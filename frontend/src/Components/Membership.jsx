@@ -138,12 +138,17 @@ const Membership = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {programs.map((prog) => (
-              <div 
+            {programs.map((prog, index) => (
+              <motion.div 
                 key={prog.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                animate={{ scale: activeTab === prog.id ? 1.02 : 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
                 onClick={() => setActiveTab(prog.id)}
-                className={`relative rounded-xl p-5 lg:p-6 cursor-pointer transition-all duration-300 border group overflow-hidden ${
-                  activeTab === prog.id ? 'border-[#defb02] shadow-[0_0_15px_rgba(222,251,2,0.15)] scale-[1.02]' : 'border-gray-800 hover:border-gray-600'
+                className={`relative rounded-xl p-5 lg:p-6 cursor-pointer transition-colors duration-300 border group overflow-hidden ${
+                  activeTab === prog.id ? 'border-[#defb02] shadow-[0_0_15px_rgba(222,251,2,0.15)] z-10' : 'border-gray-800 hover:border-gray-600'
                 }`}
               >
                 {/* Background Image Container */}
@@ -193,7 +198,7 @@ const Membership = () => {
                     </button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -257,10 +262,14 @@ const Membership = () => {
             {/* PRICING CARDS */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 flex-1">
               {activeData.plans.map((plan, i) => (
-                <div 
+                <motion.div 
                   key={i} 
+                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: plan.isPopular ? 1.03 : 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: i * 0.15 }}
                   className={`bg-[#111] rounded-xl flex flex-col relative border ${
-                    plan.isPopular ? 'border-[#defb02] shadow-[0_0_15px_rgba(249,115,22,0.1)] scale-[1.02] z-10' : 'border-gray-800'
+                    plan.isPopular ? 'border-[#defb02] shadow-[0_0_15px_rgba(222,251,2,0.15)] z-10' : 'border-gray-800'
                   }`}
                 >
                   {plan.tag && (
@@ -300,7 +309,7 @@ const Membership = () => {
                       </span>
                     </button>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 

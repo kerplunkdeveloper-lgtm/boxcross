@@ -45,16 +45,18 @@ const Membership = () => {
             <motion.div 
               initial={{ opacity: 0, scale: 0.8, x: "-50%", y: "-50%" }}
               animate={{ opacity: 1, scale: 1, x: "-50%", y: "-50%" }}
+              whileHover={{ scale: 1.05, x: "-50%", y: "-50%" }}
+              whileTap={{ scale: 0.95, x: "-50%", y: "-50%" }}
               transition={{ duration: 0.6, delay: 0.4, type: "spring", stiffness: 200 }}
-              className="absolute top-1/2 left-1/2 mt-1 md:mt-15 bg-[#dfff00] px-5 py-2 md:px-7 md:py-2.5 rounded-sm text-black flex items-center justify-center gap-2.5 whitespace-nowrap shadow-2xl"
+              className="absolute top-1/2 left-1/2 mt-[5vw] sm:mt-[3vw] md:mt-[2.5vw] lg:mt-[4vw] bg-[#defb02] px-4 py-1.5 sm:px-6 sm:py-2 md:px-8 md:py-3 rounded-md text-black flex items-center justify-center gap-2 sm:gap-3 whitespace-nowrap shadow-2xl cursor-pointer"
             >
-           <Link to="/">
-
-           <span className="font-extrabold text-[11px] md:text-[16px] tracking-wider">HOME</span>
-           </Link>
+              <Link to="/" className="flex items-center">
+                <span className="font-extrabold text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px] tracking-wider hover:opacity-70 transition-opacity">HOME</span>
+              </Link>
            
-              <span className="text-[8px] opacity-60">•</span>
-              <span className="font-bold text-[11px] md:text-[16px] tracking-wider underline decoration-[1.5px] underline-offset-4">MEMBERSHIP</span>
+              <span className="text-[8px] sm:text-[10px] opacity-60">•</span>
+              
+              <span className="font-bold text-[10px] sm:text-[12px] md:text-[14px] lg:text-[16px] tracking-wider underline decoration-[1.5px] underline-offset-4">MEMBERSHIP</span>
             </motion.div>
           </div>
           
