@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from './Components/Navbar';
 import Preloader from './Components/Preloader';
 import MembershipPage from './pages/Membership';
 import ScrollToTop from './Components/ScrollToTop';
@@ -14,7 +15,7 @@ const App = () => {
     <div className="min-h-screen flex flex-col bg-black text-white">
       {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
       <BrowserRouter>
- 
+      <Navbar />
         <ScrollToTop />
         <main className="flex-grow">
           <Routes>
