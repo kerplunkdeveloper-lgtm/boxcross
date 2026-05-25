@@ -1,0 +1,134 @@
+{
+  "post": [
+    {
+      "id": "1",
+      "title": "Introduction to Fullstack Development lol",
+      "body": "Exploring the roles of frontend and backend in web applications."
+    },
+    {
+      "id": "2",
+      "title": "Frontend Technologies Overview",
+      "body": "Learn about essential frontend tools like HTML, CSS, JavaScript, React, and responsive design techniques."
+    },
+    {
+      "id": "3",
+      "title": "Backend Technologies Explained",
+      "body": "Dive into server-side development using Node.js, Express, databases like MongoDB and SQL, and building RESTful APIs."
+    },
+    {
+      "id": "4",
+      "title": "Database Management for Developers",
+      "body": "Understand how data is stored, retrieved, and managed using relational and non-relational databases."
+    },
+    {
+      "id": "5",
+      "title": "Building a Fullstack Application",
+      "body": "Walkthrough of building a complete web application with React frontend and Node.js backend."
+    },
+    {
+      "id": "6",
+      "title": "Introduction to DevOps in Fullstack Projects",
+      "body": "Learn how CI/CD, Docker, and deployment pipelines integrate with fullstack development workflows."
+    },
+    {
+      "id": "7",
+      "title": "Authentication and Authorization",
+      "body": "Explore how to implement secure user login, session management, and role-based access control."
+    },
+    {
+      "id": "8",
+      "title": "API Integration Best Practices",
+      "body": "Understand how to integrate third-party APIs and design your own API services efficiently."
+    }
+  ],
+
+  "items": [
+    {
+      "id": "1",
+      "name": "Apple",
+      "color": "Red",
+      "vitamin": "Vitamin C"
+    },
+    {
+      "id": "2",
+      "name": "Banana",
+      "color": "Yellow",
+      "vitamin": "Vitamin B6"
+    },
+    {
+      "id": "3",
+      "name": "Carrot",
+      "color": "Orange",
+      "vitamin": "Vitamin A"
+    },
+    {
+      "id": "4",
+      "name": "Spinach",
+      "color": "Green",
+      "vitamin": "Vitamin K"
+    },
+    {
+      "id": "5",
+      "name": "Blueberry",
+      "color": "Blue",
+      "vitamin": "Vitamin C"
+    },
+    {
+      "id": "6",
+      "name": "Mango",
+      "color": "Orange",
+      "vitamin": "Vitamin A"
+    },
+    {
+      "id": "7",
+      "name": "Strawberry",
+      "color": "Red",
+      "vitamin": "Vitamin C"
+    },
+    {
+      "id": "8",
+      "name": "Broccoli",
+      "color": "Green",
+      "vitamin": "Vitamin K"
+    },
+    {
+      "id": "9",
+      "name": "Grapes",
+      "color": "Purple",
+      "vitamin": "Vitamin K"
+    },
+    {
+      "id": "10",
+      "name": "Orange",
+      "color": "Orange",
+      "vitamin": "Vitamin C"
+    }
+  ],
+
+  "users": [
+    {
+      "id": "1",
+      "name": "Alice",
+      "email": "alice@example.com",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Bob",
+      "email": "bob@example.com",
+      "role": "editor"
+    },
+    {
+      "id": "3",
+      "name": "Charlie",
+      "email": "charlie@example.com",
+      "role": "viewer"
+    },
+    {
+      "id": "4",
+      "name": "Diana",
+      "email": "diana@example.com",
+      "role": "editor"
+    }
+  ]
+}
