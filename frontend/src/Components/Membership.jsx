@@ -23,6 +23,10 @@ const programs = [
     subtitle: 'FIGHT CLUB / STRENGTH LAB',
     desc: 'Perfect for beginners. Build fitness, strength and confidence.',
     price: '2,200',
+    tabs: [
+      { id: 'start_fight', name: 'FIGHT CLUB', subtitle: 'FIGHT CLUB', desc: 'Perfect for beginners. Build fitness, strength and confidence through boxing.', price: '2,200' },
+      { id: 'start_strength', name: 'STRENGTH LAB', subtitle: 'STRENGTH LAB', desc: 'Focus on core strength, lifting techniques, and building raw power.', price: '2,500' }
+    ],
     image: box1,
   },
   {
@@ -60,20 +64,34 @@ const programs = [
     subtitle: 'HYROX LAB / PERFORMANCE BOXING',
     desc: 'For athletes and competitors. Build endurance, power and peak performance.',
     price: '4,500',
+    tabs: [
+      { id: 'perform_hyrox', name: 'HYROX LAB', subtitle: 'HYROX LAB', desc: 'For athletes and competitors. Build endurance, power and peak performance.', price: '4,500' },
+      { id: 'perform_boxing', name: 'PERFORMANCE BOXING', subtitle: 'PERFORMANCE BOXING', desc: 'Advanced boxing techniques, sparring prep, and high-intensity conditioning.', price: '5,000' }
+    ],
     image: box3,
   }
 ];
 
 const pricingData = {
-  start: {
-    title: "START (FIGHT CLUB / STRENGTH LAB)",
-    features: ["Boxing", "Strength Training", "Conditioning", "Community Access"],
+  start_fight: {
+    title: "START (FIGHT CLUB)",
+    features: ["Boxing Basics", "Cardio Conditioning", "Footwork", "Community Access"],
     plans: [
-      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "7,999", perMonth: "2,666", highlights: ["All group classes", "Strength & conditioning", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
-      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "13,999", perMonth: "2,333", highlights: ["All group classes", "Strength & conditioning", "Open gym access", "BXC community access", "Progress tracking"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
-      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "23,999", perMonth: "2,000", highlights: ["All group classes", "Strength & conditioning", "Open gym access", "BXC community access", "Progress tracking", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
+      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "5,999", perMonth: "2,000", highlights: ["Basic boxing classes", "Cardio conditioning", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
+      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "10,999", perMonth: "1,833", highlights: ["Basic boxing classes", "Cardio conditioning", "Open gym access", "BXC community access", "Progress tracking"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
+      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "19,999", perMonth: "1,666", highlights: ["Basic boxing classes", "Cardio conditioning", "Open gym access", "BXC community access", "Progress tracking", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
     ],
-    starterPrice: "2,999"
+    starterPrice: "2,200"
+  },
+  start_strength: {
+    title: "START (STRENGTH LAB)",
+    features: ["Strength Training", "Core Focus", "Lifting Technique", "Community Access"],
+    plans: [
+      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "6,999", perMonth: "2,333", highlights: ["Strength group classes", "Core conditioning", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
+      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "12,999", perMonth: "2,166", highlights: ["Strength group classes", "Core conditioning", "Open gym access", "BXC community access", "Progress tracking"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
+      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "22,999", perMonth: "1,916", highlights: ["Strength group classes", "Core conditioning", "Open gym access", "BXC community access", "Progress tracking", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
+    ],
+    starterPrice: "2,500"
   },
   transform: {
     title: "TRANSFORM (HYBRID PERFORMANCE)",
@@ -83,26 +101,39 @@ const pricingData = {
       { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "19,999", perMonth: "3,333", highlights: ["All group classes", "Strength & conditioning", "Open gym access", "BXC community access", "Progress tracking", "1 Body composition test", "Nutrition guidance"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
       { months: "12 MONTHS", subtitle: "BEST VALUE", price: "34,999", perMonth: "2,917", highlights: ["All group classes", "Strength & conditioning", "Open gym access", "BXC community access", "Progress tracking", "2 Body composition tests", "Nutrition guidance", "Priority batch booking", "Flexible membership support"], buttonText: "CHOOSE PLAN" }
     ],
-    starterPrice: "3,999"
+    starterPrice: "3,500"
   },
-  perform: {
-    title: "PERFORM (HYROX LAB / PERFORMANCE BOXING)",
-    features: ["Advanced Boxing", "HYROX Training", "Peak Performance", "Recovery", "Nutrition"],
+  perform_hyrox: {
+    title: "PERFORM (HYROX LAB)",
+    features: ["HYROX Training", "Endurance", "Peak Performance", "Recovery", "Nutrition"],
     plans: [
-      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "14,999", perMonth: "5,000", highlights: ["All advanced classes", "HYROX specific training", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
-      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "25,999", perMonth: "4,333", highlights: ["All advanced classes", "HYROX specific training", "Open gym access", "BXC community access", "Progress tracking", "2 Body composition tests"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
-      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "45,999", perMonth: "3,833", highlights: ["All advanced classes", "HYROX specific training", "Open gym access", "BXC community access", "Progress tracking", "Monthly body composition", "Nutrition planning", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
+      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "12,999", perMonth: "4,333", highlights: ["HYROX specific classes", "Endurance training", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
+      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "23,999", perMonth: "4,000", highlights: ["HYROX specific classes", "Endurance training", "Open gym access", "BXC community access", "Progress tracking", "2 Body composition tests"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
+      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "42,999", perMonth: "3,583", highlights: ["HYROX specific classes", "Endurance training", "Open gym access", "BXC community access", "Progress tracking", "Monthly body composition", "Nutrition planning", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
     ],
-    starterPrice: "4,999"
+    starterPrice: "4,500"
+  },
+  perform_boxing: {
+    title: "PERFORM (PERFORMANCE BOXING)",
+    features: ["Advanced Boxing", "Sparring Prep", "High-Intensity", "Recovery", "Nutrition"],
+    plans: [
+      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "14,999", perMonth: "5,000", highlights: ["All advanced classes", "Sparring prep training", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
+      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "26,999", perMonth: "4,500", highlights: ["All advanced classes", "Sparring prep training", "Open gym access", "BXC community access", "Progress tracking", "2 Body composition tests"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
+      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "48,999", perMonth: "4,083", highlights: ["All advanced classes", "Sparring prep training", "Open gym access", "BXC community access", "Progress tracking", "Monthly body composition", "Nutrition planning", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
+    ],
+    starterPrice: "5,000"
   }
 };
 
 const Membership = () => {
   const [activeTab, setActiveTab] = useState('transform');
+  const [subTabs, setSubTabs] = useState({ start: 'start_fight', perform: 'perform_hyrox' });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const pricingRef = useRef(null);
-  const activeData = pricingData[activeTab];
+  
+  const activeDataKey = activeTab === 'transform' ? 'transform' : subTabs[activeTab];
+  const activeData = pricingData[activeDataKey];
 
   const handlePlanSelect = (planName, price) => {
     setSelectedPlan({ name: planName, price: price });
@@ -255,6 +286,42 @@ const Membership = () => {
                 </React.Fragment>
               ))}
             </div>
+
+            {/* Sub-Tabs for Step 2 */}
+            {(() => {
+              const activeProg = programs.find(p => p.id === activeTab);
+              if (activeProg && activeProg.tabs) {
+                return (
+                  <div className="flex justify-center mt-8 relative z-20 mb-10">
+                    <div className="inline-flex bg-black border border-gray-800 rounded-full p-1.5 shadow-2xl relative">
+                      {activeProg.tabs.map(tab => {
+                        const isActive = subTabs[activeProg.id] === tab.id;
+                        return (
+                          <button
+                            key={tab.id}
+                            onClick={() => setSubTabs(prev => ({ ...prev, [activeProg.id]: tab.id }))}
+                            className={`relative px-6 py-2.5 md:px-10 md:py-3 text-[10px] md:text-xs font-bold tracking-[0.1em] md:tracking-[0.15em] uppercase rounded-full transition-colors duration-300 z-10 ${
+                              isActive ? 'text-black' : 'text-gray-400 hover:text-white'
+                            }`}
+                          >
+                            {isActive && (
+                              <motion.div
+                                layoutId={`active-tab-${activeProg.id}`}
+                                className="absolute inset-0 bg-[#defb02] rounded-full shadow-[0_0_15px_rgba(222,251,2,0.2)]"
+                                style={{ zIndex: -1 }}
+                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                              />
+                            )}
+                            {tab.name}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+              return null;
+            })()}
           </motion.div>
 
           <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6">
