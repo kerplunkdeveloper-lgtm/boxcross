@@ -115,9 +115,9 @@ const Navbar = () => {
   }, [offcanvasOpen]);
 
   return (
-    <div className="md:px-10 px-2 mt-4 relative z-[100]">
+    <div className="md:px-10 px-2 mt-4 relative">
       {/* Main Navbar */}
-      <nav className="relative rounded-2xl z-[100] bg-black/95 backdrop-blur-sm border-b border-[#a3ff00]/20">
+      <nav className="relative rounded-2xl z-[50] bg-black backdrop-blur-sm border-b border-[#a3ff00]/20">
         <div className="px-4 md:px-6 py-2.5">
           <div className="flex justify-between items-center">
             {/* Logo */}

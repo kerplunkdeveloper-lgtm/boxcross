@@ -135,22 +135,6 @@ const Membership = () => {
   const activeDataKey = activeTab === 'transform' ? 'transform' : subTabs[activeTab];
   const activeData = pricingData[activeDataKey];
 
-  const calculatePrices = (priceString) => {
-    const mrp = parseInt(priceString.replace(/,/g, ''));
-    const discount = mrp * 0.10;
-    const basePrice = mrp - discount;
-    const gst = basePrice * 0.05;
-    const total = Math.round(basePrice + gst);
-    
-    return {
-      mrp: mrp.toLocaleString('en-IN'),
-      discount: discount.toLocaleString('en-IN', { maximumFractionDigits: 0 }),
-      base: basePrice.toLocaleString('en-IN', { maximumFractionDigits: 0 }),
-      gst: gst.toLocaleString('en-IN', { maximumFractionDigits: 0 }),
-      total: total.toLocaleString('en-IN')
-    };
-  };
-
   const handlePlanSelect = (planName, price) => {
     setSelectedPlan({ name: planName, price: price });
     setIsModalOpen(true);
@@ -361,35 +345,14 @@ const Membership = () => {
                     </div>
                   )}
                   
-                  <div className="p-4 md:p-5 flex flex-col items-center text-center border-b border-gray-800">
+                  <div className="p-5 md:p-6 flex flex-col items-center text-center border-b border-gray-800">
                     <h3 className="text-base font-extrabold tracking-wider mb-1">{plan.months}</h3>
                     <p className="text-[#defb02] text-[9px] font-bold tracking-widest uppercase mb-4">{plan.subtitle}</p>
-                    
-                    <div className="flex flex-col items-center w-full mb-1">
-                      {/* MRP with strikethrough */}
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-gray-500 line-through text-sm font-bold">₹{plan.price}</span>
-                        <span className="bg-[#defb02]/10 text-[#defb02] text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-widest border border-[#defb02]/30">-10% OFF</span>
-                      </div>
-                      
-                      {/* Price breakdown */}
-                      <div className="text-left space-y-1 mb-3 border border-gray-800/80 rounded-xl p-3 bg-black/40 w-full shadow-inner">
-                        <div className="flex justify-between text-[11px] text-gray-400 font-medium">
-                          <span>Base Price</span>
-                          <span>₹{calculatePrices(plan.price).base}</span>
-                        </div>
-                        <div className="flex justify-between text-[11px] text-gray-400 font-medium border-b border-gray-800/80 pb-2">
-                          <span>GST (5%)</span>
-                          <span>+₹{calculatePrices(plan.price).gst}</span>
-                        </div>
-                        <div className="flex justify-between text-sm text-white font-black pt-2">
-                          <span>Total</span>
-                          <span className="text-[#defb02]">₹{calculatePrices(plan.price).total}</span>
-                        </div>
-                      </div>
-                      
-                      <p className="text-gray-400 text-[9px] tracking-wider uppercase font-bold">EQUIVALENT TO ₹{plan.perMonth} / MONTH</p>
+                    <div className="flex items-start justify-center gap-1 mb-1">
+                      <span className="text-lg font-bold mt-1">₹</span>
+                      <span className="text-3xl md:text-4xl font-extrabold tracking-tight">{plan.price}</span>
                     </div>
+                    <p className="text-gray-400 text-[10px]">₹{plan.perMonth} / month</p>
                   </div>
                   
                   <div className="p-5 md:p-6 flex-1 flex flex-col">
@@ -403,7 +366,7 @@ const Membership = () => {
                     </ul>
                     
                     <button 
-                      onClick={() => handlePlanSelect(`${activeData.title} - ${plan.months}`, calculatePrices(plan.price).total)}
+                      onClick={() => handlePlanSelect(`${activeData.title} - ${plan.months}`, plan.price)}
                       className={`group/planbtn relative overflow-hidden w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-lg ${
                       plan.isPopular ? 'bg-[#defb02] text-black' : 'border border-gray-600 text-white hover:border-white'
                     }`}>
@@ -423,26 +386,10 @@ const Membership = () => {
                 <Calendar size={24} className="text-[#defb02] mb-3" />
                 <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-2 group-hover:text-gray-300">NOT SURE?</p>
                 <h4 className="text-sm font-bold mb-3 leading-tight">Try 1 Month<br/>Starter Access</h4>
-                <div className="w-full mb-4">
-                  <div className="flex justify-center items-center gap-2 mb-2.5">
-                    <span className="text-gray-500 line-through text-xs font-bold">₹{activeData.starterPrice}</span>
-                    <span className="bg-[#defb02]/10 text-[#defb02] text-[8px] px-1.5 py-0.5 rounded font-bold border border-[#defb02]/30">-10% OFF</span>
-                  </div>
-                  <div className="text-left space-y-1 border border-gray-800/80 rounded-xl p-2.5 bg-black/40 shadow-inner">
-                    <div className="flex justify-between text-[10px] text-gray-400 font-medium">
-                      <span>Base</span><span>₹{calculatePrices(activeData.starterPrice).base}</span>
-                    </div>
-                    <div className="flex justify-between text-[10px] text-gray-400 font-medium border-b border-gray-800/80 pb-1.5">
-                      <span>GST (5%)</span><span>+₹{calculatePrices(activeData.starterPrice).gst}</span>
-                    </div>
-                    <div className="flex justify-between text-[12px] text-white font-black pt-1.5">
-                      <span>Total</span><span className="text-[#defb02]">₹{calculatePrices(activeData.starterPrice).total}</span>
-                    </div>
-                  </div>
-                </div>
+                <p className="text-2xl font-extrabold mb-5">₹{activeData.starterPrice}</p>
                 <button 
-                  onClick={() => handlePlanSelect(`1 Month Starter Access - ${activeData.title}`, calculatePrices(activeData.starterPrice).total)}
-                  className="group/trybtn relative overflow-hidden w-full py-2.5 border border-gray-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:border-white transition-colors mt-auto"
+                  onClick={() => handlePlanSelect(`1 Month Starter Access - ${activeData.title}`, activeData.starterPrice)}
+                  className="group/trybtn relative overflow-hidden w-full py-2 border border-gray-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:border-white transition-colors"
                 >
                   <div className="absolute inset-0 bg-white translate-x-[100%] group-hover/trybtn:translate-x-0 transition-transform duration-500 ease-out z-0"></div>
                   <span className="relative z-10 transition-colors duration-300 group-hover/trybtn:text-black">

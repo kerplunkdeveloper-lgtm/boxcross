@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 const Membership = () => {
   return (
-    <div className="w-full bg-[#050505] min-h-screen flex flex-col">
+    <div className="w-full bg-[#050505] min-h-screen flex flex-col mt-[-80px]">
       {/* Banner Section */}
       <section className="relative w-full h-[30vh] md:h-[75vh] flex flex-col items-center justify-center overflow-hidden">
 
@@ -15,12 +15,12 @@ const Membership = () => {
           style={{
             // High-quality gym background image for the banner
             backgroundImage: "url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop')",
-            filter: "grayscale(50%) brightness(0.6)" 
+          
           }}
         ></div>
 
         {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-transparent to-[#050505]"></div>
 
         {/* Banner Content */}
