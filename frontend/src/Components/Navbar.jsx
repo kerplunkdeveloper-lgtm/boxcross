@@ -180,7 +180,7 @@ const Navbar = () => {
       >
         {/* ================= NAVBAR ================= */}
 
-        <nav className="relative md:rounded-2xl py-2  md:py-0  z-50 bg-black  border-b border-[#a3ff00]/20 backdrop-blur-sm">
+        <nav className="relative md:rounded-2xl py-2  md:py-0  z-50 bg-black  border-b border-[d9ff00]/20 backdrop-blur-sm">
           <div className=" md:px-4">
             <div className="flex justify-between items-center">
               {/* ================= LOGO ================= */}

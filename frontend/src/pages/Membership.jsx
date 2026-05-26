@@ -3,6 +3,9 @@ import MembershipPlans from '../Components/Membership';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import banner from '../assets/bannervideo2.mp4';
+import WhatWeOffer from '../Components/WhatWeOffer';
+import TrainingZones from '../Components/TrainingZones';
+import BuildProgress from '../Components/BuildProgress';
 
 const Membership = () => {
   return (
@@ -159,12 +162,10 @@ const Membership = () => {
 
             {/* PLANS BUTTON */}
             <button
-              onClick={() =>
-                window.scrollTo({
-                  top: window.innerHeight,
-                  behavior: 'smooth',
-                })
-              }
+              onClick={() => {
+                const el = document.getElementById('membership-plans');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="
                 group relative overflow-hidden
                 w-[85%] sm:w-auto
@@ -186,6 +187,9 @@ const Membership = () => {
 
       {/* MEMBERSHIP SECTION */}
       <div className="relative z-20">
+        <WhatWeOffer />
+        <TrainingZones />
+        <BuildProgress />
         <MembershipPlans />
       </div>
     </div>
