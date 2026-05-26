@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import box1 from "../assets/box1.png"
 import box2 from "../assets/box2.png"
 import box3 from "../assets/box3.png"
+import BookForm from "./BookForm";
 
 
 
@@ -163,7 +164,7 @@ const Membership = () => {
             className="text-center mb-8"
           >
             <p className="text-[#defb02] font-bold text-[10px] tracking-[0.2em] mb-1 uppercase">STEP 1</p>
-            <h2 className="text-2xl md:text-3xl font-extrabold tracking-wide uppercase mb-2">
+            <h2 className="text-2xl md:text-3xl  tracking-wide uppercase mb-10 mt-10">
               CHOOSE YOUR PROGRAM
             </h2>
           </motion.div>
@@ -413,6 +414,7 @@ const Membership = () => {
         onClose={() => setIsModalOpen(false)} 
         planDetails={selectedPlan} 
       />
+      <BookForm />
       <Foot />
       <GymMarquee />
     </>

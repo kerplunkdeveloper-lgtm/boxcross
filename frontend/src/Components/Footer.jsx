@@ -2,22 +2,24 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-black border-t border-white/10">
+    <footer className="w-full bg-[#111111] border-t border-white/10">
 
       <div
         className="
-          max-w-[1700px]
-          mx-auto
-          px-5
+          mt-3
+        
           md:px-8
-          lg:px-10
-          py-4
+
+          lg:px-20
+          py-10
           flex
           flex-col
           md:flex-row
           items-center
           justify-between
           gap-4
+        max-w-[1400px]
+          mx-auto
         "
       >
 
@@ -25,11 +27,10 @@ const Footer = () => {
         <p
           className="
             text-[#8b8b8b]
-            text-xs
-            md:text-sm
             text-center
             md:text-left
           "
+          style={{ fontFamily: '"Brutal Font Light", sans-serif', fontSize: "19px"  }}
         >
           Copyright © 2026{" "}
           <span className="text-[#d9ff00] font-bold">
@@ -43,10 +44,10 @@ const Footer = () => {
           className="
             flex
             items-center
-            flex-wrap
+            flex-wrap 
             justify-center
             gap-4
-            md:gap-6
+            md:gap-20
           "
         >
 
@@ -62,9 +63,8 @@ const Footer = () => {
                 hover:text-white
                 transition-all
                 duration-300
-                text-xs
-                md:text-sm
               "
+              style={{ fontFamily: '"Brutal Font Light", sans-serif', fontSize: "18px" }}
             >
               {item}
             </button>
