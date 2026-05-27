@@ -54,7 +54,7 @@ const BookForm = () => {
       setError("Please enter your name to continue.");
       return false;
     }
-    if (step === 2 && (!formData.phone.trim() || formData.phone.length < 10)) {
+    if (step === 2 && (!formData.phone.trim() || formData.phone.length !== 10)) {
       setError("Please enter a valid 10-digit phone number.");
       return false;
     }
@@ -119,9 +119,11 @@ const BookForm = () => {
           <div>
 
             <h1
-              className="text-white uppercase leading-none font-black text-[42px] md:text-[55px]"
+              className="text-white uppercase  leading-none font-black text-[20px] md:text-[35px]"
               style={{
-                fontFamily: '"Bebas Neue", sans-serif',
+                fontFamily: '"Brutal Font", sans-serif',
+                fontWeight: 700,
+
               }}
             >
               BOOK YOUR{" "}
@@ -133,23 +135,20 @@ const BookForm = () => {
           </div>
 
           {/* STEP BAR */}
-          <div className="mt-10 flex items-center justify-between gap-2 overflow-x-auto scrollbar-hide pb-2">
-
+          <div className="mt-10 flex items-center justify-between gap-1 md:gap-2 w-full pb-2">
             {[
               "Personal",
               "Contact",
               "Goal",
               "Schedule",
             ].map((item, index) => (
-
               <div
                 key={index}
-                className="flex items-center min-w-fit"
+                className="flex items-center flex-grow last:flex-grow-0"
               >
-
                 {/* STEP CARD */}
                 <div
-                  className={`relative flex items-center gap-3 px-4 md:px-5 h-12 rounded-2xl border transition-all duration-500 whitespace-nowrap
+                  className={`relative flex items-center justify-center gap-1.5 md:gap-3 px-2.5 md:px-5 h-10 md:h-12 rounded-xl md:rounded-2xl border transition-all duration-500 whitespace-nowrap
                   ${
                     step === index + 1
                       ? "bg-[#d9ff00] border-[#d9ff00] text-black shadow-[0_0_25px_rgba(217,255,0,0.35)]"
@@ -158,10 +157,9 @@ const BookForm = () => {
                       : "bg-[#0a0a0a] border-white/10 text-gray-500"
                   }`}
                 >
-
                   {/* NUMBER */}
                   <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold
+                    className={`w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center text-[10px] md:text-[11px] font-bold
                     ${
                       step === index + 1
                         ? "bg-black text-[#d9ff00]"
@@ -171,22 +169,23 @@ const BookForm = () => {
                     }`}
                   >
                     {step > index + 1 ? (
-                      <Check size={13} />
+                      <Check size={11} />
                     ) : (
                       `0${index + 1}`
                     )}
                   </div>
 
                   {/* TITLE */}
-                  <span className="text-sm font-medium">
-                    {item}
+                  <span className="text-[11px] md:text-sm font-semibold tracking-wide uppercase">
+                    <span className="hidden md:inline">{item}</span>
+                    <span className="inline md:hidden">{step === index + 1 && item}</span>
                   </span>
                 </div>
 
                 {/* LINE */}
                 {index !== 3 && (
                   <div
-                    className={`w-5 md:w-10 h-[2px] mx-2 rounded-full transition-all duration-500
+                    className={`flex-grow h-[2px] mx-1 md:mx-2 rounded-full transition-all duration-500
                     ${
                       step > index + 1
                         ? "bg-[#d9ff00]"
@@ -286,12 +285,15 @@ const BookForm = () => {
                       type="tel"
                       placeholder="Phone Number"
                       value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          phone: e.target.value,
-                        })
-                      }
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "");
+                        if (val.length <= 10) {
+                          setFormData({
+                            ...formData,
+                            phone: val,
+                          });
+                        }
+                      }}
                       className={`w-full h-14 rounded-xl bg-black border ${error ? "border-red-500" : "border-white/10"} pl-14 pr-5 text-white outline-none focus:border-[#d9ff00] transition-all`}
                     />
                   </div>
@@ -324,8 +326,7 @@ const BookForm = () => {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
                     {goals.map((goal, index) => (
                       <button
                         key={index}
@@ -335,7 +336,7 @@ const BookForm = () => {
                             goal,
                           })
                         }
-                        className={`h-14 rounded-xl border transition-all duration-300 flex items-center justify-center gap-3 text-sm md:text-base
+                        className={`h-12 md:h-14 rounded-xl border transition-all duration-300 flex items-center justify-center gap-1.5 md:gap-3 px-2 text-center text-xs md:text-sm font-semibold uppercase tracking-wider
                         ${
                           formData.goal === goal
                             ? "bg-[#d9ff00] text-black border-[#d9ff00]"
@@ -343,8 +344,9 @@ const BookForm = () => {
                             ? "bg-black border-red-500/50 text-white hover:border-red-500"
                             : "bg-black border-white/10 text-white hover:border-[#d9ff00]"
                         }`}
+                        style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
                       >
-                        <Dumbbell size={18} />
+                        <Dumbbell size={14} className="hidden sm:inline" />
                         {goal}
                       </button>
                     ))} 
@@ -378,15 +380,14 @@ const BookForm = () => {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-2 md:gap-4">
 
                     {/* DAY */}
                     <div className="relative">
-                      <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" size={18} />
                       <select
                         value={formData.day}
                         onChange={(e) => setFormData({ ...formData, day: e.target.value })}
-                        className={`w-full h-14 rounded-xl bg-black border ${error && !formData.day ? "border-red-500" : "border-white/10"} pl-12 pr-4 text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all`}
+                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.day ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
                         <option value="" disabled>Day</option>
                         {Array.from({ length: 31 }, (_, i) => (
@@ -397,26 +398,24 @@ const BookForm = () => {
 
                     {/* MONTH */}
                     <div className="relative">
-                      <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" size={18} />
                       <select
                         value={formData.month}
                         onChange={(e) => setFormData({ ...formData, month: e.target.value })}
-                        className={`w-full h-14 rounded-xl bg-black border ${error && !formData.month ? "border-red-500" : "border-white/10"} pl-12 pr-4 text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all`}
+                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.month ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
                         <option value="" disabled>Month</option>
                         {["January","February","March","April","May","June","July","August","September","October","November","December"].map((m, i) => (
-                          <option key={i} value={m}>{m}</option>
+                          <option key={i} value={m}>{m.substring(0, 3)}</option>
                         ))}
                       </select>
                     </div>
 
                     {/* TIME */}
                     <div className="relative">
-                      <CalendarDays className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" size={18} />
                       <select
                         value={formData.time}
                         onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                        className={`w-full h-14 rounded-xl bg-black border ${error && !formData.time ? "border-red-500" : "border-white/10"} pl-12 pr-4 text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all`}
+                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.time ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
                         <option value="" disabled>Time</option>
                         {["6:00 AM","7:00 AM","8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM","7:00 PM","8:00 PM","9:00 PM"].map((t, i) => (
