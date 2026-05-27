@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import boxcrosslogo from "../assets/login.png";
 // import logo from "../assets/images/logo.png";
@@ -127,7 +127,7 @@ const Auth = () => {
                   placeholder="admin@boxcross.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
+                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
                   required
                 />
               </div>
@@ -139,18 +139,27 @@ const Auth = () => {
                   placeholder="Enter Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
+                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
                   required
                 />
               </div>
 
               {/* Action Buttons Row */}
-              <div className="flex items-center justify-end pt-4">
+              <div className="flex items-center justify-between pt-4 gap-4">
+                {/* Back to Membership Link */}
+                <Link
+                  to="/"
+                  className="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                  style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                >
+                  &larr; Back to Membership
+                </Link>
+
                 {/* Submit button pill-shaped and styled gray like reference */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group relative overflow-hidden w-full sm:w-auto px-12 py-3.5 bg-[#defb02] text-black font-extrabold uppercase tracking-widest text-xs rounded-full transition-all duration-500 cursor-pointer shadow-lg disabled:opacity-50"
+                  className="group relative overflow-hidden w-full sm:w-auto px-12 py-3.5 bg-[#defb02] text-black font-extrabold uppercase tracking-widest text-xs rounded-md transition-all duration-500 cursor-pointer shadow-lg disabled:opacity-50"
                   style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
                 >
                   <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>

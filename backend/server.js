@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const bookingRoutes = require("./routes/bookingRoutes");
 const authRoutes = require("./routes/authRoutes");
+const membershipRoutes = require("./routes/membershipRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
 
 // Load env
 dotenv.config();
@@ -27,6 +29,8 @@ app.use(express.json());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/memberships", membershipRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // Health check
 app.get("/", (req, res) => {

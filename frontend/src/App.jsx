@@ -10,6 +10,8 @@ import DashboardLayout from './Components/DashboardLayout';
 import DashboardHome from './pages/DashboardHome';
 import DashboardBookings from './pages/DashboardBookings';
 import DashboardSettings from './pages/DashboardSettings';
+import DashboardMemberships from './pages/DashboardMemberships';
+import DashboardPayments from './pages/DashboardPayments';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
@@ -73,6 +75,8 @@ const App = () => {
             >
               <Route index element={<DashboardHome />} />
               <Route path="bookings" element={<DashboardBookings />} />
+              <Route path="memberships" element={<DashboardMemberships />} />
+              <Route path="payments" element={<DashboardPayments />} />
               <Route path="settings" element={<DashboardSettings />} />
             </Route>
           </Routes>

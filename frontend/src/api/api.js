@@ -32,4 +32,18 @@ export const updateBooking = (id, data) => API.put(`/bookings/${id}`, data);
 
 export const deleteBooking = (id) => API.delete(`/bookings/${id}`);
 
+// ──────────────── MEMBERSHIP API ────────────────
+
+export const getMembershipPlans = () => API.get("/memberships");
+
+export const updateMembershipPlan = (id, data) => API.put(`/memberships/${id}`, data);
+
+// ──────────────── PAYMENT API ────────────────
+
+export const createPayment = (data) => API.post("/payments", data);
+
+export const getPayments = () => API.get("/payments");
+
+export const updatePaymentStatus = (id, data) => API.put(`/payments/${id}`, data);
+
 export default API;

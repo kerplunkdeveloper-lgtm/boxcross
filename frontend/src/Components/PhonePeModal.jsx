@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { X, Smartphone, ShieldCheck, CheckCircle2, Loader2, Info, QrCode, User, Phone, Mail, ChevronRight, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
-import { updateMembership } from "../api/api";
+import { updateMembership, createPayment } from "../api/api";
 
 const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
   const { user: authUser, setUser: setAuthUser } = useAuth();
@@ -53,10 +53,26 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
   const handleContinue = () => { if (validate()) setStep(2); };
 
   const handleSuccessPayment = async () => {
-    if (authUser && planDetails) {
-      try {
-        const monthsVal = planDetails.monthsVal || 1;
-        const priceNum = parseFloat(planDetails.price.replace(/,/g, "")) || 0;
+    try {
+      const monthsVal = planDetails?.monthsVal || 1;
+      const priceNum = parseFloat(planDetails?.price.replace(/,/g, "")) || 0;
+      const txnId = `TXN-${Date.now()}`;
+
+      // Store Payment details in Payments collection
+      await createPayment({
+        name: user.name,
+        phone: user.phone,
+        email: user.email,
+        planName: planDetails?.name || "Membership Plan",
+        price: priceNum,
+        durationMonths: monthsVal,
+        transactionId: txnId,
+        paymentStatus: "success",
+        paymentMethod: upiId ? "UPI" : "PhonePe App"
+      });
+
+      // Update logged in user membership details if authenticated
+      if (authUser && planDetails) {
         const { data } = await updateMembership({
           planName: planDetails.name,
           price: priceNum,
@@ -65,9 +81,9 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
         if (data.success) {
           setAuthUser(data.user);
         }
-      } catch (err) {
-        console.error("Error updating membership in DB", err);
       }
+    } catch (err) {
+      console.error("Error storing payment record in DB", err);
     }
   };
 

@@ -1,12 +1,14 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Home, BookOpen, Settings, LogOut, X } from "lucide-react";
+import { Home, BookOpen, Settings, LogOut, X, CreditCard, DollarSign } from "lucide-react";
 import logo from "../assets/images/logo.png";
 
 const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   const menuItems = [
     { name: "Overview", path: "/dashboard", icon: Home },
     { name: "Bookings", path: "/dashboard/bookings", icon: BookOpen },
+    { name: "Memberships", path: "/dashboard/memberships", icon: CreditCard },
+    { name: "Payment Details", path: "/dashboard/payments", icon: DollarSign },
     { name: "Settings", path: "/dashboard/settings", icon: Settings },
   ];
 

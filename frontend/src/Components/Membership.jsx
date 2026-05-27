@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Foot from "../Components/Foot";
 import GymMarquee from "../Components/GymMarquee";
 import { Check, Calendar, ArrowRight, Activity, Zap, Shield, User, Star } from 'lucide-react';
@@ -9,6 +9,7 @@ import box2 from "../assets/box2.png"
 import box3 from "../assets/box3.png"
 import BookForm from "./BookForm";
 import ChoosePlan from "./ChoosePlan";
+import { getMembershipPlans } from '../api/api';
 
 
 
@@ -134,8 +135,92 @@ const Membership = () => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const pricingRef = useRef(null);
   
+  const [dynamicPrograms, setDynamicPrograms] = useState(programs);
+  const [dynamicPricingData, setDynamicPricingData] = useState(pricingData);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await getMembershipPlans();
+        if (response.data && response.data.success) {
+          const plans = response.data.data;
+          
+          // Rebuild pricingData dynamically
+          const newPricingData = {};
+          plans.forEach(plan => {
+            newPricingData[plan.key] = {
+              _id: plan._id,
+              key: plan.key,
+              title: plan.title,
+              features: plan.features,
+              plans: plan.plans,
+              starterPrice: plan.starterPrice
+            };
+          });
+          setDynamicPricingData(newPricingData);
+
+          // Update programs prices and sub-tabs from DB plans
+          const updatedPrograms = programs.map(prog => {
+            const copy = { ...prog };
+            if (copy.id === 'transform') {
+              const dbPlan = plans.find(p => p.key === 'transform');
+              if (dbPlan) {
+                copy.price = dbPlan.starterPrice;
+                // If there's highlights in the plans, join them or keep default
+                if (dbPlan.plans?.[0]?.highlights) {
+                  copy.desc = dbPlan.plans[0].highlights.slice(0, 3).join(". ");
+                }
+              }
+            } else if (copy.id === 'start') {
+              const dbFight = plans.find(p => p.key === 'start_fight');
+              if (dbFight) {
+                copy.price = dbFight.starterPrice;
+              }
+              if (copy.tabs) {
+                copy.tabs = copy.tabs.map(tab => {
+                  const dbTab = plans.find(p => p.key === tab.id);
+                  if (dbTab) {
+                    return {
+                      ...tab,
+                      price: dbTab.starterPrice,
+                      desc: dbTab.plans?.[0]?.highlights?.slice(0, 3).join(". ") || tab.desc
+                    };
+                  }
+                  return tab;
+                });
+              }
+            } else if (copy.id === 'perform') {
+              const dbHyrox = plans.find(p => p.key === 'perform_hyrox');
+              if (dbHyrox) {
+                copy.price = dbHyrox.starterPrice;
+              }
+              if (copy.tabs) {
+                copy.tabs = copy.tabs.map(tab => {
+                  const dbTab = plans.find(p => p.key === tab.id);
+                  if (dbTab) {
+                    return {
+                      ...tab,
+                      price: dbTab.starterPrice,
+                      desc: dbTab.plans?.[0]?.highlights?.slice(0, 3).join(". ") || tab.desc
+                    };
+                  }
+                  return tab;
+                });
+              }
+            }
+            return copy;
+          });
+          setDynamicPrograms(updatedPrograms);
+        }
+      } catch (err) {
+        console.error("Error loading membership plans from API:", err);
+      }
+    };
+    fetchPlans();
+  }, []);
+
   const activeDataKey = activeTab === 'transform' ? 'transform' : subTabs[activeTab];
-  const activeData = pricingData[activeDataKey];
+  const activeData = dynamicPricingData[activeDataKey] || pricingData[activeDataKey];
 
   const handlePlanSelect = (planName, price, durationStr) => {
     const monthsVal = durationStr ? parseInt(durationStr) : 1;
@@ -184,7 +269,7 @@ const Membership = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {programs.map((prog, index) => (
+            {dynamicPrograms.map((prog, index) => (
               <motion.div 
                 key={prog.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -250,33 +335,6 @@ const Membership = () => {
             ))}
           </div>
 
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <div className="bg-[#111] border border-gray-800 rounded-xl p-4 flex items-center justify-between hover:border-gray-600 transition-colors cursor-pointer group">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 flex items-center justify-center border border-[#defb02]/30 rounded-full text-[#defb02]">
-                  <User size={16} />
-                </div>
-                <div>
-                  <h4 className="font-bold text-xs uppercase tracking-wider mb-0.5">PREMIUM 1:1 COACHING</h4>
-                  <p className="text-gray-400 text-[10px]">Personalized training. Faster results.</p>
-                </div>
-              </div>
-              <ArrowRight size={16} className="text-gray-600 group-hover:text-white transition-colors" />
-            </div>
-
-            <div className="bg-[#111] border border-gray-800 rounded-xl p-4 flex items-center justify-between hover:border-gray-600 transition-colors cursor-pointer group">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 flex items-center justify-center border border-[#defb02]/30 rounded-full text-[#defb02]">
-                  <Star size={16} />
-                </div>
-                <div>
-                  <h4 className="font-bold text-xs uppercase tracking-wider mb-0.5">JUNIOR ATHLETES</h4>
-                  <p className="text-gray-400 text-[10px]">Boxing & Fitness for kids and young athletes.</p>
-                </div>
-              </div>
-              <ArrowRight size={16} className="text-gray-600 group-hover:text-white transition-colors" />
-            </div>
-          </div> */}
        
         </div>
 
@@ -288,7 +346,7 @@ const Membership = () => {
           subTabs={subTabs}
           setSubTabs={setSubTabs}
           handlePlanSelect={handlePlanSelect}
-          programs={programs}
+          programs={dynamicPrograms}
         />
       </section>
       <PhonePeModal 
