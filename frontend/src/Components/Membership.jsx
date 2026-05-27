@@ -164,13 +164,25 @@ const Membership = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-8"
           >
-            <p className="text-[#defb02] font-bold text-[10px] tracking-[0.2em] mb-1 uppercase">STEP 1</p>
-            <h2 className="text-2xl md:text-3xl  tracking-wide uppercase mb-10 mt-10">
-              CHOOSE YOUR PROGRAM
-            </h2>
+            <span className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+          style={{
+            fontFamily: '"Bai Jamjuree", sans-serif',
+            fontSize:'16px',
+            fontWeight:'600',
+          }}>
+           STEP 1 
+          </span>
+
+          <h2
+            className="mt-5 font-black mb-4 leading-tight"
+            style={{ fontFamily: '"Brutal Fon", sans-serif' , fontSize:'48px',fontWeight:'700'}}
+          >
+            CHOOSE YOUR <br /> <span className="text-[#defb02]">PROGRAM</span>
+          </h2>
+           
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {programs.map((prog, index) => (
               <motion.div 
                 key={prog.id}
@@ -180,21 +192,21 @@ const Membership = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: index * 0.15 }}
                 onClick={() => setActiveTab(prog.id)}
-                className={`relative rounded-xl p-5 lg:p-6 cursor-pointer transition-colors duration-300 border group overflow-hidden ${
-                  activeTab === prog.id ? 'border-[#defb02] shadow-[0_0_15px_rgba(222,251,2,0.15)] z-10' : 'border-gray-800 hover:border-gray-600'
+                className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
+                  activeTab === prog.id ? 'border-[#defb02] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10' : 'border-gray-800 hover:border-gray-600'
                 }`}
               >
                 {/* Background Image Container */}
-                <div className="absolute inset-0 z-0 bg-black">
+                <div className="absolute inset-0 z-0 bg-black overflow-hidden">
                   <div 
-                    className="absolute inset-0 opacity-80 group-hover:opacity-60 transition-opacity duration-500"
+                    className="absolute inset-0 opacity-70 group-hover:opacity-90 scale-100 group-hover:scale-110 transition-all duration-700 ease-out"
                     style={{
                       backgroundImage: `url(${prog.image})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-[#0a0a0a]/10"></div>
                 </div>
 
                 {prog.popular && (
@@ -203,25 +215,27 @@ const Membership = () => {
                   </div>
                 )}
                 
-                <div className="relative z-10 flex flex-col h-full text-left">
-                  <div className="w-12 h-12 rounded-full border border-[#defb02]/50 flex items-center justify-center mb-6 bg-black/40 backdrop-blur-sm">
-                    {prog.icon}
+                <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
+                  <div>
+                    <div className="w-12 h-12 rounded-full border border-[#defb02]/50 flex items-center justify-center mb-5 bg-black/40 backdrop-blur-sm">
+                      {prog.icon}
+                    </div>
+                    
+                    <h3 className="text-xl md:text-2xl font-black mb-1 tracking-wide uppercase">{prog.title}</h3>
+                    <p className="text-[#defb02] text-[11px] tracking-widest uppercase mb-3">{prog.subtitle}</p>
+                    <p className="text-gray-300 text-xs md:text-sm mb-4 leading-relaxed max-w-[90%]">
+                      {prog.desc}
+                    </p>
                   </div>
                   
-                  <h3 className="text-xl md:text-2xl mb-1">{prog.title}</h3>
-                  <p className="text-[#defb02] text-[11px] tracking-widest uppercase mb-4">{prog.subtitle}</p>
-                  <p className="text-gray-300 text-[12px] mb-8 min-h-[50px] leading-relaxed max-w-[90%]">
-                    {prog.desc}
-                  </p>
-                  
-                  <div className="mt-auto pt-4">
-                    <p className="text-[11px] text-gray-300 uppercase tracking-widest font-bold mb-4 flex items-center">
+                  <div className="mt-auto pt-2 w-full">
+                    <p className="text-[10px] text-gray-300 uppercase tracking-widest font-bold mb-3 flex items-center">
                       FROM <span className="text-lg text-[#defb02] mx-1.5">₹{prog.price}</span> / MONTH
                     </p>
                     
                     <button 
                       onClick={(e) => handleScrollToPlans(e, prog.id)}
-                      className={`group/btn w-full py-3 text-[11px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
+                      className={`group/btn w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
                         activeTab === prog.id ? 'bg-[#defb02] border-[#defb02] text-black' : 'border-gray-500 text-white hover:border-[#defb02] bg-transparent'
                       }`}
                     >

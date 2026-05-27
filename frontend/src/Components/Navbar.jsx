@@ -174,13 +174,13 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`sticky top-0 z-[80] transition-transform duration-500 ease-in-out md:px-10 md:pt-4 ${
+        className={`sticky top-0 z-[80] transition-transform duration-500 ease-in-out md:px-10 md:pt-1 ${
           isNavVisible ? "translate-y-0" : "-translate-y-[150%]"
         }`}
       >
         {/* ================= NAVBAR ================= */}
 
-        <nav className="relative md:rounded-2xl py-2  md:py-0  z-50 bg-black  border-b border-[d9ff00]/20 backdrop-blur-sm">
+        <nav className="relative md:rounded-2xl py-2  md:py-2 z-50 bg-black backdrop-blur-sm">
           <div className=" md:px-4">
             <div className="flex justify-between items-center">
               {/* ================= LOGO ================= */}
@@ -194,9 +194,14 @@ const Navbar = () => {
               <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
                 {/* HOME */}
 
-                <a
+<a
                   href="https://boxandcross.com/"
-                  className="px-3 py-2 text-[14px] font-medium text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  style={{
+                    fontFamily: '"Bai Jamjuree", sans-serif',
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
                 >
                   HOME
                 </a>
@@ -208,7 +213,12 @@ const Navbar = () => {
                   onMouseEnter={() => handleDropdownEnter("arena")}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <button className="px-3 py-2 text-[14px] font-medium text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1">
+                  <button className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
+                    style={{
+                    fontFamily: '"Bai Jamjuree", sans-serif',
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}>
                     THE ARENA
                     <ChevronDown
                       size={14}
@@ -217,19 +227,27 @@ const Navbar = () => {
                   </button>
 
                   {openDropdown === "arena" && (
-                    <div className="absolute left-0 top-full mt-3 w-52 bg-white rounded-2xl shadow-2xl overflow-hidden z-[100]">
+                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl  overflow-hidden z-[100]">
                       {arenaDropdown.map((item, idx) => (
-                        <a
-                          key={item.name}
-                          href={item.path}
-                          className={`block px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all ${
-                            idx !== arenaDropdown.length - 1
-                              ? "border-b border-gray-100"
-                              : ""
-                          }`}
-                        >
-                          {item.name}
-                        </a>
+                      <a
+                   key={item.name}
+                   href={item.path}
+                  className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
+                    idx !== arenaDropdown.length - 1
+                 ? "border-b border-gray-200"
+                       : ""
+                  }`}
+                   >
+                  {/* Hover Line */}
+                 <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
+                   <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+                 </span>
+
+                   {/* Text */}
+                <span className="transition-all duration-300 group-hover:translate-x-1">
+                {item.name}
+                 </span>
+                     </a>
                       ))}
                     </div>
                   )}
@@ -239,7 +257,12 @@ const Navbar = () => {
 
                 <a
                   href="https://boxandcross.com/coaching/"
-                  className="px-3 py-2 text-[14px] font-medium text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  style={{
+                    fontFamily: '"Bai Jamjuree", sans-serif', 
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
                 >
                   COACHING
                 </a>
@@ -251,7 +274,14 @@ const Navbar = () => {
                   onMouseEnter={() => handleDropdownEnter("community")}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <button className="px-3 py-2 text-[14px]  text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1">
+                  <button className="px-3 py-2  text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
+                  
+                    style={{
+                    fontFamily: '"Bai Jamjuree", sans-serif',
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
+                  >
                     COMMUNITY
                     <ChevronDown
                       size={14}
@@ -260,19 +290,27 @@ const Navbar = () => {
                   </button>
 
                   {openDropdown === "community" && (
-                    <div className="absolute left-0 top-full mt-3 w-52 bg-white rounded-2xl shadow-2xl overflow-hidden z-[100]">
+                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl overflow-hidden z-[100]">
                       {communityDropdown.map((item, idx) => (
-                        <a
+                       <a
                           key={item.name}
-                          href={item.path}
-                          className={`block px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all ${
-                            idx !== communityDropdown.length - 1
-                              ? "border-b border-gray-100"
-                              : ""
-                          }`}
+                         href={item.path}
+                         className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
+                         idx !== communityDropdown.length - 1
+                         ? "border-b border-gray-200"
+                          : ""  
+                           }`}
                         >
-                          {item.name}
-                        </a>
+                         {/* Hover Line */}
+                         <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
+                         <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+                         </span>
+
+                         {/* Text */}
+                         <span className="transition-all duration-300 group-hover:translate-x-1">
+                            {item.name}
+                         </span>
+                       </a>
                       ))}
                     </div>
                   )}
@@ -285,28 +323,48 @@ const Navbar = () => {
                   onMouseEnter={() => handleDropdownEnter("membership")}
                   onMouseLeave={handleDropdownLeave}
                 >
-                  <button className="px-3 py-2 text-[14px] font-medium text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1">
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                      `px-3 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${
+                        isActive ? "text-white" : "text-gray-400 hover:text-white"
+                      }`
+                    }
+                    style={{
+                    fontFamily: '"Bai Jamjuree", sans-serif', 
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
+                  >
                     MEMBERSHIP
                     <ChevronDown
                       size={14}
                       className={`transition-transform duration-300 ${openDropdown === "membership" ? "rotate-180" : ""}`}
                     />
-                  </button>
+                  </NavLink>
 
                   {openDropdown === "membership" && (
-                    <div className="absolute left-0 top-full mt-3 w-56 bg-white rounded-2xl shadow-2xl overflow-hidden z-[100]">
+                    <div className="absolute left-0 top-full mt-3 w-60 bg-white shadow-2xl overflow-hidden z-[100]">
                       {membershipDropdown.map((item, idx) => (
-                        <a
-                          key={item.name}
-                          href={item.path}
-                          className={`block px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all ${
-                            idx !== membershipDropdown.length - 1
-                              ? "border-b border-gray-100"
-                              : ""
-                          }`}
-                        >
-                          {item.name}
-                        </a>
+                      <a
+                       key={item.name}
+                        href={item.path}
+                       className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
+                       idx !== membershipDropdown.length - 1
+                     ? "border-b border-gray-200"
+                      : ""
+                      }`}
+                     >
+  {/* Hover Line */}
+  <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
+    <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+  </span>
+
+  {/* Text */}
+  <span className="transition-all duration-300 group-hover:translate-x-1">
+    {item.name}
+  </span>
+</a>
                       ))}
                     </div>
                   )}
@@ -316,7 +374,12 @@ const Navbar = () => {
 
                 <a
                   href="https://boxandcross.com/contact-us/"
-                  className="px-3 py-2 text-[14px] font-bold  text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  style={{
+                    fontFamily: '"Bai Jamjuree", sans-serif',
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
                 >
                   CONTACT US
                 </a>
@@ -334,7 +397,13 @@ const Navbar = () => {
                 >
                   <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
 
-                  <span className="relative z-10 text-[14px] font-bold">
+                  <span className="relative z-10 "
+                     style={{
+                    fontFamily: '"Bai Jamjuree", sans-serif', 
+                    fontWeight: 700,
+                    fontSize: "14px",
+                  }}
+                  >
                     ENTER THE ARENA
                   </span>
                 </a>
@@ -501,15 +570,25 @@ const Navbar = () => {
           {/* MEMBERSHIP */}
 
           <div className="border-b border-[#1f1f1f]">
-            <button
-              onClick={() => toggleMobileDropdown("membership")}
-              className="w-full flex justify-between items-center py-2 text-white text-[14px] font-extrabold transition-colors"
-            >
-              MEMBERSHIP
-              <span className="bg-[#1a1a1a] text-gray-400 w-8 h-8 flex items-center justify-center text-xl font-light rounded-sm">
+            <div className="flex justify-between items-center py-2">
+              <NavLink
+                to="/"
+                onClick={closeOffcanvas}
+                className={({ isActive }) =>
+                  `text-[14px] font-extrabold transition-colors ${
+                    isActive ? "text-[#defb02]" : "text-white hover:text-[#defb02]"
+                  }`
+                }
+              >
+                MEMBERSHIP
+              </NavLink>
+              <button
+                onClick={() => toggleMobileDropdown("membership")}
+                className="bg-[#1a1a1a] text-gray-400 w-8 h-8 flex items-center justify-center text-xl font-light rounded-sm cursor-pointer"
+              >
                 {openDropdown === "membership" ? "-" : "+"}
-              </span>
-            </button>
+              </button>
+            </div>
 
             <div
               className={`overflow-hidden transition-all duration-300 ${

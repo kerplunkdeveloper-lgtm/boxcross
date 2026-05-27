@@ -19,11 +19,22 @@ const ChoosePlan = React.forwardRef(({
         transition={{ duration: 0.6 }}
         className="text-center mb-8"
       >
-        <p className="text-[#defb02] font-bold text-[10px] tracking-[0.2em] mb-1 uppercase">STEP 2</p>
-        <h2 className="text-xl md:text-2xl font-extrabold tracking-wide uppercase mb-3">
-          CHOOSE YOUR PLAN – {activeData.title}
-        </h2>
-        <div className="flex flex-wrap items-center justify-center gap-3 text-gray-400 text-[11px]">
+        <span className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+          style={{
+            fontFamily: '"Bai Jamjuree", sans-serif',
+            fontSize:'16px',
+            fontWeight:'600',
+          }}>
+           STEP 2
+          </span>
+      
+                <h2
+            className="mt-5 font-black mb-5 leading-tight"
+            style={{ fontFamily: '"Brutal Fon", sans-serif' , fontSize:'48px',fontWeight:'700'}}
+          >
+            CHOOSE YOUR <br /> <span className="text-[#defb02]">{activeData.title}</span>
+          </h2>
+        <div className="flex  flex-wrap items-center justify-center gap-3 text-gray-400 text-[11px]">
           {activeData.features.map((feature, i) => (
             <React.Fragment key={i}>
               <span className="flex items-center gap-1">
@@ -74,7 +85,7 @@ const ChoosePlan = React.forwardRef(({
       <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6">
         
         {/* PRICING CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 flex-1">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 flex-1 mt-8">
           {activeData.plans.map((plan, i) => (
             <motion.div 
               key={i} 
@@ -87,26 +98,26 @@ const ChoosePlan = React.forwardRef(({
               }`}
             >
               {plan.tag && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#defb02] text-black text-[9px] font-bold px-3 py-0.5 rounded-sm tracking-wider uppercase whitespace-nowrap z-10">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#defb02] text-black text-[10px] font-bold px-4 py-1 rounded-sm tracking-wider uppercase whitespace-nowrap z-10">
                   {plan.tag}
                 </div>
               )}
               
-              <div className="p-5 md:p-6 flex flex-col items-center text-center border-b border-gray-800">
-                <h3 className="text-base font-extrabold tracking-wider mb-1">{plan.months}</h3>
-                <p className="text-[#defb02] text-[9px] font-bold tracking-widest uppercase mb-4">{plan.subtitle}</p>
+              <div className="p-6 flex flex-col items-center text-center border-b border-gray-800">
+                <h3 className="text-lg md:text-xl font-black tracking-wide mb-1.5">{plan.months}</h3>
+                <p className="text-[#defb02] text-[10px] md:text-[11px] font-extrabold tracking-widest uppercase mb-4">{plan.subtitle}</p>
                 <div className="flex items-start justify-center gap-1 mb-1">
-                  <span className="text-lg font-bold mt-1">₹</span>
-                  <span className="text-3xl md:text-4xl font-extrabold tracking-tight">{plan.price}</span>
+                  <span className="text-xl font-bold mt-1">₹</span>
+                  <span className="text-4xl md:text-5xl font-black tracking-tight">{plan.price}</span>
                 </div>
-                <p className="text-gray-400 text-[10px]">₹{plan.perMonth} / month</p>
+                <p className="text-gray-400 text-xs md:text-sm font-medium">₹{plan.perMonth} / month</p>
               </div>
               
-              <div className="p-5 md:p-6 flex-1 flex flex-col">
-                <ul className="space-y-3 mb-6 flex-1">
+              <div className="p-6 flex-1 flex flex-col">
+                <ul className="space-y-4 mb-6 flex-1">
                   {plan.highlights.map((highlight, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-[11px] text-gray-300">
-                      <Check size={14} className="text-[#defb02] shrink-0 mt-0.5" />
+                    <li key={idx} className="flex items-start gap-2.5 text-xs md:text-sm text-gray-200">
+                      <Check size={16} className="text-[#defb02] shrink-0 mt-0.5" />
                       <span className="leading-snug">{highlight}</span>
                     </li>
                   ))}
@@ -114,7 +125,7 @@ const ChoosePlan = React.forwardRef(({
                 
                 <button 
                   onClick={() => handlePlanSelect(`${activeData.title} - ${plan.months}`, plan.price)}
-                  className={`group/planbtn relative overflow-hidden w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-colors rounded-lg ${
+                  className={`group/planbtn relative overflow-hidden w-full py-3.5 text-xs font-bold uppercase tracking-widest transition-colors rounded-lg ${
                     plan.isPopular ? 'bg-[#defb02] text-black' : 'border border-gray-600 text-white hover:border-white'
                   }`}
                 >
@@ -129,15 +140,15 @@ const ChoosePlan = React.forwardRef(({
         </div>
 
         {/* STARTER ACCESS CARD */}
-        <div className="w-full lg:w-[220px] flex flex-col gap-4 mt-6 lg:mt-0">
-          <div className="bg-[#111] border border-gray-800 rounded-xl p-5 text-center flex flex-col items-center justify-center flex-1 hover:border-gray-600 transition-colors cursor-pointer group">
-            <Calendar size={24} className="text-[#defb02] mb-3" />
-            <p className="text-[10px] text-gray-400 uppercase tracking-widest font-bold mb-2 group-hover:text-gray-300">NOT SURE?</p>
-            <h4 className="text-sm font-bold mb-3 leading-tight">Try 1 Month<br/>Starter Access</h4>
-            <p className="text-2xl font-extrabold mb-5">₹{activeData.starterPrice}</p>
+        <div className="w-full lg:w-[240px] flex flex-col gap-4 mt-6 lg:mt-0">
+          <div className="bg-[#111] border border-gray-800 rounded-xl p-6 text-center flex flex-col items-center justify-center flex-1 hover:border-gray-600 transition-colors cursor-pointer group">
+            <Calendar size={28} className="text-[#defb02] mb-3" />
+            <p className="text-[11px] md:text-xs text-gray-400 uppercase tracking-widest font-bold mb-2 group-hover:text-gray-300">NOT SURE?</p>
+            <h4 className="text-base font-black mb-3 leading-tight">Try 1 Month<br/>Starter Access</h4>
+            <p className="text-3xl font-black mb-5">₹{activeData.starterPrice}</p>
             <button 
               onClick={() => handlePlanSelect(`1 Month Starter Access - ${activeData.title}`, activeData.starterPrice)}
-              className="group/trybtn relative overflow-hidden w-full py-2 border border-gray-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:border-white transition-colors"
+              className="group/trybtn relative overflow-hidden w-full py-2.5 border border-gray-600 text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:border-white transition-colors"
             >
               <div className="absolute inset-0 bg-white translate-x-[100%] group-hover/trybtn:translate-x-0 transition-transform duration-500 ease-out z-0"></div>
               <span className="relative z-10 transition-colors duration-300 group-hover/trybtn:text-black">
@@ -146,10 +157,10 @@ const ChoosePlan = React.forwardRef(({
             </button>
           </div>
           
-          <div className="bg-[#111] border border-gray-800 rounded-xl p-5 text-center hover:border-gray-600 transition-colors">
-            <Shield size={20} className="text-[#defb02] mx-auto mb-2" />
-            <h4 className="text-xs font-bold mb-1">Flexible<br/>Membership<br/>Support</h4>
-            <p className="text-[10px] text-gray-400">We've got your back when life happens.</p>
+          <div className="bg-[#111] border border-gray-800 rounded-xl p-6 text-center hover:border-gray-600 transition-colors">
+            <Shield size={24} className="text-[#defb02] mx-auto mb-2" />
+            <h4 className="text-sm font-black mb-1.5">Flexible<br/>Membership<br/>Support</h4>
+            <p className="text-xs text-gray-400">We've got your back when life happens.</p>
           </div>
         </div>
 

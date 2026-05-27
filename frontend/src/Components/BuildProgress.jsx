@@ -13,13 +13,20 @@ const BuildProgress = () => {
     <section className="w-full py-24 px-4 md:px-12 max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center gap-16 lg:gap-24 border-t border-[#1a1a1a] bg-black">
       {/* Left Content */}
       <div className="flex-1 max-w-2xl text-left">
-        <h4 className="text-[#d9ff00] font-black tracking-[0.2em] text-[10px] md:text-xs uppercase mb-3">
-          EXPERT COACHING
-        </h4>
-        <h2
-          className="text-6xl md:text-[90px] font-black text-white leading-[0.9] mb-8"
+        <span className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
           style={{
-            fontFamily: '"Bebas Neue", "Bebas Neue Fallback", sans-serif',
+            fontFamily: '"Bai Jamjuree", sans-serif',
+            fontSize:'16px',
+            fontWeight:'600',
+          }}>
+           EXPERT COACHING
+          </span>
+        <h2
+          className=" text-white mt-5 leading-[0.9] mb-8"
+          style={{
+            fontFamily: '"Brutal Font", sans-serif',
+            fontSize:'48px',
+            fontWeight:'700',
           }}
         >
           BUILD REAL

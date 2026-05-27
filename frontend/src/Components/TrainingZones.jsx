@@ -77,14 +77,21 @@ const TrainingZones = ({ onBookTour }) => {
       `}} />
 
       <div className="mb-10 px-2 md:px-6">
-        <h4 className="text-[#d9ff00] font-black tracking-[0.2em] text-[10px] md:text-xs uppercase mb-2">
-          TAKE A LOOK
-        </h4>
-        <h2
-          className="text-5xl md:text-[80px] font-black text-white leading-none"
+        <span className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
           style={{
-            fontFamily: '"Bebas Neue", "Bebas Neue Fallback", sans-serif',
-          }}
+            fontFamily: '"Bai Jamjuree", sans-serif',
+            fontSize:'16px',
+            fontWeight:'600',
+          }}>
+           TAKE A LOOK
+          </span>
+        <h2
+          className=" text-white mt-5 leading-none"
+          style={{
+              fontFamily: '"Brutal Font", sans-serif',
+              fontSize:'48px',
+              fontWeight:'700',
+            }}
         >
           OUR TRAINING <span className="text-[#d9ff00]">ZONES</span>
         </h2>
