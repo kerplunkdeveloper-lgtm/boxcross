@@ -166,3 +166,41 @@ exports.updateMembership = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// @desc    Google Sign In / Register
+// @route   POST /api/auth/google
+// @access  Public
+exports.googleLogin = async (req, res) => {
+  try {
+    const { name, email, googleId, profilePic } = req.body;
+
+    if (!email || !googleId) {
+      return res.status(400).json({ success: false, message: "Google account details are missing" });
+    }
+
+    // Find if user already exists
+    let user = await User.findOne({ email });
+
+    if (user) {
+      // If user exists but has no googleId, link it
+      if (!user.googleId) {
+        user.googleId = googleId;
+        if (profilePic) user.profilePic = profilePic;
+        await user.save();
+      }
+    } else {
+      // Create new user
+      user = await User.create({
+        name: name || email.split("@")[0],
+        email,
+        googleId,
+        profilePic: profilePic || "",
+        role: "member", // Default to member for new signups
+      });
+    }
+
+    sendTokenResponse(user, 200, res);
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
