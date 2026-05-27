@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   X,
   ChevronDown,
@@ -21,6 +22,7 @@ import {
 import logo from "../assets/images/logo.png";
 
 const Navbar = () => {
+  const { user } = useAuth();
   const [openDropdown, setOpenDropdown] = useState(null);
   const [offcanvasOpen, setOffcanvasOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
@@ -387,17 +389,17 @@ const Navbar = () => {
 
               {/* ================= RIGHT ================= */}
 
-              <div className="flex items-center gap-4">
-                {/* CTA */}
+              <div className="flex items-center gap-3">
 
+
+                {/* CTA */}
                 <a
                   href="https://boxandcross.com/contact-us/"
                   rel="noopener noreferrer"
-                  className="hidden lg:flex relative overflow-hidden px-8 py-4 bg-[#defb02] text-black rounded-xl text-xs  tracking-wider uppercase group"
+                  className="hidden lg:flex relative overflow-hidden px-6 py-4 bg-[#defb02] text-black rounded-xl text-xs tracking-wider uppercase group"
                 >
                   <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
-
-                  <span className="relative z-10 "
+                  <span className="relative z-10"
                      style={{
                     fontFamily: '"Bai Jamjuree", sans-serif', 
                     fontWeight: 700,
@@ -480,14 +482,16 @@ const Navbar = () => {
           {/* HOME */}
 
           <div className="border-b border-[#1f1f1f]">
-            <a
-              href="/"
+            <NavLink
+              to="/"
               onClick={closeOffcanvas}
               className="block py-2 text-white text-[14px] font-extrabold transition-colors "
             >
               HOME
-            </a>
+            </NavLink>
           </div>
+
+
 
           {/* THE ARENA */}
 

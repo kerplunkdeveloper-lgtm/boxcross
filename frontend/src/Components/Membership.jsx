@@ -137,8 +137,9 @@ const Membership = () => {
   const activeDataKey = activeTab === 'transform' ? 'transform' : subTabs[activeTab];
   const activeData = pricingData[activeDataKey];
 
-  const handlePlanSelect = (planName, price) => {
-    setSelectedPlan({ name: planName, price: price });
+  const handlePlanSelect = (planName, price, durationStr) => {
+    const monthsVal = durationStr ? parseInt(durationStr) : 1;
+    setSelectedPlan({ name: planName, price: price, monthsVal: monthsVal });
     setIsModalOpen(true);
   };
 

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createBooking } from "../api/api";
+import { useAuth } from "../context/AuthContext";
 import {
   MapPin,
   User,
@@ -13,6 +14,7 @@ import {
 } from "lucide-react";
 
 const BookForm = () => {
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
 
   const [error, setError] = useState("");
@@ -27,6 +29,16 @@ const BookForm = () => {
     month: "",
     time: "",
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: user.name || "",
+        phone: user.phone || prev.phone || "",
+      }));
+    }
+  }, [user]);
 
   const goals = [
     "Weight Loss",

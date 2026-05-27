@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { X, Smartphone, ShieldCheck, CheckCircle2, Loader2, Info, QrCode, User, Phone, Mail, ChevronRight, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
+import { updateMembership } from "../api/api";
 
 const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
+  const { user: authUser, setUser: setAuthUser } = useAuth();
   const [step, setStep] = useState(1);
   const [payState, setPayState] = useState("idle");
   const [upiId, setUpiId] = useState("");
@@ -16,7 +19,18 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
       setPayState("idle"); 
       setUpiId(""); 
       setUpiError(""); 
-      setUser({ name: "", phone: "", email: "" }); 
+      
+      // Pre-fill user data if logged in
+      if (authUser) {
+        setUser({
+          name: authUser.name || "",
+          phone: authUser.phone || "",
+          email: authUser.email || "",
+        });
+      } else {
+        setUser({ name: "", phone: "", email: "" });
+      }
+      
       setErrors({}); 
       document.body.style.overflow = "hidden";
     } else {
@@ -25,7 +39,7 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isOpen]);
+  }, [isOpen, authUser]);
 
   const validate = () => {
     const e = {};
@@ -37,14 +51,43 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
   };
 
   const handleContinue = () => { if (validate()) setStep(2); };
+
+  const handleSuccessPayment = async () => {
+    if (authUser && planDetails) {
+      try {
+        const monthsVal = planDetails.monthsVal || 1;
+        const priceNum = parseFloat(planDetails.price.replace(/,/g, "")) || 0;
+        const { data } = await updateMembership({
+          planName: planDetails.name,
+          price: priceNum,
+          durationMonths: monthsVal
+        });
+        if (data.success) {
+          setAuthUser(data.user);
+        }
+      } catch (err) {
+        console.error("Error updating membership in DB", err);
+      }
+    }
+  };
+
   const handleVerify = () => {
     if (!upiId || !upiId.includes("@")) { setUpiError("Enter a valid UPI ID (e.g., name@ybl)"); return; }
     setUpiError(""); setPayState("processing");
-    setTimeout(() => { setPayState("success"); setTimeout(onClose, 4500); }, 4500);
+    setTimeout(async () => { 
+      setPayState("success"); 
+      await handleSuccessPayment();
+      setTimeout(onClose, 4500); 
+    }, 4500);
   };
+
   const handleAppPay = () => {
     setPayState("processing");
-    setTimeout(() => { setPayState("success"); setTimeout(onClose, 4500); }, 3000);
+    setTimeout(async () => { 
+      setPayState("success"); 
+      await handleSuccessPayment();
+      setTimeout(onClose, 4500); 
+    }, 3000);
   };
 
   const busy = payState === "processing" || payState === "success";

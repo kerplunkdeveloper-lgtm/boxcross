@@ -144,10 +144,37 @@ const deleteBooking = async (req, res) => {
   }
 };
 
+// @desc    Get current logged in user's bookings
+// @route   GET /api/bookings/my
+// @access  Private
+const getMyBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find({
+      $or: [
+        { name: req.user.name },
+        { phone: req.user.phone }
+      ]
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: bookings.length,
+      data: bookings,
+    });
+  } catch (error) {
+    console.error("Fetch My Bookings Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 module.exports = {
   createBooking,
   getBookings,
   getBookingById,
   updateBooking,
   deleteBooking,
+  getMyBookings,
 };

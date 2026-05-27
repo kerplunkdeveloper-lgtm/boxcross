@@ -157,7 +157,7 @@ const Membership = () => {
               "
             >
               <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
-              <span className="relative z-10">Book Your Free Gym Tour</span>
+              <span className="relative z-10 text-[10px] md:text-[14px] ">Book Your Free Gym Tour</span>
             </button>
 
             {/* PLANS BUTTON */}
@@ -170,15 +170,16 @@ const Membership = () => {
                 group relative overflow-hidden
                 w-[85%] sm:w-auto
                 px-10 py-4
-                bg-[#d9ff00] text-black
+                bg-white
+                 text-black
                 uppercase tracking-[0.2em]
                 rounded-lg
                 transition-all duration-500
                 cursor-pointer
               "
             >
-              <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
-              <span className="relative z-10">Membership Plans</span>
+              <span className="absolute inset-0  bg-[#d9ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
+              <span className="relative z-10 text-[10px] md:text-[14px]">Membership Plans</span>
             </button>
 
           </motion.div>

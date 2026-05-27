@@ -6,9 +6,20 @@ const {
   getBookingById,
   updateBooking,
   deleteBooking,
+  getMyBookings,
 } = require("../controllers/bookingController");
+const { protect, authorize } = require("../middleware/authMiddleware");
 
-router.route("/").post(createBooking).get(getBookings);
-router.route("/:id").get(getBookingById).put(updateBooking).delete(deleteBooking);
+// Public route to book
+router.post("/", createBooking);
+
+// Protected user route to get their own bookings
+router.get("/my", protect, getMyBookings);
+
+// Admin-only routes
+router.get("/", protect, authorize("admin"), getBookings);
+router.get("/:id", protect, authorize("admin"), getBookingById);
+router.put("/:id", protect, authorize("admin"), updateBooking);
+router.delete("/:id", protect, authorize("admin"), deleteBooking);
 
 module.exports = router;

@@ -7,13 +7,24 @@ const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Crucial for sending HttpOnly cookies
 });
+
+// ──────────────── AUTH API ────────────────
+
+export const registerUser = (data) => API.post("/auth/register", data);
+export const loginUser = (data) => API.post("/auth/login", data);
+export const logoutUser = () => API.get("/auth/logout");
+export const getMe = () => API.get("/auth/me");
+export const updateMembership = (data) => API.put("/auth/membership", data);
 
 // ──────────────── BOOKING API ────────────────
 
 export const createBooking = (data) => API.post("/bookings", data);
 
 export const getBookings = () => API.get("/bookings");
+
+export const getMyBookings = () => API.get("/bookings/my");
 
 export const getBookingById = (id) => API.get(`/bookings/${id}`);
 

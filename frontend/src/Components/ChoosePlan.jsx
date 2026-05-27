@@ -124,7 +124,7 @@ const ChoosePlan = React.forwardRef(({
                 </ul>
                 
                 <button 
-                  onClick={() => handlePlanSelect(`${activeData.title} - ${plan.months}`, plan.price)}
+                  onClick={() => handlePlanSelect(`${activeData.title} - ${plan.months}`, plan.price, plan.months)}
                   className={`group/planbtn relative overflow-hidden w-full py-3.5 text-xs font-bold uppercase tracking-widest transition-colors rounded-lg ${
                     plan.isPopular ? 'bg-[#defb02] text-black' : 'border border-gray-600 text-white hover:border-white'
                   }`}
@@ -147,7 +147,7 @@ const ChoosePlan = React.forwardRef(({
             <h4 className="text-base font-black mb-3 leading-tight">Try 1 Month<br/>Starter Access</h4>
             <p className="text-3xl font-black mb-5">₹{activeData.starterPrice}</p>
             <button 
-              onClick={() => handlePlanSelect(`1 Month Starter Access - ${activeData.title}`, activeData.starterPrice)}
+              onClick={() => handlePlanSelect(`1 Month Starter Access - ${activeData.title}`, activeData.starterPrice, "1 MONTH")}
               className="group/trybtn relative overflow-hidden w-full py-2.5 border border-gray-600 text-white text-xs font-bold uppercase tracking-widest rounded-lg hover:border-white transition-colors"
             >
               <div className="absolute inset-0 bg-white translate-x-[100%] group-hover/trybtn:translate-x-0 transition-transform duration-500 ease-out z-0"></div>

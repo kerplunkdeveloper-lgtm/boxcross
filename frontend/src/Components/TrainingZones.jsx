@@ -77,7 +77,7 @@ const TrainingZones = ({ onBookTour }) => {
       `}} />
 
       <div className="mb-10 px-2 md:px-6">
-        <span className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+        <span className="px-4 py-2 rounded-md   border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
           style={{
             fontFamily: '"Bai Jamjuree", sans-serif',
             fontSize:'16px',
@@ -86,10 +86,9 @@ const TrainingZones = ({ onBookTour }) => {
            TAKE A LOOK
           </span>
         <h2
-          className=" text-white mt-5 leading-none"
+          className=" text-white text-[30px] md:text-[48px] mt-9 leading-none"
           style={{
               fontFamily: '"Brutal Font", sans-serif',
-              fontSize:'48px',
               fontWeight:'700',
             }}
         >
