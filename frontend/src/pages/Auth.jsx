@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import boxcrosslogo from "../assets/login.png";
-import logo from "../assets/images/logo.png";
+// import logo from "../assets/images/logo.png";
 import { toast } from "react-hot-toast";
 
 const Auth = () => {
@@ -56,15 +56,15 @@ const Auth = () => {
       />
 
       {/* Top Header Bar */}
-      <header className="relative w-full px-6 md:px-12 py-4 z-10 flex items-center justify-between bg-black/60  border-b border-white/[0.08]">
-        {/* Left Logo */}
-        <div className="flex items-center select-none">
+      <header className="relative w-full px-6 md:px-12 py-4 z-10 flex items-center justify-end  border-b border-white/[0.08]">
+    
+        {/* <div className="flex items-center select-none">
           <img src={logo} alt="Box & Cross Logo" className="h-11 md:h-14 w-auto object-contain" />
-        </div>
+        </div> */}
 
         {/* Right Label */}
         <div 
-          className="text-xs md:text-2xl text-[#dbff00] font-medium font-black"
+          className="text-xs md:text-2xl text-white font-medium font-black"
           style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
         >
           GYM PORTAL
@@ -77,18 +77,18 @@ const Auth = () => {
         {/* Left Side: Bold Promotional Blocks (Desktop Only) */}
         <div className="hidden md:flex flex-col items-start text-left select-none max-w-lg mb-12">
           {/* ALL ABOUT Block */}
-          <div className="bg-black/30 text-[#dbff00] font-medium backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm tracking-[0.2em] font-black text-lg md:text-xl  inline-block mb-3.5 shadow-xl shadow-black/10">
+          <div className="bg-black/30 text-white  font-bold backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm tracking-[0.2em] font-black text-lg md:text-xl  inline-block mb-3.5 shadow-xl shadow-black/10">
             All About
           </div>
 
           {/* HEALTH & FITNESS Block */}
-          <div className="bg-black/30 text-[#dbff00] font-medium backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm tracking-[0.2em] font-black text-lg md:text-xl  inline-block shadow-xl shadow-black/10">
+          <div className="bg-black/30 text-white  font-bold backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm tracking-[0.2em] font-black text-lg md:text-xl  inline-block shadow-xl shadow-black/10">
             Health & Fitness
           </div>
         </div>
 
         {/* Right Side: Floating Glassmorphic Login Card with Spin Border Animation */}
-        <div className="w-full max-w-[390px] relative p-[1px] overflow-hidden rounded-[28px] bg-white/[0.05] shadow-2xl">
+        <div className="w-full max-w-[460px] relative p-[1px] overflow-hidden rounded-[28px] bg-white/[0.05] shadow-2xl">
           {/* Spin border animation */}
           <div className="absolute inset-[-100px] bg-[conic-gradient(from_0deg,transparent_40%,#defb02_50%,transparent_60%)] animate-[spin_5s_linear_infinite] z-0 pointer-events-none" />
 
@@ -96,15 +96,15 @@ const Auth = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4 }}
-            className="w-full bg-[#121415]/95 backdrop-blur-lg rounded-[28px] p-8 md:p-10 relative z-10"
+            className="w-full bg-[#121415]/95 backdrop-blur-lg rounded-[28px] p-10 md:p-12 relative z-10"
           >
             {/* Top accent line */}
             <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-7">
               {/* Header Title */}
               <div 
-                className="text-white/80 text-[13px] tracking-[0.18em] uppercase font-bold text-left italic border-b border-white/5 pb-3 mb-2"
+                className="text-white/80 text-sm tracking-[0.18em] uppercase font-bold text-left italic border-b border-white/5 pb-3 mb-2"
                 style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
               >
                 PROCEED TO LOGIN
@@ -127,7 +127,7 @@ const Auth = () => {
                   placeholder="admin@boxcross.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-11 bg-[#c8cacb] border-none text-black font-semibold placeholder-[#6e7173] rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
+                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
                   required
                 />
               </div>
@@ -139,7 +139,7 @@ const Auth = () => {
                   placeholder="Enter Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-11 bg-[#c8cacb] border-none text-black font-semibold placeholder-[#6e7173] rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
+                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
                   required
                 />
               </div>
@@ -150,10 +150,11 @@ const Auth = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full sm:w-auto bg-[#484e52] hover:bg-[#585f64] active:scale-[0.98] text-white font-extrabold uppercase tracking-widest text-[11px] rounded-full px-10 py-3 transition-all cursor-pointer shadow-lg disabled:opacity-50"
+                  className="group relative overflow-hidden w-full sm:w-auto px-12 py-3.5 bg-[#defb02] text-black font-extrabold uppercase tracking-widest text-xs rounded-full transition-all duration-500 cursor-pointer shadow-lg disabled:opacity-50"
                   style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
                 >
-                  {loading ? "..." : "LOGIN"}
+                  <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
+                  <span className="relative z-10">{loading ? "..." : "LOGIN"}</span>
                 </button>
               </div>
             </form>
