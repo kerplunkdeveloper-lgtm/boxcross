@@ -65,20 +65,8 @@ const Navbar = () => {
   const communityDropdown = [
     {
       name: "EVENTS",
-      path: "https://boxandcross.com/events/",
-    },
-    {
-      name: "CHALLENGES",
-      path: "https://boxandcross.com/challenges/",
-    },
-    {
-      name: "LEADERBOARDS",
-      path: "https://boxandcross.com/leaderboards/",
-    },
-    {
-      name: "FIGHT NIGHTS",
-      path: "https://boxandcross.com/fight-nights/",
-    },
+      path: "/events",
+    }
   ];
 
   const membershipDropdown = [
