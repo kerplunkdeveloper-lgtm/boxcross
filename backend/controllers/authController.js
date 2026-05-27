@@ -7,11 +7,12 @@ const sendTokenResponse = (user, statusCode, res) => {
     expiresIn: "7d",
   });
 
+  const isProduction = process.env.NODE_ENV === "production";
   const options = {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // Crucial for cross-origin local dev cookies
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   };
 
   res
@@ -102,11 +103,12 @@ exports.login = async (req, res) => {
 // @access  Public
 exports.logout = async (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", "none", {
       expires: new Date(Date.now() + 10 * 1000), // expires in 10s
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     });
 
     res.status(200).json({ success: true, message: "User logged out successfully" });
