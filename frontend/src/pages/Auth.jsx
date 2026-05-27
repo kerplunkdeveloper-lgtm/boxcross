@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import boxcrosslogo from "../assets/login.png";
 import logo from "../assets/images/logo.png";
+import { toast } from "react-hot-toast";
 
 const Auth = () => {
   const { login, user } = useAuth();
@@ -40,6 +41,9 @@ const Auth = () => {
     setLoading(false);
     if (!result.success) {
       setError(result.message);
+      toast.error(result.message || "Failed to log in.");
+    } else {
+      toast.success("Welcome back, administrator!");
     }
   };
 

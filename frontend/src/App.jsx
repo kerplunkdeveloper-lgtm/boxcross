@@ -6,9 +6,13 @@ import MembershipPage from './pages/Membership';
 import ScrollToTop from './Components/ScrollToTop';
 import Footer from './Components/Footer';
 import Auth from './pages/Auth';
-import Dashboard from './pages/Dashboard';
+import DashboardLayout from './Components/DashboardLayout';
+import DashboardHome from './pages/DashboardHome';
+import DashboardBookings from './pages/DashboardBookings';
+import DashboardSettings from './pages/DashboardSettings';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast';
 
 // Layout with Navbar and Footer
 const Layout = () => {
@@ -30,6 +34,25 @@ const App = () => {
   return (
     <AuthProvider>
       <div className="min-h-screen bg-black text-white">
+        <Toaster 
+          position="top-center"
+          toastOptions={{
+            style: {
+              background: '#0a0a0a',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.08)',
+              fontFamily: '"Bai Jamjuree", sans-serif',
+              fontSize: '13px',
+              borderRadius: '12px',
+            },
+            success: {
+              iconTheme: {
+                primary: '#defb02',
+                secondary: '#000',
+              },
+            },
+          }}
+        />
         {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
         <BrowserRouter>
           <Routes>
@@ -44,10 +67,14 @@ const App = () => {
               path="/dashboard" 
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <DashboardLayout />
                 </ProtectedRoute>
               } 
-            />
+            >
+              <Route index element={<DashboardHome />} />
+              <Route path="bookings" element={<DashboardBookings />} />
+              <Route path="settings" element={<DashboardSettings />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </div>
