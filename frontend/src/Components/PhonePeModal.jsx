@@ -11,7 +11,20 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (isOpen) { setStep(1); setPayState("idle"); setUpiId(""); setUpiError(""); setUser({ name: "", phone: "", email: "" }); setErrors({}); }
+    if (isOpen) { 
+      setStep(1); 
+      setPayState("idle"); 
+      setUpiId(""); 
+      setUpiError(""); 
+      setUser({ name: "", phone: "", email: "" }); 
+      setErrors({}); 
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [isOpen]);
 
   const validate = () => {
@@ -41,7 +54,7 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center md:p-6 font-sans">
+        <div className="fixed inset-0 z-[99999] flex items-end md:items-center justify-center md:p-6 font-sans">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="absolute inset-0 bg-black/75 backdrop-blur-md"
             onClick={!busy ? onClose : undefined} />

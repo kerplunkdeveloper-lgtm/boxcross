@@ -175,7 +175,7 @@ const Navbar = () => {
     <>
       <div
         className={`sticky top-0 z-[80] transition-transform duration-500 ease-in-out md:px-10 md:pt-1 ${
-          isNavVisible ? "translate-y-0" : "-translate-y-[150%]"
+          isNavVisible ? "translate-y-0" : "-translate-y-[150%] "
         }`}
       >
         {/* ================= NAVBAR ================= */}
