@@ -88,3 +88,11 @@ body {
   --db-accent-highlight: #2563eb;
   --db-accent-glow: rgba(37, 99, 235, 0.12);
 }
+
+/* Force Poppins font on all dashboard views */
+.dashboard-dark, 
+.dashboard-light, 
+.dashboard-dark *, 
+.dashboard-light * {
+  font-family: 'Poppins', sans-serif !important;
+}

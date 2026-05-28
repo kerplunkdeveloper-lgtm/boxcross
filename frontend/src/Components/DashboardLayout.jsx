@@ -25,7 +25,7 @@ const DashboardLayout = () => {
   if (!user) return null;
 
   return (
-    <div className={`h-screen font-sans flex overflow-hidden ${theme === 'dark' ? 'dashboard-dark' : 'dashboard-light'} bg-[var(--db-bg)] text-[var(--db-text)]`}>
+    <div className={`h-screen font-['Poppins'] flex overflow-hidden ${theme === 'dark' ? 'dashboard-dark' : 'dashboard-light'} bg-[var(--db-bg)] text-[var(--db-text)]`}>
       {/* Sidebar */}
       <DashboardSidebar 
         sidebarOpen={sidebarOpen} 

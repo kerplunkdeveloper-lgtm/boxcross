@@ -89,6 +89,58 @@ const DashboardHome = () => {
           </div>
         </div>
 
+        {/* Cinematic Video Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="w-full h-56 sm:h-72 md:h-80 lg:h-96 rounded-3xl overflow-hidden relative border border-[var(--db-card-border)] shadow-2xl"
+        >
+          {/* Loop Video Background */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          >
+            <source
+              src="https://res.cloudinary.com/dubheb1lh/video/upload/v1779972237/100546-video-720_1_yostn5.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Premium Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent z-10" />
+
+          {/* Banner Text Content */}
+          <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 sm:px-12 md:px-16 text-left">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[var(--db-accent-highlight)] text-[9px] sm:text-[10px] font-black uppercase tracking-widest self-start mb-2.5 sm:mb-3.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--db-accent-highlight)] animate-pulse" />
+              Box & Cross Elite Training
+            </span>
+            <h2 
+              className="text-2xl sm:text-4xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-wider leading-tight max-w-xs sm:max-w-lg md:max-w-xl"
+              style={{ fontFamily: '"Brutal Font", "Bebas Neue", sans-serif' }}
+            >
+              Push Your Limits. <br />
+              <span className="text-[var(--db-accent-highlight)]">Crush Your Goals.</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-300 font-medium mt-2 sm:mt-2.5 max-w-xs sm:max-w-md md:max-w-lg leading-relaxed">
+              Access premium member amenities, review active training classes, and track your workout sessions.
+            </p>
+            <button
+              onClick={() => navigate("/dashboard/calendar")}
+              className="mt-4 sm:mt-5 px-5 py-2.5 sm:px-6 sm:py-3 bg-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/95 text-white font-black uppercase tracking-wider text-xs sm:text-sm rounded-xl transition-all shadow-lg shadow-[var(--db-accent-glow)] hover:scale-105 active:scale-95 cursor-pointer self-start flex items-center gap-2"
+            >
+              Book Sessions
+              <ArrowRight size={16} />
+            </button>
+          </div>
+        </motion.div>
+
         {/* Dashboard Grid Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
