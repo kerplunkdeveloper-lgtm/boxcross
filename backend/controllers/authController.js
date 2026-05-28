@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const cloudinary = require("../config/cloudinary");
 
 // Helper to generate JWT and set HttpOnly Cookie
 const sendTokenResponse = (user, statusCode, res) => {
@@ -26,6 +27,10 @@ const sendTokenResponse = (user, statusCode, res) => {
         email: user.email,
         role: user.role,
         membership: user.membership,
+        profileImage: user.profileImage || "",
+        username: user.username || "",
+        dob: user.dob || "",
+        contactNumber: user.contactNumber || "",
       },
     });
 };
@@ -161,8 +166,68 @@ exports.updateMembership = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    res.status(200).json({ success: true, user });
+    } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Helper function to upload file buffer to Cloudinary
+const uploadToCloudinary = (fileBuffer, mimetype) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: "boxcross_profiles",
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+    uploadStream.end(fileBuffer);
+  });
+};
+
+// @desc    Update user profile details and/or profile image
+// @route   PUT /api/auth/profile
+// @access  Private
+exports.updateProfile = async (req, res) => {
+  try {
+    const { name, username, dob, contactNumber } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    if (name !== undefined) user.name = name;
+    if (username !== undefined) user.username = username;
+    if (dob !== undefined) user.dob = dob;
+    if (contactNumber !== undefined) user.contactNumber = contactNumber;
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+      user.profileImage = result.secure_url;
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        membership: user.membership,
+        profileImage: user.profileImage || "",
+        username: user.username || "",
+        dob: user.dob || "",
+        contactNumber: user.contactNumber || "",
+      },
+    });
   } catch (error) {
+    console.error("Update Profile Error:", error.message);
     res.status(500).json({ success: false, message: error.message });
   }
 };

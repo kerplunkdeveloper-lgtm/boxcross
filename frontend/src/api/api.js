@@ -80,5 +80,10 @@ export const bookEventItem = (data) => API.post("/events/book", data);
 export const verifyEventPayment = (data) => API.post("/events/verify", data);
 export const getEventBookings = () => API.get("/events/bookings");
 export const deleteEventBooking = (id) => API.delete(`/events/bookings/${id}`);
+export const updateProfile = (formData) => API.put("/auth/profile", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
 
 export default API;

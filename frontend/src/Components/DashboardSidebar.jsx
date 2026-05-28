@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Home, BookOpen, Settings, LogOut, X, CreditCard, DollarSign, Image, Calendar } from "lucide-react";
+import { Home, BookOpen, Settings, LogOut, X, CreditCard, DollarSign, Image, Calendar, User } from "lucide-react";
 import logo from "../assets/images/logo.png";
 import { useAuth } from "../context/AuthContext";
 
@@ -8,10 +8,11 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   const { user } = useAuth();
 
   const menuItems = [
-    { name: "Overview", path: "/dashboard", icon: Home },
-    { name: "Bookings", path: "/dashboard/bookings", icon: BookOpen },
-    { name: "Memberships", path: "/dashboard/memberships", icon: CreditCard },
+    { name: "Dashboard", path: "/dashboard", icon: Home },
+    { name: "Enquiry Bookings", path: "/dashboard/bookings", icon: BookOpen },
+    { name: "Membership Edit", path: "/dashboard/memberships", icon: CreditCard },
     { name: "Payment Details", path: "/dashboard/payments", icon: DollarSign },
+    { name: "Profile Settings", path: "/dashboard/profile", icon: User },
     { name: "Settings", path: "/dashboard/settings", icon: Settings },
   ];
 

@@ -33,8 +33,16 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
           <p className="text-xs font-bold text-gray-300">{user.name}</p>
           <p className="text-[10px] text-[#defb02] font-semibold uppercase tracking-widest">{user.role}</p>
         </div>
-        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#defb02]/20 to-transparent border border-[#defb02]/40 flex items-center justify-center">
-          <User size={20} className="text-[#defb02]" />
+        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#defb02]/20 to-transparent border border-[#defb02]/40 flex items-center justify-center overflow-hidden">
+          {user && user.profileImage ? (
+            <img 
+              src={user.profileImage} 
+              alt={user.name} 
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <User size={20} className="text-[#defb02]" />
+          )}
         </div>
       </div>
     </header>
