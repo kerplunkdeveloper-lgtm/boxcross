@@ -16,6 +16,7 @@ import DashboardEvents from './pages/DashboardEvents';
 import DashboardEventsList from './pages/DashboardEventsList';
 import DashboardEventPayments from './pages/DashboardEventPayments';
 import DashboardProfile from './pages/DashboardProfile';
+import DashboardCalendar from './pages/DashboardCalendar';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -91,6 +92,7 @@ const App = () => {
               <Route path="event-payments" element={<DashboardEventPayments />} />
               <Route path="profile" element={<DashboardProfile />} />
               <Route path="settings" element={<DashboardSettings />} />
+              <Route path="calendar" element={<DashboardCalendar />} />
             </Route>
           </Routes>
         </BrowserRouter>

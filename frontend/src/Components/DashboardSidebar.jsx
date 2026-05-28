@@ -12,6 +12,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
 
   const menuItems = [
     { name: "Dashboard", path: "/dashboard", icon: Home },
+    { name: "Calendar", path: "/dashboard/calendar", icon: Calendar },
     { name: "Enquiry Bookings", path: "/dashboard/bookings", icon: BookOpen },
     { name: "Membership Edit", path: "/dashboard/memberships", icon: CreditCard },
     { name: "Payment Details", path: "/dashboard/payments", icon: DollarSign },
