@@ -77,5 +77,8 @@ export const updateEventItem = (id, formData) => API.put(`/events/${id}`, formDa
 });
 export const deleteEventItem = (id) => API.delete(`/events/${id}`);
 export const bookEventItem = (data) => API.post("/events/book", data);
+export const verifyEventPayment = (data) => API.post("/events/verify", data);
+export const getEventBookings = () => API.get("/events/bookings");
+export const deleteEventBooking = (id) => API.delete(`/events/bookings/${id}`);
 
 export default API;

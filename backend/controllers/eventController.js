@@ -234,7 +234,7 @@ const deleteEvent = async (req, res) => {
 
 const EventBooking = require("../models/EventBooking");
 
-// @desc    Book an event
+// @desc    Book an event (creates pending booking + Razorpay order)
 // @route   POST /api/events/book
 // @access  Public
 const bookEvent = async (req, res) => {
@@ -284,14 +284,31 @@ const bookEvent = async (req, res) => {
     // Calculate total amount
     const totalAmount = event.price * Number(seats);
 
-    // Book seats (increment booked seats)
-    slot.booked += Number(seats);
-    
-    // We mark schedules as modified to make sure Mongoose saves updates in nested arrays
-    event.markModified("schedules");
-    await event.save();
+    // Initialize Razorpay and create order
+    let order;
+    try {
+      const Razorpay = require("razorpay");
+      const razorpay = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_BoxCross2026",
+        key_secret: process.env.RAZORPAY_KEY_SECRET || "supersecretrazorpaysecret2026",
+      });
 
-    // Create event booking
+      const amountInPaise = Math.round(totalAmount * 100);
+      order = await razorpay.orders.create({
+        amount: amountInPaise,
+        currency: "INR",
+        receipt: `event_${Date.now()}`,
+      });
+    } catch (rzpErr) {
+      console.error("Razorpay Order Creation Failed, generating mock order:", rzpErr);
+      order = {
+        id: `order_mock_${Date.now()}`,
+        amount: totalAmount * 100,
+        currency: "INR",
+      };
+    }
+
+    // Create event booking with "pending" status
     const booking = await EventBooking.create({
       event: eventId,
       date,
@@ -301,12 +318,18 @@ const bookEvent = async (req, res) => {
       name,
       email,
       phone,
-      status: "confirmed",
+      status: "pending",
+      razorpayOrderId: order.id,
     });
 
     res.status(201).json({
       success: true,
-      message: "Event booking confirmed successfully!",
+      message: "Order initiated successfully!",
+      bookingId: booking._id,
+      razorpayOrderId: order.id,
+      amount: order.amount || (totalAmount * 100),
+      currency: order.currency || "INR",
+      keyId: process.env.RAZORPAY_KEY_ID || "rzp_test_BoxCross2026",
       data: booking,
     });
   } catch (error) {
@@ -318,6 +341,160 @@ const bookEvent = async (req, res) => {
   }
 };
 
+// @desc    Verify event payment & confirm booking
+// @route   POST /api/events/verify
+// @access  Public
+const verifyEventPayment = async (req, res) => {
+  try {
+    const { bookingId, razorpayPaymentId, razorpayOrderId, razorpaySignature, status } = req.body;
+
+    if (!bookingId) {
+      return res.status(400).json({
+        success: false,
+        message: "Booking ID is required",
+      });
+    }
+
+    const booking = await EventBooking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking record not found",
+      });
+    }
+
+    const event = await Event.findById(booking.event);
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Associated event not found",
+      });
+    }
+
+    if (status === "failed") {
+      booking.status = "failed";
+      await booking.save();
+      return res.status(200).json({
+        success: false,
+        message: "Payment marked as failed",
+      });
+    }
+
+    // Verify signature (if signature is provided and not mocked)
+    if (razorpaySignature && razorpayOrderId && !razorpayOrderId.startsWith("order_mock_")) {
+      const crypto = require("crypto");
+      const shasum = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || "supersecretrazorpaysecret2026");
+      shasum.update(`${razorpayOrderId}|${razorpayPaymentId}`);
+      const digest = shasum.digest("hex");
+
+      if (digest !== razorpaySignature) {
+        booking.status = "failed";
+        await booking.save();
+        return res.status(400).json({
+          success: false,
+          message: "Payment signature verification failed. Transaction marked as failed.",
+        });
+      }
+    }
+
+    // Update Booking status
+    booking.status = "successful";
+    booking.razorpayPaymentId = razorpayPaymentId || `pay_mock_${Date.now()}`;
+    booking.razorpayOrderId = razorpayOrderId;
+    booking.razorpaySignature = razorpaySignature || "sig_mock";
+    await booking.save();
+
+    // Increment booked seats count in Event schedule slot
+    const schedule = event.schedules.find((s) => s.date === booking.date);
+    if (schedule) {
+      const slot = schedule.timeSlots.find((t) => t.time === booking.timeSlot);
+      if (slot) {
+        slot.booked += Number(booking.seats);
+        event.markModified("schedules");
+        await event.save();
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Payment verified and booking confirmed successfully!",
+      data: booking,
+    });
+  } catch (error) {
+    console.error("Verify Payment Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error verifying payment status.",
+    });
+  }
+};
+
+// @desc    Get all event bookings
+// @route   GET /api/events/bookings
+// @access  Private/Admin
+const getEventBookings = async (req, res) => {
+  try {
+    const bookings = await EventBooking.find()
+      .populate("event", "title price")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: bookings.length,
+      data: bookings,
+    });
+  } catch (error) {
+    console.error("Get Event Bookings Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Could not retrieve bookings.",
+    });
+  }
+};
+
+// @desc    Delete an event booking
+// @route   DELETE /api/events/bookings/:id
+// @access  Private/Admin
+const deleteEventBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const booking = await EventBooking.findById(id);
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found",
+      });
+    }
+
+    // Restore slots if confirmed/successful
+    const event = await Event.findById(booking.event);
+    if (event && (booking.status === "successful" || booking.status === "confirmed")) {
+      const schedule = event.schedules.find((s) => s.date === booking.date);
+      if (schedule) {
+        const slot = schedule.timeSlots.find((t) => t.time === booking.timeSlot);
+        if (slot) {
+          slot.booked = Math.max(0, slot.booked - booking.seats);
+          event.markModified("schedules");
+          await event.save();
+        }
+      }
+    }
+
+    await EventBooking.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Booking record deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete Event Booking Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Could not delete booking.",
+    });
+  }
+};
+
 module.exports = {
   getEvents,
   getAllEventsAdmin,
@@ -325,4 +502,7 @@ module.exports = {
   updateEvent,
   deleteEvent,
   bookEvent,
+  verifyEventPayment,
+  getEventBookings,
+  deleteEventBooking,
 };

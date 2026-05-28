@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MapPin, Calendar, Loader2, X, ExternalLink, ChevronLeft, ArrowRight, User, Mail, Phone, Ticket } from "lucide-react";
-import { getEventsList, bookEventItem } from "../../api/api";
+import { getEventsList, bookEventItem, verifyEventPayment } from "../../api/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
 
@@ -176,7 +176,22 @@ const EventList = () => {
     setCustomerPhone("");
   };
 
-  // Create booking API request handler
+  // Utility to dynamically inject checkout.js script of Razorpay
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  // Create booking API request handler with Razorpay checkout integration
   const handleConfirmBooking = async (e) => {
     e.preventDefault();
     if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim()) {
@@ -185,7 +200,7 @@ const EventList = () => {
     }
 
     setSubmittingBooking(true);
-    const toastId = toast.loading("Reserving your seats...");
+    const toastId = toast.loading("Initiating checkout session...");
 
     try {
       const { data } = await bookEventItem({
@@ -199,23 +214,117 @@ const EventList = () => {
       });
 
       if (data.success) {
-        toast.success(`Booking confirmed! Recieved ${seatsCount} seat ticket(s).`, { id: toastId });
-        
-        // Refresh local listing database to reflect booked slots count
-        await fetchEvents();
-        
-        // Reset flows
-        setShowContactForm(false);
-        setShowSeatsDrawer(false);
-        setBookingEvent(null);
-        setSelectedEvent(null);
+        // Check if we are running sandbox/mock mode (i.e. Razorpay keys are default simulated/offline)
+        if (data.razorpayOrderId.startsWith("order_mock_")) {
+          toast.success("Running sandbox mock payment simulation...", { id: toastId });
+          
+          setTimeout(async () => {
+            const verifyToastId = toast.loading("Verifying simulator transaction...");
+            try {
+              const { data: verifyData } = await verifyEventPayment({
+                bookingId: data.bookingId,
+                razorpayOrderId: data.razorpayOrderId,
+                status: "success",
+              });
+
+              if (verifyData.success) {
+                toast.success("Mock payment simulated & booking confirmed!", { id: verifyToastId });
+                await fetchEvents();
+                setShowContactForm(false);
+                setShowSeatsDrawer(false);
+                setBookingEvent(null);
+                setSelectedEvent(null);
+              } else {
+                toast.error("Mock verification failed", { id: verifyToastId });
+              }
+            } catch (err) {
+              console.error(err);
+              toast.error("Simulator verification error", { id: verifyToastId });
+            } finally {
+              setSubmittingBooking(false);
+            }
+          }, 1500);
+          return;
+        }
+
+        // Live/Test Razorpay Flow using standard Checkout JS library
+        const isLoaded = await loadRazorpayScript();
+        if (!isLoaded) {
+          toast.error("Razorpay SDK failed to load. Are you connected to the internet?", { id: toastId });
+          setSubmittingBooking(false);
+          return;
+        }
+
+        toast.dismiss(toastId);
+
+        const options = {
+          key: data.keyId,
+          amount: data.amount,
+          currency: data.currency,
+          name: "Box & Cross Gym",
+          description: `${bookingEvent.title} - ${seatsCount} Seats`,
+          order_id: data.razorpayOrderId,
+          handler: async function (response) {
+            const verifyToastId = toast.loading("Verifying payment transaction...");
+            try {
+              const { data: verifyData } = await verifyEventPayment({
+                bookingId: data.bookingId,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpayOrderId: response.razorpay_order_id,
+                razorpaySignature: response.razorpay_signature,
+                status: "success",
+              });
+
+              if (verifyData.success) {
+                toast.success(`Booking confirmed! Received ${seatsCount} seat ticket(s).`, { id: verifyToastId });
+                await fetchEvents();
+                setShowContactForm(false);
+                setShowSeatsDrawer(false);
+                setBookingEvent(null);
+                setSelectedEvent(null);
+              } else {
+                toast.error(verifyData.message || "Payment verification failed", { id: verifyToastId });
+              }
+            } catch (error) {
+              console.error(error);
+              toast.error("Payment verification failed. Please contact support.", { id: verifyToastId });
+            } finally {
+              setSubmittingBooking(false);
+            }
+          },
+          prefill: {
+            name: customerName.trim(),
+            email: customerEmail.trim(),
+            contact: customerPhone.trim(),
+          },
+          theme: {
+            color: "#defb02",
+          },
+          modal: {
+            ondismiss: async function () {
+              try {
+                await verifyEventPayment({
+                  bookingId: data.bookingId,
+                  status: "failed",
+                });
+              } catch (err) {
+                console.error("Failed to flag booking as cancelled on dismiss", err);
+              }
+              toast.error("Checkout closed. Transaction cancelled.");
+              setSubmittingBooking(false);
+            },
+          },
+        };
+
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
       } else {
-        toast.error(data.message || "Failed to book event seats", { id: toastId });
+        toast.error(data.message || "Failed to initiate booking order.", { id: toastId });
+        setSubmittingBooking(false);
       }
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Booking reservation failed.", { id: toastId });
-    } finally {
       setSubmittingBooking(false);
     }
   };
@@ -334,7 +443,7 @@ const EventList = () => {
       {/* Dynamic Detail Modal */}
       <AnimatePresence>
         {selectedEvent && (
-          <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[9998] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
             {/* Backdrop click to close */}
             <div 
               className="absolute inset-0 z-0" 
@@ -346,84 +455,96 @@ const EventList = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 15 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="bg-[#0a0a0a] border border-white/10 rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl relative z-10 max-h-[90vh] flex flex-col"
+              className="bg-[#0a0a0a] border border-white/10 rounded-3xl w-full max-w-xl md:max-w-4xl overflow-hidden shadow-2xl relative z-10 max-h-[90vh] flex flex-col md:flex-row animate-in fade-in zoom-in duration-200"
             >
-              {/* Image banner section */}
-              <div className="relative aspect-[16/9] w-full overflow-hidden bg-black shrink-0 border-b border-white/5">
+              {/* Left side: Image banner section */}
+              <div className="relative w-full md:w-1/2 aspect-[16/9] md:aspect-auto md:min-h-[450px] overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-white/5">
                 <img
                   src={selectedEvent.imageUrl}
                   alt={selectedEvent.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover md:absolute md:inset-0"
                 />
                 
                 {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/10 to-black/30 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0a0a0a] via-black/10 to-transparent pointer-events-none" />
 
-                {/* Close Button */}
+                {/* Close Button on mobile */}
                 <button
                   onClick={() => setSelectedEvent(null)}
-                  className="absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30"
+                  className="absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30 md:hidden"
                   aria-label="Close details"
                 >
                   <X size={16} />
                 </button>
               </div>
 
-              {/* Scrollable details wrapper */}
-              <div className="p-6 overflow-y-auto space-y-4 flex-grow custom-scrollbar">
-                
-                {/* Event Location Pin */}
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[10px] font-black uppercase tracking-wider mb-1">
-                  <MapPin size={10} className="text-[#defb02]" />
-                  <span>{selectedEvent.location.split(',').pop() || "Venue"}</span>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  {selectedEvent.title}
-                </h3>
-
-                {/* Detailed Location Address */}
-                <div className="flex items-start gap-1.5 text-gray-400">
-                  <MapPin size={14} className="text-gray-500 shrink-0 mt-0.5" />
-                  <span className="text-xs font-medium leading-relaxed">
-                    {selectedEvent.location}
-                  </span>
-                </div>
-
-                {/* Description Box */}
-                <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5">
-                  <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
-                    About The Event
-                  </h4>
-                  <p className="text-xs sm:text-sm text-gray-300 font-medium leading-relaxed whitespace-pre-line">
-                    {selectedEvent.description || "No additional description details available for this event yet. Stay tuned for special schedules."}
-                  </p>
-                </div>
-              </div>
-
-              {/* Modal Footer Pricing + Call To Action */}
-              <div className="p-6 border-t border-white/5 bg-[#080808] flex items-center justify-between gap-4 shrink-0">
-                <div className="flex flex-col">
-                  {selectedEvent.originalPrice && (
-                    <span className="text-xs text-gray-500 line-through font-semibold leading-none mb-1">
-                      ₹{selectedEvent.originalPrice}
-                    </span>
-                  )}
-                  <span className="text-lg sm:text-xl font-black text-[#ff9e00] leading-none" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
-                    ₹{selectedEvent.price}{" "}
-                    <span className="text-[10px] text-gray-400 font-normal ml-0.5 lowercase">onwards</span>
-                  </span>
-                </div>
-
+              {/* Right side: Details + Footer wrapper */}
+              <div className="w-full md:w-1/2 flex flex-col overflow-hidden max-h-[50vh] md:max-h-[90vh] relative">
+                {/* Close Button on desktop */}
                 <button
-                  onClick={() => handleOpenBooking(selectedEvent)}
-                  className="inline-flex items-center justify-center gap-2 bg-[#defb02] hover:bg-[#defb02]/90 hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#defb02]/10 transition-all duration-300 cursor-pointer"
-                  style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                  onClick={() => setSelectedEvent(null)}
+                  className="absolute top-4 right-4 p-2 bg-white/5 hover:bg-white/15 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30 hidden md:block"
+                  aria-label="Close details"
                 >
-                  Book Now
-                  <ArrowRight size={12} strokeWidth={2.5} />
+                  <X size={16} />
                 </button>
+
+                {/* Scrollable details wrapper */}
+                <div className="p-6 overflow-y-auto space-y-4 flex-grow custom-scrollbar">
+                  
+                  {/* Event Location Pin */}
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[10px] font-black uppercase tracking-wider mb-1">
+                    <MapPin size={10} className="text-[#defb02]" />
+                    <span>{selectedEvent.location.split(',').pop() || "Venue"}</span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight pr-8 text-left" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                    {selectedEvent.title}
+                  </h3>
+
+                  {/* Detailed Location Address */}
+                  <div className="flex items-start gap-1.5 text-gray-400 text-left">
+                    <MapPin size={14} className="text-gray-500 shrink-0 mt-0.5" />
+                    <span className="text-xs font-medium leading-relaxed">
+                      {selectedEvent.location}
+                    </span>
+                  </div>
+
+                  {/* Description Box */}
+                  <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
+                    <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
+                      About The Event
+                    </h4>
+                    <p className="text-xs sm:text-sm text-gray-300 font-medium leading-relaxed whitespace-pre-line">
+                      {selectedEvent.description || "No additional description details available for this event yet. Stay tuned for special schedules."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Modal Footer Pricing + Call To Action */}
+                <div className="p-6 border-t border-white/5 bg-[#080808] flex items-center justify-between gap-4 shrink-0 mt-auto">
+                  <div className="flex flex-col text-left">
+                    {selectedEvent.originalPrice && (
+                      <span className="text-xs text-gray-500 line-through font-semibold leading-none mb-1">
+                        ₹{selectedEvent.originalPrice}
+                      </span>
+                    )}
+                    <span className="text-lg sm:text-xl font-black text-[#ff9e00] leading-none" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
+                      ₹{selectedEvent.price}{" "}
+                      <span className="text-[10px] text-gray-400 font-normal ml-0.5 lowercase">onwards</span>
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => handleOpenBooking(selectedEvent)}
+                    className="inline-flex items-center justify-center gap-2 bg-[#defb02] hover:bg-[#defb02]/90 hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#defb02]/10 transition-all duration-300 cursor-pointer"
+                    style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                  >
+                    Book Now
+                    <ArrowRight size={12} strokeWidth={2.5} />
+                  </button>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -433,7 +554,7 @@ const EventList = () => {
       {/* Dynamic Date & Slot Booking Modal (Mimicking Image 1, 2, 3) */}
       <AnimatePresence>
         {bookingEvent && (
-          <div className="fixed inset-0 z-50 flex flex-col md:items-center md:justify-center bg-black text-white p-0 md:p-4 overflow-y-auto">
+          <div className="fixed inset-0 z-[9999] flex flex-col md:items-center md:justify-center bg-black text-white p-0 md:p-4 overflow-y-auto">
             {/* Header Block */}
             <div className="w-full max-w-lg bg-[#000] md:bg-[#070707] border-b md:border border-white/10 md:rounded-t-3xl h-16 flex items-center gap-3 px-4 shrink-0">
               <button 

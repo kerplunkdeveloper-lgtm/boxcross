@@ -18,6 +18,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   if (user && user.role === "admin") {
     menuItems.push({ name: "Event Banners", path: "/dashboard/events", icon: Image });
     menuItems.push({ name: "Events List", path: "/dashboard/events-list", icon: Calendar });
+    menuItems.push({ name: "Event Payments", path: "/dashboard/event-payments", icon: DollarSign });
   }
 
   return (

@@ -14,6 +14,7 @@ import DashboardMemberships from './pages/DashboardMemberships';
 import DashboardPayments from './pages/DashboardPayments';
 import DashboardEvents from './pages/DashboardEvents';
 import DashboardEventsList from './pages/DashboardEventsList';
+import DashboardEventPayments from './pages/DashboardEventPayments';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import Eventpage from './pages/Events/Eventpage';
@@ -83,6 +84,7 @@ const App = () => {
               <Route path="payments" element={<DashboardPayments />} />
               <Route path="events" element={<DashboardEvents />} />
               <Route path="events-list" element={<DashboardEventsList />} />
+              <Route path="event-payments" element={<DashboardEventPayments />} />
               <Route path="settings" element={<DashboardSettings />} />
             </Route>
           </Routes>
