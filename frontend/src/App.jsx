@@ -12,8 +12,11 @@ import DashboardBookings from './pages/DashboardBookings';
 import DashboardSettings from './pages/DashboardSettings';
 import DashboardMemberships from './pages/DashboardMemberships';
 import DashboardPayments from './pages/DashboardPayments';
+import DashboardEvents from './pages/DashboardEvents';
+import DashboardEventsList from './pages/DashboardEventsList';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import Eventpage from './pages/Events/Eventpage';
 import { Toaster } from 'react-hot-toast';
 
 // Layout with Navbar and Footer
@@ -61,6 +64,7 @@ const App = () => {
             {/* Routes WITH Navbar and Footer */}
             <Route element={<Layout />}>
               <Route path="/" element={<MembershipPage />} />
+              <Route path="/events" element={<Eventpage />} />
             </Route>
 
             {/* Routes WITHOUT Navbar and Footer */}
@@ -77,6 +81,8 @@ const App = () => {
               <Route path="bookings" element={<DashboardBookings />} />
               <Route path="memberships" element={<DashboardMemberships />} />
               <Route path="payments" element={<DashboardPayments />} />
+              <Route path="events" element={<DashboardEvents />} />
+              <Route path="events-list" element={<DashboardEventsList />} />
               <Route path="settings" element={<DashboardSettings />} />
             </Route>
           </Routes>

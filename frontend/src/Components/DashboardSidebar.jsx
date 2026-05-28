@@ -1,9 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Home, BookOpen, Settings, LogOut, X, CreditCard, DollarSign } from "lucide-react";
+import { Home, BookOpen, Settings, LogOut, X, CreditCard, DollarSign, Image, Calendar } from "lucide-react";
 import logo from "../assets/images/logo.png";
+import { useAuth } from "../context/AuthContext";
 
 const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
+  const { user } = useAuth();
+
   const menuItems = [
     { name: "Overview", path: "/dashboard", icon: Home },
     { name: "Bookings", path: "/dashboard/bookings", icon: BookOpen },
@@ -11,6 +14,11 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     { name: "Payment Details", path: "/dashboard/payments", icon: DollarSign },
     { name: "Settings", path: "/dashboard/settings", icon: Settings },
   ];
+
+  if (user && user.role === "admin") {
+    menuItems.push({ name: "Event Banners", path: "/dashboard/events", icon: Image });
+    menuItems.push({ name: "Events List", path: "/dashboard/events-list", icon: Calendar });
+  }
 
   return (
     <aside 

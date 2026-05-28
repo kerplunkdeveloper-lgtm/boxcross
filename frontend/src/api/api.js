@@ -46,4 +46,36 @@ export const getPayments = () => API.get("/payments");
 
 export const updatePaymentStatus = (id, data) => API.put(`/payments/${id}`, data);
 
+// ──────────────── EVENT BANNERS API ────────────────
+
+export const getActiveBanners = () => API.get("/event-banners");
+export const getAllBanners = () => API.get("/event-banners/admin");
+export const createBanner = (formData) => API.post("/event-banners", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+export const updateBanner = (id, formData) => API.put(`/event-banners/${id}`, formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+export const deleteBanner = (id) => API.delete(`/event-banners/${id}`);
+
+// ──────────────── EVENTS LIST API ────────────────
+export const getEventsList = () => API.get("/events");
+export const getEventsListAdmin = () => API.get("/events/admin");
+export const createEventItem = (formData) => API.post("/events", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+export const updateEventItem = (id, formData) => API.put(`/events/${id}`, formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+export const deleteEventItem = (id) => API.delete(`/events/${id}`);
+export const bookEventItem = (data) => API.post("/events/book", data);
+
 export default API;

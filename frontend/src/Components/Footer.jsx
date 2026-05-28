@@ -29,12 +29,14 @@ const Footer = () => {
             text-[#8b8b8b]
             text-center
             md:text-left
+            text-[13px]
+            md:text-[19px]
           "
-          style={{ fontFamily: '"Brutal Font Light", sans-serif', fontSize: "19px"  }}
+          style={{ fontFamily: '"Brutal Font Light", sans-serif',  }}
         >
           Copyright © 2026{" "}
-          <span className="text-[#d9ff00] font-bold">
-            Box & Cross
+          <span className="text-[#d9ff00] font-bold mx-2">
+           {" "} Box & Cross
           </span>{" "}
           . All Rights Reserved.
         </p>
@@ -63,8 +65,10 @@ const Footer = () => {
                 hover:text-white
                 transition-all
                 duration-300
+                text-[13px]
+                md:text-[18px]
               "
-              style={{ fontFamily: '"Brutal Font Light", sans-serif', fontSize: "18px" }}
+              style={{ fontFamily: '"Brutal Font Light", sans-serif'}}
             >
               {item}
             </button>

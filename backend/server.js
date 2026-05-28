@@ -7,6 +7,8 @@ const bookingRoutes = require("./routes/bookingRoutes");
 const authRoutes = require("./routes/authRoutes");
 const membershipRoutes = require("./routes/membershipRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
+const eventBannerRoutes = require("./routes/eventBannerRoutes");
+const eventRoutes = require("./routes/eventRoutes");
 
 // Load env
 dotenv.config();
@@ -33,6 +35,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/memberships", membershipRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/event-banners", eventBannerRoutes);
+app.use("/api/events", eventRoutes);
 
 // Health check
 app.get("/", (req, res) => {
