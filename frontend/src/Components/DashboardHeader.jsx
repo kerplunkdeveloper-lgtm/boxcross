@@ -1,18 +1,48 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, User, Sun, Moon, Bell, CheckCheck, CreditCard, Calendar, BookOpen } from "lucide-react";
+import { Menu, User, Sun, Moon, Bell, CheckCheck, CreditCard, Calendar, BookOpen, LogOut, Settings, ChevronDown } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
 import { getBookings, getPayments, getEventBookings } from "../api/api";
+import { toast } from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DashboardHeader = ({ setSidebarOpen, user }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
+  const { logout } = useAuth();
 
   // Notification States
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Profile Dropdown States
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const profileDropdownRef = useRef(null);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target)) {
+        setShowProfileDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
+  const handleHeaderLogout = async () => {
+    setShowProfileDropdown(false);
+    const res = await logout();
+    if (res.success) {
+      toast.success("Logged out successfully.");
+      navigate("/");
+    } else {
+      toast.error(res.message || "Failed to log out.");
+    }
+  };
   
   // Load read notification IDs from localStorage
   const [readIds, setReadIds] = useState(() => {
@@ -27,7 +57,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
   // Resolve current active title based on path
   let activeTitle = "Dashboard";
   if (location.pathname.includes("/bookings")) {
-    activeTitle = "Enquiry Bookings";
+    activeTitle = "Enquiry Members";
   } else if (location.pathname.includes("/memberships")) {
     activeTitle = "Membership Edit";
   } else if (location.pathname.includes("/payments")) {
@@ -292,23 +322,101 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         {/* Vertical divider line */}
         <span className="h-6 w-[1px] bg-[var(--db-card-border)] hidden sm:block" />
 
-        {/* User Card */}
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:block text-right">
-            <p className="text-xs font-bold text-[var(--db-text)]">{user.name}</p>
-            <p className="text-[10px] text-[var(--db-accent-highlight)] font-semibold uppercase tracking-widest">{user.role}</p>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden">
-            {user && user.profileImage ? (
-              <img 
-                src={user.profileImage} 
-                alt={user.name} 
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <User size={20} className="text-[var(--db-accent-highlight)]" />
+        {/* User Profile Dropdown Trigger */}
+        <div className="relative" ref={profileDropdownRef}>
+          <button
+            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+            className="flex items-center gap-3 p-1.5 pr-3 rounded-xl hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-left"
+          >
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+              {user && user.profileImage ? (
+                <img 
+                  src={user.profileImage} 
+                  alt={user.name} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <User size={20} className="text-[var(--db-accent-highlight)]" />
+              )}
+            </div>
+            <div className="hidden sm:block text-left">
+              <div className="flex items-center gap-1">
+                <p className="text-xs font-bold text-[var(--db-text)] line-clamp-1">{user.name}</p>
+                <ChevronDown size={12} className={`text-[var(--db-text-muted)] transition-transform duration-200 ${showProfileDropdown ? 'rotate-180' : ''}`} />
+              </div>
+              <p className="text-[9px] text-[var(--db-accent-highlight)] font-semibold uppercase tracking-wider">{user.role}</p>
+            </div>
+          </button>
+
+          {/* Profile Dropdown Menu */}
+          <AnimatePresence>
+            {showProfileDropdown && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+                className="absolute right-0 mt-2 w-64 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl p-3 z-50 transition-colors"
+              >
+                {/* User Info Header */}
+                <div className="flex items-center gap-3 p-2 pb-3 border-b border-[var(--db-card-border)]">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+                    {user && user.profileImage ? (
+                      <img 
+                        src={user.profileImage} 
+                        alt={user.name} 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User size={18} className="text-[var(--db-accent-highlight)]" />
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-[var(--db-text)] truncate">{user.name}</p>
+                    <p className="text-[10px] text-[var(--db-text-muted)] truncate">{user.email}</p>
+                    <span className="inline-block px-2 py-0.5 mt-1 text-[8px] font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)] rounded-full border border-[var(--db-accent-highlight)]/20">
+                      {user.role}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Dropdown Actions */}
+                <div className="py-1.5 space-y-1">
+                  <button
+                    onClick={() => {
+                      setShowProfileDropdown(false);
+                      navigate("/dashboard/profile");
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-left"
+                  >
+                    <User size={14} className="text-[var(--db-accent-highlight)]" />
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowProfileDropdown(false);
+                      navigate("/dashboard/settings");
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-left"
+                  >
+                    <Settings size={14} className="text-[var(--db-accent-highlight)]" />
+                    Settings
+                  </button>
+                </div>
+
+                {/* Logout Button */}
+                <div className="pt-2 border-t border-[var(--db-card-border)]">
+                  <button
+                    onClick={handleHeaderLogout}
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all cursor-pointer text-left"
+                  >
+                    <LogOut size={14} />
+                    Logout
+                  </button>
+                </div>
+              </motion.div>
             )}
-          </div>
+          </AnimatePresence>
         </div>
       </div>
     </header>

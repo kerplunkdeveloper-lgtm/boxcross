@@ -59,7 +59,7 @@ const DashboardBookings = () => {
             <div className="flex items-center gap-2">
               <Flame size={18} className="text-[var(--db-accent-highlight)]" />
               <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
-                Visitors Booking list
+                Visitors Members list
               </span>
             </div>
             <span className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] px-2 py-0.5 rounded-sm font-bold">

@@ -202,11 +202,8 @@ const DashboardEventsList = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--db-card-border)]">
           <div>
             <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-              Events Listing Manager
+              Events Listing
             </h1>
-            <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-1">
-              Admin Control Panel to create, edit, delete, and configure schedules for your fitness events.
-            </p>
           </div>
 
           <div className="flex gap-2">

@@ -13,11 +13,9 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   const menuItems = [
     { name: "Dashboard", path: "/dashboard", icon: Home },
     { name: "Calendar", path: "/dashboard/calendar", icon: Calendar },
-    { name: "Enquiry Bookings", path: "/dashboard/bookings", icon: BookOpen },
+    { name: "Enquiry Members", path: "/dashboard/bookings", icon: BookOpen },
     { name: "Membership Edit", path: "/dashboard/memberships", icon: CreditCard },
     { name: "Payment Details", path: "/dashboard/payments", icon: DollarSign },
-    { name: "Profile Settings", path: "/dashboard/profile", icon: User },
-    { name: "Settings", path: "/dashboard/settings", icon: Settings },
   ];
 
   if (user && user.role === "admin") {
@@ -25,6 +23,10 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     menuItems.push({ name: "Events List", path: "/dashboard/events-list", icon: Calendar });
     menuItems.push({ name: "Event Payments", path: "/dashboard/event-payments", icon: DollarSign });
   }
+
+  // Keep these at the very end of the list
+  menuItems.push({ name: "Profile Settings", path: "/dashboard/profile", icon: User });
+  menuItems.push({ name: "Settings", path: "/dashboard/settings", icon: Settings });
 
   return (
     <aside 

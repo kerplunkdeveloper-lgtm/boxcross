@@ -64,12 +64,12 @@ const DashboardHome = () => {
         {/* Welcome Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[var(--db-card-border)]">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/50 flex items-center justify-center overflow-hidden shadow-lg shadow-[var(--db-accent-glow)]">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/50 flex items-center justify-center overflow-hidden shadow-lg shadow-[var(--db-accent-glow)] shrink-0">
               {user.profileImage ? (
                 <img 
                   src={user.profileImage} 
                   alt={user.name} 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded-full"
                 />
               ) : (
                 <User size={30} className="text-[var(--db-accent-highlight)]" />
@@ -97,27 +97,25 @@ const DashboardHome = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.05 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
           >
-            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-20 h-20 rounded-bl-[80px] pointer-events-none" />
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Users size={16} className="text-[var(--db-accent-highlight)]" />
-                <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                  Total Bookings
-                </span>
+            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
+            <div className="flex items-center gap-3 z-10">
+              <div className="p-2.5 rounded-xl bg-[var(--db-accent-glow)]/10 text-[var(--db-accent-highlight)] shrink-0">
+                <Users size={20} />
               </div>
-              <div className="py-2">
-                {loading ? (
-                  <div className="h-12 flex items-center">
-                    <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
-                  </div>
-                ) : (
-                  <p className="text-4xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                    {visitorCount}
-                  </p>
-                )}
-              </div>
+              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                Total Bookings
+              </span>
+            </div>
+            <div className="z-10 shrink-0">
+              {loading ? (
+                <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
+              ) : (
+                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  {visitorCount}
+                </p>
+              )}
             </div>
           </motion.div>
 
@@ -126,27 +124,25 @@ const DashboardHome = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
           >
-            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-20 h-20 rounded-bl-[80px] pointer-events-none" />
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <DollarSign size={16} className="text-[var(--db-accent-highlight)]" />
-                <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                  Total Revenue
-                </span>
+            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
+            <div className="flex items-center gap-3 z-10">
+              <div className="p-2.5 rounded-xl bg-[var(--db-accent-glow)]/10 text-[var(--db-accent-highlight)] shrink-0">
+                <DollarSign size={20} />
               </div>
-              <div className="py-2">
-                {loading ? (
-                  <div className="h-12 flex items-center">
-                    <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
-                  </div>
-                ) : (
-                  <p className="text-4xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                    ₹{totalPayments.toLocaleString("en-IN")}
-                  </p>
-                )}
-              </div>
+              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                Total Revenue
+              </span>
+            </div>
+            <div className="z-10 shrink-0">
+              {loading ? (
+                <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
+              ) : (
+                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  ₹{totalPayments.toLocaleString("en-IN")}
+                </p>
+              )}
             </div>
           </motion.div>
 
@@ -155,27 +151,25 @@ const DashboardHome = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
           >
-            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-20 h-20 rounded-bl-[80px] pointer-events-none" />
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Calendar size={16} className="text-[var(--db-accent-highlight)]" />
-                <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                  Scheduled Events
-                </span>
+            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
+            <div className="flex items-center gap-3 z-10">
+              <div className="p-2.5 rounded-xl bg-[var(--db-accent-glow)]/10 text-[var(--db-accent-highlight)] shrink-0">
+                <Calendar size={20} />
               </div>
-              <div className="py-2">
-                {loading ? (
-                  <div className="h-12 flex items-center">
-                    <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
-                  </div>
-                ) : (
-                  <p className="text-4xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                    {events.length}
-                  </p>
-                )}
-              </div>
+              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                Scheduled Events
+              </span>
+            </div>
+            <div className="z-10 shrink-0">
+              {loading ? (
+                <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
+              ) : (
+                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  {events.length}
+                </p>
+              )}
             </div>
           </motion.div>
 
