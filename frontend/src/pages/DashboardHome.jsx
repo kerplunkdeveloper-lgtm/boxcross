@@ -55,7 +55,7 @@ const DashboardHome = () => {
   if (!user) return null;
 
   return (
-    <div className="p-6 md:p-8 relative overflow-hidden min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+    <div className="px-2 py-6 md:p-8 relative overflow-hidden min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none z-0" />
 
@@ -94,7 +94,7 @@ const DashboardHome = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="w-full h-56 sm:h-72 md:h-80 lg:h-96 rounded-3xl overflow-hidden relative border border-[var(--db-card-border)] shadow-2xl"
+          className="w-full h-56 sm:h-72 md:h-80 lg:h-[440px] rounded-3xl overflow-hidden relative border border-[var(--db-card-border)] shadow-2xl"
         >
           {/* Loop Video Background */}
           <video
@@ -116,28 +116,16 @@ const DashboardHome = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent z-10" />
 
           {/* Banner Text Content */}
-          <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 sm:px-12 md:px-16 text-left">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-[var(--db-accent-highlight)] text-[9px] sm:text-[10px] font-black uppercase tracking-widest self-start mb-2.5 sm:mb-3.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--db-accent-highlight)] animate-pulse" />
-              Box & Cross Elite Training
-            </span>
-            <h2 
-              className="text-2xl sm:text-4xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-wider leading-tight max-w-xs sm:max-w-lg md:max-w-xl"
-              style={{ fontFamily: '"Brutal Font", "Bebas Neue", sans-serif' }}
-            >
-              Push Your Limits. <br />
-              <span className="text-[var(--db-accent-highlight)]">Crush Your Goals.</span>
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-300 font-medium mt-2 sm:mt-2.5 max-w-xs sm:max-w-md md:max-w-lg leading-relaxed">
-              Access premium member amenities, review active training classes, and track your workout sessions.
-            </p>
-            <button
-              onClick={() => navigate("/dashboard/calendar")}
-              className="mt-4 sm:mt-5 px-5 py-2.5 sm:px-6 sm:py-3 bg-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/95 text-white font-black uppercase tracking-wider text-xs sm:text-sm rounded-xl transition-all shadow-lg shadow-[var(--db-accent-glow)] hover:scale-105 active:scale-95 cursor-pointer self-start flex items-center gap-2"
-            >
-              Book Sessions
-              <ArrowRight size={16} />
-            </button>
+          <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8 text-left">
+            <div className="flex flex-col items-start gap-1">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                Live Arena
+              </span>
+              <span className="text-[9px] sm:text-xs text-gray-300 font-bold uppercase tracking-widest mt-1 pl-1">
+                Box & Cross Elite Training
+              </span>
+            </div>
           </div>
         </motion.div>
 
