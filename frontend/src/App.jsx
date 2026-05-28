@@ -18,6 +18,7 @@ import DashboardEventPayments from './pages/DashboardEventPayments';
 import DashboardProfile from './pages/DashboardProfile';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Eventpage from './pages/Events/Eventpage';
 import { Toaster } from 'react-hot-toast';
 
@@ -75,7 +76,9 @@ const App = () => {
               path="/dashboard" 
               element={
                 <ProtectedRoute>
-                  <DashboardLayout />
+                  <ThemeProvider>
+                    <DashboardLayout />
+                  </ThemeProvider>
                 </ProtectedRoute>
               } 
             >

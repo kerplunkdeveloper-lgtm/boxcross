@@ -33,3 +33,58 @@ body {
 .bg-radial-vignette {
   background: radial-gradient(circle, transparent 30%, rgba(0, 0, 0, 0.6) 90%);
 }
+
+/* Dashboard Theme System */
+.dashboard-dark {
+  --db-bg: #050505;
+  --db-card: #0a0a0a;
+  --db-card-border: rgba(255, 255, 255, 0.08);
+  --db-text: #ffffff;
+  --db-text-muted: #9ca3af;
+  --db-sidebar: #0a0a0a;
+  --db-sidebar-border: rgba(255, 255, 255, 0.05);
+  --db-header: #0a0a0a;
+  --db-header-border: rgba(255, 255, 255, 0.05);
+  --db-input-bg: rgba(255, 255, 255, 0.03);
+  --db-input-border: rgba(255, 255, 255, 0.1);
+  --db-text-title: #ffffff;
+  --db-sidebar-link-hover: rgba(255, 255, 255, 0.05);
+  --db-sidebar-link-text: #9ca3af;
+  --db-table-hover: rgba(255, 255, 255, 0.02);
+  --db-accent-dim: rgba(222, 251, 2, 0.1);
+  --db-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+
+  /* Dynamic Accent Brand Tokens */
+  --db-accent: #defb02;
+  --db-accent-text: #000000;
+  --db-accent-hover: #eafc33;
+  --db-accent-highlight: #defb02;
+  --db-accent-glow: rgba(222, 251, 2, 0.15);
+}
+
+.dashboard-light {
+  --db-bg: #f8fafc;
+  --db-card: #ffffff;
+  --db-card-border: rgba(15, 23, 42, 0.08);
+  --db-text: #1e293b;
+  --db-text-muted: #64748b;
+  --db-sidebar: #ffffff;
+  --db-sidebar-border: rgba(15, 23, 42, 0.06);
+  --db-header: #ffffff;
+  --db-header-border: rgba(15, 23, 42, 0.06);
+  --db-input-bg: #f1f5f9;
+  --db-input-border: rgba(15, 23, 42, 0.12);
+  --db-text-title: #0f172a;
+  --db-sidebar-link-hover: rgba(15, 23, 42, 0.04);
+  --db-sidebar-link-text: #475569;
+  --db-table-hover: rgba(15, 23, 42, 0.01);
+  --db-accent-dim: rgba(15, 23, 42, 0.08);
+  --db-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+
+  /* Dynamic Accent Brand Tokens */
+  --db-accent: #0f172a;
+  --db-accent-text: #ffffff;
+  --db-accent-hover: #1e293b;
+  --db-accent-highlight: #2563eb;
+  --db-accent-glow: rgba(37, 99, 235, 0.12);
+}

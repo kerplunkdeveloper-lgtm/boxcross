@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import DashboardSidebar from "./DashboardSidebar";
 import DashboardHeader from "./DashboardHeader";
 import { toast } from "react-hot-toast";
 
 const DashboardLayout = () => {
   const { user, logout } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -23,7 +25,7 @@ const DashboardLayout = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans flex overflow-hidden">
+    <div className={`h-screen font-sans flex overflow-hidden ${theme === 'dark' ? 'dashboard-dark' : 'dashboard-light'} bg-[var(--db-bg)] text-[var(--db-text)]`}>
       {/* Sidebar */}
       <DashboardSidebar 
         sidebarOpen={sidebarOpen} 
@@ -31,16 +33,24 @@ const DashboardLayout = () => {
         handleLogout={handleLogout} 
       />
 
+      {/* Mobile Sidebar Backdrop Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-20 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Main Container */}
-      <div className="flex-grow flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-grow flex flex-col min-w-0 overflow-hidden">
         {/* Header */}
         <DashboardHeader 
           setSidebarOpen={setSidebarOpen} 
           user={user} 
         />
 
-        {/* Dynamic Nested Route content */}
-        <main className="flex-grow bg-[#050505] relative">
+        {/* Dynamic Nested Route content - independent scroll */}
+        <main className="flex-grow overflow-y-auto bg-[var(--db-bg)] relative custom-scrollbar">
           <Outlet />
         </main>
       </div>

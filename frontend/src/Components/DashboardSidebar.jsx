@@ -2,10 +2,13 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { Home, BookOpen, Settings, LogOut, X, CreditCard, DollarSign, Image, Calendar, User } from "lucide-react";
 import logo from "../assets/images/logo.png";
+import logo2 from "../assets/images/lightmode.png";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 
 const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   const { user } = useAuth();
+  const { theme } = useTheme();
 
   const menuItems = [
     { name: "Dashboard", path: "/dashboard", icon: Home },
@@ -24,16 +27,16 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
 
   return (
     <aside 
-      className={`fixed inset-y-0 left-0 z-30 w-64 bg-[#0a0a0a] border-r border-white/5 flex flex-col justify-between transform transition-transform duration-300 lg:translate-x-0 lg:static lg:flex-shrink-0 ${
+      className={`fixed inset-y-0 left-0 z-30 w-64 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform transition-transform duration-300 lg:translate-x-0 lg:static lg:flex-shrink-0 transition-colors ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
       <div>
         {/* Header with logo */}
-        <div className="h-20 flex items-center justify-between px-6 border-b border-white/5">
-          <img src={logo} alt="Box & Cross" className="h-8 w-auto object-contain" />
+        <div className="h-20 flex items-center justify-between px-6 border-b border-[var(--db-sidebar-border)]">
+          <img src={theme === "light" ? logo2 : logo} alt="Box & Cross" className="w-[150px] object-contain" />
           <button 
-            className="lg:hidden text-gray-400 hover:text-white"
+            className="lg:hidden text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
             onClick={() => setSidebarOpen(false)}
           >
             <X size={20} />
@@ -53,8 +56,8 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 className={({ isActive }) => 
                   `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                     isActive 
-                      ? 'bg-[#defb02] text-black shadow-lg shadow-[#defb02]/10' 
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? 'bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)]' 
+                      : 'text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]'
                   }`
                 }
                 style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
@@ -68,7 +71,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       </div>
 
       {/* Footer logout */}
-      <div className="p-4 border-t border-white/5">
+      <div className="p-4 border-t border-[var(--db-sidebar-border)]">
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"

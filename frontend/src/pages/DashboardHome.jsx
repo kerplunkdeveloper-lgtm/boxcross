@@ -54,25 +54,33 @@ const DashboardHome = () => {
   });
 
   return (
-    <div className="p-6 md:p-8 relative overflow-hidden">
+    <div className="p-6 md:p-8 relative overflow-hidden min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       {/* Background Radial Glow */}
-      <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[#defb02]/5 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto z-10 relative">
         {/* Welcome Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 pb-6 border-b border-white/5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10 pb-6 border-b border-[var(--db-card-border)]">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#defb02]/20 to-transparent border border-[#defb02]/50 flex items-center justify-center shadow-lg shadow-[#defb02]/10">
-              <User size={30} className="text-[#defb02]" />
+            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/50 flex items-center justify-center overflow-hidden shadow-lg shadow-[var(--db-accent-glow)]">
+              {user.profileImage ? (
+                <img 
+                  src={user.profileImage} 
+                  alt={user.name} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <User size={30} className="text-[var(--db-accent-highlight)]" />
+              )}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
                   Hi, {user.name}!
                 </h1>
-                <Sparkles size={16} className="text-[#defb02] animate-pulse" />
+                <Sparkles size={16} className="text-[var(--db-accent-highlight)] animate-pulse" />
               </div>
-              <p className="text-gray-400 text-xs md:text-sm mt-0.5">
+              <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-0.5">
                 Welcome back to your Box & Cross Athlete Portal. Ready to crush it?
               </p>
             </div>
@@ -82,59 +90,54 @@ const DashboardHome = () => {
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-
-
-  {/* VISITOR COUNT CARD */}
+          {/* VISITOR COUNT CARD */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="bg-[#0a0a0a] border border-white/10 rounded-[24px] p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl transition-colors"
           >
             {/* Background Graphic elements */}
-            <div className="absolute top-0 right-0 bg-[#defb02]/5 w-24 h-24 rounded-bl-[100px] pointer-events-none" />
+            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-24 h-24 rounded-bl-[100px] pointer-events-none" />
 
             <div>
               <div className="flex items-center gap-2 mb-6">
-                <Users size={18} className="text-[#defb02]" />
-                <span className="text-[10px] md:text-[18px] font-extrabold uppercase tracking-widest text-[#defb02]">
-               No.of.Visitors
+                <Users size={18} className="text-[var(--db-accent-highlight)]" />
+                <span className="text-[10px] md:text-[18px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
+                  No.of.Visitors
                 </span>
               </div>
 
               <div className="py-2">
                 {loading ? (
                   <div className="h-12 flex items-center">
-                    <span className="text-sm text-gray-400">Loading...</span>
+                    <span className="text-sm text-[var(--db-text-muted)]">Loading...</span>
                   </div>
                 ) : (
                   <p 
-                    className="text-5xl font-black text-[#defb02] tracking-wide" 
+                    className="text-5xl font-black text-[var(--db-accent-highlight)] tracking-wide" 
                     style={{ fontFamily: '"Brutal Font", sans-serif' }}
                   >
                     {visitorCount}
                   </p>
                 )}
-               
               </div>
             </div>
           </motion.div>
 
-
-
-     <motion.div
+          <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.15 }}
-            className="bg-[#0a0a0a] border border-white/10 rounded-[24px] p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 md:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl transition-colors"
           >
             {/* Background Graphic elements */}
-            <div className="absolute top-0 right-0 bg-[#defb02]/5 w-24 h-24 rounded-bl-[100px] pointer-events-none" />
+            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-24 h-24 rounded-bl-[100px] pointer-events-none" />
 
             <div>
               <div className="flex items-center gap-2 mb-6">
-                <Users size={18} className="text-[#defb02]" />
-                <span className="text-[10px] md:text-[18px] font-extrabold uppercase tracking-widest text-[#defb02]">
+                <Users size={18} className="text-[var(--db-accent-highlight)]" />
+                <span className="text-[10px] md:text-[18px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                   total payment
                 </span>
               </div>
@@ -142,17 +145,16 @@ const DashboardHome = () => {
               <div className="py-2">
                 {loading ? (
                   <div className="h-12 flex items-center">
-                    <span className="text-sm text-gray-400">Loading...</span>
+                    <span className="text-sm text-[var(--db-text-muted)]">Loading...</span>
                   </div>
                 ) : (
                   <p 
-                    className="text-5xl font-black text-[#defb02] tracking-wide" 
+                    className="text-5xl font-black text-[var(--db-accent-highlight)] tracking-wide" 
                     style={{ fontFamily: '"Brutal Font", sans-serif' }}
                   >
-                     -
+                    -
                   </p>
                 )}
-               
               </div>
             </div>
           </motion.div>

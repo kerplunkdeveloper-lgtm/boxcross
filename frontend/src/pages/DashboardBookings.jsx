@@ -53,23 +53,23 @@ const DashboardBookings = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="bg-[#0a0a0a] border border-white/10 rounded-[24px] p-6 md:p-8 shadow-2xl"
+          className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 md:p-8 shadow-2xl transition-colors"
         >
-          <div className="flex items-center justify-between mb-6 pb-2 border-b border-white/5">
+          <div className="flex items-center justify-between mb-6 pb-2 border-b border-[var(--db-card-border)]">
             <div className="flex items-center gap-2">
-              <Flame size={18} className="text-[#defb02]" />
-              <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[#defb02]">
+              <Flame size={18} className="text-[var(--db-accent-highlight)]" />
+              <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                 Visitors Booking list
               </span>
             </div>
-            <span className="text-[10px] bg-white/5 border border-white/10 text-gray-400 px-2 py-0.5 rounded-sm font-bold">
+            <span className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] px-2 py-0.5 rounded-sm font-bold">
               {bookings.length} Total
             </span>
           </div>
 
           {loading ? (
-            <div className="py-12 flex flex-col items-center justify-center text-gray-500 text-xs gap-2">
-              <svg className="animate-spin h-6 w-6 text-[#defb02]" viewBox="0 0 24 24">
+            <div className="py-12 flex flex-col items-center justify-center text-[var(--db-text-muted)] text-xs gap-2">
+              <svg className="animate-spin h-6 w-6 text-[var(--db-accent-highlight)]" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
@@ -79,7 +79,7 @@ const DashboardBookings = () => {
             <div className="overflow-x-auto w-full">
               <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>
-                  <tr className="bg-[#defb02] border-b border-white/10 text-black text-[10px] uppercase font-extrabold tracking-widest">
+                  <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
                     <th className="py-4 px-4 rounded-l-xl">Visitor</th>
                     <th className="py-4 px-4">Phone</th>
                     <th className="py-4 px-4">Goal</th>
@@ -89,27 +89,27 @@ const DashboardBookings = () => {
                     <th className="py-4 px-4 text-right rounded-r-xl">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-[var(--db-card-border)]">
                   {bookings.map((booking) => (
-                    <tr key={booking._id} className="hover:bg-white/[0.02] transition-colors">
-                      <td className="py-4 px-4 text-sm font-bold text-white">
+                    <tr key={booking._id} className="hover:bg-[var(--db-table-hover)] transition-colors">
+                      <td className="py-4 px-4 text-sm font-bold text-[var(--db-text)]">
                         {booking.name}
                       </td>
-                      <td className="py-4 px-4 text-sm text-gray-300">
+                      <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
                         {booking.phone}
                       </td>
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-[#defb02]/10 border border-[#defb02]/20 flex items-center justify-center text-[#defb02]">
+                          <div className="w-8 h-8 rounded-lg bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/20 flex items-center justify-center text-[var(--db-accent-highlight)]">
                             <Dumbbell size={14} />
                           </div>
-                          <span className="text-sm font-medium text-gray-300">{booking.goal}</span>
+                          <span className="text-sm font-medium text-[var(--db-text)]">{booking.goal}</span>
                         </div>
                       </td>
-                      <td className="py-4 px-4 text-sm text-gray-300">
+                      <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
                         {booking.day} {booking.month}
                       </td>
-                      <td className="py-4 px-4 text-sm text-gray-300">
+                      <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
                         {booking.time}
                       </td>
                       <td className="py-4 px-4">
@@ -121,7 +121,7 @@ const DashboardBookings = () => {
                       <td className="py-4 px-4 text-right">
                         <button
                           onClick={() => handleDelete(booking._id)}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer"
+                          className="p-2 text-[var(--db-text-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -132,11 +132,11 @@ const DashboardBookings = () => {
               </table>
             </div>
           ) : (
-            <div className="py-12 text-center border border-dashed border-white/5 rounded-xl">
-              <p className="text-gray-500 text-xs md:text-sm mb-4">No gym tour visits scheduled yet.</p>
+            <div className="py-12 text-center border border-dashed border-[var(--db-card-border)] rounded-xl">
+              <p className="text-[var(--db-text-muted)] text-xs md:text-sm mb-4">No gym tour visits scheduled yet.</p>
               <button
                 onClick={() => navigate("/")}
-                className="px-4 py-2 border border-[#defb02]/30 text-[#defb02] hover:bg-[#defb02] hover:text-black font-bold uppercase tracking-wider text-[10px] rounded-lg transition-all"
+                className="px-4 py-2 border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-[10px] rounded-lg transition-all"
                 style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
               >
                 Book a Visit Now
