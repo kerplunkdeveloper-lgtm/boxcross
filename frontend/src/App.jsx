@@ -13,7 +13,6 @@ import DashboardSettings from './pages/DashboardSettings';
 import DashboardMemberships from './pages/DashboardMemberships';
 import DashboardPayments from './pages/DashboardPayments';
 import ProtectedRoute from './Components/ProtectedRoute';
-import Eventpages from './pages/Eventpages';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 
@@ -62,7 +61,6 @@ const App = () => {
             {/* Routes WITH Navbar and Footer */}
             <Route element={<Layout />}>
               <Route path="/" element={<MembershipPage />} />
-              <Route path="/events" element={<Eventpages />} />
             </Route>
 
             {/* Routes WITHOUT Navbar and Footer */}
@@ -81,7 +79,6 @@ const App = () => {
               <Route path="payments" element={<DashboardPayments />} />
               <Route path="settings" element={<DashboardSettings />} />
             </Route>
-          
           </Routes>
         </BrowserRouter>
       </div>

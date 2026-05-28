@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { getMe, loginUser, registerUser, logoutUser, loginWithGoogle } from "../api/api";
+import { getMe, loginUser, registerUser, logoutUser } from "../api/api";
 
 const AuthContext = createContext(null);
 
@@ -40,21 +40,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loginGoogle = async (googleData) => {
-    try {
-      const { data } = await loginWithGoogle(googleData);
-      if (data.success) {
-        setUser(data.user);
-        return { success: true, user: data.user };
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response?.data?.message || "Google login failed",
-      };
-    }
-  };
-
   const register = async (name, email, password) => {
     try {
       const { data } = await registerUser({ name, email, password });
@@ -81,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, loginGoogle, register, logout }}>
+    <AuthContext.Provider value={{ user, setUser, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

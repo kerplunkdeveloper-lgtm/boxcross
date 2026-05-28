@@ -46,12 +46,4 @@ export const getPayments = () => API.get("/payments");
 
 export const updatePaymentStatus = (id, data) => API.put(`/payments/${id}`, data);
 
-// ──────────────── GOOGLE AUTH & EVENT BOOKING API ────────────────
-
-export const loginWithGoogle = (data) => API.post("/auth/google", data);
-
-export const createEventBooking = (data) => API.post("/event-bookings", data);
-
-export const getMyEventBookings = (params) => API.get("/event-bookings/my", { params });
-
 export default API;
