@@ -13,19 +13,19 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   const menuItems = [
     { name: "Dashboard", path: "/dashboard", icon: Home },
     { name: "Calendar", path: "/dashboard/calendar", icon: Calendar },
-    { name: "Enquiry Members", path: "/dashboard/bookings", icon: BookOpen },
-    { name: "Membership Edit", path: "/dashboard/memberships", icon: CreditCard },
-    { name: "Payment Details", path: "/dashboard/payments", icon: DollarSign },
+    { name: "Enquiry members", path: "/dashboard/bookings", icon: BookOpen },
+    { name: "Membership edit", path: "/dashboard/memberships", icon: CreditCard },
+    { name: "Payment details", path: "/dashboard/payments", icon: DollarSign },
   ];
 
   if (user && user.role === "admin") {
-    menuItems.push({ name: "Event Banners", path: "/dashboard/events", icon: Image });
-    menuItems.push({ name: "Events List", path: "/dashboard/events-list", icon: Calendar });
-    menuItems.push({ name: "Event Payments", path: "/dashboard/event-payments", icon: DollarSign });
+    menuItems.push({ name: "Event banners", path: "/dashboard/events", icon: Image });
+    menuItems.push({ name: "Events list", path: "/dashboard/events-list", icon: Calendar });
+    menuItems.push({ name: "Event payments", path: "/dashboard/event-payments", icon: DollarSign });
   }
 
   // Keep these at the very end of the list
-  menuItems.push({ name: "Profile Settings", path: "/dashboard/profile", icon: User });
+  menuItems.push({ name: "Profile settings", path: "/dashboard/profile", icon: User });
   menuItems.push({ name: "Settings", path: "/dashboard/settings", icon: Settings });
 
   return (
@@ -57,7 +57,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 end={item.path === "/dashboard"}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) => 
-                  `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                  `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
                     isActive 
                       ? 'bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)]' 
                       : 'text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]'
@@ -77,7 +77,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       <div className="p-4 border-t border-[var(--db-sidebar-border)]">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
           style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
         >
           <LogOut size={18} />
