@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { ArrowUp, MessageCircle } from "lucide-react";
-import logo from '../assets/images/logo.png'
+import logo from "../assets/images/logo.png";
 
 const Foot = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -21,18 +21,15 @@ const Foot = () => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   };
 
   return (
     <footer className="w-full bg-[#111111] border-t border-white/10 overflow-hidden md:px-10 px-2  md:p-10">
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 ">
-
         {/* COLUMN 1 */}
         <div className="lg:col-span-2  md:px-20  py-10 lg:py-12 border-b lg:border-b-0 lg:border-r border-white/10">
-
           {/* LOGO */}
           <img
             src={logo} // replace with your logo
@@ -41,14 +38,19 @@ const Foot = () => {
           />
 
           {/* DESCRIPTION */}
-          <p className="text-[#9b9b9b]  leading-[1.6] mt-6 " style={{fontSize:"18px", fontFamily:"Brutal Font Light, sans-serif"}}>
-            Stay connected and motivated by joining our newsletter
-            Get exclusive fitness tips, workout guides.
+          <p
+            className="text-[#9b9b9b]  leading-[1.6] mt-6 "
+            style={{
+              fontSize: "18px",
+              fontFamily: "Brutal Font Light, sans-serif",
+            }}
+          >
+            Stay connected and motivated by joining our newsletter Get exclusive
+            fitness tips, workout guides.
           </p>
 
           {/* SOCIAL ICONS */}
           <div className="flex items-center gap-4 mt-8">
-
             <a
               href="/"
               className="
@@ -90,19 +92,23 @@ const Foot = () => {
             >
               <FaInstagram size={14} />
             </a>
-
           </div>
         </div>
 
         {/* COLUMN 2 */}
         <div className="px-6 md:px-8 py-10 lg:py-12 border-b lg:border-b-0 lg:border-r border-white/10">
-
-          <h3 className="text-white uppercase tracking-wide" style={{ fontFamily: '"Brutal Font Bold", sans-serif', fontWeight: 700, fontSize: "20px" }}>
+          <h3
+            className="text-white uppercase tracking-wide"
+            style={{
+              fontFamily: '"Brutal Font Bold", sans-serif',
+              fontWeight: 700,
+              fontSize: "20px",
+            }}
+          >
             Memberships
           </h3>
 
           <ul className="mt-8 space-y-5">
-
             {[
               "Fight Club",
               "Strength Lab",
@@ -123,84 +129,105 @@ const Foot = () => {
                   duration-300
                   cursor-pointer
                 "
-                style={{ fontFamily: '"Brutal Font Light", sans-serif', fontSize: "15px" }}
+                style={{
+                  fontFamily: '"Brutal Font Light", sans-serif',
+                  fontSize: "15px",
+                }}
               >
                 <span className="w-1.5 h-1.5 bg-[#7a7a7a] transform rotate-45 inline-block shrink-0"></span>
                 {item}
               </li>
             ))}
-
           </ul>
         </div>
 
         {/* COLUMN 3 */}
         <div className="px-6 md:px-8 py-10 lg:py-12 border-b lg:border-b-0 lg:border-r border-white/10">
-
-          <h3 className="text-white uppercase tracking-wide" style={{ fontFamily: '"Brutal Font Bold", sans-serif', fontWeight: 700, fontSize: "20px" }}>
+          <h3
+            className="text-white uppercase tracking-wide"
+            style={{
+              fontFamily: '"Brutal Font Bold", sans-serif',
+              fontWeight: 700,
+              fontSize: "20px",
+            }}
+          >
             Opening Hours
           </h3>
 
-          <div className="mt-8 space-y-8" style={{ fontFamily: '"Brutal Font Light", sans-serif', fontSize: "15px" }}>
-
+          <div
+            className="mt-8 space-y-8"
+            style={{
+              fontFamily: '"Brutal Font Light", sans-serif',
+              fontSize: "15px",
+            }}
+          >
             <div>
-              <p className="text-[#b3b3b3] leading-[1.8]">
-                Morning 05:00 Am -
-              </p>
-              <p className="text-[#b3b3b3] leading-[1.8]">
-                12:00 Pm
-              </p>
+              <p className="text-[#b3b3b3] leading-[1.8]">Morning 05:00 Am -</p>
+              <p className="text-[#b3b3b3] leading-[1.8]">12:00 Pm</p>
             </div>
 
             <div>
-              <p className="text-[#b3b3b3] leading-[1.8]">
-                Evening 04:00 Pm -
-              </p>
-              <p className="text-[#b3b3b3] leading-[1.8]">
-                10:00 Pm
-              </p>
+              <p className="text-[#b3b3b3] leading-[1.8]">Evening 04:00 Pm -</p>
+              <p className="text-[#b3b3b3] leading-[1.8]">10:00 Pm</p>
             </div>
-
           </div>
         </div>
 
         {/* COLUMN 4 */}
         <div className="px-6 md:px-8 py-10 lg:py-12">
-
-          <h3 className="text-white uppercase tracking-wide" style={{ fontFamily: '"Brutal Font Bold", sans-serif', fontWeight: 700, fontSize: "20px" }}>
+          <h3
+            className="text-white uppercase tracking-wide"
+            style={{
+              fontFamily: '"Brutal Font Bold", sans-serif',
+              fontWeight: 700,
+              fontSize: "20px",
+            }}
+          >
             Location
           </h3>
 
-          <div className="mt-8 space-y-8" style={{ fontFamily: '"Brutal Font Light", sans-serif', fontSize: "15px" }}>
-
+          <div
+            className="mt-8 space-y-8"
+            style={{
+              fontFamily: '"Brutal Font Light", sans-serif',
+              fontSize: "15px",
+            }}
+          >
             <p className="text-[#b3b3b3] leading-[1.8] max-w-[300px]">
-              No. 69, Church Street,<br/>
-              Krishna Nagar, Lawspet,<br/>
-              Pondicherry, Pondicherry -<br/>
+              No. 69, Church Street,
+              <br />
+              Krishna Nagar, Lawspet,
+              <br />
+              Pondicherry, Pondicherry -<br />
               605008
             </p>
 
             <div className="space-y-4 flex flex-col">
-
-              <a href="mailto:hello@boxandcross.com" className="text-[#b3b3b3] hover:text-[#d9ff00] transition-all duration-300 w-fit">
+              <a
+                href="mailto:hello@boxandcross.com"
+                className="text-[#b3b3b3] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+              >
                 hello@boxandcross.com
               </a>
 
-              <a href="tel:+918925556900" className="text-[#b3b3b3] hover:text-[#d9ff00] transition-all duration-300 w-fit">
-                +91 89255 56900
+              <a
+                href="tel:+918925556800"
+                className="text-[#b3b3b3] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+              >
+                +91 89255 56800
               </a>
-
             </div>
-
           </div>
         </div>
-
       </div>
 
       {/* BACK TO TOP BUTTON */}
       <button
         onClick={scrollToTop}
         className={`fixed bottom-8 right-8 w-12 h-12 md:w-14 md:h-14 bg-[#defb02] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[100] ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
+          isVisible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-10 pointer-events-none"
         }`}
         aria-label="Back to top"
       >
@@ -217,16 +244,22 @@ const Foot = () => {
         >
           <FaWhatsapp size={34} />
         </a>
-        
+
         {/* Speech Bubble */}
-        <div className="ml-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
-          <span className="block group-hover:hidden transition-all duration-300">Contact us</span>
-          <span className="hidden group-hover:block transition-all duration-300 ">WhatsApp</span>
+        <div
+          className="ml-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300"
+          style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+        >
+          <span className="block group-hover:hidden transition-all duration-300">
+            Contact us
+          </span>
+          <span className="hidden group-hover:block transition-all duration-300 ">
+            WhatsApp
+          </span>
           {/* Triangle pointing left */}
           <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-r-[10px] border-r-white border-b-[8px] border-b-transparent"></div>
         </div>
       </div>
-
     </footer>
   );
 };
