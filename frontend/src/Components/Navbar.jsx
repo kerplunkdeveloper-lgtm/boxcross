@@ -18,6 +18,7 @@ import {
   FaLinkedinIn,
   FaInstagram,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 import logo from "../assets/images/new-logo.png";
 
@@ -404,8 +405,8 @@ const Navbar = () => {
 
               <div className="flex items-center gap-3">
                 {/* CTA */}
-                {/* <a
-                  href="https://boxandcross.com/contact-us/"
+                <Link
+                  to="/"
                   rel="noopener noreferrer"
                   className="hidden lg:flex relative overflow-hidden px-6 py-4 bg-[#defb02] text-black rounded-xl text-xs tracking-wider uppercase group"
                 >
@@ -417,9 +418,9 @@ const Navbar = () => {
                     fontSize: "14px",
                   }}
                   >
-                    ENTER THE ARENA
+                    BOOK YOUR FREE GYM TOUR
                   </span>
-                </a> */}
+                </Link>
 
                 {/* DESKTOP OFFCANVAS BUTTON */}
                 <button
