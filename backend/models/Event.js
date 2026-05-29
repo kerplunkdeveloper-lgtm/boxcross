@@ -17,6 +17,18 @@ const eventSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    inclusions: {
+      type: [String],
+      default: [],
+    },
+    exclusions: {
+      type: [String],
+      default: [],
+    },
+    termsAndConditions: {
+      type: [String],
+      default: [],
+    },
     originalPrice: {
       type: Number,
       default: null,

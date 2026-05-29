@@ -9,6 +9,7 @@ const membershipRoutes = require("./routes/membershipRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const eventBannerRoutes = require("./routes/eventBannerRoutes");
 const eventRoutes = require("./routes/eventRoutes");
+const leadRoutes = require("./routes/leadRoutes");
 
 // Load env
 dotenv.config();
@@ -37,6 +38,7 @@ app.use("/api/memberships", membershipRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/event-banners", eventBannerRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/leads", leadRoutes);
 
 // Health check
 app.get("/", (req, res) => {

@@ -86,4 +86,8 @@ export const updateProfile = (formData) => API.put("/auth/profile", formData, {
   },
 });
 
+// ──────────────── LEAD CAPTURE API ────────────────
+export const createLead = (data) => API.post("/leads", data);
+export const getLeadsAdmin = () => API.get("/leads");
+
 export default API;

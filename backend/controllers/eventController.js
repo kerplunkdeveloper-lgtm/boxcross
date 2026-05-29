@@ -72,7 +72,7 @@ const getAllEventsAdmin = async (req, res) => {
 // @access  Private/Admin
 const createEvent = async (req, res) => {
   try {
-    const { title, location, description, originalPrice, price, bookingLink, schedules } = req.body;
+    const { title, location, description, originalPrice, price, bookingLink, schedules, inclusions, exclusions, termsAndConditions } = req.body;
 
     if (!title || !location || !price) {
       return res.status(400).json({
@@ -98,6 +98,21 @@ const createEvent = async (req, res) => {
       }
     }
 
+    let parsedInclusions = [];
+    if (inclusions) {
+      try { parsedInclusions = typeof inclusions === "string" ? JSON.parse(inclusions) : inclusions; } catch(e) {}
+    }
+    
+    let parsedExclusions = [];
+    if (exclusions) {
+      try { parsedExclusions = typeof exclusions === "string" ? JSON.parse(exclusions) : exclusions; } catch(e) {}
+    }
+    
+    let parsedTerms = [];
+    if (termsAndConditions) {
+      try { parsedTerms = typeof termsAndConditions === "string" ? JSON.parse(termsAndConditions) : termsAndConditions; } catch(e) {}
+    }
+
     // Upload to Cloudinary
     const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
 
@@ -111,6 +126,9 @@ const createEvent = async (req, res) => {
       publicId: result.public_id,
       bookingLink: bookingLink || "#",
       schedules: parsedSchedules,
+      inclusions: parsedInclusions,
+      exclusions: parsedExclusions,
+      termsAndConditions: parsedTerms,
     });
 
     res.status(201).json({
@@ -133,7 +151,7 @@ const createEvent = async (req, res) => {
 const updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, location, description, originalPrice, price, bookingLink, schedules } = req.body;
+    const { title, location, description, originalPrice, price, bookingLink, schedules, inclusions, exclusions, termsAndConditions } = req.body;
 
     let event = await Event.findById(id);
     if (!event) {
@@ -165,6 +183,18 @@ const updateEvent = async (req, res) => {
 
     if (parsedSchedules !== undefined) {
       updateData.schedules = parsedSchedules;
+    }
+    
+    if (inclusions !== undefined) {
+      try { updateData.inclusions = typeof inclusions === "string" ? JSON.parse(inclusions) : inclusions; } catch(e) {}
+    }
+    
+    if (exclusions !== undefined) {
+      try { updateData.exclusions = typeof exclusions === "string" ? JSON.parse(exclusions) : exclusions; } catch(e) {}
+    }
+    
+    if (termsAndConditions !== undefined) {
+      try { updateData.termsAndConditions = typeof termsAndConditions === "string" ? JSON.parse(termsAndConditions) : termsAndConditions; } catch(e) {}
     }
 
     // If new image is uploaded, replace existing image in Cloudinary

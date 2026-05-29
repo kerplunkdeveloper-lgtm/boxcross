@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { Links, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
   X,
@@ -11,6 +11,7 @@ import {
   XCircle,
   ChevronLeft,
   ChevronRight,
+  User,
 } from "lucide-react";
 import {
   FaFacebookF,
@@ -19,6 +20,7 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+
 
 import logo from "../assets/images/new-logo.png";
 
@@ -379,31 +381,13 @@ const Navbar = () => {
                   CONTACT US
                 </a>
 
-                {/* DASHBOARD */}
-                {user && (
-                  <NavLink
-                    to="/dashboard"
-                    className={({ isActive }) =>
-                      `px-3 py-2 uppercase tracking-wider transition-all ${
-                        isActive
-                          ? "text-[#defb02]"
-                          : "text-gray-400 hover:text-white"
-                      }`
-                    }
-                    style={{
-                      fontFamily: '"BrutalTypeBold", sans-serif',
-                      fontWeight: 600,
-                      fontSize: "14px",
-                    }}
-                  >
-                    DASHBOARD
-                  </NavLink>
-                )}
+
               </div>
 
               {/* ================= RIGHT ================= */}
 
               <div className="flex items-center gap-3">
+
                 {/* CTA */}
                 <Link
                   to="/"
@@ -639,24 +623,6 @@ const Navbar = () => {
             </a>
           </div>
 
-          {/* DASHBOARD */}
-          {user && (
-            <div className="border-b border-[#1f1f1f]">
-              <NavLink
-                to="/dashboard"
-                onClick={closeOffcanvas}
-                className={({ isActive }) =>
-                  `block py-2 text-[14px] font-extrabold transition-colors ${
-                    isActive
-                      ? "text-[#defb02]"
-                      : "text-white hover:text-[#defb02]"
-                  }`
-                }
-              >
-                DASHBOARD
-              </NavLink>
-            </div>
-          )}
 
           {/* FOOTER */}
 
@@ -810,6 +776,19 @@ const Navbar = () => {
                     No. 69, Church Street, Krishna Nagar, Lawspet, Pondicherry -
                     605008
                   </p>
+
+                  <h1 className="pt-3">
+                    <Link to="/login"
+                    className="text-[#defb02] hover:text-white transition-colors underline"
+                    style={{
+                      fontFamily: '"Brutal Font Light", sans-serif',
+                      fontWeight: 600,
+                      fontSize: "20px",
+                    }}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  </h1>
                 </div>
               </div>
             </div>

@@ -11,6 +11,8 @@ import {
   Mail,
   Phone,
   Ticket,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import {
   getEventsList,
@@ -559,6 +561,68 @@ const EventList = () => {
                         "No additional description details available for this event yet. Stay tuned for special schedules."}
                     </p>
                   </div>
+
+                  {/* Venue Inclusions / Exclusions / Terms */}
+                  {(selectedEvent.inclusions?.length > 0 || selectedEvent.exclusions?.length > 0 || selectedEvent.termsAndConditions?.length > 0) && (
+                    <div className="space-y-4">
+                      {selectedEvent.inclusions?.length > 0 && (
+                        <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
+                          <h4
+                            className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            Venue Inclusions
+                          </h4>
+                          <ul className="space-y-4">
+                            {selectedEvent.inclusions.map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
+                                <CheckCircle size={16} className="text-green-500 shrink-0 mt-0.5" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      
+                      {selectedEvent.exclusions?.length > 0 && (
+                        <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
+                          <h4
+                            className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            Venue Exclusions
+                          </h4>
+                          <ul className="space-y-4">
+                            {selectedEvent.exclusions.map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
+                                <XCircle size={16} className="text-red-500 shrink-0 mt-0.5" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      
+                      {selectedEvent.termsAndConditions?.length > 0 && (
+                        <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
+                          <h4
+                            className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            Terms & Conditions
+                          </h4>
+                          <ul className="space-y-4">
+                            {selectedEvent.termsAndConditions.map((item, idx) => (
+                              <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
+                                <span className="w-1.5 h-1.5 bg-[#7a7a7a] transform rotate-45 inline-block shrink-0 mt-1.5"></span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Modal Footer Pricing + Call To Action */}

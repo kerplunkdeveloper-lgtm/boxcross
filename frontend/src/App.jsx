@@ -26,7 +26,10 @@ const DashboardEventPayments = lazy(
 );
 const DashboardProfile = lazy(() => import("./pages/DashboardProfile"));
 const DashboardCalendar = lazy(() => import("./pages/DashboardCalendar"));
+const DashboardLeads = lazy(() => import("./pages/DashboardLeads"));
 const Eventpage = lazy(() => import("./pages/Events/Eventpage"));
+
+import LeadModal from "./Components/LeadModal";
 
 // Layout with Navbar and Footer
 const Layout = () => {
@@ -34,6 +37,7 @@ const Layout = () => {
     <div className="min-h-screen flex flex-col bg-black text-white">
       <Navbar />
       <ScrollToTop />
+      <LeadModal />
       <main className="flex-grow">
         <Outlet />
       </main>
@@ -111,6 +115,7 @@ const App = () => {
                     element={<DashboardEventPayments />}
                   />
                   <Route path="profile" element={<DashboardProfile />} />
+                  <Route path="leads" element={<DashboardLeads />} />
                   <Route path="settings" element={<DashboardSettings />} />
                   <Route path="calendar" element={<DashboardCalendar />} />
                 </Route>

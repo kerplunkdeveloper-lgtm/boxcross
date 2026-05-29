@@ -11,6 +11,7 @@ import {
   Image,
   Calendar,
   User,
+  Users,
 } from "lucide-react";
 import logo from "../assets/images/logo.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -48,6 +49,11 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       name: "Event payments",
       path: "/dashboard/event-payments",
       icon: DollarSign,
+    });
+    menuItems.push({
+      name: "User information",
+      path: "/dashboard/leads",
+      icon: Users,
     });
   }
 

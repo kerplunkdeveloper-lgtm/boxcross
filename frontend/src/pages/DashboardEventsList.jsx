@@ -150,6 +150,9 @@ const DashboardEventsList = () => {
   const [price, setPrice] = useState("");
   const [bookingLink, setBookingLink] = useState("");
   const [schedules, setSchedules] = useState([]);
+  const [inclusions, setInclusions] = useState("");
+  const [exclusions, setExclusions] = useState("");
+  const [terms, setTerms] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
 
@@ -199,6 +202,9 @@ const DashboardEventsList = () => {
     setOriginalPrice("");
     setPrice("");
     setBookingLink("");
+    setInclusions("");
+    setExclusions("");
+    setTerms("");
     setSchedules([
       {
         date: "SAT 30 May",
@@ -228,6 +234,9 @@ const DashboardEventsList = () => {
     setOriginalPrice(event.originalPrice ? String(event.originalPrice) : "");
     setPrice(String(event.price));
     setBookingLink(event.bookingLink || "");
+    setInclusions(event.inclusions ? event.inclusions.join("\n") : "");
+    setExclusions(event.exclusions ? event.exclusions.join("\n") : "");
+    setTerms(event.termsAndConditions ? event.termsAndConditions.join("\n") : "");
     setSchedules(event.schedules || []);
     setImageFile(null);
     setImagePreview(event.imageUrl);
@@ -259,6 +268,13 @@ const DashboardEventsList = () => {
       formData.append("description", description.trim());
       formData.append("price", price);
       formData.append("schedules", JSON.stringify(schedules));
+
+      const incArray = inclusions.split("\n").map((s) => s.trim()).filter(Boolean);
+      const excArray = exclusions.split("\n").map((s) => s.trim()).filter(Boolean);
+      const termsArray = terms.split("\n").map((s) => s.trim()).filter(Boolean);
+      formData.append("inclusions", JSON.stringify(incArray));
+      formData.append("exclusions", JSON.stringify(excArray));
+      formData.append("termsAndConditions", JSON.stringify(termsArray));
 
       if (originalPrice) {
         formData.append("originalPrice", originalPrice);
@@ -640,6 +656,50 @@ const DashboardEventsList = () => {
                           className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
                         />
                       </div>
+                    </div>
+
+                    {/* Venue Inclusions & Exclusions */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Inclusions */}
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                          Venue Inclusions (One per line)
+                        </label>
+                        <textarea
+                          value={inclusions}
+                          onChange={(e) => setInclusions(e.target.value)}
+                          placeholder="e.g. Certified Instructor&#10;Locker Access&#10;Towels & amenities"
+                          rows={4}
+                          className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-green-500/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
+                        />
+                      </div>
+                      {/* Exclusions */}
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                          Venue Exclusions (One per line)
+                        </label>
+                        <textarea
+                          value={exclusions}
+                          onChange={(e) => setExclusions(e.target.value)}
+                          placeholder="e.g. Swimwear / Attire&#10;Transportation&#10;Head cap mandatory"
+                          rows={4}
+                          className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-red-500/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Terms and Conditions */}
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                        Terms and Conditions (One per line)
+                      </label>
+                      <textarea
+                        value={terms}
+                        onChange={(e) => setTerms(e.target.value)}
+                        placeholder="e.g. Please carry a valid ID proof&#10;Tickets once booked cannot be cancelled or refunded&#10;Management reserves the right of admission"
+                        rows={4}
+                        className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
+                      />
                     </div>
                   </div>
 
