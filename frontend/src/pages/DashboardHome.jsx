@@ -6,6 +6,7 @@ import {
   User, Mail, Calendar, ShieldCheck, Award, Clock, ArrowRight, Sparkles, Users, 
   MapPin, DollarSign, ArrowUpRight, Plus, Loader2 
 } from "lucide-react";
+import gymhm from "../assets/gymhm.png";
 import { getBookings, getPayments, getEventsListAdmin } from "../api/api";
 
 const DashboardHome = () => {
@@ -118,10 +119,6 @@ const DashboardHome = () => {
           {/* Banner Text Content */}
           <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8 text-left">
             <div className="flex flex-col items-start gap-1">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white text-[8px] sm:text-[10px] font-black uppercase tracking-widest">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                Live Arena
-              </span>
               <span className="text-[9px] sm:text-xs text-gray-300 font-bold uppercase tracking-widest mt-1 pl-1">
                 Box & Cross Elite Training
               </span>
@@ -215,117 +212,176 @@ const DashboardHome = () => {
 
         </div>
 
-        {/* CALENDAR EVENTS DETAILS SECTION BELOW THE CARDS */}
-        <div className="space-y-6 text-left">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                Active Class & Event Schedules
-              </h2>
-              <p className="text-[var(--db-text-muted)] text-xs mt-0.5">
-                Overview of current active gym schedules, time slots and participant capacity.
-              </p>
-            </div>
-            
-            <button 
-              onClick={() => navigate("/dashboard/calendar")}
-              className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)] hover:underline transition-all cursor-pointer"
-            >
-              Go to Calendar View
-              <ArrowUpRight size={14} />
-            </button>
-          </div>
 
-          {loading ? (
-            <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-12 text-center flex flex-col items-center justify-center gap-3">
-              <Loader2 className="animate-spin text-[var(--db-accent-highlight)]" size={32} />
-              <p className="text-xs uppercase tracking-wider text-[var(--db-text-muted)] font-bold">Syncing schedules...</p>
-            </div>
-          ) : events.length === 0 ? (
-            <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-12 text-center flex flex-col items-center justify-center">
-              <Calendar size={40} className="text-[var(--db-text-muted)] mb-3" />
-              <p className="text-sm font-bold text-[var(--db-text)]">No Scheduled Events Yet</p>
-              <p className="text-xs text-[var(--db-text-muted)] mt-1">Schedules created by gym admins will display here.</p>
-              {user.role === "admin" && (
-                <button
-                  onClick={() => navigate("/dashboard/calendar")}
-                  className="mt-4 flex items-center gap-1 bg-[var(--db-accent-glow)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all cursor-pointer"
-                >
-                  <Plus size={14} /> Create First Event
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] overflow-hidden shadow-2xl p-6 md:p-8 transition-colors">
-              <div className="divide-y divide-[var(--db-card-border)]/60">
-                {events.slice(0, 8).map((evt, idx) => (
-                  <div 
-                    key={evt._id}
-                    className={`flex flex-col md:flex-row md:items-center justify-between gap-4 py-4 ${
-                      idx === 0 ? "pt-0" : ""
-                    } ${
-                      idx === events.length - 1 || idx === 7 ? "pb-0" : ""
-                    }`}
-                  >
-                    {/* Left: Small Image & Title/Location */}
-                    <div className="flex items-center gap-4 flex-1 min-w-0 text-left">
-                      {/* Small Image */}
-                      <div className="w-14 h-14 rounded-xl overflow-hidden bg-black shrink-0 border border-[var(--db-card-border)]">
-                        <img 
-                          src={evt.imageUrl} 
-                          alt={evt.title} 
-                          className="w-full h-full object-cover" 
-                        />
-                      </div>
-                      {/* Title, Location & Price */}
-                      <div className="min-w-0 flex-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-sm font-black uppercase text-[var(--db-text-title)] truncate">
-                            {evt.title}
-                          </h3>
-                          <span className="text-[10px] font-black text-[#ff9e00] bg-[#ff9e00]/10 px-2 py-0.5 rounded-full">
-                            ₹{evt.price}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1 text-[var(--db-text-muted)] text-[10px] font-semibold mt-1">
-                          <MapPin size={12} className="shrink-0 text-[var(--db-accent-highlight)]" />
-                          <span className="truncate">{evt.location}</span>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Right: Time Slots / Schedules in a clean horizontal flow */}
-                    <div className="flex flex-wrap gap-2 md:max-w-[60%] shrink-0">
-                      {evt.schedules && evt.schedules.slice(0, 3).map((sch, sIdx) => (
-                        <div 
-                          key={sIdx}
-                          className="bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl p-2 flex flex-col gap-1 min-w-[120px]"
-                        >
-                          <span className="text-[8px] font-black text-[var(--db-text-title)] uppercase flex items-center gap-1">
-                            <Calendar size={10} className="text-[var(--db-accent-highlight)]" />
-                            {sch.date}
-                          </span>
-                          <div className="flex flex-wrap gap-1">
-                            {sch.timeSlots && sch.timeSlots.map((ts, tIdx) => (
-                              <span 
-                                key={tIdx} 
-                                className="text-[7.5px] bg-[var(--db-accent-glow)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] px-1.5 py-0.5 rounded font-mono font-semibold"
-                                title={`Limit: ${ts.slots} | Booked: ${ts.booked}`}
-                              >
-                                {ts.time} ({ts.booked}/{ts.slots})
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+
+
+
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+          {/* Left: Premium Promo Banner Card */}
+          <div className="lg:col-span-5 w-full">
+            <div className="relative overflow-hidden rounded-[32px] border border-[var(--db-card-border)] bg-[var(--db-card)] shadow-2xl h-[320px] sm:h-[400px] lg:h-[480px] flex flex-col justify-end group transition-all duration-300 lg:sticky lg:top-6">
+              <img 
+                src={gymhm} 
+                alt="Box & Cross Gym" 
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+              />
+              {/* Premium Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent z-10" />
+              
+              {/* Content Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 text-left flex flex-col items-start">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[var(--db-accent-highlight)] text-black shadow-lg mb-3">
+                  Box & Cross Club
+                </span>
+                <h3 className="text-xl md:text-2xl font-black uppercase text-white tracking-wide leading-tight" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  Elite Athlete Arena
+                </h3>
+                <p className="text-xs text-gray-300 font-medium leading-relaxed max-w-xs mt-1.5">
+                  Push your limits in our high-performance facility equipped with state-of-the-art gear and expert coaching.
+                </p>
               </div>
             </div>
-          )}
+          </div>
+
+
+          {/* Right: CALENDAR EVENTS DETAILS SECTION */}
+          <div className="lg:col-span-7 space-y-6 text-left w-full">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-md md:text-xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  Active Class & Event Schedules
+                </h2>
+                <p className="text-[var(--db-text-muted)] text-xs mt-0.5">
+                  Overview of current active gym schedules, time slots and participant capacity.
+                </p>
+              </div>
+              
+              <button 
+                onClick={() => navigate("/dashboard/calendar")}
+                className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)] hover:text-white transition-colors duration-300 cursor-pointer group"
+              >
+                Go to Calendar View
+                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </button>
+            </div>
+
+            {loading ? (
+              <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-12 text-center flex flex-col items-center justify-center gap-3">
+                <Loader2 className="animate-spin text-[var(--db-accent-highlight)]" size={32} />
+                <p className="text-xs uppercase tracking-wider text-[var(--db-text-muted)] font-bold">Syncing schedules...</p>
+              </div>
+            ) : events.length === 0 ? (
+              <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-12 text-center flex flex-col items-center justify-center">
+                <Calendar size={40} className="text-[var(--db-text-muted)] mb-3" />
+                <p className="text-sm font-bold text-[var(--db-text)]">No Scheduled Events Yet</p>
+                <p className="text-xs text-[var(--db-text-muted)] mt-1">Schedules created by gym admins will display here.</p>
+                {user.role === "admin" && (
+                  <button
+                    onClick={() => navigate("/dashboard/calendar")}
+                    className="mt-4 flex items-center gap-1 bg-[var(--db-accent-glow)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all cursor-pointer"
+                  >
+                    <Plus size={14} /> Create First Event
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] overflow-hidden shadow-2xl p-5 md:p-6 transition-colors">
+                <div className="flex flex-col gap-2.5">
+                  {events.slice(0, 8).map((evt) => (
+                    <div 
+                      key={evt._id}
+                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-4 hover:bg-[var(--db-input-bg)]/25 border border-transparent hover:border-[var(--db-card-border)]/50 rounded-2xl transition-all duration-300"
+                    >
+                      {/* Left: Small Image & Title/Location */}
+                      <div className="flex items-center gap-4 flex-1 min-w-0 text-left">
+                        {/* Small Image */}
+                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-black shrink-0 border border-[var(--db-card-border)]">
+                          <img 
+                            src={evt.imageUrl} 
+                            alt={evt.title} 
+                            className="w-full h-full object-cover transition-transform duration-350 hover:scale-105" 
+                          />
+                        </div>
+                        {/* Title, Location & Price */}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-sm font-black uppercase text-[var(--db-text-title)] truncate">
+                              {evt.title}
+                            </h3>
+                            <span className="text-[10px] font-black text-[#ff9e00] bg-[#ff9e00]/10 px-2 py-0.5 rounded-full">
+                              ₹{evt.price}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 text-[var(--db-text-muted)] text-[10px] font-semibold mt-1">
+                            <MapPin size={12} className="shrink-0 text-[var(--db-accent-highlight)]" />
+                            <span className="truncate">{evt.location}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right: Time Slots / Schedules in a clean horizontal flow */}
+                      <div className="flex flex-wrap gap-2.5 max-w-full sm:max-w-[65%] justify-start sm:justify-end shrink-0">
+                        {evt.schedules && evt.schedules.slice(0, 3).map((sch, sIdx) => (
+                          <div 
+                            key={sIdx}
+                            className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-2xl p-2.5 flex flex-col gap-1.5 min-w-[125px] flex-1 sm:flex-initial transition-all duration-350 hover:border-[var(--db-accent-highlight)]/30 hover:shadow-lg hover:shadow-[var(--db-accent-glow)]/5"
+                          >
+                            <span className="text-[9px] font-extrabold text-[var(--db-text-title)] uppercase flex items-center gap-1 border-b border-[var(--db-card-border)]/50 pb-1 mb-0.5">
+                              <Calendar size={11} className="text-[var(--db-accent-highlight)] shrink-0" />
+                              {sch.date}
+                            </span>
+                            <div className="flex flex-wrap gap-1">
+                              {sch.timeSlots && sch.timeSlots.map((ts, tIdx) => {
+                                const isFull = ts.booked >= ts.slots;
+                                const isAlmostFull = !isFull && (ts.slots - ts.booked <= 3);
+
+                                let badgeColor = "bg-[var(--db-accent-glow)] text-[var(--db-accent-highlight)] border-[var(--db-card-border)]";
+                                if (isFull) {
+                                  badgeColor = "bg-red-500/10 text-red-400 border-red-500/20";
+                                } else if (isAlmostFull) {
+                                  badgeColor = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+                                }
+
+                                return (
+                                  <span 
+                                    key={tIdx} 
+                                    className={`text-[9px] px-2 py-0.5 rounded-lg border font-mono font-bold transition-all duration-200 ${badgeColor}`}
+                                    title={`Limit: ${ts.slots} | Booked: ${ts.booked}`}
+                                  >
+                                    {ts.time} <span className="opacity-75">({ts.booked}/{ts.slots})</span>
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+
+
+
         </div>
 
+
+
+
+
+
+
+
+
+
+
+      
       </div>
     </div>
   );

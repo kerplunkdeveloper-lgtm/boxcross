@@ -224,7 +224,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         >
           <Menu size={24} />
         </button>
-        <h2 className="text-lg md:text-xl font-bold uppercase tracking-wider text-[var(--db-text-title)]">
+        <h2 className="text-[12px] md:text-xl font-bold uppercase tracking-wider text-[var(--db-text-title)]">
           {activeTitle}
         </h2>
       </div>

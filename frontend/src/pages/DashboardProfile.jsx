@@ -125,7 +125,7 @@ const DashboardProfile = () => {
         {/* Title Header */}
         <div className="text-left">
           <h1
-            className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]"
+            className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
             style={{ fontFamily: '"Brutal Font", sans-serif' }}
           >
             Account Profile

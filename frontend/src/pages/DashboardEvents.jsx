@@ -170,7 +170,7 @@ const DashboardEvents = () => {
         {/* Header Block */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--db-card-border)]">
           <div>
-            <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+            <h1 className="text-md md:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
               Event Banner Manager
             </h1>
             <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-1">

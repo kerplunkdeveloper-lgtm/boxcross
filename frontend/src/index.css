@@ -96,3 +96,33 @@ body {
 .dashboard-light * {
   font-family: 'Poppins', sans-serif !important;
 }
+
+/* Hardware-accelerated, high-performance smooth theme transitions (150ms duration) */
+.dashboard-dark, 
+.dashboard-light,
+.dashboard-dark div, .dashboard-light div,
+.dashboard-dark aside, .dashboard-light aside,
+.dashboard-dark header, .dashboard-light header,
+.dashboard-dark main, .dashboard-light main,
+.dashboard-dark section, .dashboard-light section,
+.dashboard-dark p, .dashboard-light p,
+.dashboard-dark span, .dashboard-light span,
+.dashboard-dark a, .dashboard-light a,
+.dashboard-dark h1, .dashboard-light h1,
+.dashboard-dark h2, .dashboard-light h2,
+.dashboard-dark h3, .dashboard-light h3,
+.dashboard-dark h4, .dashboard-light h4,
+.dashboard-dark button, .dashboard-light button,
+.dashboard-dark input, .dashboard-light input,
+.dashboard-dark select, .dashboard-light select,
+.dashboard-dark textarea, .dashboard-light textarea,
+.dashboard-dark table, .dashboard-light table,
+.dashboard-dark tr, .dashboard-light tr,
+.dashboard-dark td, .dashboard-light td,
+.dashboard-dark th, .dashboard-light th {
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 150ms cubic-bezier(0.4, 0, 0.2, 1), 
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: background-color, border-color, color;
+}
