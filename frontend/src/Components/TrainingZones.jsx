@@ -2,37 +2,22 @@ import React, { useState, useEffect, useRef } from "react";
 
 const zones = [
   {
-    title: "BOOTY STATION",
-    img: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=600&q=80",
+    title: "Boxing Zone",
+    img: "https://images.unsplash.com/photo-1636581563884-39569e81cbad?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   },
   {
-    title: "CURL CORNER",
-    img: "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=600&q=80",
+    title: "Hyrox Zone",
+    img: "https://fcdn.thg-corporate.com/hale/Hyrox_014_9c3015a9ea.jpg",
   },
   {
-    title: "IRON YARD",
-    img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    title: "PEC CITY",
-    img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    title: "CARDIO ARENA",
-    img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    title: "CALISTHENICS GRID",
-    img: "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?auto=format&fit=crop&w=600&q=80",
-  },
-  {
-    title: "OLYMPIC PLATFORM",
+    title: "Strength Zone",
     img: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=600&q=80",
   },
   {
-    title: "COMBAT CAGE",
-    img: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=600&q=80",
+    title: "Recovery Zone",
+    img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80",
   },
+ 
 ];
 
 const TrainingZones = ({ onBookTour }) => {

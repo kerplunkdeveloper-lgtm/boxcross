@@ -75,7 +75,7 @@ const WhatWeOffer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16 md:mb-24 flex flex-col items-center"
+          className="text-center mb-16 md:mb-18 flex flex-col items-center"
         >
           <span className="px-4 py-2 rounded-md border mb-8 border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
           style={{
@@ -87,7 +87,7 @@ const WhatWeOffer = () => {
           </span>
 
           <h2
-            className="mt-6  text-[32px] md:text-[48px] uppercase text-white leading-none"
+            className=" text-[32px] md:text-[48px] uppercase text-white leading-none"
             style={{
               fontFamily: '"Brutal Font", sans-serif',
               fontWeight:'700',

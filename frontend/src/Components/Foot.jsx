@@ -110,32 +110,34 @@ const Foot = () => {
 
           <ul className="mt-8 space-y-5">
             {[
-              "Fight Club",
-              "Strength Lab",
-              "Hybrid Performance",
-              "Fight Performance",
-              "HYROX Lab",
-              "Junior Athletes",
+              { name: "Fight Club", path: "https://boxandcross.com/fight-club/" },
+              { name: "Strength Lab", path: "https://boxandcross.com/strength-lab/" },
+              { name: "Hybrid Performance", path: "https://boxandcross.com/hybrid-performance/" },
+              { name: "Fight Performance", path: "https://boxandcross.com/fight-performance/" },
+              { name: "HYROX Lab", path: "https://boxandcross.com/hyrox-lab/" },
+              { name: "Junior Athletes", path: "https://boxandcross.com/junior-athletes/" },
             ].map((item, index) => (
-              <li
-                key={index}
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  text-[#b3b3b3]
-                  hover:text-[#d9ff00]
-                  transition-all
-                  duration-300
-                  cursor-pointer
-                "
-                style={{
-                  fontFamily: '"Brutal Font Light", sans-serif',
-                  fontSize: "15px",
-                }}
-              >
-                <span className="w-1.5 h-1.5 bg-[#7a7a7a] transform rotate-45 inline-block shrink-0"></span>
-                {item}
+              <li key={index}>
+                <a
+                  href={item.path}
+                  className="
+                    flex
+                    items-center
+                    gap-3
+                    text-[#b3b3b3]
+                    hover:text-[#d9ff00]
+                    transition-all
+                    duration-300
+                    cursor-pointer
+                  "
+                  style={{
+                    fontFamily: '"Brutal Font Light", sans-serif',
+                    fontSize: "15px",
+                  }}
+                >
+                  <span className="w-1.5 h-1.5 bg-[#7a7a7a] transform rotate-45 inline-block shrink-0"></span>
+                  {item.name}
+                </a>
               </li>
             ))}
           </ul>
