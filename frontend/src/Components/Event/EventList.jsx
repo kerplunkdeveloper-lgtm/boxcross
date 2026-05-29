@@ -27,80 +27,6 @@ const EventList = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [createdBooking, setCreatedBooking] = useState(null);
 
-  // Fallback default events with description details & schedules matching the reference images
-  const defaultEvents = [
-    {
-      _id: "default-event-1",
-      title: "JW Marriott Mumbai Sahar",
-      location: "Chhatrapati Shivaji International Airport, Vile Parle East, Mumbai",
-      description: "Dive into an intensive aquatic core and stability workout at JW Marriott Sahar pool arena.\n\nLed by certified Box & Cross instructors, this training session utilizes specialized floating mats to challenge your balance, core engagement, and agility. Ideal for athletes looking to improve stabilization muscles and endurance in a premium wellness setting.\n\nWhat to bring: Athletic swimwear, dry change of clothes, and high energy.",
-      originalPrice: 3100,
-      price: 2790,
-      imageUrl: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=800&auto=format&fit=crop",
-      bookingLink: "#",
-      schedules: [
-        {
-          date: "SAT 30 May",
-          timeSlots: [
-            { time: "6:00 AM", slots: 20, booked: 20 } // Sold out
-          ]
-        },
-        {
-          date: "SUN 7 Jun",
-          timeSlots: [
-            { time: "8:00 AM", slots: 20, booked: 5 },
-            { time: "9:00 AM", slots: 20, booked: 12 },
-            { time: "10:00 AM", slots: 20, booked: 0 }
-          ]
-        }
-      ]
-    },
-    {
-      _id: "default-event-2",
-      title: "Hyatt Regency Performance Camp",
-      location: "Sahar Airport Road, Andheri East, Mumbai",
-      description: "Take your strength training to the next level with Hyatt Regency's Performance Camp.\n\nThis high-intensity session integrates metabolic conditioning, functional movement assessment, and elite athletic drills designed to boost power output. Includes post-workout nutrition assessment and recovery sessions.\n\nSuitable for intermediate to advanced fitness levels.",
-      originalPrice: 2500,
-      price: 1999,
-      imageUrl: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop",
-      bookingLink: "#",
-      schedules: [
-        {
-          date: "SAT 6 Jun",
-          timeSlots: [
-            { time: "7:00 AM", slots: 15, booked: 0 },
-            { time: "9:00 AM", slots: 15, booked: 15 } // Sold out
-          ]
-        },
-        {
-          date: "SUN 14 Jun",
-          timeSlots: [
-            { time: "8:00 AM", slots: 15, booked: 2 }
-          ]
-        }
-      ]
-    },
-    {
-      _id: "default-event-3",
-      title: "BXC High-Performance Arena",
-      location: "Box & Cross Arena, OMR Road, Chennai",
-      description: "Our signature strength and conditioning masterclass at Box & Cross Arena Chennai.\n\nExperience Olympic lifting drills, kettlebell complexes, and team endurance challenges in our state-of-the-art facility. Learn directly from national-level powerlifters and coaches. Perfect for anyone striving for peak athletic performance.",
-      originalPrice: null,
-      price: 1500,
-      imageUrl: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=800&auto=format&fit=crop",
-      bookingLink: "#",
-      schedules: [
-        {
-          date: "SAT 20 Jun",
-          timeSlots: [
-            { time: "10:00 AM", slots: 25, booked: 10 },
-            { time: "4:00 PM", slots: 25, booked: 22 }
-          ]
-        }
-      ]
-    }
-  ];
-
   const fetchEvents = async () => {
     try {
       const { data } = await getEventsList();
@@ -127,7 +53,7 @@ const EventList = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const displayEvents = events.length > 0 ? events : defaultEvents;
+  const displayEvents = events;
 
   // Sync details modal / booking modal if background refresh updates seats
   useEffect(() => {
@@ -395,6 +321,28 @@ const EventList = () => {
             <Loader2 className="animate-spin text-[#defb02]" size={36} />
             <p className="text-xs uppercase tracking-widest text-gray-500 font-bold">Loading Event Listings...</p>
           </div>
+        ) : displayEvents.length === 0 ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, type: "spring", bounce: 0.4 }}
+            className="flex flex-col items-center justify-center py-24 px-4 text-center bg-[#0c0c0c] border border-white/5 rounded-3xl shadow-2xl relative overflow-hidden group"
+          >
+            {/* Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#defb02]/5 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover:bg-[#defb02]/10" />
+            
+            <div className="w-24 h-24 mb-6 bg-white/[0.02] border border-white/10 rounded-2xl flex items-center justify-center shadow-inner shadow-black/50 rotate-3 group-hover:-rotate-3 transition-transform duration-500 relative z-10">
+               <Calendar size={36} className="text-gray-500 group-hover:text-[#defb02] transition-colors duration-500" />
+            </div>
+            
+            <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide mb-3 relative z-10" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+              No Events Available Right Now
+            </h3>
+            
+            <p className="text-gray-400 text-sm max-w-md mx-auto leading-relaxed relative z-10">
+              We are currently engineering our next high-octane fitness events and workshops. Stay tuned and check back soon for our upcoming schedules!
+            </p>
+          </motion.div>
         ) : (
           <motion.div 
             variants={containerVariants}
