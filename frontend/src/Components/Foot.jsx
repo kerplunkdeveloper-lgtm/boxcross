@@ -110,12 +110,27 @@ const Foot = () => {
 
           <ul className="mt-8 space-y-5">
             {[
-              { name: "Fight Club", path: "https://boxandcross.com/fight-club/" },
-              { name: "Strength Lab", path: "https://boxandcross.com/strength-lab/" },
-              { name: "Hybrid Performance", path: "https://boxandcross.com/hybrid-performance/" },
-              { name: "Fight Performance", path: "https://boxandcross.com/fight-performance/" },
+              {
+                name: "Fight Club",
+                path: "https://boxandcross.com/fight-club/",
+              },
+              {
+                name: "Strength Lab",
+                path: "https://boxandcross.com/strength-lab/",
+              },
+              {
+                name: "Hybrid Performance",
+                path: "https://boxandcross.com/hybrid-performance/",
+              },
+              {
+                name: "Fight Performance",
+                path: "https://boxandcross.com/fight-performance/",
+              },
               { name: "HYROX Lab", path: "https://boxandcross.com/hyrox-lab/" },
-              { name: "Junior Athletes", path: "https://boxandcross.com/junior-athletes/" },
+              {
+                name: "Junior Athletes",
+                path: "https://boxandcross.com/junior-athletes/",
+              },
             ].map((item, index) => (
               <li key={index}>
                 <a
@@ -131,7 +146,7 @@ const Foot = () => {
                     cursor-pointer
                   "
                   style={{
-                    fontFamily: '"Brutal Font Light", sans-serif',
+                    fontFamily: '"Brutal Type Light", sans-serif',
                     fontSize: "15px",
                   }}
                 >
@@ -250,7 +265,7 @@ const Foot = () => {
         {/* Speech Bubble */}
         <div
           className="ml-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300"
-          style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           <span className="block group-hover:hidden transition-all duration-300">
             Contact us

@@ -1,30 +1,29 @@
-import React from 'react';
-import MembershipPlans from '../Components/Membership';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import banner from '../assets/bannervideo2.mp4';
-import WhatWeOffer from '../Components/WhatWeOffer';
-import TrainingZones from '../Components/TrainingZones';
-import BuildProgress from '../Components/BuildProgress';
+import React from "react";
+import MembershipPlans from "../Components/Membership";
+import { motion } from "framer-motion";
+
+import WhatWeOffer from "../Components/WhatWeOffer";
+import TrainingZones from "../Components/TrainingZones";
+import BuildProgress from "../Components/BuildProgress";
 
 const Membership = () => {
+  const videoUrl =
+    "https://res.cloudinary.com/dubheb1lh/video/upload/v1780056052/vv_nbap32.mp4";
+
   return (
     <div className="w-full bg-[#050505] min-h-screen flex flex-col mt-[-80px] overflow-hidden">
-
       {/* HERO SECTION */}
       <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
-
         {/* VIDEO */}
         <video
+          src={videoUrl}
           autoPlay
           loop
           muted
           playsInline
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover scale-105"
-        >
-          <source src={banner} type="video/mp4" />
-        </video>
+        />
 
         {/* DARK OVERLAY */}
         <div className="absolute inset-0 bg-black/20 z-[1]"></div>
@@ -34,7 +33,6 @@ const Membership = () => {
 
         {/* CONTENT */}
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-4 md:px-10 w-full">
-
           {/* TOP TEXT */}
           <motion.p
             initial={{ opacity: 0, y: -20 }}
@@ -52,10 +50,10 @@ const Membership = () => {
               font-bold
             "
             style={{
-              fontFamily: '"Bai Jamjuree", sans-serif',
+              fontFamily: '"BrutalTypeBold", sans-serif',
             }}
           >
-           PUDUCHERRY, INDIA
+            PUDUCHERRY, INDIA
           </motion.p>
 
           {/* MAIN HEADING */}
@@ -67,31 +65,23 @@ const Membership = () => {
               uppercase
               leading-[0.88]
               tracking-[-0.01em]
-              font-black
+        
               text-center
               drop-shadow-[0_5px_20px_rgba(0,0,0,0.9)]
-
+       
               text-[45px]
-              sm:text-[75px]
-              md:text-[95px]
-              lg:text-[115px]
-              xl:text-[120px]
+              md:text-[72px]
             "
             style={{
-              fontFamily: '"Bebas Neue", sans-serif',
+              fontFamily: '"BrutalTypeBold", sans-serif',
+              fontWeight: "700",
             }}
           >
-            <span className="block text-white">
-             PUDUCHERRY’S COMPLETE
-            </span>
+            <span className="block text-white">PUDUCHERRY’S COMPLETE </span>
 
             <span className="block">
-              <span className="text-[#d9ff00]">
-              PERFORMANCE
-              </span>{" "}
-              <span className="text-white">
-              ARENA
-              </span>
+              <span className="text-[#d9ff00]">PERFORMANCE</span>{" "}
+              <span className="text-white">ARENA</span>
             </span>
           </motion.h1>
 
@@ -112,11 +102,12 @@ const Membership = () => {
               px-2
             "
             style={{
-              fontFamily: '"Bai Jamjuree", sans-serif',
-              fontWeight: 300,
+              fontFamily: '"Brutal Font Light", sans-serif',
+              fontWeight: 400,
             }}
           >
-           Boxing, Strength, HYROX-style Conditioning & Community — built for people who train with purpose.
+            Boxing, Strength, HYROX-style Conditioning & Community — built for
+            people who train with purpose.
           </motion.p>
 
           {/* BUTTONS */}
@@ -135,15 +126,14 @@ const Membership = () => {
               sm:w-auto
             "
             style={{
-              fontFamily: '"Bai Jamjuree", sans-serif',
+              fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: 700,
             }}
           >
-
-             <button
+            <button
               onClick={() => {
-                const el = document.getElementById('book-form');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                const el = document.getElementById("book-form");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
               }}
               className="
                 group relative overflow-hidden
@@ -157,14 +147,22 @@ const Membership = () => {
               "
             >
               <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
-              <span className="relative z-10 font-extrabold  text-[10px] md:text-[14px] ">Book Free Gym Tour</span>
+              <span
+                className="relative z-10 text-[10px] md:text-[14px]"
+                style={{
+                  fontFamily: '"Brutal Font Bold", sans-serif',
+                  fontWeight: 800,
+                }}
+              >
+                Book Free Gym Tour
+              </span>
             </button>
 
             {/* PLANS BUTTON */}
             <button
               onClick={() => {
-                const el = document.getElementById('membership-plans');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                const el = document.getElementById("membership-plans");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
               }}
               className="
                 group relative overflow-hidden
@@ -179,9 +177,10 @@ const Membership = () => {
               "
             >
               <span className="absolute inset-0  bg-[#d9ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
-              <span className="relative z-10 font-extrabold text-[10px] md:text-[14px]">Membership Plans</span>
+              <span className="relative z-10 font-extrabold text-[10px] md:text-[14px]">
+                Membership Plans
+              </span>
             </button>
-
           </motion.div>
         </div>
       </section>

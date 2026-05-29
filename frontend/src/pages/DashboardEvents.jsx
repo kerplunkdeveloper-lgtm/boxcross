@@ -1,9 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import { 
-  Plus, Edit, Trash2, Video, Image as ImageIcon, Save, X, Upload, Loader2, RefreshCw 
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Video,
+  Image as ImageIcon,
+  Save,
+  X,
+  Upload,
+  Loader2,
+  RefreshCw,
 } from "lucide-react";
-import { 
-  getAllBanners, createBanner, updateBanner, deleteBanner 
+import {
+  getAllBanners,
+  createBanner,
+  updateBanner,
+  deleteBanner,
 } from "../api/api";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -104,7 +116,9 @@ const DashboardEvents = () => {
     }
 
     setSubmitting(true);
-    const toastId = toast.loading(editMode ? "Updating banner..." : "Creating banner...");
+    const toastId = toast.loading(
+      editMode ? "Updating banner..." : "Creating banner...",
+    );
 
     try {
       const formData = new FormData();
@@ -123,17 +137,22 @@ const DashboardEvents = () => {
       }
 
       if (res.data.success) {
-        toast.success(res.data.message || "Saved successfully!", { id: toastId });
+        toast.success(res.data.message || "Saved successfully!", {
+          id: toastId,
+        });
         setShowModal(false);
         fetchBanners();
       } else {
-        toast.error(res.data.message || "Failed to save banner", { id: toastId });
+        toast.error(res.data.message || "Failed to save banner", {
+          id: toastId,
+        });
       }
     } catch (error) {
       console.error(error);
       toast.error(
-        error.response?.data?.message || "An error occurred while uploading. Please check files and credentials.",
-        { id: toastId }
+        error.response?.data?.message ||
+          "An error occurred while uploading. Please check files and credentials.",
+        { id: toastId },
       );
     } finally {
       setSubmitting(false);
@@ -142,7 +161,11 @@ const DashboardEvents = () => {
 
   // Handle Delete
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this event banner? This will also delete it from Cloudinary.")) {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this event banner? This will also delete it from Cloudinary.",
+      )
+    ) {
       return;
     }
 
@@ -170,11 +193,15 @@ const DashboardEvents = () => {
         {/* Header Block */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--db-card-border)]">
           <div>
-            <h1 className="text-md md:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+            <h1
+              className="text-md md:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              style={{ fontFamily: '"Brutal Font", sans-serif' }}
+            >
               Event Banner Manager
             </h1>
             <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-1">
-              Upload and manage event banners (only Media, Title, and Description) displayed dynamically on the events page.
+              Upload and manage event banners (only Media, Title, and
+              Description) displayed dynamically on the events page.
             </p>
           </div>
 
@@ -184,13 +211,20 @@ const DashboardEvents = () => {
               className="p-3 bg-[var(--db-input-bg)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-xl border border-[var(--db-input-border)] transition-all flex items-center justify-center cursor-pointer"
               title="Reload data"
             >
-              <RefreshCw size={18} className={loading ? "animate-spin text-[var(--db-accent-highlight)]" : ""} />
+              <RefreshCw
+                size={18}
+                className={
+                  loading
+                    ? "animate-spin text-[var(--db-accent-highlight)]"
+                    : ""
+                }
+              />
             </button>
 
             <button
               onClick={handleOpenCreate}
               className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-5 py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
-              style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               <Plus size={16} strokeWidth={2.5} />
               Add Banner
@@ -201,15 +235,23 @@ const DashboardEvents = () => {
         {/* Content list (TABLE instead of CARDS) */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <Loader2 className="animate-spin text-[var(--db-accent-highlight)]" size={36} />
-            <p className="text-xs uppercase tracking-widest text-[var(--db-text-muted)] font-bold">Fetching banner records...</p>
+            <Loader2
+              className="animate-spin text-[var(--db-accent-highlight)]"
+              size={36}
+            />
+            <p className="text-xs uppercase tracking-widest text-[var(--db-text-muted)] font-bold">
+              Fetching banner records...
+            </p>
           </div>
         ) : banners.length === 0 ? (
           <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-12 text-center flex flex-col items-center justify-center">
             <ImageIcon size={48} className="text-[var(--db-text-muted)] mb-4" />
-            <h3 className="text-lg font-bold uppercase mb-1">No Banners Found</h3>
+            <h3 className="text-lg font-bold uppercase mb-1">
+              No Banners Found
+            </h3>
             <p className="text-sm text-[var(--db-text-muted)] max-w-sm mb-6">
-              Create your first promotional image or video banner to engage members on the upcoming events carousel.
+              Create your first promotional image or video banner to engage
+              members on the upcoming events carousel.
             </p>
             <button
               onClick={handleOpenCreate}
@@ -222,22 +264,36 @@ const DashboardEvents = () => {
           <div className="overflow-x-auto bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl shadow-2xl">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[var(--db-card-border)] bg-white/[0.02]" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
-                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">Media</th>
-                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">Title</th>
-                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">Description</th>
-                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)] text-right">Actions</th>
+                <tr
+                  className="border-b border-[var(--db-card-border)] bg-white/[0.02]"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
+                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                    Media
+                  </th>
+                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                    Title
+                  </th>
+                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                    Description
+                  </th>
+                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)] text-right">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--db-card-border)]">
                 {banners.map((banner) => (
-                  <tr key={banner._id} className="hover:bg-[var(--db-table-hover)] transition-all group">
+                  <tr
+                    key={banner._id}
+                    className="hover:bg-[var(--db-table-hover)] transition-all group"
+                  >
                     {/* Media Preview Column */}
                     <td className="py-4 px-6 whitespace-nowrap">
                       <div className="w-24 h-14 md:w-28 md:h-16 bg-black rounded-xl overflow-hidden relative border border-[var(--db-card-border)] flex items-center justify-center group-hover:border-white/20 transition-all">
                         {banner.mediaType === "video" ? (
-                          <video 
-                            src={banner.mediaUrl} 
+                          <video
+                            src={banner.mediaUrl}
                             className="w-full h-full object-cover"
                             muted
                             playsInline
@@ -248,15 +304,19 @@ const DashboardEvents = () => {
                             }}
                           />
                         ) : (
-                          <img 
-                            src={banner.mediaUrl} 
-                            alt={banner.title} 
+                          <img
+                            src={banner.mediaUrl}
+                            alt={banner.title}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         )}
 
                         <span className="absolute bottom-1 right-1 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider rounded bg-black/80 text-[var(--db-accent-highlight)] border border-white/10 flex items-center gap-1">
-                          {banner.mediaType === "video" ? <Video size={8} /> : <ImageIcon size={8} />}
+                          {banner.mediaType === "video" ? (
+                            <Video size={8} />
+                          ) : (
+                            <ImageIcon size={8} />
+                          )}
                           {banner.mediaType}
                         </span>
                       </div>
@@ -269,7 +329,11 @@ const DashboardEvents = () => {
 
                     {/* Description Column */}
                     <td className="py-4 px-6 text-xs text-[var(--db-text-muted)] max-w-[300px] truncate leading-relaxed">
-                      {banner.description || <span className="text-[var(--db-text-muted)] italic">No description</span>}
+                      {banner.description || (
+                        <span className="text-[var(--db-text-muted)] italic">
+                          No description
+                        </span>
+                      )}
                     </td>
 
                     {/* Actions Column */}
@@ -313,7 +377,7 @@ const DashboardEvents = () => {
                   <h3 className="font-bold uppercase text-sm tracking-wider text-[var(--db-accent-highlight)]">
                     {editMode ? "Edit Event Banner" : "Add Event Banner"}
                   </h3>
-                  <button 
+                  <button
                     onClick={() => setShowModal(false)}
                     className="p-1.5 text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer"
                   >
@@ -322,7 +386,10 @@ const DashboardEvents = () => {
                 </div>
 
                 {/* Modal Form */}
-                <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+                <form
+                  onSubmit={handleSubmit}
+                  className="p-6 space-y-4 max-h-[75vh] overflow-y-auto"
+                >
                   {/* Title */}
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--db-text-muted)] mb-1.5">
@@ -355,24 +422,27 @@ const DashboardEvents = () => {
                   {/* Media Upload Area */}
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--db-text-muted)] mb-1.5">
-                      Upload Banner Media (Image or Video) <span className="text-red-500">{editMode ? "" : "*"}</span>
+                      Upload Banner Media (Image or Video){" "}
+                      <span className="text-red-500">
+                        {editMode ? "" : "*"}
+                      </span>
                     </label>
 
                     {/* Preview box */}
                     {mediaPreview ? (
                       <div className="aspect-[16/9] w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-2xl relative overflow-hidden flex items-center justify-center mb-3 group">
                         {previewType === "video" ? (
-                          <video 
-                            src={mediaPreview} 
-                            className="w-full h-full object-cover" 
-                            controls 
+                          <video
+                            src={mediaPreview}
+                            className="w-full h-full object-cover"
+                            controls
                             playsInline
                           />
                         ) : (
-                          <img 
-                            src={mediaPreview} 
-                            alt="Preview" 
-                            className="w-full h-full object-cover" 
+                          <img
+                            src={mediaPreview}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
                           />
                         )}
                         <button
@@ -388,16 +458,23 @@ const DashboardEvents = () => {
                         </button>
                       </div>
                     ) : (
-                      <div 
+                      <div
                         onClick={() => fileInputRef.current?.click()}
                         className="border-2 border-dashed border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/50 bg-[var(--db-input-bg)] hover:bg-white/[0.01] rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 group"
                       >
                         <div className="w-12 h-12 rounded-xl bg-white/5 group-hover:bg-[var(--db-accent-glow)] group-hover:text-[var(--db-accent-highlight)] flex items-center justify-center transition-all">
-                          <Upload size={20} className="text-[var(--db-text-muted)] group-hover:text-[var(--db-accent-highlight)]" />
+                          <Upload
+                            size={20}
+                            className="text-[var(--db-text-muted)] group-hover:text-[var(--db-accent-highlight)]"
+                          />
                         </div>
                         <div>
-                          <p className="text-xs font-bold uppercase text-[var(--db-text)]">Click to upload files</p>
-                          <p className="text-[10px] text-[var(--db-text-muted)] mt-1">Supports PNG, JPG, JPEG, or MP4 video (Max 100MB)</p>
+                          <p className="text-xs font-bold uppercase text-[var(--db-text)]">
+                            Click to upload files
+                          </p>
+                          <p className="text-[10px] text-[var(--db-text-muted)] mt-1">
+                            Supports PNG, JPG, JPEG, or MP4 video (Max 100MB)
+                          </p>
                         </div>
                       </div>
                     )}
@@ -425,7 +502,7 @@ const DashboardEvents = () => {
                       type="submit"
                       disabled={submitting}
                       className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-6 py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none transition-all cursor-pointer"
-                      style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       {submitting ? (
                         <>

@@ -151,7 +151,7 @@ const Eventbanner = () => {
           </svg>
           <span
             className="text-xs uppercase tracking-widest text-gray-500 font-bold"
-            style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
             Loading Event Arena...
           </span>
@@ -201,7 +201,11 @@ const Eventbanner = () => {
                     className="absolute bottom-5 sm:bottom-20 right-4 sm:right-10 z-30 p-2 sm:p-2.5 bg-black/60 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer"
                     title={isMuted ? "Unmute Audio" : "Mute Audio"}
                   >
-                    {isMuted ? <VolumeX size={12} className="sm:w-4 sm:h-4" /> : <Volume2 size={12} className="sm:w-4 sm:h-4" />}
+                    {isMuted ? (
+                      <VolumeX size={12} className="sm:w-4 sm:h-4" />
+                    ) : (
+                      <Volume2 size={12} className="sm:w-4 sm:h-4" />
+                    )}
                   </button>
                 </div>
               ) : (
@@ -227,7 +231,7 @@ const Eventbanner = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
                   className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-[#defb02]/10 border border-[#defb02]/30 text-[#defb02] text-[8px] sm:text-[10px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
-                  style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <Calendar size={10} className="sm:w-3 sm:h-3 animate-pulse" />
                   Upcoming Event

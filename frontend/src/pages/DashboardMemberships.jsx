@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  CreditCard, Edit, CheckCircle, Save, X, Plus, Trash, HelpCircle
+import {
+  CreditCard,
+  Edit,
+  CheckCircle,
+  Save,
+  X,
+  Plus,
+  Trash,
+  HelpCircle,
 } from "lucide-react";
 import { getMembershipPlans, updateMembershipPlan } from "../api/api";
 import { toast } from "react-hot-toast";
@@ -61,9 +68,12 @@ const DashboardMemberships = () => {
 
   const handleSubPlanHighlightsChange = (index, value) => {
     const updated = [...formPlans];
-    updated[index] = { 
-      ...updated[index], 
-      highlights: value.split(",").map(item => item.trim()).filter(Boolean)
+    updated[index] = {
+      ...updated[index],
+      highlights: value
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean),
     };
     setFormPlans(updated);
   };
@@ -73,8 +83,11 @@ const DashboardMemberships = () => {
     const updatedData = {
       title: formTitle,
       starterPrice: formStarterPrice,
-      features: formFeatures.split(",").map(item => item.trim()).filter(Boolean),
-      plans: formPlans
+      features: formFeatures
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean),
+      plans: formPlans,
     };
 
     try {
@@ -86,7 +99,9 @@ const DashboardMemberships = () => {
       }
     } catch (error) {
       console.error("Error updating membership plan", error);
-      toast.error(error.response?.data?.message || "Failed to update membership plan.");
+      toast.error(
+        error.response?.data?.message || "Failed to update membership plan.",
+      );
     }
   };
 
@@ -102,7 +117,10 @@ const DashboardMemberships = () => {
           {/* Header */}
           <div className="flex items-center justify-between mb-6 pb-2 border-b border-[var(--db-card-border)]">
             <div className="flex items-center gap-2">
-              <CreditCard size={18} className="text-[var(--db-accent-highlight)]" />
+              <CreditCard
+                size={18}
+                className="text-[var(--db-accent-highlight)]"
+              />
               <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                 Membership Plans & Pricing
               </span>
@@ -114,9 +132,24 @@ const DashboardMemberships = () => {
 
           {loading ? (
             <div className="py-12 flex flex-col items-center justify-center text-[var(--db-text-muted)] text-xs gap-2">
-              <svg className="animate-spin h-6 w-6 text-[var(--db-accent-highlight)]" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              <svg
+                className="animate-spin h-6 w-6 text-[var(--db-accent-highlight)]"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
               </svg>
               <span>Loading membership details...</span>
             </div>
@@ -130,12 +163,17 @@ const DashboardMemberships = () => {
                     <th className="py-4 px-4">Starter Price</th>
                     <th className="py-4 px-4">Available Durations</th>
                     <th className="py-4 px-4">Total Features</th>
-                    <th className="py-4 px-4 text-right rounded-r-xl">Action</th>
+                    <th className="py-4 px-4 text-right rounded-r-xl">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--db-card-border)]">
                   {plans.map((plan) => (
-                    <tr key={plan._id} className="hover:bg-[var(--db-table-hover)] transition-colors">
+                    <tr
+                      key={plan._id}
+                      className="hover:bg-[var(--db-table-hover)] transition-colors"
+                    >
                       <td className="py-4 px-4 text-sm font-mono text-[var(--db-accent-highlight)] font-semibold">
                         {plan.key}
                       </td>
@@ -155,9 +193,12 @@ const DashboardMemberships = () => {
                         <button
                           onClick={() => handleEditClick(plan)}
                           className="p-2 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
-                          style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
-                          <Edit size={14} className="text-[var(--db-accent-highlight)]" />
+                          <Edit
+                            size={14}
+                            className="text-[var(--db-accent-highlight)]"
+                          />
                           Edit
                         </button>
                       </td>
@@ -168,7 +209,8 @@ const DashboardMemberships = () => {
             </div>
           ) : (
             <div className="py-12 text-center text-[var(--db-text-muted)] text-xs">
-              No membership plans seeded in the database. Run `node seeder.js` in the backend.
+              No membership plans seeded in the database. Run `node seeder.js`
+              in the backend.
             </div>
           )}
         </motion.div>
@@ -195,7 +237,10 @@ const DashboardMemberships = () => {
                     Modify Plan Data
                   </h3>
                   <p className="text-[var(--db-text-muted)] text-xs mt-0.5">
-                    Editing program configuration for <span className="font-mono text-[var(--db-accent-highlight)]">{formKey}</span>
+                    Editing program configuration for{" "}
+                    <span className="font-mono text-[var(--db-accent-highlight)]">
+                      {formKey}
+                    </span>
                   </p>
                 </div>
                 <button
@@ -261,7 +306,10 @@ const DashboardMemberships = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {formPlans.map((subPlan, index) => (
-                      <div key={index} className="bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-2xl p-4 space-y-3.5">
+                      <div
+                        key={index}
+                        className="bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-2xl p-4 space-y-3.5"
+                      >
                         <div className="flex justify-between items-center">
                           <span className="text-xs text-[var(--db-accent-highlight)] font-black tracking-wider uppercase font-mono">
                             {subPlan.months}
@@ -273,11 +321,19 @@ const DashboardMemberships = () => {
 
                         {/* Price */}
                         <div className="space-y-1">
-                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">Plan Total Price (₹)</span>
+                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">
+                            Plan Total Price (₹)
+                          </span>
                           <input
                             type="text"
                             value={subPlan.price}
-                            onChange={(e) => handleSubPlanChange(index, "price", e.target.value)}
+                            onChange={(e) =>
+                              handleSubPlanChange(
+                                index,
+                                "price",
+                                e.target.value,
+                              )
+                            }
                             className="w-full h-9 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-full px-4 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
                             required
                           />
@@ -285,11 +341,19 @@ const DashboardMemberships = () => {
 
                         {/* perMonth Price */}
                         <div className="space-y-1">
-                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">Per Month Equal (₹)</span>
+                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">
+                            Per Month Equal (₹)
+                          </span>
                           <input
                             type="text"
                             value={subPlan.perMonth}
-                            onChange={(e) => handleSubPlanChange(index, "perMonth", e.target.value)}
+                            onChange={(e) =>
+                              handleSubPlanChange(
+                                index,
+                                "perMonth",
+                                e.target.value,
+                              )
+                            }
                             className="w-full h-9 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-full px-4 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
                             required
                           />
@@ -297,11 +361,19 @@ const DashboardMemberships = () => {
 
                         {/* Subtitle */}
                         <div className="space-y-1">
-                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">Plan Label Subtitle</span>
+                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">
+                            Plan Label Subtitle
+                          </span>
                           <input
                             type="text"
                             value={subPlan.subtitle}
-                            onChange={(e) => handleSubPlanChange(index, "subtitle", e.target.value)}
+                            onChange={(e) =>
+                              handleSubPlanChange(
+                                index,
+                                "subtitle",
+                                e.target.value,
+                              )
+                            }
                             className="w-full h-9 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-full px-4 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
                             required
                           />
@@ -309,10 +381,17 @@ const DashboardMemberships = () => {
 
                         {/* Highlights */}
                         <div className="space-y-1">
-                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">Plan Highlights (comma separated)</span>
+                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">
+                            Plan Highlights (comma separated)
+                          </span>
                           <textarea
                             value={subPlan.highlights.join(", ")}
-                            onChange={(e) => handleSubPlanHighlightsChange(index, e.target.value)}
+                            onChange={(e) =>
+                              handleSubPlanHighlightsChange(
+                                index,
+                                e.target.value,
+                              )
+                            }
                             rows={3}
                             className="w-full bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl p-3 text-[11px] outline-none focus:border-[var(--db-accent-highlight)] transition-colors resize-none leading-snug"
                             required
@@ -329,14 +408,14 @@ const DashboardMemberships = () => {
                     type="button"
                     onClick={() => setIsModalOpen(false)}
                     className="px-6 py-2.5 rounded-full border border-[var(--db-input-border)] hover:bg-[var(--db-sidebar-link-hover)] text-xs text-[var(--db-text)] font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                    style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     className="group relative overflow-hidden px-8 py-2.5 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold uppercase tracking-wider text-xs rounded-full transition-all duration-500 cursor-pointer shadow-lg inline-flex items-center gap-1.5"
-                    style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
                     <Save size={14} className="relative z-10" />

@@ -1,41 +1,80 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from "react";
 import Foot from "../Components/Foot";
 import GymMarquee from "../Components/GymMarquee";
-import { Check, Calendar, ArrowRight, Activity, Zap, Shield, User, Star } from 'lucide-react';
-import PhonePeModal from './PhonePeModal';
-import { motion } from 'framer-motion';
-import box1 from "../assets/box1.png"
-import box2 from "../assets/box2.png"
-import box3 from "../assets/box3.png"
+import {
+  Check,
+  Calendar,
+  ArrowRight,
+  Activity,
+  Zap,
+  Shield,
+  User,
+  Star,
+} from "lucide-react";
+import PhonePeModal from "./PhonePeModal";
+import { motion } from "framer-motion";
+import box1 from "../assets/box1.png";
+import box2 from "../assets/box2.png";
+import box3 from "../assets/box3.png";
 import BookForm from "./BookForm";
 import ChoosePlan from "./ChoosePlan";
-import { getMembershipPlans } from '../api/api';
-
-
+import { getMembershipPlans } from "../api/api";
 
 const programs = [
   {
-    id: 'start',
+    id: "start",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#defb02]">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-[#defb02]"
+      >
         <path d="M16 20h-4c-2.8 0-5-2.2-5-5v-1a5 5 0 0 1 5-5h2a2 2 0 0 1 2 2v2c0 1.1.9 2 2 2h1a2 2 0 0 0 2-2V9a5 5 0 0 0-5-5h-4a5 5 0 0 0-5 5v3c0 2.8 2.2 5 5 5h3"></path>
         <path d="M9 13V9"></path>
       </svg>
     ),
-    title: 'START',
-    subtitle: 'FIGHT CLUB / STRENGTH LAB',
-    desc: 'Perfect for beginners. Build fitness, strength and confidence.',
-    price: '2,200',
+    title: "START",
+    subtitle: "FIGHT CLUB / STRENGTH LAB",
+    desc: "Perfect for beginners. Build fitness, strength and confidence.",
+    price: "2,200",
     tabs: [
-      { id: 'start_fight', name: 'FIGHT CLUB', subtitle: 'FIGHT CLUB', desc: 'Perfect for beginners. Build fitness, strength and confidence through boxing.', price: '2,200' },
-      { id: 'start_strength', name: 'STRENGTH LAB', subtitle: 'STRENGTH LAB', desc: 'Focus on core strength, lifting techniques, and building raw power.', price: '2,500' }
+      {
+        id: "start_fight",
+        name: "FIGHT CLUB",
+        subtitle: "FIGHT CLUB",
+        desc: "Perfect for beginners. Build fitness, strength and confidence through boxing.",
+        price: "2,200",
+      },
+      {
+        id: "start_strength",
+        name: "STRENGTH LAB",
+        subtitle: "STRENGTH LAB",
+        desc: "Focus on core strength, lifting techniques, and building raw power.",
+        price: "2,500",
+      },
     ],
     image: box1,
   },
   {
-    id: 'transform',
+    id: "transform",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#defb02]">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-[#defb02]"
+      >
         <path d="m6.5 6.5 11 11"></path>
         <path d="m21 21-1-1"></path>
         <path d="m3 3 1 1"></path>
@@ -45,17 +84,27 @@ const programs = [
         <path d="m14 21 7-7"></path>
       </svg>
     ),
-    title: 'TRANSFORM',
-    subtitle: 'HYBRID PERFORMANCE',
-    desc: 'Boxing + Strength + Conditioning. The complete transformation for body and mind.',
-    price: '3,500',
+    title: "TRANSFORM",
+    subtitle: "HYBRID PERFORMANCE",
+    desc: "Boxing + Strength + Conditioning. The complete transformation for body and mind.",
+    price: "3,500",
     popular: true,
     image: box2,
   },
   {
-    id: 'perform',
+    id: "perform",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#defb02]">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-[#defb02]"
+      >
         <path d="M14 4a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
         <path d="m14 14-2.5-3.5L9 12 7.5 9" />
         <path d="M14 14v4l-4 4" />
@@ -63,78 +112,342 @@ const programs = [
         <path d="M17 5l-2.5 3.5-3.5-.5" />
       </svg>
     ),
-    title: 'PERFORM', 
-    subtitle: 'HYROX LAB / PERFORMANCE BOXING',
-    desc: 'For athletes and competitors. Build endurance, power and peak performance.',
-    price: '4,500',
+    title: "PERFORM",
+    subtitle: "HYROX LAB / PERFORMANCE BOXING",
+    desc: "For athletes and competitors. Build endurance, power and peak performance.",
+    price: "4,500",
     tabs: [
-      { id: 'perform_hyrox', name: 'HYROX LAB', subtitle: 'HYROX LAB', desc: 'For athletes and competitors. Build endurance, power and peak performance.', price: '4,500' },
-      { id: 'perform_boxing', name: 'PERFORMANCE BOXING', subtitle: 'PERFORMANCE BOXING', desc: 'Advanced boxing techniques, sparring prep, and high-intensity conditioning.', price: '5,000' }
+      {
+        id: "perform_hyrox",
+        name: "HYROX LAB",
+        subtitle: "HYROX LAB",
+        desc: "For athletes and competitors. Build endurance, power and peak performance.",
+        price: "4,500",
+      },
+      {
+        id: "perform_boxing",
+        name: "PERFORMANCE BOXING",
+        subtitle: "PERFORMANCE BOXING",
+        desc: "Advanced boxing techniques, sparring prep, and high-intensity conditioning.",
+        price: "5,000",
+      },
     ],
     image: box3,
-  }
+  },
 ];
 
 const pricingData = {
   start_fight: {
     title: "START (FIGHT CLUB)",
-    features: ["Boxing Basics", "Cardio Conditioning", "Footwork", "Community Access"],
-    plans: [
-      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "5,999", perMonth: "2,000", highlights: ["Basic boxing classes", "Cardio conditioning", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
-      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "10,999", perMonth: "1,833", highlights: ["Basic boxing classes", "Cardio conditioning", "Open gym access", "BXC community access", "Progress tracking"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
-      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "19,999", perMonth: "1,666", highlights: ["Basic boxing classes", "Cardio conditioning", "Open gym access", "BXC community access", "Progress tracking", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
+    features: [
+      "Boxing Basics",
+      "Cardio Conditioning",
+      "Footwork",
+      "Community Access",
     ],
-    starterPrice: "2,200"
+    plans: [
+      {
+        months: "3 MONTHS",
+        subtitle: "START YOUR JOURNEY",
+        price: "5,999",
+        perMonth: "2,000",
+        highlights: [
+          "Basic boxing classes",
+          "Cardio conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+        ],
+        buttonText: "GET STARTED",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "BEST PROGRESS",
+        price: "10,999",
+        perMonth: "1,833",
+        highlights: [
+          "Basic boxing classes",
+          "Cardio conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+        ],
+        tag: "RECOMMENDED",
+        buttonText: "CHOOSE PLAN",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "BEST VALUE",
+        price: "19,999",
+        perMonth: "1,666",
+        highlights: [
+          "Basic boxing classes",
+          "Cardio conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+          "Priority batch booking",
+        ],
+        buttonText: "CHOOSE PLAN",
+      },
+    ],
+    starterPrice: "2,200",
   },
   start_strength: {
     title: "START (STRENGTH LAB)",
-    features: ["Strength Training", "Core Focus", "Lifting Technique", "Community Access"],
-    plans: [
-      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "6,999", perMonth: "2,333", highlights: ["Strength group classes", "Core conditioning", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
-      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "12,999", perMonth: "2,166", highlights: ["Strength group classes", "Core conditioning", "Open gym access", "BXC community access", "Progress tracking"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
-      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "22,999", perMonth: "1,916", highlights: ["Strength group classes", "Core conditioning", "Open gym access", "BXC community access", "Progress tracking", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
+    features: [
+      "Strength Training",
+      "Core Focus",
+      "Lifting Technique",
+      "Community Access",
     ],
-    starterPrice: "2,500"
+    plans: [
+      {
+        months: "3 MONTHS",
+        subtitle: "START YOUR JOURNEY",
+        price: "6,999",
+        perMonth: "2,333",
+        highlights: [
+          "Strength group classes",
+          "Core conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+        ],
+        buttonText: "GET STARTED",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "BEST PROGRESS",
+        price: "12,999",
+        perMonth: "2,166",
+        highlights: [
+          "Strength group classes",
+          "Core conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+        ],
+        tag: "RECOMMENDED",
+        buttonText: "CHOOSE PLAN",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "BEST VALUE",
+        price: "22,999",
+        perMonth: "1,916",
+        highlights: [
+          "Strength group classes",
+          "Core conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+          "Priority batch booking",
+        ],
+        buttonText: "CHOOSE PLAN",
+      },
+    ],
+    starterPrice: "2,500",
   },
   transform: {
     title: "TRANSFORM (HYBRID PERFORMANCE)",
-    features: ["Boxing", "Strength Training", "Conditioning", "Recovery", "Nutrition Guidance"],
-    plans: [
-      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "11,999", perMonth: "4,000", highlights: ["All group classes", "Strength & conditioning", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
-      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "19,999", perMonth: "3,333", highlights: ["All group classes", "Strength & conditioning", "Open gym access", "BXC community access", "Progress tracking", "1 Body composition test", "Nutrition guidance"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
-      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "34,999", perMonth: "2,917", highlights: ["All group classes", "Strength & conditioning", "Open gym access", "BXC community access", "Progress tracking", "2 Body composition tests", "Nutrition guidance", "Priority batch booking", "Flexible membership support"], buttonText: "CHOOSE PLAN" }
+    features: [
+      "Boxing",
+      "Strength Training",
+      "Conditioning",
+      "Recovery",
+      "Nutrition Guidance",
     ],
-    starterPrice: "3,500"
+    plans: [
+      {
+        months: "3 MONTHS",
+        subtitle: "START YOUR JOURNEY",
+        price: "11,999",
+        perMonth: "4,000",
+        highlights: [
+          "All group classes",
+          "Strength & conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+        ],
+        buttonText: "GET STARTED",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "BEST PROGRESS",
+        price: "19,999",
+        perMonth: "3,333",
+        highlights: [
+          "All group classes",
+          "Strength & conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+          "1 Body composition test",
+          "Nutrition guidance",
+        ],
+        tag: "RECOMMENDED",
+        buttonText: "CHOOSE PLAN",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "BEST VALUE",
+        price: "34,999",
+        perMonth: "2,917",
+        highlights: [
+          "All group classes",
+          "Strength & conditioning",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+          "2 Body composition tests",
+          "Nutrition guidance",
+          "Priority batch booking",
+          "Flexible membership support",
+        ],
+        buttonText: "CHOOSE PLAN",
+      },
+    ],
+    starterPrice: "3,500",
   },
   perform_hyrox: {
     title: "PERFORM (HYROX LAB)",
-    features: ["HYROX Training", "Endurance", "Peak Performance", "Recovery", "Nutrition"],
-    plans: [
-      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "12,999", perMonth: "4,333", highlights: ["HYROX specific classes", "Endurance training", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
-      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "23,999", perMonth: "4,000", highlights: ["HYROX specific classes", "Endurance training", "Open gym access", "BXC community access", "Progress tracking", "2 Body composition tests"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
-      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "42,999", perMonth: "3,583", highlights: ["HYROX specific classes", "Endurance training", "Open gym access", "BXC community access", "Progress tracking", "Monthly body composition", "Nutrition planning", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
+    features: [
+      "HYROX Training",
+      "Endurance",
+      "Peak Performance",
+      "Recovery",
+      "Nutrition",
     ],
-    starterPrice: "4,500"
+    plans: [
+      {
+        months: "3 MONTHS",
+        subtitle: "START YOUR JOURNEY",
+        price: "12,999",
+        perMonth: "4,333",
+        highlights: [
+          "HYROX specific classes",
+          "Endurance training",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+        ],
+        buttonText: "GET STARTED",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "BEST PROGRESS",
+        price: "23,999",
+        perMonth: "4,000",
+        highlights: [
+          "HYROX specific classes",
+          "Endurance training",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+          "2 Body composition tests",
+        ],
+        tag: "RECOMMENDED",
+        buttonText: "CHOOSE PLAN",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "BEST VALUE",
+        price: "42,999",
+        perMonth: "3,583",
+        highlights: [
+          "HYROX specific classes",
+          "Endurance training",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+          "Monthly body composition",
+          "Nutrition planning",
+          "Priority batch booking",
+        ],
+        buttonText: "CHOOSE PLAN",
+      },
+    ],
+    starterPrice: "4,500",
   },
   perform_boxing: {
     title: "PERFORM (PERFORMANCE BOXING)",
-    features: ["Advanced Boxing", "Sparring Prep", "High-Intensity", "Recovery", "Nutrition"],
-    plans: [
-      { months: "3 MONTHS", subtitle: "START YOUR JOURNEY", price: "14,999", perMonth: "5,000", highlights: ["All advanced classes", "Sparring prep training", "Open gym access", "BXC community access", "Progress tracking"], buttonText: "GET STARTED" },
-      { months: "6 MONTHS", subtitle: "BEST PROGRESS", price: "26,999", perMonth: "4,500", highlights: ["All advanced classes", "Sparring prep training", "Open gym access", "BXC community access", "Progress tracking", "2 Body composition tests"], tag: "RECOMMENDED", buttonText: "CHOOSE PLAN", isPopular: true },
-      { months: "12 MONTHS", subtitle: "BEST VALUE", price: "48,999", perMonth: "4,083", highlights: ["All advanced classes", "Sparring prep training", "Open gym access", "BXC community access", "Progress tracking", "Monthly body composition", "Nutrition planning", "Priority batch booking"], buttonText: "CHOOSE PLAN" }
+    features: [
+      "Advanced Boxing",
+      "Sparring Prep",
+      "High-Intensity",
+      "Recovery",
+      "Nutrition",
     ],
-    starterPrice: "5,000"
-  }
+    plans: [
+      {
+        months: "3 MONTHS",
+        subtitle: "START YOUR JOURNEY",
+        price: "14,999",
+        perMonth: "5,000",
+        highlights: [
+          "All advanced classes",
+          "Sparring prep training",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+        ],
+        buttonText: "GET STARTED",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "BEST PROGRESS",
+        price: "26,999",
+        perMonth: "4,500",
+        highlights: [
+          "All advanced classes",
+          "Sparring prep training",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+          "2 Body composition tests",
+        ],
+        tag: "RECOMMENDED",
+        buttonText: "CHOOSE PLAN",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "BEST VALUE",
+        price: "48,999",
+        perMonth: "4,083",
+        highlights: [
+          "All advanced classes",
+          "Sparring prep training",
+          "Open gym access",
+          "BXC community access",
+          "Progress tracking",
+          "Monthly body composition",
+          "Nutrition planning",
+          "Priority batch booking",
+        ],
+        buttonText: "CHOOSE PLAN",
+      },
+    ],
+    starterPrice: "5,000",
+  },
 };
 
 const Membership = () => {
-  const [activeTab, setActiveTab] = useState('transform');
-  const [subTabs, setSubTabs] = useState({ start: 'start_fight', perform: 'perform_hyrox' });
+  const [activeTab, setActiveTab] = useState("transform");
+  const [subTabs, setSubTabs] = useState({
+    start: "start_fight",
+    perform: "perform_hyrox",
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const pricingRef = useRef(null);
-  
+
   const [dynamicPrograms, setDynamicPrograms] = useState(programs);
   const [dynamicPricingData, setDynamicPricingData] = useState(pricingData);
 
@@ -144,26 +457,26 @@ const Membership = () => {
         const response = await getMembershipPlans();
         if (response.data && response.data.success) {
           const plans = response.data.data;
-          
+
           // Rebuild pricingData dynamically
           const newPricingData = {};
-          plans.forEach(plan => {
+          plans.forEach((plan) => {
             newPricingData[plan.key] = {
               _id: plan._id,
               key: plan.key,
               title: plan.title,
               features: plan.features,
               plans: plan.plans,
-              starterPrice: plan.starterPrice
+              starterPrice: plan.starterPrice,
             };
           });
           setDynamicPricingData(newPricingData);
 
           // Update programs prices and sub-tabs from DB plans
-          const updatedPrograms = programs.map(prog => {
+          const updatedPrograms = programs.map((prog) => {
             const copy = { ...prog };
-            if (copy.id === 'transform') {
-              const dbPlan = plans.find(p => p.key === 'transform');
+            if (copy.id === "transform") {
+              const dbPlan = plans.find((p) => p.key === "transform");
               if (dbPlan) {
                 copy.price = dbPlan.starterPrice;
                 // If there's highlights in the plans, join them or keep default
@@ -171,37 +484,41 @@ const Membership = () => {
                   copy.desc = dbPlan.plans[0].highlights.slice(0, 3).join(". ");
                 }
               }
-            } else if (copy.id === 'start') {
-              const dbFight = plans.find(p => p.key === 'start_fight');
+            } else if (copy.id === "start") {
+              const dbFight = plans.find((p) => p.key === "start_fight");
               if (dbFight) {
                 copy.price = dbFight.starterPrice;
               }
               if (copy.tabs) {
-                copy.tabs = copy.tabs.map(tab => {
-                  const dbTab = plans.find(p => p.key === tab.id);
+                copy.tabs = copy.tabs.map((tab) => {
+                  const dbTab = plans.find((p) => p.key === tab.id);
                   if (dbTab) {
                     return {
                       ...tab,
                       price: dbTab.starterPrice,
-                      desc: dbTab.plans?.[0]?.highlights?.slice(0, 3).join(". ") || tab.desc
+                      desc:
+                        dbTab.plans?.[0]?.highlights?.slice(0, 3).join(". ") ||
+                        tab.desc,
                     };
                   }
                   return tab;
                 });
               }
-            } else if (copy.id === 'perform') {
-              const dbHyrox = plans.find(p => p.key === 'perform_hyrox');
+            } else if (copy.id === "perform") {
+              const dbHyrox = plans.find((p) => p.key === "perform_hyrox");
               if (dbHyrox) {
                 copy.price = dbHyrox.starterPrice;
               }
               if (copy.tabs) {
-                copy.tabs = copy.tabs.map(tab => {
-                  const dbTab = plans.find(p => p.key === tab.id);
+                copy.tabs = copy.tabs.map((tab) => {
+                  const dbTab = plans.find((p) => p.key === tab.id);
                   if (dbTab) {
                     return {
                       ...tab,
                       price: dbTab.starterPrice,
-                      desc: dbTab.plans?.[0]?.highlights?.slice(0, 3).join(". ") || tab.desc
+                      desc:
+                        dbTab.plans?.[0]?.highlights?.slice(0, 3).join(". ") ||
+                        tab.desc,
                     };
                   }
                   return tab;
@@ -219,8 +536,10 @@ const Membership = () => {
     fetchPlans();
   }, []);
 
-  const activeDataKey = activeTab === 'transform' ? 'transform' : subTabs[activeTab];
-  const activeData = dynamicPricingData[activeDataKey] || pricingData[activeDataKey];
+  const activeDataKey =
+    activeTab === "transform" ? "transform" : subTabs[activeTab];
+  const activeData =
+    dynamicPricingData[activeDataKey] || pricingData[activeDataKey];
 
   const handlePlanSelect = (planName, price, durationStr) => {
     const monthsVal = durationStr ? parseInt(durationStr) : 1;
@@ -233,44 +552,50 @@ const Membership = () => {
     setActiveTab(id);
     // Smooth scroll to the pricing section
     if (pricingRef.current) {
-      pricingRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      pricingRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
   return (
     <>
-      <section id="membership-plans" className="w-full bg-[#0a0a0a] py-8 md:py-12 px-4 md:px-6 flex flex-col items-center justify-center font-sans text-white">
-        
+      <section
+        id="membership-plans"
+        className="w-full bg-[#0a0a0a] py-8 md:py-12 px-4 md:px-6 flex flex-col items-center justify-center font-sans text-white"
+      >
         {/* STEP 1: CHOOSE PROGRAM */}
         <div className="w-full max-w-7xl  mx-auto mb-12">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="text-center mb-8"
           >
-            <span className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
-          style={{
-            fontFamily: '"Bai Jamjuree", sans-serif',
-            fontSize:'16px',
-            fontWeight:'600',
-          }}>
-           STEP 1 
-          </span>
+            <span
+              className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+              style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+                fontSize: "16px",
+                fontWeight: "600",
+              }}
+            >
+              STEP 1
+            </span>
 
-          <h2
-            className="mt-8 md:mt-10 font-black mb-9 leading-tight text-[30px] md:text-[48px]"
-            style={{ fontFamily: '"Brutal Fon", sans-serif' ,fontWeight:'700'}}
-          >
-            CHOOSE YOUR <br /> <span className="text-[#defb02]">PROGRAM</span>
-          </h2>
-           
+            <h2
+              className="mt-8 md:mt-10 font-black mb-9 leading-tight text-[30px] md:text-[48px]"
+              style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+                fontWeight: "700",
+              }}
+            >
+              CHOOSE YOUR <br /> <span className="text-[#defb02]">PROGRAM</span>
+            </h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-15 mt-8 md:mt-15 ">
             {dynamicPrograms.map((prog, index) => (
-              <motion.div 
+              <motion.div
                 key={prog.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -279,17 +604,19 @@ const Membership = () => {
                 transition={{ duration: 0.5, delay: index * 0.15 }}
                 onClick={() => setActiveTab(prog.id)}
                 className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
-                  activeTab === prog.id ? 'border-[#defb02] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10' : 'border-gray-800 hover:border-gray-600'
+                  activeTab === prog.id
+                    ? "border-[#defb02] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
+                    : "border-gray-800 hover:border-gray-600"
                 }`}
               >
                 {/* Background Image Container */}
                 <div className="absolute inset-0 z-0 bg-black overflow-hidden">
-                  <div 
+                  <div
                     className="absolute inset-0 opacity-70 group-hover:opacity-90 scale-100 group-hover:scale-110 transition-all duration-700 ease-out"
                     style={{
                       backgroundImage: `url(${prog.image})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-[#0a0a0a]/10"></div>
@@ -300,33 +627,75 @@ const Membership = () => {
                     MOST POPULAR
                   </div>
                 )}
-                
+
                 <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
                   <div>
                     <div className="w-12 h-12 rounded-full border border-[#defb02]/50 flex items-center justify-center mb-5 bg-black/40 backdrop-blur-sm">
                       {prog.icon}
                     </div>
-                    
-                    <h3 className="text-xl md:text-2xl font-black mb-1 tracking-wide uppercase">{prog.title}</h3>
-                    <p className="text-[#defb02] text-[11px] tracking-widest uppercase mb-3">{prog.subtitle}</p>
-                    <p className="text-gray-300 text-xs md:text-sm mb-4 leading-relaxed max-w-[90%]">
+
+                    <h3 className="text-xl md:text-2xl font-black mb-1 tracking-wide uppercase"
+                    style={{
+                      fontFamily: '"BrutalTypeBold", sans-serif',
+                      fontWeight: "700",
+                    }}
+                    >
+                      {prog.title}
+                    </h3>
+                    <p className="text-[#defb02] text-[11px] tracking-widest uppercase mb-3"
+                    style={{
+                      fontFamily: '"BrutalTypeBold", sans-serif',
+                      fontWeight: "600",
+                    }}>
+                      {prog.subtitle}
+                    </p>
+                    <p className="text-gray-300 text-xs md:text-sm mb-4 leading-relaxed max-w-[90%]"
+                    style={{
+                      fontFamily: '"Brutal Font Light", sans-serif',
+                      fontWeight: "400",
+                    }}>
                       {prog.desc}
                     </p>
                   </div>
-                  
+
                   <div className="mt-auto pt-2 w-full">
-                    <p className="text-[10px] text-gray-300 uppercase tracking-widest font-bold mb-3 flex items-center">
-                      FROM <span className="text-lg text-[#defb02] mx-1.5">₹{prog.price}</span> / MONTH
+                    <p className="text-[10px] text-gray-300 uppercase tracking-widest font-bold mb-3 flex items-center"
+                    style={{
+                      fontFamily: '"BrutalTypeBold", sans-serif',
+                      fontWeight: "600",
+                    }}> 
+                      FROM{" "}
+                      <span className="text-lg text-[#defb02] mx-1.5"  style={{
+                        fontFamily: '"BrutalTypeBold", sans-serif',
+                        fontWeight: "600",
+                      }}>
+                        ₹{prog.price}
+                      </span>{" "}
+                      / MONTH
                     </p>
-                    
-                    <button 
+
+                    <button
                       onClick={(e) => handleScrollToPlans(e, prog.id)}
                       className={`group/btn w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
-                        activeTab === prog.id ? 'bg-[#defb02] border-[#defb02] text-black' : 'border-gray-500 text-white hover:border-[#defb02] bg-transparent'
+                        activeTab === prog.id
+                          ? "bg-[#defb02] border-[#defb02] text-black"
+                          : "border-gray-500 text-white hover:border-[#defb02] bg-transparent"
                       }`}
+                       style={{
+                        fontFamily: '"BrutalTypeBold", sans-serif',
+                        fontWeight: "700",
+                      }}
                     >
-                      <span className="flex items-center gap-2">
-                        VIEW PLANS <ArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" />
+                      <span className="flex items-center gap-2"
+                       style={{
+                        fontFamily: '"BrutalTypeBold", sans-serif',
+                        fontWeight: "700",
+                      }}>
+                        VIEW PLANS{" "}
+                        <ArrowRight
+                          size={14}
+                          className="group-hover/btn:translate-x-1 transition-transform"
+                        />
                       </span>
                     </button>
                   </div>
@@ -334,12 +703,10 @@ const Membership = () => {
               </motion.div>
             ))}
           </div>
-
-       
         </div>
 
         {/* STEP 2: CHOOSE PLAN */}
-        <ChoosePlan 
+        <ChoosePlan
           ref={pricingRef}
           activeData={activeData}
           activeTab={activeTab}
@@ -349,10 +716,10 @@ const Membership = () => {
           programs={dynamicPrograms}
         />
       </section>
-      <PhonePeModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        planDetails={selectedPlan} 
+      <PhonePeModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        planDetails={selectedPlan}
       />
       <BookForm />
       <Foot />

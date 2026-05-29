@@ -2,8 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  Calendar, Clock, CheckCircle, Flame, Dumbbell, Trash2
+import {
+  Calendar,
+  Clock,
+  CheckCircle,
+  Flame,
+  Dumbbell,
+  Trash2,
 } from "lucide-react";
 import { getBookings, deleteBooking } from "../api/api";
 
@@ -69,9 +74,24 @@ const DashboardBookings = () => {
 
           {loading ? (
             <div className="py-12 flex flex-col items-center justify-center text-[var(--db-text-muted)] text-xs gap-2">
-              <svg className="animate-spin h-6 w-6 text-[var(--db-accent-highlight)]" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              <svg
+                className="animate-spin h-6 w-6 text-[var(--db-accent-highlight)]"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
               </svg>
               <span>Loading bookings from server...</span>
             </div>
@@ -86,12 +106,17 @@ const DashboardBookings = () => {
                     <th className="py-4 px-4">Date</th>
                     <th className="py-4 px-4">Time</th>
                     <th className="py-4 px-4">Status</th>
-                    <th className="py-4 px-4 text-right rounded-r-xl">Action</th>
+                    <th className="py-4 px-4 text-right rounded-r-xl">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--db-card-border)]">
                   {bookings.map((booking) => (
-                    <tr key={booking._id} className="hover:bg-[var(--db-table-hover)] transition-colors">
+                    <tr
+                      key={booking._id}
+                      className="hover:bg-[var(--db-table-hover)] transition-colors"
+                    >
                       <td className="py-4 px-4 text-sm font-bold text-[var(--db-text)]">
                         {booking.name}
                       </td>
@@ -103,7 +128,9 @@ const DashboardBookings = () => {
                           <div className="w-8 h-8 rounded-lg bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/20 flex items-center justify-center text-[var(--db-accent-highlight)]">
                             <Dumbbell size={14} />
                           </div>
-                          <span className="text-sm font-medium text-[var(--db-text)]">{booking.goal}</span>
+                          <span className="text-sm font-medium text-[var(--db-text)]">
+                            {booking.goal}
+                          </span>
                         </div>
                       </td>
                       <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
@@ -133,11 +160,13 @@ const DashboardBookings = () => {
             </div>
           ) : (
             <div className="py-12 text-center border border-dashed border-[var(--db-card-border)] rounded-xl">
-              <p className="text-[var(--db-text-muted)] text-xs md:text-sm mb-4">No gym tour visits scheduled yet.</p>
+              <p className="text-[var(--db-text-muted)] text-xs md:text-sm mb-4">
+                No gym tour visits scheduled yet.
+              </p>
               <button
                 onClick={() => navigate("/")}
                 className="px-4 py-2 border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-[10px] rounded-lg transition-all"
-                style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
                 Book a Visit Now
               </button>

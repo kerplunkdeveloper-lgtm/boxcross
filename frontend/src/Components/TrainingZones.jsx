@@ -17,7 +17,6 @@ const zones = [
     title: "Recovery Zone",
     img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80",
   },
- 
 ];
 
 const TrainingZones = ({ onBookTour }) => {
@@ -56,7 +55,8 @@ const TrainingZones = ({ onBookTour }) => {
         if (scrollLeft + clientWidth >= scrollWidth - 15) {
           container.scrollTo({ left: 0, behavior: "smooth" });
         } else {
-          const cardWidth = container.querySelector(".snap-center")?.clientWidth || 340;
+          const cardWidth =
+            container.querySelector(".snap-center")?.clientWidth || 340;
           container.scrollBy({ left: cardWidth + 24, behavior: "smooth" });
         }
       }
@@ -84,7 +84,7 @@ const TrainingZones = ({ onBookTour }) => {
       const scrollAmount = container.clientWidth * 0.75;
       container.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   };
@@ -92,33 +92,39 @@ const TrainingZones = ({ onBookTour }) => {
   return (
     <section className="w-full py-24 px-4 md:px-8 max-w-[1400px] mx-auto bg-[#0a0a0a]">
       {/* CSS injection for scrollbars */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .custom-scrollbar::-webkit-scrollbar { display: none; }
         .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}} />
+      `,
+        }}
+      />
 
       <div className="mb-10 px-2 md:px-6">
-        <span className="px-4 py-2 rounded-md border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+        <span
+          className="px-4 py-2 rounded-md border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
           style={{
-            fontFamily: '"Bai Jamjuree", sans-serif',
-            fontSize:'16px',
-            fontWeight:'600',
-          }}>
-           TAKE A LOOK
-          </span>
+            fontFamily: '"BrutalTypeBold", sans-serif',
+            fontSize: "16px",
+            fontWeight: "600",
+          }}
+        >
+          TAKE A LOOK
+        </span>
         <h2
           className=" text-white text-[30px] md:text-[48px] mt-9 leading-none"
           style={{
-              fontFamily: '"Brutal Font", sans-serif',
-              fontWeight:'700',
-            }}
+            fontFamily: '"BrutalTypeBold", sans-serif',
+            fontWeight: "700",
+          }}
         >
           OUR TRAINING <span className="text-[#d9ff00]">ZONES</span>
         </h2>
       </div>
 
       {/* Carousel Container */}
-      <div 
+      <div
         ref={scrollContainerRef}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
@@ -140,7 +146,8 @@ const TrainingZones = ({ onBookTour }) => {
             <h3
               className="absolute bottom-8 left-8 text-3xl font-black text-white uppercase tracking-wider shadow-black drop-shadow-xl"
               style={{
-                fontFamily: '"Bebas Neue", "Bebas Neue Fallback", sans-serif',
+                fontFamily: '"Brutal Font",  sans-serif',
+                fontWeight: "700",
               }}
             >
               {zone.title}
@@ -156,25 +163,47 @@ const TrainingZones = ({ onBookTour }) => {
           className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-[#d9ff00] hover:border-[#d9ff00] transition-colors duration-300 bg-black/40 cursor-pointer shrink-0"
           aria-label="Scroll left"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
         </button>
-        
+
         <div className="flex-1 h-1.5 bg-gray-900 border border-gray-800 rounded-full relative overflow-hidden">
-          <div 
+          <div
             className="absolute top-0 bottom-0 bg-[#d9ff00] rounded-full transition-all duration-100 ease-out shadow-[0_0_8px_rgba(217,255,0,0.6)]"
-            style={{ 
-              left: `${scrollProgress * 75}%`, 
-              width: '25%' 
+            style={{
+              left: `${scrollProgress * 75}%`,
+              width: "25%",
             }}
           ></div>
         </div>
-        
+
         <button
           onClick={() => scroll("right")}
           className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-[#d9ff00] hover:border-[#d9ff00] transition-colors duration-300 bg-black/40 cursor-pointer shrink-0"
           aria-label="Scroll right"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m9 18 6-6-6-6" />
+          </svg>
         </button>
       </div>
 
@@ -184,7 +213,8 @@ const TrainingZones = ({ onBookTour }) => {
           onClick={handleScroll}
           className="group relative overflow-hidden bg-[#d9ff00] text-black font-black uppercase tracking-widest px-10 py-4 rounded-xl  transition-colors shadow-[0_0_20px_rgba(217,255,0,0.2)] text-lg cursor-pointer"
           style={{
-            fontFamily: '"Bebas Neue", "Bebas Neue Fallback", sans-serif',
+            fontFamily: '"Brutal Font", sans-serif',
+            fontWeight: "700",
           }}
         >
           <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-xl"></span>

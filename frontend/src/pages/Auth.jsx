@@ -50,22 +50,21 @@ const Auth = () => {
   return (
     <div className="relative min-h-screen w-full bg-black text-white font-sans overflow-hidden flex flex-col justify-between">
       {/* Background Monochrome Gym Image with High Contrast and Grayscale filter */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center filter grayscale contrast-[1.25] brightness-[1.55] pointer-events-none z-0"
         style={{ backgroundImage: `url(${boxcrosslogo})` }}
       />
 
       {/* Top Header Bar */}
       <header className="relative w-full px-6 md:px-12 py-4 z-10 flex items-center justify-end  border-b border-white/[0.08]">
-    
         {/* <div className="flex items-center select-none">
           <img src={logo} alt="Box & Cross Logo" className="h-11 md:h-14 w-auto object-contain" />
         </div> */}
 
         {/* Right Label */}
-        <div 
+        <div
           className="text-xs md:text-2xl text-white font-medium font-black"
-          style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           GYM PORTAL
         </div>
@@ -73,7 +72,6 @@ const Auth = () => {
 
       {/* Main Content Area */}
       <main className="relative flex-grow w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-center md:justify-between gap-12 z-10 py-12">
-        
         {/* Left Side: Bold Promotional Blocks (Desktop Only) */}
         <div className="hidden md:flex flex-col items-start text-left select-none max-w-lg mb-12">
           {/* ALL ABOUT Block */}
@@ -103,9 +101,9 @@ const Auth = () => {
 
             <form onSubmit={handleSubmit} className="space-y-7">
               {/* Header Title */}
-              <div 
+              <div
                 className="text-white/80 text-sm tracking-[0.18em] uppercase font-bold text-left italic border-b border-white/5 pb-3 mb-2"
-                style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
                 PROCEED TO LOGIN
               </div>
@@ -150,7 +148,7 @@ const Auth = () => {
                 <Link
                   to="/"
                   className="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
-                  style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   &larr; Back to Membership
                 </Link>
@@ -160,23 +158,24 @@ const Auth = () => {
                   type="submit"
                   disabled={loading}
                   className="group relative overflow-hidden w-full sm:w-auto px-12 py-3.5 bg-[#defb02] text-black font-extrabold uppercase tracking-widest text-xs rounded-md transition-all duration-500 cursor-pointer shadow-lg disabled:opacity-50"
-                  style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
-                  <span className="relative z-10">{loading ? "..." : "LOGIN"}</span>
+                  <span className="relative z-10">
+                    {loading ? "..." : "LOGIN"}
+                  </span>
                 </button>
               </div>
             </form>
           </motion.div>
         </div>
-
       </main>
 
       {/* Bottom Footer Area */}
       <footer className="relative w-full py-4 text-center z-10 border-t border-white/5 bg-black/25 backdrop-blur-sm select-none">
-        <span 
+        <span
           className="text-[9px] tracking-widest text-white/30 uppercase font-bold"
-          style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           © 2026 BOX & CROSS. SECURED ADMIN INTERFACE.
         </span>

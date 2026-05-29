@@ -177,7 +177,7 @@ const Navbar = () => {
               {/* ================= LOGO ================= */}
 
               <NavLink to="/" className="flex items-center flex-shrink-0">
-                <img src={logo} alt="Box & Cross" className="w-52 md:w-52" />
+                <img src={logo} alt="Box & Cross" className="w-52 md:w-48" />
               </NavLink>
 
               {/* ================= DESKTOP NAV ================= */}
@@ -189,7 +189,7 @@ const Navbar = () => {
                   href="https://boxandcross.com/"
                   className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"Bai Jamjuree", sans-serif',
+                    fontFamily: '"BrutalTypeBold", sans-serif',
                     fontWeight: 600,
                     fontSize: "14px",
                   }}
@@ -207,7 +207,7 @@ const Navbar = () => {
                   <button
                     className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
                     style={{
-                      fontFamily: '"Bai Jamjuree", sans-serif',
+                      fontFamily: '"BrutalTypeBold", sans-serif',
                       fontWeight: 600,
                       fontSize: "14px",
                     }}
@@ -252,7 +252,7 @@ const Navbar = () => {
                   href="https://boxandcross.com/coaching/"
                   className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"Bai Jamjuree", sans-serif',
+                    fontFamily: '"BrutalTypeBold", sans-serif',
                     fontWeight: 600,
                     fontSize: "14px",
                   }}
@@ -270,7 +270,7 @@ const Navbar = () => {
                   <button
                     className="px-3 py-2  text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
                     style={{
-                      fontFamily: '"Bai Jamjuree", sans-serif',
+                      fontFamily: '"BrutalTypeBold", sans-serif',
                       fontWeight: 600,
                       fontSize: "14px",
                     }}
@@ -326,7 +326,7 @@ const Navbar = () => {
                       }`
                     }
                     style={{
-                      fontFamily: '"Bai Jamjuree", sans-serif',
+                      fontFamily: '"BrutalTypeBold", sans-serif',
                       fontWeight: 600,
                       fontSize: "14px",
                     }}
@@ -371,7 +371,7 @@ const Navbar = () => {
                   href="https://boxandcross.com/contact-us/"
                   className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"Bai Jamjuree", sans-serif',
+                    fontFamily: '"BrutalTypeBold", sans-serif',
                     fontWeight: 600,
                     fontSize: "14px",
                   }}
@@ -391,7 +391,7 @@ const Navbar = () => {
                       }`
                     }
                     style={{
-                      fontFamily: '"Bai Jamjuree", sans-serif',
+                      fontFamily: '"BrutalTypeBold", sans-serif',
                       fontWeight: 600,
                       fontSize: "14px",
                     }}
@@ -411,12 +411,13 @@ const Navbar = () => {
                   className="hidden lg:flex relative overflow-hidden px-6 py-4 bg-[#defb02] text-black rounded-xl text-xs tracking-wider uppercase group"
                 >
                   <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
-                  <span className="relative z-10"
-                     style={{
-                    fontFamily: '"Bai Jamjuree", sans-serif', 
-                    fontWeight: 700,
-                    fontSize: "14px",
-                  }}
+                  <span
+                    className="relative z-10"
+                    style={{
+                      fontFamily: '"BrutalTypeBold", sans-serif',
+                      fontWeight: 700,
+                      fontSize: "14px",
+                    }}
                   >
                     BOOK YOUR FREE GYM TOUR
                   </span>
@@ -489,7 +490,7 @@ const Navbar = () => {
 
         <div
           className="flex-1 overflow-y-auto px-6 py-2 space-y-0"
-          style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           {/* HOME */}
 

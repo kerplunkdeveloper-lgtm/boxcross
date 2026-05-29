@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Dumbbell,
-  Zap,
-  HeartPulse,
-  Users,
-  ArrowUpRight,
-} from "lucide-react";
+import { Dumbbell, Zap, HeartPulse, Users, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const offers = [
@@ -63,12 +57,10 @@ const itemAnimation = {
 const WhatWeOffer = () => {
   return (
     <section className="relative w-full overflow-hidden bg-black py-24 md:py-32 px-4 md:px-8">
-      
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#d9ff00]/10 blur-[150px] rounded-full pointer-events-none" />
 
       <div className="max-w-[1250px] mx-auto relative z-10">
-        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -77,20 +69,22 @@ const WhatWeOffer = () => {
           viewport={{ once: true }}
           className="text-center mb-16 md:mb-18 flex flex-col items-center"
         >
-          <span className="px-4 py-2 rounded-md border mb-8 border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
-          style={{
-            fontFamily: '"Bai Jamjuree", sans-serif',
-            fontSize:'16px',
-            fontWeight:'600',
-          }}>
+          <span
+            className="px-4 py-2 rounded-md border mb-8 border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+            style={{
+              fontFamily: '"BrutalTypeBold", sans-serif',
+              fontSize: "16px",
+              fontWeight: "600",
+            }}
+          >
             OUR SERVICES
           </span>
 
           <h2
             className=" text-[32px] md:text-[48px] uppercase text-white leading-none"
             style={{
-              fontFamily: '"Brutal Font", sans-serif',
-              fontWeight:'700',
+              fontFamily: '"BrutalTypeBold", sans-serif',
+              fontWeight: "700",
             }}
           >
             WHAT WE{" "}
@@ -100,12 +94,14 @@ const WhatWeOffer = () => {
             </span>
           </h2>
 
-          <p className="text-gray-400 mt-7 max-w-2xl "
-           style={{
-            fontFamily: '"Brutal Font Light", sans-serif',
-            fontSize:'18px',
-            fontWeight:'400',
-          }}>
+          <p
+            className="text-gray-400 mt-7 max-w-2xl "
+            style={{
+              fontFamily: '"Brutal Font Light", sans-serif',
+              fontSize: "18px",
+              fontWeight: "400",
+            }}
+          >
             Transform your body with world-class fitness experiences,
             high-energy sessions, and elite recovery facilities.
           </p>
@@ -134,7 +130,6 @@ const WhatWeOffer = () => {
 
               {/* Card Content Mask */}
               <div className="relative z-10 h-full w-full bg-[#0a0a0a]/95 backdrop-blur-xl rounded-[15px] p-8 md:p-10 flex flex-col justify-between overflow-hidden">
-                
                 {/* Hover Glow */}
                 <div className="absolute -right-20 -top-20 w-45 h-45 bg-[#d9ff00]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
@@ -159,7 +154,7 @@ const WhatWeOffer = () => {
                     className="text-white text-2xl uppercase tracking-wide mb-4 group-hover:text-[#d9ff00] transition duration-300"
                     style={{
                       fontFamily: '"Brutal Font", sans-serif',
-                      fontWeight: '700',
+                      fontWeight: "700",
                     }}
                   >
                     {item.title}

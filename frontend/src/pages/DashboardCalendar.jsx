@@ -33,7 +33,7 @@ import { useAuth } from "../context/AuthContext";
 const convertToYYYYMMDD = (dateStr) => {
   if (!dateStr) return "";
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
-  
+
   try {
     const parsed = Date.parse(dateStr);
     if (!isNaN(parsed)) {
@@ -51,8 +51,18 @@ const convertToYYYYMMDD = (dateStr) => {
     const day = parts.length === 3 ? parts[1] : parts[0];
     const monthName = parts.length === 3 ? parts[2] : parts[1];
     const months = {
-      jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
-      jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
+      jan: 0,
+      feb: 1,
+      mar: 2,
+      apr: 3,
+      may: 4,
+      jun: 5,
+      jul: 6,
+      aug: 7,
+      sep: 8,
+      oct: 9,
+      nov: 10,
+      dec: 11,
     };
     const cleanMonth = monthName.toLowerCase().substring(0, 3);
     if (months[cleanMonth] !== undefined && !isNaN(parseInt(day, 10))) {
@@ -85,8 +95,18 @@ const formatCustomDateString = (dateVal) => {
   if (isNaN(date.getTime())) return String(dateVal);
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   return `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
 };
@@ -519,7 +539,7 @@ const DashboardCalendar = () => {
             <button
               onClick={() => handleCellClick(new Date())}
               className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-5 py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer w-fit self-end sm:self-auto"
-              style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               <Plus size={14} strokeWidth={2.5} />
               Quick Add Event
@@ -905,7 +925,9 @@ const DashboardCalendar = () => {
                       type="button"
                       onClick={() => {
                         const today = new Date();
-                        const formattedToday = today.toISOString().split('T')[0];
+                        const formattedToday = today
+                          .toISOString()
+                          .split("T")[0];
                         setSchedules([
                           ...schedules,
                           {
@@ -944,10 +966,14 @@ const DashboardCalendar = () => {
                               value={convertToYYYYMMDD(schedule.date)}
                               onChange={(e) => {
                                 const updated = [...schedules];
-                                updated[sIndex].date = formatCustomDateString(e.target.value);
+                                updated[sIndex].date = formatCustomDateString(
+                                  e.target.value,
+                                );
                                 setSchedules(updated);
                               }}
-                              onClick={(e) => e.target.showPicker && e.target.showPicker()}
+                              onClick={(e) =>
+                                e.target.showPicker && e.target.showPicker()
+                              }
                               className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-9 pr-3 py-2 text-xs text-[var(--db-text)] [color-scheme:dark] transition-all font-semibold cursor-pointer"
                               required
                             />
@@ -972,7 +998,10 @@ const DashboardCalendar = () => {
                       <div className="pl-4 border-l border-[var(--db-card-border)] space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] flex items-center gap-1.5">
-                            <Clock size={11} className="text-[var(--db-accent-highlight)]" />
+                            <Clock
+                              size={11}
+                              className="text-[var(--db-accent-highlight)]"
+                            />
                             Configure Time Slots
                           </span>
                           <button
@@ -1000,18 +1029,27 @@ const DashboardCalendar = () => {
                             >
                               {/* Slot Time */}
                               <div className="col-span-6 sm:col-span-5 space-y-1 text-left">
-                                <span className="text-[8px] font-extrabold uppercase text-[var(--db-text-muted)] tracking-wider">Start Time</span>
+                                <span className="text-[8px] font-extrabold uppercase text-[var(--db-text-muted)] tracking-wider">
+                                  Start Time
+                                </span>
                                 <div className="relative">
-                                  <Clock size={12} className="absolute left-2.5 top-3 text-[var(--db-text-muted)] pointer-events-none" />
+                                  <Clock
+                                    size={12}
+                                    className="absolute left-2.5 top-3 text-[var(--db-text-muted)] pointer-events-none"
+                                  />
                                   <input
                                     type="time"
                                     value={convertTo24Hour(slot.time)}
                                     onChange={(e) => {
                                       const updated = [...schedules];
-                                      updated[sIndex].timeSlots[tIndex].time = convertTo12Hour(e.target.value);
+                                      updated[sIndex].timeSlots[tIndex].time =
+                                        convertTo12Hour(e.target.value);
                                       setSchedules(updated);
                                     }}
-                                    onClick={(e) => e.target.showPicker && e.target.showPicker()}
+                                    onClick={(e) =>
+                                      e.target.showPicker &&
+                                      e.target.showPicker()
+                                    }
                                     className="w-full bg-[var(--db-card)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-lg pl-7 pr-2 py-1.5 text-xs text-[var(--db-text)] [color-scheme:dark] transition-all font-semibold cursor-pointer"
                                     required
                                   />
@@ -1020,15 +1058,20 @@ const DashboardCalendar = () => {
 
                               {/* Capacity Limit */}
                               <div className="col-span-4 sm:col-span-5 space-y-1 text-left">
-                                <span className="text-[8px] font-extrabold uppercase text-[var(--db-text-muted)] tracking-wider">Capacity Limit</span>
+                                <span className="text-[8px] font-extrabold uppercase text-[var(--db-text-muted)] tracking-wider">
+                                  Capacity Limit
+                                </span>
                                 <div className="flex items-center bg-[var(--db-card)] border border-[var(--db-card-border)] focus-within:border-[var(--db-accent-highlight)]/50 rounded-lg overflow-hidden h-[36px] transition-all">
                                   <button
                                     type="button"
                                     onClick={() => {
                                       const updated = [...schedules];
-                                      const currentVal = updated[sIndex].timeSlots[tIndex].slots;
+                                      const currentVal =
+                                        updated[sIndex].timeSlots[tIndex].slots;
                                       if (currentVal > 1) {
-                                        updated[sIndex].timeSlots[tIndex].slots = currentVal - 1;
+                                        updated[sIndex].timeSlots[
+                                          tIndex
+                                        ].slots = currentVal - 1;
                                         setSchedules(updated);
                                       }
                                     }}
@@ -1043,7 +1086,8 @@ const DashboardCalendar = () => {
                                     value={slot.slots}
                                     onChange={(e) => {
                                       const updated = [...schedules];
-                                      updated[sIndex].timeSlots[tIndex].slots = Number(e.target.value);
+                                      updated[sIndex].timeSlots[tIndex].slots =
+                                        Number(e.target.value);
                                       setSchedules(updated);
                                     }}
                                     className="w-full bg-transparent border-none outline-none text-xs text-[var(--db-text)] text-center font-bold font-mono [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -1053,8 +1097,10 @@ const DashboardCalendar = () => {
                                     type="button"
                                     onClick={() => {
                                       const updated = [...schedules];
-                                      const currentVal = updated[sIndex].timeSlots[tIndex].slots;
-                                      updated[sIndex].timeSlots[tIndex].slots = currentVal + 1;
+                                      const currentVal =
+                                        updated[sIndex].timeSlots[tIndex].slots;
+                                      updated[sIndex].timeSlots[tIndex].slots =
+                                        currentVal + 1;
                                       setSchedules(updated);
                                     }}
                                     className="px-2.5 h-full text-[var(--db-text-muted)] hover:text-[var(--db-accent-highlight)] hover:bg-white/[0.03] active:scale-95 transition-all font-extrabold cursor-pointer"
@@ -1070,7 +1116,11 @@ const DashboardCalendar = () => {
                                   type="button"
                                   onClick={() => {
                                     const updated = [...schedules];
-                                    updated[sIndex].timeSlots = updated[sIndex].timeSlots.filter((_, idx) => idx !== tIndex);
+                                    updated[sIndex].timeSlots = updated[
+                                      sIndex
+                                    ].timeSlots.filter(
+                                      (_, idx) => idx !== tIndex,
+                                    );
                                     setSchedules(updated);
                                   }}
                                   disabled={schedule.timeSlots.length <= 1}

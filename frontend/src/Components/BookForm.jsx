@@ -54,7 +54,10 @@ const BookForm = () => {
       setError("Please enter your name to continue.");
       return false;
     }
-    if (step === 2 && (!formData.phone.trim() || formData.phone.length !== 10)) {
+    if (
+      step === 2 &&
+      (!formData.phone.trim() || formData.phone.length !== 10)
+    ) {
       setError("Please enter a valid 10-digit phone number.");
       return false;
     }
@@ -98,7 +101,7 @@ const BookForm = () => {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-        "Unable to connect to server. Please try again."
+          "Unable to connect to server. Please try again.",
       );
     } finally {
       setIsLoading(false);
@@ -106,45 +109,38 @@ const BookForm = () => {
   };
 
   return (
-    <section id="book-form" className="w-full bg-black flex items-center justify-center px-4 py-16 md:py-24 overflow-hidden">
-
+    <section
+      id="book-form"
+      className="w-full bg-black flex items-center justify-center px-4 py-16 md:py-24 overflow-hidden"
+    >
       <div className="relative w-full max-w-4xl rounded-[35px] border border-white/10 bg-gradient-to-b from-[#050505] to-black overflow-hidden">
-
         {/* GLOW */}
         <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-[#d9ff00]/10 blur-[120px] rounded-full"></div>
 
         <div className="relative z-10 p-5 md:p-10">
-
           {/* HEADER */}
           <div>
-
             <h1
               className="text-white uppercase  leading-none font-black text-[20px] md:text-[35px]"
               style={{
-                fontFamily: '"Brutal Font", sans-serif',
+                fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: 700,
-
               }}
             >
-              BOOK YOUR{" "}
-              <span className="text-[#d9ff00]">
-                GYM TOUR
-              </span>
+              BOOK YOUR <span className="text-[#d9ff00]">GYM TOUR</span>
             </h1>
-
           </div>
 
           {/* STEP BAR */}
           <div className="mt-10 flex items-center justify-between gap-1 md:gap-2 w-full pb-2">
-            {[
-              "Personal",
-              "Contact",
-              "Goal",
-              "Schedule",
-            ].map((item, index) => (
+            {["Personal", "Contact", "Goal", "Schedule"].map((item, index) => (
               <div
                 key={index}
                 className="flex items-center flex-grow last:flex-grow-0"
+                style={{
+                  fontFamily: '"Brutal Type Light", sans-serif',
+                  fontWeight: 500,
+                }}
               >
                 {/* STEP CARD */}
                 <div
@@ -153,8 +149,8 @@ const BookForm = () => {
                     step === index + 1
                       ? "bg-[#d9ff00] border-[#d9ff00] text-black shadow-[0_0_25px_rgba(217,255,0,0.35)]"
                       : step > index + 1
-                      ? "bg-white/10 border-white/10 text-white"
-                      : "bg-[#0a0a0a] border-white/10 text-gray-500"
+                        ? "bg-white/10 border-white/10 text-white"
+                        : "bg-[#0a0a0a] border-white/10 text-gray-500"
                   }`}
                 >
                   {/* NUMBER */}
@@ -164,21 +160,19 @@ const BookForm = () => {
                       step === index + 1
                         ? "bg-black text-[#d9ff00]"
                         : step > index + 1
-                        ? "bg-[#d9ff00] text-black"
-                        : "bg-white/10 text-gray-400"
+                          ? "bg-[#d9ff00] text-black"
+                          : "bg-white/10 text-gray-400"
                     }`}
                   >
-                    {step > index + 1 ? (
-                      <Check size={11} />
-                    ) : (
-                      `0${index + 1}`
-                    )}
+                    {step > index + 1 ? <Check size={11} /> : `0${index + 1}`}
                   </div>
 
                   {/* TITLE */}
                   <span className="text-[11px] md:text-sm font-semibold tracking-wide uppercase">
                     <span className="hidden md:inline">{item}</span>
-                    <span className="inline md:hidden">{step === index + 1 && item}</span>
+                    <span className="inline md:hidden">
+                      {step === index + 1 && item}
+                    </span>
                   </span>
                 </div>
 
@@ -186,11 +180,7 @@ const BookForm = () => {
                 {index !== 3 && (
                   <div
                     className={`flex-grow h-[2px] mx-1 md:mx-2 rounded-full transition-all duration-500
-                    ${
-                      step > index + 1
-                        ? "bg-[#d9ff00]"
-                        : "bg-white/10"
-                    }`}
+                    ${step > index + 1 ? "bg-[#d9ff00]" : "bg-white/10"}`}
                   ></div>
                 )}
               </div>
@@ -199,9 +189,7 @@ const BookForm = () => {
 
           {/* FORM CARD */}
           <div className="mt-8 rounded-[30px] border border-white/10 bg-[#070707] p-5 md:p-8">
-
             <AnimatePresence mode="wait">
-
               {/* STEP 1 */}
               {step === 1 && (
                 <motion.div
@@ -211,14 +199,20 @@ const BookForm = () => {
                   exit={{ opacity: 0, x: -40 }}
                   transition={{ duration: 0.35 }}
                 >
-
                   <div className="mb-7">
-
-                    <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
+                    <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3"
+                      style={{
+                        fontFamily: '"BrutalTypeLight", sans-serif',
+                        fontWeight: 500,
+                      }}>
                       Step 01
                     </p>
 
-                    <h2 className="text-white text-2xl md:text-3xl font-bold">
+                    <h2 className="text-white text-2xl md:text-3xl font-bold"
+                      style={{
+                        fontFamily: '"BrutalTypeBold", sans-serif',
+                        fontWeight: 700,
+                      }}>
                       Your Name
                     </h2>
 
@@ -246,7 +240,9 @@ const BookForm = () => {
                       className={`w-full h-14 rounded-xl bg-black border ${error ? "border-red-500" : "border-white/10"} pl-14 pr-5 text-white outline-none focus:border-[#d9ff00] transition-all`}
                     />
                   </div>
-                  {error && <p className="text-red-500 text-xs mt-2 ml-1">{error}</p>}
+                  {error && (
+                    <p className="text-red-500 text-xs mt-2 ml-1">{error}</p>
+                  )}
                 </motion.div>
               )}
 
@@ -259,9 +255,7 @@ const BookForm = () => {
                   exit={{ opacity: 0, x: -40 }}
                   transition={{ duration: 0.35 }}
                 >
-
                   <div className="mb-7">
-
                     <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
                       Step 02
                     </p>
@@ -297,7 +291,9 @@ const BookForm = () => {
                       className={`w-full h-14 rounded-xl bg-black border ${error ? "border-red-500" : "border-white/10"} pl-14 pr-5 text-white outline-none focus:border-[#d9ff00] transition-all`}
                     />
                   </div>
-                  {error && <p className="text-red-500 text-xs mt-2 ml-1">{error}</p>}
+                  {error && (
+                    <p className="text-red-500 text-xs mt-2 ml-1">{error}</p>
+                  )}
                 </motion.div>
               )}
 
@@ -310,9 +306,7 @@ const BookForm = () => {
                   exit={{ opacity: 0, x: -40 }}
                   transition={{ duration: 0.35 }}
                 >
-
                   <div className="mb-7">
-
                     <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
                       Step 03
                     </p>
@@ -341,17 +335,19 @@ const BookForm = () => {
                           formData.goal === goal
                             ? "bg-[#d9ff00] text-black border-[#d9ff00]"
                             : error
-                            ? "bg-black border-red-500/50 text-white hover:border-red-500"
-                            : "bg-black border-white/10 text-white hover:border-[#d9ff00]"
+                              ? "bg-black border-red-500/50 text-white hover:border-red-500"
+                              : "bg-black border-white/10 text-white hover:border-[#d9ff00]"
                         }`}
-                        style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         <Dumbbell size={14} className="hidden sm:inline" />
                         {goal}
                       </button>
-                    ))} 
+                    ))}
                   </div>
-                  {error && <p className="text-red-500 text-xs mt-3 ml-1">{error}</p>}
+                  {error && (
+                    <p className="text-red-500 text-xs mt-3 ml-1">{error}</p>
+                  )}
                 </motion.div>
               )}
 
@@ -364,9 +360,7 @@ const BookForm = () => {
                   exit={{ opacity: 0, x: -40 }}
                   transition={{ duration: 0.35 }}
                 >
-
                   <div className="mb-7">
-
                     <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
                       Step 04
                     </p>
@@ -381,17 +375,22 @@ const BookForm = () => {
                   </div>
 
                   <div className="grid grid-cols-3 gap-2 md:gap-4">
-
                     {/* DAY */}
                     <div className="relative">
                       <select
                         value={formData.day}
-                        onChange={(e) => setFormData({ ...formData, day: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, day: e.target.value })
+                        }
                         className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.day ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
-                        <option value="" disabled>Day</option>
+                        <option value="" disabled>
+                          Day
+                        </option>
                         {Array.from({ length: 31 }, (_, i) => (
-                          <option key={i + 1} value={i + 1}>{i + 1}</option>
+                          <option key={i + 1} value={i + 1}>
+                            {i + 1}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -400,12 +399,31 @@ const BookForm = () => {
                     <div className="relative">
                       <select
                         value={formData.month}
-                        onChange={(e) => setFormData({ ...formData, month: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, month: e.target.value })
+                        }
                         className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.month ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
-                        <option value="" disabled>Month</option>
-                        {["January","February","March","April","May","June","July","August","September","October","November","December"].map((m, i) => (
-                          <option key={i} value={m}>{m.substring(0, 3)}</option>
+                        <option value="" disabled>
+                          Month
+                        </option>
+                        {[
+                          "January",
+                          "February",
+                          "March",
+                          "April",
+                          "May",
+                          "June",
+                          "July",
+                          "August",
+                          "September",
+                          "October",
+                          "November",
+                          "December",
+                        ].map((m, i) => (
+                          <option key={i} value={m}>
+                            {m.substring(0, 3)}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -414,24 +432,46 @@ const BookForm = () => {
                     <div className="relative">
                       <select
                         value={formData.time}
-                        onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, time: e.target.value })
+                        }
                         className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.time ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
-                        <option value="" disabled>Time</option>
-                        {["6:00 AM","7:00 AM","8:00 AM","9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM","7:00 PM","8:00 PM","9:00 PM"].map((t, i) => (
-                          <option key={i} value={t}>{t}</option>
+                        <option value="" disabled>
+                          Time
+                        </option>
+                        {[
+                          "6:00 AM",
+                          "7:00 AM",
+                          "8:00 AM",
+                          "9:00 AM",
+                          "10:00 AM",
+                          "11:00 AM",
+                          "12:00 PM",
+                          "1:00 PM",
+                          "2:00 PM",
+                          "3:00 PM",
+                          "4:00 PM",
+                          "5:00 PM",
+                          "6:00 PM",
+                          "7:00 PM",
+                          "8:00 PM",
+                          "9:00 PM",
+                        ].map((t, i) => (
+                          <option key={i} value={t}>
+                            {t}
+                          </option>
                         ))}
                       </select>
                     </div>
-
                   </div>
-                  {error && <p className="text-red-500 text-xs mt-2 ml-1">{error}</p>}
+                  {error && (
+                    <p className="text-red-500 text-xs mt-2 ml-1">{error}</p>
+                  )}
 
                   {/* SUCCESS */}
                   <div className="mt-7 rounded-2xl border border-[#d9ff00]/20 bg-[#d9ff00]/5 p-5">
-
                     <div className="flex items-center gap-3">
-
                       <div className="w-11 h-11 rounded-full bg-[#d9ff00] flex items-center justify-center">
                         <Check className="text-black" size={18} />
                       </div>
@@ -453,7 +493,6 @@ const BookForm = () => {
 
             {/* BUTTONS */}
             <div className="flex items-center justify-between gap-4 mt-10">
-
               <button
                 onClick={prevStep}
                 className={`h-12 md:h-14 px-6 rounded-xl border border-white/10 text-white flex items-center gap-2 transition-all
@@ -487,8 +526,20 @@ const BookForm = () => {
                   {isLoading ? (
                     <>
                       <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
                       </svg>
                       Booking...
                     </>
@@ -520,32 +571,45 @@ const BookForm = () => {
             >
               {/* Glow Behind */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-[#d9ff00]/20 blur-[80px] rounded-full"></div>
-              
+
               <div className="relative z-10 flex flex-col items-center">
                 <div className="w-20 h-20 bg-[#d9ff00] rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(217,255,0,0.4)]">
                   <Check size={40} className="text-black" strokeWidth={3} />
                 </div>
-                
-                <h2 
+
+                <h2
                   className="text-white text-4xl md:text-5xl uppercase font-black tracking-wide leading-none mb-4"
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   Request <span className="text-[#d9ff00]">Sent</span>
                 </h2>
-                
-                <p className="text-gray-400 text-sm md:text-base leading-relaxed mb-8" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
-                  Thank you, <span className="text-white font-bold">{formData.name}</span>! Your gym tour has been booked successfully. Our team will contact you shortly to confirm your visit.
+
+                <p
+                  className="text-gray-400 text-sm md:text-base leading-relaxed mb-8"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
+                  Thank you,{" "}
+                  <span className="text-white font-bold">{formData.name}</span>!
+                  Your gym tour has been booked successfully. Our team will
+                  contact you shortly to confirm your visit.
                 </p>
-                
+
                 <button
                   onClick={() => {
                     setShowSuccess(false);
                     setStep(1);
-                    setFormData({ name: "", phone: "", goal: "", day: "", month: "", time: "" });
+                    setFormData({
+                      name: "",
+                      phone: "",
+                      goal: "",
+                      day: "",
+                      month: "",
+                      time: "",
+                    });
                     setError("");
                   }}
                   className="w-full h-14 rounded-xl bg-white text-black font-bold uppercase tracking-wider hover:bg-[#d9ff00] transition-all duration-300 shadow-xl"
-                  style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   Done
                 </button>
@@ -554,7 +618,6 @@ const BookForm = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
     </section>
   );
 };

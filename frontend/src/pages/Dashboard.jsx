@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { 
-  User, LogOut, Home, BookOpen, Settings, Menu, X
-} from "lucide-react";
+import { User, LogOut, Home, BookOpen, Settings, Menu, X } from "lucide-react";
 import logo from "../assets/images/logo.png";
 
 const Dashboard = () => {
@@ -29,18 +27,21 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans flex overflow-hidden">
-      
       {/* 1. SIDEBAR */}
-      <aside 
+      <aside
         className={`fixed inset-y-0 left-0 z-30 w-64 bg-[#0a0a0a] border-r border-white/5 flex flex-col justify-between transform transition-transform duration-300 lg:translate-x-0 lg:static lg:flex-shrink-0 ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Sidebar Header with Logo */}
         <div>
           <div className="h-20 flex items-center justify-between px-6 border-b border-white/5">
-            <img src={logo} alt="Box & Cross" className="h-8 w-auto object-contain" />
-            <button 
+            <img
+              src={logo}
+              alt="Box & Cross"
+              className="h-8 w-auto object-contain"
+            />
+            <button
               className="lg:hidden text-gray-400 hover:text-white"
               onClick={() => setSidebarOpen(false)}
             >
@@ -61,11 +62,11 @@ const Dashboard = () => {
                     setSidebarOpen(false);
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider transition-all cursor-pointer ${
-                    isActive 
-                      ? 'bg-[#defb02] text-black shadow-lg shadow-[#defb02]/10' 
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    isActive
+                      ? "bg-[#defb02] text-black shadow-lg shadow-[#defb02]/10"
+                      : "text-gray-400 hover:text-white hover:bg-white/5"
                   }`}
-                  style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <Icon size={18} />
                   {item.name}
@@ -80,7 +81,7 @@ const Dashboard = () => {
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
-            style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
             <LogOut size={18} />
             Logout
@@ -90,7 +91,6 @@ const Dashboard = () => {
 
       {/* Main Container */}
       <div className="flex-grow flex flex-col min-w-0 overflow-y-auto">
-        
         {/* 2. HEADER */}
         <header className="h-20 bg-[#0a0a0a] border-b border-white/5 px-6 md:px-8 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-4">
@@ -109,7 +109,9 @@ const Dashboard = () => {
           <div className="flex items-center gap-3">
             <div className="hidden sm:block text-right">
               <p className="text-xs font-bold text-gray-300">{user.name}</p>
-              <p className="text-[10px] text-[#defb02] font-semibold uppercase tracking-widest">{user.role}</p>
+              <p className="text-[10px] text-[#defb02] font-semibold uppercase tracking-widest">
+                {user.role}
+              </p>
             </div>
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#defb02]/20 to-transparent border border-[#defb02]/40 flex items-center justify-center">
               <User size={20} className="text-[#defb02]" />
@@ -122,9 +124,12 @@ const Dashboard = () => {
           <div className="w-full min-h-[300px] bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 flex items-center justify-center shadow-inner relative overflow-hidden">
             {/* Background Graphic elements */}
             <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-[#defb02]/5 rounded-full blur-[100px] pointer-events-none" />
-            
+
             <div className="text-center z-10">
-              <p className="text-5xl font-black uppercase tracking-widest text-[#defb02] mb-2" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+              <p
+                className="text-5xl font-black uppercase tracking-widest text-[#defb02] mb-2"
+                style={{ fontFamily: '"Brutal Font", sans-serif' }}
+              >
                 hello
               </p>
               <p className="text-xs text-gray-400 uppercase tracking-widest font-semibold">
@@ -134,7 +139,6 @@ const Dashboard = () => {
           </div>
         </main>
       </div>
-
     </div>
   );
 };
