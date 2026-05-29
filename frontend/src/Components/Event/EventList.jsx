@@ -629,11 +629,27 @@ const EventList = () => {
                   ) : (
                     bookingEvent.schedules.map((schedule, idx) => {
                       const isActive = idx === activeDateIndex;
-                      // Split e.g. "SAT 30 May" into ["SAT", "30", "May"]
-                      const parts = schedule.date.split(" ");
-                      const dayName = parts[0] || "";
-                      const dateNum = parts[1] || "";
-                      const monthName = parts[2] || "";
+                      
+                      let dayName = "";
+                      let dateNum = "";
+                      let monthName = "";
+                      
+                      if (/^\d{4}-\d{2}-\d{2}$/.test(schedule.date)) {
+                        // Parse safely to avoid timezone shift
+                        const [year, month, day] = schedule.date.split("-").map(Number);
+                        const d = new Date(year, month - 1, day);
+                        const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+                        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        dayName = days[d.getDay()];
+                        dateNum = d.getDate();
+                        monthName = months[d.getMonth()];
+                      } else {
+                        // Legacy support for "SAT 30 May"
+                        const parts = schedule.date.split(" ");
+                        dayName = parts[0] || "";
+                        dateNum = parts[1] || "";
+                        monthName = parts[2] || "";
+                      }
 
                       return (
                         <button
@@ -865,12 +881,12 @@ const EventList = () => {
             {/* session details */}
             <AnimatePresence>
               {showContactForm && (
-                <div className="fixed inset-0  z-50 flex  p-2  bg-black/90 backdrop-blur-sm">
+                <div className="fixed inset-0  z-50 flex md:items-center md:justify-center  p-2  bg-black/60 backdrop-blur-md">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-[#0c0c0c] border border-white/10 rounded-3xl w-full max-w-9xl overflow-hidden shadow-2xl relative"
+                    className="bg-[#0c0c0c] border border-white/10 rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl relative"
                   >
                     <div className="h-16 flex items-center justify-between bg-[#defb02] px-6 border-b border-white/5">
                       <div className="flex items-center gap-3 ">

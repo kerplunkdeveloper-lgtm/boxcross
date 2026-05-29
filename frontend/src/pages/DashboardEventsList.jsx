@@ -34,10 +34,11 @@ const convertToYYYYMMDD = (dateStr) => {
     const parsed = Date.parse(dateStr);
     if (!isNaN(parsed)) {
       const d = new Date(parsed);
-      const yyyy = d.getFullYear();
-      const mm = (d.getMonth() + 1).toString().padStart(2, "0");
-      const dd = d.getDate().toString().padStart(2, "0");
-      return `${yyyy}-${mm}-${dd}`;
+      // Format locally to avoid UTC timezone shift issues!
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
     }
   } catch (e) {}
 
@@ -74,21 +75,14 @@ const convertToYYYYMMDD = (dateStr) => {
   return "";
 };
 
-// Formats a Date object or YYYY-MM-DD string to "SAT 30 May" style
+// Formats a Date object or YYYY-MM-DD string to "SAT 30 May YYYY" style
 const formatDateToCustom = (dateVal) => {
   if (!dateVal) return "";
-  let date;
-  if (typeof dateVal === "string") {
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateVal)) {
-      const [year, month, day] = dateVal.split("-").map(Number);
-      date = new Date(year, month - 1, day);
-    } else {
-      date = new Date(dateVal);
-    }
-  } else {
-    date = dateVal;
-  }
+  const date = new Date(dateVal);
   if (isNaN(date.getTime())) return String(dateVal);
+  
+  // Format locally instead of relying on default toString which might shift
+  const year = date.getFullYear();
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
   const months = [
     "Jan",
@@ -104,7 +98,7 @@ const formatDateToCustom = (dateVal) => {
     "Nov",
     "Dec",
   ];
-  return `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]}`;
+  return `${days[date.getDay()]} ${date.getDate()} ${months[date.getMonth()]} ${year}`;
 };
 
 // Helper to convert 12-hour AM/PM string to 24-hour HH:mm
@@ -491,7 +485,7 @@ const DashboardEventsList = () => {
                             className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-lg p-2 space-y-1"
                           >
                             <span className="font-extrabold text-[var(--db-accent-highlight)] uppercase">
-                              {sch.date}
+                              {/^\d{4}-\d{2}-\d{2}$/.test(sch.date) ? formatDateToCustom(sch.date) : sch.date}
                             </span>
                             <div className="flex flex-wrap gap-1 text-[9px] text-[var(--db-text-muted)]">
                               {sch.timeSlots.map((ts, idx) => (
@@ -732,7 +726,7 @@ const DashboardEventsList = () => {
                           setSchedules([
                             ...schedules,
                             {
-                              date: formatDateToCustom(formattedToday),
+                              date: formattedToday,
                               timeSlots: [
                                 { time: "9:00 AM", slots: 20, booked: 0 },
                               ],
@@ -776,9 +770,7 @@ const DashboardEventsList = () => {
                                     value={convertToYYYYMMDD(schedule.date)}
                                     onChange={(e) => {
                                       const updated = [...schedules];
-                                      updated[sIndex].date = formatDateToCustom(
-                                        e.target.value,
-                                      );
+                                      updated[sIndex].date = e.target.value;
                                       setSchedules(updated);
                                     }}
                                     onClick={(e) =>
