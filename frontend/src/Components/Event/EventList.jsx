@@ -18,10 +18,14 @@ const EventList = () => {
   
   // Checkout states
   const [showContactForm, setShowContactForm] = useState(false);
+  const [showDiscardConfirmation, setShowDiscardConfirmation] = useState(false);
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [submittingBooking, setSubmittingBooking] = useState(false);
+  const [checkoutStep, setCheckoutStep] = useState(1);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [createdBooking, setCreatedBooking] = useState(null);
 
   // Fallback default events with description details & schedules matching the reference images
   const defaultEvents = [
@@ -170,10 +174,13 @@ const EventList = () => {
     setShowSeatsDrawer(false);
     setShowContactForm(false);
     
-    // Clear user info
+    // Clear user info and reset checkout state
     setCustomerName("");
     setCustomerEmail("");
     setCustomerPhone("");
+    setCheckoutStep(1);
+    setTermsAccepted(false);
+    setCreatedBooking(null);
   };
 
   // Utility to dynamically inject checkout.js script of Razorpay
@@ -191,8 +198,8 @@ const EventList = () => {
     });
   };
 
-  // Create booking API request handler with Razorpay checkout integration
-  const handleConfirmBooking = async (e) => {
+  // Step 1: Save details to database as "not payment"
+  const handleSaveDetails = async (e) => {
     e.preventDefault();
     if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim()) {
       toast.error("Please fill in all contact fields");
@@ -200,7 +207,7 @@ const EventList = () => {
     }
 
     setSubmittingBooking(true);
-    const toastId = toast.loading("Initiating checkout session...");
+    const toastId = toast.loading("Saving contact details...");
 
     try {
       const { data } = await bookEventItem({
@@ -214,117 +221,139 @@ const EventList = () => {
       });
 
       if (data.success) {
-        // Check if we are running sandbox/mock mode (i.e. Razorpay keys are default simulated/offline)
-        if (data.razorpayOrderId.startsWith("order_mock_")) {
-          toast.success("Running sandbox mock payment simulation...", { id: toastId });
-          
-          setTimeout(async () => {
-            const verifyToastId = toast.loading("Verifying simulator transaction...");
-            try {
-              const { data: verifyData } = await verifyEventPayment({
-                bookingId: data.bookingId,
-                razorpayOrderId: data.razorpayOrderId,
-                status: "success",
-              });
-
-              if (verifyData.success) {
-                toast.success("Mock payment simulated & booking confirmed!", { id: verifyToastId });
-                await fetchEvents();
-                setShowContactForm(false);
-                setShowSeatsDrawer(false);
-                setBookingEvent(null);
-                setSelectedEvent(null);
-              } else {
-                toast.error("Mock verification failed", { id: verifyToastId });
-              }
-            } catch (err) {
-              console.error(err);
-              toast.error("Simulator verification error", { id: verifyToastId });
-            } finally {
-              setSubmittingBooking(false);
-            }
-          }, 1500);
-          return;
-        }
-
-        // Live/Test Razorpay Flow using standard Checkout JS library
-        const isLoaded = await loadRazorpayScript();
-        if (!isLoaded) {
-          toast.error("Razorpay SDK failed to load. Are you connected to the internet?", { id: toastId });
-          setSubmittingBooking(false);
-          return;
-        }
-
-        toast.dismiss(toastId);
-
-        const options = {
-          key: data.keyId,
-          amount: data.amount,
-          currency: data.currency,
-          name: "Box & Cross Gym",
-          description: `${bookingEvent.title} - ${seatsCount} Seats`,
-          order_id: data.razorpayOrderId,
-          handler: async function (response) {
-            const verifyToastId = toast.loading("Verifying payment transaction...");
-            try {
-              const { data: verifyData } = await verifyEventPayment({
-                bookingId: data.bookingId,
-                razorpayPaymentId: response.razorpay_payment_id,
-                razorpayOrderId: response.razorpay_order_id,
-                razorpaySignature: response.razorpay_signature,
-                status: "success",
-              });
-
-              if (verifyData.success) {
-                toast.success(`Booking confirmed! Received ${seatsCount} seat ticket(s).`, { id: verifyToastId });
-                await fetchEvents();
-                setShowContactForm(false);
-                setShowSeatsDrawer(false);
-                setBookingEvent(null);
-                setSelectedEvent(null);
-              } else {
-                toast.error(verifyData.message || "Payment verification failed", { id: verifyToastId });
-              }
-            } catch (error) {
-              console.error(error);
-              toast.error("Payment verification failed. Please contact support.", { id: verifyToastId });
-            } finally {
-              setSubmittingBooking(false);
-            }
-          },
-          prefill: {
-            name: customerName.trim(),
-            email: customerEmail.trim(),
-            contact: customerPhone.trim(),
-          },
-          theme: {
-            color: "#defb02",
-          },
-          modal: {
-            ondismiss: async function () {
-              try {
-                await verifyEventPayment({
-                  bookingId: data.bookingId,
-                  status: "failed",
-                });
-              } catch (err) {
-                console.error("Failed to flag booking as cancelled on dismiss", err);
-              }
-              toast.error("Checkout closed. Transaction cancelled.");
-              setSubmittingBooking(false);
-            },
-          },
-        };
-
-        const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
+        toast.success("Contact details saved!", { id: toastId });
+        setCreatedBooking(data); // Stores bookingId and Razorpay order info
+        setCheckoutStep(2);      // Move to Step 2 (Review & Pay)
       } else {
-        toast.error(data.message || "Failed to initiate booking order.", { id: toastId });
-        setSubmittingBooking(false);
+        toast.error(data.message || "Failed to save details", { id: toastId });
       }
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data?.message || "Booking reservation failed.", { id: toastId });
+      toast.error("Error saving contact details", { id: toastId });
+    } finally {
+      setSubmittingBooking(false);
+    }
+  };
+
+  // Step 2: Proceed to Pay (Razorpay checkout)
+  const handleProceedToPay = async () => {
+    if (!createdBooking) {
+      toast.error("Booking details missing. Please go back and save details again.");
+      return;
+    }
+
+    setSubmittingBooking(true);
+    const toastId = toast.loading("Initiating payment...");
+
+    try {
+      // Check if we are running sandbox/mock mode
+      if (createdBooking.razorpayOrderId.startsWith("order_mock_")) {
+        toast.success("Running sandbox mock payment simulation...", { id: toastId });
+        
+        setTimeout(async () => {
+          const verifyToastId = toast.loading("Verifying simulator transaction...");
+          try {
+            const { data: verifyData } = await verifyEventPayment({
+              bookingId: createdBooking.bookingId,
+              razorpayOrderId: createdBooking.razorpayOrderId,
+              status: "success",
+            });
+
+            if (verifyData.success) {
+              toast.success("Payment successfully!", { id: verifyToastId });
+              await fetchEvents();
+              setShowContactForm(false);
+              setShowSeatsDrawer(false);
+              setBookingEvent(null);
+              setSelectedEvent(null);
+            } else {
+              toast.error("Mock verification failed", { id: verifyToastId });
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error("Simulator verification error", { id: verifyToastId });
+          } finally {
+            setSubmittingBooking(false);
+          }
+        }, 1500);
+        return;
+      }
+
+      // Real Razorpay Integration
+      const res = await loadRazorpayScript();
+      if (!res) {
+        toast.error("Razorpay SDK failed to load. Are you online?", { id: toastId });
+        setSubmittingBooking(false);
+        return;
+      }
+
+      toast.dismiss(toastId);
+
+      const options = {
+        key: createdBooking.keyId,
+        amount: createdBooking.amount,
+        currency: createdBooking.currency,
+        name: "BoxCross",
+        description: `Booking for ${bookingEvent.title}`,
+        order_id: createdBooking.razorpayOrderId,
+        handler: async function (response) {
+          const verifyToastId = toast.loading("Verifying payment...");
+          try {
+            const { data: verifyData } = await verifyEventPayment({
+              bookingId: createdBooking.bookingId,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpaySignature: response.razorpay_signature,
+              status: "success",
+            });
+
+            if (verifyData.success) {
+              toast.success("Payment successfully!", { id: verifyToastId });
+              await fetchEvents();
+              setShowContactForm(false);
+              setShowSeatsDrawer(false);
+              setBookingEvent(null);
+              setSelectedEvent(null);
+            } else {
+              toast.error("Payment verification failed", { id: verifyToastId });
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error("Payment verification error", { id: verifyToastId });
+          }
+        },
+        prefill: {
+          name: customerName,
+          email: customerEmail,
+          contact: customerPhone,
+        },
+        theme: {
+          color: "#defb02",
+        },
+        modal: {
+          ondismiss: function() {
+            setSubmittingBooking(false);
+          }
+        }
+      };
+
+      const rzp1 = new window.Razorpay(options);
+      rzp1.on('payment.failed', async function (response) {
+        toast.error("Payment failed!");
+        try {
+          await verifyEventPayment({
+            bookingId: createdBooking.bookingId,
+            status: "failed",
+          });
+        } catch (err) {
+          console.error("Failed to update status", err);
+        }
+      });
+      rzp1.open();
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Error processing payment", { id: toastId });
       setSubmittingBooking(false);
     }
   };
@@ -554,23 +583,23 @@ const EventList = () => {
       {/* Dynamic Date & Slot Booking Modal (Mimicking Image 1, 2, 3) */}
       <AnimatePresence>
         {bookingEvent && (
-          <div className="fixed inset-0 z-[9999] flex flex-col md:items-center md:justify-center bg-black text-white p-0 md:p-4 overflow-y-auto">
+          <div className="fixed inset-0 z-[9999] flex flex-col bg-black p-0 md:p-4 overflow-y-auto">
             {/* Header Block */}
-            <div className="w-full max-w-lg bg-[#000] md:bg-[#070707] border-b md:border border-white/10 md:rounded-t-3xl h-16 flex items-center gap-3 px-4 shrink-0">
+            <div className="w-full max-w-9xl  bg-[#d2ec07] border-b md:border border-white/10 md:rounded-t-3xl h-16 flex items-center gap-3 px-4 shrink-0">
               <button 
                 onClick={() => setBookingEvent(null)}
-                className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all border border-white/5 cursor-pointer"
+                className="p-2 bg-white/5 hover:bg-white/10 text-black  rounded-xl transition-all border border-white/5 cursor-pointer"
                 title="Go Back"
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft size={19} />
               </button>
-              <h3 className="font-bold text-sm tracking-tight text-white truncate max-w-[280px]">
+              <h3 className="font-bold text-sm md:text-2xl tracking-tight text-black font-bold  truncate max-w-[280px]">
                 {bookingEvent.title}
               </h3>
             </div>
 
             {/* Main Interactive Screen */}
-            <div className="w-full max-w-lg bg-[#000] md:bg-[#070707] md:border-x border-white/10 flex-grow md:flex-grow-0 p-4 space-y-6 flex flex-col">
+            <div className="w-full  max-w-9xl bg-[#000] md:bg-[#070707] md:border-x border-white/10 flex-grow md:flex-grow-0 p-4 space-y-6 flex flex-col">
               
               {/* Date Horizontal Selectors */}
               <div className="space-y-2">
@@ -692,7 +721,7 @@ const EventList = () => {
             {/* seats count drawer overlay (mimicking Image 4) */}
             <AnimatePresence>
               {showSeatsDrawer && selectedSlot && (
-                <div className="fixed inset-0 z-50 flex items-end justify-center p-0 md:p-4 bg-black/70 backdrop-blur-sm">
+                <div className="fixed inset-0 z-50 flex items-end  justify-center p-0 md:p-4 bg-black/70 backdrop-blur-sm">
                   {/* Backdrop close */}
                   <div className="absolute inset-0 z-0" onClick={() => setShowSeatsDrawer(false)} />
                   
@@ -732,7 +761,7 @@ const EventList = () => {
                     </div>
 
                     {/* Horizontal pills count */}
-                    <div className="flex justify-center gap-2 overflow-x-auto py-2">
+                    <div className="flex justify-start sm:justify-center gap-2.5 overflow-x-auto py-2 px-4 custom-scrollbar">
                       {Array.from({ length: getMaximumSeats() }, (_, idx) => idx + 1).map((num) => {
                         const isSelected = seatsCount === num;
                         return (
@@ -777,134 +806,382 @@ const EventList = () => {
               )}
             </AnimatePresence>
 
-            {/* Contact details Modal Overlay */}
+            {/* session details */}
             <AnimatePresence>
               {showContactForm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+                <div className="fixed inset-0  z-50 flex  p-2  bg-black/90 backdrop-blur-sm">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-[#0c0c0c] border border-white/10 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl relative"
+                    className="bg-[#0c0c0c] border border-white/10 rounded-3xl w-full max-w-9xl overflow-hidden shadow-2xl relative"
                   >
-                    <div className="h-16 flex items-center justify-between px-6 border-b border-white/5">
-                      <h3 className="font-bold uppercase text-xs tracking-wider text-[#defb02]" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
-                        Enter Contact Details
-                      </h3>
+                    <div className="h-16 flex items-center justify-between bg-[#defb02] px-6 border-b border-white/5">
+                      <div className="flex items-center gap-3 ">
+                        <button 
+                          type="button"
+                          onClick={() => setShowDiscardConfirmation(true)}
+                          className="p-1 text-black  rounded-lg transition-all cursor-pointer"
+                        >
+                          <ChevronLeft size={18} />
+                        </button>
+                        <h3 className="font-bold uppercase text-xl tracking-wider  text-black" style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}>
+                          Session Details
+                        </h3>
+                      </div>
                       <button 
+                        type="button"
                         onClick={() => setShowContactForm(false)}
-                        className="p-1 text-gray-400 hover:text-white rounded-lg transition-all cursor-pointer"
+                        className="p-1 text-black rounded-lg transition-all cursor-pointer"
                       >
                         <X size={16} />
                       </button>
                     </div>
 
-                    <form onSubmit={handleConfirmBooking} className="p-6 space-y-4">
-                      {/* Name */}
-                      <div className="space-y-1.5">
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                          Full Name
-                        </label>
-                        <div className="relative">
-                          <User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
-                          <input
-                            type="text"
-                            value={customerName}
-                            onChange={(e) => setCustomerName(e.target.value)}
-                            placeholder="e.g. John Doe"
-                            className="w-full bg-[#050505] border border-white/5 focus:border-[#defb02]/50 outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-white transition-all"
-                            required
+
+                    <div className="flex flex-col lg:flex-row max-h-[85vh] overflow-y-auto custom-scrollbar">
+                      {/* Left: Event Details Overview */}
+                      <div className="w-full lg:w-5/12 p-2 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505]">
+                        <div className="relative rounded-2xl overflow-hidden mb-6 group shadow-lg shadow-black/60">
+                          <img 
+                            src={bookingEvent.imageUrl} 
+                            alt={bookingEvent.title} 
+                            className="w-full h-48 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-110" 
                           />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <span className="px-3 py-1 bg-[#defb02] text-black text-[10px] font-black uppercase tracking-widest rounded-md shadow-md mb-2 inline-block">
+                              Selected Event
+                            </span>
+                            <h4 className="text-xl md:text-2xl font-black uppercase text-white leading-tight drop-shadow-xl" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                              {bookingEvent.title}
+                            </h4>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
+                          {/* Date */}
+                          <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#defb02] shadow-inner shadow-white/5">
+                              <Calendar size={18} />
+                            </div>
+                            <div>
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Booking Date</p>
+                              <p className="text-sm font-bold text-gray-200">{bookingEvent.schedules[activeDateIndex].date}</p>
+                            </div>
+                          </div>
+
+                          {/* Time */}
+                          <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#defb02] shadow-inner shadow-white/5">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            </div>
+                            <div>
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Time Slot</p>
+                              <p className="text-sm font-bold text-gray-200">{selectedSlot.time}</p>
+                            </div>
+                          </div>
+
+                          {/* Location */}
+                          <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#defb02] shadow-inner shadow-white/5">
+                              <MapPin size={18} />
+                            </div>
+                            <div>
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Location</p>
+                              <p className="text-xs md:text-sm font-bold text-gray-200 leading-snug">{bookingEvent.location}</p>
+                            </div>
+                          </div>
+                          
+                          {/* Seats */}
+                          <div className="flex items-start gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-[#defb02]/10 flex items-center justify-center shrink-0 text-[#defb02] shadow-inner shadow-[#defb02]/20">
+                              <Ticket size={18} />
+                            </div>
+                            <div>
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">Reserved Seats</p>
+                              <p className="text-sm font-black text-[#defb02]">{seatsCount} Seat{seatsCount > 1 ? 's' : ''}</p>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Email */}
-                      <div className="space-y-1.5">
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                          Email Address
-                        </label>
-                        <div className="relative">
-                          <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
-                          <input
-                            type="email"
-                            value={customerEmail}
-                            onChange={(e) => setCustomerEmail(e.target.value)}
-                            placeholder="e.g. john@example.com"
-                            className="w-full bg-[#050505] border border-white/5 focus:border-[#defb02]/50 outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-white transition-all"
-                            required
-                          />
-                        </div>
+                      {/* Right: Contact Form */}
+                      <div className="w-full lg:w-7/12 flex flex-col justify-center">
+                        {checkoutStep === 1 ? (
+                          <form onSubmit={handleSaveDetails} className="p-6 lg:p-10 space-y-6">
+                            <div>
+                              <h4 className="text-lg font-black uppercase text-white tracking-wide mb-1" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                                Primary Contact
+                              </h4>
+                              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4">
+                                Enter attendee details for confirmation
+                              </p>
+                            </div>
+
+                            {/* Name */}
+                            <div className="space-y-1.5">
+                              <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                Full Name
+                              </label>
+                              <div className="relative group">
+                                <User size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#defb02] transition-colors" />
+                                <input
+                                  type="text"
+                                  value={customerName}
+                                  onChange={(e) => setCustomerName(e.target.value)}
+                                  placeholder="Enter your name"
+                                  className="w-full bg-[#050505] border border-white/10 focus:border-[#defb02]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                  required
+                                />
+                              </div>
+                            </div>
+
+                            {/* Email & Phone Grid */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                              {/* Email */}
+                              <div className="space-y-1.5">
+                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                  Email Address
+                                </label>
+                                <div className="relative group">
+                                  <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#defb02] transition-colors" />
+                                  <input
+                                    type="email"
+                                    value={customerEmail}
+                                    onChange={(e) => setCustomerEmail(e.target.value)}
+                                    placeholder="Enter your email"
+                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#defb02]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                    required
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Phone */}
+                              <div className="space-y-1.5">
+                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                  Phone Number
+                                </label>
+                                <div className="relative group">
+                                  <Phone size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#defb02] transition-colors" />
+                                  <input
+                                    type="tel"
+                                    value={customerPhone}
+                                    onChange={(e) => setCustomerPhone(e.target.value)}
+                                    placeholder="Enter your phone number"
+                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#defb02]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                    required
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Form action buttons */}
+                            <div className="pt-6">
+                              <button
+                                type="submit"
+                                disabled={submittingBooking}
+                                className="w-full py-4.5 bg-white hover:bg-[#defb02] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#defb02]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 cursor-pointer"
+                                style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                              >
+                                {submittingBooking ? (
+                                  <>
+                                    <Loader2 size={18} className="animate-spin" />
+                                    Saving Details...
+                                  </>
+                                ) : (
+                                  <>
+                                    Save Details & Continue
+                                    <ArrowRight size={18} strokeWidth={3} />
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </form>
+                        ) : (
+                          <div className="p-6 lg:p-10 space-y-6 flex flex-col h-full justify-center">
+                            <div>
+                              <div className="flex items-center justify-between mb-2">
+                                <h4 className="text-lg font-black uppercase text-white tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                                  Review & Pay
+                                </h4>
+                                <button 
+                                  onClick={() => setCheckoutStep(1)}
+                                  className="text-[10px] uppercase font-bold text-gray-400 hover:text-white underline decoration-white/20 hover:decoration-white transition-all cursor-pointer"
+                                >
+                                  Edit Contact
+                                </button>
+                              </div>
+                              
+                              {/* Readonly contact details */}
+                              <div className="bg-white/5 border border-white/5 rounded-xl p-3 mb-4 flex items-center gap-3 shadow-inner shadow-black/20">
+                                <div className="w-8 h-8 rounded-full bg-[#defb02]/10 flex items-center justify-center text-[#defb02] shrink-0">
+                                  <User size={14} />
+                                </div>
+                                <div className="truncate">
+                                  <p className="text-xs font-bold text-white truncate">{customerName}</p>
+                                  <p className="text-[10px] text-gray-400 truncate">{customerEmail} • {customerPhone}</p>
+                                </div>
+                              </div>
+
+                              {/* Price Breakdown */}
+                              <div className="bg-[#050505] border border-white/10 rounded-2xl p-5 text-sm space-y-3 mt-4 relative overflow-hidden shadow-inner shadow-black/50">
+                                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#defb02]"></div>
+                                
+                                <h5 className="text-white font-bold uppercase tracking-wider text-xs mb-3 flex items-center gap-2">
+                                  <Ticket size={14} className="text-[#defb02]" />
+                                  Order Breakdown
+                                </h5>
+                                
+                                {bookingEvent.originalPrice && bookingEvent.originalPrice > bookingEvent.price && (
+                                  <div className="flex justify-between items-center text-gray-500 text-xs">
+                                    <span>Original Price ({seatsCount} x ₹{bookingEvent.originalPrice})</span>
+                                    <span className="font-semibold line-through">₹{(seatsCount * bookingEvent.originalPrice).toFixed(2)}</span>
+                                  </div>
+                                )}
+
+                                <div className="flex justify-between items-center text-gray-300">
+                                  <span>Ticket Price ({seatsCount} x ₹{bookingEvent.price})</span>
+                                  <span className="font-semibold text-white">₹{(seatsCount * bookingEvent.price).toFixed(2)}</span>
+                                </div>
+
+                                {bookingEvent.originalPrice && bookingEvent.originalPrice > bookingEvent.price && (
+                                  <div className="flex justify-between items-center text-[#defb02]/90 text-xs">
+                                    <span>Special Discount</span>
+                                    <span className="font-bold">- ₹{(seatsCount * (bookingEvent.originalPrice - bookingEvent.price)).toFixed(2)}</span>
+                                  </div>
+                                )}
+                                
+                                <div className="flex justify-between items-center text-gray-400 text-xs">
+                                  <span>Taxes & Platform Fees</span>
+                                  <span className="font-semibold text-green-400">Included</span>
+                                </div>
+
+                                <div className="h-px bg-white/10 w-full my-3"></div>
+                                
+                                <div className="flex justify-between items-center">
+                                  <span className="uppercase text-xs tracking-wider text-gray-300 font-bold">Total Payable</span>
+                                  <span className="text-2xl font-black text-[#defb02] tracking-tight">₹{(seatsCount * bookingEvent.price).toFixed(2)}</span>
+                                </div>
+                              </div>
+
+                              {/* Terms and conditions */}
+                              <label className="flex items-start gap-3 cursor-pointer group mt-6">
+                                <div className="relative flex items-center justify-center mt-0.5 shrink-0">
+                                  <input 
+                                    type="checkbox" 
+                                    className="appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-[#050505] checked:bg-[#defb02] checked:border-[#defb02] transition-colors cursor-pointer peer"
+                                    checked={termsAccepted}
+                                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                                  />
+                                  <svg className="absolute w-3 h-3 pointer-events-none opacity-0 peer-checked:opacity-100 text-black stroke-current" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 5L4.5 8.5L13 1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                  </svg>
+                                </div>
+                                <p className="text-[11px] md:text-xs text-gray-400 leading-relaxed select-none group-hover:text-gray-300 transition-colors">
+                                  I accept the <a href="#" className="text-white hover:text-[#defb02] underline decoration-white/20 transition-colors">Terms and Conditions</a>, including the cancellation policy and facility rules.
+                                </p>
+                              </label>
+                            </div>
+
+                            <div className="pt-6">
+                              <button
+                                onClick={handleProceedToPay}
+                                disabled={submittingBooking || !termsAccepted}
+                                className="w-full py-4.5 bg-white hover:bg-[#defb02] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#defb02]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed cursor-pointer"
+                                style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                              >
+                                {submittingBooking ? (
+                                  <>
+                                    <Loader2 size={18} className="animate-spin" />
+                                    Processing Payment...
+                                  </>
+                                ) : (
+                                  <>
+                                    Proceed to Pay
+                                    <ArrowRight size={18} strokeWidth={3} />
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
+
+
+
+
+
+
+
+
+
+
+
+            
+
+            {/* Discard Confirmation Dropup */}
+            <AnimatePresence>
+              {showDiscardConfirmation && (
+                <div className="fixed inset-0 z-[60] flex items-end justify-center p-0 md:p-4 bg-black/60 backdrop-blur-sm">
+                  <div className="absolute inset-0 z-0" onClick={() => setShowDiscardConfirmation(false)} />
+                  <motion.div
+                    initial={{ y: "100%", opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: "100%", opacity: 0 }}
+                    transition={{ type: "spring", bounce: 0.1, duration: 0.4 }}
+                    className="relative z-10 w-full max-w-md bg-[#0a0a0a] border-t border-white/10 md:border md:rounded-3xl rounded-t-3xl p-6 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]"
+                  >
+                    {/* Top drag handle (Mobile only) */}
+                    <div className="w-12 h-1.5 bg-white/10 rounded-full mx-auto mb-2 md:hidden" />
+                    
+                    {/* Top Right Close Button */}
+                    <button 
+                      type="button"
+                      onClick={() => setShowDiscardConfirmation(false)}
+                      className="absolute top-4 right-4 p-2 text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-full transition-all cursor-pointer z-10"
+                    >
+                      <X size={16} strokeWidth={2.5} />
+                    </button>
+
+                    <div className="flex flex-col items-center text-center mt-2 md:mt-0">
+                      {/* Emoji Icon */}
+                      <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-5 text-3xl shadow-lg shadow-red-500/5">
+                        🚨
                       </div>
 
-                      {/* Phone */}
-                      <div className="space-y-1.5">
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                          Phone Number
-                        </label>
-                        <div className="relative">
-                          <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
-                          <input
-                            type="tel"
-                            value={customerPhone}
-                            onChange={(e) => setCustomerPhone(e.target.value)}
-                            placeholder="e.g. +91 98765 43210"
-                            className="w-full bg-[#050505] border border-white/5 focus:border-[#defb02]/50 outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-white transition-all"
-                            required
-                          />
-                        </div>
-                      </div>
+                      <h4 className="text-xl md:text-2xl font-black uppercase text-white mb-2" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                        Discard Booking?
+                      </h4>
+                      <p className="text-xs md:text-sm text-gray-400 mb-8 leading-relaxed max-w-[280px] md:max-w-sm">
+                        Are you sure you want to discard your selected seats? Your session details will be lost. 🛑
+                      </p>
 
-                      {/* Summary calculations */}
-                      <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 text-xs space-y-2.5">
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Date</span>
-                          <span className="font-bold text-white">{bookingEvent.schedules[activeDateIndex].date}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Slot Time</span>
-                          <span className="font-bold text-white">{selectedSlot.time}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-400">Reserved Tickets</span>
-                          <span className="font-bold text-white">{seatsCount} Seat(s)</span>
-                        </div>
-                        <div className="h-px bg-white/5" />
-                        <div className="flex justify-between text-sm font-black">
-                          <span className="text-gray-300">Total Booking Price</span>
-                          <span className="text-[#ff9e00]">₹{(seatsCount * bookingEvent.price).toFixed(2)}</span>
-                        </div>
-                      </div>
-
-                      {/* Form action buttons */}
-                      <div className="pt-4 border-t border-white/5 flex gap-3">
+                      <div className="flex flex-col w-full gap-3">
                         <button
-                          type="button"
-                          onClick={() => setShowContactForm(false)}
-                          disabled={submittingBooking}
-                          className="w-1/2 py-3 border border-white/10 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
+                          onClick={() => {
+                            setShowDiscardConfirmation(false);
+                            setShowContactForm(false);
+                            setShowSeatsDrawer(false);
+                            setBookingEvent(null);
+                          }}
+                          className="w-full py-4 bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500/20 hover:border-red-500/30 font-bold uppercase tracking-wider text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
                         >
-                          Back
+                          <span>🗑️</span> Discard Booking
                         </button>
                         <button
-                          type="submit"
-                          disabled={submittingBooking}
-                          className="w-1/2 py-3 bg-[#defb02] text-black font-black uppercase tracking-wider text-xs rounded-xl shadow-lg transition-all flex items-center justify-center gap-1.5 hover:scale-[1.02] active:scale-95 disabled:opacity-50 cursor-pointer"
-                          style={{ fontFamily: '"Bai Jamjuree", sans-serif' }}
+                          onClick={() => setShowDiscardConfirmation(false)}
+                          className="w-full py-4 bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 font-bold uppercase tracking-wider text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
                         >
-                          {submittingBooking ? (
-                            <>
-                              <Loader2 size={12} className="animate-spin" />
-                              Processing...
-                            </>
-                          ) : (
-                            <>
-                              <Ticket size={12} strokeWidth={2.5} />
-                              Confirm Booking
-                            </>
-                          )}
+                          <span>✨</span> Continue Booking
                         </button>
                       </div>
-                    </form>
+                    </div>
                   </motion.div>
                 </div>
               )}

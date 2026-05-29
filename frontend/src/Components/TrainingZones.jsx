@@ -17,10 +17,27 @@ const zones = [
     title: "PEC CITY",
     img: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80",
   },
+  {
+    title: "CARDIO ARENA",
+    img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    title: "CALISTHENICS GRID",
+    img: "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    title: "OLYMPIC PLATFORM",
+    img: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=600&q=80",
+  },
+  {
+    title: "COMBAT CAGE",
+    img: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=600&q=80",
+  },
 ];
 
 const TrainingZones = ({ onBookTour }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const scrollContainerRef = useRef(null);
 
   const handleScroll = () => {
@@ -43,11 +60,30 @@ const TrainingZones = ({ onBookTour }) => {
     }
   };
 
+  // Auto sliding logic with smart pause on interaction
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      const container = scrollContainerRef.current;
+      if (container) {
+        const { scrollLeft, scrollWidth, clientWidth } = container;
+        if (scrollLeft + clientWidth >= scrollWidth - 15) {
+          container.scrollTo({ left: 0, behavior: "smooth" });
+        } else {
+          const cardWidth = container.querySelector(".snap-center")?.clientWidth || 340;
+          container.scrollBy({ left: cardWidth + 24, behavior: "smooth" });
+        }
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
+
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
       container.addEventListener("scroll", handleScrollEvent);
-      // Run once initially
       handleScrollEvent();
     }
     return () => {
@@ -77,7 +113,7 @@ const TrainingZones = ({ onBookTour }) => {
       `}} />
 
       <div className="mb-10 px-2 md:px-6">
-        <span className="px-4 py-2 rounded-md   border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+        <span className="px-4 py-2 rounded-md border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
           style={{
             fontFamily: '"Bai Jamjuree", sans-serif',
             fontSize:'16px',
@@ -99,19 +135,23 @@ const TrainingZones = ({ onBookTour }) => {
       {/* Carousel Container */}
       <div 
         ref={scrollContainerRef}
-        className="flex overflow-x-auto gap-4 md:gap-6 px-2 md:px-6 pb-6 snap-x snap-mandatory custom-scrollbar"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+        className="flex overflow-x-auto gap-4 md:gap-6 px-2 md:px-6 pb-6 snap-x snap-mandatory custom-scrollbar scroll-smooth"
       >
         {zones.map((zone, i) => (
           <div
             key={i}
-            className="min-w-[280px] md:min-w-[340px] h-[400px] md:h-[500px] relative rounded-2xl overflow-hidden snap-center group border border-[#222]"
+            className="min-w-[280px] md:min-w-[340px] h-[400px] md:h-[500px] relative rounded-2xl overflow-hidden snap-center group border border-[#222] hover:border-[#d9ff00]/40 transition-all duration-500 shadow-xl"
           >
             <img
               src={zone.img}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-750 group-hover:scale-110 filter grayscale group-hover:grayscale-0"
               alt={zone.title}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent"></div>
             <h3
               className="absolute bottom-8 left-8 text-3xl font-black text-white uppercase tracking-wider shadow-black drop-shadow-xl"
               style={{

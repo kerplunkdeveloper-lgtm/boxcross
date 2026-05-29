@@ -29,12 +29,17 @@ const ChoosePlan = React.forwardRef(({
           </span>
       
                 <h2
-            className="mt-5 font-black mb-5 leading-tight"
-            style={{ fontFamily: '"Brutal Fon", sans-serif' , fontSize:'48px',fontWeight:'700'}}
+            className="mt-5 md:mt-10 font-black mb-5 md:mb-8 leading-tight text-[30px] md:text-[48px]"
+            style={{ fontFamily: '"Brutal Fon", sans-serif' ,fontWeight:'700'}}
           >
             CHOOSE YOUR <br /> <span className="text-[#defb02]">{activeData.title}</span>
           </h2>
-        <div className="flex  flex-wrap items-center justify-center gap-3 text-gray-400 text-[11px]">
+        <div className="flex  flex-wrap items-center justify-center gap-3 text-gray-400 text-[11px]" 
+           style={{
+            fontSize:'16px',
+            fontWeight:'500',
+            fontFamily:'"Brutal Font", sans-serif'
+           }}>
           {activeData.features.map((feature, i) => (
             <React.Fragment key={i}>
               <span className="flex items-center gap-1">
@@ -104,13 +109,21 @@ const ChoosePlan = React.forwardRef(({
               )}
               
               <div className="p-6 flex flex-col items-center text-center border-b border-gray-800">
-                <h3 className="text-lg md:text-xl font-black tracking-wide mb-1.5">{plan.months}</h3>
-                <p className="text-[#defb02] text-[10px] md:text-[11px] font-extrabold tracking-widest uppercase mb-4">{plan.subtitle}</p>
+                <h3 className="text-lg md:text-xl font-black tracking-wide mb-1.5" style={{
+                  fontFamily:'"Brutal Font", sans-serif',
+                }}>{plan.months}</h3>
+                <p className="text-[#defb02] text-[10px] md:text-[11px] font-extrabold tracking-widest uppercase mb-4" style={{
+                  fontFamily:'"Brutal Font", sans-serif',
+                }}>{plan.subtitle}</p>
                 <div className="flex items-start justify-center gap-1 mb-1">
                   <span className="text-xl font-bold mt-1">₹</span>
-                  <span className="text-4xl md:text-5xl font-black tracking-tight">{plan.price}</span>
+                  <span className="text-4xl md:text-5xl font-black tracking-tight" style={{
+                    fontFamily:'"Brutal Font", sans-serif',
+                  }}  >{plan.price}</span>
                 </div>
-                <p className="text-gray-400 text-xs md:text-sm font-medium">₹{plan.perMonth} / month</p>
+                <p className="text-gray-400 text-xs md:text-sm font-medium" style={{
+                  fontFamily:'"Brutal Font", sans-serif',
+                }}>₹{plan.perMonth} / month</p>
               </div>
               
               <div className="p-6 flex-1 flex flex-col">
@@ -118,7 +131,9 @@ const ChoosePlan = React.forwardRef(({
                   {plan.highlights.map((highlight, idx) => (
                     <li key={idx} className="flex items-start gap-2.5 text-xs md:text-sm text-gray-200">
                       <Check size={16} className="text-[#defb02] shrink-0 mt-0.5" />
-                      <span className="leading-snug">{highlight}</span>
+                      <span className="leading-snug" style={{
+                        fontFamily:'"Brutal Font", sans-serif',
+                      }}>{highlight}</span>
                     </li>
                   ))}
                 </ul>
@@ -127,10 +142,13 @@ const ChoosePlan = React.forwardRef(({
                   onClick={() => handlePlanSelect(`${activeData.title} - ${plan.months}`, plan.price, plan.months)}
                   className={`group/planbtn relative overflow-hidden w-full py-3.5 text-xs font-bold uppercase tracking-widest transition-colors rounded-lg ${
                     plan.isPopular ? 'bg-[#defb02] text-black' : 'border border-gray-600 text-white hover:border-white'
-                  }`}
+                  }` }
                 >
                   <div className="absolute inset-0 bg-white translate-x-[100%] group-hover/planbtn:translate-x-0 transition-transform duration-500 ease-out z-0"></div>
-                  <span className={`relative z-10 transition-colors duration-300 ${plan.isPopular ? 'text-black' : 'group-hover/planbtn:text-black'}`}>
+                  <span className={`relative z-10 transition-colors duration-300 ${plan.isPopular ? 'text-black' : 'group-hover/planbtn:text-black'}`} style={{
+                    fontFamily:'"Brutal Font", sans-serif',
+                    
+                  }}>
                     {plan.buttonText}
                   </span>
                 </button>

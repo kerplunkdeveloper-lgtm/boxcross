@@ -61,11 +61,11 @@ const DashboardEventPayments = () => {
 
   // Compute stats
   const totalVolume = bookings
-    .filter(b => b.status === "successful" || b.status === "confirmed")
+    .filter(b => b.status === "payment successfully" || b.status === "confirmed")
     .reduce((sum, b) => sum + b.totalAmount, 0);
 
-  const successfulTxns = bookings.filter(b => b.status === "successful" || b.status === "confirmed").length;
-  const pendingTxns = bookings.filter(b => b.status === "pending").length;
+  const successfulTxns = bookings.filter(b => b.status === "payment successfully" || b.status === "confirmed").length;
+  const pendingTxns = bookings.filter(b => b.status === "not payment").length;
   const failedTxns = bookings.filter(b => b.status === "failed").length;
 
   // Filter bookings
@@ -225,8 +225,8 @@ const DashboardEventPayments = () => {
                   className="bg-transparent border-none text-[var(--db-text)] outline-none cursor-pointer pr-1 text-xs"
                 >
                   <option value="all" className="bg-[var(--db-card)] text-[var(--db-text)]">All Status</option>
-                  <option value="successful" className="bg-[var(--db-card)] text-[var(--db-text)]">Successful</option>
-                  <option value="pending" className="bg-[var(--db-card)] text-[var(--db-text)]">Pending</option>
+                  <option value="payment successfully" className="bg-[var(--db-card)] text-[var(--db-text)]">Payment Successfully</option>
+                  <option value="not payment" className="bg-[var(--db-card)] text-[var(--db-text)]">Not Payment</option>
                   <option value="failed" className="bg-[var(--db-card)] text-[var(--db-text)]">Failed</option>
                 </select>
               </div>
@@ -302,9 +302,9 @@ const DashboardEventPayments = () => {
                       {/* Status */}
                       <td className="py-4 px-4">
                         <span className={`inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black ${
-                          booking.status === 'successful' || booking.status === 'confirmed'
+                          booking.status === 'payment successfully' || booking.status === 'confirmed'
                             ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                            : booking.status === 'pending'
+                            : booking.status === 'not payment'
                             ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-500'
                             : 'bg-red-500/10 border border-red-500/20 text-red-400'
                         }`}>

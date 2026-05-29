@@ -308,7 +308,7 @@ const bookEvent = async (req, res) => {
       };
     }
 
-    // Create event booking with "pending" status
+    // Create event booking with "not payment" status
     const booking = await EventBooking.create({
       event: eventId,
       date,
@@ -318,7 +318,7 @@ const bookEvent = async (req, res) => {
       name,
       email,
       phone,
-      status: "pending",
+      status: "not payment",
       razorpayOrderId: order.id,
     });
 
@@ -398,7 +398,7 @@ const verifyEventPayment = async (req, res) => {
     }
 
     // Update Booking status
-    booking.status = "successful";
+    booking.status = "payment successfully";
     booking.razorpayPaymentId = razorpayPaymentId || `pay_mock_${Date.now()}`;
     booking.razorpayOrderId = razorpayOrderId;
     booking.razorpaySignature = razorpaySignature || "sig_mock";
@@ -468,7 +468,7 @@ const deleteEventBooking = async (req, res) => {
 
     // Restore slots if confirmed/successful
     const event = await Event.findById(booking.event);
-    if (event && (booking.status === "successful" || booking.status === "confirmed")) {
+    if (event && (booking.status === "payment successfully" || booking.status === "confirmed")) {
       const schedule = event.schedules.find((s) => s.date === booking.date);
       if (schedule) {
         const slot = schedule.timeSlots.find((t) => t.time === booking.timeSlot);

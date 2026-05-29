@@ -260,15 +260,15 @@ const Membership = () => {
           </span>
 
           <h2
-            className="mt-5 font-black mb-4 leading-tight"
-            style={{ fontFamily: '"Brutal Fon", sans-serif' , fontSize:'48px',fontWeight:'700'}}
+            className="mt-8 md:mt-15 font-black mb-9 leading-tight text-[30px] md:text-[48px]"
+            style={{ fontFamily: '"Brutal Fon", sans-serif' ,fontWeight:'700'}}
           >
             CHOOSE YOUR <br /> <span className="text-[#defb02]">PROGRAM</span>
           </h2>
            
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-15 mt-8 md:mt-15 ">
             {dynamicPrograms.map((prog, index) => (
               <motion.div 
                 key={prog.id}

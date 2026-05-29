@@ -1,27 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Preloader from './Components/Preloader';
-import MembershipPage from './pages/Membership';
 import ScrollToTop from './Components/ScrollToTop';
 import Footer from './Components/Footer';
-import Auth from './pages/Auth';
-import DashboardLayout from './Components/DashboardLayout';
-import DashboardHome from './pages/DashboardHome';
-import DashboardBookings from './pages/DashboardBookings';
-import DashboardSettings from './pages/DashboardSettings';
-import DashboardMemberships from './pages/DashboardMemberships';
-import DashboardPayments from './pages/DashboardPayments';
-import DashboardEvents from './pages/DashboardEvents';
-import DashboardEventsList from './pages/DashboardEventsList';
-import DashboardEventPayments from './pages/DashboardEventPayments';
-import DashboardProfile from './pages/DashboardProfile';
-import DashboardCalendar from './pages/DashboardCalendar';
 import ProtectedRoute from './Components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
-import Eventpage from './pages/Events/Eventpage';
 import { Toaster } from 'react-hot-toast';
+import { HelmetProvider } from 'react-helmet-async';
+
+
+// Lazy-load page components for code splitting & optimized initial bundle sizes
+const MembershipPage = lazy(() => import('./pages/Membership'));
+const Auth = lazy(() => import('./pages/Auth'));
+const DashboardLayout = lazy(() => import('./Components/DashboardLayout'));
+const DashboardHome = lazy(() => import('./pages/DashboardHome'));
+const DashboardBookings = lazy(() => import('./pages/DashboardBookings'));
+const DashboardSettings = lazy(() => import('./pages/DashboardSettings'));
+const DashboardMemberships = lazy(() => import('./pages/DashboardMemberships'));
+const DashboardPayments = lazy(() => import('./pages/DashboardPayments'));
+const DashboardEvents = lazy(() => import('./pages/DashboardEvents'));
+const DashboardEventsList = lazy(() => import('./pages/DashboardEventsList'));
+const DashboardEventPayments = lazy(() => import('./pages/DashboardEventPayments'));
+const DashboardProfile = lazy(() => import('./pages/DashboardProfile'));
+const DashboardCalendar = lazy(() => import('./pages/DashboardCalendar'));
+const Eventpage = lazy(() => import('./pages/Events/Eventpage'));
 
 // Layout with Navbar and Footer
 const Layout = () => {
@@ -37,12 +41,20 @@ const Layout = () => {
   );
 };
 
+// Sleek fallback loading indicator for code-splitted chunks
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[60vh] bg-black">
+    <div className="w-8 h-8 border-2 border-[var(--db-accent-highlight, #defb02)]/20 border-t-[var(--db-accent-highlight, #defb02)] rounded-full animate-spin"></div>
+  </div>
+);
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-black text-white">
+      <HelmetProvider>
+        <div className="min-h-screen bg-black text-white">
         <Toaster 
           position="top-center"
           toastOptions={{
@@ -64,39 +76,42 @@ const App = () => {
         />
         {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
         <BrowserRouter>
-          <Routes>
-            {/* Routes WITH Navbar and Footer */}
-            <Route element={<Layout />}>
-              <Route path="/" element={<MembershipPage />} />
-              <Route path="/events" element={<Eventpage />} />
-            </Route>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Routes WITH Navbar and Footer */}
+              <Route element={<Layout />}>
+                <Route path="/" element={<MembershipPage />} />
+                <Route path="/events" element={<Eventpage />} />
+              </Route>
 
-            {/* Routes WITHOUT Navbar and Footer */}
-            <Route path="/login" element={<Auth />} />
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <ThemeProvider>
-                    <DashboardLayout />
-                  </ThemeProvider>
-                </ProtectedRoute>
-              } 
-            >
-              <Route index element={<DashboardHome />} />
-              <Route path="bookings" element={<DashboardBookings />} />
-              <Route path="memberships" element={<DashboardMemberships />} />
-              <Route path="payments" element={<DashboardPayments />} />
-              <Route path="events" element={<DashboardEvents />} />
-              <Route path="events-list" element={<DashboardEventsList />} />
-              <Route path="event-payments" element={<DashboardEventPayments />} />
-              <Route path="profile" element={<DashboardProfile />} />
-              <Route path="settings" element={<DashboardSettings />} />
-              <Route path="calendar" element={<DashboardCalendar />} />
-            </Route>
-          </Routes>
+              {/* Routes WITHOUT Navbar and Footer */}
+              <Route path="/login" element={<Auth />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <ProtectedRoute>
+                    <ThemeProvider>
+                      <DashboardLayout />
+                    </ThemeProvider>
+                  </ProtectedRoute>
+                } 
+              >
+                <Route index element={<DashboardHome />} />
+                <Route path="bookings" element={<DashboardBookings />} />
+                <Route path="memberships" element={<DashboardMemberships />} />
+                <Route path="payments" element={<DashboardPayments />} />
+                <Route path="events" element={<DashboardEvents />} />
+                <Route path="events-list" element={<DashboardEventsList />} />
+                <Route path="event-payments" element={<DashboardEventPayments />} />
+                <Route path="profile" element={<DashboardProfile />} />
+                <Route path="settings" element={<DashboardSettings />} />
+                <Route path="calendar" element={<DashboardCalendar />} />
+              </Route>
+            </Routes>
+          </Suspense>
         </BrowserRouter>
-      </div>
+        </div>
+      </HelmetProvider>
     </AuthProvider>
   );
 }
