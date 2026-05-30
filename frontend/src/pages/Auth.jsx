@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import boxcrosslogo from "../assets/login.png";
 // import logo from "../assets/images/logo.png";
 import { toast } from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
 
 const Auth = () => {
   const { login, user } = useAuth();
@@ -14,6 +15,7 @@ const Auth = () => {
   // Form states
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -75,13 +77,22 @@ const Auth = () => {
         {/* Left Side: Bold Promotional Blocks (Desktop Only) */}
         <div className="hidden md:flex flex-col items-start text-left select-none max-w-lg mb-12">
           {/* ALL ABOUT Block */}
-          <div className="bg-black/30 text-white  font-bold backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm tracking-[0.2em] font-black text-lg md:text-xl  inline-block mb-3.5 shadow-xl shadow-black/10">
-            All About
+          <div className="bg-black/30 text-white   backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm    inline-block mb-3.5 shadow-xl shadow-black/10">
+            <h1 className="text-2xl"
+            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+            >
+              All About
+            </h1>
+             
           </div>
 
           {/* HEALTH & FITNESS Block */}
-          <div className="bg-black/30 text-white  font-bold backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm tracking-[0.2em] font-black text-lg md:text-xl  inline-block shadow-xl shadow-black/10">
-            Health & Fitness
+          <div className="bg-black/30 text-white  backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm   inline-block shadow-xl shadow-black/10">
+           <h1 className="text-2xl"
+             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+           >
+              Health & Fitness
+            </h1>
           </div>
         </div>
 
@@ -94,7 +105,7 @@ const Auth = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.4 }}
-            className="w-full bg-[#121415]/95 backdrop-blur-lg rounded-[28px] p-10 md:p-12 relative z-10"
+            className="w-full  bg-black/20 backdrop-blur-md rounded-[28px] p-10 md:p-12 relative z-10"
           >
             {/* Top accent line */}
             <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -131,15 +142,22 @@ const Auth = () => {
               </div>
 
               {/* Password Input */}
-              <div className="space-y-1.5 text-left">
+              <div className="space-y-1.5 text-left relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
+                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md pl-6 pr-12 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-black focus:outline-none transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
 
               {/* Action Buttons Row */}
