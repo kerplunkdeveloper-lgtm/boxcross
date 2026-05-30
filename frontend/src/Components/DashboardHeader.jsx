@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, User, Sun, Moon, Bell, CheckCheck, CreditCard, Calendar, BookOpen, LogOut, Settings, ChevronDown } from "lucide-react";
+import { Menu, User, Sun, Moon, Bell, CheckCheck, CreditCard, Calendar, BookOpen, LogOut, Settings, ChevronDown, Trash2, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
@@ -17,6 +17,44 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+
+  const [deletedIds, setDeletedIds] = useState(() => {
+    try {
+      const stored = localStorage.getItem("boxcross_deleted_notifications");
+      return stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const prevIdsRef = useRef([]);
+  const [latestNotification, setLatestNotification] = useState(null);
+
+  const playNotificationSound = () => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const playTone = (freq, startTime, duration) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, startTime);
+        gain.gain.setValueAtTime(0.0001, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.15, startTime + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+      };
+      const now = ctx.currentTime;
+      playTone(523.25, now, 0.35); // C5
+      playTone(783.99, now + 0.08, 0.45); // G5
+    } catch (e) {
+      console.warn("Audio playback context failed or blocked", e);
+    }
+  };
 
   // Profile Dropdown States
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -141,8 +179,31 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
       // Sort by time descending (newest first)
       aggregated.sort((a, b) => b.time.getTime() - a.time.getTime());
 
-      // Slice to top 15 notifications
-      setNotifications(aggregated.slice(0, 15));
+      // Filter out deleted notifications
+      let currentDeleted = [];
+      try {
+        const stored = localStorage.getItem("boxcross_deleted_notifications");
+        currentDeleted = stored ? JSON.parse(stored) : [];
+      } catch (e) {}
+
+      let currentRead = [];
+      try {
+        const stored = localStorage.getItem("boxcross_read_notifications");
+        currentRead = stored ? JSON.parse(stored) : [];
+      } catch (e) {}
+
+      const activeFetched = aggregated.filter(n => !currentDeleted.includes(n.id));
+
+      if (prevIdsRef.current.length > 0) {
+        const newItems = activeFetched.filter(n => !prevIdsRef.current.includes(n.id) && !currentRead.includes(n.id));
+        if (newItems.length > 0) {
+          playNotificationSound();
+          setLatestNotification(newItems[0]);
+        }
+      }
+
+      prevIdsRef.current = activeFetched.map(n => n.id);
+      setNotifications(activeFetched.slice(0, 15));
     } catch (err) {
       console.error("Notification aggregation error", err);
     }
@@ -167,7 +228,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
   }, []);
 
   // Calculate unread count
-  const unreadNotifications = notifications.filter(n => !readIds.includes(n.id));
+  const unreadNotifications = notifications.filter(n => !readIds.includes(n.id) && !deletedIds.includes(n.id));
   const unreadCount = unreadNotifications.length;
 
   // Mark all notifications as read
@@ -176,6 +237,15 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     const updatedReadIds = Array.from(new Set([...readIds, ...allIds]));
     setReadIds(updatedReadIds);
     localStorage.setItem("boxcross_read_notifications", JSON.stringify(updatedReadIds));
+  };
+
+  // Delete notification permanently
+  const handleDeleteNotification = (e, id) => {
+    e.stopPropagation();
+    const updated = [...deletedIds, id];
+    setDeletedIds(updated);
+    localStorage.setItem("boxcross_deleted_notifications", JSON.stringify(updated));
+    setNotifications(prev => prev.filter(item => item.id !== id));
   };
 
   // Mark individual notification as read and navigate
@@ -241,7 +311,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
           >
             <Bell size={18} />
             {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 bg-red-500 text-white rounded-full text-[8px] font-black w-4.5 h-4.5 flex items-center justify-center animate-pulse">
+              <span className="absolute top-0.5 right-0.5 bg-[var(--db-accent-highlight)] text-black rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center shadow-[0_0_10px_rgba(222,251,2,0.4)]">
                 {unreadCount}
               </span>
             )}
@@ -279,28 +349,39 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                       <div 
                         key={item.id}
                         onClick={() => handleNotificationClick(item)}
-                        className={`py-3 flex items-start gap-3 cursor-pointer hover:bg-[var(--db-sidebar-link-hover)] px-2 rounded-xl transition-colors ${
+                        className={`py-2.5 flex items-start gap-3 cursor-pointer hover:bg-[var(--db-sidebar-link-hover)] px-2 rounded-xl transition-colors group relative ${
                           isUnread ? "bg-[var(--db-accent-glow)]/5" : ""
                         }`}
                       >
                         {/* Left notification badge icon */}
-                        <div className="w-8 h-8 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] flex items-center justify-center shrink-0 mt-0.5">
+                        <div className="w-8.5 h-8.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] flex items-center justify-center shrink-0 mt-0.5 transition-colors group-hover:border-[var(--db-accent-highlight)]/40">
                           {getNotificationIcon(item.type)}
                         </div>
 
                         {/* Middle textual content info */}
-                        <div className="flex-grow space-y-0.5">
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-extrabold uppercase text-[var(--db-text-title)]">{item.title}</span>
-                            <span className="text-[8px] text-[var(--db-text-muted)] font-semibold">{formatRelativeTime(item.time)}</span>
+                        <div className="flex-grow min-w-0 space-y-0.5 text-left">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text)] truncate">{item.title}</span>
+                            <span className="text-[8px] text-[var(--db-text-muted)] font-extrabold uppercase shrink-0">{formatRelativeTime(item.time)}</span>
                           </div>
-                          <p className="text-[11px] text-[var(--db-text-muted)] leading-normal line-clamp-2">{item.message}</p>
+                          <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2 pr-6">{item.message}</p>
                         </div>
 
-                        {/* Right side unread dot notifier */}
-                        {isUnread && (
-                          <div className="w-1.5 h-1.5 rounded-full bg-[var(--db-accent-highlight)] shrink-0 self-center" />
-                        )}
+                        {/* Right side actions and indicators */}
+                        <div className="flex items-center gap-1.5 shrink-0 self-center z-10">
+                          {isUnread && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--db-accent-highlight)] shadow-[0_0_6px_rgba(222,251,2,0.6)] group-hover:opacity-0 transition-opacity" />
+                          )}
+                          
+                          {/* Delete button */}
+                          <button
+                            onClick={(e) => handleDeleteNotification(e, item.id)}
+                            className="p-1.5 rounded-lg text-[var(--db-text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 shrink-0 cursor-pointer"
+                            title="Delete Notification"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
                       </div>
                     );
                   })
@@ -419,6 +500,50 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Real-time Slide-in Banner Notification */}
+      <AnimatePresence>
+        {latestNotification && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95, x: 20 }}
+            animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95, x: 10 }}
+            className="fixed top-6 right-6 z-[9999] w-80 sm:w-96 bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] p-4 flex gap-3 text-left items-start cursor-pointer"
+            onClick={() => {
+              if (latestNotification.link) {
+                navigate(latestNotification.link);
+                setLatestNotification(null);
+              }
+            }}
+          >
+            <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-[#defb02]">
+              {getNotificationIcon(latestNotification.type)}
+            </div>
+            <div className="flex-grow space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#defb02]">
+                  New Activity Alert
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLatestNotification(null);
+                  }}
+                  className="text-gray-500 hover:text-white transition-colors cursor-pointer"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+              <h5 className="text-xs font-bold text-white uppercase tracking-tight">
+                {latestNotification.title}
+              </h5>
+              <p className="text-xs text-gray-400 leading-normal">
+                {latestNotification.message}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

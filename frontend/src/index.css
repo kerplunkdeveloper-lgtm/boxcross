@@ -130,7 +130,7 @@
 
   /* Dynamic Accent Brand Tokens */
   --db-accent:linear-gradient(135deg, #00ff88, #22fa1e, #00c853);
-  --db-accent-text: #faefef;
+  --db-accent-text: #000000;
   --db-accent-hover: #22fa1e;
   --db-accent-highlight: #0dc400;
   --db-accent-glow: rgba(37, 99, 235, 0.12);

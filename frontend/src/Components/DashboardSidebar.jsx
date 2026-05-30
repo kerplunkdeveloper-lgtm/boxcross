@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   Home,
   BookOpen,
@@ -14,6 +14,8 @@ import {
   Users,
   FileText,
   MessageSquare,
+  ChevronDown,
+  Sparkles,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -23,8 +25,27 @@ import { useTheme } from "../context/ThemeContext";
 const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   const { user } = useAuth();
   const { theme } = useTheme();
+  const location = useLocation();
 
-  const menuItems = [
+  const [eventsOpen, setEventsOpen] = useState(() => {
+    return (
+      location.pathname.includes("/events") ||
+      location.pathname.includes("/events-list") ||
+      location.pathname.includes("/event-payments")
+    );
+  });
+
+  useEffect(() => {
+    if (
+      location.pathname.includes("/events") ||
+      location.pathname.includes("/events-list") ||
+      location.pathname.includes("/event-payments")
+    ) {
+      setEventsOpen(true);
+    }
+  }, [location.pathname]);
+
+  const baseMenuItems = [
     { name: "Dashboard", path: "/dashboard", icon: Home },
     { name: "Calendar", path: "/dashboard/calendar", icon: Calendar },
     { name: "Enquiry membership", path: "/dashboard/bookings", icon: BookOpen },
@@ -36,50 +57,37 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     { name: "Payment details", path: "/dashboard/payments", icon: DollarSign },
   ];
 
+  const adminFormItems = [];
   if (user && user.role === "admin") {
-    menuItems.push({
-      name: "Event banners",
-      path: "/dashboard/events",
-      icon: Image,
-    });
-    menuItems.push({
-      name: "Events list",
-      path: "/dashboard/events-list",
-      icon: Calendar,
-    });
-    menuItems.push({
-      name: "Event payments",
-      path: "/dashboard/event-payments",
-      icon: DollarSign,
-    });
-    menuItems.push({
+    adminFormItems.push({
       name: "Home/trialform ",
       path: "/dashboard/homec1",
       icon: FileText,
     });
-    menuItems.push({
+    adminFormItems.push({
       name: "Consult us form ",
       path: "/dashboard/homec2",
       icon: Users,
     });
-    menuItems.push({
+    adminFormItems.push({
       name: "Contact Form",
       path: "/dashboard/homec3",
       icon: MessageSquare,
     });
   }
 
-  // Keep these at the very end of the list
-  menuItems.push({
-    name: "Profile settings",
-    path: "/dashboard/profile",
-    icon: User,
-  });
-  menuItems.push({
-    name: "Settings",
-    path: "/dashboard/settings",
-    icon: Settings,
-  });
+  const footerMenuItems = [
+    {
+      name: "Profile settings",
+      path: "/dashboard/profile",
+      icon: User,
+    },
+    {
+      name: "Settings",
+      path: "/dashboard/settings",
+      icon: Settings,
+    },
+  ];
 
   return (
     <aside
@@ -105,13 +113,141 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       {/* Menu Nav Links (Scrollable) */}
       <div className="flex-grow overflow-y-auto custom-scrollbar py-6">
         <nav className="px-4 space-y-2">
-          {menuItems.map((item) => {
+          {baseMenuItems.map((item) => {
             const Icon = item.icon;
             return (
               <NavLink
                 key={item.name}
                 to={item.path}
                 end={item.path === "/dashboard"}
+                onClick={() => setSidebarOpen(false)}
+                className={({ isActive }) =>
+                  `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)]"
+                      : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                  }`
+                }
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                <Icon size={18} />
+                {item.name}
+              </NavLink>
+            );
+          })}
+
+          {/* Events dropdown for Admin */}
+          {user && user.role === "admin" && (
+            <div className="space-y-1">
+              <button
+                onClick={() => setEventsOpen(!eventsOpen)}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                  location.pathname.includes("/events") ||
+                  location.pathname.includes("/events-list") ||
+                  location.pathname.includes("/event-payments")
+                    ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
+                    : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                }`}
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                <div className="flex items-center gap-3">
+                  <Sparkles size={18} className={location.pathname.includes("/events") || location.pathname.includes("/events-list") || location.pathname.includes("/event-payments") ? "text-[var(--db-accent-highlight)]" : ""} />
+                  <span>Events</span>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform duration-300 ${
+                    eventsOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
+                  }`}
+                />
+              </button>
+
+              {eventsOpen && (
+                <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
+                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+
+                  <NavLink
+                    to="/dashboard/events"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <Image size={14} />
+                    Event banners
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/events-list"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <Calendar size={14} />
+                    Events list
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/event-payments"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <DollarSign size={14} />
+                    Event payments
+                  </NavLink>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Form links */}
+          {adminFormItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                onClick={() => setSidebarOpen(false)}
+                className={({ isActive }) =>
+                  `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)]"
+                      : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                  }`
+                }
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                <Icon size={18} />
+                {item.name}
+              </NavLink>
+            );
+          })}
+
+          {/* Settings items */}
+          {footerMenuItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.name}
+                to={item.path}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
