@@ -75,7 +75,7 @@ exports.deleteContact = async (req, res) => {
       });
     }
 
-    await Contact.findByIdAndDelete(req.params.id);
+    await Homec1.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
       success: true,
