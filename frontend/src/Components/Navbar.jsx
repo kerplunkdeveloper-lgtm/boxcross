@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Links, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
   X,
@@ -22,7 +22,7 @@ import {
 import { Link } from "react-router-dom";
 
 
-import logo from "../assets/images/new-logo.png";
+import logo from "../assets/images/logo-new.png";
 
 const Navbar = () => {
   const { user } = useAuth();

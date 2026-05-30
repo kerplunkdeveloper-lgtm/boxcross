@@ -353,7 +353,7 @@ const DashboardEventsList = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--db-card-border)]">
           <div>
             <h1
-              className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
               Events Listing
@@ -567,7 +567,7 @@ const DashboardEventsList = () => {
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
-                className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative my-8"
+                className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl relative my-8"
               >
                 {/* Modal Header */}
                 <div className="h-16 flex items-center justify-between px-6 border-b border-[var(--db-card-border)] bg-white/[0.01]">

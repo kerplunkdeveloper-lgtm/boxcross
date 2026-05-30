@@ -524,7 +524,7 @@ const DashboardCalendar = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="text-left">
             <h1
-              className="text-md md:text-3xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
               Athlete & Events Schedule

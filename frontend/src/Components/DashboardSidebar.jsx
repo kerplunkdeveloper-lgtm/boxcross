@@ -15,7 +15,7 @@ import {
   FileText,
   MessageSquare,
 } from "lucide-react";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
@@ -27,7 +27,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   const menuItems = [
     { name: "Dashboard", path: "/dashboard", icon: Home },
     { name: "Calendar", path: "/dashboard/calendar", icon: Calendar },
-    { name: "Enquiry members", path: "/dashboard/bookings", icon: BookOpen },
+    { name: "Enquiry membership", path: "/dashboard/bookings", icon: BookOpen },
     {
       name: "Membership edit",
       path: "/dashboard/memberships",

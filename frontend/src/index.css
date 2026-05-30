@@ -94,12 +94,15 @@
   --db-table-hover: rgba(255, 255, 255, 0.02);
   --db-accent-dim: rgba(222, 251, 2, 0.1);
   --db-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --db-glass-bg: rgba(10, 10, 10, 0.45);
+  --db-glass-border: rgba(255, 255, 255, 0.08);
+
 
   /* Dynamic Accent Brand Tokens */
- --db-accent: linear-gradient(135deg, #00ff88, #00e676, #00c853);
+ --db-accent: linear-gradient(135deg, #00ff88, #22fa1e, #00c853);
   --db-accent-text: #000000;
-  --db-accent-hover: #eafc33;
-  --db-accent-highlight: #defb02;
+  --db-accent-hover: #22fa1e;
+  --db-accent-highlight: #25ee06;
   --db-accent-glow: rgba(222, 251, 2, 0.15);
 }
 
@@ -121,12 +124,15 @@
   --db-table-hover: rgba(15, 23, 42, 0.01);
   --db-accent-dim: rgba(15, 23, 42, 0.08);
   --db-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --db-glass-bg: rgba(255, 255, 255, 0.45);
+  --db-glass-border: rgba(15, 23, 42, 0.08);
+
 
   /* Dynamic Accent Brand Tokens */
-  --db-accent: #0f172a;
-  --db-accent-text: #ffffff;
-  --db-accent-hover: #1e293b;
-  --db-accent-highlight: #2563eb;
+  --db-accent:linear-gradient(135deg, #00ff88, #22fa1e, #00c853);
+  --db-accent-text: #faefef;
+  --db-accent-hover: #22fa1e;
+  --db-accent-highlight: #0dc400;
   --db-accent-glow: rgba(37, 99, 235, 0.12);
 }
 
@@ -193,4 +199,17 @@
 }
 [class*="hover:bg-[var(--db-accent-hover)]"]:hover {
   background: var(--db-accent-hover) !important;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
 }

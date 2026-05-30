@@ -104,12 +104,12 @@ const DashboardHomec2 = () => {
         <div className="overflow-x-auto w-full custom-scrollbar">
           <table className="w-full text-left border-collapse min-w-[700px]">
             <thead>
-              <tr className="bg-black/5 border-b border-[var(--db-card-border)]">
-                <th className="p-4 text-[10px] uppercase tracking-widest text-[var(--db-text-muted)] font-black whitespace-nowrap">Contact Name</th>
-                <th className="p-4 text-[10px] uppercase tracking-widest text-[var(--db-text-muted)] font-black whitespace-nowrap">Email Address</th>
-                <th className="p-4 text-[10px] uppercase tracking-widest text-[var(--db-text-muted)] font-black whitespace-nowrap">Phone Number</th>
-                <th className="p-4 text-[10px] uppercase tracking-widest text-[var(--db-text-muted)] font-black whitespace-nowrap">Submitted On</th>
-                <th className="p-4 text-[10px] uppercase tracking-widest text-[var(--db-text-muted)] font-black whitespace-nowrap text-center">Action</th>
+              <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
+                <th className="p-4 rounded-l-xl whitespace-nowrap">Contact Name</th>
+                <th className="p-4 whitespace-nowrap">Email Address</th>
+                <th className="p-4 whitespace-nowrap">Phone Number</th>
+                <th className="p-4 whitespace-nowrap">Submitted On</th>
+                <th className="p-4 text-center rounded-r-xl whitespace-nowrap">Action</th>
               </tr>
             </thead>
             <tbody>

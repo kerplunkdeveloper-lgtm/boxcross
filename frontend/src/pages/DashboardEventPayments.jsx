@@ -95,7 +95,7 @@ const DashboardEventPayments = () => {
         
         {/* Header Title */}
         <div className="text-left">
-          <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+          <h1 className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
             Event Payments & Bookings
           </h1>
           <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-1">

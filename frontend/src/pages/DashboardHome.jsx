@@ -16,6 +16,15 @@ const DashboardHome = () => {
   const [totalPayments, setTotalPayments] = useState(0);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
 
   useEffect(() => {
     const fetchDashboardStats = async () => {
@@ -60,12 +69,24 @@ const DashboardHome = () => {
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none z-0" />
 
-      <div className="max-w-6xl mx-auto z-10 relative space-y-10">
+      <div className="max-w-9xl mx-auto z-10 relative space-y-10">
         
-        {/* Welcome Section */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[var(--db-card-border)]">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/50 flex items-center justify-center overflow-hidden shadow-lg shadow-[var(--db-accent-glow)] shrink-0">
+        {/* Welcome Section with Glassmorphism and Real-Time Clock */}
+        <div 
+          className="relative overflow-hidden p-6 md:p-8 rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+          style={{
+            background: "var(--db-glass-bg)",
+            borderColor: "var(--db-glass-border)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)"
+          }}
+        >
+          {/* Subtle accent light reflection inside the card */}
+          <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40" />
+          <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20" />
+          
+          <div className="flex items-center gap-4 z-10">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-highlight)]/40 via-transparent to-[var(--db-accent-highlight)]/10 border-2 border-[var(--db-accent-highlight)]/30 flex items-center justify-center overflow-hidden shadow-lg shadow-[var(--db-accent-glow)] shrink-0">
               {user.profileImage ? (
                 <img 
                   src={user.profileImage} 
@@ -83,9 +104,46 @@ const DashboardHome = () => {
                 </h1>
                 <Sparkles size={16} className="text-[var(--db-accent-highlight)] animate-pulse" />
               </div>
-              <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-0.5">
+              <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-0.5 font-semibold leading-relaxed max-w-md">
                 Welcome back to your Box & Cross Athlete Portal. Ready to crush it?
               </p>
+            </div>
+          </div>
+
+          {/* Right Side - Dynamic Date & Time Display with High-Tech Premium Glass Layout */}
+          <div className="z-10 flex items-center gap-4 self-stretch sm:self-auto justify-between sm:justify-end border-t sm:border-t-0 sm:border-l border-[var(--db-glass-border)] pt-4 sm:pt-0 sm:pl-8">
+            <div className="flex flex-col text-left">
+              <div className="flex items-center gap-1.5 text-[var(--db-text-muted)] text-[10px] font-black uppercase tracking-widest">
+                <Calendar size={12} className="text-[var(--db-accent-highlight)]" />
+                <span>
+                  {currentTime.toLocaleDateString([], { weekday: 'short' }).toUpperCase()}, {currentTime.toLocaleDateString([], { month: 'short', day: 'numeric' }).toUpperCase()}
+                </span>
+              </div>
+              <div className="flex items-baseline gap-1 mt-1">
+                <span className="text-2xl md:text-3xl font-black tracking-tighter text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).split(" ")[0]}
+                </span>
+                <span className="text-[10px] md:text-xs font-bold text-[var(--db-accent-highlight)] ml-0.5">
+                  :{currentTime.toLocaleTimeString([], { second: '2-digit' })}
+                </span>
+                <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[var(--db-text-muted)] ml-2">
+                  {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).split(" ")[1]}
+                </span>
+              </div>
+            </div>
+
+            {/* Premium circular glass clock ornament */}
+            <div 
+              className="w-12 h-12 rounded-2xl border flex items-center justify-center text-[var(--db-accent-highlight)] shadow-inner relative group overflow-hidden"
+              style={{
+                background: "var(--db-glass-bg)",
+                borderColor: "var(--db-glass-border)",
+                backdropFilter: "blur(10px)",
+                WebkitBackdropFilter: "blur(10px)"
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent opacity-50 group-hover:scale-110 transition-transform duration-500" />
+              <Clock size={20} className="relative z-10 animate-spin-slow" />
             </div>
           </div>
         </div>
@@ -95,7 +153,7 @@ const DashboardHome = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="w-full h-56 sm:h-72 md:h-80 lg:h-[440px] rounded-3xl overflow-hidden relative border border-[var(--db-card-border)] shadow-2xl"
+          className="w-full h-56 sm:h-72 md:h-80 lg:h-[530px] rounded-3xl overflow-hidden relative border border-[var(--db-card-border)] shadow-2xl"
         >
           {/* Loop Video Background */}
           <video

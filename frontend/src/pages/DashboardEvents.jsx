@@ -265,19 +265,19 @@ const DashboardEvents = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr
-                  className="border-b border-[var(--db-card-border)] bg-white/[0.02]"
+                  className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
-                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                  <th className="py-4 px-6 rounded-l-xl whitespace-nowrap">
                     Media
                   </th>
-                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                  <th className="py-4 px-6 whitespace-nowrap">
                     Title
                   </th>
-                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                  <th className="py-4 px-6 whitespace-nowrap">
                     Description
                   </th>
-                  <th className="py-4 px-6 text-[10px] md:text-xs font-black uppercase tracking-wider text-[var(--db-text-muted)] text-right">
+                  <th className="py-4 px-6 text-right rounded-r-xl whitespace-nowrap">
                     Actions
                   </th>
                 </tr>
