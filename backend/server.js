@@ -12,6 +12,7 @@ const eventRoutes = require("./routes/eventRoutes");
 const leadRoutes = require("./routes/leadRoutes");
 const homec1routes = require("./routes/homec1routes");
 const homec2routes = require("./routes/homec2routes");
+const homec3routes = require("./routes/homec3routes");
 
 // Load env
 dotenv.config();
@@ -59,6 +60,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/leads", leadRoutes);
 app.use("/api/homec1", homec1routes);
 app.use("/api/homec2", homec2routes);
+app.use("/api/homec3", homec3routes); 
 
 // Health check
 app.get("/", (req, res) => {
