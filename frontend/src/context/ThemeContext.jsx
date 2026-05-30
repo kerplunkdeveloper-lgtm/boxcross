@@ -4,13 +4,13 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("dashboard-theme") || "dark";
+    return sessionStorage.getItem("dashboard-theme") || "dark";
   });
 
   const toggleTheme = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
-    localStorage.setItem("dashboard-theme", newTheme);
+    sessionStorage.setItem("dashboard-theme", newTheme);
   };
 
   return (
