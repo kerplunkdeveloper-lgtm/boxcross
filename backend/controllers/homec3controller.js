@@ -23,6 +23,9 @@ exports.createContact = async (req, res) => {
       fullName,
       email,
       phoneNumber,
+      aboutus,
+      subject,
+      message,
     });
 
     res.status(201).json({
