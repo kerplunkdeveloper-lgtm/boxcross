@@ -72,7 +72,23 @@ const getAllEventsAdmin = async (req, res) => {
 // @access  Private/Admin
 const createEvent = async (req, res) => {
   try {
-    const { title, location, description, originalPrice, price, bookingLink, schedules, inclusions, exclusions, termsAndConditions } = req.body;
+    const { 
+      title, 
+      location, 
+      description, 
+      originalPrice, 
+      price, 
+      bookingLink, 
+      schedules, 
+      inclusions, 
+      exclusions, 
+      termsAndConditions,
+      category,
+      duration,
+      calories,
+      benefits,
+      agenda
+    } = req.body;
 
     if (!title || !location || !price) {
       return res.status(400).json({
@@ -113,6 +129,16 @@ const createEvent = async (req, res) => {
       try { parsedTerms = typeof termsAndConditions === "string" ? JSON.parse(termsAndConditions) : termsAndConditions; } catch(e) {}
     }
 
+    let parsedBenefits = [];
+    if (benefits) {
+      try { parsedBenefits = typeof benefits === "string" ? JSON.parse(benefits) : benefits; } catch(e) {}
+    }
+
+    let parsedAgenda = [];
+    if (agenda) {
+      try { parsedAgenda = typeof agenda === "string" ? JSON.parse(agenda) : agenda; } catch(e) {}
+    }
+
     // Upload to Cloudinary
     const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
 
@@ -129,6 +155,11 @@ const createEvent = async (req, res) => {
       inclusions: parsedInclusions,
       exclusions: parsedExclusions,
       termsAndConditions: parsedTerms,
+      category: category || "",
+      duration: duration || "",
+      calories: calories || "",
+      benefits: parsedBenefits,
+      agenda: parsedAgenda,
     });
 
     res.status(201).json({
@@ -151,7 +182,23 @@ const createEvent = async (req, res) => {
 const updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, location, description, originalPrice, price, bookingLink, schedules, inclusions, exclusions, termsAndConditions } = req.body;
+    const { 
+      title, 
+      location, 
+      description, 
+      originalPrice, 
+      price, 
+      bookingLink, 
+      schedules, 
+      inclusions, 
+      exclusions, 
+      termsAndConditions,
+      category,
+      duration,
+      calories,
+      benefits,
+      agenda
+    } = req.body;
 
     let event = await Event.findById(id);
     if (!event) {
@@ -179,6 +226,9 @@ const updateEvent = async (req, res) => {
       originalPrice: originalPrice !== undefined ? (originalPrice ? Number(originalPrice) : null) : event.originalPrice,
       price: price !== undefined ? Number(price) : event.price,
       bookingLink: bookingLink !== undefined ? bookingLink : event.bookingLink,
+      category: category !== undefined ? category : event.category,
+      duration: duration !== undefined ? duration : event.duration,
+      calories: calories !== undefined ? calories : event.calories,
     };
 
     if (parsedSchedules !== undefined) {
@@ -195,6 +245,14 @@ const updateEvent = async (req, res) => {
     
     if (termsAndConditions !== undefined) {
       try { updateData.termsAndConditions = typeof termsAndConditions === "string" ? JSON.parse(termsAndConditions) : termsAndConditions; } catch(e) {}
+    }
+
+    if (benefits !== undefined) {
+      try { updateData.benefits = typeof benefits === "string" ? JSON.parse(benefits) : benefits; } catch(e) {}
+    }
+
+    if (agenda !== undefined) {
+      try { updateData.agenda = typeof agenda === "string" ? JSON.parse(agenda) : agenda; } catch(e) {}
     }
 
     // If new image is uploaded, replace existing image in Cloudinary

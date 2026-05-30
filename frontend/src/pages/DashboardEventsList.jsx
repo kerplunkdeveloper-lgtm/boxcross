@@ -15,6 +15,8 @@ import {
   Clock,
   AlignLeft,
   Info,
+  Sparkles,
+  ListTodo,
 } from "lucide-react";
 import {
   getEventsListAdmin,
@@ -153,6 +155,11 @@ const DashboardEventsList = () => {
   const [inclusions, setInclusions] = useState("");
   const [exclusions, setExclusions] = useState("");
   const [terms, setTerms] = useState("");
+  const [category, setCategory] = useState("");
+  const [duration, setDuration] = useState("");
+  const [calories, setCalories] = useState("");
+  const [benefits, setBenefits] = useState("");
+  const [agenda, setAgenda] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
 
@@ -205,6 +212,11 @@ const DashboardEventsList = () => {
     setInclusions("");
     setExclusions("");
     setTerms("");
+    setCategory("");
+    setDuration("");
+    setCalories("");
+    setBenefits("");
+    setAgenda([]);
     setSchedules([
       {
         date: "SAT 30 May",
@@ -237,6 +249,11 @@ const DashboardEventsList = () => {
     setInclusions(event.inclusions ? event.inclusions.join("\n") : "");
     setExclusions(event.exclusions ? event.exclusions.join("\n") : "");
     setTerms(event.termsAndConditions ? event.termsAndConditions.join("\n") : "");
+    setCategory(event.category || "");
+    setDuration(event.duration || "");
+    setCalories(event.calories || "");
+    setBenefits(event.benefits ? event.benefits.join("\n") : "");
+    setAgenda(event.agenda || []);
     setSchedules(event.schedules || []);
     setImageFile(null);
     setImagePreview(event.imageUrl);
@@ -275,6 +292,14 @@ const DashboardEventsList = () => {
       formData.append("inclusions", JSON.stringify(incArray));
       formData.append("exclusions", JSON.stringify(excArray));
       formData.append("termsAndConditions", JSON.stringify(termsArray));
+
+      formData.append("category", category.trim());
+      formData.append("duration", duration.trim());
+      formData.append("calories", calories.trim());
+
+      const benefitsArray = benefits.split("\n").map((s) => s.trim()).filter(Boolean);
+      formData.append("benefits", JSON.stringify(benefitsArray));
+      formData.append("agenda", JSON.stringify(agenda));
 
       if (originalPrice) {
         formData.append("originalPrice", originalPrice);
@@ -695,6 +720,188 @@ const DashboardEventsList = () => {
                         className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
                       />
                     </div>
+                  </div>
+
+                  {/* SECTION 1.5: DETAILED METRICS & BENEFITS */}
+                  <div className="space-y-4 pt-4 border-t border-[var(--db-card-border)]">
+                    <h4 className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] flex items-center gap-1.5">
+                      <Sparkles
+                        size={12}
+                        className="text-[var(--db-accent-highlight)]"
+                      />
+                      Event Metrics & Benefits
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {/* Category */}
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                          Category / Badge (e.g. Fitness)
+                        </label>
+                        <input
+                          type="text"
+                          value={category}
+                          onChange={(e) => setCategory(e.target.value)}
+                          placeholder="e.g. Fitness"
+                          className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
+                        />
+                      </div>
+
+                      {/* Duration */}
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                          Duration (e.g. 50 mins)
+                        </label>
+                        <input
+                          type="text"
+                          value={duration}
+                          onChange={(e) => setDuration(e.target.value)}
+                          placeholder="e.g. 50 mins"
+                          className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
+                        />
+                      </div>
+
+                      {/* Calories */}
+                      <div className="space-y-1">
+                        <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                          Calories (e.g. 400 calories)
+                        </label>
+                        <input
+                          type="text"
+                          value={calories}
+                          onChange={(e) => setCalories(e.target.value)}
+                          placeholder="e.g. 400 calories"
+                          className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Benefits */}
+                    <div className="space-y-1">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                        Benefits / Key Highlights (One per line)
+                      </label>
+                      <textarea
+                        value={benefits}
+                        onChange={(e) => setBenefits(e.target.value)}
+                        rows={3}
+                        placeholder="e.g. Double the Caloric Burn&#10;Maximum Core & Muscle Activation"
+                        className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* SECTION 1.6: TYPICAL SESSION AGENDA */}
+                  <div className="space-y-4 pt-4 border-t border-[var(--db-card-border)]">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] flex items-center gap-1.5">
+                        <ListTodo
+                          size={12}
+                          className="text-[var(--db-accent-highlight)]"
+                        />
+                        Typical Session Agenda (Timeline)
+                      </h4>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAgenda([
+                            ...agenda,
+                            { title: "", duration: "", color: "green" },
+                          ]);
+                        }}
+                        className="flex items-center gap-1 bg-[var(--db-accent-glow)] hover:bg-[var(--db-accent)] text-[var(--db-accent-text)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all cursor-pointer"
+                      >
+                        <Plus size={10} />
+                        Add Agenda Step
+                      </button>
+                    </div>
+
+                    {agenda.length === 0 ? (
+                      <div className="p-6 bg-white/[0.01] border border-[var(--db-card-border)] rounded-2xl text-center">
+                        <p className="text-xs text-[var(--db-text-muted)]">
+                          No agenda steps configured.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {agenda.map((step, idx) => (
+                          <div
+                            key={idx}
+                            className="flex flex-col sm:flex-row gap-3 items-end bg-[var(--db-input-bg)] p-4 rounded-2xl border border-[var(--db-input-border)]"
+                          >
+                            {/* Step Title */}
+                            <div className="flex-grow space-y-1 w-full text-left">
+                              <label className="block text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)]">
+                                Step Title
+                              </label>
+                              <input
+                                type="text"
+                                value={step.title}
+                                onChange={(e) => {
+                                  const updated = [...agenda];
+                                  updated[idx].title = e.target.value;
+                                  setAgenda(updated);
+                                }}
+                                placeholder="e.g. Warm up in Water"
+                                className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-3 py-2 text-xs text-[var(--db-text)]"
+                                required
+                              />
+                            </div>
+
+                            {/* Step Duration */}
+                            <div className="w-full sm:w-32 space-y-1 text-left">
+                              <label className="block text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)]">
+                                Duration
+                              </label>
+                              <input
+                                type="text"
+                                value={step.duration}
+                                onChange={(e) => {
+                                  const updated = [...agenda];
+                                  updated[idx].duration = e.target.value;
+                                  setAgenda(updated);
+                                }}
+                                placeholder="e.g. 5 mins"
+                                className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-3 py-2 text-xs text-[var(--db-text)]"
+                                required
+                              />
+                            </div>
+
+                            {/* Step Color Selection */}
+                            <div className="w-full sm:w-32 space-y-1 text-left">
+                              <label className="block text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)]">
+                                Bullet Color
+                              </label>
+                              <select
+                                value={step.color}
+                                onChange={(e) => {
+                                  const updated = [...agenda];
+                                  updated[idx].color = e.target.value;
+                                  setAgenda(updated);
+                                }}
+                                className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-3 py-2 text-xs text-[var(--db-text)]"
+                              >
+                                <option value="green">Green</option>
+                                <option value="orange">Orange</option>
+                                <option value="blue">Blue</option>
+                                <option value="red">Red/Pink</option>
+                                <option value="purple">Purple</option>
+                              </select>
+                            </div>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setAgenda(agenda.filter((_, sIdx) => sIdx !== idx));
+                              }}
+                              className="p-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl transition-all cursor-pointer h-[38px] flex items-center justify-center shrink-0 border border-red-500/5"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {/* SECTION 2: PRICING & LINKS */}

@@ -13,6 +13,9 @@ import {
   Ticket,
   CheckCircle,
   XCircle,
+  Dumbbell,
+  Timer,
+  Flame,
 } from "lucide-react";
 import {
   getEventsList,
@@ -340,11 +343,11 @@ const EventList = () => {
           </div>
           <h2
             className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white"
-            style={{ fontFamily: '"Brutal Font", sans-serif' }}
+            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
             Featured Events & Workshops
           </h2>
-          <p className="text-gray-400 text-xs md:text-sm mt-2 max-w-xl">
+          <p className="text-gray-400 text-xs md:text-sm mt-2 max-w-xl" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
             Click on any card to view detailed schedules, descriptions, and
             booking information for our upcoming fitness events.
           </p>
@@ -377,12 +380,12 @@ const EventList = () => {
 
             <h3
               className="text-2xl md:text-3xl font-black text-white uppercase tracking-wide mb-3 relative z-10"
-              style={{ fontFamily: '"Brutal Font", sans-serif' }}
+              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               No Events Available Right Now
             </h3>
 
-            <p className="text-gray-400 text-sm max-w-md mx-auto leading-relaxed relative z-10">
+            <p className="text-gray-400 text-sm max-w-md mx-auto leading-relaxed relative z-10" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
               We are currently engineering our next high-octane fitness events
               and workshops. Stay tuned and check back soon for our upcoming
               schedules!
@@ -400,68 +403,95 @@ const EventList = () => {
                 key={event._id}
                 variants={itemVariants}
                 onClick={() => setSelectedEvent(event)}
-                className="group bg-[#0c0c0c] border border-white/5 hover:border-[#defb02]/30 rounded-2xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-black/70"
+                className="group relative p-[1.5px] rounded-2xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-black/70 card-border-spin-container"
               >
-                {/* Media Image Wrap */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-black shrink-0">
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                  {/* Subtle Top-Bottom Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
-                </div>
-
-                {/* Card Content details */}
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    {/* Event Title */}
-                    <h3 className="text-lg md:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#defb02] transition-colors line-clamp-1 mb-2">
-                      {event.title}
-                    </h3>
-
-                    {/* Location venue */}
-                    <div className="flex items-start gap-1.5 text-gray-400 hover:text-gray-300 transition-colors mb-5">
-                      <MapPin
-                        size={14}
-                        className="text-gray-500 shrink-0 mt-0.5"
-                      />
-                      <span className="text-xs font-semibold leading-relaxed line-clamp-1">
-                        {event.location}
-                      </span>
-                    </div>
+                <div className="card-border-spin-inner">
+                  {/* Media Image Wrap */}
+                  <div className="relative aspect-[16/10] overflow-hidden bg-black shrink-0">
+                    <img
+                      src={event.imageUrl}
+                      alt={event.title}
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                    {/* Subtle Top-Bottom Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
                   </div>
 
-                  {/* Pricing and Action Panel */}
-                  <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
-                    <div className="flex flex-col">
-                      {event.originalPrice && (
-                        <span className="text-xs text-gray-500 line-through font-semibold leading-none mb-1">
-                          ₹{event.originalPrice}
+                  {/* Card Content details */}
+                  <div className="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                      {/* Event Title */}
+                      <h3 className="text-lg md:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#defb02] transition-colors line-clamp-1 mb-2" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                        {event.title}
+                      </h3>
+
+                      {/* Location venue */}
+                      <div className="flex items-start gap-1.5 text-gray-400 hover:text-gray-300 transition-colors mb-4">
+                        <MapPin
+                          size={14}
+                          className="text-gray-500 shrink-0 mt-0.5"
+                        />
+                        <span className="text-xs font-semibold leading-relaxed line-clamp-1" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                          {event.location}
                         </span>
+                      </div>
+
+                      {/* Mini Badges on Card */}
+                      {(event.category || event.duration || event.calories) && (
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {event.category && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-[#defb02]" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                              <Dumbbell size={9} strokeWidth={2.5} />
+                              {event.category}
+                            </span>
+                          )}
+                          {event.duration && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                              <Timer size={9} strokeWidth={2.5} />
+                              {event.duration}
+                            </span>
+                          )}
+                          {event.calories && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                              <Flame size={9} strokeWidth={2.5} />
+                              {event.calories}
+                            </span>
+                          )}
+                        </div>
                       )}
-                      <span
-                        className="text-base md:text-lg font-black text-[#ff9e00] leading-none"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                      >
-                        ₹{event.price}{" "}
-                        <span className="text-[10px] text-gray-400 font-normal ml-0.5 lowercase">
-                          onwards
-                        </span>
-                      </span>
                     </div>
 
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOpenBooking(event);
-                      }}
-                      className="inline-flex items-center gap-1.5 bg-white hover:bg-[#defb02] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
-                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                    >
-                      Book Now
-                    </button>
+                    {/* Pricing and Action Panel */}
+                    <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
+                      <div className="flex flex-col">
+                        {event.originalPrice && (
+                          <span className="text-xs text-gray-500 line-through font-semibold leading-none mb-1">
+                            ₹{event.originalPrice}
+                          </span>
+                        )}
+                        <span
+                          className="text-base md:text-lg font-black text-[#ff9e00] leading-none"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          ₹{event.price}{" "}
+                          <span className="text-[10px] text-gray-400 font-normal ml-0.5 lowercase">
+                            onwards
+                          </span>
+                        </span>
+                      </div>
+
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenBooking(event);
+                        }}
+                        className="inline-flex items-center gap-1.5 bg-[#defb02] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">Book Now</span>
+                        <ArrowRight size={12} strokeWidth={3} className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -473,7 +503,7 @@ const EventList = () => {
       {/* Dynamic Detail Modal */}
       <AnimatePresence>
         {selectedEvent && (
-          <div className="fixed inset-0 z-[9998] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[9998] flex items-center justify-center p-0 md:p-4 bg-black/85 backdrop-blur-sm">
             {/* Backdrop click to close */}
             <div
               className="absolute inset-0 z-0"
@@ -485,10 +515,10 @@ const EventList = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 15 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="bg-[#0a0a0a] border border-white/10 rounded-3xl w-full max-w-xl md:max-w-4xl overflow-hidden shadow-2xl relative z-10 max-h-[90vh] flex flex-col md:flex-row animate-in fade-in zoom-in duration-200"
+              className="bg-[#0a0a0a] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full max-h-screen md:h-auto md:max-h-[90vh] md:max-w-9xl overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row animate-in fade-in zoom-in duration-200"
             >
               {/* Left side: Image banner section */}
-              <div className="relative w-full md:w-1/2 aspect-[16/9] md:aspect-auto md:min-h-[450px] overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-white/5">
+              <div className="relative w-full md:w-1/2 aspect-[16/10] md:aspect-auto md:min-h-[450px] overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-white/5">
                 <img
                   src={selectedEvent.imageUrl}
                   alt={selectedEvent.title}
@@ -498,18 +528,18 @@ const EventList = () => {
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0a0a0a] via-black/10 to-transparent pointer-events-none" />
 
-                {/* Close Button on mobile */}
+                {/* Premium Back Arrow Button on mobile */}
                 <button
                   onClick={() => setSelectedEvent(null)}
-                  className="absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30 md:hidden"
-                  aria-label="Close details"
+                  className="absolute top-4 left-4 p-2.5 bg-black/60 hover:bg-black/90 hover:scale-105 text-white backdrop-blur-md border border-white/10 rounded-full transition-all cursor-pointer z-30 md:hidden flex items-center justify-center shadow-lg"
+                  aria-label="Go back"
                 >
-                  <X size={16} />
+                  <ChevronLeft size={20} strokeWidth={2.5} />
                 </button>
               </div>
 
               {/* Right side: Details + Footer wrapper */}
-              <div className="w-full md:w-1/2 flex flex-col overflow-hidden max-h-[50vh] md:max-h-[90vh] relative">
+              <div className="w-full md:w-1/2 flex flex-col overflow-hidden flex-grow md:max-h-[90vh] relative">
                 {/* Close Button on desktop */}
                 <button
                   onClick={() => setSelectedEvent(null)}
@@ -532,7 +562,7 @@ const EventList = () => {
                   {/* Title */}
                   <h3
                     className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight pr-8 text-left"
-                    style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     {selectedEvent.title}
                   </h3>
@@ -543,10 +573,40 @@ const EventList = () => {
                       size={14}
                       className="text-gray-500 shrink-0 mt-0.5"
                     />
-                    <span className="text-xs font-medium leading-relaxed">
+                    <span className="text-xs font-medium leading-relaxed" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
                       {selectedEvent.location}
                     </span>
                   </div>
+
+                  {/* Premium Badges */}
+                  {(selectedEvent.category || selectedEvent.duration || selectedEvent.calories) && (
+                    <div className="grid grid-cols-3 gap-2.5 sm:gap-4 my-2">
+                      {selectedEvent.category && (
+                        <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
+                          <Dumbbell size={16} className="text-[#defb02] mb-1.5 shrink-0" />
+                          <span className="text-[10px] font-black uppercase tracking-wider text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                            {selectedEvent.category}
+                          </span>
+                        </div>
+                      )}
+                      {selectedEvent.duration && (
+                        <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
+                          <Timer size={16} className="text-[#defb02] mb-1.5 shrink-0" />
+                          <span className="text-[10px] font-black uppercase tracking-wider text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                            {selectedEvent.duration}
+                          </span>
+                        </div>
+                      )}
+                      {selectedEvent.calories && (
+                        <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
+                          <Flame size={16} className="text-[#defb02] mb-1.5 shrink-0" />
+                          <span className="text-[10px] font-black uppercase tracking-wider text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                            {selectedEvent.calories}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Description Box */}
                   <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
@@ -556,11 +616,115 @@ const EventList = () => {
                     >
                       About The Event
                     </h4>
-                    <p className="text-xs sm:text-sm text-gray-300 font-medium leading-relaxed whitespace-pre-line">
+                    <p className="text-xs sm:text-sm text-gray-300 font-medium leading-relaxed whitespace-pre-line" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
                       {selectedEvent.description ||
                         "No additional description details available for this event yet. Stay tuned for special schedules."}
                     </p>
                   </div>
+
+                  {/* Benefits Section */}
+                  {selectedEvent.benefits?.length > 0 && (
+                    <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
+                      <h4
+                        className="text-[10px] font-black uppercase tracking-wider text-gray-500 mb-3"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        Benefits
+                      </h4>
+                      <ul className="space-y-2.5">
+                        {selectedEvent.benefits.map((benefit, idx) => (
+                          <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
+                            <CheckCircle size={15} className="text-green-500 shrink-0 mt-0.5" />
+                            <span style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>{benefit}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Session Agenda Section */}
+                  {selectedEvent.agenda?.length > 0 && (
+                    <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left space-y-4">
+                      <div className="flex items-baseline justify-between">
+                        <h4
+                          className="text-[10px] font-black uppercase tracking-wider text-gray-500"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          A typical {selectedEvent.title} Session
+                        </h4>
+                        {selectedEvent.duration && (
+                          <span className="text-xs text-gray-400 font-bold" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                            {selectedEvent.duration}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Segments progress bar */}
+                      <div className="flex h-2 w-full rounded-full overflow-hidden bg-white/5 gap-0.5">
+                        {selectedEvent.agenda.map((step, idx) => {
+                          let bgClass = "bg-green-500";
+                          if (step.color === "orange") bgClass = "bg-[#ff9e00]";
+                          if (step.color === "blue") bgClass = "bg-[#00d2ff]";
+                          if (step.color === "red") bgClass = "bg-[#ff4b72]";
+                          if (step.color === "purple") bgClass = "bg-[#9b51e0]";
+                          return (
+                            <div
+                              key={idx}
+                              className={`h-full flex-1 ${bgClass} opacity-90 transition-opacity hover:opacity-100`}
+                              title={`${step.title} (${step.duration})`}
+                            />
+                          );
+                        })}
+                      </div>
+
+                      {/* Agenda list mapping */}
+                      <div className="space-y-2">
+                        {selectedEvent.agenda.map((step, idx) => {
+                          let borderClass = "border-green-500/30 hover:border-green-500/50";
+                          let bulletBg = "bg-green-500";
+                          if (step.color === "orange") {
+                            borderClass = "border-[#ff9e00]/30 hover:border-[#ff9e00]/50";
+                            bulletBg = "bg-[#ff9e00]";
+                          }
+                          if (step.color === "blue") {
+                            borderClass = "border-[#00d2ff]/30 hover:border-[#00d2ff]/50";
+                            bulletBg = "bg-[#00d2ff]";
+                          }
+                          if (step.color === "red") {
+                            borderClass = "border-[#ff4b72]/30 hover:border-[#ff4b72]/50";
+                            bulletBg = "bg-[#ff4b72]";
+                          }
+                          if (step.color === "purple") {
+                            borderClass = "border-[#9b51e0]/30 hover:border-[#9b51e0]/50";
+                            bulletBg = "bg-[#9b51e0]";
+                          }
+
+                          return (
+                            <div
+                              key={idx}
+                              className={`flex items-center justify-between p-3 bg-white/[0.01] border ${borderClass} rounded-xl transition-all`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className={`w-2.5 h-2.5 rounded-full ${bulletBg} shrink-0`} />
+                                <span
+                                  className="text-xs sm:text-sm text-gray-200 font-semibold leading-none"
+                                  style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                                >
+                                  {step.title}
+                                </span>
+                              </div>
+                              <span
+                                className="text-xs font-bold text-gray-400 tracking-wider whitespace-nowrap"
+                                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                              >
+                                {step.duration}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Venue Inclusions / Exclusions / Terms */}
                   {(selectedEvent.inclusions?.length > 0 || selectedEvent.exclusions?.length > 0 || selectedEvent.termsAndConditions?.length > 0) && (
@@ -646,11 +810,11 @@ const EventList = () => {
 
                   <button
                     onClick={() => handleOpenBooking(selectedEvent)}
-                    className="inline-flex items-center justify-center gap-2 bg-[#defb02] hover:bg-[#defb02]/90 hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#defb02]/10 transition-all duration-300 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 bg-[#defb02] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#defb02]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    Book Now
-                    <ArrowRight size={12} strokeWidth={2.5} />
+                    <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">Book Now</span>
+                    <ArrowRight size={12} strokeWidth={3} className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2" />
                   </button>
                 </div>
               </div>
@@ -672,7 +836,7 @@ const EventList = () => {
               >
                 <ChevronLeft size={19} />
               </button>
-              <h3 className="font-bold text-sm md:text-2xl tracking-tight text-black font-bold  truncate max-w-[280px]">
+              <h3 className="font-bold text-sm md:text-2xl tracking-tight text-black font-bold  truncate max-w-[280px]" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                 {bookingEvent.title}
               </h3>
             </div>
@@ -681,7 +845,7 @@ const EventList = () => {
             <div className="w-full  max-w-5xl bg-[#000] md:bg-[#070707] md:border-x border-white/10 flex-grow md:flex-grow-0 p-4 space-y-6 flex flex-col">
               {/* Date Horizontal Selectors */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500">
+                <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                   Select Date
                 </label>
                 <div className="flex gap-3 overflow-x-auto pb-1.5 scroll-smooth custom-scrollbar">
@@ -775,7 +939,7 @@ const EventList = () => {
 
               {/* Time Slots Area */}
               <div className="space-y-3 flex-grow">
-                <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500">
+                <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                   Select Time Slot
                 </label>
 
@@ -869,11 +1033,11 @@ const EventList = () => {
                     <div className="text-center space-y-1">
                       <h4
                         className="text-lg font-black uppercase text-white tracking-wide"
-                        style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         How many seats?
                       </h4>
-                      <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">
+                      <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
                         Select count to book
                       </p>
                     </div>
@@ -945,12 +1109,12 @@ const EventList = () => {
             {/* session details */}
             <AnimatePresence>
               {showContactForm && (
-                <div className="fixed inset-0  z-50 flex md:items-center md:justify-center  p-2  bg-black/60 backdrop-blur-md">
+                <div className="fixed inset-0  z-50 flex md:items-center md:justify-center  p-0 md:p-2  bg-black/60 backdrop-blur-md">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-[#0c0c0c] border border-white/10 rounded-3xl w-full max-w-5xl overflow-hidden shadow-2xl relative"
+                    className="bg-[#0c0c0c] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full max-h-screen md:h-auto md:max-h-[90vh] md:max-w-5xl overflow-hidden shadow-2xl relative flex flex-col"
                   >
                     <div className="h-16 flex items-center justify-between bg-[#defb02] px-6 border-b border-white/5">
                       <div className="flex items-center gap-3 ">
@@ -977,7 +1141,7 @@ const EventList = () => {
                       </button>
                     </div>
 
-                    <div className="flex flex-col lg:flex-row max-h-[85vh] overflow-y-auto custom-scrollbar">
+                    <div className="flex flex-col lg:flex-row max-h-[calc(100vh-64px)] lg:max-h-[85vh] overflow-y-auto custom-scrollbar flex-grow">
                       {/* Left: Event Details Overview */}
                       <div className="w-full lg:w-5/12 p-2 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505]">
                         <div className="relative rounded-2xl overflow-hidden mb-6 group shadow-lg shadow-black/60">
@@ -994,7 +1158,7 @@ const EventList = () => {
                             <h4
                               className="text-xl md:text-2xl font-black uppercase text-white leading-tight drop-shadow-xl"
                               style={{
-                                fontFamily: '"Brutal Font", sans-serif',
+                                fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
                             >
                               {bookingEvent.title}
@@ -1009,10 +1173,10 @@ const EventList = () => {
                               <Calendar size={18} />
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                                 Booking Date
                               </p>
-                              <p className="text-sm font-bold text-gray-200">
+                              <p className="text-sm font-bold text-gray-200" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
                                 {bookingEvent.schedules[activeDateIndex].date}
                               </p>
                             </div>
@@ -1037,10 +1201,10 @@ const EventList = () => {
                               </svg>
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                                 Time Slot
                               </p>
-                              <p className="text-sm font-bold text-gray-200">
+                              <p className="text-sm font-bold text-gray-200" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
                                 {selectedSlot.time}
                               </p>
                             </div>
@@ -1052,10 +1216,10 @@ const EventList = () => {
                               <MapPin size={18} />
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                                 Location
                               </p>
-                              <p className="text-xs md:text-sm font-bold text-gray-200 leading-snug">
+                              <p className="text-xs md:text-sm font-bold text-gray-200 leading-snug" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
                                 {bookingEvent.location}
                               </p>
                             </div>
@@ -1067,10 +1231,10 @@ const EventList = () => {
                               <Ticket size={18} />
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                                 Reserved Seats
                               </p>
-                              <p className="text-sm font-black text-[#defb02]">
+                              <p className="text-sm font-black text-[#defb02]" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                                 {seatsCount} Seat{seatsCount > 1 ? "s" : ""}
                               </p>
                             </div>
@@ -1089,12 +1253,12 @@ const EventList = () => {
                               <h4
                                 className="text-lg font-black uppercase text-white tracking-wide mb-1"
                                 style={{
-                                  fontFamily: '"Brutal Font", sans-serif',
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
                                 Primary Contact
                               </h4>
-                              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4">
+                              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
                                 Enter attendee details for confirmation
                               </p>
                             </div>
@@ -1205,7 +1369,7 @@ const EventList = () => {
                                 <h4
                                   className="text-lg font-black uppercase text-white tracking-wide"
                                   style={{
-                                    fontFamily: '"Brutal Font", sans-serif',
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
                                   }}
                                 >
                                   Review & Pay
@@ -1422,11 +1586,11 @@ const EventList = () => {
 
                       <h4
                         className="text-xl md:text-2xl font-black uppercase text-white mb-2"
-                        style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         Discard Booking?
                       </h4>
-                      <p className="text-xs md:text-sm text-gray-400 mb-8 leading-relaxed max-w-[280px] md:max-w-sm">
+                      <p className="text-xs md:text-sm text-gray-400 mb-8 leading-relaxed max-w-[280px] md:max-w-sm" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
                         Are you sure you want to discard your selected seats?
                         Your session details will be lost. 🛑
                       </p>

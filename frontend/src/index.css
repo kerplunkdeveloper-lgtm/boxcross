@@ -213,3 +213,76 @@
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
 }
+
+/* Event Cards Custom Spinning Border Glow Animation */
+@keyframes border-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.card-border-spin-container {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.card-border-spin-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent,
+    transparent,
+    #defb02,
+    transparent,
+    transparent
+  );
+  animation: border-spin 6s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.card-border-spin-inner {
+  position: relative;
+  z-index: 1;
+  background: #0c0c0c;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Book Now Button Glossy Sliding Sheen Animation */
+.book-now-btn {
+  background: #defb02;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-now-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  transition: transform 0.5s ease;
+  transform: skewX(-20deg);
+  z-index: 5;
+}
+
+.book-now-btn:hover::before {
+  transform: translate(250%, 0) skewX(-20deg);
+}

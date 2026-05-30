@@ -50,6 +50,38 @@ const eventSchema = new mongoose.Schema(
       default: "#",
       trim: true,
     },
+    category: {
+      type: String,
+      default: "",
+    },
+    duration: {
+      type: String,
+      default: "",
+    },
+    calories: {
+      type: String,
+      default: "",
+    },
+    benefits: {
+      type: [String],
+      default: [],
+    },
+    agenda: [
+      {
+        title: {
+          type: String,
+          required: [true, "Agenda title is required"],
+        },
+        duration: {
+          type: String,
+          required: [true, "Agenda duration is required"],
+        },
+        color: {
+          type: String,
+          default: "green",
+        },
+      },
+    ],
     schedules: [
       {
         date: {
