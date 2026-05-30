@@ -65,12 +65,7 @@ const Navbar = () => {
     },
   ];
 
-  const communityDropdown = [
-    {
-      name: "EVENTS",
-      path: "/events",
-    },
-  ];
+
 
   const membershipDropdown = [
     {
@@ -262,54 +257,23 @@ const Navbar = () => {
                   COACHING
                 </a>
 
-                {/* COMMUNITY */}
+                {/* EVENTS */}
 
-                <div
-                  className="relative"
-                  onMouseEnter={() => handleDropdownEnter("community")}
-                  onMouseLeave={handleDropdownLeave}
+                <NavLink
+                  to="/events"
+                  className={({ isActive }) =>
+                    `px-3 py-2 uppercase tracking-wider transition-all ${
+                      isActive ? "text-white" : "text-gray-400 hover:text-white"
+                    }`
+                  }
+                  style={{
+                    fontFamily: '"BrutalTypeBold", sans-serif',
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
                 >
-                  <button
-                    className="px-3 py-2  text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
-                    style={{
-                      fontFamily: '"BrutalTypeBold", sans-serif',
-                      fontWeight: 600,
-                      fontSize: "14px",
-                    }}
-                  >
-                    COMMUNITY
-                    <ChevronDown
-                      size={14}
-                      className={`transition-transform duration-300 ${openDropdown === "community" ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  {openDropdown === "community" && (
-                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl overflow-hidden z-[100]">
-                      {communityDropdown.map((item, idx) => (
-                        <a
-                          key={item.name}
-                          href={item.path}
-                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
-                            idx !== communityDropdown.length - 1
-                              ? "border-b border-gray-200"
-                              : ""
-                          }`}
-                        >
-                          {/* Hover Line */}
-                          <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
-                            <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
-                          </span>
-
-                          {/* Text */}
-                          <span className="transition-all duration-300 group-hover:translate-x-1">
-                            {item.name}
-                          </span>
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  EVENTS
+                </NavLink>
 
                 {/* MEMBERSHIP */}
 
@@ -533,37 +497,20 @@ const Navbar = () => {
             </a>
           </div>
 
-          {/* COMMUNITY */}
+          {/* EVENTS */}
 
           <div className="border-b border-[#1f1f1f]">
-            <button
-              onClick={() => toggleMobileDropdown("community")}
-              className="w-full flex justify-between items-center py-2 text-white text-[14px] font-extrabold transition-colors"
+            <NavLink
+              to="/events"
+              onClick={closeOffcanvas}
+              className={({ isActive }) =>
+                `block py-2 text-[14px] font-extrabold transition-colors ${
+                  isActive ? "text-[#defb02]" : "text-white hover:text-[#defb02]"
+                }`
+              }
             >
-              COMMUNITY
-              <span className="bg-[#1a1a1a] text-gray-400 w-8 h-8 flex items-center justify-center text-xl font-light rounded-sm">
-                {openDropdown === "community" ? "-" : "+"}
-              </span>
-            </button>
-
-            <div
-              className={`overflow-hidden transition-all duration-300 ${
-                openDropdown === "community" ? "max-h-60 pb-4" : "max-h-0"
-              }`}
-            >
-              <div className="flex flex-col gap-3 pl-2">
-                {communityDropdown.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.path}
-                    onClick={closeOffcanvas}
-                    className="text-sm text-gray-400 hover:text-white font-medium tracking-wider"
-                  >
-                    {item.name}
-                  </a>
-                ))}
-              </div>
-            </div>
+              EVENTS
+            </NavLink>
           </div>
 
           {/* MEMBERSHIP */}
@@ -777,17 +724,23 @@ const Navbar = () => {
                     605008
                   </p>
 
-                  <h1 className="pt-3">
-                    <Link to="/login"
-                    className="text-[#defb02] hover:text-white transition-colors underline"
+                  <h1 className="pt-4">
+                    <Link
+                  to="/dashboard"
+                  className="lg:flex relative overflow-hidden px-6 py-4 bg-[#defb02] text-black rounded-xl text-xs tracking-wider uppercase group"
+                >
+                  <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
+                  <span
+                    className="relative z-10"
                     style={{
-                      fontFamily: '"Brutal Font Light", sans-serif',
-                      fontWeight: 600,
-                      fontSize: "20px",
+                      fontFamily: '"BrutalTypeBold", sans-serif',
+                      fontWeight: 700,
+                      fontSize: "14px",
                     }}
-                    >
-                      Admin Dashboard
-                    </Link>
+                  >
+                    Admin Dashboard
+                  </span>
+                </Link>
                   </h1>
                 </div>
               </div>
