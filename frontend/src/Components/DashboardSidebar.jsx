@@ -87,24 +87,24 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
-      <div>
-        {/* Header with logo */}
-        <div className="h-20 flex items-center justify-between px-6 border-b border-[var(--db-sidebar-border)]">
-          <img
-            src={theme === "light" ? logo2 : logo}
-            alt="Box & Cross"
-            className="w-[150px] object-contain"
-          />
-          <button
-            className="lg:hidden text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <X size={20} />
-          </button>
-        </div>
+      {/* Header with logo */}
+      <div className="h-20 flex items-center justify-between px-6 border-b border-[var(--db-sidebar-border)] flex-shrink-0">
+        <img
+          src={theme === "light" ? logo2 : logo}
+          alt="Box & Cross"
+          className="w-[150px] object-contain"
+        />
+        <button
+          className="lg:hidden text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
+          onClick={() => setSidebarOpen(false)}
+        >
+          <X size={20} />
+        </button>
+      </div>
 
-        {/* Menu Nav Links */}
-        <nav className="mt-8 px-4 space-y-2">
+      {/* Menu Nav Links (Scrollable) */}
+      <div className="flex-grow overflow-y-auto custom-scrollbar py-6">
+        <nav className="px-4 space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -131,7 +131,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       </div>
 
       {/* Footer logout */}
-      <div className="p-4 border-t border-[var(--db-sidebar-border)]">
+      <div className="p-4 border-t border-[var(--db-sidebar-border)] flex-shrink-0">
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
