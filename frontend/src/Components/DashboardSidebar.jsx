@@ -12,6 +12,8 @@ import {
   Calendar,
   User,
   Users,
+  FileText,
+  MessageSquare,
 } from "lucide-react";
 import logo from "../assets/images/logo.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -51,9 +53,19 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       icon: DollarSign,
     });
     menuItems.push({
-      name: "User information",
-      path: "/dashboard/leads",
+      name: "Home/trialform ",
+      path: "/dashboard/homec1",
+      icon: FileText,
+    });
+    menuItems.push({
+      name: "Consult us form ",
+      path: "/dashboard/homec2",
       icon: Users,
+    });
+    menuItems.push({
+      name: "Contact Form",
+      path: "/dashboard/homec3",
+      icon: MessageSquare,
     });
   }
 

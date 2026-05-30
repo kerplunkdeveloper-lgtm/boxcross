@@ -9,6 +9,20 @@
 }
 
 @font-face {
+  font-family: 'Brutal Font';
+  src: url('./assets/fonts/BrutalType-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Brutal Font';
+  src: url('./assets/fonts/BrutalType-ExtraLight.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Brutal Font Bold';
   src: url('./assets/fonts/BrutalType-Bold.ttf') format('truetype');
   font-weight: 700;
@@ -116,12 +130,12 @@
   --db-accent-glow: rgba(37, 99, 235, 0.12);
 }
 
-/* Force Poppins font on all dashboard views */
+/* Force Brutal Font on all dashboard views */
 .dashboard-dark, 
 .dashboard-light, 
 .dashboard-dark *, 
 .dashboard-light * {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'Brutal Font', sans-serif !important;
 }
 
 /* Hardware-accelerated, high-performance smooth theme transitions (150ms duration) */

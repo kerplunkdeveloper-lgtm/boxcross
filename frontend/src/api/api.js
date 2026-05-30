@@ -90,4 +90,14 @@ export const updateProfile = (formData) => API.put("/auth/profile", formData, {
 export const createLead = (data) => API.post("/leads", data);
 export const getLeadsAdmin = () => API.get("/leads");
 
+// ──────────────── HOMEC1, HOMEC2, HOMEC3 API ────────────────
+export const getHomec1 = () => API.get("/homec1");
+export const deleteHomec1 = (id) => API.delete(`/homec1/${id}`);
+
+export const getHomec2 = () => API.get("/homec2");
+export const deleteHomec2 = (id) => API.delete(`/homec2/${id}`);
+
+export const getHomec3 = () => API.get("/homec3");
+export const deleteHomec3 = (id) => API.delete(`/homec3/${id}`);
+
 export default API;

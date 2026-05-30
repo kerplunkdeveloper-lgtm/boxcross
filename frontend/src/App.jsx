@@ -26,10 +26,12 @@ const DashboardEventPayments = lazy(
 );
 const DashboardProfile = lazy(() => import("./pages/DashboardProfile"));
 const DashboardCalendar = lazy(() => import("./pages/DashboardCalendar"));
-const DashboardLeads = lazy(() => import("./pages/DashboardLeads"));
 const Eventpage = lazy(() => import("./pages/Events/Eventpage"));
+const DashboardHomec1 = lazy(() => import("./pages/DashboardHomec1"));
+const DashboardHomec2 = lazy(() => import("./pages/DashboardHomec2"));
+const DashboardHomec3 = lazy(() => import("./pages/DashboardHomec3"));
 
-import LeadModal from "./Components/LeadModal";
+// import LeadModal from "./Components/LeadModal";
 
 // Layout with Navbar and Footer
 const Layout = () => {
@@ -37,7 +39,7 @@ const Layout = () => {
     <div className="min-h-screen flex flex-col bg-black text-white">
       <Navbar />
       <ScrollToTop />
-      <LeadModal />
+      {/* <LeadModal /> */}
       <main className="flex-grow">
         <Outlet />
       </main>
@@ -115,7 +117,9 @@ const App = () => {
                     element={<DashboardEventPayments />}
                   />
                   <Route path="profile" element={<DashboardProfile />} />
-                  <Route path="leads" element={<DashboardLeads />} />
+                  <Route path="homec1" element={<DashboardHomec1 />} />
+                  <Route path="homec2" element={<DashboardHomec2 />} />
+                  <Route path="homec3" element={<DashboardHomec3 />} />
                   <Route path="settings" element={<DashboardSettings />} />
                   <Route path="calendar" element={<DashboardCalendar />} />
                 </Route>
