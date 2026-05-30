@@ -20,14 +20,7 @@ connectDB();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL
-      ? process.env.FRONTEND_URL.split(",")
-      : ["http://localhost:5173", "https://boxandcross.com", "http://127.0.0.1:5500"],
-    credentials: true,
-  })
-);
+app.use(cors());
 
 app.use(cookieParser());
 app.use(express.json());
