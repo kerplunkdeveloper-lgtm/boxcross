@@ -33,7 +33,7 @@ const programs = [
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-[#defb02]"
+        className="text-[#e5ff00]"
       >
         <path d="M16 20h-4c-2.8 0-5-2.2-5-5v-1a5 5 0 0 1 5-5h2a2 2 0 0 1 2 2v2c0 1.1.9 2 2 2h1a2 2 0 0 0 2-2V9a5 5 0 0 0-5-5h-4a5 5 0 0 0-5 5v3c0 2.8 2.2 5 5 5h3"></path>
         <path d="M9 13V9"></path>
@@ -73,7 +73,7 @@ const programs = [
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-[#defb02]"
+        className="text-[#e5ff00]"
       >
         <path d="m6.5 6.5 11 11"></path>
         <path d="m21 21-1-1"></path>
@@ -103,7 +103,7 @@ const programs = [
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-[#defb02]"
+        className="text-[#e5ff00]"
       >
         <path d="M14 4a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
         <path d="m14 14-2.5-3.5L9 12 7.5 9" />
@@ -589,7 +589,7 @@ const Membership = () => {
                 fontWeight: "700",
               }}
             >
-              CHOOSE YOUR <br /> <span className="text-[#defb02]">PROGRAM</span>
+              CHOOSE YOUR <br /> <span className="text-[#e5ff00]">PROGRAM</span>
             </h2>
           </motion.div>
 
@@ -605,7 +605,7 @@ const Membership = () => {
                 onClick={() => setActiveTab(prog.id)}
                 className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
                   activeTab === prog.id
-                    ? "border-[#defb02] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
+                    ? "border-[#e5ff00] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
                     : "border-gray-800 hover:border-gray-600"
                 }`}
               >
@@ -623,52 +623,62 @@ const Membership = () => {
                 </div>
 
                 {prog.popular && (
-                  <div className="absolute top-0 right-0 bg-[#defb02] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
+                  <div className="absolute top-0 right-0 bg-[#e5ff00] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
                     MOST POPULAR
                   </div>
                 )}
 
                 <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
                   <div>
-                    <div className="w-12 h-12 rounded-full border border-[#defb02]/50 flex items-center justify-center mb-5 bg-black/40 backdrop-blur-sm">
+                    <div className="w-12 h-12 rounded-full border border-[#e5ff00]/50 flex items-center justify-center mb-5 bg-black/40 backdrop-blur-sm">
                       {prog.icon}
                     </div>
 
-                    <h3 className="text-xl md:text-2xl font-black mb-1 tracking-wide uppercase"
-                    style={{
-                      fontFamily: '"BrutalTypeBold", sans-serif',
-                      fontWeight: "700",
-                    }}
+                    <h3
+                      className="text-xl md:text-2xl font-black mb-1 tracking-wide uppercase"
+                      style={{
+                        fontFamily: '"BrutalTypeBold", sans-serif',
+                        fontWeight: "700",
+                      }}
                     >
                       {prog.title}
                     </h3>
-                    <p className="text-[#defb02] text-[11px] tracking-widest uppercase mb-3"
-                    style={{
-                      fontFamily: '"BrutalTypeBold", sans-serif',
-                      fontWeight: "600",
-                    }}>
+                    <p
+                      className="text-[#e5ff00] text-[11px] tracking-widest uppercase mb-3"
+                      style={{
+                        fontFamily: '"BrutalTypeBold", sans-serif',
+                        fontWeight: "600",
+                      }}
+                    >
                       {prog.subtitle}
                     </p>
-                    <p className="text-gray-300 text-xs md:text-sm mb-4 leading-relaxed max-w-[90%]"
-                    style={{
-                      fontFamily: '"Brutal Font Light", sans-serif',
-                      fontWeight: "400",
-                    }}>
+                    <p
+                      className="text-gray-300 text-xs md:text-sm mb-4 leading-relaxed max-w-[90%]"
+                      style={{
+                        fontFamily: '"Brutal Font Light", sans-serif',
+                        fontWeight: "400",
+                      }}
+                    >
                       {prog.desc}
                     </p>
                   </div>
 
                   <div className="mt-auto pt-2 w-full">
-                    <p className="text-[10px] text-gray-300 uppercase tracking-widest font-bold mb-3 flex items-center"
-                    style={{
-                      fontFamily: '"BrutalTypeBold", sans-serif',
-                      fontWeight: "600",
-                    }}> 
-                      FROM{" "}
-                      <span className="text-lg text-[#defb02] mx-1.5"  style={{
+                    <p
+                      className="text-[10px] text-gray-300 uppercase tracking-widest font-bold mb-3 flex items-center"
+                      style={{
                         fontFamily: '"BrutalTypeBold", sans-serif',
                         fontWeight: "600",
-                      }}>
+                      }}
+                    >
+                      FROM{" "}
+                      <span
+                        className="text-lg text-[#e5ff00] mx-1.5"
+                        style={{
+                          fontFamily: '"BrutalTypeBold", sans-serif',
+                          fontWeight: "600",
+                        }}
+                      >
                         ₹{prog.price}
                       </span>{" "}
                       / MONTH
@@ -678,19 +688,21 @@ const Membership = () => {
                       onClick={(e) => handleScrollToPlans(e, prog.id)}
                       className={`group/btn w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
                         activeTab === prog.id
-                          ? "bg-[#defb02] border-[#defb02] text-black"
-                          : "border-gray-500 text-white hover:border-[#defb02] bg-transparent"
+                          ? "bg-[#e5ff00] border-[#e5ff00] text-black"
+                          : "border-gray-500 text-white hover:border-[#e5ff00] bg-transparent"
                       }`}
-                       style={{
+                      style={{
                         fontFamily: '"BrutalTypeBold", sans-serif',
                         fontWeight: "700",
                       }}
                     >
-                      <span className="flex items-center gap-2"
-                       style={{
-                        fontFamily: '"BrutalTypeBold", sans-serif',
-                        fontWeight: "700",
-                      }}>
+                      <span
+                        className="flex items-center gap-2"
+                        style={{
+                          fontFamily: '"BrutalTypeBold", sans-serif',
+                          fontWeight: "700",
+                        }}
+                      >
                         VIEW PLANS{" "}
                         <ArrowRight
                           size={14}

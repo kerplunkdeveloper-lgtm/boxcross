@@ -78,19 +78,20 @@ const Auth = () => {
         <div className="hidden md:flex flex-col items-start text-left select-none max-w-lg mb-12">
           {/* ALL ABOUT Block */}
           <div className="bg-black/30 text-white   backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm    inline-block mb-3.5 shadow-xl shadow-black/10">
-            <h1 className="text-2xl"
-            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+            <h1
+              className="text-2xl"
+              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               All About
             </h1>
-             
           </div>
 
           {/* HEALTH & FITNESS Block */}
           <div className="bg-black/30 text-white  backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm   inline-block shadow-xl shadow-black/10">
-           <h1 className="text-2xl"
-             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-           >
+            <h1
+              className="text-2xl"
+              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+            >
               Health & Fitness
             </h1>
           </div>
@@ -99,7 +100,7 @@ const Auth = () => {
         {/* Right Side: Floating Glassmorphic Login Card with Spin Border Animation */}
         <div className="w-full max-w-[460px] relative p-[1px] overflow-hidden rounded-[28px] bg-white/[0.05] shadow-2xl">
           {/* Spin border animation */}
-          <div className="absolute inset-[-100px] bg-[conic-gradient(from_0deg,transparent_40%,#defb02_50%,transparent_60%)] animate-[spin_5s_linear_infinite] z-0 pointer-events-none" />
+          <div className="absolute inset-[-100px] bg-[conic-gradient(from_0deg,transparent_40%,#e5ff00_50%,transparent_60%)] animate-[spin_5s_linear_infinite] z-0 pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -136,7 +137,7 @@ const Auth = () => {
                   placeholder="admin@boxcross.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md px-6 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
+                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md px-6 text-sm outline-none focus:ring-2 focus:ring-[#e5ff00]/30 transition-all shadow-inner"
                   required
                 />
               </div>
@@ -148,7 +149,7 @@ const Auth = () => {
                   placeholder="Enter Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md pl-6 pr-12 text-sm outline-none focus:ring-2 focus:ring-[#defb02]/30 transition-all shadow-inner"
+                  className="w-full h-14 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md pl-6 pr-12 text-sm outline-none focus:ring-2 focus:ring-[#e5ff00]/30 transition-all shadow-inner"
                   required
                 />
                 <button
@@ -175,7 +176,7 @@ const Auth = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group relative overflow-hidden w-full sm:w-auto px-12 py-3.5 bg-[#defb02] text-black font-extrabold uppercase tracking-widest text-xs rounded-md transition-all duration-500 cursor-pointer shadow-lg disabled:opacity-50"
+                  className="group relative overflow-hidden w-full sm:w-auto px-12 py-3.5 bg-[#e5ff00] text-black font-extrabold uppercase tracking-widest text-xs rounded-md transition-all duration-500 cursor-pointer shadow-lg disabled:opacity-50"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>

@@ -51,7 +51,7 @@ const Layout = () => {
 // Sleek fallback loading indicator for code-splitted chunks
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[60vh] bg-black">
-    <div className="w-8 h-8 border-2 border-[var(--db-accent-highlight, #defb02)]/20 border-t-[var(--db-accent-highlight, #defb02)] rounded-full animate-spin"></div>
+    <div className="w-8 h-8 border-2 border-[var(--db-accent-highlight, #e5ff00)]/20 border-t-[var(--db-accent-highlight, #e5ff00)] rounded-full animate-spin"></div>
   </div>
 );
 
@@ -75,7 +75,7 @@ const App = () => {
               },
               success: {
                 iconTheme: {
-                  primary: "#defb02",
+                  primary: "#e5ff00",
                   secondary: "#000",
                 },
               },

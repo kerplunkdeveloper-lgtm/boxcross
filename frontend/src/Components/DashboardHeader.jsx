@@ -1,5 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, User, Sun, Moon, Bell, CheckCheck, CreditCard, Calendar, BookOpen, LogOut, Settings, ChevronDown, Trash2, X } from "lucide-react";
+import {
+  Menu,
+  User,
+  Sun,
+  Moon,
+  Bell,
+  CheckCheck,
+  CreditCard,
+  Calendar,
+  BookOpen,
+  LogOut,
+  Settings,
+  ChevronDown,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
@@ -63,7 +78,10 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
   // Close profile dropdown on outside click
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (profileDropdownRef.current && !profileDropdownRef.current.contains(e.target)) {
+      if (
+        profileDropdownRef.current &&
+        !profileDropdownRef.current.contains(e.target)
+      ) {
         setShowProfileDropdown(false);
       }
     };
@@ -81,7 +99,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
       toast.error(res.message || "Failed to log out.");
     }
   };
-  
+
   // Load read notification IDs from localStorage
   const [readIds, setReadIds] = useState(() => {
     try {
@@ -123,14 +141,14 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
       try {
         const res = await getBookings();
         if (res.data?.success && Array.isArray(res.data.data)) {
-          res.data.data.forEach(item => {
+          res.data.data.forEach((item) => {
             aggregated.push({
               id: `booking-${item._id}`,
               title: "New Enquiry Booking",
               message: `${item.name} scheduled a tour at ${item.time}`,
               time: new Date(item.createdAt || Date.now()),
               type: "booking",
-              link: "/dashboard/bookings"
+              link: "/dashboard/bookings",
             });
           });
         }
@@ -142,33 +160,36 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
       try {
         const res = await getPayments();
         if (res.data?.success && Array.isArray(res.data.data)) {
-          res.data.data.forEach(item => {
+          res.data.data.forEach((item) => {
             aggregated.push({
               id: `payment-${item._id}`,
               title: "Membership Payment",
               message: `Payment of ₹${item.amount || item.planPrice || 0} received from user (Status: ${item.status})`,
               time: new Date(item.createdAt || Date.now()),
               type: "payment",
-              link: "/dashboard/payments"
+              link: "/dashboard/payments",
             });
           });
         }
       } catch (e) {
-        console.error("Failed to fetch membership payments for notifications", e);
+        console.error(
+          "Failed to fetch membership payments for notifications",
+          e,
+        );
       }
 
       // 3. Fetch Event Bookings
       try {
         const res = await getEventBookings();
         if (res.data?.success && Array.isArray(res.data.data)) {
-          res.data.data.forEach(item => {
+          res.data.data.forEach((item) => {
             aggregated.push({
               id: `event-${item._id}`,
               title: "Event Booking",
-              message: `${item.name} registered for ${item.eventName || 'event'} (${item.seats || 1} seats)`,
+              message: `${item.name} registered for ${item.eventName || "event"} (${item.seats || 1} seats)`,
               time: new Date(item.createdAt || Date.now()),
               type: "event",
-              link: "/dashboard/event-payments"
+              link: "/dashboard/event-payments",
             });
           });
         }
@@ -192,17 +213,22 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         currentRead = stored ? JSON.parse(stored) : [];
       } catch (e) {}
 
-      const activeFetched = aggregated.filter(n => !currentDeleted.includes(n.id));
+      const activeFetched = aggregated.filter(
+        (n) => !currentDeleted.includes(n.id),
+      );
 
       if (prevIdsRef.current.length > 0) {
-        const newItems = activeFetched.filter(n => !prevIdsRef.current.includes(n.id) && !currentRead.includes(n.id));
+        const newItems = activeFetched.filter(
+          (n) =>
+            !prevIdsRef.current.includes(n.id) && !currentRead.includes(n.id),
+        );
         if (newItems.length > 0) {
           playNotificationSound();
           setLatestNotification(newItems[0]);
         }
       }
 
-      prevIdsRef.current = activeFetched.map(n => n.id);
+      prevIdsRef.current = activeFetched.map((n) => n.id);
       setNotifications(activeFetched.slice(0, 15));
     } catch (err) {
       console.error("Notification aggregation error", err);
@@ -228,15 +254,20 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
   }, []);
 
   // Calculate unread count
-  const unreadNotifications = notifications.filter(n => !readIds.includes(n.id) && !deletedIds.includes(n.id));
+  const unreadNotifications = notifications.filter(
+    (n) => !readIds.includes(n.id) && !deletedIds.includes(n.id),
+  );
   const unreadCount = unreadNotifications.length;
 
   // Mark all notifications as read
   const handleMarkAllRead = () => {
-    const allIds = notifications.map(n => n.id);
+    const allIds = notifications.map((n) => n.id);
     const updatedReadIds = Array.from(new Set([...readIds, ...allIds]));
     setReadIds(updatedReadIds);
-    localStorage.setItem("boxcross_read_notifications", JSON.stringify(updatedReadIds));
+    localStorage.setItem(
+      "boxcross_read_notifications",
+      JSON.stringify(updatedReadIds),
+    );
   };
 
   // Delete notification permanently
@@ -244,8 +275,11 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     e.stopPropagation();
     const updated = [...deletedIds, id];
     setDeletedIds(updated);
-    localStorage.setItem("boxcross_deleted_notifications", JSON.stringify(updated));
-    setNotifications(prev => prev.filter(item => item.id !== id));
+    localStorage.setItem(
+      "boxcross_deleted_notifications",
+      JSON.stringify(updated),
+    );
+    setNotifications((prev) => prev.filter((item) => item.id !== id));
   };
 
   // Mark individual notification as read and navigate
@@ -253,7 +287,10 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     if (!readIds.includes(item.id)) {
       const updatedReadIds = [...readIds, item.id];
       setReadIds(updatedReadIds);
-      localStorage.setItem("boxcross_read_notifications", JSON.stringify(updatedReadIds));
+      localStorage.setItem(
+        "boxcross_read_notifications",
+        JSON.stringify(updatedReadIds),
+      );
     }
     setShowDropdown(false);
     navigate(item.link);
@@ -279,7 +316,9 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
       case "payment":
         return <CreditCard size={14} className="text-emerald-400" />;
       case "event":
-        return <Calendar size={14} className="text-[var(--db-accent-highlight)]" />;
+        return (
+          <Calendar size={14} className="text-[var(--db-accent-highlight)]" />
+        );
       default:
         return <Bell size={14} className="text-gray-400" />;
     }
@@ -301,7 +340,6 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
 
       {/* Action panel & User info */}
       <div className="flex items-center gap-5">
-        
         {/* Real-time Notifications Bell Icon with Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button
@@ -322,11 +360,14 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
             <div className="absolute top-12 right-0 w-80 sm:w-96 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl p-4 z-50 text-left transition-colors">
               <div className="flex items-center justify-between pb-3 border-b border-[var(--db-card-border)]">
                 <span className="text-xs font-black uppercase tracking-wider text-[var(--db-text-title)] flex items-center gap-1.5">
-                  <Bell size={12} className="text-[var(--db-accent-highlight)]" />
+                  <Bell
+                    size={12}
+                    className="text-[var(--db-accent-highlight)]"
+                  />
                   Notifications Center
                 </span>
                 {unreadCount > 0 && (
-                  <button 
+                  <button
                     onClick={handleMarkAllRead}
                     className="flex items-center gap-1 text-[10px] font-extrabold uppercase text-[var(--db-accent-highlight)] hover:underline cursor-pointer"
                   >
@@ -346,7 +387,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                   notifications.map((item) => {
                     const isUnread = !readIds.includes(item.id);
                     return (
-                      <div 
+                      <div
                         key={item.id}
                         onClick={() => handleNotificationClick(item)}
                         className={`py-2.5 flex items-start gap-3 cursor-pointer hover:bg-[var(--db-sidebar-link-hover)] px-2 rounded-xl transition-colors group relative ${
@@ -361,10 +402,16 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                         {/* Middle textual content info */}
                         <div className="flex-grow min-w-0 space-y-0.5 text-left">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text)] truncate">{item.title}</span>
-                            <span className="text-[8px] text-[var(--db-text-muted)] font-extrabold uppercase shrink-0">{formatRelativeTime(item.time)}</span>
+                            <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text)] truncate">
+                              {item.title}
+                            </span>
+                            <span className="text-[8px] text-[var(--db-text-muted)] font-extrabold uppercase shrink-0">
+                              {formatRelativeTime(item.time)}
+                            </span>
                           </div>
-                          <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2 pr-6">{item.message}</p>
+                          <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2 pr-6">
+                            {item.message}
+                          </p>
                         </div>
 
                         {/* Right side actions and indicators */}
@@ -372,10 +419,12 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                           {isUnread && (
                             <span className="w-1.5 h-1.5 rounded-full bg-[var(--db-accent-highlight)] shadow-[0_0_6px_rgba(222,251,2,0.6)] group-hover:opacity-0 transition-opacity" />
                           )}
-                          
+
                           {/* Delete button */}
                           <button
-                            onClick={(e) => handleDeleteNotification(e, item.id)}
+                            onClick={(e) =>
+                              handleDeleteNotification(e, item.id)
+                            }
                             className="p-1.5 rounded-lg text-[var(--db-text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 shrink-0 cursor-pointer"
                             title="Delete Notification"
                           >
@@ -411,9 +460,9 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
           >
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
               {user && user.profileImage ? (
-                <img 
-                  src={user.profileImage} 
-                  alt={user.name} 
+                <img
+                  src={user.profileImage}
+                  alt={user.name}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -422,10 +471,17 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
             </div>
             <div className="hidden sm:block text-left">
               <div className="flex items-center gap-1">
-                <p className="text-xs font-bold text-[var(--db-text)] line-clamp-1">{user.name}</p>
-                <ChevronDown size={12} className={`text-[var(--db-text-muted)] transition-transform duration-200 ${showProfileDropdown ? 'rotate-180' : ''}`} />
+                <p className="text-xs font-bold text-[var(--db-text)] line-clamp-1">
+                  {user.name}
+                </p>
+                <ChevronDown
+                  size={12}
+                  className={`text-[var(--db-text-muted)] transition-transform duration-200 ${showProfileDropdown ? "rotate-180" : ""}`}
+                />
               </div>
-              <p className="text-[9px] text-[var(--db-accent-highlight)] font-semibold uppercase tracking-wider">{user.role}</p>
+              <p className="text-[9px] text-[var(--db-accent-highlight)] font-semibold uppercase tracking-wider">
+                {user.role}
+              </p>
             </div>
           </button>
 
@@ -443,18 +499,25 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                 <div className="flex items-center gap-3 p-2 pb-3 border-b border-[var(--db-card-border)]">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
                     {user && user.profileImage ? (
-                      <img 
-                        src={user.profileImage} 
-                        alt={user.name} 
+                      <img
+                        src={user.profileImage}
+                        alt={user.name}
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <User size={18} className="text-[var(--db-accent-highlight)]" />
+                      <User
+                        size={18}
+                        className="text-[var(--db-accent-highlight)]"
+                      />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-[var(--db-text)] truncate">{user.name}</p>
-                    <p className="text-[10px] text-[var(--db-text-muted)] truncate">{user.email}</p>
+                    <p className="text-xs font-bold text-[var(--db-text)] truncate">
+                      {user.name}
+                    </p>
+                    <p className="text-[10px] text-[var(--db-text-muted)] truncate">
+                      {user.email}
+                    </p>
                     <span className="inline-block px-2 py-0.5 mt-1 text-[8px] font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)] rounded-full border border-[var(--db-accent-highlight)]/20">
                       {user.role}
                     </span>
@@ -470,7 +533,10 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                     }}
                     className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-left"
                   >
-                    <User size={14} className="text-[var(--db-accent-highlight)]" />
+                    <User
+                      size={14}
+                      className="text-[var(--db-accent-highlight)]"
+                    />
                     Edit Profile
                   </button>
                   <button
@@ -480,7 +546,10 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                     }}
                     className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-left"
                   >
-                    <Settings size={14} className="text-[var(--db-accent-highlight)]" />
+                    <Settings
+                      size={14}
+                      className="text-[var(--db-accent-highlight)]"
+                    />
                     Settings
                   </button>
                 </div>
@@ -516,12 +585,12 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
               }
             }}
           >
-            <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-[#defb02]">
+            <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-[#e5ff00]">
               {getNotificationIcon(latestNotification.type)}
             </div>
             <div className="flex-grow space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#defb02]">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#e5ff00]">
                   New Activity Alert
                 </span>
                 <button

@@ -817,10 +817,22 @@ const DashboardEventsList = () => {
                     </div>
 
                     {agenda.length === 0 ? (
-                      <div className="p-6 bg-white/[0.01] border border-[var(--db-card-border)] rounded-2xl text-center">
+                      <div className="p-6 bg-white/[0.01] border border-[var(--db-card-border)] rounded-2xl text-center flex flex-col items-center justify-center gap-3">
                         <p className="text-xs text-[var(--db-text-muted)]">
                           No agenda steps configured.
                         </p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAgenda([
+                              { title: "", duration: "", color: "green" },
+                            ]);
+                          }}
+                          className="flex items-center gap-1.5 bg-[var(--db-accent)] hover:bg-white text-black text-[10px] font-black uppercase tracking-wider px-4 py-2 rounded-xl transition-all cursor-pointer"
+                        >
+                          <Plus size={12} />
+                          Create First Step
+                        </button>
                       </div>
                     ) : (
                       <div className="space-y-3">
@@ -900,6 +912,21 @@ const DashboardEventsList = () => {
                             </button>
                           </div>
                         ))}
+
+                        {/* Dashed Bottom Add Button */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAgenda([
+                              ...agenda,
+                              { title: "", duration: "", color: "green" },
+                            ]);
+                          }}
+                          className="w-full flex items-center justify-center gap-2 py-3.5 border border-dashed border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/50 rounded-2xl text-xs font-black tracking-wider uppercase text-[var(--db-text-muted)] hover:text-[var(--db-text)] bg-[var(--db-input-bg)] hover:bg-[var(--db-accent-glow)]/5 transition-all cursor-pointer"
+                        >
+                          <Plus size={14} className="text-[var(--db-accent-highlight)]" />
+                          Add Step
+                        </button>
                       </div>
                     )}
                   </div>

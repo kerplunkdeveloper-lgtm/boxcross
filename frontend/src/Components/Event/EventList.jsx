@@ -287,7 +287,7 @@ const EventList = () => {
           contact: customerPhone,
         },
         theme: {
-          color: "#defb02",
+          color: "#e5ff00",
         },
         modal: {
           ondismiss: function () {
@@ -326,16 +326,16 @@ const EventList = () => {
   return (
     <section className="py-16 md:py-24 px-6 md:px-16 lg:px-24 bg-[#030303] relative overflow-hidden select-none">
       {/* Background Radial Glow */}
-      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#defb02]/3 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#e5ff00]/3 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#ff9e00]/2 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Title Block */}
         <div className="mb-12 md:mb-16">
           <div className="flex items-center gap-2 mb-2">
-            <span className="h-[2px] w-8 bg-[#defb02]"></span>
+            <span className="h-[2px] w-8 bg-[#e5ff00]"></span>
             <span
-              className="text-[#defb02] text-[10px] md:text-xs font-black uppercase tracking-widest"
+              className="text-[#e5ff00] text-[10px] md:text-xs font-black uppercase tracking-widest"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               Special Schedules
@@ -347,7 +347,10 @@ const EventList = () => {
           >
             Featured Events & Workshops
           </h2>
-          <p className="text-gray-400 text-xs md:text-sm mt-2 max-w-xl" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+          <p
+            className="text-gray-400 text-xs md:text-sm mt-2 max-w-xl"
+            style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+          >
             Click on any card to view detailed schedules, descriptions, and
             booking information for our upcoming fitness events.
           </p>
@@ -356,7 +359,7 @@ const EventList = () => {
         {/* Loading */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
-            <Loader2 className="animate-spin text-[#defb02]" size={36} />
+            <Loader2 className="animate-spin text-[#e5ff00]" size={36} />
             <p className="text-xs uppercase tracking-widest text-gray-500 font-bold">
               Loading Event Listings...
             </p>
@@ -369,12 +372,12 @@ const EventList = () => {
             className="flex flex-col items-center justify-center py-24 px-4 text-center bg-[#0c0c0c] border border-white/5 rounded-3xl shadow-2xl relative overflow-hidden group"
           >
             {/* Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#defb02]/5 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover:bg-[#defb02]/10" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#e5ff00]/5 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover:bg-[#e5ff00]/10" />
 
             <div className="w-24 h-24 mb-6 bg-white/[0.02] border border-white/10 rounded-2xl flex items-center justify-center shadow-inner shadow-black/50 rotate-3 group-hover:-rotate-3 transition-transform duration-500 relative z-10">
               <Calendar
                 size={36}
-                className="text-gray-500 group-hover:text-[#defb02] transition-colors duration-500"
+                className="text-gray-500 group-hover:text-[#e5ff00] transition-colors duration-500"
               />
             </div>
 
@@ -385,7 +388,10 @@ const EventList = () => {
               No Events Available Right Now
             </h3>
 
-            <p className="text-gray-400 text-sm max-w-md mx-auto leading-relaxed relative z-10" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+            <p
+              className="text-gray-400 text-sm max-w-md mx-auto leading-relaxed relative z-10"
+              style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+            >
               We are currently engineering our next high-octane fitness events
               and workshops. Stay tuned and check back soon for our upcoming
               schedules!
@@ -421,7 +427,10 @@ const EventList = () => {
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div>
                       {/* Event Title */}
-                      <h3 className="text-lg md:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#defb02] transition-colors line-clamp-1 mb-2" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                      <h3
+                        className="text-lg md:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#e5ff00] transition-colors line-clamp-1 mb-2"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
                         {event.title}
                       </h3>
 
@@ -431,7 +440,12 @@ const EventList = () => {
                           size={14}
                           className="text-gray-500 shrink-0 mt-0.5"
                         />
-                        <span className="text-xs font-semibold leading-relaxed line-clamp-1" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                        <span
+                          className="text-xs font-semibold leading-relaxed line-clamp-1"
+                          style={{
+                            fontFamily: '"Brutal Font Light", sans-serif',
+                          }}
+                        >
                           {event.location}
                         </span>
                       </div>
@@ -440,19 +454,34 @@ const EventList = () => {
                       {(event.category || event.duration || event.calories) && (
                         <div className="flex flex-wrap gap-1.5 mb-4">
                           {event.category && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-[#defb02]" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                            <span
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-[#e5ff00]"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
                               <Dumbbell size={9} strokeWidth={2.5} />
                               {event.category}
                             </span>
                           )}
                           {event.duration && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                            <span
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-gray-400"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
                               <Timer size={9} strokeWidth={2.5} />
                               {event.duration}
                             </span>
                           )}
                           {event.calories && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                            <span
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-gray-400"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
                               <Flame size={9} strokeWidth={2.5} />
                               {event.calories}
                             </span>
@@ -485,11 +514,17 @@ const EventList = () => {
                           e.stopPropagation();
                           handleOpenBooking(event);
                         }}
-                        className="inline-flex items-center gap-1.5 bg-[#defb02] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                        className="inline-flex items-center gap-1.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
-                        <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">Book Now</span>
-                        <ArrowRight size={12} strokeWidth={3} className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2" />
+                        <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
+                          Book Now
+                        </span>
+                        <ArrowRight
+                          size={12}
+                          strokeWidth={3}
+                          className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
+                        />
                       </button>
                     </div>
                   </div>
@@ -553,7 +588,7 @@ const EventList = () => {
                 <div className="p-6 overflow-y-auto space-y-4 flex-grow custom-scrollbar">
                   {/* Event Location Pin */}
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[10px] font-black uppercase tracking-wider mb-1">
-                    <MapPin size={10} className="text-[#defb02]" />
+                    <MapPin size={10} className="text-[#e5ff00]" />
                     <span>
                       {selectedEvent.location.split(",").pop() || "Venue"}
                     </span>
@@ -573,34 +608,63 @@ const EventList = () => {
                       size={14}
                       className="text-gray-500 shrink-0 mt-0.5"
                     />
-                    <span className="text-xs font-medium leading-relaxed" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                    <span
+                      className="text-xs font-medium leading-relaxed"
+                      style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                    >
                       {selectedEvent.location}
                     </span>
                   </div>
 
                   {/* Premium Badges */}
-                  {(selectedEvent.category || selectedEvent.duration || selectedEvent.calories) && (
+                  {(selectedEvent.category ||
+                    selectedEvent.duration ||
+                    selectedEvent.calories) && (
                     <div className="grid grid-cols-3 gap-2.5 sm:gap-4 my-2">
                       {selectedEvent.category && (
                         <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
-                          <Dumbbell size={16} className="text-[#defb02] mb-1.5 shrink-0" />
-                          <span className="text-[10px] font-black uppercase tracking-wider text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                          <Dumbbell
+                            size={16}
+                            className="text-[#e5ff00] mb-1.5 shrink-0"
+                          />
+                          <span
+                            className="text-[10px] font-black uppercase tracking-wider text-gray-400"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
                             {selectedEvent.category}
                           </span>
                         </div>
                       )}
                       {selectedEvent.duration && (
                         <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
-                          <Timer size={16} className="text-[#defb02] mb-1.5 shrink-0" />
-                          <span className="text-[10px] font-black uppercase tracking-wider text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                          <Timer
+                            size={16}
+                            className="text-[#e5ff00] mb-1.5 shrink-0"
+                          />
+                          <span
+                            className="text-[10px] font-black uppercase tracking-wider text-gray-400"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
                             {selectedEvent.duration}
                           </span>
                         </div>
                       )}
                       {selectedEvent.calories && (
                         <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
-                          <Flame size={16} className="text-[#defb02] mb-1.5 shrink-0" />
-                          <span className="text-[10px] font-black uppercase tracking-wider text-gray-400" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                          <Flame
+                            size={16}
+                            className="text-[#e5ff00] mb-1.5 shrink-0"
+                          />
+                          <span
+                            className="text-[10px] font-black uppercase tracking-wider text-gray-400"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
                             {selectedEvent.calories}
                           </span>
                         </div>
@@ -616,7 +680,10 @@ const EventList = () => {
                     >
                       About The Event
                     </h4>
-                    <p className="text-xs sm:text-sm text-gray-300 font-medium leading-relaxed whitespace-pre-line" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                    <p
+                      className="text-xs sm:text-sm text-gray-300 font-medium leading-relaxed whitespace-pre-line"
+                      style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                    >
                       {selectedEvent.description ||
                         "No additional description details available for this event yet. Stay tuned for special schedules."}
                     </p>
@@ -633,9 +700,21 @@ const EventList = () => {
                       </h4>
                       <ul className="space-y-2.5">
                         {selectedEvent.benefits.map((benefit, idx) => (
-                          <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
-                            <CheckCircle size={15} className="text-green-500 shrink-0 mt-0.5" />
-                            <span style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>{benefit}</span>
+                          <li
+                            key={idx}
+                            className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed"
+                          >
+                            <CheckCircle
+                              size={15}
+                              className="text-green-500 shrink-0 mt-0.5"
+                            />
+                            <span
+                              style={{
+                                fontFamily: '"Brutal Font Light", sans-serif',
+                              }}
+                            >
+                              {benefit}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -653,7 +732,12 @@ const EventList = () => {
                           A typical {selectedEvent.title} Session
                         </h4>
                         {selectedEvent.duration && (
-                          <span className="text-xs text-gray-400 font-bold" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                          <span
+                            className="text-xs text-gray-400 font-bold"
+                            style={{
+                              fontFamily: '"Brutal Font Light", sans-serif',
+                            }}
+                          >
                             {selectedEvent.duration}
                           </span>
                         )}
@@ -680,22 +764,27 @@ const EventList = () => {
                       {/* Agenda list mapping */}
                       <div className="space-y-2">
                         {selectedEvent.agenda.map((step, idx) => {
-                          let borderClass = "border-green-500/30 hover:border-green-500/50";
+                          let borderClass =
+                            "border-green-500/30 hover:border-green-500/50";
                           let bulletBg = "bg-green-500";
                           if (step.color === "orange") {
-                            borderClass = "border-[#ff9e00]/30 hover:border-[#ff9e00]/50";
+                            borderClass =
+                              "border-[#ff9e00]/30 hover:border-[#ff9e00]/50";
                             bulletBg = "bg-[#ff9e00]";
                           }
                           if (step.color === "blue") {
-                            borderClass = "border-[#00d2ff]/30 hover:border-[#00d2ff]/50";
+                            borderClass =
+                              "border-[#00d2ff]/30 hover:border-[#00d2ff]/50";
                             bulletBg = "bg-[#00d2ff]";
                           }
                           if (step.color === "red") {
-                            borderClass = "border-[#ff4b72]/30 hover:border-[#ff4b72]/50";
+                            borderClass =
+                              "border-[#ff4b72]/30 hover:border-[#ff4b72]/50";
                             bulletBg = "bg-[#ff4b72]";
                           }
                           if (step.color === "purple") {
-                            borderClass = "border-[#9b51e0]/30 hover:border-[#9b51e0]/50";
+                            borderClass =
+                              "border-[#9b51e0]/30 hover:border-[#9b51e0]/50";
                             bulletBg = "bg-[#9b51e0]";
                           }
 
@@ -705,17 +794,24 @@ const EventList = () => {
                               className={`flex items-center justify-between p-3 bg-white/[0.01] border ${borderClass} rounded-xl transition-all`}
                             >
                               <div className="flex items-center gap-3">
-                                <span className={`w-2.5 h-2.5 rounded-full ${bulletBg} shrink-0`} />
+                                <span
+                                  className={`w-2.5 h-2.5 rounded-full ${bulletBg} shrink-0`}
+                                />
                                 <span
                                   className="text-xs sm:text-sm text-gray-200 font-semibold leading-none"
-                                  style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                                  style={{
+                                    fontFamily:
+                                      '"Brutal Font Light", sans-serif',
+                                  }}
                                 >
                                   {step.title}
                                 </span>
                               </div>
                               <span
                                 className="text-xs font-bold text-gray-400 tracking-wider whitespace-nowrap"
-                                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
                               >
                                 {step.duration}
                               </span>
@@ -727,61 +823,86 @@ const EventList = () => {
                   )}
 
                   {/* Venue Inclusions / Exclusions / Terms */}
-                  {(selectedEvent.inclusions?.length > 0 || selectedEvent.exclusions?.length > 0 || selectedEvent.termsAndConditions?.length > 0) && (
+                  {(selectedEvent.inclusions?.length > 0 ||
+                    selectedEvent.exclusions?.length > 0 ||
+                    selectedEvent.termsAndConditions?.length > 0) && (
                     <div className="space-y-4">
                       {selectedEvent.inclusions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
                             className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
                           >
                             Venue Inclusions
                           </h4>
                           <ul className="space-y-4">
                             {selectedEvent.inclusions.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
-                                <CheckCircle size={16} className="text-green-500 shrink-0 mt-0.5" />
+                              <li
+                                key={idx}
+                                className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed"
+                              >
+                                <CheckCircle
+                                  size={16}
+                                  className="text-green-500 shrink-0 mt-0.5"
+                                />
                                 <span>{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
                       )}
-                      
+
                       {selectedEvent.exclusions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
                             className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
                           >
                             Venue Exclusions
                           </h4>
                           <ul className="space-y-4">
                             {selectedEvent.exclusions.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
-                                <XCircle size={16} className="text-red-500 shrink-0 mt-0.5" />
+                              <li
+                                key={idx}
+                                className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed"
+                              >
+                                <XCircle
+                                  size={16}
+                                  className="text-red-500 shrink-0 mt-0.5"
+                                />
                                 <span>{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
                       )}
-                      
+
                       {selectedEvent.termsAndConditions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
                             className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
                           >
                             Terms & Conditions
                           </h4>
                           <ul className="space-y-4">
-                            {selectedEvent.termsAndConditions.map((item, idx) => (
-                              <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed">
-                                <span className="w-1.5 h-1.5 bg-[#7a7a7a] transform rotate-45 inline-block shrink-0 mt-1.5"></span>
-                                <span>{item}</span>
-                              </li>
-                            ))}
+                            {selectedEvent.termsAndConditions.map(
+                              (item, idx) => (
+                                <li
+                                  key={idx}
+                                  className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed"
+                                >
+                                  <span className="w-1.5 h-1.5 bg-[#7a7a7a] transform rotate-45 inline-block shrink-0 mt-1.5"></span>
+                                  <span>{item}</span>
+                                </li>
+                              ),
+                            )}
                           </ul>
                         </div>
                       )}
@@ -810,11 +931,17 @@ const EventList = () => {
 
                   <button
                     onClick={() => handleOpenBooking(selectedEvent)}
-                    className="inline-flex items-center justify-center gap-2 bg-[#defb02] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#defb02]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                    className="inline-flex items-center justify-center gap-2 bg-[#e5ff00] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#e5ff00]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">Book Now</span>
-                    <ArrowRight size={12} strokeWidth={3} className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2" />
+                    <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
+                      Book Now
+                    </span>
+                    <ArrowRight
+                      size={12}
+                      strokeWidth={3}
+                      className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
+                    />
                   </button>
                 </div>
               </div>
@@ -836,7 +963,10 @@ const EventList = () => {
               >
                 <ChevronLeft size={19} />
               </button>
-              <h3 className="font-bold text-sm md:text-2xl tracking-tight text-black font-bold  truncate max-w-[280px]" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+              <h3
+                className="font-bold text-sm md:text-2xl tracking-tight text-black font-bold  truncate max-w-[280px]"
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
                 {bookingEvent.title}
               </h3>
             </div>
@@ -845,7 +975,10 @@ const EventList = () => {
             <div className="w-full  max-w-5xl bg-[#000] md:bg-[#070707] md:border-x border-white/10 flex-grow md:flex-grow-0 p-4 space-y-6 flex flex-col">
               {/* Date Horizontal Selectors */}
               <div className="space-y-2">
-                <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                <label
+                  className="block text-[10px] font-black uppercase tracking-wider text-gray-500"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
                   Select Date
                 </label>
                 <div className="flex gap-3 overflow-x-auto pb-1.5 scroll-smooth custom-scrollbar">
@@ -857,17 +990,40 @@ const EventList = () => {
                   ) : (
                     bookingEvent.schedules.map((schedule, idx) => {
                       const isActive = idx === activeDateIndex;
-                      
+
                       let dayName = "";
                       let dateNum = "";
                       let monthName = "";
-                      
+
                       if (/^\d{4}-\d{2}-\d{2}$/.test(schedule.date)) {
                         // Parse safely to avoid timezone shift
-                        const [year, month, day] = schedule.date.split("-").map(Number);
+                        const [year, month, day] = schedule.date
+                          .split("-")
+                          .map(Number);
                         const d = new Date(year, month - 1, day);
-                        const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-                        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                        const days = [
+                          "SUN",
+                          "MON",
+                          "TUE",
+                          "WED",
+                          "THU",
+                          "FRI",
+                          "SAT",
+                        ];
+                        const months = [
+                          "Jan",
+                          "Feb",
+                          "Mar",
+                          "Apr",
+                          "May",
+                          "Jun",
+                          "Jul",
+                          "Aug",
+                          "Sep",
+                          "Oct",
+                          "Nov",
+                          "Dec",
+                        ];
                         dayName = days[d.getDay()];
                         dateNum = d.getDate();
                         monthName = months[d.getMonth()];
@@ -939,7 +1095,10 @@ const EventList = () => {
 
               {/* Time Slots Area */}
               <div className="space-y-3 flex-grow">
-                <label className="block text-[10px] font-black uppercase tracking-wider text-gray-500" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                <label
+                  className="block text-[10px] font-black uppercase tracking-wider text-gray-500"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
                   Select Time Slot
                 </label>
 
@@ -969,14 +1128,14 @@ const EventList = () => {
                               isSoldOut
                                 ? "bg-black/50 text-gray-600 border-white/5 cursor-not-allowed opacity-40"
                                 : isSelected
-                                  ? "bg-[#defb02]/10 border-[#defb02] text-white"
+                                  ? "bg-[#e5ff00]/10 border-[#e5ff00] text-white"
                                   : "bg-[#0f0f0f] border-white/5 hover:border-white/10 text-white cursor-pointer"
                             }`}
                           >
                             {/* Left indicator accent */}
                             {!isSoldOut && (
                               <span
-                                className={`absolute left-0 top-3 bottom-3 w-1 rounded-r-md ${isSelected ? "bg-[#defb02]" : "bg-green-500"}`}
+                                className={`absolute left-0 top-3 bottom-3 w-1 rounded-r-md ${isSelected ? "bg-[#e5ff00]" : "bg-green-500"}`}
                               />
                             )}
 
@@ -1037,7 +1196,12 @@ const EventList = () => {
                       >
                         How many seats?
                       </h4>
-                      <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                      <p
+                        className="text-xs text-gray-500 font-semibold uppercase tracking-wider"
+                        style={{
+                          fontFamily: '"Brutal Font Light", sans-serif',
+                        }}
+                      >
                         Select count to book
                       </p>
                     </div>
@@ -1096,7 +1260,7 @@ const EventList = () => {
                     {/* Action button */}
                     <button
                       onClick={() => setShowContactForm(true)}
-                      className="w-full py-4 bg-white hover:bg-[#defb02] text-black font-black uppercase tracking-wider text-xs rounded-full shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      className="w-full py-4 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-wider text-xs rounded-full shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 cursor-pointer"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       Continue
@@ -1116,7 +1280,7 @@ const EventList = () => {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="bg-[#0c0c0c] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full max-h-screen md:h-auto md:max-h-[90vh] md:max-w-5xl overflow-hidden shadow-2xl relative flex flex-col"
                   >
-                    <div className="h-16 flex items-center justify-between bg-[#defb02] px-6 border-b border-white/5">
+                    <div className="h-16 flex items-center justify-between bg-[#e5ff00] px-6 border-b border-white/5">
                       <div className="flex items-center gap-3 ">
                         <button
                           type="button"
@@ -1152,7 +1316,7 @@ const EventList = () => {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
                           <div className="absolute bottom-4 left-4 right-4">
-                            <span className="px-3 py-1 bg-[#defb02] text-black text-[10px] font-black uppercase tracking-widest rounded-md shadow-md mb-2 inline-block">
+                            <span className="px-3 py-1 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-widest rounded-md shadow-md mb-2 inline-block">
                               Selected Event
                             </span>
                             <h4
@@ -1169,14 +1333,24 @@ const EventList = () => {
                         <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
                           {/* Date */}
                           <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#defb02] shadow-inner shadow-white/5">
+                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
                               <Calendar size={18} />
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                              <p
+                                className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
                                 Booking Date
                               </p>
-                              <p className="text-sm font-bold text-gray-200" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                              <p
+                                className="text-sm font-bold text-gray-200"
+                                style={{
+                                  fontFamily: '"Brutal Font Light", sans-serif',
+                                }}
+                              >
                                 {bookingEvent.schedules[activeDateIndex].date}
                               </p>
                             </div>
@@ -1184,7 +1358,7 @@ const EventList = () => {
 
                           {/* Time */}
                           <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#defb02] shadow-inner shadow-white/5">
+                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="18"
@@ -1201,10 +1375,20 @@ const EventList = () => {
                               </svg>
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                              <p
+                                className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
                                 Time Slot
                               </p>
-                              <p className="text-sm font-bold text-gray-200" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                              <p
+                                className="text-sm font-bold text-gray-200"
+                                style={{
+                                  fontFamily: '"Brutal Font Light", sans-serif',
+                                }}
+                              >
                                 {selectedSlot.time}
                               </p>
                             </div>
@@ -1212,14 +1396,24 @@ const EventList = () => {
 
                           {/* Location */}
                           <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#defb02] shadow-inner shadow-white/5">
+                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
                               <MapPin size={18} />
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                              <p
+                                className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
                                 Location
                               </p>
-                              <p className="text-xs md:text-sm font-bold text-gray-200 leading-snug" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                              <p
+                                className="text-xs md:text-sm font-bold text-gray-200 leading-snug"
+                                style={{
+                                  fontFamily: '"Brutal Font Light", sans-serif',
+                                }}
+                              >
                                 {bookingEvent.location}
                               </p>
                             </div>
@@ -1227,14 +1421,24 @@ const EventList = () => {
 
                           {/* Seats */}
                           <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-[#defb02]/10 flex items-center justify-center shrink-0 text-[#defb02] shadow-inner shadow-[#defb02]/20">
+                            <div className="w-10 h-10 rounded-xl bg-[#e5ff00]/10 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-[#e5ff00]/20">
                               <Ticket size={18} />
                             </div>
                             <div>
-                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                              <p
+                                className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
                                 Reserved Seats
                               </p>
-                              <p className="text-sm font-black text-[#defb02]" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                              <p
+                                className="text-sm font-black text-[#e5ff00]"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
                                 {seatsCount} Seat{seatsCount > 1 ? "s" : ""}
                               </p>
                             </div>
@@ -1258,7 +1462,12 @@ const EventList = () => {
                               >
                                 Primary Contact
                               </h4>
-                              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                              <p
+                                className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4"
+                                style={{
+                                  fontFamily: '"Brutal Font Light", sans-serif',
+                                }}
+                              >
                                 Enter attendee details for confirmation
                               </p>
                             </div>
@@ -1271,7 +1480,7 @@ const EventList = () => {
                               <div className="relative group">
                                 <User
                                   size={16}
-                                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#defb02] transition-colors"
+                                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
                                 />
                                 <input
                                   type="text"
@@ -1280,7 +1489,7 @@ const EventList = () => {
                                     setCustomerName(e.target.value)
                                   }
                                   placeholder="Enter your name"
-                                  className="w-full bg-[#050505] border border-white/10 focus:border-[#defb02]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                  className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
                                   required
                                 />
                               </div>
@@ -1296,7 +1505,7 @@ const EventList = () => {
                                 <div className="relative group">
                                   <Mail
                                     size={16}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#defb02] transition-colors"
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
                                   />
                                   <input
                                     type="email"
@@ -1305,7 +1514,7 @@ const EventList = () => {
                                       setCustomerEmail(e.target.value)
                                     }
                                     placeholder="Enter your email"
-                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#defb02]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
                                     required
                                   />
                                 </div>
@@ -1319,7 +1528,7 @@ const EventList = () => {
                                 <div className="relative group">
                                   <Phone
                                     size={16}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#defb02] transition-colors"
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
                                   />
                                   <input
                                     type="tel"
@@ -1328,7 +1537,7 @@ const EventList = () => {
                                       setCustomerPhone(e.target.value)
                                     }
                                     placeholder="Enter your phone number"
-                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#defb02]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
                                     required
                                   />
                                 </div>
@@ -1340,7 +1549,7 @@ const EventList = () => {
                               <button
                                 type="submit"
                                 disabled={submittingBooking}
-                                className="w-full py-4.5 bg-white hover:bg-[#defb02] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#defb02]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 cursor-pointer"
+                                className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 cursor-pointer"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
@@ -1384,7 +1593,7 @@ const EventList = () => {
 
                               {/* Readonly contact details */}
                               <div className="bg-white/5 border border-white/5 rounded-xl p-3 mb-4 flex items-center gap-3 shadow-inner shadow-black/20">
-                                <div className="w-8 h-8 rounded-full bg-[#defb02]/10 flex items-center justify-center text-[#defb02] shrink-0">
+                                <div className="w-8 h-8 rounded-full bg-[#e5ff00]/10 flex items-center justify-center text-[#e5ff00] shrink-0">
                                   <User size={14} />
                                 </div>
                                 <div className="truncate">
@@ -1399,12 +1608,12 @@ const EventList = () => {
 
                               {/* Price Breakdown */}
                               <div className="bg-[#050505] border border-white/10 rounded-2xl p-5 text-sm space-y-3 mt-4 relative overflow-hidden shadow-inner shadow-black/50">
-                                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#defb02]"></div>
+                                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#e5ff00]"></div>
 
                                 <h5 className="text-white font-bold uppercase tracking-wider text-xs mb-3 flex items-center gap-2">
                                   <Ticket
                                     size={14}
-                                    className="text-[#defb02]"
+                                    className="text-[#e5ff00]"
                                   />
                                   Order Breakdown
                                 </h5>
@@ -1443,7 +1652,7 @@ const EventList = () => {
                                 {bookingEvent.originalPrice &&
                                   bookingEvent.originalPrice >
                                     bookingEvent.price && (
-                                    <div className="flex justify-between items-center text-[#defb02]/90 text-xs">
+                                    <div className="flex justify-between items-center text-[#e5ff00]/90 text-xs">
                                       <span>Special Discount</span>
                                       <span className="font-bold">
                                         - ₹
@@ -1469,7 +1678,7 @@ const EventList = () => {
                                   <span className="uppercase text-xs tracking-wider text-gray-300 font-bold">
                                     Total Payable
                                   </span>
-                                  <span className="text-2xl font-black text-[#defb02] tracking-tight">
+                                  <span className="text-2xl font-black text-[#e5ff00] tracking-tight">
                                     ₹
                                     {(seatsCount * bookingEvent.price).toFixed(
                                       2,
@@ -1483,7 +1692,7 @@ const EventList = () => {
                                 <div className="relative flex items-center justify-center mt-0.5 shrink-0">
                                   <input
                                     type="checkbox"
-                                    className="appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-[#050505] checked:bg-[#defb02] checked:border-[#defb02] transition-colors cursor-pointer peer"
+                                    className="appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-[#050505] checked:bg-[#e5ff00] checked:border-[#e5ff00] transition-colors cursor-pointer peer"
                                     checked={termsAccepted}
                                     onChange={(e) =>
                                       setTermsAccepted(e.target.checked)
@@ -1507,7 +1716,7 @@ const EventList = () => {
                                   I accept the{" "}
                                   <a
                                     href="#"
-                                    className="text-white hover:text-[#defb02] underline decoration-white/20 transition-colors"
+                                    className="text-white hover:text-[#e5ff00] underline decoration-white/20 transition-colors"
                                   >
                                     Terms and Conditions
                                   </a>
@@ -1521,7 +1730,7 @@ const EventList = () => {
                               <button
                                 onClick={handleProceedToPay}
                                 disabled={submittingBooking || !termsAccepted}
-                                className="w-full py-4.5 bg-white hover:bg-[#defb02] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#defb02]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed cursor-pointer"
+                                className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed cursor-pointer"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
@@ -1590,7 +1799,12 @@ const EventList = () => {
                       >
                         Discard Booking?
                       </h4>
-                      <p className="text-xs md:text-sm text-gray-400 mb-8 leading-relaxed max-w-[280px] md:max-w-sm" style={{ fontFamily: '"Brutal Font Light", sans-serif' }}>
+                      <p
+                        className="text-xs md:text-sm text-gray-400 mb-8 leading-relaxed max-w-[280px] md:max-w-sm"
+                        style={{
+                          fontFamily: '"Brutal Font Light", sans-serif',
+                        }}
+                      >
                         Are you sure you want to discard your selected seats?
                         Your session details will be lost. 🛑
                       </p>

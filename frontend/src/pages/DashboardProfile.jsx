@@ -119,7 +119,7 @@ const DashboardProfile = () => {
   return (
     <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
       {/* Background Radial Glow */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#defb02]/5 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#e5ff00]/5 rounded-full blur-[120px] pointer-events-none z-0" />
 
       <div className="max-w-5xl mx-auto space-y-6 relative z-10">
         {/* Title Header */}
@@ -211,7 +211,10 @@ const DashboardProfile = () => {
                   @{username || "username"}
                 </p>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] mt-2">
-                  <Shield size={12} className="text-[var(--db-accent-highlight)]" />
+                  <Shield
+                    size={12}
+                    className="text-[var(--db-accent-highlight)]"
+                  />
                   <span className="text-[10px] text-[var(--db-accent-highlight)] font-black uppercase tracking-wider">
                     {user?.role || "Member"}
                   </span>
@@ -229,7 +232,10 @@ const DashboardProfile = () => {
           >
             <form onSubmit={handleSaveProfile} className="space-y-6">
               <div className="flex items-center gap-2 pb-4 border-b border-[var(--db-card-border)]">
-                <Edit3 size={18} className="text-[var(--db-accent-highlight)]" />
+                <Edit3
+                  size={18}
+                  className="text-[var(--db-accent-highlight)]"
+                />
                 <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                   Edit Profile Fields
                 </span>

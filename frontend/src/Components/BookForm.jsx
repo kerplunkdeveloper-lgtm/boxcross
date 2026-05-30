@@ -34,11 +34,25 @@ const BookForm = () => {
     if (user) {
       setFormData((prev) => ({
         ...prev,
-        name: user.name || "",
+        name: (user.name && user.name.toLowerCase() !== "vasanth") ? user.name : "",
         phone: user.phone || prev.phone || "",
       }));
     }
   }, [user]);
+
+  useEffect(() => {
+    const shouldScroll = sessionStorage.getItem("scrollToBookForm");
+    const hasHash = window.location.hash === "#book-form";
+    if (shouldScroll === "true" || hasHash) {
+      sessionStorage.removeItem("scrollToBookForm");
+      setTimeout(() => {
+        const element = document.getElementById("book-form");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 400);
+    }
+  }, []);
 
   const goals = [
     "Weight Loss",
@@ -127,7 +141,7 @@ const BookForm = () => {
                 fontWeight: 700,
               }}
             >
-              BOOK YOUR <span className="text-[#d9ff00]">GYM TOUR</span>
+              BOOK YOUR FREE<span className="text-[#d9ff00]"> GYM TOUR</span>
             </h1>
           </div>
 

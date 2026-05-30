@@ -131,7 +131,7 @@ const Eventbanner = () => {
       <section className="w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[80vh] bg-black flex flex-col items-center justify-center relative z-10 border-b border-white/5">
         <div className="flex flex-col items-center gap-3">
           <svg
-            className="animate-spin h-8 w-8 text-[#defb02]"
+            className="animate-spin h-8 w-8 text-[#e5ff00]"
             viewBox="0 0 24 24"
           >
             <circle
@@ -230,7 +230,7 @@ const Eventbanner = () => {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-[#defb02]/10 border border-[#defb02]/30 text-[#defb02] text-[8px] sm:text-[10px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[8px] sm:text-[10px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <Calendar size={10} className="sm:w-3 sm:h-3 animate-pulse" />
@@ -247,7 +247,7 @@ const Eventbanner = () => {
                 >
                   {currentBanner.title}
                 </motion.h2>
- 
+
                 {/* Description */}
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
@@ -269,7 +269,7 @@ const Eventbanner = () => {
         <>
           <button
             onClick={handlePrev}
-            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-[#defb02] text-white hover:text-black border border-white/10 hover:border-transparent flex items-center justify-center transition-all duration-300 group cursor-pointer"
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-[#e5ff00] text-white hover:text-black border border-white/10 hover:border-transparent flex items-center justify-center transition-all duration-300 group cursor-pointer"
             aria-label="Previous Slide"
           >
             <ChevronLeft
@@ -279,7 +279,7 @@ const Eventbanner = () => {
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-[#defb02] text-white hover:text-black border border-white/10 hover:border-transparent flex items-center justify-center transition-all duration-300 group cursor-pointer"
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-[#e5ff00] text-white hover:text-black border border-white/10 hover:border-transparent flex items-center justify-center transition-all duration-300 group cursor-pointer"
             aria-label="Next Slide"
           >
             <ChevronRight
@@ -299,7 +299,7 @@ const Eventbanner = () => {
               onClick={() => handleDotClick(index)}
               className={`h-1 sm:h-2 rounded-full transition-all duration-300 cursor-pointer ${
                 index === currentIndex
-                  ? "w-6 sm:w-8 bg-[#defb02]"
+                  ? "w-6 sm:w-8 bg-[#e5ff00]"
                   : "w-1.5 sm:w-2 bg-white/30 hover:bg-white/50"
               }`}
               aria-label={`Go to slide ${index + 1}`}

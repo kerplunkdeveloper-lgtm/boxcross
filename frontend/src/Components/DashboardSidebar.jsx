@@ -35,6 +35,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     );
   });
 
+  const [enquiriesOpen, setEnquiriesOpen] = useState(() => {
+    return (
+      location.pathname.includes("/homec1") ||
+      location.pathname.includes("/homec2") ||
+      location.pathname.includes("/homec3") ||
+      location.pathname.includes("/bookings")
+    );
+  });
+
   useEffect(() => {
     if (
       location.pathname.includes("/events") ||
@@ -45,10 +54,20 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (
+      location.pathname.includes("/homec1") ||
+      location.pathname.includes("/homec2") ||
+      location.pathname.includes("/homec3") ||
+      location.pathname.includes("/bookings")
+    ) {
+      setEnquiriesOpen(true);
+    }
+  }, [location.pathname]);
+
   const baseMenuItems = [
     { name: "Dashboard", path: "/dashboard", icon: Home },
     { name: "Calendar", path: "/dashboard/calendar", icon: Calendar },
-    { name: "Enquiry membership", path: "/dashboard/bookings", icon: BookOpen },
     {
       name: "Membership edit",
       path: "/dashboard/memberships",
@@ -56,25 +75,6 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     },
     { name: "Payment details", path: "/dashboard/payments", icon: DollarSign },
   ];
-
-  const adminFormItems = [];
-  if (user && user.role === "admin") {
-    adminFormItems.push({
-      name: "Home/trialform ",
-      path: "/dashboard/homec1",
-      icon: FileText,
-    });
-    adminFormItems.push({
-      name: "Consult us form ",
-      path: "/dashboard/homec2",
-      icon: Users,
-    });
-    adminFormItems.push({
-      name: "Contact Form",
-      path: "/dashboard/homec3",
-      icon: MessageSquare,
-    });
-  }
 
   const footerMenuItems = [
     {
@@ -218,28 +218,104 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
             </div>
           )}
 
-          {/* Form links */}
-          {adminFormItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <NavLink
-                key={item.name}
-                to={item.path}
-                onClick={() => setSidebarOpen(false)}
-                className={({ isActive }) =>
-                  `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
-                    isActive
-                      ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)]"
-                      : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
-                  }`
-                }
+          {/* Website Enquiry form dropdown for Admin */}
+          {user && user.role === "admin" && (
+            <div className="space-y-1">
+              <button
+                onClick={() => setEnquiriesOpen(!enquiriesOpen)}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                  location.pathname.includes("/homec1") ||
+                  location.pathname.includes("/homec2") ||
+                  location.pathname.includes("/homec3") ||
+                  location.pathname.includes("/bookings")
+                    ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
+                    : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                }`}
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
-                <Icon size={18} />
-                {item.name}
-              </NavLink>
-            );
-          })}
+                <div className="flex items-center gap-3">
+                  <FileText size={18} className={location.pathname.includes("/homec1") || location.pathname.includes("/homec2") || location.pathname.includes("/homec3") || location.pathname.includes("/bookings") ? "text-[var(--db-accent-highlight)]" : ""} />
+                  <span>Enquiry forms</span>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform duration-300 ${
+                    enquiriesOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
+                  }`}
+                />
+              </button>
+
+              {enquiriesOpen && (
+                <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
+                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+
+                  <NavLink
+                    to="/dashboard/bookings"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <BookOpen size={14} />
+                    Book gym free tour
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/homec1"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <FileText size={14} />
+                    Home/trialform
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/homec2"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <Users size={14} />
+                    Consult us form
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/homec3"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <MessageSquare size={14} />
+                    Contact Form
+                  </NavLink>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Settings items */}
           {footerMenuItems.map((item) => {

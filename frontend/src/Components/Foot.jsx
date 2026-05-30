@@ -241,7 +241,7 @@ const Foot = () => {
       {/* BACK TO TOP BUTTON */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-8 right-8 w-12 h-12 md:w-14 md:h-14 bg-[#defb02] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[100] ${
+        className={`fixed bottom-8 right-8 w-12 h-12 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[100] ${
           isVisible
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-10 pointer-events-none"

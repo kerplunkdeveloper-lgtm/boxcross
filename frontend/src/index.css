@@ -1,6 +1,10 @@
 
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 @font-face {
   font-family: 'Brutal Font';
   src: url('./assets/fonts/Brutal Type.ttf') format('truetype');
@@ -240,7 +244,7 @@
   background: conic-gradient(
     transparent,
     transparent,
-    #defb02,
+    #e5ff00,
     transparent,
     transparent
   );
@@ -264,7 +268,7 @@
 
 /* Book Now Button Glossy Sliding Sheen Animation */
 .book-now-btn {
-  background: #defb02;
+  background: #e5ff00;
   position: relative;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
