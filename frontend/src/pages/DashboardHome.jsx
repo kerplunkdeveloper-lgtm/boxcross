@@ -79,7 +79,7 @@ const DashboardHome = () => {
             <div className="text-left">
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  Hi, <span className="text-[var(--db-accent-highlight)]"> {user.name}!</span>
+                  Hi, <span className="text-[var(--db-accent-highlight)]" style={{fontFamily:"'BrutalType Bold', sans-serif"}}> {user.name}</span>
                 </h1>
                 <Sparkles size={16} className="text-[var(--db-accent-highlight)] animate-pulse" />
               </div>
