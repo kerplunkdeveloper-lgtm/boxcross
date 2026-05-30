@@ -20,7 +20,30 @@ connectDB();
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  ...(process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(",")
+    : []),
+  "http://localhost:5173",
+  "http://127.0.0.1:5500",
+  "https://boxandcross.com",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Postman, mobile apps
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked: ${origin}`));
+    },
+    credentials: true,
+  })
+);
 
 app.use(cookieParser());
 app.use(express.json());
