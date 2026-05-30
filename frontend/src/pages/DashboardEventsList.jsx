@@ -610,7 +610,6 @@ const DashboardEventsList = () => {
                         type="text"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        placeholder="e.g. JW Marriott Pool Workout"
                         className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
                         required
                       />
@@ -631,7 +630,6 @@ const DashboardEventsList = () => {
                           type="text"
                           value={location}
                           onChange={(e) => setLocation(e.target.value)}
-                          placeholder="e.g. Vile Parle East, Mumbai, Maharashtra"
                           className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
                           required
                         />
@@ -651,7 +649,6 @@ const DashboardEventsList = () => {
                         <textarea
                           value={description}
                           onChange={(e) => setDescription(e.target.value)}
-                          placeholder="Describe the training drills, scheduling, fitness gear, coaches, etc."
                           rows={3}
                           className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
                         />
@@ -668,7 +665,6 @@ const DashboardEventsList = () => {
                         <textarea
                           value={inclusions}
                           onChange={(e) => setInclusions(e.target.value)}
-                          placeholder="e.g. Certified Instructor&#10;Locker Access&#10;Towels & amenities"
                           rows={4}
                           className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-green-500/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
                         />
@@ -681,7 +677,6 @@ const DashboardEventsList = () => {
                         <textarea
                           value={exclusions}
                           onChange={(e) => setExclusions(e.target.value)}
-                          placeholder="e.g. Swimwear / Attire&#10;Transportation&#10;Head cap mandatory"
                           rows={4}
                           className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-red-500/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
                         />
@@ -696,7 +691,6 @@ const DashboardEventsList = () => {
                       <textarea
                         value={terms}
                         onChange={(e) => setTerms(e.target.value)}
-                        placeholder="e.g. Please carry a valid ID proof&#10;Tickets once booked cannot be cancelled or refunded&#10;Management reserves the right of admission"
                         rows={4}
                         className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
                       />
@@ -759,7 +753,7 @@ const DashboardEventsList = () => {
                           type="text"
                           value={bookingLink}
                           onChange={(e) => setBookingLink(e.target.value)}
-                          placeholder="e.g. https://insider.in/event-link (leave blank for local seat booking)"
+
                           className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
                         />
                       </div>
@@ -793,7 +787,7 @@ const DashboardEventsList = () => {
                             },
                           ]);
                         }}
-                        className="flex items-center gap-1 bg-[var(--db-accent-glow)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all cursor-pointer"
+                        className="flex items-center gap-1 bg-[var(--db-accent-glow)] hover:bg-[var(--db-accent)] text-[var(--db-accent-text)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all cursor-pointer"
                       >
                         <Plus size={10} />
                         Add Date Tab
