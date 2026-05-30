@@ -26,8 +26,6 @@ app.use(
       ? process.env.FRONTEND_URL.split(",")
       : ["http://localhost:5173", "https://boxandcross.com", "http://127.0.0.1:5500"],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
 
