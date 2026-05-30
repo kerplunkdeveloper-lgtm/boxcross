@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { ArrowUp, MessageCircle } from "lucide-react";
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logo-new.png";
 
 const Foot = () => {
   const [isVisible, setIsVisible] = useState(false);
