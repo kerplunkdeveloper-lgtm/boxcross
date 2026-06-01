@@ -6,6 +6,7 @@ import WhatWeOffer from "../Components/WhatWeOffer";
 import TrainingZones from "../Components/TrainingZones";
 // import BuildProgress from "../Components/BuildProgress";
 import BookForm from "../Components/BookForm";     
+import Founding from "../Components/Founding";
 
 const Membership = () => {
   const videoUrl =
@@ -194,6 +195,7 @@ const Membership = () => {
 
       {/* MEMBERSHIP SECTION */}
       <div className="relative z-20">
+         <Founding />
         <WhatWeOffer />
         <TrainingZones />
         {/* <BuildProgress /> */}

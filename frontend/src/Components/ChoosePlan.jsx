@@ -10,6 +10,7 @@ const ChoosePlan = React.forwardRef(
     return (
       <div
         ref={ref}
+        id="pricing"
         className="w-full max-w-7xl mx-auto border-t border-gray-800 pt-12 pb-8 scroll-mt-10"
       >
         <motion.div

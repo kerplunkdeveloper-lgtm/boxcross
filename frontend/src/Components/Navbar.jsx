@@ -76,11 +76,11 @@ const Navbar = () => {
     },
     {
       name: "PLANS & PRICING",
-      path: "/membership",
+      scrollToId: "pricing",
     },
     {
       name: "FOUNDING MEMBERS",
-      path: "/founding-members",
+      scrollToId: "founders",
     },
   ];
 
@@ -371,7 +371,7 @@ const Navbar = () => {
                       fontSize: "14px",
                     }}
                   >
-                    BOOK YOUR FREE GYM TOUR
+                    PLAN AND PRICING
                   </span>
                 </Link>
 
