@@ -813,7 +813,7 @@ const EventList = () => {
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
-                                {step.duration}
+                                {step.duration} <span className="text-gray-500 font-normal">mins</span>
                               </span>
                             </div>
                           );
