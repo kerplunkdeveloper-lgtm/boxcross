@@ -441,7 +441,14 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
           >
             <Bell size={18} />
             {unreadCount > 0 && (
-              <span className="absolute top-0.5 right-0.5 bg-[var(--db-accent-highlight)] text-black rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center shadow-[0_0_10px_rgba(222,251,2,0.4)]">
+              <span
+                className="absolute top-0.5 right-0.5 rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center"
+                style={{
+                  background: theme === "dark" ? "#e5ff00" : "#1e293b",
+                  color:      theme === "dark" ? "#000000" : "#ffffff",
+                  boxShadow:  theme === "dark" ? "0 0 10px rgba(229,255,0,0.5)" : "none",
+                }}
+              >
                 {unreadCount}
               </span>
             )}
