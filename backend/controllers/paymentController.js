@@ -98,3 +98,32 @@ exports.updatePayment = async (req, res) => {
     });
   }
 };
+
+// @desc    Delete payment record
+// @route   DELETE /api/payments/:id
+// @access  Private/Admin
+exports.deletePayment = async (req, res) => {
+  try {
+    const payment = await Payment.findById(req.params.id);
+
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: `Payment record not found with id of ${req.params.id}`
+      });
+    }
+
+    await payment.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: "Payment record deleted successfully"
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error deleting payment record",
+      error: error.message
+    });
+  }
+};

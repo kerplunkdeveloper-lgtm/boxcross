@@ -33,16 +33,8 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
       setUpiId("");
       setUpiError("");
 
-      // Pre-fill user data if logged in
-      if (authUser) {
-        setUser({
-          name: authUser.name || "",
-          phone: authUser.phone || "",
-          email: authUser.email || "",
-        });
-      } else {
-        setUser({ name: "", phone: "", email: "" });
-      }
+      // Start with empty details so they are not pre-filled by default
+      setUser({ name: "", phone: "", email: "" });
 
       setErrors({});
       document.body.style.overflow = "hidden";
@@ -52,7 +44,7 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isOpen, authUser]);
+  }, [isOpen]);
 
   const validate = () => {
     const e = {};

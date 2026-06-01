@@ -129,7 +129,7 @@ const BookForm = () => {
     >
       <div className="relative w-full max-w-4xl rounded-[35px] border border-white/10 bg-gradient-to-b from-[#050505] to-black overflow-hidden">
         {/* GLOW */}
-        <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-[#d9ff00]/10 blur-[120px] rounded-full"></div>
+        <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-[#e5ff00]/10 blur-[120px] rounded-full"></div>
 
         <div className="relative z-10 p-5 md:p-10">
           {/* HEADER */}
@@ -141,7 +141,7 @@ const BookForm = () => {
                 fontWeight: 700,
               }}
             >
-              BOOK YOUR FREE<span className="text-[#d9ff00]"> GYM TOUR</span>
+              BOOK YOUR FREE<span className="text-[#e5ff00]"> GYM TOUR</span>
             </h1>
           </div>
 
@@ -161,7 +161,7 @@ const BookForm = () => {
                   className={`relative flex items-center justify-center gap-1.5 md:gap-3 px-2.5 md:px-5 h-10 md:h-12 rounded-xl md:rounded-2xl border transition-all duration-500 whitespace-nowrap
                   ${
                     step === index + 1
-                      ? "bg-[#d9ff00] border-[#d9ff00] text-black shadow-[0_0_25px_rgba(217,255,0,0.35)]"
+                      ? "bg-[#e5ff00] border-[#e5ff00] text-black shadow-[0_0_25px_rgba(217,255,0,0.35)]"
                       : step > index + 1
                         ? "bg-white/10 border-white/10 text-white"
                         : "bg-[#0a0a0a] border-white/10 text-gray-500"
@@ -172,9 +172,9 @@ const BookForm = () => {
                     className={`w-5 h-5 md:w-7 md:h-7 rounded-full flex items-center justify-center text-[10px] md:text-[11px] font-bold
                     ${
                       step === index + 1
-                        ? "bg-black text-[#d9ff00]"
+                        ? "bg-black text-[#e5ff00]"
                         : step > index + 1
-                          ? "bg-[#d9ff00] text-black"
+                          ? "bg-[#e5ff00] text-black"
                           : "bg-white/10 text-gray-400"
                     }`}
                   >
@@ -194,7 +194,7 @@ const BookForm = () => {
                 {index !== 3 && (
                   <div
                     className={`flex-grow h-[2px] mx-1 md:mx-2 rounded-full transition-all duration-500
-                    ${step > index + 1 ? "bg-[#d9ff00]" : "bg-white/10"}`}
+                    ${step > index + 1 ? "bg-[#e5ff00]" : "bg-white/10"}`}
                   ></div>
                 )}
               </div>
@@ -214,7 +214,7 @@ const BookForm = () => {
                   transition={{ duration: 0.35 }}
                 >
                   <div className="mb-7">
-                    <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3"
+                    <p className="text-[#e5ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3"
                       style={{
                         fontFamily: '"BrutalTypeLight", sans-serif',
                         fontWeight: 500,
@@ -251,7 +251,7 @@ const BookForm = () => {
                           name: e.target.value,
                         })
                       }
-                      className={`w-full h-14 rounded-xl bg-black border ${error ? "border-red-500" : "border-white/10"} pl-14 pr-5 text-white outline-none focus:border-[#d9ff00] transition-all`}
+                      className={`w-full h-14 rounded-xl bg-black border ${error ? "border-red-500" : "border-white/10"} pl-14 pr-5 text-white outline-none focus:border-[#e5ff00] transition-all`}
                     />
                   </div>
                   {error && (
@@ -270,7 +270,7 @@ const BookForm = () => {
                   transition={{ duration: 0.35 }}
                 >
                   <div className="mb-7">
-                    <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
+                    <p className="text-[#e5ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
                       Step 02
                     </p>
 
@@ -302,7 +302,7 @@ const BookForm = () => {
                           });
                         }
                       }}
-                      className={`w-full h-14 rounded-xl bg-black border ${error ? "border-red-500" : "border-white/10"} pl-14 pr-5 text-white outline-none focus:border-[#d9ff00] transition-all`}
+                      className={`w-full h-14 rounded-xl bg-black border ${error ? "border-red-500" : "border-white/10"} pl-14 pr-5 text-white outline-none focus:border-[#e5ff00] transition-all`}
                     />
                   </div>
                   {error && (
@@ -321,7 +321,7 @@ const BookForm = () => {
                   transition={{ duration: 0.35 }}
                 >
                   <div className="mb-7">
-                    <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
+                    <p className="text-[#e5ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
                       Step 03
                     </p>
 
@@ -347,10 +347,10 @@ const BookForm = () => {
                         className={`h-12 md:h-14 rounded-xl border transition-all duration-300 flex items-center justify-center gap-1.5 md:gap-3 px-2 text-center text-xs md:text-sm font-semibold uppercase tracking-wider
                         ${
                           formData.goal === goal
-                            ? "bg-[#d9ff00] text-black border-[#d9ff00]"
+                            ? "bg-[#e5ff00] text-black border-[#e5ff00]"
                             : error
                               ? "bg-black border-red-500/50 text-white hover:border-red-500"
-                              : "bg-black border-white/10 text-white hover:border-[#d9ff00]"
+                              : "bg-black border-white/10 text-white hover:border-[#e5ff00]"
                         }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
@@ -375,7 +375,7 @@ const BookForm = () => {
                   transition={{ duration: 0.35 }}
                 >
                   <div className="mb-7">
-                    <p className="text-[#d9ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
+                    <p className="text-[#e5ff00] uppercase tracking-[0.25em] text-[11px] font-semibold mb-3">
                       Step 04
                     </p>
 
@@ -396,7 +396,7 @@ const BookForm = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, day: e.target.value })
                         }
-                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.day ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
+                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.day ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#e5ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
                         <option value="" disabled>
                           Day
@@ -416,7 +416,7 @@ const BookForm = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, month: e.target.value })
                         }
-                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.month ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
+                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.month ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#e5ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
                         <option value="" disabled>
                           Month
@@ -449,7 +449,7 @@ const BookForm = () => {
                         onChange={(e) =>
                           setFormData({ ...formData, time: e.target.value })
                         }
-                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.time ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#d9ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
+                        className={`w-full h-12 md:h-14 rounded-xl bg-black border ${error && !formData.time ? "border-red-500" : "border-white/10"} text-center text-white outline-none focus:border-[#e5ff00] appearance-none cursor-pointer transition-all text-xs md:text-sm`}
                       >
                         <option value="" disabled>
                           Time
@@ -484,9 +484,9 @@ const BookForm = () => {
                   )}
 
                   {/* SUCCESS */}
-                  <div className="mt-7 rounded-2xl border border-[#d9ff00]/20 bg-[#d9ff00]/5 p-5">
+                  <div className="mt-7 rounded-2xl border border-[#e5ff00]/20 bg-[#e5ff00]/5 p-5">
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-full bg-[#d9ff00] flex items-center justify-center">
+                      <div className="w-11 h-11 rounded-full bg-[#e5ff00] flex items-center justify-center">
                         <Check className="text-black" size={18} />
                       </div>
 
@@ -513,7 +513,7 @@ const BookForm = () => {
                 ${
                   step === 1
                     ? "opacity-40 cursor-not-allowed"
-                    : "hover:border-[#d9ff00]"
+                    : "hover:border-[#e5ff00]"
                 }`}
               >
                 <ChevronLeft size={18} />
@@ -523,7 +523,7 @@ const BookForm = () => {
               {step !== 4 ? (
                 <button
                   onClick={nextStep}
-                  className="h-12 md:h-14 px-8 rounded-xl bg-[#d9ff00] text-black font-bold flex items-center gap-2 hover:scale-105 transition-all"
+                  className="h-12 md:h-14 px-8 rounded-xl bg-[#e5ff00] text-black font-bold flex items-center gap-2 hover:scale-105 transition-all"
                 >
                   Continue
                   <ChevronRight size={18} />
@@ -532,7 +532,7 @@ const BookForm = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  className={`h-12 md:h-14 px-8 md:px-10 rounded-xl bg-[#d9ff00] text-black font-black tracking-[0.12em] uppercase transition-all shadow-[0_0_30px_rgba(217,255,0,0.35)] flex items-center gap-2 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:scale-105"}`}
+                  className={`h-12 md:h-14 px-8 md:px-10 rounded-xl bg-[#e5ff00] text-black font-black tracking-[0.12em] uppercase transition-all shadow-[0_0_30px_rgba(217,255,0,0.35)] flex items-center gap-2 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:scale-105"}`}
                   style={{
                     fontFamily: '"Bebas Neue", sans-serif',
                   }}
@@ -584,10 +584,10 @@ const BookForm = () => {
               className="bg-[#0a0a0a] border border-white/10 rounded-[30px] p-8 md:p-12 max-w-md w-full text-center relative overflow-hidden shadow-[0_0_50px_rgba(217,255,0,0.1)]"
             >
               {/* Glow Behind */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-[#d9ff00]/20 blur-[80px] rounded-full"></div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-[#e5ff00]/20 blur-[80px] rounded-full"></div>
 
               <div className="relative z-10 flex flex-col items-center">
-                <div className="w-20 h-20 bg-[#d9ff00] rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(217,255,0,0.4)]">
+                <div className="w-20 h-20 bg-[#e5ff00] rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(217,255,0,0.4)]">
                   <Check size={40} className="text-black" strokeWidth={3} />
                 </div>
 
@@ -595,7 +595,7 @@ const BookForm = () => {
                   className="text-white text-4xl md:text-5xl uppercase font-black tracking-wide leading-none mb-4"
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
-                  Request <span className="text-[#d9ff00]">Sent</span>
+                  Request <span className="text-[#e5ff00]">Sent</span>
                 </h2>
 
                 <p
@@ -622,7 +622,7 @@ const BookForm = () => {
                     });
                     setError("");
                   }}
-                  className="w-full h-14 rounded-xl bg-white text-black font-bold uppercase tracking-wider hover:bg-[#d9ff00] transition-all duration-300 shadow-xl"
+                  className="w-full h-14 rounded-xl bg-white text-black font-bold uppercase tracking-wider hover:bg-[#e5ff00] transition-all duration-300 shadow-xl"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   Done

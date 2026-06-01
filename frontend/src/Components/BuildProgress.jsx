@@ -14,7 +14,7 @@ const BuildProgress = () => {
       {/* Left Content */}
       <div className="flex-1 max-w-2xl text-left">
         <span
-          className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+          className="px-4 py-2 rounded-md  border border-[#e5ff00]/30 bg-[#e5ff00]/10 text-[#e5ff00] uppercase"
           style={{
             fontFamily: '"BrutalTypeBold", sans-serif',
             fontSize: "16px",
@@ -33,7 +33,7 @@ const BuildProgress = () => {
         >
           BUILD REAL
           <br />
-          <span className="text-[#d9ff00]">PROGRESS</span>
+          <span className="text-[#e5ff00]">PROGRESS</span>
         </h2>
 
         <p className="text-white text-lg mb-6 leading-snug"
@@ -67,7 +67,7 @@ const BuildProgress = () => {
                 fontWeight: "400",
               }}
             >
-              <div className="w-2 h-2 rounded-full bg-[#d9ff00] shadow-[0_0_8px_rgba(163,255,0,0.8)]"></div>
+              <div className="w-2 h-2 rounded-full bg-[#e5ff00] shadow-[0_0_8px_rgba(163,255,0,0.8)]"></div>
               {item}
             </li>
           ))}
@@ -75,7 +75,7 @@ const BuildProgress = () => {
 
         {/* <Link to="/trainers">
           <button
-            className="group relative overflow-hidden bg-[#d9ff00] text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(217,255,0,0.2)] cursor-pointer"
+            className="group relative overflow-hidden bg-[#e5ff00] text-black font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-[0_0_20px_rgba(217,255,0,0.2)] cursor-pointer"
             style={{
               fontFamily: '"Bebas Neue", "Bebas Neue Fallback", sans-serif',
               fontSize: "1.25rem",
@@ -92,9 +92,9 @@ const BuildProgress = () => {
       {/* Right Glowing Icon/Image Area */}
       <div className="flex-1 w-full flex justify-center items-center relative min-h-[400px] lg:min-h-[600px]">
         {/* Intense Glow Background */}
-        <div className="absolute w-64 h-64 md:w-96 md:h-96 bg-[#d9ff00] blur-[100px] md:blur-[150px] opacity-20 rounded-full animate-pulse"></div>
+        <div className="absolute w-64 h-64 md:w-96 md:h-96 bg-[#e5ff00] blur-[100px] md:blur-[150px] opacity-20 rounded-full animate-pulse"></div>
 
-        <div className="relative z-10 w-64 h-64 md:w-100 md:h-100 text-[#d9ff00] drop-shadow-[0_0_20px_rgba(163,255,0,0.8)]">
+        <div className="relative z-10 w-64 h-64 md:w-100 md:h-100 text-[#e5ff00] drop-shadow-[0_0_20px_rgba(163,255,0,0.8)]">
           <img
             src={tt}
             alt="expert trainer coaching illustration"

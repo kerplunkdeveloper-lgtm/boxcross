@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { getHomec2, deleteHomec2 } from "../api/api";
-import { Users, Phone, Calendar, Loader2, Trash2, Mail, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Users, Phone, Calendar, Loader2, Trash2, Mail, Search } from "lucide-react";
 import toast from "react-hot-toast";
 
 const DashboardHomec2 = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
 
   useEffect(() => {
     fetchData(true);
@@ -47,7 +45,6 @@ const DashboardHomec2 = () => {
       if (res.data.success) {
         toast.success("Contact deleted successfully.");
         fetchData(false);
-        setCurrentPage(1);
       } else {
         // Rollback if request fails
         setData(originalData);
@@ -73,10 +70,6 @@ const DashboardHomec2 = () => {
       item.phoneNumber.toLowerCase().includes(search)
     );
   });
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredData.slice(startIndex, startIndex + itemsPerPage);
 
   if (loading) {
     return (
@@ -107,10 +100,7 @@ const DashboardHomec2 = () => {
           type="text"
           placeholder="Search by name, email, phone..."
           value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrentPage(1);
-          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl pl-12 pr-4 text-sm text-[var(--db-text)] placeholder-[var(--db-text-muted)] focus:outline-none focus:border-[var(--db-accent-highlight)]/50 transition-colors"
         />
       </div>
@@ -128,14 +118,14 @@ const DashboardHomec2 = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedData.length === 0 ? (
+              {filteredData.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="p-8 text-center text-[var(--db-text-muted)]">
                     No contacts found.
                   </td>
                 </tr>
               ) : (
-                paginatedData.map((item) => (
+                filteredData.map((item) => (
                   <tr key={item._id} className="border-b border-[var(--db-card-border)]/50 hover:bg-[var(--db-table-hover)] transition-colors">
                     <td className="p-4">
                       <div className="flex items-center gap-3">
@@ -178,65 +168,6 @@ const DashboardHomec2 = () => {
             </tbody>
           </table>
         </div>
-
-        {/* Premium Pagination Control */}
-        {totalPages > 1 && (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 pb-6 px-6 border-t border-[var(--db-card-border)] bg-black/5">
-            <div className="text-xs text-[var(--db-text-muted)] font-medium">
-              Showing <span className="font-bold text-[var(--db-text)]">{startIndex + 1}</span> to{" "}
-              <span className="font-bold text-[var(--db-text)]">
-                {Math.min(startIndex + itemsPerPage, filteredData.length)}
-              </span>{" "}
-              of <span className="font-bold text-[var(--db-text)]">{filteredData.length}</span> entries
-            </div>
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="p-2 rounded-xl border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer bg-[var(--db-card)]"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                if (
-                  totalPages > 5 &&
-                  page !== 1 &&
-                  page !== totalPages &&
-                  Math.abs(page - currentPage) > 1
-                ) {
-                  if (page === 2 && currentPage > 3) {
-                    return <span key="dots-1" className="px-2 text-[var(--db-text-muted)] text-xs">...</span>;
-                  }
-                  if (page === totalPages - 1 && currentPage < totalPages - 2) {
-                    return <span key="dots-2" className="px-2 text-[var(--db-text-muted)] text-xs">...</span>;
-                  }
-                  return null;
-                }
-                
-                return (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`h-9 min-w-[36px] px-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      currentPage === page
-                        ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] border border-[var(--db-accent)] shadow-md"
-                        : "border border-[var(--db-card-border)] bg-[var(--db-card)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                );
-              })}
-              <button
-                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="p-2 rounded-xl border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer bg-[var(--db-card)]"
-              >
-                <ChevronRight size={16} />
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

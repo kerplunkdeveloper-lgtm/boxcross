@@ -9,8 +9,6 @@ import {
   Flame,
   Dumbbell,
   Trash2,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { getBookings, deleteBooking } from "../api/api";
 
@@ -19,20 +17,6 @@ const DashboardBookings = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
-
-  // Pagination calculations
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentBookings = bookings.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(bookings.length / itemsPerPage);
-
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [bookings.length, totalPages, currentPage]);
 
   const fetchBookings = async (showLoader = false) => {
     const shouldShow = showLoader === true;

@@ -103,7 +103,7 @@ const TrainingZones = ({ onBookTour }) => {
 
       <div className="mb-10 px-2 md:px-6">
         <span
-          className="px-4 py-2 rounded-md border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+          className="px-4 py-2 rounded-md border border-[#e5ff00]/30 bg-[#e5ff00]/10 text-[#e5ff00] uppercase"
           style={{
             fontFamily: '"BrutalTypeBold", sans-serif',
             fontSize: "16px",
@@ -119,7 +119,7 @@ const TrainingZones = ({ onBookTour }) => {
             fontWeight: "700",
           }}
         >
-          OUR TRAINING <span className="text-[#d9ff00]">ZONES</span>
+          OUR TRAINING <span className="text-[#e5ff00]">ZONES</span>
         </h2>
       </div>
 
@@ -135,7 +135,7 @@ const TrainingZones = ({ onBookTour }) => {
         {zones.map((zone, i) => (
           <div
             key={i}
-            className="min-w-[280px] md:min-w-[340px] h-[400px] md:h-[500px] relative rounded-2xl overflow-hidden snap-center group border border-[#222] hover:border-[#d9ff00]/40 transition-all duration-500 shadow-xl"
+            className="min-w-[280px] md:min-w-[340px] h-[400px] md:h-[500px] relative rounded-2xl overflow-hidden snap-center group border border-[#222] hover:border-[#e5ff00]/40 transition-all duration-500 shadow-xl"
           >
             <img
               src={zone.img}
@@ -160,7 +160,7 @@ const TrainingZones = ({ onBookTour }) => {
       <div className="flex items-center mt-8 gap-4 w-full max-w-xl mx-auto px-4">
         <button
           onClick={() => scroll("left")}
-          className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-[#d9ff00] hover:border-[#d9ff00] transition-colors duration-300 bg-black/40 cursor-pointer shrink-0"
+          className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-[#e5ff00] hover:border-[#e5ff00] transition-colors duration-300 bg-black/40 cursor-pointer shrink-0"
           aria-label="Scroll left"
         >
           <svg
@@ -179,7 +179,7 @@ const TrainingZones = ({ onBookTour }) => {
 
         <div className="flex-1 h-1.5 bg-gray-900 border border-gray-800 rounded-full relative overflow-hidden">
           <div
-            className="absolute top-0 bottom-0 bg-[#d9ff00] rounded-full transition-all duration-100 ease-out shadow-[0_0_8px_rgba(217,255,0,0.6)]"
+            className="absolute top-0 bottom-0 bg-[#e5ff00] rounded-full transition-all duration-100 ease-out shadow-[0_0_8px_rgba(217,255,0,0.6)]"
             style={{
               left: `${scrollProgress * 75}%`,
               width: "25%",
@@ -189,7 +189,7 @@ const TrainingZones = ({ onBookTour }) => {
 
         <button
           onClick={() => scroll("right")}
-          className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-[#d9ff00] hover:border-[#d9ff00] transition-colors duration-300 bg-black/40 cursor-pointer shrink-0"
+          className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-[#e5ff00] hover:border-[#e5ff00] transition-colors duration-300 bg-black/40 cursor-pointer shrink-0"
           aria-label="Scroll right"
         >
           <svg
@@ -211,7 +211,7 @@ const TrainingZones = ({ onBookTour }) => {
       <div className="flex justify-center mt-16">
         <button
           onClick={handleScroll}
-          className="group relative overflow-hidden bg-[#d9ff00] text-black font-black uppercase tracking-widest px-10 py-4 rounded-xl  transition-colors shadow-[0_0_20px_rgba(217,255,0,0.2)] text-lg cursor-pointer"
+          className="group relative overflow-hidden bg-[#e5ff00] text-black font-black uppercase tracking-widest px-10 py-4 rounded-xl  transition-colors shadow-[0_0_20px_rgba(217,255,0,0.2)] text-lg cursor-pointer"
           style={{
             fontFamily: '"Brutal Font", sans-serif',
             fontWeight: "700",

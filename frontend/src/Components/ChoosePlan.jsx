@@ -20,7 +20,7 @@ const ChoosePlan = React.forwardRef(
           className="text-center mb-8"
         >
           <span
-            className="px-4 py-2 rounded-md  border border-[#d9ff00]/30 bg-[#d9ff00]/10 text-[#d9ff00] uppercase"
+            className="px-4 py-2 rounded-md  border border-[#e5ff00]/30 bg-[#e5ff00]/10 text-[#e5ff00] uppercase"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontSize: "16px",

@@ -44,6 +44,13 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     );
   });
 
+  const [membershipOpen, setMembershipOpen] = useState(() => {
+    return (
+      location.pathname.includes("/memberships") ||
+      location.pathname.includes("/payments")
+    );
+  });
+
   useEffect(() => {
     if (
       location.pathname.includes("/events") ||
@@ -65,15 +72,18 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (
+      location.pathname.includes("/memberships") ||
+      location.pathname.includes("/payments")
+    ) {
+      setMembershipOpen(true);
+    }
+  }, [location.pathname]);
+
   const baseMenuItems = [
     { name: "Dashboard", path: "/dashboard", icon: Home },
     { name: "Calendar", path: "/dashboard/calendar", icon: Calendar },
-    {
-      name: "Membership edit",
-      path: "/dashboard/memberships",
-      icon: CreditCard,
-    },
-    { name: "Payment details", path: "/dashboard/payments", icon: DollarSign },
   ];
 
   const footerMenuItems = [
@@ -135,6 +145,71 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
               </NavLink>
             );
           })}
+
+          {/* Membership dropdown for Admin */}
+          {user && user.role === "admin" && (
+            <div className="space-y-1">
+              <button
+                onClick={() => setMembershipOpen(!membershipOpen)}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                  location.pathname.includes("/memberships") ||
+                  location.pathname.includes("/payments")
+                    ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
+                    : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                }`}
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                <div className="flex items-center gap-3">
+                  <CreditCard size={18} className={location.pathname.includes("/memberships") || location.pathname.includes("/payments") ? "text-[var(--db-accent-highlight)]" : ""} />
+                  <span>Membership</span>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform duration-300 ${
+                    membershipOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
+                  }`}
+                />
+              </button>
+
+              {membershipOpen && (
+                <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
+                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+
+                  <NavLink
+                    to="/dashboard/memberships"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <CreditCard size={14} />
+                    Membership edit
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/payments"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <DollarSign size={14} />
+                    Payment details
+                  </NavLink>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Events dropdown for Admin */}
           {user && user.role === "admin" && (
@@ -346,7 +421,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       <div className="p-4 border-t border-[var(--db-sidebar-border)] flex-shrink-0">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider text-red-400 hover:bg-red-500/10 transition-all cursor-pointer"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider text-red-400 bg-[var(--db-sidebar-link-hover)] hover:text-red-400 transition-all cursor-pointer"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           <LogOut size={18} />

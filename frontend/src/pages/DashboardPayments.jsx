@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import { 
-  CreditCard, Search, DollarSign, CheckCircle, AlertTriangle, Calendar, Filter
+  CreditCard, Search, DollarSign, CheckCircle, AlertTriangle, Calendar, Filter, Trash2
 } from "lucide-react";
-import { getPayments } from "../api/api";
+import { getPayments, deletePayment } from "../api/api";
 import { toast } from "react-hot-toast";
 
 const DashboardPayments = () => {
@@ -27,6 +27,30 @@ const DashboardPayments = () => {
       toast.error("Failed to load payment transactions");
     } finally {
       if (shouldShow) setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this payment record?")) {
+      return;
+    }
+
+    const originalPayments = payments;
+    setPayments((prev) => prev.filter((p) => p._id !== id));
+
+    try {
+      const { data } = await deletePayment(id);
+      if (data.success) {
+        toast.success("Payment record deleted successfully");
+        fetchPayments(false);
+      } else {
+        setPayments(originalPayments);
+        toast.error("Failed to delete payment record");
+      }
+    } catch (error) {
+      console.error("Error deleting payment record", error);
+      setPayments(originalPayments);
+      toast.error(error.response?.data?.message || "Failed to delete payment record");
     }
   };
 
@@ -199,7 +223,8 @@ const DashboardPayments = () => {
                     <th className="py-4 px-4">Transaction ID</th>
                     <th className="py-4 px-4">Method</th>
                     <th className="py-4 px-4">Date</th>
-                    <th className="py-4 px-4 text-right rounded-r-xl">Status</th>
+                    <th className="py-4 px-4 text-right">Status</th>
+                    <th className="py-4 px-4 text-right rounded-r-xl">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--db-card-border)]">
@@ -259,6 +284,17 @@ const DashboardPayments = () => {
                         }`}>
                           {payment.paymentStatus}
                         </span>
+                      </td>
+
+                      {/* Action */}
+                      <td className="py-4 px-4 text-right">
+                        <button
+                          onClick={() => handleDelete(payment._id)}
+                          className="p-2 text-[var(--db-text-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer"
+                          title="Delete Payment Record"
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </td>
                     </tr>
                   ))}

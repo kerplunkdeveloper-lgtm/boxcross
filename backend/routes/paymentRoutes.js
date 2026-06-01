@@ -3,7 +3,8 @@ const router = express.Router();
 const {
   createPayment,
   getPayments,
-  updatePayment
+  updatePayment,
+  deletePayment
 } = require("../controllers/paymentController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
@@ -13,5 +14,6 @@ router.post("/", createPayment);
 // Admin-only operations
 router.get("/", protect, authorize("admin"), getPayments);
 router.put("/:id", protect, authorize("admin"), updatePayment);
+router.delete("/:id", protect, authorize("admin"), deletePayment);
 
 module.exports = router;

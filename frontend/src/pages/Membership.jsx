@@ -39,7 +39,7 @@ const Membership = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="
-              text-[#d9ff00]
+              text-[#e5ff00]
               uppercase
               tracking-[0.4em]
               text-[10px]
@@ -80,7 +80,7 @@ const Membership = () => {
             <span className="block text-white">PUDUCHERRY’S COMPLETE </span>
 
             <span className="block">
-              <span className="text-[#d9ff00]">PERFORMANCE</span>{" "}
+              <span className="text-[#e5ff00]">PERFORMANCE</span>{" "}
               <span className="text-white">ARENA</span>
             </span>
           </motion.h1>
@@ -139,7 +139,7 @@ const Membership = () => {
                 group relative overflow-hidden
                 w-[85%] sm:w-auto
                 px-10 py-4
-                bg-[#d9ff00] text-black
+                bg-[#e5ff00] text-black
                 uppercase tracking-[0.2em]
                 rounded-lg
                 transition-all duration-500
@@ -176,7 +176,7 @@ const Membership = () => {
                 cursor-pointer
               "
             >
-              <span className="absolute inset-0  bg-[#d9ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
+              <span className="absolute inset-0  bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
               <span className="relative z-10 font-extrabold text-[10px] md:text-[14px]">
                 Membership Plans
               </span>

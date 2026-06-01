@@ -46,6 +46,8 @@ export const getPayments = () => API.get("/payments");
 
 export const updatePaymentStatus = (id, data) => API.put(`/payments/${id}`, data);
 
+export const deletePayment = (id) => API.delete(`/payments/${id}`);
+
 // ──────────────── EVENT BANNERS API ────────────────
 
 export const getActiveBanners = () => API.get("/event-banners");
