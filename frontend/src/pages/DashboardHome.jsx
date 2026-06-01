@@ -26,39 +26,48 @@ const DashboardHome = () => {
   }, []);
 
 
-  useEffect(() => {
-    const fetchDashboardStats = async () => {
-      setLoading(true);
-      try {
-        const [bookingsRes, paymentsRes, eventsRes] = await Promise.all([
-          getBookings(),
-          getPayments(),
-          getEventsListAdmin()
-        ]);
+  const fetchDashboardStats = async (showLoader = false) => {
+    const shouldShow = showLoader === true;
+    if (shouldShow) setLoading(true);
+    try {
+      const [bookingsRes, paymentsRes, eventsRes] = await Promise.all([
+        getBookings(),
+        getPayments(),
+        getEventsListAdmin()
+      ]);
 
-        if (bookingsRes.data?.success) {
-          setVisitorCount(bookingsRes.data.count || bookingsRes.data.data.length);
-        }
-        
-        if (paymentsRes.data?.success && Array.isArray(paymentsRes.data.data)) {
-          const total = paymentsRes.data.data.reduce((sum, item) => {
-            return sum + (Number(item.amount) || Number(item.planPrice) || 0);
-          }, 0);
-          setTotalPayments(total);
-        }
-
-        if (eventsRes.data?.success && Array.isArray(eventsRes.data.data)) {
-          setEvents(eventsRes.data.data);
-        }
-      } catch (error) {
-        console.error("Error loading dashboard home stats", error);
-      } finally {
-        setLoading(false);
+      if (bookingsRes.data?.success) {
+        setVisitorCount(bookingsRes.data.count || bookingsRes.data.data.length);
       }
-    };
+      
+      if (paymentsRes.data?.success && Array.isArray(paymentsRes.data.data)) {
+        const total = paymentsRes.data.data.reduce((sum, item) => {
+          const status = item.paymentStatus || item.status;
+          if (status === "success" || status === "completed") {
+            return sum + (Number(item.price) || Number(item.amount) || Number(item.planPrice) || 0);
+          }
+          return sum;
+        }, 0);
+        setTotalPayments(total);
+      }
 
+      if (eventsRes.data?.success && Array.isArray(eventsRes.data.data)) {
+        setEvents(eventsRes.data.data);
+      }
+    } catch (error) {
+      console.error("Error loading dashboard home stats", error);
+    } finally {
+      if (shouldShow) setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     if (user) {
-      fetchDashboardStats();
+      fetchDashboardStats(true);
+      const interval = setInterval(() => {
+        fetchDashboardStats(false);
+      }, 5000);
+      return () => clearInterval(interval);
     }
   }, [user]);
 
@@ -148,41 +157,7 @@ const DashboardHome = () => {
           </div>
         </div>
 
-        {/* Cinematic Video Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="w-full h-56 sm:h-72 md:h-80 lg:h-[530px] rounded-3xl overflow-hidden relative border border-[var(--db-card-border)] shadow-2xl"
-        >
-          {/* Loop Video Background */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover object-center"
-          >
-            <source
-              src="https://res.cloudinary.com/dubheb1lh/video/upload/v1779972237/100546-video-720_1_yostn5.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-
-          {/* Premium Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-transparent z-10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent z-10" />
-
-          {/* Banner Text Content */}
-          <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8 text-left">
-            <div className="flex flex-col items-start gap-1">
-              <span className="text-[9px] sm:text-xs text-gray-300 font-bold uppercase tracking-widest mt-1 pl-1">
-                Box & Cross Elite Training
-              </span>
-            </div>
-          </div>
-        </motion.div>
+   
 
         {/* Dashboard Grid Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -200,7 +175,7 @@ const DashboardHome = () => {
                 <Users size={20} />
               </div>
               <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                Total Bookings
+                Total free gym visitors
               </span>
             </div>
             <div className="z-10 shrink-0">

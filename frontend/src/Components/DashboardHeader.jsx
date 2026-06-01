@@ -18,7 +18,15 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
-import { getBookings, getPayments, getEventBookings } from "../api/api";
+import { 
+  getBookings, 
+  getPayments, 
+  getEventBookings,
+  getHomec1,
+  getHomec2,
+  getHomec3,
+  getLeadsAdmin 
+} from "../api/api";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -130,6 +138,14 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     activeTitle = "Settings";
   } else if (location.pathname.includes("/calendar")) {
     activeTitle = "Athlete & Events Schedule";
+  } else if (location.pathname.includes("/homec1")) {
+    activeTitle = "Trial Bookings";
+  } else if (location.pathname.includes("/homec2")) {
+    activeTitle = "Consultation Details";
+  } else if (location.pathname.includes("/homec3")) {
+    activeTitle = "Contact Enquiries";
+  } else if (location.pathname.includes("/leads")) {
+    activeTitle = "Captured Leads";
   }
 
   // Fetch real-time data and aggregate as notifications
@@ -137,64 +153,122 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     try {
       let aggregated = [];
 
+      const results = await Promise.allSettled([
+        getBookings(),
+        getPayments(),
+        getEventBookings(),
+        getHomec1(),
+        getHomec2(),
+        getHomec3(),
+        getLeadsAdmin()
+      ]);
+
+      const [
+        bookingsRes,
+        paymentsRes,
+        eventBookingsRes,
+        homec1Res,
+        homec2Res,
+        homec3Res,
+        leadsRes
+      ] = results;
+
       // 1. Fetch Enquiry Bookings
-      try {
-        const res = await getBookings();
-        if (res.data?.success && Array.isArray(res.data.data)) {
-          res.data.data.forEach((item) => {
-            aggregated.push({
-              id: `booking-${item._id}`,
-              title: "New Enquiry Booking",
-              message: `${item.name} scheduled a tour at ${item.time}`,
-              time: new Date(item.createdAt || Date.now()),
-              type: "booking",
-              link: "/dashboard/bookings",
-            });
+      if (bookingsRes.status === "fulfilled" && bookingsRes.value.data?.success && Array.isArray(bookingsRes.value.data.data)) {
+        bookingsRes.value.data.data.forEach((item) => {
+          aggregated.push({
+            id: `booking-${item._id}`,
+            title: "New Enquiry Booking",
+            message: `${item.name} scheduled a tour at ${item.time}`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "booking",
+            link: "/dashboard/bookings",
           });
-        }
-      } catch (e) {
-        console.error("Failed to fetch enquiry bookings for notifications", e);
+        });
       }
 
       // 2. Fetch Membership Payments
-      try {
-        const res = await getPayments();
-        if (res.data?.success && Array.isArray(res.data.data)) {
-          res.data.data.forEach((item) => {
-            aggregated.push({
-              id: `payment-${item._id}`,
-              title: "Membership Payment",
-              message: `Payment of ₹${item.amount || item.planPrice || 0} received from user (Status: ${item.status})`,
-              time: new Date(item.createdAt || Date.now()),
-              type: "payment",
-              link: "/dashboard/payments",
-            });
+      if (paymentsRes.status === "fulfilled" && paymentsRes.value.data?.success && Array.isArray(paymentsRes.value.data.data)) {
+        paymentsRes.value.data.data.forEach((item) => {
+          aggregated.push({
+            id: `payment-${item._id}`,
+            title: "Membership Payment",
+            message: `Payment of ₹${item.price || item.amount || item.planPrice || 0} received (Status: ${item.paymentStatus || item.status || "success"})`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "payment",
+            link: "/dashboard/payments",
           });
-        }
-      } catch (e) {
-        console.error(
-          "Failed to fetch membership payments for notifications",
-          e,
-        );
+        });
       }
 
       // 3. Fetch Event Bookings
-      try {
-        const res = await getEventBookings();
-        if (res.data?.success && Array.isArray(res.data.data)) {
-          res.data.data.forEach((item) => {
-            aggregated.push({
-              id: `event-${item._id}`,
-              title: "Event Booking",
-              message: `${item.name} registered for ${item.eventName || "event"} (${item.seats || 1} seats)`,
-              time: new Date(item.createdAt || Date.now()),
-              type: "event",
-              link: "/dashboard/event-payments",
-            });
+      if (eventBookingsRes.status === "fulfilled" && eventBookingsRes.value.data?.success && Array.isArray(eventBookingsRes.value.data.data)) {
+        eventBookingsRes.value.data.data.forEach((item) => {
+          aggregated.push({
+            id: `event-${item._id}`,
+            title: "Event Booking",
+            message: `${item.name} registered for ${item.event?.title || item.eventName || "event"} (${item.seats || 1} seats)`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "event",
+            link: "/dashboard/event-payments",
           });
-        }
-      } catch (e) {
-        console.error("Failed to fetch event bookings for notifications", e);
+        });
+      }
+
+      // 4. Fetch Trial Bookings (Homec1)
+      if (homec1Res.status === "fulfilled" && homec1Res.value.data?.success && Array.isArray(homec1Res.value.data.data)) {
+        homec1Res.value.data.data.forEach((item) => {
+          aggregated.push({
+            id: `homec1-${item._id}`,
+            title: "New Trial Booking",
+            message: `${item.name} booked a Free Trial`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "booking",
+            link: "/dashboard/homec1",
+          });
+        });
+      }
+
+      // 5. Fetch Consultation Requests (Homec2)
+      if (homec2Res.status === "fulfilled" && homec2Res.value.data?.success && Array.isArray(homec2Res.value.data.data)) {
+        homec2Res.value.data.data.forEach((item) => {
+          aggregated.push({
+            id: `homec2-${item._id}`,
+            title: "New Consultation Request",
+            message: `${item.name} requested a consultation`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "event",
+            link: "/dashboard/homec2",
+          });
+        });
+      }
+
+      // 6. Fetch Contact Form Enquiries (Homec3)
+      if (homec3Res.status === "fulfilled" && homec3Res.value.data?.success && Array.isArray(homec3Res.value.data.data)) {
+        homec3Res.value.data.data.forEach((item) => {
+          aggregated.push({
+            id: `homec3-${item._id}`,
+            title: "New Contact Enquiry",
+            message: `${item.name} sent: "${item.message || ""}"`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "booking",
+            link: "/dashboard/homec3",
+          });
+        });
+      }
+
+      // 7. Fetch Popup Leads
+      if (leadsRes.status === "fulfilled" && leadsRes.value.data?.success && Array.isArray(leadsRes.value.data.data)) {
+        leadsRes.value.data.data.forEach((item) => {
+          aggregated.push({
+            id: `lead-${item._id}`,
+            title: "New Popup Lead Captured",
+            message: `${item.name} registered (Phone: ${item.phone})`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "event",
+            link: "/dashboard/leads",
+          });
+        });
       }
 
       // Sort by time descending (newest first)
@@ -235,11 +309,28 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     }
   };
 
-  // Fetch immediately and poll every 25 seconds for real-time updates
+  // Fetch immediately, and poll every 5 seconds when tab is active (for real-time updates and performance optimization)
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 25000);
-    return () => clearInterval(interval);
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchNotifications();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        fetchNotifications();
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   // Handle clicking outside the notifications dropdown to close it
@@ -357,7 +448,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
 
           {/* Notifications Dropdown Drawer */}
           {showDropdown && (
-            <div className="absolute top-12 right-0 w-80 sm:w-96 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl p-4 z-50 text-left transition-colors">
+            <div className="fixed sm:absolute top-20 sm:top-12 left-4 right-4 sm:left-auto sm:right-0 w-auto sm:w-96 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl p-4 z-50 text-left transition-colors">
               <div className="flex items-center justify-between pb-3 border-b border-[var(--db-card-border)]">
                 <span className="text-xs font-black uppercase tracking-wider text-[var(--db-text-title)] flex items-center gap-1.5">
                   <Bell
@@ -577,7 +668,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
             initial={{ opacity: 0, y: -20, scale: 0.95, x: 20 }}
             animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
             exit={{ opacity: 0, y: -10, scale: 0.95, x: 10 }}
-            className="fixed top-6 right-6 z-[9999] w-80 sm:w-96 bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] p-4 flex gap-3 text-left items-start cursor-pointer"
+            className="fixed top-6 right-4 left-4 sm:left-auto sm:right-6 w-auto sm:w-96 bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] p-4 flex gap-3 text-left items-start cursor-pointer z-[9999]"
             onClick={() => {
               if (latestNotification.link) {
                 navigate(latestNotification.link);

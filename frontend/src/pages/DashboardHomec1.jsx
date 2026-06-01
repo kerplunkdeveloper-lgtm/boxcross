@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getHomec1, deleteHomec1 } from "../api/api";
-import { Users, Phone, Calendar, Loader2, Trash2, Mail, Search } from "lucide-react";
+import { Users, Phone, Calendar, Loader2, Trash2, Mail, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import toast from "react-hot-toast";
 
 const DashboardHomec1 = () => {
@@ -11,12 +11,17 @@ const DashboardHomec1 = () => {
   const itemsPerPage = 8;
 
   useEffect(() => {
-    fetchData();
+    fetchData(true);
+    const interval = setInterval(() => {
+      fetchData(false);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (showLoader = false) => {
+    const shouldShow = showLoader === true;
     try {
-      setLoading(true);
+      if (shouldShow) setLoading(true);
       const res = await getHomec1();
       if (res.data.success) {
         setData(res.data.data);
@@ -24,7 +29,7 @@ const DashboardHomec1 = () => {
     } catch (error) {
       toast.error("Failed to load trial submissions.");
     } finally {
-      setLoading(false);
+      if (shouldShow) setLoading(false);
     }
   };
 
@@ -33,14 +38,24 @@ const DashboardHomec1 = () => {
       return;
     }
 
+    // Optimistically update the UI by removing the deleted item
+    const originalData = data;
+    setData((prev) => prev.filter((item) => item._id !== id));
+
     try {
       const res = await deleteHomec1(id);
       if (res.data.success) {
         toast.success("Submission deleted successfully.");
-        fetchData();
+        fetchData(false);
         setCurrentPage(1);
+      } else {
+        // Rollback if request fails
+        setData(originalData);
+        toast.error("Failed to delete submission.");
       }
     } catch (error) {
+      // Rollback if exception is thrown
+      setData(originalData);
       toast.error("Failed to delete submission.");
     }
   };
@@ -176,26 +191,60 @@ const DashboardHomec1 = () => {
           </table>
         </div>
 
+        {/* Premium Pagination Control */}
         {totalPages > 1 && (
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-6 py-4 bg-black/5 border-t border-[var(--db-card-border)]">
-            <span className="text-xs text-[var(--db-text-muted)]">
-              Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredData.length)} of {filteredData.length} entries
-            </span>
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 pb-6 px-6 border-t border-[var(--db-card-border)] bg-black/5">
+            <div className="text-xs text-[var(--db-text-muted)] font-medium">
+              Showing <span className="font-bold text-[var(--db-text)]">{startIndex + 1}</span> to{" "}
+              <span className="font-bold text-[var(--db-text)]">
+                {Math.min(startIndex + itemsPerPage, filteredData.length)}
+              </span>{" "}
+              of <span className="font-bold text-[var(--db-text)]">{filteredData.length}</span> entries
+            </div>
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1.5 rounded-lg bg-[var(--db-card)] border border-[var(--db-card-border)] text-xs text-[var(--db-text)] hover:bg-black/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="p-2 rounded-xl border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer bg-[var(--db-card)]"
               >
-                Previous
+                <ChevronLeft size={16} />
               </button>
-              <span className="text-xs text-[var(--db-text)] px-2">Page {currentPage} of {totalPages}</span>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                if (
+                  totalPages > 5 &&
+                  page !== 1 &&
+                  page !== totalPages &&
+                  Math.abs(page - currentPage) > 1
+                ) {
+                  if (page === 2 && currentPage > 3) {
+                    return <span key="dots-1" className="px-2 text-[var(--db-text-muted)] text-xs">...</span>;
+                  }
+                  if (page === totalPages - 1 && currentPage < totalPages - 2) {
+                    return <span key="dots-2" className="px-2 text-[var(--db-text-muted)] text-xs">...</span>;
+                  }
+                  return null;
+                }
+                
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`h-9 min-w-[36px] px-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      currentPage === page
+                        ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] border border-[var(--db-accent)] shadow-md"
+                        : "border border-[var(--db-card-border)] bg-[var(--db-card)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
               <button
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1.5 rounded-lg bg-[var(--db-card)] border border-[var(--db-card-border)] text-xs text-[var(--db-text)] hover:bg-black/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                className="p-2 rounded-xl border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] disabled:opacity-40 disabled:hover:bg-transparent transition-all cursor-pointer bg-[var(--db-card)]"
               >
-                Next
+                <ChevronRight size={16} />
               </button>
             </div>
           </div>

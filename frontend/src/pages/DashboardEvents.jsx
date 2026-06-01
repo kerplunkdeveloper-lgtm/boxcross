@@ -38,8 +38,9 @@ const DashboardEvents = () => {
   const fileInputRef = useRef(null);
 
   // Fetch banners on load
-  const fetchBanners = async () => {
-    setLoading(true);
+  const fetchBanners = async (showLoader = false) => {
+    const shouldShow = showLoader === true;
+    if (shouldShow) setLoading(true);
     try {
       const { data } = await getAllBanners();
       if (data.success) {
@@ -49,12 +50,16 @@ const DashboardEvents = () => {
       console.error(error);
       toast.error("Failed to load banners");
     } finally {
-      setLoading(false);
+      if (shouldShow) setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchBanners();
+    fetchBanners(true);
+    const interval = setInterval(() => {
+      fetchBanners(false);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   // Handle file select and preview

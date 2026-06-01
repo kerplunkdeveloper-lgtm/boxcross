@@ -14,8 +14,10 @@ const DashboardPayments = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const fetchPayments = async () => {
+  const fetchPayments = async (showLoader = false) => {
+    const shouldShow = showLoader === true;
     try {
+      if (shouldShow) setLoading(true);
       const { data } = await getPayments();
       if (data.success) {
         setPayments(data.data);
@@ -24,13 +26,17 @@ const DashboardPayments = () => {
       console.error("Error fetching payment transactions", error);
       toast.error("Failed to load payment transactions");
     } finally {
-      setLoading(false);
+      if (shouldShow) setLoading(false);
     }
   };
 
   useEffect(() => {
     if (user) {
-      fetchPayments();
+      fetchPayments(true);
+      const interval = setInterval(() => {
+        fetchPayments(false);
+      }, 5000);
+      return () => clearInterval(interval);
     }
   }, [user]);
 

@@ -171,8 +171,9 @@ const DashboardCalendar = () => {
   const fileInputRef = useRef(null);
 
   // Fetch all events and bookings
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (showLoader = false) => {
+    const shouldShow = showLoader === true;
+    if (shouldShow) setLoading(true);
     try {
       const [eventsRes, bookingsRes] = await Promise.all([
         getEventsListAdmin(),
@@ -189,12 +190,16 @@ const DashboardCalendar = () => {
       console.error("Error loading dashboard calendar data", error);
       toast.error("Failed to load calendar content");
     } finally {
-      setLoading(false);
+      if (shouldShow) setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData(true);
+    const interval = setInterval(() => {
+      fetchData(false);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   // Helper parser to read date strings of events and bookings

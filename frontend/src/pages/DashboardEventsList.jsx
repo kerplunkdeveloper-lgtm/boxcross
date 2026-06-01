@@ -166,8 +166,9 @@ const DashboardEventsList = () => {
   const fileInputRef = useRef(null);
 
   // Fetch events
-  const fetchEvents = async () => {
-    setLoading(true);
+  const fetchEvents = async (showLoader = false) => {
+    const shouldShow = showLoader === true;
+    if (shouldShow) setLoading(true);
     try {
       const { data } = await getEventsListAdmin();
       if (data.success) {
@@ -177,12 +178,16 @@ const DashboardEventsList = () => {
       console.error(error);
       toast.error("Failed to load events");
     } finally {
-      setLoading(false);
+      if (shouldShow) setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchEvents();
+    fetchEvents(true);
+    const interval = setInterval(() => {
+      fetchEvents(false);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   // Handle file select and preview
@@ -441,7 +446,6 @@ const DashboardEventsList = () => {
             </button>
           </div>
         ) : (
-          /* Cards Grid Layout (Replacing Table) */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events.map((event) => (
               <div
@@ -828,7 +832,7 @@ const DashboardEventsList = () => {
                               { title: "", duration: "", color: "green" },
                             ]);
                           }}
-                          className="flex items-center gap-1.5 bg-[var(--db-accent)] hover:bg-white text-black text-[10px] font-black uppercase tracking-wider px-4 py-2 rounded-xl transition-all cursor-pointer"
+                         className="flex items-center gap-1 bg-[var(--db-accent-glow)] hover:bg-[var(--db-accent)] text-[var(--db-accent-text)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all cursor-pointer"
                         >
                           <Plus size={12} />
                           Create First Step

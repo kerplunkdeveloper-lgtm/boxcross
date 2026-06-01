@@ -103,10 +103,10 @@ html {
 
 
   /* Dynamic Accent Brand Tokens */
- --db-accent: linear-gradient(135deg, #00ff88, #22fa1e, #00c853);
+ --db-accent: #e5ff00;
   --db-accent-text: #000000;
-  --db-accent-hover: #22fa1e;
-  --db-accent-highlight: #25ee06;
+  --db-accent-hover: #e5ff00;
+  --db-accent-highlight: #e5ff00;
   --db-accent-glow: rgba(222, 251, 2, 0.15);
 }
 
@@ -133,11 +133,11 @@ html {
 
 
   /* Dynamic Accent Brand Tokens */
-  --db-accent:linear-gradient(135deg, #00ff88, #22fa1e, #00c853);
-  --db-accent-text: #000000;
-  --db-accent-hover: #22fa1e;
-  --db-accent-highlight: #0dc400;
-  --db-accent-glow: rgba(37, 99, 235, 0.12);
+  --db-accent:#000000;
+  --db-accent-text: white;
+  --db-accent-hover: #111111;
+  --db-accent-highlight: #111111;
+  --db-accent-glow: rgba(119, 119, 119, 0.12);
 }
 
 /* Force Brutal Font on all dashboard views */

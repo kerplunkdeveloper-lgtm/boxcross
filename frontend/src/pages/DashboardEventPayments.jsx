@@ -15,8 +15,10 @@ const DashboardEventPayments = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [deletingId, setDeletingId] = useState(null);
 
-  const fetchBookings = async () => {
+  const fetchBookings = async (showLoader = false) => {
+    const shouldShow = showLoader === true;
     try {
+      if (shouldShow) setLoading(true);
       const { data } = await getEventBookings();
       if (data.success) {
         setBookings(data.data);
@@ -25,13 +27,17 @@ const DashboardEventPayments = () => {
       console.error("Error fetching event bookings", error);
       toast.error("Failed to load event bookings");
     } finally {
-      setLoading(false);
+      if (shouldShow) setLoading(false);
     }
   };
 
   useEffect(() => {
     if (user) {
-      fetchBookings();
+      fetchBookings(true);
+      const interval = setInterval(() => {
+        fetchBookings(false);
+      }, 5000);
+      return () => clearInterval(interval);
     }
   }, [user]);
 
@@ -41,18 +47,25 @@ const DashboardEventPayments = () => {
       return;
     }
 
+    // Optimistically update the UI
+    const originalBookings = bookings;
+    setBookings((prev) => prev.filter((b) => b._id !== id));
     setDeletingId(id);
     const toastId = toast.loading("Deleting booking record...");
     try {
       const { data } = await deleteEventBooking(id);
       if (data.success) {
         toast.success(data.message || "Record deleted successfully", { id: toastId });
-        fetchBookings();
+        fetchBookings(false);
       } else {
+        // Rollback
+        setBookings(originalBookings);
         toast.error("Failed to delete record", { id: toastId });
       }
     } catch (error) {
       console.error(error);
+      // Rollback
+      setBookings(originalBookings);
       toast.error("An error occurred while deleting the booking record.", { id: toastId });
     } finally {
       setDeletingId(null);
@@ -82,7 +95,6 @@ const DashboardEventPayments = () => {
     const matchesStatus = 
       statusFilter === "all" || 
       booking.status === statusFilter;
-
     return matchesSearch && matchesStatus;
   });
 

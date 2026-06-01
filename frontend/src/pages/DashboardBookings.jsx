@@ -9,6 +9,8 @@ import {
   Flame,
   Dumbbell,
   Trash2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { getBookings, deleteBooking } from "../api/api";
 
@@ -17,9 +19,25 @@ const DashboardBookings = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
-  const fetchBookings = async () => {
+  // Pagination calculations
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBookings = bookings.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(bookings.length / itemsPerPage);
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [bookings.length, totalPages, currentPage]);
+
+  const fetchBookings = async (showLoader = false) => {
+    const shouldShow = showLoader === true;
     try {
+      if (shouldShow) setLoading(true);
       const { data } = await getBookings();
       if (data.success) {
         setBookings(data.data);
@@ -27,27 +45,38 @@ const DashboardBookings = () => {
     } catch (error) {
       console.error("Error fetching bookings", error);
     } finally {
-      setLoading(false);
+      if (shouldShow) setLoading(false);
     }
   };
 
   useEffect(() => {
     if (user) {
-      fetchBookings();
+      fetchBookings(true);
+      const interval = setInterval(() => {
+        fetchBookings(false);
+      }, 5000);
+      return () => clearInterval(interval);
     }
   }, [user]);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this booking?")) {
-      try {
-        const { data } = await deleteBooking(id);
-        if (data.success) {
-          setBookings((prev) => prev.filter((b) => b._id !== id));
-        }
-      } catch (error) {
-        console.error("Error deleting booking", error);
-        alert(error.response?.data?.message || "Failed to delete booking.");
+    if (!window.confirm("Are you sure you want to delete this booking?")) {
+      return;
+    }
+    const originalBookings = bookings;
+    setBookings((prev) => prev.filter((b) => b._id !== id));
+    try {
+      const { data } = await deleteBooking(id);
+      if (!data.success) {
+        setBookings(originalBookings);
+        alert("Failed to delete booking.");
+      } else {
+        fetchBookings(false);
       }
+    } catch (error) {
+      console.error("Error deleting booking", error);
+      setBookings(originalBookings);
+      alert(error.response?.data?.message || "Failed to delete booking.");
     }
   };
 
