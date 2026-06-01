@@ -128,7 +128,7 @@ const Eventbanner = () => {
 
   if (loading) {
     return (
-      <section className="w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[80vh] bg-black flex flex-col items-center justify-center relative z-10 border-b border-white/5">
+      <section className="w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[60vh] bg-black flex flex-col items-center justify-center relative z-10 border-b border-white/5">
         <div className="flex flex-col items-center gap-3">
           <svg
             className="animate-spin h-8 w-8 text-[#e5ff00]"
@@ -164,7 +164,7 @@ const Eventbanner = () => {
 
   return (
     <section
-      className="relative w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden select-none z-10 border-b border-white/5"
+      className="relative w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[60vh] lg:h-[60vh] overflow-hidden select-none z-10 border-b border-white/5"
       onMouseEnter={stopAutoplay}
       onMouseLeave={startAutoplay}
     >

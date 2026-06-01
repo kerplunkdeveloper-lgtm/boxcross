@@ -183,8 +183,8 @@ const Navbar = () => {
                   href="https://boxandcross.com/"
                   className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"BrutalTypeBold", sans-serif',
-                    fontWeight: 600,
+                    fontFamily: '"Brutal Font Light", sans-serif',
+                    fontWeight: 400,
                     fontSize: "14px",
                   }}
                 >
@@ -201,8 +201,8 @@ const Navbar = () => {
                   <button
                     className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
                     style={{
-                      fontFamily: '"BrutalTypeBold", sans-serif',
-                      fontWeight: 600,
+                      fontFamily: '"Brutal Font Light", sans-serif',
+                      fontWeight: 400,
                       fontSize: "14px",
                     }}
                   >
@@ -246,8 +246,8 @@ const Navbar = () => {
                   href="https://boxandcross.com/coaching/"
                   className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"BrutalTypeBold", sans-serif',
-                    fontWeight: 600,
+                    fontFamily: '"Brutal Font Light", sans-serif',
+                    fontWeight: 400,
                     fontSize: "14px",
                   }}
                 >
@@ -264,8 +264,8 @@ const Navbar = () => {
                     }`
                   }
                   style={{
-                    fontFamily: '"BrutalTypeBold", sans-serif',
-                    fontWeight: 600,
+                    fontFamily: '"Brutal Font Light", sans-serif',
+                    fontWeight: 400,
                     fontSize: "14px",
                   }}
                 >
@@ -289,8 +289,8 @@ const Navbar = () => {
                       }`
                     }
                     style={{
-                      fontFamily: '"BrutalTypeBold", sans-serif',
-                      fontWeight: 600,
+                      fontFamily: '"Brutal Font Light", sans-serif',
+                      fontWeight: 400,
                       fontSize: "14px",
                     }}
                   >
@@ -334,8 +334,8 @@ const Navbar = () => {
                   href="https://boxandcross.com/contact-us/"
                   className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"BrutalTypeBold", sans-serif',
-                    fontWeight: 600,
+                    fontFamily: '"Brutal Font Light", sans-serif',
+                    fontWeight: 400,
                     fontSize: "14px",
                   }}
                 >
