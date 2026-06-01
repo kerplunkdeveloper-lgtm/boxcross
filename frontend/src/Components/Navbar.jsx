@@ -352,7 +352,7 @@ const Navbar = () => {
                   onClick={(e) => {
                     if (window.location.pathname === "/") {
                       e.preventDefault();
-                      const element = document.getElementById("book-form");
+                      const element = document.getElementById("book-your-free-gym-tour");
                       if (element) {
                         element.scrollIntoView({ behavior: "smooth" });
                       }

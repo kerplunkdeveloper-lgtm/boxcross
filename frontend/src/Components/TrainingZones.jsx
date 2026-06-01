@@ -28,7 +28,7 @@ const TrainingZones = ({ onBookTour }) => {
     if (onBookTour) {
       onBookTour();
     } else {
-      const el = document.getElementById("book-form");
+      const el = document.getElementById("book-your-free-gym-tour");
       if (el) el.scrollIntoView({ behavior: "smooth" });
     }
   };

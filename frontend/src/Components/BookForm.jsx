@@ -42,11 +42,11 @@ const BookForm = () => {
 
   useEffect(() => {
     const shouldScroll = sessionStorage.getItem("scrollToBookForm");
-    const hasHash = window.location.hash === "#book-form";
+    const hasHash = window.location.hash === "#book-your-free-gym-tour";
     if (shouldScroll === "true" || hasHash) {
       sessionStorage.removeItem("scrollToBookForm");
       setTimeout(() => {
-        const element = document.getElementById("book-form");
+        const element = document.getElementById("book-your-free-gym-tour");
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
         }
@@ -124,7 +124,7 @@ const BookForm = () => {
 
   return (
     <section
-      id="book-form"
+      id="book-your-free-gym-tour"
       className="w-full bg-black flex items-center justify-center px-4 py-16 md:py-24 overflow-hidden"
     >
       <div className="relative w-full max-w-4xl rounded-[35px] border border-white/10 bg-gradient-to-b from-[#050505] to-black overflow-hidden">
