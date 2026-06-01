@@ -109,7 +109,7 @@ const ChoosePlan = React.forwardRef(
 
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6">
           {/* PRICING CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 flex-1 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 flex-1 mt-8">
             {activeData.plans.map((plan, i) => (
               <motion.div
                 key={i}
@@ -128,14 +128,19 @@ const ChoosePlan = React.forwardRef(
                 }`}
               >
                 {plan.tag && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#e5ff00] text-black text-[10px] font-bold px-4 py-1 rounded-sm tracking-wider uppercase whitespace-nowrap z-10">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#e5ff00] text-black  font-bold px-4 py-1 rounded-sm tracking-wider uppercase whitespace-nowrap z-10"
+                    style={{
+                      fontSize: "10px",
+                      fontFamily: '"Brutal Font", sans-serif',
+                    }}
+                  >
                     {plan.tag}
                   </div>
                 )}
 
                 <div className="p-6 flex flex-col items-center text-center border-b border-gray-800">
                   <h3
-                    className="text-lg md:text-xl font-black tracking-wide mb-1.5"
+                    className="text-3xl md:text-4xl font-black tracking-wide mb-1.5"
                     style={{
                       fontFamily: '"Brutal Font", sans-serif',
                     }}
@@ -143,7 +148,7 @@ const ChoosePlan = React.forwardRef(
                     {plan.months}
                   </h3>
                   <p
-                    className="text-[#e5ff00] text-[10px] md:text-[11px] font-extrabold tracking-widest uppercase mb-4"
+                    className="text-[#e5ff00] text-[12px] md:text-[14px] font-extrabold tracking-widest uppercase mb-4"
                     style={{
                       fontFamily: '"Brutal Font", sans-serif',
                     }}
@@ -153,7 +158,7 @@ const ChoosePlan = React.forwardRef(
                   <div className="flex items-start justify-center gap-1 mb-1">
                     <span className="text-xl font-bold mt-1">₹</span>
                     <span
-                      className="text-4xl md:text-5xl font-black tracking-tight"
+                      className="text-5xl md:text-6xl font-black tracking-tight"
                       style={{
                         fontFamily: '"Brutal Font", sans-serif',
                       }}
@@ -162,7 +167,7 @@ const ChoosePlan = React.forwardRef(
                     </span>
                   </div>
                   <p
-                    className="text-gray-400 text-xs md:text-sm font-medium"
+                    className="text-gray-400 text-lg md:text-xl font-medium"
                     style={{
                       fontFamily: '"Brutal Font", sans-serif',
                     }}
@@ -176,7 +181,7 @@ const ChoosePlan = React.forwardRef(
                     {plan.highlights.map((highlight, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-2.5 text-xs md:text-sm text-gray-200"
+                        className="flex items-start gap-2.5 text-sm md:text-md text-gray-200"
                       >
                         <Check
                           size={16}

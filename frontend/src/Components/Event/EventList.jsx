@@ -335,20 +335,20 @@ const EventList = () => {
           <div className="flex items-center gap-2 mb-2">
             <span className="h-[2px] w-8 bg-[#e5ff00]"></span>
             <span
-              className="text-[#e5ff00] text-[10px] md:text-xs font-black uppercase tracking-widest"
+              className="text-[#e5ff00] text-[14px] md:text-xl font-black uppercase tracking-widest"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               Special Schedules
             </span>
           </div>
           <h2
-            className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white"
+            className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white mt-3"
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
             Featured Events & Workshops
           </h2>
           <p
-            className="text-gray-400 text-xs md:text-sm mt-2 max-w-xl"
+            className="text-gray-200 text-xl md:text-2xl mt-3 max-w-xl mt-5"
             style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
           >
             Click on any card to view detailed schedules, descriptions, and
@@ -428,20 +428,20 @@ const EventList = () => {
                     <div>
                       {/* Event Title */}
                       <h3
-                        className="text-lg md:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#e5ff00] transition-colors line-clamp-1 mb-2"
+                        className="text-xl md:text-2xl font-bold text-white tracking-wide leading-snug group-hover:text-[#e5ff00] transition-colors line-clamp-1 mb-2"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         {event.title}
                       </h3>
 
                       {/* Location venue */}
-                      <div className="flex items-start gap-1.5 text-gray-400 hover:text-gray-300 transition-colors mb-4">
+                      <div className="flex items-start gap-1.5 text-gray-200 hover:text-gray-300 transition-colors mb-4">
                         <MapPin
                           size={14}
-                          className="text-gray-500 shrink-0 mt-0.5"
+                          className="text-gray-200 shrink-0 mt-0.5"
                         />
                         <span
-                          className="text-xs font-semibold leading-relaxed line-clamp-1"
+                          className="text-sm font-semibold leading-relaxed line-clamp-1"
                           style={{
                             fontFamily: '"Brutal Font Light", sans-serif',
                           }}

@@ -230,7 +230,7 @@ const Eventbanner = () => {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[8px] sm:text-[10px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[15px] sm:text-[20px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <Calendar size={10} className="sm:w-3 sm:h-3 animate-pulse" />
@@ -242,7 +242,7 @@ const Eventbanner = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
-                  className="text-lg sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
+                  className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   {currentBanner.title}
@@ -253,7 +253,7 @@ const Eventbanner = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
-                  className="text-gray-300 text-[10px] sm:text-sm md:text-base lg:text-lg font-medium leading-relaxed mb-2 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
+                  className="text-gray-300 text-xl sm:text-sm md:text-base lg:text-lg font-medium leading-relaxed mb-2 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
                   style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
                 >
                   {currentBanner.description}
