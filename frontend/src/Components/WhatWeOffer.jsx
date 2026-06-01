@@ -56,7 +56,7 @@ const itemAnimation = {
 
 const WhatWeOffer = () => {
   return (
-    <section className="relative w-full overflow-hidden bg-black py-24 md:py-32 px-4 md:px-8">
+    <section className="relative w-full overflow-hidden bg-black  mb-10 px-3 md:px-8">
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#e5ff00]/10 blur-[150px] rounded-full pointer-events-none" />
 
@@ -81,10 +81,11 @@ const WhatWeOffer = () => {
           </span>
 
           <h2
-            className=" text-[32px] md:text-[48px] uppercase text-white leading-none"
+            className=" uppercase text-white leading-none"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",
+              fontSize: "48px",
             }}
           >
             WHAT WE{" "}
@@ -99,7 +100,7 @@ const WhatWeOffer = () => {
             style={{
               fontFamily: '"Brutal Font Light", sans-serif',
               fontSize: "18px",
-              fontWeight: "400",
+              fontWeight: "600",
             }}
           >
             Transform your body with world-class fitness experiences,

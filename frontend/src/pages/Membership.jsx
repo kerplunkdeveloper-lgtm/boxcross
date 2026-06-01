@@ -103,7 +103,7 @@ const Membership = () => {
             "
             style={{
               fontFamily: '"Brutal Font Light", sans-serif',
-              fontWeight: 400,
+              fontWeight: 700,
             }}
           >
             Boxing, Strength, HYROX-style Conditioning & Community — built for
@@ -148,7 +148,7 @@ const Membership = () => {
             >
               <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
               <span
-                className="relative z-10 text-[10px] md:text-[14px]"
+                className="relative z-10 text-[14px] md:text-[14px]"
                 style={{
                   fontFamily: '"Brutal Font Bold", sans-serif',
                   fontWeight: 800,
@@ -177,7 +177,13 @@ const Membership = () => {
               "
             >
               <span className="absolute inset-0  bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
-              <span className="relative z-10 font-extrabold text-[10px] md:text-[14px]">
+              <span
+                className="relative z-10 font-bold text-[14px] md:text-[14px]"
+                style={{
+                  fontFamily: '"Brutal Font Bold", sans-serif',
+                  fontWeight: 800,
+                }}
+              >
                 Membership Plans
               </span>
             </button>

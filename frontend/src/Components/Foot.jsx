@@ -43,6 +43,7 @@ const Foot = () => {
             style={{
               fontSize: "18px",
               fontFamily: "Brutal Font Light, sans-serif",
+              fontWeight: "600",
             }}
           >
             Stay connected and motivated by joining our newsletter Get exclusive
@@ -179,13 +180,41 @@ const Foot = () => {
             }}
           >
             <div>
-              <p className="text-[#b3b3b3] leading-[1.8]">Morning 05:00 Am -</p>
-              <p className="text-[#b3b3b3] leading-[1.8]">12:00 Pm</p>
+              <p
+                className="text-[#827979] leading-[1.8]"
+                style={{
+                  fontWeight: "600",
+                }}
+              >
+                Morning 05:00 Am -
+              </p>
+              <p
+                className="text-[#827979] leading-[1.8]"
+                style={{
+                  fontWeight: "600",
+                }}
+              >
+                12:00 Pm
+              </p>
             </div>
 
             <div>
-              <p className="text-[#b3b3b3] leading-[1.8]">Evening 04:00 Pm -</p>
-              <p className="text-[#b3b3b3] leading-[1.8]">10:00 Pm</p>
+              <p
+                className="text-[#827979] leading-[1.8]"
+                style={{
+                  fontWeight: "600",
+                }}
+              >
+                Evening 04:00 Pm -
+              </p>
+              <p
+                className="text-[#827979] leading-[1.8]"
+                style={{
+                  fontWeight: "600",
+                }}
+              >
+                10:00 Pm
+              </p>
             </div>
           </div>
         </div>
@@ -210,7 +239,12 @@ const Foot = () => {
               fontSize: "15px",
             }}
           >
-            <p className="text-[#b3b3b3] leading-[1.8] max-w-[300px]">
+            <p
+              className="text-[#827979] leading-[1.8] max-w-[300px]"
+              style={{
+                fontWeight: "600",
+              }}
+            > 
               No. 69, Church Street,
               <br />
               Krishna Nagar, Lawspet,
@@ -222,14 +256,20 @@ const Foot = () => {
             <div className="space-y-4 flex flex-col">
               <a
                 href="mailto:hello@boxandcross.com"
-                className="text-[#b3b3b3] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+                className="text-[#827979] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+                style={{
+                  fontWeight: "600",
+                }}
               >
                 hello@boxandcross.com
               </a>
 
               <a
                 href="tel:+918925556800"
-                className="text-[#b3b3b3] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+                className="text-[#827979] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+                style={{
+                  fontWeight: "600",
+                }}
               >
                 +91 89255 56800
               </a>

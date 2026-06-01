@@ -31,10 +31,11 @@ const ChoosePlan = React.forwardRef(
           </span>
 
           <h2
-            className="mt-5 md:mt-10 font-black mb-5 md:mb-8 leading-tight text-[30px] md:text-[48px]"
+            className="mt-5 md:mt-10 font-black mb-5 md:mb-8 leading-tight "
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",
+                   fontSize: "48px",
             }}
           >
             CHOOSE YOUR <br />{" "}

@@ -583,10 +583,11 @@ const Membership = () => {
             </span>
 
             <h2
-              className="mt-8 md:mt-10  mb-9 leading-tight text-[30px] md:text-[48px]"
+              className="mt-8 md:mt-10  mb-9 leading-tight "
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: "700",
+                fontSize: "48px",
               }}
             >
               CHOOSE YOUR <br /> <span className="text-[#e5ff00]">PROGRAM</span>

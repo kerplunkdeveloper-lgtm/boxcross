@@ -135,10 +135,11 @@ const BookForm = () => {
           {/* HEADER */}
           <div>
             <h1
-              className="text-white uppercase  leading-none font-black text-[20px] md:text-[35px]"
+              className="text-white uppercase"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: 700,
+                fontSize: "40px",
               }}
             >
               BOOK YOUR FREE<span className="text-[#e5ff00]"> GYM TOUR</span>

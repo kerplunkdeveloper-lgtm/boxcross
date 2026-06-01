@@ -90,7 +90,7 @@ const TrainingZones = ({ onBookTour }) => {
   };
 
   return (
-    <section className="w-full py-24 px-4 md:px-8 max-w-[1400px] mx-auto bg-[#0a0a0a]">
+    <section className="w-full py-20 px-4 md:px-8 max-w-[1400px] mx-auto bg-[#0a0a0a]">
       {/* CSS injection for scrollbars */}
       <style
         dangerouslySetInnerHTML={{
@@ -113,10 +113,11 @@ const TrainingZones = ({ onBookTour }) => {
           TAKE A LOOK
         </span>
         <h2
-          className=" text-white text-[30px] md:text-[48px] mt-9 leading-none"
+          className=" text-white  mt-9 leading-none"
           style={{
             fontFamily: '"BrutalTypeBold", sans-serif',
             fontWeight: "700",
+            fontSize: "48px",
           }}
         >
           OUR TRAINING <span className="text-[#e5ff00]">ZONES</span>
