@@ -202,7 +202,7 @@ const DashboardHome = () => {
                 <DollarSign size={20} />
               </div>
               <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                Total Revenue
+                No.of Event payment
               </span>
             </div>
             <div className="z-10 shrink-0">
@@ -322,8 +322,8 @@ const DashboardHome = () => {
               </div>
             ) : (
               <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] overflow-hidden shadow-2xl p-5 md:p-6 transition-colors">
-                <div className="flex flex-col gap-2.5">
-                  {events.slice(0, 8).map((evt) => (
+                <div className="flex flex-col gap-2.5 max-h-[350px] overflow-y-auto custom-scrollbar pr-2">
+                  {events.map((evt) => (
                     <div 
                       key={evt._id}
                       className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-4 hover:bg-[var(--db-input-bg)]/25 border border-transparent hover:border-[var(--db-card-border)]/50 rounded-2xl transition-all duration-300"

@@ -465,14 +465,14 @@ const DashboardEventsList = () => {
                   <div className="absolute top-3 right-3 flex gap-1.5 z-10">
                     <button
                       onClick={() => handleOpenEdit(event)}
-                      className="p-2 bg-black/70 hover:bg-[var(--db-accent)] text-white hover:text-[var(--db-accent-text)] rounded-lg border border-white/10 hover:border-transparent transition-all cursor-pointer"
+                      className="p-2 bg-black/60 hover:bg-black/90 text-white rounded-lg backdrop-blur-sm border border-white/10 transition-all cursor-pointer"
                       title="Edit Event Details"
                     >
                       <Edit size={12} />
                     </button>
                     <button
                       onClick={() => handleDelete(event._id)}
-                      className="p-2 bg-black/70 hover:bg-red-500/20 text-white hover:text-red-400 rounded-lg border border-white/10 hover:border-transparent transition-all cursor-pointer"
+                      className="p-2 bg-black/60 hover:bg-red-500/90 text-white rounded-lg backdrop-blur-sm border border-white/10 hover:border-red-500 transition-all cursor-pointer"
                       title="Delete Event"
                     >
                       <Trash2 size={12} />
@@ -480,7 +480,7 @@ const DashboardEventsList = () => {
                   </div>
 
                   {/* Price pill */}
-                  <div className="absolute bottom-3 left-3 bg-[#ff9e00] text-black text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">
+                  <div className="absolute bottom-3 left-3 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-lg">
                     ₹{event.price} onwards
                   </div>
                 </div>
@@ -488,7 +488,7 @@ const DashboardEventsList = () => {
                 {/* Event Details Content */}
                 <div className="p-5 flex-grow space-y-4 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <h3 className="text-base font-black uppercase tracking-wide text-[var(--db-text)] group-hover:text-[var(--db-accent-highlight)] transition-colors leading-snug line-clamp-1">
+                    <h3 className="text-base font-black uppercase tracking-wide text-[var(--db-text)] leading-snug line-clamp-1">
                       {event.title}
                     </h3>
 
@@ -1060,6 +1060,7 @@ const DashboardEventsList = () => {
                                   <input
                                     type="date"
                                     value={convertToYYYYMMDD(schedule.date)}
+                                    min={new Date().toISOString().split('T')[0]}
                                     onChange={(e) => {
                                       const updated = [...schedules];
                                       updated[sIndex].date = e.target.value;
@@ -1069,7 +1070,8 @@ const DashboardEventsList = () => {
                                       e.target.showPicker &&
                                       e.target.showPicker()
                                     }
-                                    className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-9 pr-3 py-2 text-xs text-[var(--db-text)] [color-scheme:dark] transition-all font-semibold cursor-pointer"
+                                    className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-9 pr-3 py-2 text-xs text-[var(--db-text)] transition-all font-semibold cursor-pointer"
+                                    style={{ colorScheme: 'dark' }}
                                     required
                                   />
                                 </div>

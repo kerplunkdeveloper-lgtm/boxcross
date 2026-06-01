@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 
 import WhatWeOffer from "../Components/WhatWeOffer";
 import TrainingZones from "../Components/TrainingZones";
-import BuildProgress from "../Components/BuildProgress";
+// import BuildProgress from "../Components/BuildProgress";
+import BookForm from "../Components/BookForm";     
 
 const Membership = () => {
   const videoUrl =
@@ -132,7 +133,7 @@ const Membership = () => {
           >
             <button
               onClick={() => {
-                const el = document.getElementById("book-form");
+                const el = document.getElementById("book-your-free-gym-tour");
                 if (el) el.scrollIntoView({ behavior: "smooth" });
               }}
               className="
@@ -195,8 +196,10 @@ const Membership = () => {
       <div className="relative z-20">
         <WhatWeOffer />
         <TrainingZones />
-        <BuildProgress />
+        {/* <BuildProgress /> */}
+            <BookForm  /> 
         <MembershipPlans />
+
       </div>
     </div>
   );

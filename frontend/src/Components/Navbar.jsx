@@ -67,32 +67,20 @@ const Navbar = () => {
 
   const membershipDropdown = [
     {
-      name: "FIGHT CLUB",
-      path: "https://boxandcross.com/fight-club/",
+      name: "BOOK FREE TRIAL",
+      scrollToId: "book-your-free-gym-tour",
     },
     {
-      name: "STRENGTH LAB",
-      path: "https://boxandcross.com/strength-lab/",
+      name: "PROGRAMS",
+      scrollToId: "membership-plans",
     },
     {
-      name: "HYBRID PERFORMANCE",
-      path: "https://boxandcross.com/hybrid-performance/",
+      name: "PLANS & PRICING",
+      path: "/membership",
     },
     {
-      name: "FIGHT PERFORMANCE",
-      path: "https://boxandcross.com/fight-performance/",
-    },
-    {
-      name: "HYROX LAB",
-      path: "https://boxandcross.com/hyrox-lab/",
-    },
-    {
-      name: "JUNIOR ATHLETES",
-      path: "https://boxandcross.com/junior-athletes/",
-    },
-    {
-      name: "1:1 COACHING",
-      path: "https://boxandcross.com/1-1-coaching/",
+      name: "FOUNDING MEMBERS",
+      path: "/founding-members",
     },
   ];
 
@@ -171,7 +159,7 @@ const Navbar = () => {
             <div className="flex justify-between items-center">
               {/* ================= LOGO ================= */}
 
-              <NavLink to="/" className="flex items-center flex-shrink-0">
+              <NavLink to="https://boxandcross.com" className="flex items-center flex-shrink-0">
                 <img src={logo} alt="Box & Cross" className="w-52 md:w-48" />
               </NavLink>
 
@@ -308,7 +296,17 @@ const Navbar = () => {
                       {membershipDropdown.map((item, idx) => (
                         <a
                           key={item.name}
-                          href={item.path}
+                          href={item.path || `/#${item.scrollToId}`}
+                          onClick={(e) => {
+                            if (item.scrollToId) {
+                              const el = document.getElementById(item.scrollToId);
+                              if (el) {
+                                e.preventDefault();
+                                el.scrollIntoView({ behavior: "smooth" });
+                                setOpenDropdown(null);
+                              }
+                            }
+                          }}
                           className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
                             idx !== membershipDropdown.length - 1
                               ? "border-b border-gray-200"
@@ -555,8 +553,17 @@ const Navbar = () => {
                 {membershipDropdown.map((item) => (
                   <a
                     key={item.name}
-                    href={item.path}
-                    onClick={closeOffcanvas}
+                    href={item.path || `/#${item.scrollToId}`}
+                    onClick={(e) => {
+                      if (item.scrollToId) {
+                        const el = document.getElementById(item.scrollToId);
+                        if (el) {
+                          e.preventDefault();
+                          el.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }
+                      closeOffcanvas();
+                    }}
                     className="text-sm text-gray-400 hover:text-white font-medium tracking-wider"
                   >
                     {item.name}

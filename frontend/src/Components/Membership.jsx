@@ -16,7 +16,7 @@ import { motion } from "framer-motion";
 import box1 from "../assets/box1.png";
 import box2 from "../assets/box2.png";
 import box3 from "../assets/box3.png";
-import BookForm from "./BookForm";
+
 import ChoosePlan from "./ChoosePlan";
 import { getMembershipPlans } from "../api/api";
 
@@ -737,7 +737,7 @@ const Membership = () => {
         onClose={() => setIsModalOpen(false)}
         planDetails={selectedPlan}
       />
-      <BookForm />
+   
       <Foot />
       <GymMarquee />
     </>

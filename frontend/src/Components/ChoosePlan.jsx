@@ -109,7 +109,7 @@ const ChoosePlan = React.forwardRef(
 
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6">
           {/* PRICING CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 flex-1 mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 flex-1 mt-8 items-stretch">
             {activeData.plans.map((plan, i) => (
               <motion.div
                 key={i}
@@ -121,7 +121,7 @@ const ChoosePlan = React.forwardRef(
                 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: i * 0.15 }}
-                className={`bg-[#111] rounded-xl flex flex-col relative border ${
+                className={`bg-[#111] rounded-xl flex flex-col relative border h-full ${
                   plan.isPopular
                     ? "border-[#e5ff00] shadow-[0_0_15px_rgba(222,251,2,0.15)] z-10"
                     : "border-gray-800"
@@ -229,7 +229,7 @@ const ChoosePlan = React.forwardRef(
           </div>
 
           {/* STARTER ACCESS CARD */}
-          <div className="w-full lg:w-[240px] flex flex-col gap-4 mt-6 lg:mt-0">
+          <div className="w-full lg:w-[240px] flex flex-col gap-4 mt-6 lg:mt-8">
             <div className="bg-[#111] border border-gray-800 rounded-xl p-6 text-center flex flex-col items-center justify-center flex-1 hover:border-gray-600 transition-colors cursor-pointer group">
               <Calendar size={28} className="text-[#e5ff00] mb-3" />
               <p className="text-[11px] md:text-xs text-gray-400 uppercase tracking-widest font-bold mb-2 group-hover:text-gray-300">

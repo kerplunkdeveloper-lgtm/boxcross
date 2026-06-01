@@ -969,6 +969,7 @@ const DashboardCalendar = () => {
                             <input
                               type="date"
                               value={convertToYYYYMMDD(schedule.date)}
+                              min={new Date().toISOString().split('T')[0]}
                               onChange={(e) => {
                                 const updated = [...schedules];
                                 updated[sIndex].date = formatCustomDateString(
@@ -979,7 +980,8 @@ const DashboardCalendar = () => {
                               onClick={(e) =>
                                 e.target.showPicker && e.target.showPicker()
                               }
-                              className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-9 pr-3 py-2 text-xs text-[var(--db-text)] [color-scheme:dark] transition-all font-semibold cursor-pointer"
+                              className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-9 pr-3 py-2 text-xs text-[var(--db-text)] transition-all font-semibold cursor-pointer"
+                              style={{ colorScheme: 'dark' }}
                               required
                             />
                           </div>
