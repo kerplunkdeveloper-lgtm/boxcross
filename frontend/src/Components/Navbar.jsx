@@ -371,7 +371,7 @@ const Navbar = () => {
                       fontSize: "14px",
                     }}
                   >
-                    PLAN AND PRICING
+                    PLANS AND PRICING
                   </span>
                 </Link>
 
