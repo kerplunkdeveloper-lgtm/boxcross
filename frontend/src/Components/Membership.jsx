@@ -560,7 +560,7 @@ const Membership = () => {
     <>
       <section
         id="membership-plans"
-        className="w-full bg-[#0a0a0a] py-8 md:py-12 px-4 md:px-6 flex flex-col items-center justify-center font-sans text-white"
+        className="w-full bg-[#0a0a0a] py-8 md:py-12 px-2 md:px-6 flex flex-col items-center justify-center font-sans text-white"
       >
         {/* STEP 1: CHOOSE PROGRAM */}
         <div className="w-full max-w-7xl  mx-auto mb-12">
@@ -631,40 +631,43 @@ const Membership = () => {
 
                 <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
                   <div>
-                    <div className="w-12 h-12 rounded-full border border-[#e5ff00]/50 flex items-center justify-center mb-5 bg-black/40 backdrop-blur-sm">
+                    <div className="w-14 h-14 rounded-full border border-[#e5ff00]/50 flex items-center justify-center mb-5 bg-black/40 backdrop-blur-sm">
                       {prog.icon}
                     </div>
 
                     <h3
-                      className="text-xl md:text-2xl font-black mb-1 tracking-wide uppercase"
+                      className=" font-black mb-1 tracking-wide uppercase"
                       style={{
                         fontFamily: '"BrutalTypeBold", sans-serif',
-                        fontWeight: "700",
+                        fontWeight: "900",
+                        fontSize: "35px",
                       }}
                     >
                       {prog.title}
                     </h3>
                     <p
-                      className="text-[#e5ff00] text-[11px] tracking-widest uppercase mb-3"
+                      className="text-[#e5ff00]  tracking-widest uppercase mb-3"
                       style={{
                         fontFamily: '"BrutalTypeBold", sans-serif',
-                        fontWeight: "600",
+                        fontWeight: "400",
+                        fontSize: "19px",
                       }}
                     >
                       {prog.subtitle}
                     </p>
                     <p
-                      className="text-gray-300 text-xs md:text-sm mb-4 leading-relaxed max-w-[90%]"
+                      className="text-gray-200 mb-4 leading-relaxed max-w-[90%]"
                       style={{
                         fontFamily: '"Brutal Font Light", sans-serif',
                         fontWeight: "400",
+                        fontSize: "17px",
                       }}
                     >
                       {prog.desc}
                     </p>
                   </div>
 
-                  <div className="mt-auto pt-2 w-full">
+                  <div className="mt-auto pt-4 w-full">
                     <p
                       className="text-[10px] text-gray-300 uppercase tracking-widest font-bold mb-3 flex items-center"
                       style={{
@@ -687,7 +690,7 @@ const Membership = () => {
 
                     <button
                       onClick={(e) => handleScrollToPlans(e, prog.id)}
-                      className={`group/btn w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
+                      className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
                         activeTab === prog.id
                           ? "bg-[#e5ff00] border-[#e5ff00] text-black"
                           : "border-gray-500 text-white hover:border-[#e5ff00] bg-transparent"

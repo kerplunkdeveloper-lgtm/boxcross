@@ -45,10 +45,10 @@ const BuildProgress = () => {
           Our certified trainers and expert coaches don't just guide
           workouts—they build progress.
         </p>
-        <p className="text-gray-400 text-sm md:text-base mb-10 leading-relaxed "
+        <p className="text-gray-400 mb-10 leading-relaxed "
           style={{
             fontFamily: '"Brutal Font Light", sans-serif',
-            fontWeight: "400",
+            fontWeight: "600",
           }}
         >
           Whether you're training for a marathon, recovering from an injury, or
@@ -61,10 +61,11 @@ const BuildProgress = () => {
           {benefits.map((item, i) => (
             <li
               key={i}
-              className="flex items-center gap-4 text-gray-300 text-sm md:text-base "
+              className="flex items-center gap-4 text-gray-300  "
               style={{
                 fontFamily: '"Brutal Font Light", sans-serif',
-                fontWeight: "400",
+                fontWeight: "600",
+                fontSize: "16px", 
               }}
             >
               <div className="w-2 h-2 rounded-full bg-[#e5ff00] shadow-[0_0_8px_rgba(163,255,0,0.8)]"></div>

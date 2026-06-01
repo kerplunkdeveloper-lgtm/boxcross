@@ -163,9 +163,11 @@ const WhatWeOffer = () => {
 
                   {/* Description */}
                   <p
-                    className="text-gray-400 text-sm md:text-[15px] leading-relaxed"
+                    className="text-gray-200 leading-relaxed"
                     style={{
                       fontFamily: '"Brutal Font Light", sans-serif',
+                      fontSize: "16px",
+                      fontWeight: "600",
                     }}
                   >
                     {item.desc}
