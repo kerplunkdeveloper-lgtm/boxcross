@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
   X,
@@ -25,6 +25,7 @@ import logo from "../assets/images/logo-new.png";
 
 const Navbar = () => {
   const { user } = useAuth();
+  const location = useLocation();
   const [openDropdown, setOpenDropdown] = useState(null);
   const [offcanvasOpen, setOffcanvasOpen] = useState(false);
   const [isNavVisible, setIsNavVisible] = useState(true);
@@ -181,7 +182,7 @@ const Navbar = () => {
 
                 <a
                   href="https://boxandcross.com/"
-                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-white uppercase tracking-wider transition-all"
                   style={{
                     fontFamily: '"Brutal Font Light", sans-serif',
                     fontWeight: 400,
@@ -199,7 +200,7 @@ const Navbar = () => {
                   onMouseLeave={handleDropdownLeave}
                 >
                   <button
-                    className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
+                    className="px-3 py-2 text-white uppercase tracking-wider transition-all flex items-center gap-1"
                     style={{
                       fontFamily: '"Brutal Font Light", sans-serif',
                       fontWeight: 400,
@@ -244,7 +245,7 @@ const Navbar = () => {
 
                 <a
                   href="https://boxandcross.com/coaching/"
-                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-white uppercase tracking-wider transition-all"
                   style={{
                     fontFamily: '"Brutal Font Light", sans-serif',
                     fontWeight: 400,
@@ -260,7 +261,7 @@ const Navbar = () => {
                   to="/events"
                   className={({ isActive }) =>
                     `px-3 py-2 uppercase tracking-wider transition-all ${
-                      isActive ? "text-white" : "text-gray-400 hover:text-white"
+                      isActive ? "text-[#e5ff00]" : "text-white hover:text-[#e5ff00]"
                     }`
                   }
                   style={{
@@ -283,9 +284,10 @@ const Navbar = () => {
                     to="/"
                     className={({ isActive }) =>
                       `px-3 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${
-                        isActive
-                          ? "text-white"
-                          : "text-gray-400 hover:text-white"
+                        (isActive && location.pathname === "/") ||
+                        location.pathname.includes("/membership")
+                          ? "text-[#e5ff00]"
+                          : "text-white hover:text-[#e5ff00]"
                       }`
                     }
                     style={{
@@ -332,7 +334,7 @@ const Navbar = () => {
 
                 <a
                   href="https://boxandcross.com/contact-us/"
-                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-white uppercase tracking-wider transition-all"
                   style={{
                     fontFamily: '"Brutal Font Light", sans-serif',
                     fontWeight: 400,
