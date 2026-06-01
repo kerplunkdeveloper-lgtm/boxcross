@@ -171,7 +171,7 @@ const Navbar = () => {
               {/* ================= LOGO ================= */}
 
               <NavLink to="/" className="flex items-center flex-shrink-0">
-                <img src={logo} alt="Box & Cross" className="w-52 md:w-48" />
+                <img src={logo} alt="Box & Cross" className="w-57 md:w-48" />
               </NavLink>
 
               {/* ================= DESKTOP NAV ================= */}

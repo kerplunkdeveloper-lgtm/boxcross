@@ -81,7 +81,7 @@ const WhatWeOffer = () => {
           </span>
 
           <h2
-            className=" text-[32px] md:text-[48px] uppercase text-white leading-none"
+            className=" text-[40px] md:text-[48px] uppercase text-white leading-none"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",

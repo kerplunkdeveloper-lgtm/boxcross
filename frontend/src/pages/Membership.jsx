@@ -39,7 +39,7 @@ const Membership = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="
-              text-[#d9ff00]
+              text-[#e5ff00]
               uppercase
               tracking-[0.4em]
               text-[10px]
@@ -80,7 +80,7 @@ const Membership = () => {
             <span className="block text-white">PUDUCHERRY’S COMPLETE </span>
 
             <span className="block">
-              <span className="text-[#d9ff00]">PERFORMANCE</span>{" "}
+              <span className="text-[#e5ff00]">PERFORMANCE</span>{" "}
               <span className="text-white">ARENA</span>
             </span>
           </motion.h1>
@@ -91,7 +91,7 @@ const Membership = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="
-              text-gray-200
+              text-gray-100
               max-w-4xl
               text-base
               sm:text-lg
@@ -103,7 +103,7 @@ const Membership = () => {
             "
             style={{
               fontFamily: '"Brutal Font Light", sans-serif',
-              fontWeight: 400,
+              fontWeight: 500,
             }}
           >
             Boxing, Strength, HYROX-style Conditioning & Community — built for
@@ -138,20 +138,20 @@ const Membership = () => {
               className="
                 group relative overflow-hidden
                 w-[85%] sm:w-auto
-                px-10 py-4
-                bg-[#d9ff00] text-black
+                px-10 py-5
+                bg-[#e5ff00] text-black
                 uppercase tracking-[0.2em]
                 rounded-lg
                 transition-all duration-500
                 cursor-pointer
               "
             >
-              <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
+              <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-md"></span>
               <span
-                className="relative z-10 text-[10px] md:text-[14px]"
+                className="relative z-10 text-[13px] md:text-[14px]"
                 style={{
                   fontFamily: '"Brutal Font Bold", sans-serif',
-                  fontWeight: 800,
+                  fontWeight: 900,
                 }}
               >
                 Book Free Gym Tour
@@ -167,17 +167,17 @@ const Membership = () => {
               className="
                 group relative overflow-hidden
                 w-[85%] sm:w-auto
-                px-10 py-4
+                px-10 py-5
                 bg-white
                  text-black
                 uppercase tracking-[0.2em]
-                rounded-lg
+                rounded-md
                 transition-all duration-500
                 cursor-pointer
               "
             >
-              <span className="absolute inset-0  bg-[#d9ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
-              <span className="relative z-10 font-extrabold text-[10px] md:text-[14px]">
+              <span className="absolute inset-0  bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
+              <span className="relative z-10 font-extrabold text-[13px] md:text-[14px]">
                 Membership Plans
               </span>
             </button>

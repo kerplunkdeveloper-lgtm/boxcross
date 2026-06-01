@@ -175,7 +175,7 @@ const DashboardHome = () => {
                 <Users size={20} />
               </div>
               <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                Total Bookings
+                Total Visting Counts
               </span>
             </div>
             <div className="z-10 shrink-0">
