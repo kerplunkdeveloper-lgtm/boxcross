@@ -348,7 +348,7 @@ const EventList = () => {
             Featured Events & Workshops
           </h2>
           <p
-            className="text-gray-200 text-xl md:text-2xl mt-3 max-w-xl mt-5"
+            className="text-gray-200 text-md md:text-xl mt-3 max-w-xl mt-5"
             style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
           >
             Click on any card to view detailed schedules, descriptions, and

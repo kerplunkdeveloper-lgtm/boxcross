@@ -58,13 +58,13 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) return;
       const ctx = new AudioContext();
-      const playTone = (freq, startTime, duration) => {
+      const playTone = (freq, startTime, duration, vol = 0.12) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = "sine";
         osc.frequency.setValueAtTime(freq, startTime);
         gain.gain.setValueAtTime(0.0001, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.15, startTime + 0.04);
+        gain.gain.exponentialRampToValueAtTime(vol, startTime + 0.03);
         gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -72,8 +72,9 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         osc.stop(startTime + duration);
       };
       const now = ctx.currentTime;
-      playTone(523.25, now, 0.35); // C5
-      playTone(783.99, now + 0.08, 0.45); // G5
+      playTone(523.25, now,        0.3,  0.10); // C5
+      playTone(659.25, now + 0.10, 0.3,  0.12); // E5
+      playTone(783.99, now + 0.20, 0.45, 0.14); // G5
     } catch (e) {
       console.warn("Audio playback context failed or blocked", e);
     }
@@ -447,88 +448,154 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
           </button>
 
           {/* Notifications Dropdown Drawer */}
-          {showDropdown && (
-            <div className="fixed sm:absolute top-20 sm:top-12 left-4 right-4 sm:left-auto sm:right-0 w-auto sm:w-96 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl p-4 z-50 text-left transition-colors">
-              <div className="flex items-center justify-between pb-3 border-b border-[var(--db-card-border)]">
-                <span className="text-xs font-black uppercase tracking-wider text-[var(--db-text-title)] flex items-center gap-1.5">
-                  <Bell
-                    size={12}
-                    className="text-[var(--db-accent-highlight)]"
-                  />
-                  Notifications Center
-                </span>
-                {unreadCount > 0 && (
-                  <button
-                    onClick={handleMarkAllRead}
-                    className="flex items-center gap-1 text-[10px] font-extrabold uppercase text-[var(--db-accent-highlight)] hover:underline cursor-pointer"
-                  >
-                    <CheckCheck size={10} />
-                    Mark all read
-                  </button>
-                )}
-              </div>
-
-              {/* Notification feed list */}
-              <div className="mt-3 max-h-[300px] overflow-y-auto divide-y divide-[var(--db-card-border)] custom-scrollbar pr-1">
-                {notifications.length === 0 ? (
-                  <div className="py-8 text-center text-xs text-[var(--db-text-muted)] uppercase tracking-wide">
-                    All caught up! No recent activity.
-                  </div>
-                ) : (
-                  notifications.map((item) => {
-                    const isUnread = !readIds.includes(item.id);
-                    return (
-                      <div
-                        key={item.id}
-                        onClick={() => handleNotificationClick(item)}
-                        className={`py-2.5 flex items-start gap-3 cursor-pointer hover:bg-[var(--db-sidebar-link-hover)] px-2 rounded-xl transition-colors group relative ${
-                          isUnread ? "bg-[var(--db-accent-glow)]/5" : ""
-                        }`}
+          <AnimatePresence>
+            {showDropdown && (
+              <motion.div
+                initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="fixed sm:absolute top-20 sm:top-14 left-3 right-3 sm:left-auto sm:right-0 w-auto sm:w-[400px] bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] z-50 overflow-hidden"
+              >
+                {/* Header */}
+                <div className={`flex items-center justify-between px-4 py-3.5 border-b border-[var(--db-card-border)] ${theme === "dark" ? "bg-[rgba(229,255,0,0.06)]" : "bg-slate-50"}`}>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${theme === "dark" ? "bg-[#e5ff00] shadow-[0_0_12px_rgba(229,255,0,0.35)]" : "bg-slate-800"}`}>
+                      <Bell size={13} className="text-black" style={{ color: theme === "dark" ? "#000" : "#fff" }} />
+                    </div>
+                    <div>
+                      <span
+                        className="text-xs font-black uppercase tracking-wider"
+                        style={{ color: theme === "dark" ? "#ffffff" : "#0f172a" }}
                       >
-                        {/* Left notification badge icon */}
-                        <div className="w-8.5 h-8.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] flex items-center justify-center shrink-0 mt-0.5 transition-colors group-hover:border-[var(--db-accent-highlight)]/40">
-                          {getNotificationIcon(item.type)}
-                        </div>
+                        Notifications
+                      </span>
+                      {unreadCount > 0 && (
+                        <span
+                          className="ml-2 px-1.5 py-0.5 text-[9px] font-black rounded-full"
+                          style={{
+                            background: theme === "dark" ? "#e5ff00" : "#1e293b",
+                            color: theme === "dark" ? "#000" : "#fff",
+                          }}
+                        >
+                          {unreadCount} new
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={handleMarkAllRead}
+                      className="flex items-center gap-1 text-[10px] font-bold text-[var(--db-accent-highlight)] hover:opacity-75 transition-opacity cursor-pointer"
+                    >
+                      <CheckCheck size={11} />
+                      Mark all read
+                    </button>
+                  )}
+                </div>
 
-                        {/* Middle textual content info */}
-                        <div className="flex-grow min-w-0 space-y-0.5 text-left">
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text)] truncate">
-                              {item.title}
-                            </span>
-                            <span className="text-[8px] text-[var(--db-text-muted)] font-extrabold uppercase shrink-0">
-                              {formatRelativeTime(item.time)}
-                            </span>
-                          </div>
-                          <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2 pr-6">
-                            {item.message}
-                          </p>
-                        </div>
-
-                        {/* Right side actions and indicators */}
-                        <div className="flex items-center gap-1.5 shrink-0 self-center z-10">
-                          {isUnread && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--db-accent-highlight)] shadow-[0_0_6px_rgba(222,251,2,0.6)] group-hover:opacity-0 transition-opacity" />
-                          )}
-
-                          {/* Delete button */}
-                          <button
-                            onClick={(e) =>
-                              handleDeleteNotification(e, item.id)
-                            }
-                            className="p-1.5 rounded-lg text-[var(--db-text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 shrink-0 cursor-pointer"
-                            title="Delete Notification"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        </div>
+                {/* Feed */}
+                <div className="max-h-[340px] overflow-y-auto custom-scrollbar divide-y divide-[var(--db-card-border)]">
+                  {notifications.length === 0 ? (
+                    <div className="py-12 flex flex-col items-center gap-3 text-center">
+                      <div className="w-12 h-12 rounded-full bg-[var(--db-input-bg)] flex items-center justify-center">
+                        <Bell size={20} className="text-[var(--db-text-muted)]" />
                       </div>
-                    );
-                  })
+                      <p className="text-xs text-[var(--db-text-muted)] uppercase tracking-widest font-bold">All caught up!</p>
+                    </div>
+                  ) : (
+                    notifications.map((item) => {
+                      const isUnread = !readIds.includes(item.id);
+                      const typeStyles = {
+                        booking: {
+                          bg:     theme === "dark" ? "rgba(59,130,246,0.12)" : "rgba(59,130,246,0.08)",
+                          border: theme === "dark" ? "rgba(59,130,246,0.25)" : "rgba(59,130,246,0.2)",
+                          text:   theme === "dark" ? "#60a5fa" : "#2563eb",
+                          label:  "Booking",
+                        },
+                        payment: {
+                          bg:     theme === "dark" ? "rgba(16,185,129,0.12)" : "rgba(16,185,129,0.08)",
+                          border: theme === "dark" ? "rgba(16,185,129,0.25)" : "rgba(16,185,129,0.2)",
+                          text:   theme === "dark" ? "#34d399" : "#059669",
+                          label:  "Payment",
+                        },
+                        event: {
+                          bg:     theme === "dark" ? "rgba(229,255,0,0.08)" : "rgba(202,138,4,0.1)",
+                          border: theme === "dark" ? "rgba(229,255,0,0.2)" : "rgba(202,138,4,0.2)",
+                          text:   theme === "dark" ? "#e5ff00" : "#b45309",
+                          label:  "Event",
+                        },
+                      };
+                      const ts = typeStyles[item.type] || typeStyles.event;
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => handleNotificationClick(item)}
+                          className="group flex items-start gap-3 px-4 py-3.5 cursor-pointer transition-all hover:bg-[var(--db-sidebar-link-hover)]"
+                          style={{ background: isUnread ? (theme === "dark" ? "rgba(229,255,0,0.03)" : "rgba(15,23,42,0.02)") : "transparent" }}
+                        >
+                          {/* Icon badge */}
+                          <div
+                            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
+                            style={{ background: ts.bg, border: `1px solid ${ts.border}` }}
+                          >
+                            {getNotificationIcon(item.type)}
+                          </div>
+
+                          {/* Content */}
+                          <div className="flex-grow min-w-0">
+                            <div className="flex items-start justify-between gap-1 mb-0.5">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span
+                                  className="text-[10px] font-black uppercase tracking-wider leading-tight"
+                                  style={{ color: theme === "dark" ? "#ffffff" : "#0f172a" }}
+                                >{item.title}</span>
+                                <span
+                                  className="px-1.5 py-px text-[8px] font-bold uppercase tracking-wider rounded-full"
+                                  style={{ background: ts.bg, border: `1px solid ${ts.border}`, color: ts.text }}
+                                >{ts.label}</span>
+                              </div>
+                              <span className="text-[9px] text-[var(--db-text-muted)] font-bold uppercase shrink-0 mt-0.5">{formatRelativeTime(item.time)}</span>
+                            </div>
+                            <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2 pr-2">{item.message}</p>
+                          </div>
+
+                          {/* Right indicators */}
+                          <div className="flex flex-col items-center gap-2 shrink-0 self-center">
+                            {isUnread && (
+                              <span
+                                className="w-2 h-2 rounded-full group-hover:opacity-0 transition-opacity"
+                                style={{
+                                  background: theme === "dark" ? "#e5ff00" : "#1e293b",
+                                  boxShadow: theme === "dark" ? "0 0 8px rgba(229,255,0,0.7)" : "none",
+                                }}
+                              />
+                            )}
+                            <button
+                              onClick={(e) => handleDeleteNotification(e, item.id)}
+                              className="p-1 rounded-lg text-[var(--db-text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+                              title="Delete"
+                            >
+                              <Trash2 size={11} />
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+
+                {/* Footer */}
+                {notifications.length > 0 && (
+                  <div className="px-4 py-2.5 border-t border-[var(--db-card-border)] bg-[var(--db-input-bg)] flex items-center justify-center">
+                    <span className="text-[9px] uppercase tracking-widest font-bold text-[var(--db-text-muted)]">
+                      {notifications.length} recent notifications
+                    </span>
+                  </div>
                 )}
-              </div>
-            </div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Theme Switcher Toggle button */}
@@ -665,10 +732,11 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
       <AnimatePresence>
         {latestNotification && (
           <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.95, x: 20 }}
-            animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95, x: 10 }}
-            className="fixed top-6 right-4 left-4 sm:left-auto sm:right-6 w-auto sm:w-96 bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] p-4 flex gap-3 text-left items-start cursor-pointer z-[9999]"
+            initial={{ opacity: 0, y: -24, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 380, damping: 28 }}
+            className="fixed top-5 right-4 left-4 sm:left-auto sm:right-5 w-auto sm:w-[380px] bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-[0_24px_60px_rgba(0,0,0,0.3)] overflow-hidden z-[9999] cursor-pointer"
             onClick={() => {
               if (latestNotification.link) {
                 navigate(latestNotification.link);
@@ -676,31 +744,45 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
               }
             }}
           >
-            <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0 text-[#e5ff00]">
-              {getNotificationIcon(latestNotification.type)}
-            </div>
-            <div className="flex-grow space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#e5ff00]">
-                  New Activity Alert
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setLatestNotification(null);
-                  }}
-                  className="text-gray-500 hover:text-white transition-colors cursor-pointer"
-                >
-                  <X size={14} />
-                </button>
+            {/* Top accent bar */}
+            <div className="h-0.5 w-full bg-gradient-to-r from-[var(--db-accent)] via-[var(--db-accent)]/60 to-transparent" />
+
+            <div className="p-4 flex gap-3 items-start">
+              {/* Icon */}
+              <div className="w-10 h-10 rounded-xl bg-[var(--db-accent)] flex items-center justify-center shrink-0 shadow-[0_0_16px_rgba(229,255,0,0.35)]">
+                <Bell size={16} className="text-black" />
               </div>
-              <h5 className="text-xs font-bold text-white uppercase tracking-tight">
-                {latestNotification.title}
-              </h5>
-              <p className="text-xs text-gray-400 leading-normal">
-                {latestNotification.message}
-              </p>
+
+              {/* Text */}
+              <div className="flex-grow min-w-0">
+                <div className="flex items-center justify-between mb-0.5">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--db-accent-highlight)]">
+                    New Activity
+                  </span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setLatestNotification(null); }}
+                    className="p-1 rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer"
+                  >
+                    <X size={13} />
+                  </button>
+                </div>
+                <h5 className="text-xs font-black text-[var(--db-text)] uppercase tracking-tight mb-0.5">
+                  {latestNotification.title}
+                </h5>
+                <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2">
+                  {latestNotification.message}
+                </p>
+              </div>
             </div>
+
+            {/* Auto-dismiss progress bar */}
+            <motion.div
+              initial={{ width: "100%" }}
+              animate={{ width: "0%" }}
+              transition={{ duration: 6, ease: "linear" }}
+              onAnimationComplete={() => setLatestNotification(null)}
+              className="h-0.5 bg-[var(--db-accent)]/50"
+            />
           </motion.div>
         )}
       </AnimatePresence>
