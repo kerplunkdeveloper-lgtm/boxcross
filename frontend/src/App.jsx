@@ -6,6 +6,7 @@ import ScrollToTop from "./Components/ScrollToTop";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
+import { RealTimeProvider } from "./context/RealTimeContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Toaster } from "react-hot-toast";
 import { HelmetProvider } from "react-helmet-async";
@@ -60,74 +61,76 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <HelmetProvider>
-        <div className="min-h-screen bg-black text-white">
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              style: {
-                background: "#0a0a0a",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.08)",
-                fontFamily: '"BrutalTypeBold", sans-serif',
-                fontSize: "13px",
-                borderRadius: "12px",
-              },
-              success: {
-                iconTheme: {
-                  primary: "#e5ff00",
-                  secondary: "#000",
+      <RealTimeProvider>
+        <HelmetProvider>
+          <div className="min-h-screen bg-black text-white">
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style: {
+                  background: "#0a0a0a",
+                  color: "#fff",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  fontFamily: '"BrutalTypeBold", sans-serif',
+                  fontSize: "13px",
+                  borderRadius: "12px",
                 },
-              },
-            }}
-          />
-          {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
-          <BrowserRouter>
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                {/* Routes WITH Navbar and Footer */}
-                <Route element={<Layout />}>
-                  <Route path="/" element={<MembershipPage />} />
-                  <Route path="/events" element={<Eventpage />} />
-                </Route>
+                success: {
+                  iconTheme: {
+                    primary: "#e5ff00",
+                    secondary: "#000",
+                  },
+                },
+              }}
+            />
+            {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
+            <BrowserRouter>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  {/* Routes WITH Navbar and Footer */}
+                  <Route element={<Layout />}>
+                    <Route path="/" element={<MembershipPage />} />
+                    <Route path="/events" element={<Eventpage />} />
+                  </Route>
 
-                {/* Routes WITHOUT Navbar and Footer */}
-                <Route path="/login" element={<Auth />} />
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <ThemeProvider>
-                        <DashboardLayout />
-                      </ThemeProvider>
-                    </ProtectedRoute>
-                  }
-                >
-                  <Route index element={<DashboardHome />} />
-                  <Route path="bookings" element={<DashboardBookings />} />
+                  {/* Routes WITHOUT Navbar and Footer */}
+                  <Route path="/login" element={<Auth />} />
                   <Route
-                    path="memberships"
-                    element={<DashboardMemberships />}
-                  />
-                  <Route path="payments" element={<DashboardPayments />} />
-                  <Route path="events" element={<DashboardEvents />} />
-                  <Route path="events-list" element={<DashboardEventsList />} />
-                  <Route
-                    path="event-payments"
-                    element={<DashboardEventPayments />}
-                  />
-                  <Route path="profile" element={<DashboardProfile />} />
-                  <Route path="homec1" element={<DashboardHomec1 />} />
-                  <Route path="homec2" element={<DashboardHomec2 />} />
-                  <Route path="homec3" element={<DashboardHomec3 />} />
-                  <Route path="settings" element={<DashboardSettings />} />
-                  <Route path="calendar" element={<DashboardCalendar />} />
-                </Route>
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
-        </div>
-      </HelmetProvider>
+                    path="/dashboard"
+                    element={
+                      <ProtectedRoute>
+                        <ThemeProvider>
+                          <DashboardLayout />
+                        </ThemeProvider>
+                      </ProtectedRoute>
+                    }
+                  >
+                    <Route index element={<DashboardHome />} />
+                    <Route path="bookings" element={<DashboardBookings />} />
+                    <Route
+                      path="memberships"
+                      element={<DashboardMemberships />}
+                    />
+                    <Route path="payments" element={<DashboardPayments />} />
+                    <Route path="events" element={<DashboardEvents />} />
+                    <Route path="events-list" element={<DashboardEventsList />} />
+                    <Route
+                      path="event-payments"
+                      element={<DashboardEventPayments />}
+                    />
+                    <Route path="profile" element={<DashboardProfile />} />
+                    <Route path="homec1" element={<DashboardHomec1 />} />
+                    <Route path="homec2" element={<DashboardHomec2 />} />
+                    <Route path="homec3" element={<DashboardHomec3 />} />
+                    <Route path="settings" element={<DashboardSettings />} />
+                    <Route path="calendar" element={<DashboardCalendar />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          </div>
+        </HelmetProvider>
+      </RealTimeProvider>
     </AuthProvider>
   );
 };

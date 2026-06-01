@@ -33,8 +33,8 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
       setUpiId("");
       setUpiError("");
 
-      // Pre-fill user data if logged in
-      if (authUser) {
+      // Pre-fill user data if logged in (only for regular customer accounts, not admin users)
+      if (authUser && authUser.role !== "admin") {
         setUser({
           name: authUser.name || "",
           phone: authUser.phone || "",
@@ -138,7 +138,7 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[99999] flex items-end md:items-center justify-center md:p-6 font-sans">
+        <div className="fixed inset-0 z-[999999] flex items-end md:items-center justify-center md:p-6 font-sans" style={{ zIndex: 999999 }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

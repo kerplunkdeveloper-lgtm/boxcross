@@ -22,6 +22,10 @@ exports.createContact = async (req, res) => {
       phoneNumber,
     });
 
+    if (req.io) {
+      req.io.emit("data_updated", { type: "homec2", action: "create", data: contact });
+    }
+
     res.status(201).json({
       success: true,
       message: "Form submitted successfully",
@@ -72,6 +76,10 @@ exports.deleteContact = async (req, res) => {
     }
 
     await Homec2.findByIdAndDelete(req.params.id);
+
+    if (req.io) {
+      req.io.emit("data_updated", { type: "homec2", action: "delete", id: req.params.id });
+    }
 
     res.status(200).json({
       success: true,

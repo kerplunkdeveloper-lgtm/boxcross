@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { getHomec1, deleteHomec1 } from "../api/api";
+import { useRealTime } from "../context/RealTimeContext";
 import { Users, Phone, Calendar, Loader2, Trash2, Mail, Search } from "lucide-react";
 import toast from "react-hot-toast";
 
 const DashboardHomec1 = () => {
+  const { subscribe } = useRealTime();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const res = await getHomec1();
       if (res.data.success) {
         setData(res.data.data);
@@ -24,9 +22,20 @@ const DashboardHomec1 = () => {
     } catch (error) {
       toast.error("Failed to load trial submissions.");
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchData(true);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = subscribe("homec1", () => {
+      fetchData(false);
+    });
+    return unsubscribe;
+  }, [subscribe]);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this trial submission?")) {

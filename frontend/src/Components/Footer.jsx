@@ -35,7 +35,7 @@ const Footer = () => {
           style={{ fontFamily: '"Brutal Font Light", sans-serif',  }}
         >
           Copyright © 2026{" "}
-          <span className="text-[#d9ff00] font-bold mx-2">
+          <span className="text-[#e5ff00] font-bold mx-2">
            {" "} Box & Cross
           </span>{" "}
           . All Rights Reserved.

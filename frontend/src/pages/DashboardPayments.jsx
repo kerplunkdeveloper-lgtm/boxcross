@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useRealTime } from "../context/RealTimeContext";
 import { motion } from "framer-motion";
 import { 
   CreditCard, Search, DollarSign, CheckCircle, AlertTriangle, Calendar, Filter
@@ -9,12 +10,14 @@ import { toast } from "react-hot-toast";
 
 const DashboardPayments = () => {
   const { user } = useAuth();
+  const { subscribe } = useRealTime();
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  const fetchPayments = async () => {
+  const fetchPayments = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
     try {
       const { data } = await getPayments();
       if (data.success) {
@@ -24,15 +27,26 @@ const DashboardPayments = () => {
       console.error("Error fetching payment transactions", error);
       toast.error("Failed to load payment transactions");
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
   useEffect(() => {
     if (user) {
-      fetchPayments();
+      fetchPayments(true);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    // Real-time payments update
+    const unsubscribe = subscribe("payments", () => {
+      fetchPayments(false);
+    });
+
+    return unsubscribe;
+  }, [user, subscribe]);
 
   // Compute stats
   const totalVolume = payments

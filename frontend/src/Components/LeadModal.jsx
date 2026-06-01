@@ -83,7 +83,7 @@ const LeadModal = () => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 sm:p-0">
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-0" style={{ zIndex: 999999 }}>
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"

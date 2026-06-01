@@ -118,9 +118,6 @@ const DashboardProfile = () => {
 
   return (
     <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
-      {/* Background Radial Glow */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#e5ff00]/5 rounded-full blur-[120px] pointer-events-none z-0" />
-
       <div className="max-w-5xl mx-auto space-y-6 relative z-10">
         {/* Title Header */}
         <div className="text-left">
@@ -145,14 +142,10 @@ const DashboardProfile = () => {
             transition={{ duration: 0.3 }}
             className="md:col-span-1 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 flex flex-col items-center justify-between text-center relative overflow-hidden transition-colors"
           >
-            {/* Design accents */}
-            <div className="absolute -top-12 -left-12 w-24 h-24 bg-[var(--db-accent-glow)] rounded-full blur-xl pointer-events-none" />
-            <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-[var(--db-accent-glow)] rounded-full blur-xl pointer-events-none" />
-
             <div className="space-y-6 w-full flex flex-col items-center">
               {/* Profile Avatar Frame */}
               <div className="relative group w-32 h-32">
-                <div className="w-full h-full rounded-full bg-gradient-to-tr from-[var(--db-accent-highlight)]/30 via-transparent to-[var(--db-accent-highlight)]/10 border-2 border-[var(--db-card-border)] flex items-center justify-center overflow-hidden relative shadow-2xl">
+                <div className="w-full h-full rounded-full bg-[var(--db-input-bg)] border-2 border-[var(--db-card-border)] flex items-center justify-center overflow-hidden relative shadow-2xl">
                   {imagePreview ? (
                     <img
                       src={imagePreview}

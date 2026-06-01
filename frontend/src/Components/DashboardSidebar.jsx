@@ -164,7 +164,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
 
               {eventsOpen && (
                 <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
-                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-[var(--db-accent-highlight)]/30 rounded-full" />
 
                   <NavLink
                     to="/dashboard/events"
@@ -247,7 +247,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
 
               {enquiriesOpen && (
                 <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
-                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-[var(--db-accent-highlight)]/30 rounded-full" />
 
                   <NavLink
                     to="/dashboard/bookings"

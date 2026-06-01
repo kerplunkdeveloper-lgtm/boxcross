@@ -516,9 +516,6 @@ const DashboardCalendar = () => {
 
   return (
     <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
-      {/* Glow effect */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
-
       <div className="max-w-6xl mx-auto space-y-6 relative z-10">
         {/* Title Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

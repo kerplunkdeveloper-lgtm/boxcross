@@ -26,6 +26,10 @@ exports.createPayment = async (req, res) => {
       paymentMethod: paymentMethod || "UPI"
     });
 
+    if (req.io) {
+      req.io.emit("data_updated", { type: "payments", action: "create", data: payment });
+    }
+
     res.status(201).json({
       success: true,
       data: payment
@@ -85,6 +89,10 @@ exports.updatePayment = async (req, res) => {
       new: true,
       runValidators: true
     });
+
+    if (req.io) {
+      req.io.emit("data_updated", { type: "payments", action: "update", data: updatedPayment });
+    }
 
     res.status(200).json({
       success: true,

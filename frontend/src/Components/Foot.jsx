@@ -63,7 +63,7 @@ const Foot = () => {
                 items-center
                 justify-center
                 text-white
-                hover:bg-[#d9ff00]
+                hover:bg-[#e5ff00]
                 hover:text-black
                 transition-all
                 duration-300
@@ -84,7 +84,7 @@ const Foot = () => {
                 items-center
                 justify-center
                 text-white
-                hover:bg-[#d9ff00]
+                hover:bg-[#e5ff00]
                 hover:text-black
                 transition-all
                 duration-300
@@ -140,7 +140,7 @@ const Foot = () => {
                     items-center
                     gap-3
                     text-[#b3b3b3]
-                    hover:text-[#d9ff00]
+                    hover:text-[#e5ff00]
                     transition-all
                     duration-300
                     cursor-pointer
@@ -222,14 +222,14 @@ const Foot = () => {
             <div className="space-y-4 flex flex-col">
               <a
                 href="mailto:hello@boxandcross.com"
-                className="text-[#b3b3b3] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+                className="text-[#b3b3b3] hover:text-[#e5ff00] transition-all duration-300 w-fit"
               >
                 hello@boxandcross.com
               </a>
 
               <a
                 href="tel:+918925556800"
-                className="text-[#b3b3b3] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+                className="text-[#b3b3b3] hover:text-[#e5ff00] transition-all duration-300 w-fit"
               >
                 +91 89255 56800
               </a>

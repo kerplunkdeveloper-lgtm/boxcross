@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { getLeadsAdmin } from "../api/api";
+import { useRealTime } from "../context/RealTimeContext";
 import { Users, Phone, Calendar, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 const DashboardLeads = () => {
+  const { subscribe } = useRealTime();
   const [leads, setLeads] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchLeads();
-  }, []);
-
-  const fetchLeads = async () => {
+  const fetchLeads = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const { data } = await getLeadsAdmin();
       if (data.success) {
         setLeads(data.data);
@@ -21,9 +19,20 @@ const DashboardLeads = () => {
     } catch (error) {
       toast.error("Failed to load user information.");
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchLeads(true);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = subscribe("leads", () => {
+      fetchLeads(false);
+    });
+    return unsubscribe;
+  }, [subscribe]);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" };

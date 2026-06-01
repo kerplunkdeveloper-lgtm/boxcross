@@ -30,6 +30,10 @@ const createBooking = async (req, res) => {
       time,
     });
 
+    if (req.io) {
+      req.io.emit("data_updated", { type: "bookings", action: "create", data: booking });
+    }
+
     res.status(201).json({
       success: true,
       message: "Booking created successfully",
@@ -106,6 +110,10 @@ const updateBooking = async (req, res) => {
       });
     }
 
+    if (req.io) {
+      req.io.emit("data_updated", { type: "bookings", action: "update", data: booking });
+    }
+
     res.status(200).json({
       success: true,
       message: "Booking updated",
@@ -130,6 +138,10 @@ const deleteBooking = async (req, res) => {
         success: false,
         message: "Booking not found",
       });
+    }
+
+    if (req.io) {
+      req.io.emit("data_updated", { type: "bookings", action: "delete", id: req.params.id });
     }
 
     res.status(200).json({
