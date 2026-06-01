@@ -96,17 +96,18 @@ html {
   --db-sidebar-link-hover: rgba(255, 255, 255, 0.05);
   --db-sidebar-link-text: #9ca3af;
   --db-table-hover: rgba(255, 255, 255, 0.02);
-  --db-accent-dim: rgba(229, 255, 0, 0.1);
-  --db-shadow: none;
-  --db-glass-bg: #0a0a0a;
+  --db-accent-dim: rgba(222, 251, 2, 0.1);
+  --db-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --db-glass-bg: rgba(10, 10, 10, 0.45);
   --db-glass-border: rgba(255, 255, 255, 0.08);
 
-  /* Solid Accent Brand Tokens - No Gradients */
-  --db-accent: #e5ff00;
+
+  /* Dynamic Accent Brand Tokens */
+ --db-accent: linear-gradient(135deg, #00ff88, #22fa1e, #00c853);
   --db-accent-text: #000000;
-  --db-accent-hover: #e5ff00;
-  --db-accent-highlight: #e5ff00;
-  --db-accent-glow: transparent;
+  --db-accent-hover: #22fa1e;
+  --db-accent-highlight: #25ee06;
+  --db-accent-glow: rgba(222, 251, 2, 0.15);
 }
 
 .dashboard-light {
@@ -126,16 +127,17 @@ html {
   --db-sidebar-link-text: #475569;
   --db-table-hover: rgba(15, 23, 42, 0.01);
   --db-accent-dim: rgba(15, 23, 42, 0.08);
-  --db-shadow: none;
-  --db-glass-bg: #ffffff;
+  --db-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --db-glass-bg: rgba(255, 255, 255, 0.45);
   --db-glass-border: rgba(15, 23, 42, 0.08);
 
-  /* Solid Accent Brand Tokens - No Gradients */
-  --db-accent: #000000;
-  --db-accent-text: #ffffff;
-  --db-accent-hover: #111111;
-  --db-accent-highlight: #111111;
-  --db-accent-glow: transparent;
+
+  /* Dynamic Accent Brand Tokens */
+  --db-accent:linear-gradient(135deg, #00ff88, #22fa1e, #00c853);
+  --db-accent-text: #000000;
+  --db-accent-hover: #22fa1e;
+  --db-accent-highlight: #0dc400;
+  --db-accent-glow: rgba(37, 99, 235, 0.12);
 }
 
 /* Force Brutal Font on all dashboard views */
@@ -287,35 +289,4 @@ html {
 
 .book-now-btn:hover::before {
   transform: translate(250%, 0) skewX(-20deg);
-}
-
-/* Disable all background glow / blur overlay divs / gradients in dashboard */
-.dashboard-dark div.absolute.blur-\[140px\],
-.dashboard-light div.absolute.blur-\[140px\],
-.dashboard-dark div.absolute.blur-3xl,
-.dashboard-light div.absolute.blur-3xl,
-.dashboard-dark div.absolute.blur-2xl,
-.dashboard-light div.absolute.blur-2xl,
-.dashboard-dark .absolute.bg-\[var\(--db-accent-glow\)\],
-.dashboard-light .absolute.bg-\[var\(--db-accent-glow\)\],
-.dashboard-dark [class*="blur-"],
-.dashboard-light [class*="blur-"],
-.dashboard-dark [class*="bg-[var(--db-accent-glow)]"],
-.dashboard-light [class*="bg-[var(--db-accent-glow)]"] {
-  display: none !important;
-  backdrop-filter: none !important;
-  filter: none !important;
-}
-
-.dashboard-dark, .dashboard-light {
-  background: var(--db-bg) !important;
-}
-
-/* Remove card border spin conic gradients */
-.card-border-spin-container::before {
-  display: none !important;
-}
-
-.card-border-spin-inner {
-  background: var(--db-card) !important;
 }

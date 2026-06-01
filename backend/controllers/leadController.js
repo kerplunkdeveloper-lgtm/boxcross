@@ -17,10 +17,6 @@ const createLead = async (req, res) => {
       verified: true
     });
 
-    if (req.io) {
-      req.io.emit("data_updated", { type: "leads", action: "create", data: lead });
-    }
-
     res.status(201).json({
       success: true,
       message: "User information saved successfully",

@@ -348,8 +348,8 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
             title="Activity Notifications"
           >
             <Bell size={18} />
-             {unreadCount > 0 && (
-              <span className="absolute top-0.5 right-0.5 bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)] rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center shadow-md">
+            {unreadCount > 0 && (
+              <span className="absolute top-0.5 right-0.5 bg-[var(--db-accent-highlight)] text-black rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center shadow-[0_0_10px_rgba(222,251,2,0.4)]">
                 {unreadCount}
               </span>
             )}
@@ -391,7 +391,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                         key={item.id}
                         onClick={() => handleNotificationClick(item)}
                         className={`py-2.5 flex items-start gap-3 cursor-pointer hover:bg-[var(--db-sidebar-link-hover)] px-2 rounded-xl transition-colors group relative ${
-                          isUnread ? "bg-[var(--db-accent-dim)]" : ""
+                          isUnread ? "bg-[var(--db-accent-glow)]/5" : ""
                         }`}
                       >
                         {/* Left notification badge icon */}
@@ -417,7 +417,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                         {/* Right side actions and indicators */}
                         <div className="flex items-center gap-1.5 shrink-0 self-center z-10">
                           {isUnread && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--db-accent-highlight)] group-hover:opacity-0 transition-opacity shrink-0" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--db-accent-highlight)] shadow-[0_0_6px_rgba(222,251,2,0.6)] group-hover:opacity-0 transition-opacity" />
                           )}
 
                           {/* Delete button */}
@@ -458,7 +458,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
             onClick={() => setShowProfileDropdown(!showProfileDropdown)}
             className="flex items-center gap-3 p-1.5 pr-3 rounded-xl hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-left"
           >
-            <div className="w-10 h-10 rounded-full bg-[var(--db-input-bg)] border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
               {user && user.profileImage ? (
                 <img
                   src={user.profileImage}
@@ -484,7 +484,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
               </p>
             </div>
           </button>
- 
+
           {/* Profile Dropdown Menu */}
           <AnimatePresence>
             {showProfileDropdown && (
@@ -497,7 +497,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
               >
                 {/* User Info Header */}
                 <div className="flex items-center gap-3 p-2 pb-3 border-b border-[var(--db-card-border)]">
-                  <div className="w-10 h-10 rounded-full bg-[var(--db-input-bg)] border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
                     {user && user.profileImage ? (
                       <img
                         src={user.profileImage}

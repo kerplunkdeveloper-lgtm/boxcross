@@ -25,7 +25,6 @@ import {
   deleteEventItem,
 } from "../api/api";
 import { toast } from "react-hot-toast";
-import { useRealTime } from "../context/RealTimeContext";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Helper for Date Conversion to YYYY-MM-DD
@@ -138,7 +137,6 @@ const convertTo12Hour = (time24) => {
 };
 
 const DashboardEventsList = () => {
-  const { subscribe } = useRealTime();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -168,8 +166,8 @@ const DashboardEventsList = () => {
   const fileInputRef = useRef(null);
 
   // Fetch events
-  const fetchEvents = async (showLoading = true) => {
-    if (showLoading) setLoading(true);
+  const fetchEvents = async () => {
+    setLoading(true);
     try {
       const { data } = await getEventsListAdmin();
       if (data.success) {
@@ -179,20 +177,13 @@ const DashboardEventsList = () => {
       console.error(error);
       toast.error("Failed to load events");
     } finally {
-      if (showLoading) setLoading(false);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchEvents(true);
+    fetchEvents();
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = subscribe("events", () => {
-      fetchEvents(false);
-    });
-    return unsubscribe;
-  }, [subscribe]);
 
   // Handle file select and preview
   const handleFileChange = (e) => {
@@ -379,6 +370,9 @@ const DashboardEventsList = () => {
 
   return (
     <div className="p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+      {/* Background Radial Glow */}
+      <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none z-0" />
+
       <div className="max-w-6xl mx-auto z-10 relative">
         {/* Header Block */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--db-card-border)]">

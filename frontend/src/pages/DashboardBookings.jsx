@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useRealTime } from "../context/RealTimeContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -15,13 +14,11 @@ import { getBookings, deleteBooking } from "../api/api";
 
 const DashboardBookings = () => {
   const { user } = useAuth();
-  const { subscribe } = useRealTime();
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchBookings = async (showLoading = true) => {
-    if (showLoading) setLoading(true);
+  const fetchBookings = async () => {
     try {
       const { data } = await getBookings();
       if (data.success) {
@@ -30,26 +27,15 @@ const DashboardBookings = () => {
     } catch (error) {
       console.error("Error fetching bookings", error);
     } finally {
-      if (showLoading) setLoading(false);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     if (user) {
-      fetchBookings(true);
+      fetchBookings();
     }
   }, [user]);
-
-  useEffect(() => {
-    if (!user) return;
-
-    // Real-time update for bookings
-    const unsubscribe = subscribe("bookings", () => {
-      fetchBookings(false); // fetch in background without page flickering
-    });
-
-    return unsubscribe;
-  }, [user, subscribe]);
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this booking?")) {

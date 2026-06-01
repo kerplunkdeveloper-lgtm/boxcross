@@ -162,10 +162,6 @@ const createEvent = async (req, res) => {
       agenda: parsedAgenda,
     });
 
-    if (req.io) {
-      req.io.emit("data_updated", { type: "events", action: "create", data: event });
-    }
-
     res.status(201).json({
       success: true,
       message: "Event created successfully",
@@ -276,10 +272,6 @@ const updateEvent = async (req, res) => {
       runValidators: true,
     });
 
-    if (req.io) {
-      req.io.emit("data_updated", { type: "events", action: "update", data: event });
-    }
-
     res.status(200).json({
       success: true,
       message: "Event updated successfully",
@@ -314,10 +306,6 @@ const deleteEvent = async (req, res) => {
 
     // Delete document from database
     await Event.findByIdAndDelete(id);
-
-    if (req.io) {
-      req.io.emit("data_updated", { type: "events", action: "delete", id });
-    }
 
     res.status(200).json({
       success: true,
@@ -515,11 +503,6 @@ const verifyEventPayment = async (req, res) => {
       }
     }
 
-    if (req.io) {
-      req.io.emit("data_updated", { type: "eventBookings", action: "create", data: booking });
-      req.io.emit("data_updated", { type: "events", action: "update", data: event });
-    }
-
     res.status(200).json({
       success: true,
       message: "Payment verified and booking confirmed successfully!",
@@ -586,13 +569,6 @@ const deleteEventBooking = async (req, res) => {
     }
 
     await EventBooking.findByIdAndDelete(id);
-
-    if (req.io) {
-      req.io.emit("data_updated", { type: "eventBookings", action: "delete", id });
-      if (event) {
-        req.io.emit("data_updated", { type: "events", action: "update", data: event });
-      }
-    }
 
     res.status(200).json({
       success: true,

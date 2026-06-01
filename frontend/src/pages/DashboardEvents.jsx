@@ -186,6 +186,9 @@ const DashboardEvents = () => {
 
   return (
     <div className="p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+      {/* Background Radial Glow */}
+      <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[#e5ff00]/5 rounded-full blur-[140px] pointer-events-none z-0" />
+
       <div className="max-w-6xl mx-auto z-10 relative">
         {/* Header Block */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--db-card-border)]">

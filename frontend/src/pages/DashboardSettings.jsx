@@ -33,6 +33,9 @@ const DashboardSettings = () => {
 
   return (
     <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
+      {/* Background Radial Glow */}
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
+
       <div className="max-w-6xl mx-auto space-y-6 relative z-10">
         {/* Title Header */}
         <div className="text-left">
@@ -71,7 +74,7 @@ const DashboardSettings = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Profile Header Block inside card */}
                 <div className="md:col-span-2 flex items-center gap-4 p-4 rounded-2xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] mb-2">
-                  <div className="w-16 h-16 rounded-full bg-[var(--db-input-bg)] border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
                     {user.profileImage ? (
                       <img 
                         src={user.profileImage} 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useRealTime } from "../context/RealTimeContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
@@ -12,7 +11,6 @@ import { getBookings, getPayments, getEventsListAdmin } from "../api/api";
 
 const DashboardHome = () => {
   const { user } = useAuth();
-  const { subscribe } = useRealTime();
   const navigate = useNavigate();
   const [visitorCount, setVisitorCount] = useState(0);
   const [totalPayments, setTotalPayments] = useState(0);
@@ -27,61 +25,50 @@ const DashboardHome = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const fetchDashboardStats = async (showLoading = true) => {
-    if (showLoading) setLoading(true);
-    try {
-      const [bookingsRes, paymentsRes, eventsRes] = await Promise.all([
-        getBookings(),
-        getPayments(),
-        getEventsListAdmin()
-      ]);
-
-      if (bookingsRes.data?.success) {
-        setVisitorCount(bookingsRes.data.count || bookingsRes.data.data.length);
-      }
-      
-      if (paymentsRes.data?.success && Array.isArray(paymentsRes.data.data)) {
-        const total = paymentsRes.data.data.reduce((sum, item) => {
-          return sum + (Number(item.amount) || Number(item.planPrice) || 0);
-        }, 0);
-        setTotalPayments(total);
-      }
-
-      if (eventsRes.data?.success && Array.isArray(eventsRes.data.data)) {
-        setEvents(eventsRes.data.data);
-      }
-    } catch (error) {
-      console.error("Error loading dashboard home stats", error);
-    } finally {
-      if (showLoading) setLoading(false);
-    }
-  };
 
   useEffect(() => {
+    const fetchDashboardStats = async () => {
+      setLoading(true);
+      try {
+        const [bookingsRes, paymentsRes, eventsRes] = await Promise.all([
+          getBookings(),
+          getPayments(),
+          getEventsListAdmin()
+        ]);
+
+        if (bookingsRes.data?.success) {
+          setVisitorCount(bookingsRes.data.count || bookingsRes.data.data.length);
+        }
+        
+        if (paymentsRes.data?.success && Array.isArray(paymentsRes.data.data)) {
+          const total = paymentsRes.data.data.reduce((sum, item) => {
+            return sum + (Number(item.amount) || Number(item.planPrice) || 0);
+          }, 0);
+          setTotalPayments(total);
+        }
+
+        if (eventsRes.data?.success && Array.isArray(eventsRes.data.data)) {
+          setEvents(eventsRes.data.data);
+        }
+      } catch (error) {
+        console.error("Error loading dashboard home stats", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (user) {
-      fetchDashboardStats(true);
+      fetchDashboardStats();
     }
   }, [user]);
-
-  useEffect(() => {
-    if (!user) return;
-
-    // Subscribe to real-time events without showing global spinner
-    const unsubBookings = subscribe("bookings", () => fetchDashboardStats(false));
-    const unsubPayments = subscribe("payments", () => fetchDashboardStats(false));
-    const unsubEvents = subscribe("events", () => fetchDashboardStats(false));
-
-    return () => {
-      unsubBookings();
-      unsubPayments();
-      unsubEvents();
-    };
-  }, [user, subscribe]);
 
   if (!user) return null;
 
   return (
     <div className="px-2 py-6 md:p-8 relative overflow-hidden min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+      {/* Background Radial Glow */}
+      <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none z-0" />
+
       <div className="max-w-9xl mx-auto z-10 relative space-y-10">
         
         {/* Welcome Section with Glassmorphism and Real-Time Clock */}
@@ -94,8 +81,12 @@ const DashboardHome = () => {
             WebkitBackdropFilter: "blur(24px)"
           }}
         >
+          {/* Subtle accent light reflection inside the card */}
+          <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40" />
+          <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20" />
+          
           <div className="flex items-center gap-4 z-10">
-            <div className="w-16 h-16 rounded-full bg-[var(--db-input-bg)] border-2 border-[var(--db-accent-highlight)]/30 flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-highlight)]/40 via-transparent to-[var(--db-accent-highlight)]/10 border-2 border-[var(--db-accent-highlight)]/30 flex items-center justify-center overflow-hidden shadow-lg shadow-[var(--db-accent-glow)] shrink-0">
               {user.profileImage ? (
                 <img 
                   src={user.profileImage} 
@@ -157,7 +148,41 @@ const DashboardHome = () => {
           </div>
         </div>
 
-     
+        {/* Cinematic Video Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="w-full h-56 sm:h-72 md:h-80 lg:h-[530px] rounded-3xl overflow-hidden relative border border-[var(--db-card-border)] shadow-2xl"
+        >
+          {/* Loop Video Background */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          >
+            <source
+              src="https://res.cloudinary.com/dubheb1lh/video/upload/v1779972237/100546-video-720_1_yostn5.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Premium Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent z-10" />
+
+          {/* Banner Text Content */}
+          <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 sm:p-8 text-left">
+            <div className="flex flex-col items-start gap-1">
+              <span className="text-[9px] sm:text-xs text-gray-300 font-bold uppercase tracking-widest mt-1 pl-1">
+                Box & Cross Elite Training
+              </span>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Dashboard Grid Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -175,7 +200,7 @@ const DashboardHome = () => {
                 <Users size={20} />
               </div>
               <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                Total Visting Counts
+                Total Bookings
               </span>
             </div>
             <div className="z-10 shrink-0">

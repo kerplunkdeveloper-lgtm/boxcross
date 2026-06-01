@@ -26,10 +26,6 @@ exports.createContact = async (req, res) => {
       message,
     });
 
-    if (req.io) {
-      req.io.emit("data_updated", { type: "homec1", action: "create", data: contact });
-    }
-
     res.status(201).json({
       success: true,
       message: "Form submitted successfully",
@@ -80,10 +76,6 @@ exports.deleteContact = async (req, res) => {
     }
 
     await Homec1.findByIdAndDelete(req.params.id);
-
-    if (req.io) {
-      req.io.emit("data_updated", { type: "homec1", action: "delete", id: req.params.id });
-    }
 
     res.status(200).json({
       success: true,
