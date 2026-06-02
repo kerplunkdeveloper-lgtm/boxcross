@@ -1,6 +1,6 @@
 import React from "react";
 import foundersAsset from "../assets/right.png";
-import { User, Crown, Star } from "lucide-react";
+import { User, Crown, Star, Clock } from "lucide-react";
 
 
 const Founding = () => {
@@ -11,12 +11,12 @@ const Founding = () => {
     <div className="">
     
       {/* Countdown Promo Banner */}
-      <div className="relative z-20 max-w-[1400px] mx-auto px-5 md:px-10 lg:px-16 mt-16 md:mt-24">
-        <div className="relative w-full rounded-[20px] md:rounded-[32px] border border-[#e5ff00] bg-black/80 backdrop-blur-md overflow-hidden shadow-[0_0_40px_rgba(229,255,0,0.15)] flex flex-col lg:flex-row items-center p-8 md:p-10 lg:p-14 gap-10 lg:gap-0">
+      <div className="relative z-20 max-w-8xl mx-auto px-4 md:px-6 lg:px-10  md:mt-[-50px]">
+        <div className="relative w-full rounded-[24px] md:rounded-[32px] border border-[#e5ff00] bg-black overflow-hidden flex flex-col lg:flex-row p-6 md:p-8 lg:p-12 gap-8 lg:gap-0 shadow-[0_0_50px_rgba(229,255,0,0.15)]">
           
-          {/* Subtle X background pattern on the right (simulated with CSS pattern) */}
+          {/* Subtle X background pattern on the right */}
           <div 
-            className="absolute top-0 right-0 w-full lg:w-1/2 h-full opacity-5 pointer-events-none" 
+            className="absolute top-0 right-0 w-full lg:w-1/3 h-full opacity-[0.03] pointer-events-none" 
             style={{ 
               backgroundImage: "url('data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M54.627 0l5.373 5.373-24.627 24.627 24.627 24.627-5.373 5.373-24.627-24.627-24.627 24.627-5.373-5.373 24.627-24.627-24.627-24.627 5.373-5.373 24.627 24.627z\\' fill=\\'%23ffffff\\' fill-opacity=\\'1\\' fill-rule=\\'evenodd\\'/%3E%3C/svg%3E')",
               backgroundSize: "60px 60px"
@@ -24,123 +24,149 @@ const Founding = () => {
           ></div>
 
           {/* Column 1: Huge Text */}
-          <div className="flex-1 w-full flex flex-col items-center lg:items-start text-center lg:text-left z-10 pl-0 lg:pl-6">
-            <div className="inline-block transform -skew-x-[16deg] bg-[#e5ff00] px-4 py-1.5 mb-5 shadow-[0_0_15px_rgba(229,255,0,0.2)]">
-              <span className="inline-block transform skew-x-[16deg] text-black font-black uppercase tracking-wider text-[11px] md:text-[13px]">
+          <div className="flex-[1.4] w-full flex flex-col items-center lg:items-start text-center lg:text-left z-10 pr-0 lg:pr-8">
+            
+            <div className="inline-block transform -skew-x-[12deg] bg-[#e5ff00] px-4 py-1.5 mb-6">
+              <span className="inline-block transform skew-x-[12deg] text-black font-black uppercase tracking-wider text-[12px] md:text-[14px]">
                 Founding Member Offer
               </span>
             </div>
-            <h2 className="flex flex-col uppercase m-0 leading-[0.85] tracking-[-0.03em]" style={{ fontFamily: '"Brutal Font", Impact, sans-serif' }}>
-              <span className="text-white text-[32px] md:text-[40px] font-black drop-shadow-md">
+            
+            <h2 className="flex flex-col uppercase m-0 leading-[0.8] tracking-[-0.03em]" style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}>
+              <span className="text-white text-[30px] md:text-[48px] font-black">
                 THE FIRST 100.
               </span>
-              <span className="text-[#e5ff00] text-[32px] md:text-[40px] mt-3 font-black drop-shadow-lg" style={{ textShadow: "0 0 20px rgba(229,255,0,0.15)" }}>
+              <span className="text-[#e5ff00] text-[30px] md:text-[48px] font-black  mt-2" style={{ textShadow: "0 0 20px rgba(229,255,0,0.2)" }}>
                 THE FOUNDERS.
               </span>
             </h2>
+
+            <div className="flex items-start justify-center lg:justify-start gap-3 md:gap-5 mt-10 w-full">
+              {/* Icon 1 */}
+              <div className="flex flex-col items-center text-center flex-1 max-w-[130px]">
+                <div className="w-14 h-14 rounded-full border border-[#e5ff00] flex items-center justify-center mb-3">
+                  <Crown size={24} className="text-[#e5ff00]" />
+                </div>
+                <span className="text-white font-bold text-[10px] md:text-[11px] leading-[1.2] uppercase tracking-wider">FOUNDING MEMBER</span>
+                <span className="text-[#e5ff00] font-bold text-[10px] md:text-[11px] leading-[1.2] uppercase tracking-wider">PRIVILEGES FOREVER</span>
+              </div>
+              
+              <div className="w-px h-14 bg-zinc-800 mt-2"></div>
+              
+              {/* Icon 2 */}
+              <div className="flex flex-col items-center text-center flex-1 max-w-[130px]">
+                <div className="w-14 h-14 rounded-full border border-[#e5ff00] flex items-center justify-center mb-3">
+                  <Star size={24} className="text-[#e5ff00]" />
+                </div>
+                <span className="text-white font-bold text-[10px] md:text-[11px] leading-[1.2] uppercase tracking-wider">BE PART OF BXC</span>
+                <span className="text-[#e5ff00] font-bold text-[10px] md:text-[11px] leading-[1.2] uppercase tracking-wider">FROM DAY ONE</span>
+              </div>
+              
+              <div className="w-px h-14 bg-zinc-800 mt-2"></div>
+              
+              {/* Icon 3 */}
+              <div className="flex flex-col items-center text-center flex-1 max-w-[130px]">
+                <div className="w-14 h-14 rounded-full border border-[#e5ff00] flex items-center justify-center mb-3">
+                  <User size={24} className="text-[#e5ff00]" />
+                </div>
+                <span className="text-white font-bold text-[10px] md:text-[11px] leading-[1.2] uppercase tracking-wider">FIRST 100 MEMBERS</span>
+                <span className="text-white font-bold text-[10px] md:text-[11px] leading-[1.2] uppercase tracking-wider">ONLY</span>
+              </div>
+            </div>
           </div>
 
-          {/* Vertical Divider (Desktop) / Horizontal (Mobile) */}
-          <div className="hidden lg:block w-px h-40 bg-gradient-to-b from-transparent via-zinc-600 to-transparent mx-6 xl:mx-10 z-10"></div>
-          <div className="w-full h-px lg:hidden bg-gradient-to-r from-transparent via-zinc-600 to-transparent my-2 z-10"></div>
+          {/* DIVIDER */}
+          <div className="hidden lg:block w-px h-[85%] self-center bg-zinc-800 mx-4 z-10"></div>
+          <div className="lg:hidden w-full h-px bg-zinc-800 my-4 z-10"></div>
 
-          {/* Column 2: Features */}
-          <div className="flex-1 w-full flex flex-col justify-center gap-5 z-10 px-0 lg:px-4">
+          {/* Column 2: Price */}
+          <div className="flex-1 w-full flex flex-col items-center justify-center z-10 px-0 lg:px-6">
             
-            {/* Feature 1 */}
-            <div className="flex items-center gap-5 group cursor-default">
-              <div className="w-[42px] h-[42px] rounded-full border-2 border-[#e5ff00] flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 shadow-[0_0_15px_rgba(229,255,0,0.15)]">
-                <User size={18} className="text-[#e5ff00]" />
+            <div className="flex items-center gap-4 w-full justify-center mb-5">
+              <div className="h-[1px] bg-zinc-700 flex-1 max-w-[40px]"></div>
+              <span className="text-white font-bold text-[11px] tracking-widest uppercase">EXCLUSIVE PRICE</span>
+              <div className="h-[1px] bg-zinc-700 flex-1 max-w-[40px]"></div>
+            </div>
+
+            <div className="text-center mb-5 leading-[1.1]">
+              <span className="block text-white font-black text-[18px] md:text-[20px] tracking-wide uppercase">ANY PLAN</span>
+              <span className="block text-[#e5ff00] font-black text-[18px] md:text-[20px] tracking-wide uppercase">ONE PRICE</span>
+            </div>
+
+            <div className="relative w-full max-w-[280px] border border-[#e5ff00] rounded-[24px] flex flex-col items-center justify-center py-7 mb-10">
+              <div className="flex items-start">
+                <span className="text-[#e5ff00] font-black text-3xl md:text-4xl mt-1.5 mr-1.5">₹</span>
+                <span className="text-white font-black text-[60px] md:text-[76px] leading-none tracking-tighter" style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}>12,000</span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-white font-black text-[13px] md:text-sm tracking-widest uppercase">FIRST 100 MEMBERS ONLY</span>
-                <span className="text-zinc-400 text-[11px] font-bold tracking-widest uppercase mt-0.5">ONLY</span>
+              <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 bg-[#e5ff00] px-8 py-1.5 rounded-md whitespace-nowrap">
+                <span className="text-black font-black text-[13px] tracking-widest uppercase">FOR 1 YEAR</span>
               </div>
             </div>
-            <div className="w-[85%] h-px bg-zinc-800 ml-16"></div>
 
-            {/* Feature 2 */}
-            <div className="flex items-center gap-5 group cursor-default">
-              <div className="w-[42px] h-[42px] rounded-full border-2 border-[#e5ff00] flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 shadow-[0_0_15px_rgba(229,255,0,0.15)]">
-                <Crown size={18} className="text-[#e5ff00]" />
+            <div className="flex items-center gap-4 w-full justify-center">
+              <div className="h-[1px] bg-zinc-700 flex-1 max-w-[50px]"></div>
+              <div className="text-center leading-[1.2]">
+                <span className="block text-white font-bold text-[12px] md:text-[13px] tracking-widest uppercase">YOU SAVE</span>
+                <span className="block text-[#e5ff00] font-bold text-[12px] md:text-[13px] tracking-widest uppercase">UP TO ₹6,000</span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-white font-black text-[13px] md:text-sm tracking-widest uppercase">FOUNDING MEMBER</span>
-                <span className="text-zinc-400 text-[11px] font-bold tracking-widest uppercase mt-0.5">PRIVILEGES FOREVER</span>
-              </div>
-            </div>
-            <div className="w-[85%] h-px bg-zinc-800 ml-16"></div>
-
-            {/* Feature 3 */}
-            <div className="flex items-center gap-5 group cursor-default">
-              <div className="w-[42px] h-[42px] rounded-full border-2 border-[#e5ff00] flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 shadow-[0_0_15px_rgba(229,255,0,0.15)]">
-                <Star size={18} className="text-[#e5ff00]" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-white font-black text-[13px] md:text-sm tracking-widest uppercase">BE PART OF BXC</span>
-                <span className="text-zinc-400 text-[11px] font-bold tracking-widest uppercase mt-0.5">FROM DAY ONE</span>
-              </div>
+              <div className="h-[1px] bg-zinc-700 flex-1 max-w-[50px]"></div>
             </div>
 
           </div>
 
-          {/* Vertical Divider (Desktop) / Horizontal (Mobile) */}
-          <div className="hidden lg:block w-px h-40 bg-gradient-to-b from-transparent via-zinc-600 to-transparent mx-6 xl:mx-10 z-10"></div>
-          <div className="w-full h-px lg:hidden bg-gradient-to-r from-transparent via-zinc-600 to-transparent my-2 z-10"></div>
+          {/* DIVIDER */}
+          <div className="hidden lg:block w-px h-[85%] self-center bg-zinc-800 mx-4 z-10"></div>
+          <div className="lg:hidden w-full h-px bg-zinc-800 my-4 z-10"></div>
 
           {/* Column 3: Countdown */}
-          <div className="flex-1 w-full flex flex-col items-center justify-center z-10 pr-0 lg:pr-6">
+          <div className="flex-[0.9] w-full flex flex-col items-center justify-center z-10 pl-0 lg:pl-6">
             
             <div className="flex items-center gap-4 w-full justify-center mb-6">
-              <div className="h-px bg-zinc-600 flex-1 max-w-[30px]"></div>
-              <span className="text-[#e5ff00] font-black text-[13px] tracking-widest uppercase">OFFER ENDS IN</span>
-              <div className="h-px bg-zinc-600 flex-1 max-w-[30px]"></div>
+              <div className="h-[1px] bg-zinc-700 flex-1 max-w-[30px]"></div>
+              <span className="text-white font-bold text-[11px] tracking-widest uppercase">OFFER ENDS IN</span>
+              <div className="h-[1px] bg-zinc-700 flex-1 max-w-[30px]"></div>
             </div>
 
-            <div className="flex items-center justify-center gap-4 md:gap-6 mb-8">
-              <div className="flex flex-col items-center">
-                <span className="text-[#e5ff00] font-black text-5xl md:text-[64px] leading-none drop-shadow-[0_0_15px_rgba(229,255,0,0.3)] font-mono">07</span>
-                <span className="text-zinc-400 text-[11px] tracking-widest font-bold mt-3 uppercase">HRS</span>
+            <div className="flex items-start justify-center gap-2 md:gap-3 mb-10">
+              <div className="flex flex-col items-center w-[70px]">
+                <span className="text-[#e5ff00] font-black text-[52px] leading-none tracking-tight font-mono">07</span>
+                <span className="text-white/80 text-[11px] tracking-widest font-bold mt-3 uppercase">HRS</span>
               </div>
-              <span className="text-[#e5ff00] font-black text-4xl md:text-5xl -mt-8">:</span>
-              <div className="flex flex-col items-center">
-                <span className="text-[#e5ff00] font-black text-5xl md:text-[64px] leading-none drop-shadow-[0_0_15px_rgba(229,255,0,0.3)] font-mono">04</span>
-                <span className="text-zinc-400 text-[11px] tracking-widest font-bold mt-3 uppercase">MINS</span>
+              <span className="text-[#e5ff00] font-black text-[40px] leading-none mt-1.5">:</span>
+              <div className="flex flex-col items-center w-[70px]">
+                <span className="text-[#e5ff00] font-black text-[52px] leading-none tracking-tight font-mono">04</span>
+                <span className="text-white/80 text-[11px] tracking-widest font-bold mt-3 uppercase">MINS</span>
               </div>
-              <span className="text-[#e5ff00] font-black text-4xl md:text-5xl -mt-8">:</span>
-              <div className="flex flex-col items-center">
-                <span className="text-[#e5ff00] font-black text-5xl md:text-[64px] leading-none drop-shadow-[0_0_15px_rgba(229,255,0,0.3)] font-mono">02</span>
-                <span className="text-zinc-400 text-[11px] tracking-widest font-bold mt-3 uppercase">SECS</span>
+              <span className="text-[#e5ff00] font-black text-[40px] leading-none mt-1.5">:</span>
+              <div className="flex flex-col items-center w-[70px]">
+                <span className="text-[#e5ff00] font-black text-[52px] leading-none tracking-tight font-mono">02</span>
+                <span className="text-white/80 text-[11px] tracking-widest font-bold mt-3 uppercase">SECS</span>
               </div>
             </div>
 
-            <div className="inline-block transform -skew-x-[16deg] bg-[#e5ff00] px-8 py-2.5 shadow-[0_0_20px_rgba(229,255,0,0.2)] hover:scale-105 hover:bg-[#ccff00] transition-all cursor-pointer">
-              <span className="inline-block transform skew-x-[16deg] text-black font-black uppercase tracking-widest text-[13px] md:text-sm">
+            <div className="border-[1.5px] border-[#e5ff00] rounded-[14px] px-6 py-3 flex items-center justify-center gap-2.5 mb-5 w-full max-w-[260px] cursor-pointer hover:bg-[#e5ff00]/10 transition-colors">
+              <Clock size={18} className="text-[#e5ff00]" />
+              <span className="text-[#e5ff00] font-bold uppercase tracking-wider text-[13px] md:text-[14px]">
                 LIMITED TIME ONLY
               </span>
             </div>
+
+            <span className="text-white/90 text-[14px] font-medium tracking-wide">Once it's gone, it's gone.</span>
 
           </div>
 
         </div>
       </div>
+
+
+
+
+
+
       <section
       id="founders"
       className="relative overflow-hidden  py-12 md:py-20 lg:py-28 mb-10 "
     >
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
       {/* Background Crowd */}
