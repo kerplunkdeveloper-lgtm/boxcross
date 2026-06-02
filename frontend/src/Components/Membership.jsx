@@ -564,12 +564,15 @@ const Membership = () => {
       >
         {/* STEP 1: CHOOSE PROGRAM */}
         <div className="w-full max-w-7xl  mx-auto mb-12">
+
+{/*................................................................. Membership Plans heading start.............................. */}
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-8"
+            className="text-center mb-8 flex  items-center justify-between"
           >
             <span
               className="px-4 py-2 rounded-md  border border-[#e5ff00]/30 bg-[#e5ff00]/10 text-[#e5ff00] uppercase"
@@ -593,6 +596,14 @@ const Membership = () => {
               CHOOSE YOUR <br /> <span className="text-[#e5ff00]">PROGRAM</span>
             </h2>
           </motion.div>
+
+
+
+
+
+
+
+
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-15 mt-8 md:mt-15 ">
             {dynamicPrograms.map((prog, index) => (

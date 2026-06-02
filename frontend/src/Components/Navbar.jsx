@@ -33,6 +33,7 @@ const Navbar = () => {
   const [desktopOffcanvasOpen, setDesktopOffcanvasOpen] = useState(false);
   const [galleryModalOpen, setGalleryModalOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
 
   const galleryImages = [
     "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop",
@@ -127,35 +128,63 @@ const Navbar = () => {
 
   // ================= SCROLL LISTENER =================
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (offcanvasOpen) return; // Don't hide navbar if mobile menu is open
+useEffect(() => {
+  const handleScroll = () => {
+    if (offcanvasOpen) return;
 
-      const currentScrollY = window.scrollY;
+    const currentScrollY = window.scrollY;
 
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsNavVisible(false);
-      } else {
-        setIsNavVisible(true);
-      }
-      setLastScrollY(currentScrollY);
-    };
+    // navbar show/hide
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      setIsNavVisible(false);
+    } else {
+      setIsNavVisible(true);
+    }
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY, offcanvasOpen, desktopOffcanvasOpen]);
+    // background change after scrolling
+    setScrolled(currentScrollY > 80);
+
+    setLastScrollY(currentScrollY);
+  };
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [lastScrollY, offcanvasOpen]);
+
+
+
+
+
+
 
   return (
     <>
-      <div
-        className={`sticky top-0 md:top-2 z-[80] transition-transform duration-500 ease-in-out md:px-10 md:pt-1 ${
-          isNavVisible ? "translate-y-0" : "-translate-y-[150%] "
-        }`}
-      >
+     <div
+  className={`
+    sticky top-0 z-[80]
+    transition-all duration-500 ease-in-out
+    ${isNavVisible ? "translate-y-0" : "-translate-y-[150%]"}
+    ${scrolled ? "w-full px-0 " : "md:px-10 md:pt-2"}
+  `}
+>
         {/* ================= NAVBAR ================= */}
 
-        <nav className="relative md:rounded-2xl py-3 p-3  md:py-3 z-50 bg-black border-[0.1px] border-white/10 backdrop-blur-sm">
-          <div className=" md:px-4">
+      <nav
+  className={`
+    relative py-3 p-3 md:py-3 z-50
+    border-[0.1px] border-white/10
+    backdrop-blur-md
+    transition-all duration-500
+
+    ${
+      scrolled
+        ? "bg-[#0e0e0e] md:rounded-none"
+        : "bg-black md:rounded-2xl"
+    }
+  `}
+>
+          <div className={`md:px-4 ${scrolled? "md:px-10" : ""}`}>
             <div className="flex justify-between items-center">
               {/* ================= LOGO ================= */}
 
@@ -360,7 +389,13 @@ const Navbar = () => {
                       sessionStorage.setItem("scrollToBookForm", "true");
                     }
                   }}
-                  className="hidden lg:flex relative overflow-hidden px-6 py-4 bg-[#e5ff00] text-black rounded-xl text-xs tracking-wider uppercase group"
+                  className={`
+    hidden lg:flex relative overflow-hidden
+    px-6 py-4 bg-[#e5ff00] text-black rounded-xl
+    text-xs tracking-wider uppercase group
+    transition-all duration-500
+    ${scrolled ? "opacity-0 hidden" : "opacity-100"}
+  `}
                 >
                   <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
                   <span
@@ -448,7 +483,7 @@ const Navbar = () => {
 
           <div className="border-b border-[#1f1f1f]">
             <NavLink
-              to="/"
+              to="https://boxandcross.com/"
               onClick={closeOffcanvas}
               className="block py-2 text-white text-[14px] font-extrabold transition-colors "
             >
