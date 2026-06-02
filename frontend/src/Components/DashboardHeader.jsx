@@ -350,9 +350,9 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     }, 5000);
 
     // Global BroadcastChannel listener for immediate notifications across all dashboard pages
-    const channel = new BroadcastChannel("founder_updates");
+    const channel = new BroadcastChannel("founding_members_updates");
     channel.onmessage = (event) => {
-      if (event.data === "new_founder") {
+      if (event.data === "NEW_FOUNDER_ADDED") {
         toast.success("New Founding Member signed up!");
         fetchNotifications();
       }
