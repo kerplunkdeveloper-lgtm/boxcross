@@ -16,6 +16,7 @@ import {
   MessageSquare,
   ChevronDown,
   Sparkles,
+  Crown,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -51,6 +52,13 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     );
   });
 
+  const [offerFoundersOpen, setOfferFoundersOpen] = useState(() => {
+    return (
+      location.pathname.includes("/founding-members") ||
+      location.pathname.includes("/founding-offer")
+    );
+  });
+
   useEffect(() => {
     if (
       location.pathname.includes("/events") ||
@@ -78,6 +86,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       location.pathname.includes("/payments")
     ) {
       setMembershipOpen(true);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (
+      location.pathname.includes("/founding-members") ||
+      location.pathname.includes("/founding-offer")
+    ) {
+      setOfferFoundersOpen(true);
     }
   }, [location.pathname]);
 
@@ -205,6 +222,71 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                   >
                     <DollarSign size={14} />
                     Payment details
+                  </NavLink>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Offer Founders dropdown for Admin */}
+          {user && user.role === "admin" && (
+            <div className="space-y-1">
+              <button
+                onClick={() => setOfferFoundersOpen(!offerFoundersOpen)}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                  location.pathname.includes("/founding-members") ||
+                  location.pathname.includes("/founding-offer")
+                    ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
+                    : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                }`}
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                <div className="flex items-center gap-3">
+                  <Crown size={18} className={location.pathname.includes("/founding-members") || location.pathname.includes("/founding-offer") ? "text-[var(--db-accent-highlight)]" : ""} />
+                  <span>Offer Founders</span>
+                </div>
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform duration-300 ${
+                    offerFoundersOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
+                  }`}
+                />
+              </button>
+
+              {offerFoundersOpen && (
+                <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
+                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+
+                  <NavLink
+                    to="/dashboard/founding-offer"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <Crown size={14} />
+                    Offer details edit
+                  </NavLink>
+                  
+                  <NavLink
+                    to="/dashboard/founding-members"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <Users size={14} />
+                    Founding members
                   </NavLink>
                 </div>
               )}

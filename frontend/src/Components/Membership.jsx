@@ -697,7 +697,7 @@ const Membership = () => {
 
                        <div>
                         <span
-                        className="text-lg text-[#e5ff00] md:text-[48px] mx-1.5"
+                        className="text-lg text-[#e5ff00] text-[30px] md:text-[48px] mx-1.5"
                         style={{
                           fontFamily: '"BrutalTypeBold", sans-serif',
                           fontWeight: "700",

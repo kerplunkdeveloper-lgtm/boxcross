@@ -147,6 +147,10 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     activeTitle = "Contact Enquiries";
   } else if (location.pathname.includes("/leads")) {
     activeTitle = "Captured Leads";
+  } else if (location.pathname.includes("/founding-members")) {
+    activeTitle = "Founding Members";
+  } else if (location.pathname.includes("/founding-offer")) {
+    activeTitle = "Offer Details Edit";
   }
 
   // Fetch real-time data and aggregate as notifications

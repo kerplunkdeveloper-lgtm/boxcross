@@ -18,6 +18,8 @@ const DashboardHome = lazy(() => import("./pages/DashboardHome"));
 const DashboardBookings = lazy(() => import("./pages/DashboardBookings"));
 const DashboardSettings = lazy(() => import("./pages/DashboardSettings"));
 const DashboardMemberships = lazy(() => import("./pages/DashboardMemberships"));
+const DashboardFoundingMembers = lazy(() => import("./pages/DashboardFoundingMembers"));
+const DashboardFoundingOffer = lazy(() => import("./pages/DashboardFoundingOffer"));
 const DashboardPayments = lazy(() => import("./pages/DashboardPayments"));
 const DashboardEvents = lazy(() => import("./pages/DashboardEvents"));
 const DashboardEventsList = lazy(() => import("./pages/DashboardEventsList"));
@@ -108,6 +110,14 @@ const App = () => {
                   <Route
                     path="memberships"
                     element={<DashboardMemberships />}
+                  />
+                  <Route
+                    path="founding-members"
+                    element={<DashboardFoundingMembers />}
+                  />
+                  <Route
+                    path="founding-offer"
+                    element={<DashboardFoundingOffer />}
                   />
                   <Route path="payments" element={<DashboardPayments />} />
                   <Route path="events" element={<DashboardEvents />} />

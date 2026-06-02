@@ -102,4 +102,14 @@ export const deleteHomec2 = (id) => API.delete(`/homec2/${id}`);
 export const getHomec3 = () => API.get("/homec3");
 export const deleteHomec3 = (id) => API.delete(`/homec3/${id}`);
 
+// ──────────────── FOUNDER API ────────────────
+export const getFounders = () => API.get("/founders");
+export const createFounder = (data) => API.post("/founders", data);
+export const updateFounder = (id, data) => API.put(`/founders/${id}`, data);
+export const deleteFounder = (id) => API.delete(`/founders/${id}`);
+
+// ──────────────── FOUNDING OFFER API ────────────────
+export const getFoundingOffer = () => API.get("/founding-offer");
+export const updateFoundingOffer = (id, data) => API.put(`/founding-offer/${id}`, data);
+
 export default API;
