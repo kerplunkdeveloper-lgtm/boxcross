@@ -162,7 +162,7 @@ useEffect(() => {
     <>
      <div
   className={`
-    sticky top-0 z-[80] w-full
+    fixed top-0 z-[80] w-full
     transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
     ${isNavVisible ? "translate-y-0" : "-translate-y-full"}
     ${scrolled ? "px-0 pt-0" : "px-0 md:px-10 pt-0 md:pt-4"}

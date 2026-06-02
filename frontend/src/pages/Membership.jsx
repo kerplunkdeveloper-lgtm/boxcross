@@ -12,7 +12,7 @@ const Membership = () => {
   return (
     <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden ">
       {/* HERO SECTION */}
-      <section className="relative w-full h-[80vh]   flex items-center justify-center overflow-hidden mb-10">
+      <section className="relative mt-[80px] md:mt-0 w-full h-[50vh] md:h-[80vh]   flex items-center justify-center overflow-hidden mb-10">
         {/* IMAGE BACKGROUND */}
         <img
           src={bannerImg}
@@ -27,20 +27,20 @@ const Membership = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-[#050505] z-[2]"></div>
 
         {/* HUGE BACKGROUND TEXT (Outline) */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1] overflow-hidden">
+        <div className="absolute inset-x-0 top-10 md:top-30  flex justify-center pointer-events-none z-[5] overflow-hidden">
           <span 
-            className="text-transparent font-black uppercase text-[150px] md:text-[250px] lg:text-[300px] whitespace-nowrap opacity-20 select-none tracking-tighter" 
+            className="text-transparent font-black uppercase text-[50px] md:text-[150px] whitespace-nowrap select-none tracking-widest leading-none" 
             style={{ 
-              WebkitTextStroke: "2px rgba(255,255,255,0.3)",
-              fontFamily: '"BrutalTypeBold", Impact, sans-serif'
+              WebkitTextStroke: "1px rgba(255, 255, 255, 0.25)",
+              fontFamily: '"BrutalTypeBold", Arial, sans-serif'
             }}
           >
-            FITNESS CENTER
+            MEMBERSHIP
           </span>
         </div>
 
         {/* CONTENT */}
-        <div className="relative z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-10 flex flex-col md:flex-row items-center justify-center md:justify-between gap-8 md:gap-16 pt-20 md:pt-0">
+        <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between  md:gap-16 pt-20 md:pt-0">
           
           {/* LEFT SIDE: HEADING */}
           <motion.div
@@ -76,13 +76,13 @@ const Membership = () => {
                 fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
-              <span className="block text-[55px] sm:text-[60px] md:text-[70px] lg:text-[90px] xl:text-[100px] whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[44px] sm:text-[60px] md:text-[90px]   whitespace-normal md:whitespace-nowrap">
                 BXC
               </span>
-              <span className="block text-[55px] sm:text-[60px] md:text-[70px] lg:text-[90px] xl:text-[100px] whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[44px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
                 MEMBERSHIP
               </span>
-              <span className="block text-[55px] sm:text-[60px] md:text-[70px] lg:text-[90px] xl:text-[100px] whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[44px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
                 PLANS
               </span>
             </motion.h1>
@@ -112,8 +112,9 @@ const Membership = () => {
               }}
               className="
                 text-gray-200
-                text-md
-                md:text-xl
+                text-sm
+                md:text-[20px]
+                mt-[-3px] md:mt-25
                 leading-relaxed
                 mb-8
               "
