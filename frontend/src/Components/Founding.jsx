@@ -8,7 +8,7 @@ const Founding = () => {
 
 
 
-    <div className="mt-[-190px] ">
+    <div className="">
     
       {/* Countdown Promo Banner */}
       <div className="relative z-20 max-w-[1400px] mx-auto px-5 md:px-10 lg:px-16 mt-16 md:mt-24">
