@@ -3,7 +3,9 @@ import React, { useEffect } from "react";
 const Preloader = ({ onComplete }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
+      sessionStorage.setItem("preloaderDone", "true");
       onComplete();
+      window.dispatchEvent(new Event("preloaderComplete"));
     }, 2000); // 2 seconds loading
 
     return () => clearTimeout(timer);

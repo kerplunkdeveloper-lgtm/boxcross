@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MembershipPlans from "../Components/Membership";
-import { motion } from "framer-motion";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import bannerImg from "../assets/banner.png";
 import WhatWeOffer from "../Components/WhatWeOffer";
 import TrainingZones from "../Components/TrainingZones";
@@ -9,6 +10,20 @@ import BookForm from "../Components/BookForm";
 import Founding from "../Components/Founding";
 
 const Membership = () => {
+  useEffect(() => {
+    const initAOS = () => {
+      AOS.init({ duration: 1000, once: true });
+      AOS.refresh();
+    };
+
+    if (sessionStorage.getItem("preloaderDone")) {
+      initAOS();
+    } else {
+      window.addEventListener("preloaderComplete", initAOS);
+      return () => window.removeEventListener("preloaderComplete", initAOS);
+    }
+  }, []);
+
   return (
     <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden ">
       {/* HERO SECTION */}
@@ -43,30 +58,15 @@ const Membership = () => {
         <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between  md:gap-16 pt-20 md:pt-0">
           
           {/* LEFT SIDE: HEADING */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { staggerChildren: 0.15, delayChildren: 0.1 },
-              },
-            }}
+          <div
+            data-aos="fade-right"
             className="flex-1 w-full flex flex-col justify-center text-left z-10"
           >
-            <motion.h1
-              variants={{
-                hidden: { opacity: 0, x: -30 },
-                visible: {
-                  opacity: 1,
-                  x: 0,
-                  transition: { duration: 0.8, ease: "easeOut" },
-                },
-              }}
+            <h1
               className="
                 text-white
                 font-black
+                
                 uppercase
                 leading-[0.95]
                 tracking-tight
@@ -85,35 +85,20 @@ const Membership = () => {
               <span className="block text-[44px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
                 PLANS
               </span>
-            </motion.h1>
-          </motion.div>
+            </h1>
+          </div>
 
           {/* RIGHT SIDE: SUBTITLE & BUTTONS */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { staggerChildren: 0.15, delayChildren: 0.4 },
-              },
-            }}
+          <div
+            data-aos="fade-left"
+            data-aos-delay="200"
             className="flex-1 w-full flex flex-col justify-center items-start md:max-w-lg z-10"
           >
-            <motion.p
-              variants={{
-                hidden: { opacity: 0, x: 20 },
-                visible: {
-                  opacity: 1,
-                  x: 0,
-                  transition: { duration: 0.8, ease: "easeOut" },
-                },
-              }}
+            <p
               className="
                 text-gray-200
                 text-sm
-                md:text-[20px]
+                md:text-[17px]
                 mt-[-3px] md:mt-25
                 leading-relaxed
                 mb-8
@@ -126,17 +111,11 @@ const Membership = () => {
               At BXC, every plan is designed to give you access to our premium
               performance arena, structured coaching, and the BXC community.
               Choose the plan that suits your goals and timeline.
-            </motion.p>
+            </p>
 
-            <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.8, ease: "easeOut" },
-                },
-              }}
+            <div
+              data-aos="fade-up"
+              data-aos-delay="400"
               className="
                 flex
                 flex-row
@@ -171,7 +150,7 @@ const Membership = () => {
               >
                 <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
-                  className="relative z-10 text-[10px] sm:text-[12px] md:text-[13px] whitespace-nowrap"
+                  className="relative z-10 text-[10px]  md:text-[16px] whitespace-nowrap"
                   style={{
                     fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 800,
@@ -203,7 +182,7 @@ const Membership = () => {
               >
                 <span className="absolute inset-0 bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
-                  className="relative z-10 font-bold text-[10px] sm:text-[12px] md:text-[13px] whitespace-nowrap"
+                  className="relative z-10 font-bold text-[10px]  md:text-[16px] whitespace-nowrap"
                   style={{
                     fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 800,
@@ -212,19 +191,29 @@ const Membership = () => {
                   Membership Plans
                 </span>
               </button>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* MEMBERSHIP SECTION */}
       <div className="relative z-20">
-        <Founding />
-        <WhatWeOffer />
-        <TrainingZones />
+        <div data-aos="fade-up">
+          <Founding />
+        </div>
+        <div data-aos="fade-up" data-aos-delay="100">
+          <WhatWeOffer />
+        </div>
+        <div data-aos="fade-up" data-aos-delay="100">
+          <TrainingZones />
+        </div>
         {/* <BuildProgress /> */}
-        <BookForm />
-        <MembershipPlans />
+        <div data-aos="fade-up" data-aos-delay="100">
+          <BookForm />
+        </div>
+        <div data-aos="fade-up" data-aos-delay="100">
+          <MembershipPlans />
+        </div>
       </div>
     </div>
   );
