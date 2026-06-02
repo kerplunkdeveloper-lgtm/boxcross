@@ -10,9 +10,9 @@ import Founding from "../Components/Founding";
 
 const Membership = () => {
   return (
-    <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden">
+    <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden mt-[-80px]">
       {/* HERO SECTION */}
-      <section className="relative w-full h-[100vh] mt-[-50px] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full h-[80vh]   flex items-center justify-center overflow-hidden mb-10">
         {/* IMAGE BACKGROUND */}
         <img
           src={bannerImg}
@@ -65,7 +65,7 @@ const Membership = () => {
               }}
             >
               <span
-                className="block text-transparent font-black uppercase text-[55px]  md:text-[100px] tracking-tight mb-3 md:mb-5 whitespace-normal md:whitespace-nowrap"
+                className="block  text-transparent font-black uppercase text-[55px]  md:text-[80px] tracking-tight mb-3 whitespace-normal md:whitespace-nowrap"
                 style={{
                   WebkitTextStroke: "0.2px #fff",
                   filter: "drop-shadow(0 0 15px rgba(255,255,255,0.2))",
@@ -76,7 +76,7 @@ const Membership = () => {
               </span>
 
               <span
-                className="text-[#e5ff00] font-bold text-2xl  md:text-3xl mt-5  md:mt-10 block "
+                className="text-[#e5ff00] font-bold text-md  md:text-xl  md:mt-10 block "
                 style={{
                   fontFamily: '"Brutal Font Light", sans-serif',
                 }}
@@ -100,7 +100,7 @@ const Membership = () => {
                 max-w-3xl
                 text-md
               
-                md:text-2xl
+                md:text-xl
                 leading-relaxed
                 mt-6
                 mb-10
@@ -128,15 +128,12 @@ const Membership = () => {
               }}
               className="
                 flex
-                flex-col
-                sm:flex-row
-                items-start md:items-center
+                flex-row
+                items-center
                 justify-start md:justify-center
-                gap-4
+                gap-3 sm:gap-4
                 w-full
                 sm:w-auto
-                px-4
-                sm:px-0
               "
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
@@ -150,18 +147,20 @@ const Membership = () => {
                 }}
                 className="
                   group relative overflow-hidden
+                  flex-1 sm:flex-none
                   w-full sm:w-auto
-                  px-8 py-4 md:px-10
+                  px-3 py-3.5 sm:px-8 sm:py-4 md:px-10
                   bg-[#e5ff00] text-black
-                  uppercase tracking-[0.15em] md:tracking-[0.2em]
+                  uppercase tracking-[0.05em] sm:tracking-[0.15em] md:tracking-[0.2em]
                   rounded-lg
                   transition-all duration-500
                   cursor-pointer
+                  flex justify-center
                 "
               >
                 <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
-                  className="relative z-10 text-[13px] md:text-[14px] whitespace-nowrap"
+                  className="relative z-10 text-[10px] sm:text-[13px] md:text-[14px] whitespace-nowrap"
                   style={{
                     fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 800,
@@ -179,19 +178,21 @@ const Membership = () => {
                 }}
                 className="
                   group relative overflow-hidden
+                  flex-1 sm:flex-none
                   w-full sm:w-auto
-                  px-8 py-4 md:px-10
+                  px-3 py-3.5 sm:px-8 sm:py-4 md:px-10
                   bg-white
                   text-black
-                  uppercase tracking-[0.15em] md:tracking-[0.2em]
+                  uppercase tracking-[0.05em] sm:tracking-[0.15em] md:tracking-[0.2em]
                   rounded-lg
                   transition-all duration-500
                   cursor-pointer
+                  flex justify-center
                 "
               >
                 <span className="absolute inset-0 bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
-                  className="relative z-10 font-bold text-[13px] md:text-[14px] whitespace-nowrap"
+                  className="relative z-10 font-bold text-[10px] sm:text-[13px] md:text-[14px] whitespace-nowrap"
                   style={{
                     fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 800,
