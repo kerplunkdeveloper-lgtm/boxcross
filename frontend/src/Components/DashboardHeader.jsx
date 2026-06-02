@@ -25,7 +25,8 @@ import {
   getHomec1,
   getHomec2,
   getHomec3,
-  getLeadsAdmin 
+  getLeadsAdmin,
+  getFounders
 } from "../api/api";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -165,7 +166,8 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         getHomec1(),
         getHomec2(),
         getHomec3(),
-        getLeadsAdmin()
+        getLeadsAdmin(),
+        getFounders()
       ]);
 
       const [
@@ -175,7 +177,8 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         homec1Res,
         homec2Res,
         homec3Res,
-        leadsRes
+        leadsRes,
+        foundersRes
       ] = results;
 
       // 1. Fetch Enquiry Bookings
@@ -276,6 +279,20 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         });
       }
 
+      // 8. Fetch Founding Members
+      if (foundersRes.status === "fulfilled" && foundersRes.value.data?.success && Array.isArray(foundersRes.value.data.data)) {
+        foundersRes.value.data.data.forEach((item) => {
+          aggregated.push({
+            id: `founder-${item._id}`,
+            title: "New Founding Member",
+            message: `${item.name} claimed the Founding Offer!`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "payment",
+            link: "/dashboard/founding-members",
+          });
+        });
+      }
+
       // Sort by time descending (newest first)
       aggregated.sort((a, b) => b.time.getTime() - a.time.getTime());
 
@@ -332,9 +349,19 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
       }
     }, 5000);
 
+    // Global BroadcastChannel listener for immediate notifications across all dashboard pages
+    const channel = new BroadcastChannel("founder_updates");
+    channel.onmessage = (event) => {
+      if (event.data === "new_founder") {
+        toast.success("New Founding Member signed up!");
+        fetchNotifications();
+      }
+    };
+
     return () => {
       clearInterval(interval);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      channel.close();
     };
   }, []);
 

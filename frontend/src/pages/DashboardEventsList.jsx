@@ -32,6 +32,34 @@ const convertToYYYYMMDD = (dateStr) => {
   if (!dateStr) return "";
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
 
+  // 1. Parse "SAT 30 May 2026" or "SAT 30 May" style FIRST
+  const parts = dateStr.trim().split(/\s+/);
+  if (parts.length >= 2) {
+    const day = parts.length >= 3 ? parts[1] : parts[0];
+    const monthName = parts.length >= 3 ? parts[2] : parts[1];
+    const yearStr = parts.length === 4 ? parts[3] : null;
+
+    const months = {
+      jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+      jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
+    };
+    const cleanMonth = monthName.toLowerCase().substring(0, 3);
+    if (months[cleanMonth] !== undefined && !isNaN(parseInt(day, 10))) {
+      const d = new Date();
+      if (yearStr && !isNaN(parseInt(yearStr, 10))) {
+        d.setFullYear(parseInt(yearStr, 10));
+      }
+      d.setMonth(months[cleanMonth]);
+      d.setDate(parseInt(day, 10));
+
+      const yyyy = d.getFullYear();
+      const mm = (d.getMonth() + 1).toString().padStart(2, "0");
+      const dd = d.getDate().toString().padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    }
+  }
+
+  // 2. Fallback to Date.parse
   try {
     const parsed = Date.parse(dateStr);
     if (!isNaN(parsed)) {
@@ -44,36 +72,6 @@ const convertToYYYYMMDD = (dateStr) => {
     }
   } catch (e) {}
 
-  // Parse "SAT 30 May" style
-  const parts = dateStr.trim().split(/\s+/);
-  if (parts.length >= 2) {
-    const day = parts.length === 3 ? parts[1] : parts[0];
-    const monthName = parts.length === 3 ? parts[2] : parts[1];
-    const months = {
-      jan: 0,
-      feb: 1,
-      mar: 2,
-      apr: 3,
-      may: 4,
-      jun: 5,
-      jul: 6,
-      aug: 7,
-      sep: 8,
-      oct: 9,
-      nov: 10,
-      dec: 11,
-    };
-    const cleanMonth = monthName.toLowerCase().substring(0, 3);
-    if (months[cleanMonth] !== undefined && !isNaN(parseInt(day, 10))) {
-      const d = new Date();
-      d.setMonth(months[cleanMonth]);
-      d.setDate(parseInt(day, 10));
-      const yyyy = d.getFullYear();
-      const mm = (d.getMonth() + 1).toString().padStart(2, "0");
-      const dd = d.getDate().toString().padStart(2, "0");
-      return `${yyyy}-${mm}-${dd}`;
-    }
-  }
   return "";
 };
 
@@ -222,13 +220,19 @@ const DashboardEventsList = () => {
     setCalories("");
     setBenefits("");
     setAgenda([]);
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const formattedTomorrow = tomorrow.toISOString().split("T")[0];
+
     setSchedules([
       {
-        date: "SAT 30 May",
+        date: formatDateToCustom(formattedToday),
         timeSlots: [{ time: "6:00 AM", slots: 20, booked: 0 }],
       },
       {
-        date: "SUN 7 Jun",
+        date: formatDateToCustom(formattedTomorrow),
         timeSlots: [
           { time: "8:00 AM", slots: 20, booked: 0 },
           { time: "9:00 AM", slots: 20, booked: 0 },

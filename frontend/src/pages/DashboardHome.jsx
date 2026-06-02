@@ -7,7 +7,7 @@ import {
   MapPin, DollarSign, ArrowUpRight, Plus, Loader2 
 } from "lucide-react";
 import gymhm from "../assets/gymhm.png";
-import { getBookings, getPayments, getEventsListAdmin } from "../api/api";
+import { getBookings, getPayments, getEventsListAdmin, getEventBookings, getFounders } from "../api/api";
 
 const DashboardHome = () => {
   const { user } = useAuth();
@@ -15,6 +15,8 @@ const DashboardHome = () => {
   const [visitorCount, setVisitorCount] = useState(0);
   const [totalPayments, setTotalPayments] = useState(0);
   const [events, setEvents] = useState([]);
+  const [eventRevenue, setEventRevenue] = useState(0);
+  const [paidFounders, setPaidFounders] = useState(0);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -30,10 +32,12 @@ const DashboardHome = () => {
     const shouldShow = showLoader === true;
     if (shouldShow) setLoading(true);
     try {
-      const [bookingsRes, paymentsRes, eventsRes] = await Promise.all([
+      const [bookingsRes, paymentsRes, eventsRes, eventBookingsRes, foundersRes] = await Promise.all([
         getBookings(),
         getPayments(),
-        getEventsListAdmin()
+        getEventsListAdmin(),
+        getEventBookings(),
+        getFounders()
       ]);
 
       if (bookingsRes.data?.success) {
@@ -53,6 +57,19 @@ const DashboardHome = () => {
 
       if (eventsRes.data?.success && Array.isArray(eventsRes.data.data)) {
         setEvents(eventsRes.data.data);
+      }
+
+      if (eventBookingsRes.data?.success && Array.isArray(eventBookingsRes.data.data)) {
+        const revenue = eventBookingsRes.data.data
+          .filter(b => b.status === "payment successfully" || b.status === "confirmed")
+          .reduce((sum, b) => sum + (Number(b.totalAmount) || 0), 0);
+        setEventRevenue(revenue);
+      }
+
+      if (foundersRes.data?.success && Array.isArray(foundersRes.data.data)) {
+        const paidCount = foundersRes.data.data
+          .filter(f => f.paymentStatus === "Completed" || f.paymentStatus === "completed").length;
+        setPaidFounders(paidCount);
       }
     } catch (error) {
       console.error("Error loading dashboard home stats", error);
@@ -229,7 +246,7 @@ const DashboardHome = () => {
                 <Calendar size={20} />
               </div>
               <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                Scheduled Events
+                No.of Events
               </span>
             </div>
             <div className="z-10 shrink-0">
@@ -238,6 +255,60 @@ const DashboardHome = () => {
               ) : (
                 <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
                   {events.length}
+                </p>
+              )}
+            </div>
+          </motion.div>
+
+          {/* EVENT COLLECTION CARD */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
+          >
+            <div className="absolute top-0 right-0 bg-green-500/20 w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
+            <div className="flex items-center gap-3 z-10">
+              <div className="p-2.5 rounded-xl bg-green-500/10 text-green-400 shrink-0 border border-green-500/20">
+                <DollarSign size={20} />
+              </div>
+              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                Event Collection
+              </span>
+            </div>
+            <div className="z-10 shrink-0">
+              {loading ? (
+                <Loader2 size={24} className="animate-spin text-green-400" />
+              ) : (
+                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  ₹{eventRevenue.toLocaleString()}
+                </p>
+              )}
+            </div>
+          </motion.div>
+
+          {/* PAID FOUNDING MEMBERS CARD */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.25 }}
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
+          >
+            <div className="absolute top-0 right-0 bg-purple-500/20 w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
+            <div className="flex items-center gap-3 z-10">
+              <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 shrink-0 border border-purple-500/20">
+                <ShieldCheck size={20} />
+              </div>
+              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                Paid Founders
+              </span>
+            </div>
+            <div className="z-10 shrink-0">
+              {loading ? (
+                <Loader2 size={24} className="animate-spin text-purple-400" />
+              ) : (
+                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  {paidFounders}
                 </p>
               )}
             </div>
