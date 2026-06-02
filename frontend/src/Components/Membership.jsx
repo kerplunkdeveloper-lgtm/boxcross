@@ -572,10 +572,11 @@ const Membership = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-8 flex  items-center justify-between"
+            className="text-left mb-8 flex flex-col items-start md:flex-row justify-start md:items-center md:justify-between"
           >
-            <span
-              className="px-4 py-2 rounded-md  border border-[#e5ff00]/30 bg-[#e5ff00]/10 text-[#e5ff00] uppercase"
+            <div>
+               <span
+              className="px-4 py-2 rounded-md  border border-[#e5ff00]/30 bg-[#e5ff00] text-[#1e1111] uppercase"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontSize: "16px",
@@ -585,16 +586,21 @@ const Membership = () => {
               STEP 1
             </span>
 
-            <h2
-              className="mt-8 md:mt-10  mb-9 leading-tight "
+            </div>
+           
+           <div>
+ <h2
+              className=" mt-4 md:mt-0 mb-0  text-[32px] md:text-[48px] leading-[40px] md:leading-[55px] "
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: "700",
-                fontSize: "48px",
+              
               }}
             >
-              CHOOSE YOUR <br /> <span className="text-[#e5ff00]">PROGRAM</span>
+              CHOOSE YOUR <span className="text-[#e5ff00]">PROGRAM</span>
             </h2>
+           </div>
+           
           </motion.div>
 
 
@@ -605,7 +611,7 @@ const Membership = () => {
 
 
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-15 mt-8 md:mt-15 ">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8  mt-8 md:mt-15 ">
             {dynamicPrograms.map((prog, index) => (
               <motion.div
                 key={prog.id}

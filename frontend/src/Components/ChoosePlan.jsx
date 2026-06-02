@@ -13,14 +13,27 @@ const ChoosePlan = React.forwardRef(
         id="pricing"
         className="w-full max-w-7xl mx-auto border-t border-gray-800 pt-12 pb-8 scroll-mt-10"
       >
+
+
+
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8"
+          className=" mb-8"
         >
-          <span
+          
+          
+          
+          
+          
+          
+          <div  className="text-left mb-8 flex flex-col items-start md:flex-row justify-start md:items-center md:justify-between">
+             
+             <div>
+                <span
             className="px-4 py-2 rounded-md  border border-[#e5ff00]/30 bg-[#e5ff00]/10 text-[#e5ff00] uppercase"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
@@ -30,22 +43,25 @@ const ChoosePlan = React.forwardRef(
           >
             STEP 2
           </span>
+             </div>
 
-          <h2
-            className="mt-5 md:mt-10 font-black mb-5 md:mb-8 leading-tight "
+
+
+             <div>
+              <h2
+             className=" mt-4 md:mt-0 mb-0  text-[32px] md:text-[48px] leading-[40px] md:leading-[55px] "
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",
-                   fontSize: "48px",
             }}
           >
             CHOOSE YOUR <br />{" "}
             <span className="text-[#e5ff00]">{activeData.title}</span>
           </h2>
-          <div
-            className="flex  flex-wrap items-center justify-center gap-3 text-gray-400 text-[11px]"
+
+            <div
+            className="flex flex-wrap items-center gap-3 mt-4 md:mt-5 text-gray-400 text-[11px] md:text-[12px]"
             style={{
-              fontSize: "16px",
               fontWeight: "500",
               fontFamily: '"Brutal Type Regular", sans-serif',
             }}
@@ -59,6 +75,15 @@ const ChoosePlan = React.forwardRef(
               </React.Fragment>
             ))}
           </div>
+             </div>
+             
+             
+          </div>
+          
+        
+
+        
+        
 
           {/* Sub-Tabs for Step 2 */}
           {(() => {
@@ -110,7 +135,7 @@ const ChoosePlan = React.forwardRef(
 
         <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6">
           {/* PRICING CARDS */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 flex-1 mt-8 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 flex-1 mt-8 items-stretch">
             {activeData.plans.map((plan, i) => (
               <motion.div
                 key={i}

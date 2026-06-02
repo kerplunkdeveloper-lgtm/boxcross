@@ -125,24 +125,34 @@ const BookForm = () => {
   return (
     <section
       id="book-your-free-gym-tour"
-      className="w-full bg-black flex items-center justify-center px-4 py-16 md:py-24 overflow-hidden"
+      className="relative w-full flex items-center justify-center py-20 md:py-32 overflow-hidden"
     >
-      <div className="relative w-full max-w-4xl rounded-[35px] border border-white/10 bg-gradient-to-b from-[#050505] to-black overflow-hidden">
+      {/* PREMIUM BACKGROUND */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[#050505]/70 z-10"></div>
+        <img 
+          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop" 
+          alt="Gym Background" 
+          className="w-full h-full object-cover grayscale opacity-50 mix-blend-luminosity"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] z-20"></div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-5xl mx-4 rounded-[35px] border border-white/10 bg-black/40 backdrop-blur-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
         {/* GLOW */}
-        <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-[#e5ff00]/10 blur-[120px] rounded-full"></div>
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#e5ff00]/15 blur-[120px] rounded-full pointer-events-none"></div>
 
         <div className="relative z-10 p-5 md:p-10">
           {/* HEADER */}
           <div>
             <h1
-              className="text-white uppercase"
+              className="text-white uppercase text-[32px] md:text-[40px]"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: 700,
-                fontSize: "40px",
               }}
             >
-              BOOK YOUR FREE<span className="text-[#e5ff00]"> GYM TOUR</span>
+              BOOK YOUR FREE <br /><span className="text-[#e5ff00]"> GYM TOUR</span>
             </h1>
           </div>
 

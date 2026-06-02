@@ -67,10 +67,10 @@ const WhatWeOffer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16 md:mb-18 flex flex-col items-center"
+          className="mb-16 md:mb-18 flex flex-col items-start md:items-center text-left md:text-center"
         >
           <span
-            className="px-4 py-2 rounded-md border mb-8 border-[#e5ff00]/30 bg-[#e5ff00]/10 text-[#e5ff00] uppercase"
+            className="px-4 py-2 rounded-md border mb-5 bg-[#e5ff00] text-[#0a0a0a] uppercase"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontSize: "16px",
@@ -81,11 +81,10 @@ const WhatWeOffer = () => {
           </span>
 
           <h2
-            className=" uppercase text-white leading-none"
+            className=" uppercase text-white leading-none text-4xl md:text-5xl"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",
-              fontSize: "48px",
             }}
           >
             WHAT WE{" "}

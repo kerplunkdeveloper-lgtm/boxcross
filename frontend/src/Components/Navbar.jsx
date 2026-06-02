@@ -173,14 +173,14 @@ useEffect(() => {
       <nav
   className={`
     relative py-3 p-3 md:py-3 z-50
-    border-[0.1px] border-white/10
+  
     backdrop-blur-md
     transition-all duration-500
 
     ${
       scrolled
         ? "bg-[#0e0e0e] md:rounded-none"
-        : "bg-black md:rounded-2xl"
+        : "bg-black md:rounded-2xl border-[0.1px] border-white/10"
     }
   `}
 >
