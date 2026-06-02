@@ -148,13 +148,13 @@ const Navbar = () => {
   return (
     <>
       <div
-        className={`sticky top-0 z-[80] transition-transform duration-500 ease-in-out md:px-10 md:pt-1 ${
+        className={`sticky top-0 md:top-2 z-[80] transition-transform duration-500 ease-in-out md:px-10 md:pt-1 ${
           isNavVisible ? "translate-y-0" : "-translate-y-[150%] "
         }`}
       >
         {/* ================= NAVBAR ================= */}
 
-        <nav className="relative md:rounded-2xl py-3 p-3  md:py-2 z-50 bg-black backdrop-blur-sm">
+        <nav className="relative md:rounded-2xl py-3 p-3  md:py-3 z-50 bg-black border-[0.1px] border-white/10 backdrop-blur-sm">
           <div className=" md:px-4">
             <div className="flex justify-between items-center">
               {/* ================= LOGO ================= */}

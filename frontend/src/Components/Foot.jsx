@@ -281,7 +281,7 @@ const Foot = () => {
       {/* BACK TO TOP BUTTON */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-8 right-8 w-12 h-12 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[100] ${
+        className={`fixed bottom-8 left-8 w-12 h-12 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[100] ${
           isVisible
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-10 pointer-events-none"
@@ -292,19 +292,19 @@ const Foot = () => {
       </button>
 
       {/* WHATSAPP CONTACT BUTTON */}
-      <div className="fixed bottom-8 left-8 z-[100] flex items-center group cursor-pointer">
+      <div className="fixed bottom-8 right-8 z-[100] flex flex-row-reverse items-center group cursor-pointer">
         <a
           href="https://wa.me/918925556900"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform duration-300 relative z-10"
+          className="flex items-center justify-center w-14 h-14 bg-[#e5ff00] text-black rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform duration-300 relative z-10"
         >
           <FaWhatsapp size={34} />
         </a>
 
         {/* Speech Bubble */}
         <div
-          className="ml-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300"
+          className="mr-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           <span className="block group-hover:hidden transition-all duration-300">
@@ -313,8 +313,8 @@ const Foot = () => {
           <span className="hidden group-hover:block transition-all duration-300 ">
             WhatsApp
           </span>
-          {/* Triangle pointing left */}
-          <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-r-[10px] border-r-white border-b-[8px] border-b-transparent"></div>
+          {/* Triangle pointing right */}
+          <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-l-[10px] border-l-white border-b-[8px] border-b-transparent"></div>
         </div>
       </div>
     </footer>

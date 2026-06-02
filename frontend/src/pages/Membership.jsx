@@ -13,9 +13,9 @@ const Membership = () => {
     "https://res.cloudinary.com/dubheb1lh/video/upload/v1780056052/vv_nbap32.mp4";
 
   return (
-    <div className="w-full bg-[#050505] min-h-screen flex flex-col mt-[-80px] overflow-hidden">
+    <div className="w-full bg-[#050505]  flex flex-col mt-[-100px] overflow-hidden">
       {/* HERO SECTION */}
-      <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative w-full h-[90vh] flex items-center justify-center overflow-hidden">
         {/* VIDEO */}
         <video
           src={videoUrl}
