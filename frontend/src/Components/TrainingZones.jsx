@@ -90,7 +90,7 @@ const TrainingZones = ({ onBookTour }) => {
   };
 
   return (
-    <section className="w-full py-20 px-4 md:px-8 max-w-[1400px] mx-auto bg-[#0a0a0a]">
+    <section className="w-full py-20 px-4 md:px-8  bg-[#0a0a0a]">
       {/* CSS injection for scrollbars */}
       <style
         dangerouslySetInnerHTML={{
