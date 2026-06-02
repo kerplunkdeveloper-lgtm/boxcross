@@ -162,29 +162,26 @@ useEffect(() => {
     <>
      <div
   className={`
-    sticky top-0 z-[80]
-    transition-all duration-500 ease-in-out
-    ${isNavVisible ? "translate-y-0" : "-translate-y-[150%]"}
-    ${scrolled ? "w-full px-0 " : "md:px-10 md:pt-2"}
+    sticky top-0 z-[80] w-full
+    transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
+    ${isNavVisible ? "translate-y-0" : "-translate-y-full"}
+    ${scrolled ? "px-0 pt-0" : "px-0 md:px-10 pt-0 md:pt-4"}
   `}
 >
         {/* ================= NAVBAR ================= */}
 
       <nav
   className={`
-    relative py-3 p-3 md:py-3 z-50
-  
-    backdrop-blur-md
-    transition-all duration-500
-
+    relative z-50 w-full overflow-hidden
+    transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
     ${
       scrolled
-        ? "bg-[#0e0e0e] md:rounded-none"
-        : "bg-black md:rounded-2xl border-[0.1px] border-white/10"
+        ? "py-3 px-4 md:px-10 bg-black/80 backdrop-blur-xl border-b border-white/10 md:rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+        : "py-4 px-4 bg-black/95 backdrop-blur-md md:rounded-2xl border border-white/5 shadow-none"
     }
   `}
 >
-          <div className={`md:px-4 ${scrolled? "md:px-10" : ""}`}>
+          <div className={`transition-all duration-700 ${scrolled ? "md:px-2" : "md:px-4"}`}>
             <div className="flex justify-between items-center">
               {/* ================= LOGO ================= */}
 
