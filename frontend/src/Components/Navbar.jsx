@@ -154,13 +154,13 @@ const Navbar = () => {
       >
         {/* ================= NAVBAR ================= */}
 
-        <nav className="relative md:rounded-2xl py-2  md:py-2 z-50 bg-black backdrop-blur-sm">
+        <nav className="relative md:rounded-2xl py-3 p-3  md:py-2 z-50 bg-black backdrop-blur-sm">
           <div className=" md:px-4">
             <div className="flex justify-between items-center">
               {/* ================= LOGO ================= */}
 
               <NavLink to="https://boxandcross.com" className="flex items-center flex-shrink-0">
-                <img src={logo} alt="Box & Cross" className="w-52 md:w-48" />
+                <img src={logo} alt="Box & Cross" className="w-45 md:w-48" />
               </NavLink>
 
               {/* ================= DESKTOP NAV ================= */}
