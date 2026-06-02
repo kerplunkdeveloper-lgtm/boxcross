@@ -572,7 +572,7 @@ const Membership = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-left mb-8 flex flex-col items-start md:flex-row justify-start md:items-center md:justify-between"
+            className="text-left md:text-center mb-8 flex flex-col items-start md:items-center justify-start md:justify-center gap-4"
           >
             <div>
                <span
@@ -589,12 +589,11 @@ const Membership = () => {
             </div>
            
            <div>
- <h2
-              className=" mt-4 md:mt-0 mb-0  text-[32px] md:text-[48px] leading-[40px] md:leading-[55px] "
+            <h2
+              className="mt-2 md:mt-4 mb-0 text-[32px] md:text-[48px] leading-[40px] md:leading-[55px]"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: "700",
-              
               }}
             >
               CHOOSE YOUR <span className="text-[#e5ff00]">PROGRAM</span>
@@ -686,24 +685,31 @@ const Membership = () => {
 
                   <div className="mt-auto pt-4 w-full">
                     <p
-                      className="text-[10px] text-gray-300 uppercase tracking-widest font-bold mb-3 flex items-center"
+                      className="text-[14px] text-gray-300 uppercase tracking-widest font-bold  flex items-center"
                       style={{
                         fontFamily: '"BrutalTypeBold", sans-serif',
                         fontWeight: "600",
                       }}
                     >
-                      FROM{" "}
-                      <span
-                        className="text-lg text-[#e5ff00] mx-1.5"
+                      FROM 
+                     
+                    </p>
+
+                       <div>
+                        <span
+                        className="text-lg text-[#e5ff00] md:text-[48px] mx-1.5"
                         style={{
                           fontFamily: '"BrutalTypeBold", sans-serif',
-                          fontWeight: "600",
+                          fontWeight: "700",
                         }}
                       >
                         ₹{prog.price}
-                      </span>{" "}
+                      </span>
                       / MONTH
-                    </p>
+                       </div>
+
+
+                    
 
                     <button
                       onClick={(e) => handleScrollToPlans(e, prog.id)}

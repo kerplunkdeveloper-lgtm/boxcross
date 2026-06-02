@@ -10,7 +10,7 @@ const Founding = () => {
     <div className="">
     
       {/* Countdown Promo Banner */}
-      <div className="relative z-20 max-w-8xl mx-auto px-4 md:px-6 lg:px-10 mb-20">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-0 mb-20">
         <div className="relative w-full rounded-[24px] md:rounded-[32px] border border-[#e5ff00] bg-black overflow-hidden flex flex-col lg:flex-row p-6 md:p-8 lg:p-12 gap-8 lg:gap-0 shadow-[0_0_50px_rgba(229,255,0,0.15)]">
           
           {/* Subtle X background pattern on the right */}
@@ -32,10 +32,10 @@ const Founding = () => {
             </div>
             
             <h2 className="flex flex-col uppercase m-0 leading-[0.8] tracking-[-0.03em]" style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}>
-              <span className="text-white text-[30px] md:text-[48px] font-black">
+              <span className="text-white text-[30px] md:text-[40px] font-black">
                 THE FIRST 100.
               </span>
-              <span className="text-[#e5ff00] text-[30px] md:text-[48px] font-black  mt-2" style={{ textShadow: "0 0 20px rgba(229,255,0,0.2)" }}>
+              <span className="text-[#e5ff00] text-[30px] md:text-[40px] font-black  mt-2" style={{ textShadow: "0 0 20px rgba(229,255,0,0.2)" }}>
                 THE FOUNDERS.
               </span>
             </h2>
@@ -151,6 +151,10 @@ const Founding = () => {
             </div>
 
             <span className="text-white/90 text-[14px] font-medium tracking-wide">Once it's gone, it's gone.</span>
+
+            <button className="mt-8 px-8 py-3 bg-[#e5ff00] text-black font-bold uppercase tracking-widest text-[14px] rounded-md hover:bg-[#e5ff00]/90 transition-colors cursor-pointer">
+              JOIN NOW
+            </button>
 
           </div>
 

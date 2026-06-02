@@ -101,7 +101,7 @@ const TrainingZones = ({ onBookTour }) => {
         }}
       />
 
-      <div className="mb-9 px-2 md:px-6">
+      <div className="mb-9 px-2 md:px-6 flex flex-col items-start md:items-center text-left md:text-center">
         <span
           className="px-4 py-2 rounded-md border border-[#e5ff00]/30 bg-[#e5ff00] text-[#0a0a0a] uppercase"
           style={{
@@ -113,11 +113,10 @@ const TrainingZones = ({ onBookTour }) => {
           TAKE A LOOK
         </span>
         <h2
-          className=" text-white  mt-5 text-4xl md:text-5xl "
+          className="text-white mt-5 text-4xl md:text-5xl"
           style={{
             fontFamily: '"BrutalTypeBold", sans-serif',
             fontWeight: "700",
-          
           }}
         >
           OUR TRAINING <span className="text-[#e5ff00]">ZONES</span>
@@ -131,7 +130,7 @@ const TrainingZones = ({ onBookTour }) => {
         onMouseLeave={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
         onTouchEnd={() => setIsPaused(false)}
-        className="flex overflow-x-auto gap-4 md:gap-6 px-2 md:px-6 pb-6 snap-x snap-mandatory custom-scrollbar scroll-smooth"
+        className="flex overflow-x-auto gap-4 md:gap-6 px-2 md:px-6 pb-6 snap-x snap-mandatory custom-scrollbar scroll-smooth md:justify-center"
       >
         {zones.map((zone, i) => (
           <div
@@ -145,9 +144,9 @@ const TrainingZones = ({ onBookTour }) => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent"></div>
             <h3
-              className="absolute bottom-8 left-8 text-3xl font-black text-white uppercase tracking-wider shadow-black drop-shadow-xl"
+              className="absolute bottom-8 inset-x-0 text-center px-4 text-3xl font-black text-white uppercase tracking-wider shadow-black drop-shadow-xl"
               style={{
-                fontFamily: '"Brutal Font",  sans-serif',
+                fontFamily: '"Brutal Font", sans-serif',
                 fontWeight: "700",
               }}
             >
