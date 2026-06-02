@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { User, Crown, Star, Clock, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createFounder, getFoundingOffer, updateFounder } from "../api/api";
@@ -31,21 +32,21 @@ const Founding = () => {
         console.error("Failed to fetch founding offer");
       }
     };
-    
+
     // Initial fetch
     fetchOffer();
 
     // 1. Cross-tab communication: Listen for instant updates from the Admin dashboard
-    const channel = new BroadcastChannel('founding_offer_updates');
+    const channel = new BroadcastChannel("founding_offer_updates");
     channel.onmessage = (event) => {
-      if (event.data === 'OFFER_UPDATED') {
+      if (event.data === "OFFER_UPDATED") {
         fetchOffer(); // Refetch immediately when admin saves
       }
     };
 
     // 2. Refresh data when user returns to this tab
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === "visible") {
         fetchOffer();
       }
     };
@@ -93,6 +94,18 @@ const Founding = () => {
     return () => clearInterval(interval);
   }, [offerData]);
 
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -104,22 +117,22 @@ const Founding = () => {
       toast.error("Please fill in all fields");
       return;
     }
-    
+
     setLoading(true);
     try {
       const { data } = await createFounder({
         ...formData,
         paymentStatus: "Pending",
         price: offerData ? offerData.col2_price : "12,000",
-        duration: offerData ? offerData.col2_duration : "FOR 1 YEAR"
+        duration: offerData ? offerData.col2_duration : "FOR 1 YEAR",
       });
       setCurrentFounderId(data._id);
-      
+
       // Notify admin dashboard immediately about the pending lead
-      const channel = new BroadcastChannel('founding_members_updates');
-      channel.postMessage('NEW_FOUNDER_ADDED');
+      const channel = new BroadcastChannel("founding_members_updates");
+      channel.postMessage("NEW_FOUNDER_ADDED");
       channel.close();
-      
+
       setPaymentStep(true);
     } catch (error) {
       console.error(error);
@@ -140,16 +153,16 @@ const Founding = () => {
             paymentId: "demo_pay_" + Math.random().toString(36).substr(2, 9),
           });
         }
-        
+
         toast.success("Payment Successful! Welcome Founder.");
         setIsModalOpen(false);
         setPaymentStep(false);
         setFormData({ name: "", email: "", phone: "" });
         setCurrentFounderId(null);
-        
+
         // Notify admin dashboard immediately
-        const channel = new BroadcastChannel('founding_members_updates');
-        channel.postMessage('NEW_FOUNDER_ADDED');
+        const channel = new BroadcastChannel("founding_members_updates");
+        channel.postMessage("NEW_FOUNDER_ADDED");
         channel.close();
       } catch (error) {
         console.error(error);
@@ -380,40 +393,42 @@ const Founding = () => {
       </div>
 
       {/* Modal / Popup for Data Collection & Payment */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      {typeof window === "object" && createPortal(
+        <AnimatePresence>
+          {isModalOpen && (
+          <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-lg bg-[#0a0a0a] border border-[#222] rounded-[24px] p-6 md:p-8 shadow-2xl"
+              className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border border-[#222] rounded-[24px] p-6 md:p-8 shadow-2xl"
             >
               <button
                 onClick={() => {
                   setIsModalOpen(false);
                   setPaymentStep(false);
                 }}
-                className="absolute top-4 right-4 p-2 bg-[#111] hover:bg-[#222] rounded-full text-white transition-colors"
+                className="absolute top-4 right-4 p-2 bg-[#111] hover:bg-[#222] rounded-full text-white transition-colors z-10"
               >
                 <X size={20} />
               </button>
 
               {!paymentStep ? (
-                <>
-                  <div className="text-center mb-6">
+                <div>
+                  <div className="text-center mb-6 mt-2">
+                    <img src="https://framerusercontent.com/images/JI0NtmPcO2urtdJXDxdoDB0.jpeg?width=2124&height=1416" alt="" />
                     <h3 className="text-[#e5ff00] text-2xl font-black uppercase tracking-wider mb-2">
                       Claim Founder Offer
                     </h3>
-                    <p className="text-gray-400 text-sm">
-                      Enter your details to lock in the ₹{offerData ? offerData.col2_price : "12,000"} / {offerData ? offerData.col2_duration : "Year"} pricing.
+                    <p className="text-gray-400 text-sm px-2">
+                      Enter your details to lock in the ₹
+                      {offerData ? offerData.col2_price : "12,000"} /{" "}
+                      {offerData ? offerData.col2_duration : "Year"} pricing.
                     </p>
                   </div>
                   <form onSubmit={handleInitialSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-1.5">
-                        Full Name
-                      </label>
+                     
                       <input
                         type="text"
                         name="name"
@@ -421,13 +436,11 @@ const Founding = () => {
                         onChange={handleChange}
                         className="w-full bg-[#111] border border-[#333] text-white rounded-lg px-4 py-3 outline-none focus:border-[#e5ff00] transition-colors"
                         required
-                        placeholder="Enter a name "
+                        placeholder="Enter your name"
                       />
                     </div>
                     <div>
-                      <label className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-1.5">
-                        Email Address
-                      </label>
+                     
                       <input
                         type="email"
                         name="email"
@@ -435,13 +448,11 @@ const Founding = () => {
                         onChange={handleChange}
                         className="w-full bg-[#111] border border-[#333] text-white rounded-lg px-4 py-3 outline-none focus:border-[#e5ff00] transition-colors"
                         required
-                        placeholder="Enter an email address"
+                        placeholder="Enter your email"
                       />
                     </div>
                     <div>
-                      <label className="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-1.5">
-                        Phone Number
-                      </label>
+                     
                       <input
                         type="tel"
                         name="phone"
@@ -449,7 +460,7 @@ const Founding = () => {
                         onChange={handleChange}
                         className="w-full bg-[#111] border border-[#333] text-white rounded-lg px-4 py-3 outline-none focus:border-[#e5ff00] transition-colors"
                         required
-                        placeholder="Enter phone number"
+                        placeholder="Enter your phone number"
                       />
                     </div>
                     <button
@@ -459,9 +470,24 @@ const Founding = () => {
                     >
                       {loading ? (
                         <>
-                          <svg className="animate-spin h-5 w-5 text-black" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          <svg
+                            className="animate-spin h-5 w-5 text-black"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                              fill="none"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                            />
                           </svg>
                           Saving Details...
                         </>
@@ -470,7 +496,7 @@ const Founding = () => {
                       )}
                     </button>
                   </form>
-                </>
+                </div>
               ) : (
                 <div className="text-center py-6">
                   <div className="w-16 h-16 bg-[#0055FF]/10 text-[#0055FF] rounded-full mx-auto flex items-center justify-center mb-6">
@@ -497,31 +523,31 @@ const Founding = () => {
                   <button
                     onClick={handlePaymentSimulation}
                     disabled={loading}
-                    className="w-full bg-[#0055FF] text-white font-bold uppercase tracking-wider py-3.5 rounded-lg hover:bg-[#0044CC] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                    className="w-full bg-[#0055FF] text-white font-bold uppercase tracking-wider py-3.5 rounded-lg hover:bg-[#0044CC] transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
                   >
                     {loading ? (
-                      <>
-                        <svg
-                          className="animate-spin h-5 w-5 text-white"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                            fill="none"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                          />
-                        </svg>
-                        Processing...
-                      </>
+                       <>
+                         <svg
+                           className="animate-spin h-5 w-5 text-white"
+                           viewBox="0 0 24 24"
+                         >
+                           <circle
+                             className="opacity-25"
+                             cx="12"
+                             cy="12"
+                             r="10"
+                             stroke="currentColor"
+                             strokeWidth="4"
+                             fill="none"
+                           />
+                           <path
+                             className="opacity-75"
+                             fill="currentColor"
+                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                           />
+                         </svg>
+                         Processing...
+                       </>
                     ) : (
                       "Pay with Razorpay"
                     )}
@@ -529,7 +555,7 @@ const Founding = () => {
                   <button
                     onClick={() => setPaymentStep(false)}
                     disabled={loading}
-                    className="w-full mt-3 text-gray-400 hover:text-white text-sm transition-colors"
+                    className="w-full mt-4 text-gray-400 hover:text-white text-sm transition-colors"
                   >
                     Back to details
                   </button>
@@ -538,7 +564,9 @@ const Founding = () => {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };

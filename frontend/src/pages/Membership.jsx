@@ -16,7 +16,7 @@ const Membership = () => {
       AOS.refresh();
     };
 
-    if (sessionStorage.getItem("preloaderDone")) {
+    if (window.isPreloaderDone) {
       initAOS();
     } else {
       window.addEventListener("preloaderComplete", initAOS);
