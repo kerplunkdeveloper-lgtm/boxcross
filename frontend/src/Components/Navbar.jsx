@@ -172,7 +172,7 @@ useEffect(() => {
 
       <nav
   className={`
-    relative z-50 w-full overflow-hidden
+    relative z-50 w-full
     transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
     ${
       scrolled

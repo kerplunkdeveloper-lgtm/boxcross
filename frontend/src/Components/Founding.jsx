@@ -1,17 +1,16 @@
 import React from "react";
 import foundersAsset from "../assets/right.png";
 import { User, Crown, Star, Clock } from "lucide-react";
+import { motion } from "framer-motion";
 
 
 const Founding = () => {
   return (
 
-
-
     <div className="">
     
       {/* Countdown Promo Banner */}
-      <div className="relative z-20 max-w-8xl mx-auto px-4 md:px-6 lg:px-10  md:mt-[-50px]">
+      <div className="relative z-20 max-w-8xl mx-auto px-4 md:px-6 lg:px-10 mb-20">
         <div className="relative w-full rounded-[24px] md:rounded-[32px] border border-[#e5ff00] bg-black overflow-hidden flex flex-col lg:flex-row p-6 md:p-8 lg:p-12 gap-8 lg:gap-0 shadow-[0_0_50px_rgba(229,255,0,0.15)]">
           
           {/* Subtle X background pattern on the right */}
@@ -24,7 +23,7 @@ const Founding = () => {
           ></div>
 
           {/* Column 1: Huge Text */}
-          <div className="flex-[1.4] w-full flex flex-col items-center lg:items-start text-center lg:text-left z-10 pr-0 lg:pr-8">
+          <div className="flex-1 w-full flex flex-col items-center lg:items-start text-center lg:text-left z-10 pr-0 lg:pr-6">
             
             <div className="inline-block transform -skew-x-[12deg] bg-[#e5ff00] px-4 py-1.5 mb-6">
               <span className="inline-block transform skew-x-[12deg] text-black font-black uppercase tracking-wider text-[12px] md:text-[14px]">
@@ -119,7 +118,7 @@ const Founding = () => {
           <div className="lg:hidden w-full h-px bg-zinc-800 my-4 z-10"></div>
 
           {/* Column 3: Countdown */}
-          <div className="flex-[0.9] w-full flex flex-col items-center justify-center z-10 pl-0 lg:pl-6">
+          <div className="flex-1 w-full flex flex-col items-center justify-center z-10 pl-0 lg:pl-6">
             
             <div className="flex items-center gap-4 w-full justify-center mb-6">
               <div className="h-[1px] bg-zinc-700 flex-1 max-w-[30px]"></div>
@@ -163,186 +162,7 @@ const Founding = () => {
 
 
 
-      <section
-      id="founders"
-      className="relative overflow-hidden  py-12 md:py-20 lg:py-28 mb-10 "
-    >
-
-
-      {/* Background Crowd */}
-      <div
-        className="absolute inset-0"
       
-      />
-
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/30" />
-
-      {/* Left Dark Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" />
-
-      {/* Top & Bottom Vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.85)_100%)]" />
-
-      {/* Smoke Effect */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-90" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-10 lg:px-16">
-        <div className="grid lg:grid-cols-2 items-center gap-10">
-          {/* LEFT SIDE */}
-          <div className="text-center lg:text-left">
-            {/* Badge */}
-            <div className="inline-block  bg-[#e5ff00] px-4 py-2 mb-5">
-              <span className="inline-block text-black font-extrabold uppercase tracking-wider text-xs md:text-sm">
-                Founding Member Offer
-              </span>
-            </div>
-
-            {/* Heading */}
-            <h1
-              className="uppercase leading-[0.82] font-black text-[12px] md:text-[14px] "
-              style={{
-                fontFamily: '"Brutal Type Bold", sans-serif',
-                fontWeight: 700,
-              
-                fontStyle: "normal",
-                fontDisplay: "swap",
-              }}
-            >
-              <div
-                className="text-white text-[40px] md:text-[48px]"
-                style={{
-                  textShadow:
-                    "0 5px 15px rgba(0,0,0,0.9),0 15px 35px rgba(0,0,0,0.9)",
-                }}
-              >
-                THE FIRST 100.
-              </div>
-
-              <div
-                className="text-[#e5ff00] text-[40px] md:text-[48px] mt-5"
-                style={{
-                  textShadow:
-                    "0 5px 15px rgba(0,0,0,0.9),0 15px 35px rgba(0,0,0,0.9)",
-                }}
-              >
-                THE FOUNDERS.
-              </div>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="mt-4 text-white text-lg md:text-2xl lg:text-3xl">
-              Be part of{" "}
-              <span className="text-[#e5ff00] font-bold">BXC</span> from the
-              beginning.
-            </p>
-
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center lg:justify-start">
-              <button
-                className="
-                  h-14
-                  px-10
-                  border
-                  border-[#555]
-                  text-white
-                  bg-black/70
-                  backdrop-blur-sm
-                  rounded-md
-                  font-bold
-                  tracking-wide
-                  hover:border-[#e5ff00]
-                  transition-all
-                  duration-300
-                "
-              >
-                TRY FOR FREE
-              </button>
-
-              <button
-                className="
-                  h-14
-                  px-10
-                  bg-[#e5ff00]
-                  text-black
-                  rounded-md
-                  font-black
-                  tracking-wide
-                  hover:scale-105
-                  transition-all
-                  duration-300
-                  shadow-[0_0_25px_rgba(229,255,0,0.25)]
-                "
-              >
-                JOIN NOW
-              </button>
-            </div>
-
-            <p className="text-zinc-500 text-xs mt-8">
-              *Effective Monthly Pricing including Extension, if any
-            </p>
-          </div>
-
-          {/* RIGHT SIDE */}
-          <div className="relative flex justify-center lg:justify-end">
-            {/* Ribbon */}
-            <div className="absolute left-4 md:left-10 top-0 z-30">
-              <div
-                className="
-                  bg-black/90
-                  border-l-2
-                  border-r-2
-                  border-[#e5ff00]
-                  w-[65px]
-                  h-[260px]
-                  flex
-                  items-center
-                  justify-center
-                "
-                style={{
-                  clipPath:
-                    "polygon(0 0,100% 0,100% 100%,50% 88%,0 100%)",
-                }}
-              >
-                <span
-                  className="
-                    text-[#e5ff00]
-                    font-black
-                    text-xl
-                    tracking-[0.2em]
-                  "
-                  style={{
-                    writingMode: "vertical-rl",
-                    transform: "rotate(180deg)",
-                  }}
-                >
-                  FOUNDERS
-                </span>
-              </div>
-            </div>
-
-            {/* Asset Glow */}
-            <div className="absolute w-[350px] md:w-[500px] h-[350px] md:h-[500px] rounded-full bg-[#e5ff00]/10 blur-[120px]" />
-
-            {/* Main Image */}
-            <img
-              src={foundersAsset}
-              alt="Founders"
-              className="
-                relative
-                z-20
-                w-full
-                max-w-[650px]
-                object-contain
-                drop-shadow-[0_35px_70px_rgba(0,0,0,0.95)]
-              "
-            />
-          </div>
-        </div>
-      </div>
-
-    
-    </section>
     </div>
   
   );
