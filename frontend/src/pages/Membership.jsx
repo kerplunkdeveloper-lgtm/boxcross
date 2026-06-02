@@ -10,7 +10,7 @@ import Founding from "../Components/Founding";
 
 const Membership = () => {
   return (
-    <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden mt-[-80px]">
+    <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden ">
       {/* HERO SECTION */}
       <section className="relative w-full h-[80vh]   flex items-center justify-center overflow-hidden mb-10">
         {/* IMAGE BACKGROUND */}
@@ -21,13 +21,28 @@ const Membership = () => {
         />
 
         {/* DARK OVERLAY */}
-        <div className="absolute inset-0 bg-black/70 z-[1]"></div>
+        <div className="absolute inset-0 bg-black/50 z-[1]"></div>
 
         {/* GRADIENT OVERLAY */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-[#050505] z-[2]"></div>
 
+        {/* HUGE BACKGROUND TEXT (Outline) */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1] overflow-hidden">
+          <span 
+            className="text-transparent font-black uppercase text-[150px] md:text-[250px] lg:text-[300px] whitespace-nowrap opacity-20 select-none tracking-tighter" 
+            style={{ 
+              WebkitTextStroke: "2px rgba(255,255,255,0.3)",
+              fontFamily: '"BrutalTypeBold", Impact, sans-serif'
+            }}
+          >
+            FITNESS CENTER
+          </span>
+        </div>
+
         {/* CONTENT */}
-        <div className="relative z-10 flex flex-col items-start md:items-center justify-center text-left md:text-center px-4 sm:px-6 md:px-10 w-full h-full">
+        <div className="relative z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-10 flex flex-col md:flex-row items-center justify-center md:justify-between gap-8 md:gap-16 pt-20 md:pt-0">
+          
+          {/* LEFT SIDE: HEADING */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -38,73 +53,69 @@ const Membership = () => {
                 transition: { staggerChildren: 0.15, delayChildren: 0.1 },
               },
             }}
-            className="flex flex-col items-start md:items-center w-full"
+            className="flex-1 w-full flex flex-col justify-center text-left z-10"
           >
-            {/* MAIN HEADING */}
             <motion.h1
               variants={{
-                hidden: { opacity: 0, y: 30, scale: 0.95 },
+                hidden: { opacity: 0, x: -30 },
                 visible: {
                   opacity: 1,
-                  y: 0,
-                  scale: 1,
+                  x: 0,
                   transition: { duration: 0.8, ease: "easeOut" },
                 },
               }}
               className="
+                text-white
+                font-black
                 uppercase
-                leading-[1.2] md:leading-[1]
-                tracking-[-0.01em]
-                text-left md:text-center
+                leading-[0.95]
+                tracking-tight
                 drop-shadow-[0_5px_20px_rgba(0,0,0,0.9)]
-                w-full
               "
               style={{
-                fontFamily: '"BrutalTypeBold", sans-serif',
-                fontWeight: "700",
+                fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
-              <span
-                className="block  text-transparent font-black uppercase text-[55px]  md:text-[80px] tracking-tight mb-3 whitespace-normal md:whitespace-nowrap"
-                style={{
-                  WebkitTextStroke: "0.2px #fff",
-                  filter: "drop-shadow(0 0 15px rgba(255,255,255,0.2))",
-                  fontFamily: '"BrutalTypeBold", Impact, sans-serif',
-                }}
-              >
-                BXC <br className="block md:hidden" /> MEMBERSHIP PLANS
+              <span className="block text-[55px] sm:text-[60px] md:text-[70px] lg:text-[90px] xl:text-[100px] whitespace-normal md:whitespace-nowrap">
+                BXC
               </span>
-
-              <span
-                className="text-[#e5ff00] font-bold text-md  md:text-xl  md:mt-10 block "
-                style={{
-                  fontFamily: '"Brutal Font Light", sans-serif',
-                }}
-              >
-                Train with Purpose. Transform with Confidence.
+              <span className="block text-[55px] sm:text-[60px] md:text-[70px] lg:text-[90px] xl:text-[100px] whitespace-normal md:whitespace-nowrap">
+                MEMBERSHIP
+              </span>
+              <span className="block text-[55px] sm:text-[60px] md:text-[70px] lg:text-[90px] xl:text-[100px] whitespace-normal md:whitespace-nowrap">
+                PLANS
               </span>
             </motion.h1>
+          </motion.div>
 
-            {/* SUBTITLE */}
+          {/* RIGHT SIDE: SUBTITLE & BUTTONS */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.15, delayChildren: 0.4 },
+              },
+            }}
+            className="flex-1 w-full flex flex-col justify-center items-start md:max-w-lg z-10"
+          >
             <motion.p
               variants={{
-                hidden: { opacity: 0, y: 20 },
+                hidden: { opacity: 0, x: 20 },
                 visible: {
                   opacity: 1,
-                  y: 0,
+                  x: 0,
                   transition: { duration: 0.8, ease: "easeOut" },
                 },
               }}
               className="
                 text-gray-200
-                max-w-3xl
                 text-md
-              
                 md:text-xl
                 leading-relaxed
-                mt-6
-                mb-10
-                px-2
+                mb-8
               "
               style={{
                 fontFamily: '"Brutal Font Light", sans-serif',
@@ -116,7 +127,6 @@ const Membership = () => {
               Choose the plan that suits your goals and timeline.
             </motion.p>
 
-            {/* BUTTONS */}
             <motion.div
               variants={{
                 hidden: { opacity: 0, y: 20 },
@@ -130,10 +140,9 @@ const Membership = () => {
                 flex
                 flex-row
                 items-center
-                justify-start md:justify-center
+                justify-start
                 gap-3 sm:gap-4
                 w-full
-                sm:w-auto
               "
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
@@ -149,18 +158,19 @@ const Membership = () => {
                   group relative overflow-hidden
                   flex-1 sm:flex-none
                   w-full sm:w-auto
-                  px-3 py-3.5 sm:px-8 sm:py-4 md:px-10
+                  px-3 py-3.5 sm:px-8 sm:py-4 md:px-8 lg:px-10
                   bg-[#e5ff00] text-black
-                  uppercase tracking-[0.05em] sm:tracking-[0.15em] md:tracking-[0.2em]
+                  uppercase tracking-[0.05em] sm:tracking-[0.1em] md:tracking-[0.15em]
                   rounded-lg
                   transition-all duration-500
                   cursor-pointer
                   flex justify-center
+                  shadow-[0_0_20px_rgba(229,255,0,0.15)]
                 "
               >
                 <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
-                  className="relative z-10 text-[10px] sm:text-[13px] md:text-[14px] whitespace-nowrap"
+                  className="relative z-10 text-[10px] sm:text-[12px] md:text-[13px] whitespace-nowrap"
                   style={{
                     fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 800,
@@ -180,10 +190,10 @@ const Membership = () => {
                   group relative overflow-hidden
                   flex-1 sm:flex-none
                   w-full sm:w-auto
-                  px-3 py-3.5 sm:px-8 sm:py-4 md:px-10
+                  px-3 py-3.5 sm:px-8 sm:py-4 md:px-8 lg:px-10
                   bg-white
                   text-black
-                  uppercase tracking-[0.05em] sm:tracking-[0.15em] md:tracking-[0.2em]
+                  uppercase tracking-[0.05em] sm:tracking-[0.1em] md:tracking-[0.15em]
                   rounded-lg
                   transition-all duration-500
                   cursor-pointer
@@ -192,7 +202,7 @@ const Membership = () => {
               >
                 <span className="absolute inset-0 bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
-                  className="relative z-10 font-bold text-[10px] sm:text-[13px] md:text-[14px] whitespace-nowrap"
+                  className="relative z-10 font-bold text-[10px] sm:text-[12px] md:text-[13px] whitespace-nowrap"
                   style={{
                     fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 800,
