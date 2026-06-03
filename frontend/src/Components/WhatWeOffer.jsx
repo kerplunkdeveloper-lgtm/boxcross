@@ -129,7 +129,7 @@ const WhatWeOffer = () => {
               <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,transparent_60%,#e5ff00_80%,#ffffff_95%,transparent_100%)] animate-border-spin opacity-20 group-hover:opacity-100 transition-opacity duration-500" />
 
               {/* Card Content Mask */}
-              <div className="relative z-10 h-full w-full bg-[#0a0a0a]/95 backdrop-blur-xl rounded-[15px] p-8 md:p-10 flex flex-col justify-between overflow-hidden">
+              <div className="relative z-10 h-full w-full bg-[#0a0a0a]/50  backdrop-blur-xl rounded-[15px] p-8 md:p-10 flex flex-col justify-between overflow-hidden">
                 {/* Hover Glow */}
                 <div className="absolute -right-20 -top-20 w-45 h-45 bg-[#e5ff00]/10 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 

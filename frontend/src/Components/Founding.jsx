@@ -401,8 +401,12 @@ const Founding = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto bg-[#0a0a0a] border border-[#222] rounded-[24px] p-6 md:p-8 shadow-2xl"
+              className="relative w-full max-w-lg max-h-[90vh] rounded-[24px] p-[2px] shadow-2xl overflow-hidden"
             >
+              {/* Spinning animated border */}
+              <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0%,transparent_75%,#e5ff00_100%)] animate-[spin_3s_linear_infinite]" />
+              
+              <div className="relative w-full h-full bg-black rounded-[22px] p-6 md:p-8 overflow-y-auto custom-scrollbar" style={{ maxHeight: "calc(90vh - 4px)" }}>
               <button
                 onClick={() => {
                   setIsModalOpen(false);
@@ -416,11 +420,21 @@ const Founding = () => {
               {!paymentStep ? (
                 <div>
                   <div className="text-center mb-6 mt-2">
-                    <img src="https://framerusercontent.com/images/JI0NtmPcO2urtdJXDxdoDB0.jpeg?width=2124&height=1416" alt="" />
-                    <h3 className="text-[#e5ff00] text-2xl font-black uppercase tracking-wider mb-2">
+                    <img src="https://framerusercontent.com/images/JI0NtmPcO2urtdJXDxdoDB0.jpeg?width=2124&height=1416" alt="" className="w-1/2 h-auto mx-auto mb-4 rounded-3xl" />
+                    <h3 className="text-[#e5ff00]   uppercase tracking-wider mb-2"
+                      style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+                fontSize: "16px",
+                fontWeight: "600",
+              }}>
                       Claim Founder Offer
                     </h3>
-                    <p className="text-gray-400 text-sm px-2">
+                    <p className="text-gray-400 text-sm px-2"
+                      style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+                fontSize: "16px",
+                fontWeight: "600",
+              }}>
                       Enter your details to lock in the ₹
                       {offerData ? offerData.col2_price : "12,000"} /{" "}
                       {offerData ? offerData.col2_duration : "Year"} pricing.
@@ -467,6 +481,11 @@ const Founding = () => {
                       type="submit"
                       disabled={loading}
                       className="w-full mt-4 bg-[#e5ff00] text-black font-black uppercase tracking-wider py-3.5 rounded-lg hover:bg-[#cce600] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                       style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+                fontSize: "16px",
+                fontWeight: "600",
+              }}
                     >
                       {loading ? (
                         <>
@@ -561,6 +580,7 @@ const Founding = () => {
                   </button>
                 </div>
               )}
+              </div>
             </motion.div>
           </div>
         )}

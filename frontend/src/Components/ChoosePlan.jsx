@@ -166,7 +166,7 @@ const ChoosePlan = React.forwardRef(
 
                 <div className="p-6 flex flex-col items-center text-center border-b border-gray-800">
                   <h3
-                    className="text-3xl md:text-4xl font-black tracking-wide mb-1.5"
+                    className="text-3xl font-black tracking-wide mb-1.5"
                     style={{
                       fontFamily: '"Brutal Font", sans-serif',
                     }}
@@ -184,7 +184,7 @@ const ChoosePlan = React.forwardRef(
                   <div className="flex items-start justify-center gap-1 mb-1">
                     <span className="text-xl font-bold mt-1">₹</span>
                     <span
-                      className="text-5xl md:text-6xl font-black tracking-tight"
+                      className="text-4xl md:text-5xl font-black tracking-tight"
                       style={{
                         fontFamily: '"Brutal Font", sans-serif',
                       }}

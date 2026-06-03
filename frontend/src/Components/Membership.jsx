@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Foot from "../Components/Foot";
 import GymMarquee from "../Components/GymMarquee";
 import {
@@ -755,11 +756,16 @@ const Membership = () => {
           programs={dynamicPrograms}
         />
       </section>
-      <PhonePeModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        planDetails={selectedPlan}
-      />
+     {
+  createPortal(
+    <PhonePeModal
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      planDetails={selectedPlan}
+    />,
+    document.body
+  )
+}
    
       <Foot />
       <GymMarquee />
