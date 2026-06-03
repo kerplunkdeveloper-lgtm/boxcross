@@ -506,12 +506,12 @@ const EventList = () => {
                     <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
                       <div className="flex flex-col">
                         {event.originalPrice && (
-                          <span className="text-3xl text-gray-500 line-through font-semibold leading-none mb-1">
+                          <span className="text-xl text-gray-500 line-through font-semibold leading-none mb-1">
                             ₹{event.originalPrice}
                           </span>
                         )}
                         <span
-                          className="text-3xl font-black text-[#ff9e00] leading-none"
+                          className="text-3xl mt-1 font-black text-[#ff9e00] leading-none"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           ₹{event.price}{" "}
