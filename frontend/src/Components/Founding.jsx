@@ -190,8 +190,12 @@ const Founding = () => {
 
           {/* Column 1: Huge Text */}
           <div className="flex-1 w-full flex flex-col items-center lg:items-start text-center lg:text-left z-10 pr-0 lg:pr-6">
-            <div className="inline-block transform -skew-x-[12deg] bg-[#e5ff00] px-4 py-1.5 mb-6">
-              <span className="inline-block transform skew-x-[12deg] text-black font-black uppercase tracking-wider text-[12px] md:text-[14px]">
+            <div className="inline-block rounded-md bg-[#e5ff00] px-4 py-1.5 mb-6">
+              <span className="inline-block text-black  uppercase tracking-wider text-[12px] md:text-[14px]"
+               style={{
+                fontFamily: "Brutal Font Bold",
+                fontWeight: "700",
+               }}>
                 {offerData ? offerData.col1_badge : "Founding Member Offer"}
               </span>
             </div>

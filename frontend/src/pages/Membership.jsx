@@ -96,12 +96,11 @@ const Membership = () => {
           >
             <p
               className="
-                text-gray-200
-                text-sm
-                md:text-[17px]
+                text-[#c9c9c9]
+                text-base md:text-[17px]
                 mt-[-3px] md:mt-25
                 leading-relaxed
-                mb-8
+                mb-5
               "
               style={{
                 fontFamily: '"Brutal Font Light", sans-serif',
@@ -123,6 +122,7 @@ const Membership = () => {
                 justify-start
                 gap-3 sm:gap-4
                 w-full
+                max-w-[700px]
               "
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
@@ -136,21 +136,19 @@ const Membership = () => {
                 }}
                 className="
                   group relative overflow-hidden
-                  flex-1 sm:flex-none
-                  w-full sm:w-auto
-                  px-3 py-3.5 sm:px-8 sm:py-4 md:px-8 lg:px-10
+                  px-4 py-3 md:px-8 md:py-3.5
                   bg-[#e5ff00] text-black
-                  uppercase tracking-[0.05em] sm:tracking-[0.1em] md:tracking-[0.15em]
+                  uppercase tracking-wider md:tracking-[0.05em]
                   rounded-lg
                   transition-all duration-500
                   cursor-pointer
-                  flex justify-center
+                  flex justify-center items-center
                   shadow-[0_0_20px_rgba(229,255,0,0.15)]
                 "
               >
                 <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
-                  className="relative z-10 text-[10px]  md:text-[16px] whitespace-nowrap"
+                  className="relative z-10 text-[11px] sm:text-[13px] md:text-[15px] whitespace-nowrap"
                   style={{
                     fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 800,
@@ -168,21 +166,19 @@ const Membership = () => {
                 }}
                 className="
                   group relative overflow-hidden
-                  flex-1 sm:flex-none
-                  w-full sm:w-auto
-                  px-3 py-3.5 sm:px-8 sm:py-4 md:px-8 lg:px-10
+                  px-4 py-3 md:px-8 md:py-3.5
                   bg-white
                   text-black
-                  uppercase tracking-[0.05em] sm:tracking-[0.1em] md:tracking-[0.15em]
+                  uppercase tracking-wider md:tracking-[0.05em]
                   rounded-lg
                   transition-all duration-500
                   cursor-pointer
-                  flex justify-center
+                  flex justify-center items-center
                 "
               >
                 <span className="absolute inset-0 bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
-                  className="relative z-10 font-bold text-[10px]  md:text-[16px] whitespace-nowrap"
+                  className="relative z-10 text-[11px] sm:text-[13px] md:text-[15px] whitespace-nowrap"
                   style={{
                     fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 800,

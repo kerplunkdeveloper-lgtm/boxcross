@@ -88,6 +88,18 @@ const EventList = () => {
     }
   }, [displayEvents]);
 
+  // Lock body scroll when any modal is open (this also triggers FloatingActions to hide)
+  useEffect(() => {
+    if (selectedEvent || bookingEvent) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedEvent, bookingEvent]);
+
   // Framer motion variants for cards list stagger
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -329,9 +341,9 @@ const EventList = () => {
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#e5ff00]/3 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#ff9e00]/2 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto  relative z-10">
         {/* Title Block */}
-        <div className="mb-12 md:mb-16">
+        <div className="flex flex-col items-start md:items-center text-left md:text-center mb-12 md:mb-16">
           <div className="flex items-center gap-2 mb-2">
             <span className="h-[2px] w-8 bg-[#e5ff00]"></span>
             <span
@@ -348,7 +360,7 @@ const EventList = () => {
             Featured Events & Workshops
           </h2>
           <p
-            className="text-gray-200 text-md md:text-xl mt-3 max-w-xl mt-5"
+            className="text-gray-200 text-md md:text-xl mt-5 max-w-xl text-left md:text-center"
             style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
           >
             Click on any card to view detailed schedules, descriptions, and
@@ -424,11 +436,11 @@ const EventList = () => {
                   </div>
 
                   {/* Card Content details */}
-                  <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div className="p-4 flex-1 flex flex-col justify-between">
                     <div>
                       {/* Event Title */}
                       <h3
-                        className="text-xl md:text-2xl font-bold text-white tracking-wide leading-snug group-hover:text-[#e5ff00] transition-colors line-clamp-1 mb-2"
+                        className="text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#e5ff00] transition-colors line-clamp-1 mb-2"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         {event.title}
@@ -437,7 +449,7 @@ const EventList = () => {
                       {/* Location venue */}
                       <div className="flex items-start gap-1.5 text-gray-200 hover:text-gray-300 transition-colors mb-4">
                         <MapPin
-                          size={14}
+                          size={16}
                           className="text-gray-200 shrink-0 mt-0.5"
                         />
                         <span
@@ -455,7 +467,7 @@ const EventList = () => {
                         <div className="flex flex-wrap gap-1.5 mb-4">
                           {event.category && (
                             <span
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-[#e5ff00]"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-[#e5ff00]"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -466,7 +478,7 @@ const EventList = () => {
                           )}
                           {event.duration && (
                             <span
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-gray-400"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-gray-400"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -477,7 +489,7 @@ const EventList = () => {
                           )}
                           {event.calories && (
                             <span
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[8px] font-black uppercase text-gray-400"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-gray-400"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -494,16 +506,16 @@ const EventList = () => {
                     <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
                       <div className="flex flex-col">
                         {event.originalPrice && (
-                          <span className="text-xs text-gray-500 line-through font-semibold leading-none mb-1">
+                          <span className="text-3xl text-gray-500 line-through font-semibold leading-none mb-1">
                             ₹{event.originalPrice}
                           </span>
                         )}
                         <span
-                          className="text-base md:text-lg font-black text-[#ff9e00] leading-none"
+                          className="text-3xl font-black text-[#ff9e00] leading-none"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           ₹{event.price}{" "}
-                          <span className="text-[10px] text-gray-400 font-normal ml-0.5 lowercase">
+                          <span className="text-[15px] text-gray-400 font-normal ml-0.5 lowercase">
                             onwards
                           </span>
                         </span>

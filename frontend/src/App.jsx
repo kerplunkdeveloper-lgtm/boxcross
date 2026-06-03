@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Preloader from "./Components/Preloader";
 import ScrollToTop from "./Components/ScrollToTop";
+import FloatingActions from "./Components/FloatingActions";
 import Footer from "./Components/Footer";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
@@ -85,6 +86,7 @@ const App = () => {
           />
           {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
           <BrowserRouter>
+            {!isLoading && <FloatingActions />}
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Routes WITH Navbar and Footer */}

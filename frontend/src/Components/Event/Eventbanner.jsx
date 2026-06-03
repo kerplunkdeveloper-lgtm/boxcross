@@ -128,7 +128,7 @@ const Eventbanner = () => {
 
   if (loading) {
     return (
-      <section className="w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[60vh] bg-black flex flex-col items-center justify-center relative z-10 border-b border-white/5">
+      <section className="w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[70vh] bg-black flex flex-col items-center justify-center relative z-10 border-b border-white/5">
         <div className="flex flex-col items-center gap-3">
           <svg
             className="animate-spin h-8 w-8 text-[#e5ff00]"
@@ -164,7 +164,7 @@ const Eventbanner = () => {
 
   return (
     <section
-      className="relative w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[60vh] lg:h-[70vh] overflow-hidden select-none z-10 border-b border-white/5"
+      className="relative w-full aspect-video sm:aspect-auto h-[50vh] md:h-[80vh] overflow-hidden select-none z-10 border-b border-white/5"
       onMouseEnter={stopAutoplay}
       onMouseLeave={startAutoplay}
     >
@@ -223,14 +223,14 @@ const Eventbanner = () => {
             <div className="absolute inset-0 bg-radial-vignette pointer-events-none z-10" />
 
             {/* Content Details Layer */}
-            <div className="absolute inset-0 flex flex-col justify-end z-20 pb-6 sm:pb-20 md:pb-24 px-4 sm:px-16 lg:px-40">
+            <div className="absolute inset-0 flex flex-col justify-end z-20 pb-6 sm:pb-20 md:pb-24 px-10 md:px-30">
               <div className="max-w-3xl ">
                 {/* Event Tag */}
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3  py-0.5 sm:py-1.5  rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[15px] sm:text-[20px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3   py-0.5 sm:py-1.5  rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[15px] sm:text-[20px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <Calendar size={10} className="sm:w-3 sm:h-3 animate-pulse" />
