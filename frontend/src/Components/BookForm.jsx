@@ -125,18 +125,9 @@ const BookForm = () => {
   return (
     <section
       id="book-your-free-gym-tour"
-      className="relative w-full flex items-center justify-center py-20 md:py-32 overflow-hidden"
+      className="relative w-full flex  justify-center py-10 overflow-hidden"
     >
-      {/* PREMIUM BACKGROUND */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[#050505]/70 z-10"></div>
-        <img 
-          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop" 
-          alt="Gym Background" 
-          className="w-full h-full object-cover grayscale opacity-50 mix-blend-luminosity"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] z-20"></div>
-      </div>
+
 
       <div className="relative z-10 w-full max-w-5xl mx-4 rounded-[35px] border border-white/10 bg-black/40 backdrop-blur-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
         {/* GLOW */}

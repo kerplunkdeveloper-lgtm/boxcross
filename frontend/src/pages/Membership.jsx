@@ -156,7 +156,7 @@ const Membership = () => {
                     fontWeight: 800,
                   }}
                 >
-                  Prices and Plans
+                  Book Your Free Gym Tour
                 </span>
               </button>
 
