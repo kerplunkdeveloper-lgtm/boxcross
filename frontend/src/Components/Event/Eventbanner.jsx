@@ -242,7 +242,7 @@ const Eventbanner = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
-                  className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
+                  className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   {currentBanner.title}
