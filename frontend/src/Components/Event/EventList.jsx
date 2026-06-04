@@ -511,7 +511,7 @@ const EventList = () => {
                           </span>
                         )}
                         <span
-                          className="text-3xl mt-1 font-black text-[#ff9e00] leading-none"
+                          className="text-4xl mt-1 font-black text-gray-200 leading-none"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           ₹{event.price}{" "}
@@ -590,17 +590,17 @@ const EventList = () => {
                 {/* Close Button on desktop */}
                 <button
                   onClick={() => setSelectedEvent(null)}
-                  className="absolute top-4 right-4 p-2 bg-white/5 hover:bg-white/15 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30 hidden md:block"
+                  className="absolute top-4 right-4 p-3 bg-white/5 hover:bg-white/15 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30 hidden md:block"
                   aria-label="Close details"
                 >
-                  <X size={16} />
+                  <X size={19} />
                 </button>
 
                 {/* Scrollable details wrapper */}
                 <div className="p-6 overflow-y-auto space-y-4 flex-grow custom-scrollbar">
                   {/* Event Location Pin */}
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[10px] font-black uppercase tracking-wider mb-1">
-                    <MapPin size={10} className="text-[#e5ff00]" />
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[14px] font-black uppercase tracking-wider mb-1">
+                    <MapPin size={14} className="text-[#e5ff00]" />
                     <span>
                       {selectedEvent.location.split(",").pop() || "Venue"}
                     </span>
@@ -608,25 +608,13 @@ const EventList = () => {
 
                   {/* Title */}
                   <h3
-                    className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight pr-8 text-left"
+                    className="text-4xl  font-black uppercase tracking-tight text-white leading-tight pr-8 text-left"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     {selectedEvent.title}
                   </h3>
 
-                  {/* Detailed Location Address */}
-                  <div className="flex items-start gap-1.5 text-gray-400 text-left">
-                    <MapPin
-                      size={14}
-                      className="text-gray-500 shrink-0 mt-0.5"
-                    />
-                    <span
-                      className="text-xs font-medium leading-relaxed"
-                      style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
-                    >
-                      {selectedEvent.location}
-                    </span>
-                  </div>
+                 
 
                   {/* Premium Badges */}
                   {(selectedEvent.category ||
@@ -640,7 +628,7 @@ const EventList = () => {
                             className="text-[#e5ff00] mb-1.5 shrink-0"
                           />
                           <span
-                            className="text-[10px] font-black uppercase tracking-wider text-gray-400"
+                            className="text-[15px] font-black uppercase tracking-wider text-gray-400"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -656,7 +644,7 @@ const EventList = () => {
                             className="text-[#e5ff00] mb-1.5 shrink-0"
                           />
                           <span
-                            className="text-[10px] font-black uppercase tracking-wider text-gray-400"
+                            className="text-[15px] font-black uppercase tracking-wider text-gray-400"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -672,7 +660,7 @@ const EventList = () => {
                             className="text-[#e5ff00] mb-1.5 shrink-0"
                           />
                           <span
-                            className="text-[10px] font-black uppercase tracking-wider text-gray-400"
+                            className="text-[15px] font-black uppercase tracking-wider text-gray-400"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -687,13 +675,13 @@ const EventList = () => {
                   {/* Description Box */}
                   <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                     <h4
-                      className="text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2"
+                      className="text-[20px] font-black uppercase tracking-wider text-[#e5ff00] mb-2"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       About The Event
                     </h4>
                     <p
-                      className="text-xs sm:text-sm text-gray-300 font-medium leading-relaxed whitespace-pre-line"
+                      className="text-[15px] text-gray-300 font-medium leading-relaxed whitespace-pre-line"
                       style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
                     >
                       {selectedEvent.description ||
@@ -705,7 +693,7 @@ const EventList = () => {
                   {selectedEvent.benefits?.length > 0 && (
                     <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                       <h4
-                        className="text-[10px] font-black uppercase tracking-wider text-gray-500 mb-3"
+                        className="text-[20px] font-black uppercase tracking-wider text-[#e5ff00] mb-3"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         Benefits
@@ -714,7 +702,7 @@ const EventList = () => {
                         {selectedEvent.benefits.map((benefit, idx) => (
                           <li
                             key={idx}
-                            className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed"
+                            className="flex items-start gap-2.5 text-[15px] text-gray-300 font-medium leading-relaxed"
                           >
                             <CheckCircle
                               size={15}
@@ -738,14 +726,14 @@ const EventList = () => {
                     <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left space-y-4">
                       <div className="flex items-baseline justify-between">
                         <h4
-                          className="text-[10px] font-black uppercase tracking-wider text-gray-500"
+                          className="text-[15px] font-black uppercase tracking-wider text-[#e5ff00]"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           A typical {selectedEvent.title} Session
                         </h4>
                         {selectedEvent.duration && (
                           <span
-                            className="text-xs text-gray-400 font-bold"
+                            className="text-[15px] text-gray-400 font-bold"
                             style={{
                               fontFamily: '"Brutal Font Light", sans-serif',
                             }}
@@ -842,7 +830,7 @@ const EventList = () => {
                       {selectedEvent.inclusions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
+                            className="text-[20px] font-black tracking-wider text-[#e5ff00] mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -853,7 +841,7 @@ const EventList = () => {
                             {selectedEvent.inclusions.map((item, idx) => (
                               <li
                                 key={idx}
-                                className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed"
+                                className="flex items-start gap-3 text-[15px] text-gray-300 font-medium leading-relaxed"
                               >
                                 <CheckCircle
                                   size={16}
@@ -869,7 +857,7 @@ const EventList = () => {
                       {selectedEvent.exclusions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
+                            className="text-[20px] font-black tracking-wider text-[#e5ff00] mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -880,7 +868,7 @@ const EventList = () => {
                             {selectedEvent.exclusions.map((item, idx) => (
                               <li
                                 key={idx}
-                                className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed"
+                                className="flex items-start gap-3 text-[15px] text-gray-300 font-medium leading-relaxed"
                               >
                                 <XCircle
                                   size={16}
@@ -896,7 +884,7 @@ const EventList = () => {
                       {selectedEvent.termsAndConditions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[12px] font-black tracking-wider text-white mb-4 flex items-center justify-between"
+                            className="text-[20px] font-black tracking-wider text-[#e5ff00] mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -908,7 +896,7 @@ const EventList = () => {
                               (item, idx) => (
                                 <li
                                   key={idx}
-                                  className="flex items-start gap-3 text-xs sm:text-sm text-gray-300 font-medium leading-relaxed"
+                                  className="flex items-start gap-3 text-[15px] text-gray-300 font-medium leading-relaxed"
                                 >
                                   <span className="w-1.5 h-1.5 bg-[#7a7a7a] transform rotate-45 inline-block shrink-0 mt-1.5"></span>
                                   <span>{item}</span>
@@ -926,16 +914,16 @@ const EventList = () => {
                 <div className="p-6 border-t border-white/5 bg-[#080808] flex items-center justify-between gap-4 shrink-0 mt-auto">
                   <div className="flex flex-col text-left">
                     {selectedEvent.originalPrice && (
-                      <span className="text-xs text-gray-500 line-through font-semibold leading-none mb-1">
+                      <span className="text-[20px] text-gray-500 line-through font-semibold leading-none mb-1">
                         ₹{selectedEvent.originalPrice}
                       </span>
                     )}
                     <span
-                      className="text-lg sm:text-xl font-black text-[#ff9e00] leading-none"
+                      className="text-[30px] font-black text-gray-200 leading-none"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      ₹{selectedEvent.price}{" "}
-                      <span className="text-[10px] text-gray-400 font-normal ml-0.5 lowercase">
+                      ₹{selectedEvent.price}
+                      <span className="text-[20px] text-gray-400 font-normal ml-0.5 lowercase">
                         onwards
                       </span>
                     </span>

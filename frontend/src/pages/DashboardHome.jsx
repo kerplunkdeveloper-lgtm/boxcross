@@ -415,7 +415,7 @@ const DashboardHome = () => {
                             <h3 className="text-sm font-black uppercase text-[var(--db-text-title)] truncate">
                               {evt.title}
                             </h3>
-                            <span className="text-[10px] font-black text-[#ff9e00] bg-[#ff9e00]/10 px-2 py-0.5 rounded-full">
+                            <span className="text-[10px] font-black text-[#e0e0e0] bg-[#ff9e00]/10 px-2 py-0.5 rounded-full">
                               ₹{evt.price}
                             </span>
                           </div>
