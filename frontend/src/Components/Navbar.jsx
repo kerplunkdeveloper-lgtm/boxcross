@@ -67,6 +67,10 @@ const Navbar = () => {
   ];
 
   const membershipDropdown = [
+       {
+      name: "First 100 offer",
+      scrollToId: "founders",
+    },
     {
       name: "BOOK FREE TRIAL",
       scrollToId: "book-your-free-gym-tour",
@@ -79,10 +83,7 @@ const Navbar = () => {
       name: "PLANS & PRICING",
       scrollToId: "pricing",
     },
-    {
-      name: "FOUNDING MEMBERS",
-      scrollToId: "founders",
-    },
+ 
   ];
 
   // ================= DESKTOP DROPDOWN =================

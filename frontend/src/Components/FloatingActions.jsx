@@ -78,13 +78,10 @@ const FloatingActions = () => {
 
         {/* Speech Bubble */}
         <div
-          className="mr-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[14px] md:text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300 opacity-90 group-hover:opacity-100 group-hover:-translate-x-1"
+          className="mr-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[14px] md:text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300 opacity-0 translate-x-2 pointer-events-none group-hover:opacity-100 group-hover:-translate-x-1"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
-          <span className="block group-hover:hidden transition-all duration-300">
-            WhatsApp 
-          </span>
-          <span className="hidden group-hover:block transition-all duration-300 text-[#25D366]">
+          <span className="block text-black">
             WhatsApp
           </span>
           {/* Triangle pointing right */}
