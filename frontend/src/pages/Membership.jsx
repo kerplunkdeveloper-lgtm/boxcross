@@ -8,6 +8,8 @@ import TrainingZones from "../Components/TrainingZones";
 // import BuildProgress from "../Components/BuildProgress";
 import BookForm from "../Components/BookForm";
 import Founding from "../Components/Founding";
+import Foot from "../Components/Foot";
+import GymMarquee from "../Components/GymMarquee";
 
 const Membership = () => {
   useEffect(() => {
@@ -197,12 +199,7 @@ const Membership = () => {
         <div data-aos="fade-up">
           <Founding />
         </div>
-        <div data-aos="fade-up" data-aos-delay="100">
-          <WhatWeOffer />
-        </div>
-        <div data-aos="fade-up" data-aos-delay="100">
-          <TrainingZones />
-        </div>
+      
         {/* <BuildProgress /> */}
         <div data-aos="fade-up" data-aos-delay="100">
           <BookForm />
@@ -210,7 +207,16 @@ const Membership = () => {
         <div data-aos="fade-up" data-aos-delay="100">
           <MembershipPlans />
         </div>
+
+          <div data-aos="fade-up" data-aos-delay="100">
+          <WhatWeOffer />
+        </div>
+        <div data-aos="fade-up" data-aos-delay="100">
+          <TrainingZones />
+        </div>
       </div>
+       <Foot  />
+      <GymMarquee  />
     </div>
   );
 };
