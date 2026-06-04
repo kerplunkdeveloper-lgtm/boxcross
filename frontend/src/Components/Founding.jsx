@@ -174,7 +174,7 @@ const Founding = () => {
   };
 
   return (
-    <div className="">
+    <div id="founders" className="">
       {/* Countdown Promo Banner */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-0 mb-20">
         <div className="relative w-full rounded-[24px] md:rounded-[32px] border border-[#e5ff00] bg-black overflow-hidden flex flex-col lg:flex-row p-6 md:p-8 lg:p-12 gap-8 lg:gap-0 shadow-[0_0_50px_rgba(229,255,0,0.15)]">
