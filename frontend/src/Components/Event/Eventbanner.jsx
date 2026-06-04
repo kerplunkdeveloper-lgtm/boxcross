@@ -242,7 +242,7 @@ const Eventbanner = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
-                  className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
+                  className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl mt-2 font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   {currentBanner.title}
@@ -253,7 +253,7 @@ const Eventbanner = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
-                  className="text-gray-300 text-xl sm:text-sm md:text-base lg:text-lg font-medium leading-relaxed mb-2 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
+                  className="text-gray-300 text-xl sm:text-sm md:text-base ml-2 md:ml-5 lg:text-lg font-medium leading-relaxed mb-2 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
                   style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
                 >
                   {currentBanner.description}

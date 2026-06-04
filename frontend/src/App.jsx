@@ -33,6 +33,7 @@ const Eventpage = lazy(() => import("./pages/Events/Eventpage"));
 const DashboardHomec1 = lazy(() => import("./pages/DashboardHomec1"));
 const DashboardHomec2 = lazy(() => import("./pages/DashboardHomec2"));
 const DashboardHomec3 = lazy(() => import("./pages/DashboardHomec3"));
+const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
 
 // import LeadModal from "./Components/LeadModal";
 
@@ -96,6 +97,7 @@ const App = () => {
                 </Route>
 
                 {/* Routes WITHOUT Navbar and Footer */}
+                <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />
                 <Route
                   path="/dashboard"
