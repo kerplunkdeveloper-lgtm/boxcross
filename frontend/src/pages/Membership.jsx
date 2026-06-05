@@ -29,7 +29,7 @@ const Membership = () => {
   return (
     <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden ">
       {/* HERO SECTION */}
-      <section className="relative mt-[80px] md:mt-0 w-full h-[50vh] md:h-[80vh]   flex items-center justify-center overflow-hidden mb-10">
+      <section className="relative mt-[80px] md:mt-0 w-full h-[50vh] md:h-[70vh]   flex items-center justify-center overflow-hidden mb-10">
         {/* IMAGE BACKGROUND */}
         <img
           src={bannerImg}
