@@ -16,7 +16,7 @@ const Footer = () => {
           flex-col
           md:flex-row
           items-center
-          justify-between
+          justify-center
           gap-4
         max-w-[1400px]
           mx-auto
@@ -32,49 +32,32 @@ const Footer = () => {
             text-[13px]
             md:text-[19px]
           "
-          style={{ fontFamily: '"Brutal Font Light", sans-serif',  }}
+          style={{ fontFamily: '"Brutal", sans-serif',  }}
         >
           Copyright © 2026{" "}
           <span className="text-[#d9ff00] font-bold mx-2">
            {" "} Box & Cross
-          </span>{" "}
+          </span>
           . All Rights Reserved.
         </p>
 
-        {/* RIGHT LINKS */}
-        <div
+{/* LEFT */}
+        <p
           className="
-            flex
-            items-center
-            flex-wrap 
-            justify-center
-            gap-4
-            md:gap-20
+            text-[#8b8b8b]
+            text-center
+            md:text-left
+            text-[13px]
+            md:text-[19px]
           "
+          style={{ fontFamily: '"Brutal", sans-serif',  }}
         >
+         Developed By
+          <span className="text-[#d9ff00] font-bold mx-2">
+          Kelpunk Media
+          </span>
+        </p>
 
-          {[
-            "Privacy Policy",
-            "Terms of Use",
-            "FAQs",
-          ].map((item, index) => (
-            <button
-              key={index}
-              className="
-                text-[#8b8b8b]
-                hover:text-white
-                transition-all
-                duration-300
-                text-[13px]
-                md:text-[18px]
-              "
-              style={{ fontFamily: '"Brutal Font Light", sans-serif'}}
-            >
-              {item}
-            </button>
-          ))}
-
-        </div>
 
       </div>
 

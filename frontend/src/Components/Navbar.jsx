@@ -207,88 +207,12 @@ useEffect(() => {
                   HOME
                 </a>
 
-                {/* THE ARENA */}
 
-                <div
-                  className="relative"
-                  onMouseEnter={() => handleDropdownEnter("arena")}
-                  onMouseLeave={handleDropdownLeave}
-                >
-                  <button
-                    className="px-3 py-2 text-white uppercase tracking-wider transition-all flex items-center gap-1"
-                    style={{
-                      fontFamily: '"Brutal Font Light", sans-serif',
-                      fontWeight: 400,
-                      fontSize: "14px",
-                    }}
-                  >
-                    THE ARENA
-                    <ChevronDown
-                      size={14}
-                      className={`transition-transform duration-300 ${openDropdown === "arena" ? "rotate-180" : ""}`}
-                    />
-                  </button>
 
-                  {openDropdown === "arena" && (
-                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl  overflow-hidden z-[100]">
-                      {arenaDropdown.map((item, idx) => (
-                        <a
-                          key={item.name}
-                          href={item.path}
-                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
-                            idx !== arenaDropdown.length - 1
-                              ? "border-b border-gray-200"
-                              : ""
-                          }`}
-                        >
-                          {/* Hover Line */}
-                          <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
-                            <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
-                          </span>
 
-                          {/* Text */}
-                          <span className="transition-all duration-300 group-hover:translate-x-1">
-                            {item.name}
-                          </span>
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
 
-                {/* COACHING */}
 
-                <a
-                  href="https://boxandcross.com/coaching/"
-                  className="px-3 py-2 text-white uppercase tracking-wider transition-all"
-                  style={{
-                    fontFamily: '"Brutal Font Light", sans-serif',
-                    fontWeight: 400,
-                    fontSize: "14px",
-                  }}
-                >
-                  COACHING
-                </a>
-
-                {/* EVENTS */}
-
-                <NavLink
-                  to="/events"
-                  className={({ isActive }) =>
-                    `px-3 py-2 uppercase tracking-wider transition-all ${
-                      isActive ? "text-[#e5ff00]" : "text-white hover:text-[#e5ff00]"
-                    }`
-                  }
-                  style={{
-                    fontFamily: '"Brutal Font Light", sans-serif',
-                    fontWeight: 400,
-                    fontSize: "14px",
-                  }}
-                >
-                  EVENTS
-                </NavLink>
-
-                {/* MEMBERSHIP */}
+                   {/* MEMBERSHIP */}
 
                 <div
                   className="relative"
@@ -354,6 +278,95 @@ useEffect(() => {
                     </div>
                   )}
                 </div>
+
+
+
+                {/* EVENTS */}
+
+                <NavLink
+                  to="/events"
+                  className={({ isActive }) =>
+                    `px-3 py-2 uppercase tracking-wider transition-all ${
+                      isActive ? "text-[#e5ff00]" : "text-white hover:text-[#e5ff00]"
+                    }`
+                  }
+                  style={{
+                    fontFamily: '"Brutal Font Light", sans-serif',
+                    fontWeight: 400,
+                    fontSize: "14px",
+                  }}
+                >
+                  EVENTS
+                </NavLink>
+
+
+
+                {/* THE ARENA */}
+
+                <div
+                  className="relative"
+                  onMouseEnter={() => handleDropdownEnter("arena")}
+                  onMouseLeave={handleDropdownLeave}
+                >
+                  <button
+                    className="px-3 py-2 text-white uppercase tracking-wider transition-all flex items-center gap-1"
+                    style={{
+                      fontFamily: '"Brutal Font Light", sans-serif',
+                      fontWeight: 400,
+                      fontSize: "14px",
+                    }}
+                  >
+                    THE ARENA
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-300 ${openDropdown === "arena" ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  {openDropdown === "arena" && (
+                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl  overflow-hidden z-[100]">
+                      {arenaDropdown.map((item, idx) => (
+                        <a
+                          key={item.name}
+                          href={item.path}
+                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
+                            idx !== arenaDropdown.length - 1
+                              ? "border-b border-gray-200"
+                              : ""
+                          }`}
+                        >
+                          {/* Hover Line */}
+                          <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
+                            <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+                          </span>
+
+                          {/* Text */}
+                          <span className="transition-all duration-300 group-hover:translate-x-1">
+                            {item.name}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* COACHING */}
+
+                <a
+                  href="https://boxandcross.com/coaching/"
+                  className="px-3 py-2 text-white uppercase tracking-wider transition-all"
+                  style={{
+                    fontFamily: '"Brutal Font Light", sans-serif',
+                    fontWeight: 400,
+                    fontSize: "14px",
+                  }}
+                >
+                  COACHING
+                </a>
+
+              
+
+             
 
                 {/* CONTACT */}
 
