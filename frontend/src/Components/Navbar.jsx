@@ -67,7 +67,7 @@ const Navbar = () => {
   ];
 
   const membershipDropdown = [
-       {
+    {
       name: "First 100 offer",
       scrollToId: "founders",
     },
@@ -83,7 +83,6 @@ const Navbar = () => {
       name: "PLANS & PRICING",
       scrollToId: "pricing",
     },
- 
   ];
 
   // ================= DESKTOP DROPDOWN =================
@@ -129,50 +128,44 @@ const Navbar = () => {
 
   // ================= SCROLL LISTENER =================
 
-useEffect(() => {
-  const handleScroll = () => {
-    if (offcanvasOpen) return;
+  useEffect(() => {
+    const handleScroll = () => {
+      if (offcanvasOpen) return;
 
-    const currentScrollY = window.scrollY;
+      const currentScrollY = window.scrollY;
 
-    // navbar show/hide
-    if (currentScrollY > lastScrollY && currentScrollY > 100) {
-      setIsNavVisible(false);
-    } else {
-      setIsNavVisible(true);
-    }
+      // navbar show/hide
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsNavVisible(false);
+      } else {
+        setIsNavVisible(true);
+      }
 
-    // background change after scrolling
-    setScrolled(currentScrollY > 80);
+      // background change after scrolling
+      setScrolled(currentScrollY > 80);
 
-    setLastScrollY(currentScrollY);
-  };
+      setLastScrollY(currentScrollY);
+    };
 
-  window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [lastScrollY, offcanvasOpen]);
-
-
-
-
-
-
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY, offcanvasOpen]);
 
   return (
     <>
-     <div
-  className={`
+      <div
+        className={`
     fixed top-0 z-[80] w-full
     transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
     ${isNavVisible ? "translate-y-0" : "-translate-y-full"}
     ${scrolled ? "px-0 pt-0" : "px-0 md:px-10 pt-0 md:pt-4"}
   `}
->
+      >
         {/* ================= NAVBAR ================= */}
 
-      <nav
-  className={`
+        <nav
+          className={`
     relative z-50 w-full
     transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
     ${
@@ -181,12 +174,17 @@ useEffect(() => {
         : "py-4 px-4 bg-black/95 backdrop-blur-md md:rounded-2xl border border-white/5 shadow-none"
     }
   `}
->
-          <div className={`transition-all duration-700 ${scrolled ? "md:px-2" : "md:px-4"}`}>
+        >
+          <div
+            className={`transition-all duration-700 ${scrolled ? "md:px-2" : "md:px-4"}`}
+          >
             <div className="flex justify-between items-center">
               {/* ================= LOGO ================= */}
 
-              <NavLink to="https://boxandcross.com" className="flex items-center flex-shrink-0">
+              <NavLink
+                to="https://boxandcross.com"
+                className="flex items-center flex-shrink-0"
+              >
                 <img src={logo} alt="Box & Cross" className="w-45 md:w-48" />
               </NavLink>
 
@@ -207,12 +205,7 @@ useEffect(() => {
                   HOME
                 </a>
 
-
-
-
-
-
-                   {/* MEMBERSHIP */}
+                {/* MEMBERSHIP */}
 
                 <div
                   className="relative"
@@ -250,7 +243,9 @@ useEffect(() => {
                           href={item.path || `/#${item.scrollToId}`}
                           onClick={(e) => {
                             if (item.scrollToId) {
-                              const el = document.getElementById(item.scrollToId);
+                              const el = document.getElementById(
+                                item.scrollToId,
+                              );
                               if (el) {
                                 e.preventDefault();
                                 el.scrollIntoView({ behavior: "smooth" });
@@ -279,15 +274,15 @@ useEffect(() => {
                   )}
                 </div>
 
-
-
                 {/* EVENTS */}
 
                 <NavLink
                   to="/events"
                   className={({ isActive }) =>
                     `px-3 py-2 uppercase tracking-wider transition-all ${
-                      isActive ? "text-[#e5ff00]" : "text-white hover:text-[#e5ff00]"
+                      isActive
+                        ? "text-[#e5ff00]"
+                        : "text-white hover:text-[#e5ff00]"
                     }`
                   }
                   style={{
@@ -298,8 +293,6 @@ useEffect(() => {
                 >
                   EVENTS
                 </NavLink>
-
-
 
                 {/* THE ARENA */}
 
@@ -364,10 +357,6 @@ useEffect(() => {
                   COACHING
                 </a>
 
-              
-
-             
-
                 {/* CONTACT */}
 
                 <a
@@ -385,14 +374,33 @@ useEffect(() => {
 
               {/* ================= RIGHT ================= */}
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-6">
+                {/* CALL BUTTON */}
+                <a
+                  href="tel:+918925556800"
+                  className="hidden lg:flex items-center justify-center w-[52px] h-[52px] rounded-full bg-[#e5ff00] text-black hover:bg-white transition-all duration-300 group"
+                  aria-label="Call Us"
+                >
+                  <div className="relative flex items-center justify-center">
+                    <Phone size={22} className="fill-black group-hover:scale-110 transition-transform duration-300" />
+                    <div className="absolute -top-[2px] -right-[6px] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"></line>
+                        <polyline points="7 7 17 7 17 17"></polyline>
+                      </svg>
+                    </div>
+                  </div>
+                </a>
+
                 {/* CTA */}
                 <Link
                   to="/"
                   onClick={(e) => {
                     if (window.location.pathname === "/") {
                       e.preventDefault();
-                      const element = document.getElementById("book-your-free-gym-tour");
+                      const element = document.getElementById(
+                        "book-your-free-gym-tour",
+                      );
                       if (element) {
                         element.scrollIntoView({ behavior: "smooth" });
                       }
@@ -405,7 +413,6 @@ useEffect(() => {
     px-6 py-4 bg-[#e5ff00] text-black rounded-xl
     text-xs tracking-wider uppercase group
     transition-all duration-500
-    ${scrolled ? "opacity-0 hidden" : "opacity-100"}
   `}
                 >
                   <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
