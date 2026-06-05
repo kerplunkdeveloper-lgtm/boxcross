@@ -1,5 +1,5 @@
-import React, { useState, lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import React, { useState, lazy, Suspense, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Preloader from "./Components/Preloader";
 import ScrollToTop from "./Components/ScrollToTop";
@@ -59,6 +59,24 @@ const PageLoader = () => (
   </div>
 );
 
+// Triggers preloader on specific route changes
+const RoutePreloader = ({ setIsLoading }) => {
+  const location = useLocation();
+  const [prevPath, setPrevPath] = useState(location.pathname);
+
+  useEffect(() => {
+    if (location.pathname !== prevPath) {
+      if (location.pathname === "/" || location.pathname === "/events") {
+        window.isPreloaderDone = false;
+        setIsLoading(true);
+      }
+      setPrevPath(location.pathname);
+    }
+  }, [location.pathname, prevPath, setIsLoading]);
+
+  return null;
+};
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -87,6 +105,7 @@ const App = () => {
           />
           {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
           <BrowserRouter>
+            <RoutePreloader setIsLoading={setIsLoading} />
             {!isLoading && <FloatingActions />}
             <Suspense fallback={<PageLoader />}>
               <Routes>
