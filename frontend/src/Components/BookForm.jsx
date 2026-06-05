@@ -135,9 +135,9 @@ const BookForm = () => {
 
         <div className="relative z-10 p-5 md:p-10">
           {/* HEADER */}
-          <div>
+          <div className="md:text-center">
             <h1
-              className="text-white uppercase text-[32px] md:text-[40px]"
+              className="text-white uppercase text-[32px] md:text-[40px] md:text-center"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: 700,
