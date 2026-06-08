@@ -25,8 +25,8 @@ const programs = [
     id: "start",
     icon: (
       <svg
-        width="20"
-        height="20"
+        width="30"
+        height="30"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -65,8 +65,8 @@ const programs = [
     id: "transform",
     icon: (
       <svg
-        width="20"
-        height="20"
+        width="30"
+        height="30"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -95,8 +95,8 @@ const programs = [
     id: "perform",
     icon: (
       <svg
-        width="20"
-        height="20"
+        width="30"
+        height="30"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
