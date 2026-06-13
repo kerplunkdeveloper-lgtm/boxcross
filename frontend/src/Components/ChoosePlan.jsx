@@ -13,10 +13,6 @@ const ChoosePlan = React.forwardRef(
         id="pricing"
         className="w-full max-w-7xl mx-auto border-t border-gray-800 pt-12 pb-8 scroll-mt-10"
       >
-
-
-
-
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -24,12 +20,6 @@ const ChoosePlan = React.forwardRef(
           transition={{ duration: 0.6 }}
           className=" mb-8"
         >
-          
-          
-          
-          
-          
-          
           <div className="text-left md:text-center mb-8 flex flex-col items-start md:items-center justify-start md:justify-center gap-4">
              
              <div>
@@ -44,9 +34,6 @@ const ChoosePlan = React.forwardRef(
             STEP 2
           </span>
              </div>
-
-
-
              <div className="flex justify-center flex-col items-center">
               <h2
              className="mt-2 md:mt-4 mb-0 text-[32px] md:w-[70%]  md:text-[40px] leading-[40px] md:leading-[55px]"

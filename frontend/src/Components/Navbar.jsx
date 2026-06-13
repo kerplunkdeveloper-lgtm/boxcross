@@ -159,7 +159,7 @@ const Navbar = () => {
     fixed top-0 z-[80] w-full
     transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
     ${isNavVisible ? "translate-y-0" : "-translate-y-full"}
-    ${scrolled ? "px-0 pt-0" : "px-0 md:px-10 pt-0 md:pt-4"}
+    ${scrolled ? "px-0 pt-0" : "px-0 md:px-5 pt-0 md:pt-4"}
   `}
       >
         {/* ================= NAVBAR ================= */}
@@ -170,34 +170,36 @@ const Navbar = () => {
     transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
     ${
       scrolled
-        ? "py-3 px-4 md:px-10 bg-black/80 backdrop-blur-xl border-b border-white/10 md:rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-        : "py-4 px-4 bg-black/95 backdrop-blur-md md:rounded-2xl border border-white/5 shadow-none"
+        ? "py-3 px-4 md:px-8 bg-black backdrop-blur-xl border-b border-white/10 md:rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+        : "py-3 px-4 md:px-5 bg-black backdrop-blur-md md:rounded-2xl border border-white/5 shadow-none"
     }
   `}
         >
           <div
-            className={`transition-all duration-700 ${scrolled ? "md:px-2" : "md:px-4"}`}
+            className={`transition-all duration-700 ${scrolled ? "md:px-2" : "md:px-3"}`}
           >
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center md:gap-35  w-full">
               {/* ================= LOGO ================= */}
 
-              <NavLink
-                to="https://boxandcross.com"
-                className="flex items-center flex-shrink-0"
-              >
-                <img src={logo} alt="Box & Cross" className="w-45 md:w-48" />
-              </NavLink>
+              <div className=" flex-shrink-0">
+                <NavLink
+                  to="https://boxandcross.com"
+                  className="flex items-center flex-shrink-0"
+                >
+                  <img src={logo} alt="Box & Cross" className="w-45 md:w-48" />
+                </NavLink>
+              </div>
 
               {/* ================= DESKTOP NAV ================= */}
 
-              <div className="hidden lg:flex items-center gap-1 flex-1 justify-center">
+              <div className="hidden lg:flex items-center gap-5  justify-center ">
                 {/* HOME */}
 
                 <a
                   href="https://boxandcross.com/"
-                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  className="px-2 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"Brutal Font", sans-serif',
+                    fontFamily: '"Brutal Font Bold", sans-serif',
                     fontWeight: 600,
                     fontSize: "14px",
                   }}
@@ -215,15 +217,15 @@ const Navbar = () => {
                   <NavLink
                     to="/"
                     className={({ isActive }) =>
-                      `px-3 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${
+                      `px-2 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${
                         (isActive && location.pathname === "/") ||
                         location.pathname.includes("/membership")
-                          ? "text-white"
+                          ? "text-[#fffffff]"
                           : "text-gray-400 hover:text-white"
                       }`
                     }
                     style={{
-                      fontFamily: '"Brutal Font", sans-serif',
+                      fontFamily: '"Brutal Font Bold", sans-serif',
                       fontWeight: 600,
                       fontSize: "14px",
                     }}
@@ -279,10 +281,10 @@ const Navbar = () => {
                 <NavLink
                   to="/events"
                   className={({ isActive }) =>
-                    `px-3 py-2 uppercase tracking-wider transition-all ${
+                    `px-2 py-2 uppercase tracking-wider transition-all ${
                       isActive
-                        ? "text-white"
-                        : "text-gray-400 hover:text-[#e5ff00]"
+                        ? "text-[#fffffff]"
+                        : "text-[#808080] hover:text-white"
                     }`
                   }
                   style={{
@@ -294,6 +296,32 @@ const Navbar = () => {
                   EVENTS
                 </NavLink>
 
+
+
+
+ {/* COACHING */}
+
+                <a
+                  href="https://boxandcross.com/coaching/"
+                  className="px-2 py-2 text-[#808080] hover:text-white uppercase tracking-wider transition-all"
+                  style={{
+                    fontFamily: '"Brutal Font", sans-serif',
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
+                >
+                  COACHING
+                </a>
+
+
+
+
+
+
+
+
+
+
                 {/* THE ARENA */}
 
                 <div
@@ -302,7 +330,7 @@ const Navbar = () => {
                   onMouseLeave={handleDropdownLeave}
                 >
                   <button
-                    className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
+                    className="px-2 py-2 text-[#808080] hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
                     style={{
                       fontFamily: '"Brutal Font", sans-serif',
                       fontWeight: 600,
@@ -343,25 +371,13 @@ const Navbar = () => {
                   )}
                 </div>
 
-                {/* COACHING */}
-
-                <a
-                  href="https://boxandcross.com/coaching/"
-                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
-                  style={{
-                    fontFamily: '"Brutal Font", sans-serif',
-                    fontWeight: 600,
-                    fontSize: "14px",
-                  }}
-                >
-                  COACHING
-                </a>
+               
 
                 {/* CONTACT */}
 
                 <a
                   href="https://boxandcross.com/contact-us/"
-                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
+                  className="px-2 py-2 text-[#808080] hover:text-white uppercase tracking-wider transition-all"
                   style={{
                     fontFamily: '"Brutal Font", sans-serif',
                     fontWeight: 600,
@@ -374,17 +390,29 @@ const Navbar = () => {
 
               {/* ================= RIGHT ================= */}
 
-              <div className="flex items-center gap-6">
+              <div className="lg:flex-1 flex items-center justify-end gap-4 lg:gap-5">
                 {/* CALL BUTTON */}
                 <a
                   href="tel:+918925556800"
-                  className="hidden lg:flex items-center justify-center w-[52px] h-[52px] rounded-full bg-[#e5ff00] text-black hover:bg-white transition-all duration-300 group"
+                  className="hidden lg:flex items-center justify-center w-[48px] h-[48px] rounded-full bg-[#e5ff00] text-black hover:bg-white transition-all duration-300 group shrink-0"
                   aria-label="Call Us"
                 >
                   <div className="relative flex items-center justify-center">
-                    <Phone size={22} className="fill-black group-hover:scale-110 transition-transform duration-300" />
+                    <Phone
+                      size={18}
+                      className="fill-black group-hover:scale-110 transition-transform duration-300"
+                    />
                     <div className="absolute -top-[2px] -right-[6px] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <line x1="7" y1="17" x2="17" y2="7"></line>
                         <polyline points="7 7 17 7 17 17"></polyline>
                       </svg>
@@ -409,11 +437,11 @@ const Navbar = () => {
                     }
                   }}
                   className={`
-    hidden lg:flex relative overflow-hidden
-    px-6 py-4 bg-[#e5ff00] text-black rounded-xl
-    text-xs tracking-wider uppercase group
-    transition-all duration-500
-  `}
+                    hidden lg:flex relative overflow-hidden
+                    px-6 py-4 bg-[#e5ff00] text-black rounded-xl
+                   tracking-wider uppercase group
+                    transition-all duration-500 shrink-0
+                  `}
                 >
                   <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
                   <span
@@ -431,7 +459,7 @@ const Navbar = () => {
                 {/* DESKTOP OFFCANVAS BUTTON */}
                 <button
                   onClick={() => setDesktopOffcanvasOpen(true)}
-                  className="hidden lg:flex items-center justify-center w-12 h-12 text-white hover:text-[#e5ff00] group transition-all duration-300 ml-4 cursor-pointer"
+                  className="hidden lg:flex items-center justify-center w-[45px] h-[45px] text-white hover:text-[#e5ff00] group transition-all duration-300 cursor-pointer shrink-0"
                   aria-label="Open desktop menu"
                 >
                   <LayoutGrid
@@ -454,6 +482,8 @@ const Navbar = () => {
                   <div className="w-5 h-[2px] bg-white rounded-full transition-all duration-300 group-hover:w-7"></div>
                 </button>
               </div>
+
+
             </div>
           </div>
         </nav>
