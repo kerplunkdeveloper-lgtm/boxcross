@@ -47,16 +47,16 @@ const ChoosePlan = React.forwardRef(
 
 
 
-             <div>
+             <div className="flex justify-center flex-col items-center">
               <h2
-             className="mt-2 md:mt-4 mb-0 text-[32px] md:text-[48px] leading-[40px] md:leading-[55px]"
+             className="mt-2 md:mt-4 mb-0 text-[32px] md:w-[70%]  md:text-[40px] leading-[40px] md:leading-[55px]"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",
             }}
           >
             CHOOSE YOUR{" "}
-            <span className="text-[#e5ff00]">{activeData.title}</span>
+            <span className="text-[#e5ff00] ">{activeData.title}</span>
           </h2>
 
             <div

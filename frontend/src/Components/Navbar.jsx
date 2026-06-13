@@ -195,10 +195,10 @@ const Navbar = () => {
 
                 <a
                   href="https://boxandcross.com/"
-                  className="px-3 py-2 text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"Brutal Font Light", sans-serif',
-                    fontWeight: 400,
+                    fontFamily: '"Brutal Font", sans-serif',
+                    fontWeight: 600,
                     fontSize: "14px",
                   }}
                 >
@@ -218,13 +218,13 @@ const Navbar = () => {
                       `px-3 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${
                         (isActive && location.pathname === "/") ||
                         location.pathname.includes("/membership")
-                          ? "text-[#e5ff00]"
-                          : "text-white hover:text-[#e5ff00]"
+                          ? "text-white"
+                          : "text-gray-400 hover:text-white"
                       }`
                     }
                     style={{
-                      fontFamily: '"Brutal Font Light", sans-serif',
-                      fontWeight: 400,
+                      fontFamily: '"Brutal Font", sans-serif',
+                      fontWeight: 600,
                       fontSize: "14px",
                     }}
                   >
@@ -281,13 +281,13 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     `px-3 py-2 uppercase tracking-wider transition-all ${
                       isActive
-                        ? "text-[#e5ff00]"
-                        : "text-white hover:text-[#e5ff00]"
+                        ? "text-white"
+                        : "text-gray-400 hover:text-[#e5ff00]"
                     }`
                   }
                   style={{
-                    fontFamily: '"Brutal Font Light", sans-serif',
-                    fontWeight: 400,
+                    fontFamily: '"Brutal Font", sans-serif',
+                    fontWeight: 600,
                     fontSize: "14px",
                   }}
                 >
@@ -302,10 +302,10 @@ const Navbar = () => {
                   onMouseLeave={handleDropdownLeave}
                 >
                   <button
-                    className="px-3 py-2 text-white uppercase tracking-wider transition-all flex items-center gap-1"
+                    className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
                     style={{
-                      fontFamily: '"Brutal Font Light", sans-serif',
-                      fontWeight: 400,
+                      fontFamily: '"Brutal Font", sans-serif',
+                      fontWeight: 600,
                       fontSize: "14px",
                     }}
                   >
@@ -347,10 +347,10 @@ const Navbar = () => {
 
                 <a
                   href="https://boxandcross.com/coaching/"
-                  className="px-3 py-2 text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"Brutal Font Light", sans-serif',
-                    fontWeight: 400,
+                    fontFamily: '"Brutal Font", sans-serif',
+                    fontWeight: 600,
                     fontSize: "14px",
                   }}
                 >
@@ -361,10 +361,10 @@ const Navbar = () => {
 
                 <a
                   href="https://boxandcross.com/contact-us/"
-                  className="px-3 py-2 text-white uppercase tracking-wider transition-all"
+                  className="px-3 py-2 text-gray-400 hover:text-white uppercase tracking-wider transition-all"
                   style={{
-                    fontFamily: '"Brutal Font Light", sans-serif',
-                    fontWeight: 400,
+                    fontFamily: '"Brutal Font", sans-serif',
+                    fontWeight: 600,
                     fontSize: "14px",
                   }}
                 >
