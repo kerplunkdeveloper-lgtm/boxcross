@@ -32,7 +32,6 @@ const allowedOrigins = [
   "http://127.0.0.1:5500",
   "https://boxandcross.com",
   "https://boxandcross.com/contact-us",
-
 ];
 
 app.use(
@@ -41,11 +40,14 @@ app.use(
       // Postman, mobile apps
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
+      // Check if it's localhost/127.0.0.1 on any port (for development ease)
+      const isLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+
+      if (allowedOrigins.includes(origin) || isLocalhost) {
         return callback(null, true);
       }
 
-      return callback(new Error(`CORS blocked: ${origin}`));
+      return callback(null, false);
     },
     credentials: true,
   })

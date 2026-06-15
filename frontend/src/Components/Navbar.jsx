@@ -207,6 +207,77 @@ const Navbar = () => {
                   HOME
                 </a>
 
+
+                   {/* THE ARENA */}
+
+                <div
+                  className="relative"
+                  onMouseEnter={() => handleDropdownEnter("arena")}
+                  onMouseLeave={handleDropdownLeave}
+                >
+                  <button
+                    className="px-2 py-2 text-[#808080] hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
+                    style={{
+                      fontFamily: '"Brutal Font Bold", sans-serif',
+                      fontWeight: 600,
+                      fontSize: "14px",
+                    }}
+                  >
+                    THE ARENA
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-300 ${openDropdown === "arena" ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  {openDropdown === "arena" && (
+                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl  overflow-hidden z-[100]">
+                      {arenaDropdown.map((item, idx) => (
+                        <a
+                          key={item.name}
+                          href={item.path}
+                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
+                            idx !== arenaDropdown.length - 1
+                              ? "border-b border-gray-200"
+                              : ""
+                          }`}
+                        >
+                          {/* Hover Line */}
+                          <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
+                            <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+                          </span>
+
+                          {/* Text */}
+                          <span className="transition-all duration-300 group-hover:translate-x-1">
+                            {item.name}
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+
+
+
+
+              {/* COACHING */}
+
+                <a
+                  href="https://boxandcross.com/coaching/"
+                  className="px-2 py-2 text-[#808080] hover:text-white uppercase tracking-wider transition-all"
+                  style={{
+                    fontFamily: '"Brutal Font Bold", sans-serif',
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
+                >
+                  COACHING
+                </a>
+
+
+
+
                 {/* MEMBERSHIP */}
 
                 <div
@@ -299,80 +370,10 @@ const Navbar = () => {
 
 
 
- {/* COACHING */}
 
-                <a
-                  href="https://boxandcross.com/coaching/"
-                  className="px-2 py-2 text-[#808080] hover:text-white uppercase tracking-wider transition-all"
-                  style={{
-                    fontFamily: '"Brutal Font Bold", sans-serif',
-                    fontWeight: 600,
-                    fontSize: "14px",
-                  }}
-                >
-                  COACHING
-                </a>
+             
 
-
-
-
-
-
-
-
-
-
-                {/* THE ARENA */}
-
-                <div
-                  className="relative"
-                  onMouseEnter={() => handleDropdownEnter("arena")}
-                  onMouseLeave={handleDropdownLeave}
-                >
-                  <button
-                    className="px-2 py-2 text-[#808080] hover:text-white uppercase tracking-wider transition-all flex items-center gap-1"
-                    style={{
-                      fontFamily: '"Brutal Font Bold", sans-serif',
-                      fontWeight: 600,
-                      fontSize: "14px",
-                    }}
-                  >
-                    THE ARENA
-                    <ChevronDown
-                      size={14}
-                      className={`transition-transform duration-300 ${openDropdown === "arena" ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  {openDropdown === "arena" && (
-                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl  overflow-hidden z-[100]">
-                      {arenaDropdown.map((item, idx) => (
-                        <a
-                          key={item.name}
-                          href={item.path}
-                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
-                            idx !== arenaDropdown.length - 1
-                              ? "border-b border-gray-200"
-                              : ""
-                          }`}
-                        >
-                          {/* Hover Line */}
-                          <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
-                            <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
-                          </span>
-
-                          {/* Text */}
-                          <span className="transition-all duration-300 group-hover:translate-x-1">
-                            {item.name}
-                          </span>
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-               
-
+              
                 {/* CONTACT */}
 
                 <a
@@ -731,7 +732,7 @@ const Navbar = () => {
           <span className="text-[#e5ff00] font-bold">Box & Cross</span>, where
           passion meets performance and fitness <br /> becomes a lifestyle. Our
           mission is to empower individuals of all ages and <br />
-          fitness.
+          abilities to build strength, move better, and train with purpose  — in a space <br /> built for results.
         </p>
 
         <div className="grid grid-cols-2 gap-12">
