@@ -178,10 +178,10 @@ const Navbar = () => {
           <div
             className={`transition-all duration-700 ${scrolled ? "md:px-2" : "md:px-3"}`}
           >
-            <div className="flex justify-between items-center md:gap-35  w-full">
+            <div className="relative flex items-center w-full">
               {/* ================= LOGO ================= */}
 
-              <div className=" flex-shrink-0">
+              <div className="flex-shrink-0">
                 <NavLink
                   to="https://boxandcross.com"
                   className="flex items-center flex-shrink-0"
@@ -192,7 +192,7 @@ const Navbar = () => {
 
               {/* ================= DESKTOP NAV ================= */}
 
-              <div className="hidden lg:flex items-center gap-5  justify-center ">
+              <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-5">
                 {/* HOME */}
 
                 <a
