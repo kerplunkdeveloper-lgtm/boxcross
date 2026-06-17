@@ -39,7 +39,7 @@ const Eventbanner = () => {
         "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920&auto=format&fit=crop",
       mediaType: "image",
     },
-  ];
+  ]; 
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -224,40 +224,68 @@ const Eventbanner = () => {
 
             {/* Content Details Layer */}
             <div className="absolute inset-0 flex flex-col justify-end z-20 pb-6 sm:pb-20 md:pb-24 px-10 md:px-30">
-              <div className="max-w-3xl ">
-                {/* Event Tag */}
+              <div className="w-full flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div className="max-w-3xl">
+                  {/* Event Tag */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.4 }}
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3   py-0.5 sm:py-1.5  rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[15px] sm:text-[20px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <Calendar size={10} className="sm:w-3 sm:h-3 animate-pulse" />
+                    Upcoming Event
+                  </motion.div>
+
+                  {/* Banner Title */}
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                    className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    {currentBanner.title}
+                  </motion.h2>
+
+                  {/* Description */}
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.5 }}
+                    className="text-gray-300 text-xl sm:text-sm md:text-base ml-2 md:ml-5 lg:text-lg font-medium leading-relaxed mb-2 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
+                    style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                  >
+                    {currentBanner.description}
+                  </motion.p>
+                </div>
+
+                {/* Book Now Button */}
                 <motion.div
-                  initial={{ opacity: 0, y: 15 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3   py-0.5 sm:py-1.5  rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[15px] sm:text-[20px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="ml-2 md:ml-0 md:mr-10 mb-2 sm:mb-6 shrink-0"
                 >
-                  <Calendar size={10} className="sm:w-3 sm:h-3 animate-pulse" />
-                  Upcoming Event
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      document.getElementById("event-list")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="inline-flex items-center gap-2 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[14px] sm:text-[16px] px-6 py-2.5 sm:py-3 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <span className="relative z-10 transition-transform duration-300 group-hover/btn:-translate-x-1">
+                      Book Now
+                    </span>
+                    <ChevronRight
+                      size={18}
+                      strokeWidth={3}
+                      className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-1"
+                    />
+                  </button>
                 </motion.div>
-
-                {/* Banner Title */}
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                  className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  {currentBanner.title}
-                </motion.h2>
-
-                {/* Description */}
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.5 }}
-                  className="text-gray-300 text-xl sm:text-sm md:text-base ml-2 md:ml-5 lg:text-lg font-medium leading-relaxed mb-2 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
-                  style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
-                >
-                  {currentBanner.description}
-                </motion.p>
               </div>
             </div>
           </motion.div>
