@@ -178,7 +178,7 @@ const Navbar = () => {
           <div
             className={`transition-all duration-700 ${scrolled ? "md:px-2" : "md:px-3"}`}
           >
-            <div className="relative flex items-center w-full">
+            <div className="relative flex items-center justify-between w-full">
               {/* ================= LOGO ================= */}
 
               <div className="flex-shrink-0">
