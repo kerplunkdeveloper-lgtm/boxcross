@@ -57,7 +57,7 @@ const Membership = () => {
         </div>
 
         {/* CONTENT */}
-        <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between  md:gap-16 pt-20 md:pt-0">
+        <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between   md:gap-16 pt-20 md:pt-0">
           
           {/* LEFT SIDE: HEADING */}
           <div
@@ -78,13 +78,13 @@ const Membership = () => {
                 fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
-              <span className="block text-[44px] sm:text-[60px] md:text-[90px]   whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[50px] sm:text-[60px] md:text-[90px]   whitespace-normal md:whitespace-nowrap">
                 BXC
               </span>
-              <span className="block text-[44px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[50px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
                 MEMBERSHIP
               </span>
-              <span className="block text-[44px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[50px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
                 PLANS
               </span>
             </h1>
@@ -102,6 +102,7 @@ const Membership = () => {
                 text-base md:text-[17px]
                 mt-[-3px] md:mt-25
                 leading-relaxed
+                hidden md:block
                 mb-5
               "
               style={{
