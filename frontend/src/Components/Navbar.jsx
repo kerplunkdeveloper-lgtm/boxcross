@@ -85,6 +85,13 @@ const Navbar = () => {
     },
   ];
 
+  const communityDropdown = [
+    {
+      name: "EVENTS",
+      path: "/events",
+    },
+  ];
+
   // ================= DESKTOP DROPDOWN =================
 
   const handleDropdownEnter = (dropdown) => {
@@ -347,25 +354,65 @@ const Navbar = () => {
                   )}
                 </div>
 
-                {/* EVENTS */}
 
-                <NavLink
-                  to="/events"
-                  className={({ isActive }) =>
-                    `px-2 py-2 uppercase tracking-wider transition-all ${
-                      isActive
-                        ? "text-[#fffffff]"
-                        : "text-[#808080] hover:text-white"
-                    }`
-                  }
-                  style={{
-                    fontFamily: '"Brutal Font Bold", sans-serif',
-                    fontWeight: 600,
-                    fontSize: "14px",
-                  }}
+                {/* COMMUNITY DROPDOWN */}
+
+                <div
+                  className="relative"
+                  onMouseEnter={() => handleDropdownEnter("community")}
+                  onMouseLeave={handleDropdownLeave}
                 >
-                  EVENTS
-                </NavLink>
+                  <NavLink
+                    to="/community"
+                    className={({ isActive }) =>
+                      `px-2 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${
+                        isActive || location.pathname === "/events"
+                          ? "text-white"
+                          : "text-[#808080] hover:text-white"
+                      }`
+                    }
+                    style={{
+                      fontFamily: '"Brutal Font Bold", sans-serif',
+                      fontWeight: 600,
+                      fontSize: "14px",
+                    }}
+                  >
+                    COMMUNITY
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-300 ${openDropdown === "community" ? "rotate-180" : ""}`}
+                    />
+                  </NavLink>
+
+                  {openDropdown === "community" && (
+                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl overflow-hidden z-[100]">
+                      {communityDropdown.map((item, idx) => (
+                        <Link
+                          key={item.name}
+                          to={item.path}
+                          onClick={() => setOpenDropdown(null)}
+                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
+                            idx !== communityDropdown.length - 1
+                              ? "border-b border-gray-200"
+                              : ""
+                          }`}
+                        >
+                          {/* Hover Line */}
+                          <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
+                            <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+                          </span>
+
+                          {/* Text */}
+                          <span className="transition-all duration-300 group-hover:translate-x-1">
+                            {item.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                
 
 
 
@@ -385,7 +432,7 @@ const Navbar = () => {
                     fontSize: "14px",
                   }}
                 >
-                  CONTACT US
+                  CONTACT 
                 </a>
               </div>
 
@@ -585,23 +632,7 @@ const Navbar = () => {
             </a>
           </div>
 
-          {/* EVENTS */}
-
-          <div className="border-b border-[#1f1f1f]">
-            <NavLink
-              to="/events"
-              onClick={closeOffcanvas}
-              className={({ isActive }) =>
-                `block py-2 text-[14px] font-extrabold transition-colors ${
-                  isActive
-                    ? "text-[#e5ff00]"
-                    : "text-white hover:text-[#e5ff00]"
-                }`
-              }
-            >
-              EVENTS
-            </NavLink>
-          </div>
+         
 
           {/* MEMBERSHIP */}
 
@@ -652,6 +683,55 @@ const Navbar = () => {
                   >
                     {item.name}
                   </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+           {/* COMMUNITY */}
+
+          <div className="border-b border-[#1f1f1f]">
+            <div className="flex justify-between items-center py-2">
+              <NavLink
+                to="/community"
+                onClick={closeOffcanvas}
+                className={({ isActive }) =>
+                  `text-[14px] font-extrabold transition-colors ${
+                    isActive || location.pathname === "/events"
+                      ? "text-[#e5ff00]"
+                      : "text-white hover:text-[#e5ff00]"
+                  }`
+                }
+              >
+                COMMUNITY
+              </NavLink>
+              <button
+                onClick={() => toggleMobileDropdown("community")}
+                className="bg-[#1a1a1a] text-gray-400 w-8 h-8 flex items-center justify-center text-xl font-light rounded-sm cursor-pointer"
+              >
+                {openDropdown === "community" ? "-" : "+"}
+              </button>
+            </div>
+
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                openDropdown === "community" ? "max-h-60 pb-4" : "max-h-0"
+              }`}
+            >
+              <div className="flex flex-col gap-3 pl-2">
+                {communityDropdown.map((item) => (
+                  <NavLink
+                    key={item.name}
+                    to={item.path}
+                    onClick={closeOffcanvas}
+                    className={({ isActive }) =>
+                      `text-sm font-medium tracking-wider transition-colors ${
+                        isActive ? "text-[#e5ff00]" : "text-gray-400 hover:text-white"
+                      }`
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
                 ))}
               </div>
             </div>

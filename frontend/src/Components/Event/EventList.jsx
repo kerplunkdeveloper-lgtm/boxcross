@@ -343,7 +343,7 @@ const EventList = () => {
 
       <div className="max-w-7xl mx-auto  relative z-10">
         {/* Title Block */}
-        <div className="flex flex-col items-start md:items-center text-left md:text-center mb-12 md:mb-16">
+        <div className="flex flex-col items-center text-center mb-12 md:mb-16">
           <div className="flex items-center gap-2 mb-2">
             <span className="h-[2px] w-8 bg-[#e5ff00]"></span>
             <span
@@ -360,7 +360,7 @@ const EventList = () => {
             Featured Events & Workshops
           </h2>
           <p
-            className="text-gray-200 text-md md:text-xl mt-5 max-w-xl text-left md:text-center"
+            className="text-gray-200 text-md md:text-xl mt-5 max-w-xl text-center"
             style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
           >
             Click on any card to view detailed schedules, descriptions, and

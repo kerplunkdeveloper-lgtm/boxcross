@@ -164,7 +164,7 @@ const Eventbanner = () => {
 
   return (
     <section
-      className="relative w-full aspect-video sm:aspect-auto h-[50vh] md:h-[80vh] overflow-hidden select-none z-10 border-b border-white/5"
+      className="relative w-full h-[55vh] sm:h-[65vh] md:h-[80vh] overflow-hidden select-none z-10 border-b border-white/5"
       onMouseEnter={stopAutoplay}
       onMouseLeave={startAutoplay}
     >
@@ -198,7 +198,7 @@ const Eventbanner = () => {
                       e.stopPropagation();
                       setIsMuted(!isMuted);
                     }}
-                    className="absolute bottom-5 sm:bottom-20 right-4 sm:right-10 z-30 p-2 sm:p-2.5 bg-black/60 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer"
+                    className="absolute bottom-24 sm:bottom-20 right-6 sm:right-10 z-30 p-2 sm:p-2.5 bg-black/60 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer"
                     title={isMuted ? "Unmute Audio" : "Mute Audio"}
                   >
                     {isMuted ? (
@@ -223,18 +223,18 @@ const Eventbanner = () => {
             <div className="absolute inset-0 bg-radial-vignette pointer-events-none z-10" />
 
             {/* Content Details Layer */}
-            <div className="absolute inset-0 flex flex-col justify-end z-20 pb-6 sm:pb-20 md:pb-24 px-10 md:px-30">
-              <div className="w-full flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div className="max-w-3xl">
+            <div className="absolute inset-0 flex flex-col justify-center md:justify-end z-20 pb-0 sm:pb-20 md:pb-24 px-8 sm:px-12 md:px-20 lg:px-30">
+              <div className="w-full flex flex-col md:flex-row md:items-end justify-between gap-4 items-center md:items-end text-center md:text-left">
+                <div className="max-w-3xl flex flex-col items-center md:items-start">
                   {/* Event Tag */}
                   <motion.div
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.4 }}
-                    className="inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3   py-0.5 sm:py-1.5  rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[15px] sm:text-[20px] font-black uppercase tracking-wider mb-1.5 sm:mb-4"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[11px] sm:text-[13px] font-black uppercase tracking-wider mb-2.5 sm:mb-4"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <Calendar size={10} className="sm:w-3 sm:h-3 animate-pulse" />
+                    <Calendar size={12} className="animate-pulse" />
                     Upcoming Event
                   </motion.div>
 
@@ -243,7 +243,7 @@ const Eventbanner = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.5 }}
-                    className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl  font-black uppercase tracking-tight text-white mb-1.5 sm:mb-4 leading-none"
+                    className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white mb-2 sm:mb-4 leading-none"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     {currentBanner.title}
@@ -254,7 +254,7 @@ const Eventbanner = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="text-gray-300 text-xl sm:text-sm md:text-base ml-2 md:ml-5 lg:text-lg font-medium leading-relaxed mb-2 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
+                    className="text-gray-300 text-[13px] sm:text-sm md:text-base ml-0 md:ml-5 lg:text-lg font-medium leading-relaxed mb-3 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
                     style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
                   >
                     {currentBanner.description}
@@ -266,7 +266,7 @@ const Eventbanner = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.5 }}
-                  className="ml-2 md:ml-0 md:mr-10 mb-2 sm:mb-6 shrink-0"
+                  className="ml-0 md:ml-0 md:mr-10 mb-2 sm:mb-6 shrink-0 w-full md:w-auto flex justify-center md:justify-start"
                 >
                   <button
                     onClick={(e) => {

@@ -30,6 +30,7 @@ const DashboardEventPayments = lazy(
 const DashboardProfile = lazy(() => import("./pages/DashboardProfile"));
 const DashboardCalendar = lazy(() => import("./pages/DashboardCalendar"));
 const Eventpage = lazy(() => import("./pages/Events/Eventpage"));
+const Community = lazy(() => import("./pages/Community"));
 const DashboardHomec1 = lazy(() => import("./pages/DashboardHomec1"));
 const DashboardHomec2 = lazy(() => import("./pages/DashboardHomec2"));
 const DashboardHomec3 = lazy(() => import("./pages/DashboardHomec3"));
@@ -66,7 +67,11 @@ const RoutePreloader = ({ setIsLoading }) => {
 
   useEffect(() => {
     if (location.pathname !== prevPath) {
-      if (location.pathname === "/" || location.pathname === "/events") {
+      if (
+        location.pathname === "/" ||
+        location.pathname === "/events" ||
+        location.pathname === "/community"
+      ) {
         window.isPreloaderDone = false;
         setIsLoading(true);
       }
@@ -113,6 +118,7 @@ const App = () => {
                 <Route element={<Layout />}>
                   <Route path="/" element={<MembershipPage />} />
                   <Route path="/events" element={<Eventpage />} />
+                  <Route path="/community" element={<Community />} />
                 </Route>
 
                 {/* Routes WITHOUT Navbar and Footer */}

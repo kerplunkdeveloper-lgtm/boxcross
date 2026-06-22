@@ -22,7 +22,7 @@ const Footer = () => {
             text-[#8b8b8b]
             text-center
             font-bold
-            text-[17px]
+            text-[15px]
             md:text-[18px]
             leading-relaxed
             
