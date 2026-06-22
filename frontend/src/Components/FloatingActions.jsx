@@ -52,7 +52,7 @@ const FloatingActions = () => {
       {/* BACK TO TOP BUTTON */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 left-6 md:bottom-8 md:left-8 w-12 h-12 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[9999] ${
+        className={`fixed bottom-[50px] left-10 md:bottom-8 md:left-8 w-14 h-14 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[9999] ${
           isVisible && !isModalOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-10 pointer-events-none"
@@ -67,12 +67,12 @@ const FloatingActions = () => {
         href="https://wa.me/918925556900"
         target="_blank"
         rel="noopener noreferrer"
-        className={`fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[9999] flex flex-row-reverse items-center group cursor-pointer transition-all duration-300 ${
+        className={`fixed bottom-[45px] right-10 md:bottom-8 md:right-8 z-[9999] flex flex-row-reverse items-center group cursor-pointer transition-all duration-300 ${
           isModalOpen ? "opacity-0 translate-y-10 pointer-events-none" : "opacity-100 translate-y-0"
         }`}
         aria-label="Contact on WhatsApp"
       >
-        <div className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 relative z-10">
+        <div className="flex items-center justify-center w-14 h-14 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 relative z-10">
           <FaWhatsapp size={32} />
         </div>
 
