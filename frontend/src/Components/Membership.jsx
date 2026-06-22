@@ -30,8 +30,8 @@ const programs = [
     id: "start",
     icon: (
       <svg
-        width="30"
-        height="30"
+        width="45"
+        height="45"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -40,8 +40,12 @@ const programs = [
         strokeLinejoin="round"
         className="text-[#e5ff00]"
       >
-        <path d="M16 20h-4c-2.8 0-5-2.2-5-5v-1a5 5 0 0 1 5-5h2a2 2 0 0 1 2 2v2c0 1.1.9 2 2 2h1a2 2 0 0 0 2-2V9a5 5 0 0 0-5-5h-4a5 5 0 0 0-5 5v3c0 2.8 2.2 5 5 5h3"></path>
-        <path d="M9 13V9"></path>
+        <circle cx="12" cy="13" r="8" />
+        <path d="M12 13v-4" />
+        <path d="M12 2v3" />
+        <path d="M9 2h6" />
+        <path d="M18 5.5l-1.5 1.5" />
+        <path d="M6 5.5l1.5 1.5" />
       </svg>
     ),
     title: "START",
@@ -70,23 +74,24 @@ const programs = [
     id: "transform",
     icon: (
       <svg
-        width="30"
-        height="30"
-        viewBox="0 0 24 24"
-        fill="none"
+        width="45"
+        height="42"
+        viewBox="0 0 48 48"
+       fill="currentColor"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
         className="text-[#e5ff00]"
       >
-        <path d="m6.5 6.5 11 11"></path>
-        <path d="m21 21-1-1"></path>
-        <path d="m3 3 1 1"></path>
-        <path d="m18 22 4-4"></path>
-        <path d="m2 6 4-4"></path>
-        <path d="m3 10 7-7"></path>
-        <path d="m14 21 7-7"></path>
+        <path d="M4 44H44" />
+        <path d="M28 30H34.1905C36.4603 30 41 31.344 41 36.72V44" />
+        <path d="M35 30L40 19L34 6" />
+        <path d="M29 8L39 4" />
+        <circle cx="20" cy="30" r="8" />
+        <path d="M20 30H28" />
+        <path d="M21 22L14 13" />
+        <path d="M10 13L18 13" />
       </svg>
     ),
     title: "TRANSFORM",
@@ -100,21 +105,14 @@ const programs = [
     id: "perform",
     icon: (
       <svg
-        width="30"
-        height="30"
+        width="45"
+        height="45"
         viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fill="currentColor"
         className="text-[#e5ff00]"
       >
-        <path d="M14 4a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" />
-        <path d="m14 14-2.5-3.5L9 12 7.5 9" />
-        <path d="M14 14v4l-4 4" />
-        <path d="m14 14 3.5-2L22 15" />
-        <path d="M17 5l-2.5 3.5-3.5-.5" />
+        <circle cx="12" cy="6" r="2" />
+        <path d="M21 16v-2c-2.24 0-4.16-.96-5.6-2.68l-1.34-1.6A1.98 1.98 0 0 0 12.53 9h-1.05c-.59 0-1.15.26-1.53.72l-1.34 1.6C7.16 13.04 5.24 14 3 14v2c2.77 0 5.19-1.17 7-3.25V15l-3.88 1.55c-.67.27-1.12.93-1.12 1.66C5 19.2 5.8 20 6.79 20H9v-.5a2.5 2.5 0 0 1 2.5-2.5h3c.28 0 .5.22.5.5s-.22.5-.5.5h-3c-.83 0-1.5.67-1.5 1.5v.5h7.21c.99 0 1.79-.8 1.79-1.79c0-.73-.45-1.39-1.12-1.66L14 15v-2.25c1.81 2.08 4.23 3.25 7 3.25" />
       </svg>
     ),
     title: "PERFORM",
@@ -652,7 +650,7 @@ const Membership = () => {
 
                 <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
                   <div>
-                    <div className="w-14 h-14 flex items-center justify-center mb-5 ">
+                    <div className="w-16 h-14 flex items-center   justify-center mb-5 ">
                       {prog.icon}
                     </div>
 
