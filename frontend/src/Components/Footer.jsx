@@ -7,18 +7,18 @@ const Footer = () => {
       <div
         className="
           mt-3
-        
           md:px-8
-
           lg:px-20
-          py-10
+          pt-10
+          pb-28
+          md:py-10
           flex
           flex-col
           md:flex-row
           items-center
           justify-center
-          gap-4
-        max-w-[1400px]
+          gap-3
+          max-w-[1400px]
           mx-auto
         "
       >
@@ -29,7 +29,7 @@ const Footer = () => {
             text-[#8b8b8b]
             text-center
             md:text-left
-            text-[13px]
+            text-[14px]
             md:text-[19px]
           "
           style={{ fontFamily: '"Brutal", sans-serif',  }}
@@ -47,7 +47,7 @@ const Footer = () => {
             text-[#8b8b8b]
             text-center
             md:text-left
-            text-[13px]
+            text-[14px]
             md:text-[19px]
           "
           style={{ fontFamily: '"Brutal", sans-serif',  }}

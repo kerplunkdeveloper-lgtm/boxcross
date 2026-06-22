@@ -7,8 +7,13 @@ import {
   ArrowRight,
   Activity,
   Zap,
-  Shield,
-  User,
+   ShieldHalf,
+  Flame,
+  Medal,
+   Dumbbell,
+   Trophy,
+   Shield,
+   User,
   Star,
 } from "lucide-react";
 import PhonePeModal from "./PhonePeModal";
@@ -647,7 +652,7 @@ const Membership = () => {
 
                 <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
                   <div>
-                    <div className="w-14 h-14 rounded-full border border-[#e5ff00]/50 flex items-center justify-center mb-5 bg-black/40 backdrop-blur-sm">
+                    <div className="w-14 h-14 flex items-center justify-center mb-5 ">
                       {prog.icon}
                     </div>
 
