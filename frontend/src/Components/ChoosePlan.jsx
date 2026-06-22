@@ -20,7 +20,7 @@ const ChoosePlan = React.forwardRef(
           transition={{ duration: 0.6 }}
           className=" mb-8"
         >
-          <div className="text-left md:text-center mb-8 flex flex-col items-start md:items-center justify-start md:justify-center gap-4">
+          <div className="text-center mb-8 flex flex-col items-center justify-center gap-4">
              
              <div>
                 <span
@@ -47,7 +47,7 @@ const ChoosePlan = React.forwardRef(
           </h2>
 
             <div
-            className="flex flex-wrap items-center  md:justify-center gap-3 mt-4 md:mt-5 text-gray-400 text-[11px] md:text-[12px]"
+            className="flex flex-wrap items-center justify-center gap-3 mt-4 md:mt-5 text-gray-400 text-[11px] md:text-[12px]"
             style={{
               fontWeight: "500",
               fontFamily: '"Brutal Type Regular", sans-serif',

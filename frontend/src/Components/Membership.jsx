@@ -73,26 +73,11 @@ const programs = [
   {
     id: "transform",
     icon: (
-      <svg
-        width="45"
-        height="42"
-        viewBox="0 0 48 48"
-       fill="currentColor"
-        stroke="currentColor"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+      <Dumbbell
+        size={45}
+        strokeWidth={1.5}
         className="text-[#e5ff00]"
-      >
-        <path d="M4 44H44" />
-        <path d="M28 30H34.1905C36.4603 30 41 31.344 41 36.72V44" />
-        <path d="M35 30L40 19L34 6" />
-        <path d="M29 8L39 4" />
-        <circle cx="20" cy="30" r="8" />
-        <path d="M20 30H28" />
-        <path d="M21 22L14 13" />
-        <path d="M10 13L18 13" />
-      </svg>
+      />
     ),
     title: "TRANSFORM",
     subtitle: "HYBRID PERFORMANCE",
@@ -575,7 +560,7 @@ const Membership = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-left md:text-center mb-8 flex flex-col items-start md:items-center justify-start md:justify-center gap-4"
+            className="text-center mb-8 flex flex-col items-center justify-start  gap-4"
           >
             <div>
                <span

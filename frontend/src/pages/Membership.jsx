@@ -62,7 +62,7 @@ const Membership = () => {
           {/* LEFT SIDE: HEADING */}
           <div
             data-aos="fade-right"
-            className="flex-1 w-full flex flex-col justify-center text-left z-10"
+            className="flex-1 w-full flex flex-col justify-center text-center md:text-left z-10"
           >
             <h1
               className="
@@ -78,13 +78,13 @@ const Membership = () => {
                 fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
-              <span className="block text-[50px] sm:text-[60px] md:text-[85px]   whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[44px] sm:text-[60px] md:text-[85px]   whitespace-normal md:whitespace-nowrap">
                 BXC
               </span>
-              <span className="block text-[50px] sm:text-[60px] md:text-[85px]  whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[44px] sm:text-[60px] md:text-[85px]  whitespace-normal md:whitespace-nowrap">
                 MEMBERSHIP
               </span>
-              <span className="block text-[50px] sm:text-[60px] md:text-[85px]  whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[44px] sm:text-[60px] md:text-[85px]  whitespace-normal md:whitespace-nowrap">
                 PLANS
               </span>
             </h1>
@@ -122,7 +122,8 @@ const Membership = () => {
                 flex
                 flex-row
                 items-center
-                justify-start
+                justify-center
+                md:justify-start
                 gap-3 sm:gap-4
                 w-full
                 max-w-[700px]

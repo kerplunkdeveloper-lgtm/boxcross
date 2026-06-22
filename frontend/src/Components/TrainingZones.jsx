@@ -101,7 +101,7 @@ const TrainingZones = ({ onBookTour }) => {
         }}
       />
 
-      <div className="mb-9 px-2 md:px-6 flex flex-col items-start md:items-center text-left md:text-center">
+      <div className="mb-9 px-2 md:px-6 flex flex-col items-center text-center ">
         <span
           className="px-4 py-2 rounded-md border border-[#e5ff00]/30 bg-[#e5ff00] text-[#0a0a0a] uppercase"
           style={{
