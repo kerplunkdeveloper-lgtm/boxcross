@@ -29,7 +29,7 @@ const Membership = () => {
   return (
     <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden ">
       {/* HERO SECTION */}
-      <section className="relative mt-[80px] md:mt-0 w-full h-[50vh] md:h-[70vh]   flex items-center justify-center overflow-hidden mb-10">
+      <section className="relative mt-[80px] md:mt-0 w-full h-[40vh] md:h-[70vh]   flex items-center justify-center overflow-hidden mb-10">
         {/* IMAGE BACKGROUND */}
         <img
           src={bannerImg}
@@ -68,7 +68,7 @@ const Membership = () => {
               className="
                 text-white
                 font-black
-                
+                mt-8 md:mt-20
                 uppercase
                 leading-[0.95]
                 tracking-tight
@@ -78,13 +78,13 @@ const Membership = () => {
                 fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
-              <span className="block text-[50px] sm:text-[60px] md:text-[90px]   whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[50px] sm:text-[60px] md:text-[85px]   whitespace-normal md:whitespace-nowrap">
                 BXC
               </span>
-              <span className="block text-[50px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[50px] sm:text-[60px] md:text-[85px]  whitespace-normal md:whitespace-nowrap">
                 MEMBERSHIP
               </span>
-              <span className="block text-[50px] sm:text-[60px] md:text-[90px]  whitespace-normal md:whitespace-nowrap">
+              <span className="block text-[50px] sm:text-[60px] md:text-[85px]  whitespace-normal md:whitespace-nowrap">
                 PLANS
               </span>
             </h1>
