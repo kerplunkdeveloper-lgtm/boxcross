@@ -16,7 +16,7 @@ import {
    User,
   Star,
 } from "lucide-react";
-import PhonePeModal from "./PhonePeModal";
+import RazorpayMembershipModal from "./RazorpayMembershipModal";
 import { motion } from "framer-motion";
 import box1 from "../assets/box1.png";
 import box2 from "../assets/box2.png";
@@ -745,7 +745,7 @@ const Membership = () => {
       </section>
      {
   createPortal(
-    <PhonePeModal
+    <RazorpayMembershipModal
       isOpen={isModalOpen}
       onClose={() => setIsModalOpen(false)}
       planDetails={selectedPlan}

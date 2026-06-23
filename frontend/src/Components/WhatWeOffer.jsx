@@ -70,7 +70,7 @@ const WhatWeOffer = () => {
           className="mb-16 md:mb-18 flex flex-col items-center text-center "
         >
           <span
-            className="px-4 py-2 rounded-md border mb-5 bg-[#e5ff00] text-[#0a0a0a] uppercase"
+            className="px-4 py-2 mt-10 rounded-md border mb-5 bg-[#e5ff00] text-[#0a0a0a] uppercase"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontSize: "16px",

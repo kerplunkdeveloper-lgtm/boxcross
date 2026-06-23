@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
   createPayment,
+  verifyPaymentSignature,
   getPayments,
   updatePayment,
   deletePayment
@@ -10,6 +11,7 @@ const { protect, authorize } = require("../middleware/authMiddleware");
 
 // Public payment initiation/completion endpoint
 router.post("/", createPayment);
+router.post("/verify", verifyPaymentSignature);
 
 // Admin-only operations
 router.get("/", protect, authorize("admin"), getPayments);

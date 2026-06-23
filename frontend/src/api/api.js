@@ -41,6 +41,7 @@ export const updateMembershipPlan = (id, data) => API.put(`/memberships/${id}`, 
 // ──────────────── PAYMENT API ────────────────
 
 export const createPayment = (data) => API.post("/payments", data);
+export const verifyMembershipPayment = (data) => API.post("/payments/verify", data);
 
 export const getPayments = () => API.get("/payments");
 
