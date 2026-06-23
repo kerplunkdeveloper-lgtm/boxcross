@@ -26,7 +26,7 @@ export default function TribeSection() {
     {
       title: "JUNIOR ATHLETES",
       desc: "Future Champions.",
-      img: "https://images.unsplash.com/photo-1606902965551-dce093cda6e7?q=80&w=150&auto=format&fit=crop"
+      img: "https://images.unsplash.com/photo-1486218119243-13883505764c?q=80&w=150&auto=format&fit=crop"
     }
   ];
 

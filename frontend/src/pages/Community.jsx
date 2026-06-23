@@ -5,6 +5,7 @@ import Communitybanner from '../Components/Communitybanner'
 import CommunityCards from '../Components/CommunityCards'
 import TribeSection from '../Components/TribeSection'
 import CommunitySection from '../Components/CommunitySection'
+import EventList from '../Components/Event/EventList'
 
 const Community = () => {
   useEffect(() => {
@@ -26,6 +27,7 @@ const Community = () => {
       <Communitybanner/>
       <TribeSection/>
       <CommunityCards/>
+      <EventList/>
       <CommunitySection/>
     </div>
   )

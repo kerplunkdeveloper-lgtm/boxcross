@@ -562,7 +562,7 @@ const EventList = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 15 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="bg-[#0a0a0a] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full max-h-screen md:h-auto md:max-h-[90vh] md:max-w-9xl overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row animate-in fade-in zoom-in duration-200"
+              className="bg-[#0a0a0a] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full md:h-auto max-h-screen md:max-h-[90vh] md:max-w-9xl overflow-y-auto md:overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row animate-in fade-in zoom-in duration-200"
             >
               {/* Left side: Image banner section */}
               <div className="relative w-full md:w-1/2 aspect-[16/10] md:aspect-auto md:min-h-[450px] overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-white/5">
@@ -586,7 +586,7 @@ const EventList = () => {
               </div>
 
               {/* Right side: Details + Footer wrapper */}
-              <div className="w-full md:w-1/2 flex flex-col overflow-hidden flex-grow md:max-h-[90vh] relative">
+              <div className="w-full md:w-1/2 flex flex-col md:overflow-hidden flex-grow md:max-h-[90vh] relative">
                 {/* Close Button on desktop */}
                 <button
                   onClick={() => setSelectedEvent(null)}
@@ -597,7 +597,7 @@ const EventList = () => {
                 </button>
 
                 {/* Scrollable details wrapper */}
-                <div className="p-6 overflow-y-auto space-y-4 flex-grow custom-scrollbar">
+                <div className="p-6 md:overflow-y-auto space-y-4 flex-grow md:custom-scrollbar">
                   {/* Event Location Pin */}
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[14px] font-black uppercase tracking-wider mb-1">
                     <MapPin size={14} className="text-[#e5ff00]" />
