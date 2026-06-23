@@ -177,7 +177,7 @@ const Founding = () => {
     <div id="founders" className=" md:py-9">
       <div className="flex flex-col items-center justify-center  mb-5 w-full max-w-7xl mx-auto px-4 md:px-0">
         <h2
-          className="mt-2 md:mt-4 mb-0 text-[44px] uppercase md:text-[48px] leading-[40px] md:leading-[55px]"
+          className="mt-2 md:mt-4 mb-0 text-[44px] uppercase  text-center md:text-[48px] leading-[40px] md:leading-[55px]"
           style={{
             fontFamily: '"BrutalTypeBold", sans-serif',
             fontWeight: "700",
@@ -189,8 +189,9 @@ const Founding = () => {
      
       {/* Countdown Promo Banner */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-0 mb-20">
-        <div className="relative w-full rounded-[24px] md:rounded-[32px] border border-[#e5ff00] bg-black overflow-hidden flex flex-col lg:flex-row p-6 md:p-8 lg:p-12 gap-8 lg:gap-0 shadow-[0_0_50px_rgba(229,255,0,0.15)]">
-          {/* Subtle X background pattern on the right */}
+        <div className="card-border-spin-container rounded-[24px] md:rounded-[32px] p-[1.5px]">
+          <div className="card-border-spin-inner relative w-full rounded-[22px] md:rounded-[30px] bg-black overflow-hidden !flex !flex-col lg:!flex-row p-6 md:p-8 lg:p-12 gap-8 lg:gap-0 shadow-[0_0_50px_rgba(229,255,0,0.15)]">
+            {/* Subtle X background pattern on the right */}
           <div
             className="absolute top-0 right-0 w-full lg:w-1/3 h-full opacity-[0.03] pointer-events-none"
             style={{
@@ -407,6 +408,7 @@ const Founding = () => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* Modal / Popup for Data Collection & Payment */}
       {typeof window === "object" && createPortal(
