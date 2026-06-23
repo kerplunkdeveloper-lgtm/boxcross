@@ -129,13 +129,18 @@ const BookForm = () => {
     >
 
 
-      <div className="relative z-10 w-full max-w-5xl mx-4 rounded-[35px] border border-white/10 bg-black/40 backdrop-blur-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-        {/* GLOW */}
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#e5ff00]/15 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className="relative z-10 w-full max-w-5xl rounded-[35px] p-[2.5px] overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.55)]">
+        {/* Spinning animated border */}
+        <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0%,transparent_75%,#e5ff00_100%)] animate-[spin_4s_linear_infinite]" />
+        
+        {/* Inner container */}
+        <div className="relative z-10 w-full h-full bg-[#070708]/90 backdrop-blur-2xl rounded-[33px] overflow-hidden">
+          {/* GLOW */}
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#e5ff00]/15 blur-[120px] rounded-full pointer-events-none"></div>
 
-        <div className="relative z-10 p-5 md:p-10">
+          <div className="relative z-10 p-5 md:p-10">
           {/* HEADER */}
-          <div className="md:text-center">
+          <div className="text-center">
             <h1
               className="text-white uppercase text-[35px] md:text-[40px] text-center"
               style={{
@@ -143,7 +148,7 @@ const BookForm = () => {
                 fontWeight: 700,
               }}
             >
-              BOOK YOUR FREE <br /><span className="text-[#e5ff00]"> GYM TOUR</span>
+              BOOK YOUR FREE <span className="text-[#e5ff00]"> GYM TOUR</span>
             </h1>
           </div>
 
@@ -568,6 +573,7 @@ const BookForm = () => {
           </div>
         </div>
       </div>
+    </div>
 
       {/* PREMIUM SUCCESS MODAL */}
       <AnimatePresence>
