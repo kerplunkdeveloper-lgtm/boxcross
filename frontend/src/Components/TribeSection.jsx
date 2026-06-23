@@ -1,79 +1,139 @@
 import React from "react";
+import crowdImg from "../assets/runn.png";
 
 export default function TribeSection() {
-  const points = [
+  const subCommunities = [
     {
-      title: "THE BXC TRIBE",
-      highlight: "The Tribe is everyone who trains at BXC.",
-      description: "Fight Club. Strength Lab. HYROX Lab. Run Club. Hybrid Performance. Junior Athletes. One Community."
+      title: "FIGHT CLUB",
+      desc: "Fighters. Discipline. Boxing.",
+      img: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=150&auto=format&fit=crop"
     },
     {
-      title: "SUNDAY RUNS & DRILLS",
-      highlight: "The Tribe shows up on Sunday mornings.",
-      description: "Before the city wakes up, the Tribe is already moving, pushing limits together."
+      title: "STRENGTH LAB",
+      desc: "Strength. Power. Progress.",
+      img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=150&auto=format&fit=crop"
     },
     {
-      title: "COMMUNITY INTEGRITY",
-      highlight: "The Tribe holds each other to the standard.",
-      description: "We show up, support each other, and grow together. Accountability is our foundation."
+      title: "HYROX LAB",
+      desc: "Endurance. Race Day. Grit.",
+      img: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=150&auto=format&fit=crop"
+    },
+    {
+      title: "RUN CLUB",
+      desc: "Sunday Sunrise Runs.",
+      img: "https://images.unsplash.com/photo-1486218119243-13883505764c?q=80&w=150&auto=format&fit=crop"
+    },
+    {
+      title: "JUNIOR ATHLETES",
+      desc: "Future Champions.",
+      img: "https://images.unsplash.com/photo-1606902965551-dce093cda6e7?q=80&w=150&auto=format&fit=crop"
     }
   ];
 
   return (
-    <section className="bg-black overflow-hidden py-10 lg:py-0">
-      <div className="max-w-[1600px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:h-[650px] gap-10 items-stretch">
+    <section className="bg-black py-12  sm:px-6 lg:px-8 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
 
-          {/* LEFT CONTENT */}
-          <div className="flex items-center px-6 sm:px-12 md:px-16 lg:px-24 lg:py-0">
-            <div className="w-full">
-              <h2
-                data-aos="fade-up"
-                className="text-white uppercase text-3xl md:text-4xl text-center md:text-left font-black leading-none mb-10 tracking-wide"
-                style={{ fontFamily: '"Bebas Neue", sans-serif' }}
-              >
-                WHAT THE <span className="text-[#E5FF00]">TRIBE</span> IS
-              </h2>
+          {/* LEFT CARD: WHAT THE TRIBE IS */}
+          <div 
+            data-aos="fade-right"
+            className="card-border-spin-container rounded-[24px] md:rounded-[32px] p-[1.5px] h-full"
+          >
+            <div 
+              className="card-border-spin-inner relative w-full h-full min-h-[480px] md:min-h-[580px] rounded-[22px] md:rounded-[30px] overflow-hidden bg-cover bg-right flex flex-col justify-center p-6 sm:p-8 md:p-12"
+              style={{ backgroundImage: `url(${crowdImg})` }}
+            >
+              {/* Dark Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 sm:via-black/75 to-black/20 z-0"></div>
 
-              <div className="space-y-8">
-                {points.map((point, idx) => (
-                  <div
-                    key={idx}
-                    data-aos="fade-up"
-                    data-aos-delay={100 + idx * 100}
-                    className="border-l-[3px] border-[#E5FF00]/40 hover:border-[#E5FF00] pl-6 transition-all duration-300 py-1"
-                  >
-                    <h3 className="text-zinc-500 text-xs font-bold uppercase tracking-widest">
-                      {point.title}
-                    </h3>
-                    <p className="text-gray-100 text-lg md:text-xl font-bold mt-1 uppercase">
-                      {point.highlight}
-                    </p>
-                    <p className="text-zinc-400 text-sm md:text-base leading-relaxed mt-2 font-medium">
-                      {point.description}
-                    </p>
-                  </div>
-                ))}
+
+
+              {/* Text Content */}
+              <div className="relative z-10 w-full flex flex-col justify-center">
+                <h2 
+                  className="text-white text-3xl md:text-4xl font-black uppercase tracking-wider mb-8"
+                  style={{ fontFamily: '"Bebas Neue", sans-serif' }}
+                >
+                  WHAT THE TRIBE IS
+                </h2>
+
+                <div className="space-y-6">
+                  <p className="text-zinc-200 text-sm sm:text-base font-semibold leading-relaxed max-w-[90%] sm:max-w-[80%]">
+                    The Tribe is everyone who trains at BXC. 
+                  </p>
+
+                  <p className="text-zinc-200 text-sm sm:text-base font-semibold leading-relaxed max-w-[50%] sm:max-w-[50%]">
+                    Fight Club. Strength Lab. HYROX Lab. Run Club. Hybrid Performance. Junior Athletes. One Community.
+                  </p>
+
+                  <div className="w-12 h-[2px] bg-[#E5FF00]/60"></div>
+
+                  <p className="text-zinc-200 text-sm sm:text-base font-semibold leading-relaxed max-w-[50%] sm:max-w-[50%]">
+                    The Tribe shows up on Sunday mornings. Before the city wakes up, the Tribe is already moving.
+                  </p>
+
+                  <div className="w-12 h-[2px] bg-[#E5FF00]/60"></div>
+
+                  <p className="text-zinc-200 text-sm sm:text-base font-semibold leading-relaxed max-w-[50%] sm:max-w-[50%]">
+                    The Tribe holds each other to the standard.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* RIGHT IMAGE */}
+          {/* RIGHT CARD: SUB-COMMUNITIES */}
           <div 
             data-aos="fade-left"
-            className="relative overflow-hidden group h-[300px] sm:h-[400px] lg:h-full min-h-[300px]"
+            data-aos-delay="150"
+            className="card-border-spin-container rounded-[24px] md:rounded-[32px] p-[1.5px] h-full"
           >
-            {/* Left Black Overlay (Desktop) */}
-            <div className="absolute inset-0 z-20 bg-gradient-to-r from-black via-black/45 to-transparent hidden lg:block"></div>
+            <div className="card-border-spin-inner relative w-full h-full rounded-[22px] md:rounded-[30px] overflow-hidden bg-zinc-950 flex flex-col p-6 sm:p-8 md:p-10 justify-between">
+              <div>
+                <h2 
+                  className="text-white text-3xl md:text-4xl font-black uppercase tracking-wider mb-8"
+                  style={{ fontFamily: '"Bebas Neue", sans-serif' }}
+                >
+                  SUB-COMMUNITIES
+                </h2>
 
-            {/* Bottom Overlay (Mobile/Tablet) */}
-            <div className="absolute inset-0 z-20 bg-gradient-to-t from-black via-transparent to-transparent lg:hidden"></div>
+                <div className="flex flex-col">
+                  {subCommunities.map((item, idx) => (
+                    <div 
+                      key={idx} 
+                      className="flex items-center justify-between py-4 border-b border-zinc-900/60 last:border-0 gap-4"
+                    >
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <img 
+                          src={item.img} 
+                          alt={item.title} 
+                          className="w-12 h-12 sm:w-50 sm:h-17 rounded-md object-cover border border-zinc-800 flex-shrink-0"
+                        />
+                        <div>
+                          <h3 
+                            className="text-[#E5FF00] font-black text-sm sm:text-base md:text-md tracking-wider uppercase leading-none"
+                            style={{ fontFamily: '"Bebas Neue", sans-serif' }}
+                          >
+                            {item.title}
+                          </h3>
+                          <p className="text-zinc-400 text-[11px] sm:text-xs md:text-sm font-semibold mt-1.5 leading-none">
+                            {item.desc}
+                          </p>
+                        </div>
+                      </div>
 
-            <img
-              src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1600&auto=format&fit=crop"
-              alt="BXC Tribe Workout"
-              className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
-            />
+                      <button 
+                        onClick={() => window.open("https://wa.me/918925556900", "_blank")}
+                        className="border border-[#E5FF00] text-[#E5FF00] hover:bg-[#E5FF00] hover:text-black rounded-lg px-4 py-1.5 sm:px-5 sm:py-2 text-[10px] sm:text-xs font-black tracking-wider transition-all duration-300 active:scale-95 cursor-pointer uppercase flex-shrink-0"
+                      >
+                        JOIN
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
