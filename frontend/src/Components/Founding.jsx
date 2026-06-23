@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { User, Crown, Star, Clock, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createFounder, getFoundingOffer, updateFounder } from "../api/api";
+import { createFounder, getFoundingOffer, updateFounder, verifyFounderPayment } from "../api/api";
 import { toast } from "react-hot-toast";
 
 const Founding = () => {
@@ -22,6 +22,7 @@ const Founding = () => {
     phone: "",
   });
   const [currentFounderId, setCurrentFounderId] = useState(null);
+  const [createdFounderOrder, setCreatedFounderOrder] = useState(null);
 
   useEffect(() => {
     const fetchOffer = async () => {
@@ -111,6 +112,20 @@ const Founding = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleInitialSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.phone) {
@@ -122,18 +137,23 @@ const Founding = () => {
     try {
       const { data } = await createFounder({
         ...formData,
-        paymentStatus: "Pending",
         price: offerData ? offerData.col2_price : "12,000",
         duration: offerData ? offerData.col2_duration : "FOR 1 YEAR",
       });
-      setCurrentFounderId(data._id);
+      
+      if (data.success) {
+        setCreatedFounderOrder(data);
+        setCurrentFounderId(data.founderId);
+        
+        // Notify admin dashboard immediately about the pending lead
+        const channel = new BroadcastChannel("founding_members_updates");
+        channel.postMessage("NEW_FOUNDER_ADDED");
+        channel.close();
 
-      // Notify admin dashboard immediately about the pending lead
-      const channel = new BroadcastChannel("founding_members_updates");
-      channel.postMessage("NEW_FOUNDER_ADDED");
-      channel.close();
-
-      setPaymentStep(true);
+        setPaymentStep(true);
+      } else {
+        toast.error("Error creating payment order.");
+      }
     } catch (error) {
       console.error(error);
       toast.error("Error saving your details. Please try again.");
@@ -143,34 +163,146 @@ const Founding = () => {
   };
 
   const handlePaymentSimulation = async () => {
+    if (!createdFounderOrder) {
+      toast.error("Founder details missing. Please submit details again.");
+      return;
+    }
+
     setLoading(true);
-    // Simulate Razorpay / Payment Gateway delay
-    setTimeout(async () => {
-      try {
-        if (currentFounderId) {
-          await updateFounder(currentFounderId, {
-            paymentStatus: "Completed",
-            paymentId: "demo_pay_" + Math.random().toString(36).substr(2, 9),
-          });
-        }
+    const toastId = toast.loading("Initiating payment...");
 
-        toast.success("Payment Successful! Welcome Founder.");
-        setIsModalOpen(false);
-        setPaymentStep(false);
-        setFormData({ name: "", email: "", phone: "" });
-        setCurrentFounderId(null);
+    try {
+      // Mock payment sandbox
+      if (createdFounderOrder.razorpayOrderId.startsWith("order_mock_")) {
+        toast.success("Running sandbox mock payment simulation...", {
+          id: toastId,
+        });
 
-        // Notify admin dashboard immediately
-        const channel = new BroadcastChannel("founding_members_updates");
-        channel.postMessage("NEW_FOUNDER_ADDED");
-        channel.close();
-      } catch (error) {
-        console.error(error);
-        toast.error("Error processing your request");
-      } finally {
-        setLoading(false);
+        setTimeout(async () => {
+          const verifyToastId = toast.loading("Verifying transaction...");
+          try {
+            const { data: verifyData } = await verifyFounderPayment({
+              founderId: createdFounderOrder.founderId,
+              razorpayOrderId: createdFounderOrder.razorpayOrderId,
+              status: "success",
+            });
+
+            if (verifyData.success) {
+              toast.success("Payment Successful! Welcome Founder.", {
+                id: verifyToastId,
+              });
+              setIsModalOpen(false);
+              setPaymentStep(false);
+              setFormData({ name: "", email: "", phone: "" });
+              setCurrentFounderId(null);
+              setCreatedFounderOrder(null);
+
+              // Notify admin dashboard immediately
+              const channel = new BroadcastChannel("founding_members_updates");
+              channel.postMessage("NEW_FOUNDER_ADDED");
+              channel.close();
+            } else {
+              toast.error("Mock verification failed", { id: verifyToastId });
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error("Simulator verification error", { id: verifyToastId });
+          } finally {
+            setLoading(false);
+          }
+        }, 1500);
+        return;
       }
-    }, 2000);
+
+      // Real Razorpay integration
+      const res = await loadRazorpayScript();
+      if (!res) {
+        toast.error("Razorpay SDK failed to load. Are you online?", {
+          id: toastId,
+        });
+        setLoading(false);
+        return;
+      }
+
+      toast.dismiss(toastId);
+
+      const options = {
+        key: createdFounderOrder.keyId,
+        amount: createdFounderOrder.amount,
+        currency: createdFounderOrder.currency,
+        name: "BoxCross Gym",
+        description: "Founding Member Membership Plan",
+        order_id: createdFounderOrder.razorpayOrderId,
+        handler: async function (response) {
+          const verifyToastId = toast.loading("Verifying payment...");
+          try {
+            const { data: verifyData } = await verifyFounderPayment({
+              founderId: createdFounderOrder.founderId,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpaySignature: response.razorpay_signature,
+              status: "success",
+            });
+
+            if (verifyData.success) {
+              toast.success("Payment Successful! Welcome Founder.", {
+                id: verifyToastId,
+              });
+              setIsModalOpen(false);
+              setPaymentStep(false);
+              setFormData({ name: "", email: "", phone: "" });
+              setCurrentFounderId(null);
+              setCreatedFounderOrder(null);
+
+              // Notify admin dashboard immediately
+              const channel = new BroadcastChannel("founding_members_updates");
+              channel.postMessage("NEW_FOUNDER_ADDED");
+              channel.close();
+            } else {
+              toast.error("Payment verification failed", { id: verifyToastId });
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error("Payment verification error", { id: verifyToastId });
+          } finally {
+            setLoading(false);
+          }
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone,
+        },
+        theme: {
+          color: "#e5ff00",
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          },
+        },
+      };
+
+      const rzp1 = new window.Razorpay(options);
+      rzp1.on("payment.failed", async function (response) {
+        toast.error("Payment failed!");
+        try {
+          await verifyFounderPayment({
+            founderId: createdFounderOrder.founderId,
+            status: "failed",
+          });
+        } catch (err) {
+          console.error("Failed to update status", err);
+        } finally {
+          setLoading(false);
+        }
+      });
+      rzp1.open();
+    } catch (error) {
+      console.error(error);
+      toast.error("Error processing payment", { id: toastId });
+      setLoading(false);
+    }
   };
 
   return (
@@ -536,7 +668,7 @@ const Founding = () => {
                 </div>
               ) : (
                 <div className="text-center py-6">
-                  <div className="w-16 h-16 bg-[#0055FF]/10 text-[#0055FF] rounded-full mx-auto flex items-center justify-center mb-6">
+                  <div className="w-16 h-16 bg-[#e5ff00]/10 text-[#e5ff00] rounded-full mx-auto flex items-center justify-center mb-6">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="32"
@@ -548,7 +680,7 @@ const Founding = () => {
                     </svg>
                   </div>
                   <h3 className="text-white text-xl font-bold mb-2">
-                    Razorpay Demo Secure Checkout
+                    Secure Checkout
                   </h3>
                   <p className="text-gray-400 text-sm mb-8">
                     Total Amount:{" "}
@@ -560,12 +692,12 @@ const Founding = () => {
                   <button
                     onClick={handlePaymentSimulation}
                     disabled={loading}
-                    className="w-full bg-[#0055FF] text-white font-bold uppercase tracking-wider py-3.5 rounded-lg hover:bg-[#0044CC] transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
+                    className="w-full bg-[#e5ff00] text-black font-bold uppercase tracking-wider py-3.5 rounded-lg hover:bg-[#d8f000] transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
                   >
                     {loading ? (
                        <>
                          <svg
-                           className="animate-spin h-5 w-5 text-white"
+                           className="animate-spin h-5 w-5 text-black"
                            viewBox="0 0 24 24"
                          >
                            <circle

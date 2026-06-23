@@ -105,6 +105,7 @@ export const deleteHomec3 = (id) => API.delete(`/homec3/${id}`);
 // ──────────────── FOUNDER API ────────────────
 export const getFounders = () => API.get("/founders");
 export const createFounder = (data) => API.post("/founders", data);
+export const verifyFounderPayment = (data) => API.post("/founders/verify", data);
 export const updateFounder = (id, data) => API.put(`/founders/${id}`, data);
 export const deleteFounder = (id) => API.delete(`/founders/${id}`);
 
