@@ -39,7 +39,11 @@ const Communitybanner = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/35 to-[#050505] z-[2]"></div>
 
         {/* HUGE BACKGROUND TEXT (Outline) */}
-        <div className="absolute inset-x-0 top-10 md:top-30 flex justify-center pointer-events-none z-[5] overflow-hidden">
+        <div 
+          data-aos="zoom-in"
+          data-aos-duration="1200"
+          className="absolute inset-x-0 top-10 md:top-30 flex justify-center pointer-events-none z-[5] overflow-hidden"
+        >
           <span 
             className="text-transparent font-black uppercase text-[50px] md:text-[150px] whitespace-nowrap select-none tracking-widest leading-none" 
             style={{ 
@@ -55,7 +59,10 @@ const Communitybanner = () => {
         <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between md:gap-16 pt-20 md:pt-0">
           
           {/* LEFT SIDE: HEADING */}
-          <div className="flex-1 w-full flex flex-col justify-center text-center md:text-left z-10">
+          <div 
+            data-aos="fade-right"
+            className="flex-1 w-full flex flex-col justify-center text-center md:text-left z-10"
+          >
             <h1
               className="text-white font-black mt-8 md:mt-20 uppercase leading-[0.95] tracking-tight drop-shadow-[0_5px_20px_rgba(0,0,0,0.9)]"
               style={{
@@ -75,7 +82,11 @@ const Communitybanner = () => {
           </div>
 
           {/* RIGHT SIDE: SUBTITLE & BUTTONS */}
-          <div className="flex-1 w-full flex flex-col justify-center items-start md:max-w-lg z-10 text-left">
+          <div 
+            data-aos="fade-left"
+            data-aos-delay="200"
+            className="flex-1 w-full flex flex-col justify-center items-start md:max-w-lg z-10 text-left"
+          >
             <p
               className="text-[#c9c9c9] text-base md:text-[17px] mt-[-3px] md:mt-25 leading-relaxed hidden md:block mb-5 font-bold"
               style={{

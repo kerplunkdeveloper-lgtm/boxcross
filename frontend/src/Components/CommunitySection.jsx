@@ -64,20 +64,6 @@ export default function CommunitySection() {
     window.open("https://wa.me/918925556900", "_blank", "noopener,noreferrer");
   };
 
-  // Card entrance animations
-  const cardVariants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: (i) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.15,
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    }),
-  };
-
   return (
     <section className="bg-black text-white py-0 md:py-20 md:px-5 overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -85,6 +71,7 @@ export default function CommunitySection() {
         {/* Member Stories Section */}
         <div className="mb-20">
           <h2 
+            data-aos="fade-up"
             className="text-3xl text-[#E5FF00] font-black mb-10 text-center  uppercase tracking-wide" 
             style={{ fontFamily: '"Bebas Neue", sans-serif' }}
           >
@@ -95,11 +82,8 @@ export default function CommunitySection() {
             {stories.map((item, i) => (
               <motion.div
                 key={i}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={cardVariants}
+                data-aos="fade-up"
+                data-aos-delay={100 + i * 150}
                 whileHover={{ y: -8, transition: { duration: 0.2 } }}
                 className="card-border-spin-container rounded-3xl p-[1.5px] h-auto sm:h-60 group"
               >
@@ -134,11 +118,8 @@ export default function CommunitySection() {
         </div>
 
         {/* Instagram Wall Section wrapped in a container with Spin Border */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+        <div
+          data-aos="fade-up"
           className="card-border-spin-container rounded-[24px] md:rounded-[35px] p-[1.5px] mb-20"
         >
           <div className="card-border-spin-inner rounded-[22px] md:rounded-[33px] p-6 md:p-10 flex flex-col justify-between">
@@ -153,10 +134,8 @@ export default function CommunitySection() {
               {instaImages.map((img, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  data-aos="fade-up"
+                  data-aos-delay={i * 80}
                   whileHover={{ scale: 1.05 }}
                   className="overflow-hidden rounded-2xl border border-zinc-800 hover:border-[#E5FF00]/40 transition duration-300"
                 >
@@ -184,14 +163,11 @@ export default function CommunitySection() {
               </a>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* CTA Section Box wrapped in Spin Border */}
-        <motion.div
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
+          data-aos="zoom-in"
           className="card-border-spin-container rounded-[30px] p-[1.5px] mb-12"
         >
           <div 
@@ -282,7 +258,7 @@ export default function CommunitySection() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Sub-Footer */}
         <div className="mt-12 pt-8 border-t border-zinc-900/60 mb-10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs md:text-sm text-zinc-500 font-medium">

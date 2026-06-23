@@ -177,7 +177,7 @@ const Founding = () => {
     <div id="founders" className=" md:py-9">
       <div className="flex flex-col items-center justify-center  mb-5 w-full max-w-7xl mx-auto px-4 md:px-0">
         <h2
-          className="mt-2 md:mt-4 mb-0 text-[44px] md:text-[48px] leading-[40px] md:leading-[55px]"
+          className="mt-2 md:mt-4 mb-0 text-[44px] uppercase md:text-[48px] leading-[40px] md:leading-[55px]"
           style={{
             fontFamily: '"BrutalTypeBold", sans-serif',
             fontWeight: "700",

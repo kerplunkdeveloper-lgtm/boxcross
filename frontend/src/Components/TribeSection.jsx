@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 
 export default function TribeSection() {
   const points = [
@@ -26,27 +25,22 @@ export default function TribeSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:h-[650px] gap-10 items-stretch">
 
           {/* LEFT CONTENT */}
-          <div className="flex items-center px-6 sm:px-12 md:px-16 lg:px-24  lg:py-0">
+          <div className="flex items-center px-6 sm:px-12 md:px-16 lg:px-24 lg:py-0">
             <div className="w-full">
-              <motion.h2
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="text-white uppercase text-3xl md:text-4xl text-center md:text-left  font-black leading-none mb-10 tracking-wide"
+              <h2
+                data-aos="fade-up"
+                className="text-white uppercase text-3xl md:text-4xl text-center md:text-left font-black leading-none mb-10 tracking-wide"
                 style={{ fontFamily: '"Bebas Neue", sans-serif' }}
               >
                 WHAT THE <span className="text-[#E5FF00]">TRIBE</span> IS
-              </motion.h2>
+              </h2>
 
               <div className="space-y-8">
                 {points.map((point, idx) => (
-                  <motion.div
+                  <div
                     key={idx}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: idx * 0.15 }}
+                    data-aos="fade-up"
+                    data-aos-delay={100 + idx * 100}
                     className="border-l-[3px] border-[#E5FF00]/40 hover:border-[#E5FF00] pl-6 transition-all duration-300 py-1"
                   >
                     <h3 className="text-zinc-500 text-xs font-bold uppercase tracking-widest">
@@ -58,18 +52,15 @@ export default function TribeSection() {
                     <p className="text-zinc-400 text-sm md:text-base leading-relaxed mt-2 font-medium">
                       {point.description}
                     </p>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
 
           {/* RIGHT IMAGE */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+          <div 
+            data-aos="fade-left"
             className="relative overflow-hidden group h-[300px] sm:h-[400px] lg:h-full min-h-[300px]"
           >
             {/* Left Black Overlay (Desktop) */}
@@ -83,7 +74,7 @@ export default function TribeSection() {
               alt="BXC Tribe Workout"
               className="w-full h-full object-cover transition duration-700 group-hover:scale-105"
             />
-          </motion.div>
+          </div>
 
         </div>
       </div>

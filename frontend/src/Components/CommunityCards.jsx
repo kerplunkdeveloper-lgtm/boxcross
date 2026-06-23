@@ -110,11 +110,8 @@ export default function CommunityCards() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           
           {/* Card 1: Join the Community */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <div 
+            data-aos="fade-right"
             className="card-border-spin-container rounded-3xl p-[1.5px]"
           >
             <div className="card-border-spin-inner rounded-3xl p-6 md:p-8 flex flex-col justify-between h-full">
@@ -152,14 +149,12 @@ export default function CommunityCards() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Card 2: Tribe Events */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15 }}
+          <div 
+            data-aos="fade-left"
+            data-aos-delay="200"
             className="card-border-spin-container rounded-3xl p-[1.5px]"
           >
             <div className="card-border-spin-inner rounded-3xl p-6 md:p-8 flex flex-col justify-between h-full">
@@ -196,7 +191,7 @@ export default function CommunityCards() {
                 <ArrowRight className="w-5 h-5 text-black transform group-hover:translate-x-1.5 transition-transform duration-300" />
               </button>
             </div>
-          </motion.div>
+          </div>
 
         </div>
       </div>
