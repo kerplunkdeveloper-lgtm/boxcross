@@ -1,5 +1,5 @@
 import React from "react";
-import crowdImg from "../assets/com3.png";
+import crowdImg from "../assets/com.png";
 
 const Communitybanner = () => {
   const handleBookTrial = () => {
