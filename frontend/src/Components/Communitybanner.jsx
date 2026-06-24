@@ -1,5 +1,5 @@
 import React from "react";
-import crowdImg from "../assets/crowd.jpg";
+import crowdImg from "../assets/com3.png";
 
 const Communitybanner = () => {
   const handleBookTrial = () => {
@@ -29,7 +29,7 @@ const Communitybanner = () => {
         <img
           src={crowdImg}
           alt="Community Background"
-          className="absolute inset-0 w-full h-full object-cover scale-105 filter grayscale-[30%] brightness-[0.7]"
+          className="absolute inset-0 w-full h-full object-cover scale-105 filter grayscale-[30%] brightness-[4.5]"
         />
 
         {/* DARK OVERLAY */}

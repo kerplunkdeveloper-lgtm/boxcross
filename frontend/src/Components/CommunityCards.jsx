@@ -117,7 +117,7 @@ export default function CommunityCards() {
             <div className="card-border-spin-inner rounded-3xl p-6 md:p-8 flex flex-col justify-between h-full">
               <div>
                 <h2 
-                  className="text-white text-3xl md:text-4xl font-black text-center md:text-left  uppercase tracking-wide mb-8"
+                  className="text-white text-2xl md:text-4xl font-black text-center md:text-left  uppercase tracking-wide mb-8"
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   JOIN THE COMMUNITY
@@ -160,7 +160,7 @@ export default function CommunityCards() {
             <div className="card-border-spin-inner rounded-3xl p-6 md:p-8 flex flex-col justify-between h-full">
               <div>
                 <h2 
-                  className="text-white text-3xl md:text-4xl font-black text-center md:text-left  uppercase tracking-wide mb-8"
+                  className="text-white text-2xl md:text-4xl font-black text-center md:text-left  uppercase tracking-wide mb-8"
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   TRIBE EVENTS

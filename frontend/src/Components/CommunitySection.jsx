@@ -203,13 +203,13 @@ export default function CommunitySection() {
 
                 <h2 
                   className="text-3xl sm:text-5xl md:text-5xl font-black text-white leading-none uppercase tracking-tight" 
-                  style={{ fontFamily: '"Bebas Neue", sans-serif' }}
+                  style={{ fontFamily: '"Bebas Neue", sans-serif' , lineHeight: '1.7' }}
                 >
                   THE TRIBE IS <br className="hidden sm:block" /> ALREADY TRAINING.
                 </h2>
 
                 <h3 
-                  className="text-[#E5FF00] text-xl sm:text-3xl md:text-4xl  font-black mt-3 uppercase tracking-tight" 
+                  className="text-[#E5FF00] text-xl sm:text-3xl md:text-4xl italic   mt-3 " 
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   YOUR FIRST SESSION IS FREE.
@@ -231,9 +231,9 @@ export default function CommunitySection() {
                       className="flex items-center gap-3.5 p-4 rounded-2xl bg-zinc-950/40 border border-zinc-900/50 backdrop-blur-md hover:border-[#E5FF00]/30 hover:bg-zinc-900/60 transition-all duration-300 group"
                     >
                       <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-800/80 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
-                        <Icon className="text-[#E5FF00] group-hover:text-black transition-colors duration-300 text-sm md:text-base" />
+                        <Icon className="text-[#E5FF00] group-hover:text-black transition-colors duration-300 text-xl md:text-base" />
                       </div>
-                      <span className="text-sm font-bold text-zinc-300 group-hover:text-white transition-colors duration-300">
+                      <span className="text-xl font-bold text-zinc-300 group-hover:text-white transition-colors duration-300">
                         {item.text}
                       </span>
                     </div>
