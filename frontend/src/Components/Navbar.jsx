@@ -199,7 +199,7 @@ const Navbar = () => {
 
               {/* ================= DESKTOP NAV ================= */}
 
-              <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center gap-5">
+              <div className="hidden lg:flex absolute left-[46%] -translate-x-1/2 items-center gap-5">
                 {/* HOME */}
 
                 <a
@@ -414,7 +414,7 @@ const Navbar = () => {
                     fontSize: "14px",
                   }}
                 >
-                  CONTACT
+                  CONTACT US
                 </a>
               </div>
 
