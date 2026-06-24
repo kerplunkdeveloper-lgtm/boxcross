@@ -354,10 +354,10 @@ const EventList = () => {
             </span>
           </div>
           <h2
-            className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white mt-3"
+            className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white mt-3"
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
-            Featured Events & Workshops
+           Events & Workshops
           </h2>
           <p
             className="text-gray-200 text-md md:text-xl mt-5 max-w-xl text-center"

@@ -164,7 +164,7 @@ const Eventbanner = () => {
 
   return (
     <section
-      className="relative w-full h-[55vh] sm:h-[65vh] md:h-[80vh] overflow-hidden select-none z-10 border-b border-white/5"
+      className="relative w-full h-[50vh] sm:h-[65vh] md:h-[80vh] overflow-hidden select-none z-10 border-b border-white/5"
       onMouseEnter={stopAutoplay}
       onMouseLeave={startAutoplay}
     >
@@ -198,7 +198,7 @@ const Eventbanner = () => {
                       e.stopPropagation();
                       setIsMuted(!isMuted);
                     }}
-                    className="absolute bottom-24 sm:bottom-20 right-6 sm:right-10 z-30 p-2 sm:p-2.5 bg-black/60 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer"
+                    className="absolute bottom-24 sm:bottom-20 right-6 sm:right-10 z-30 p-2 sm:p-2.5 bg-black/80 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer"
                     title={isMuted ? "Unmute Audio" : "Mute Audio"}
                   >
                     {isMuted ? (
@@ -219,7 +219,8 @@ const Eventbanner = () => {
             </div>
 
             {/* Premium Dark Vignette and Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/30 z-10" />
+            <div className="absolute inset-0 bg-black/30 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20 z-10" />
             <div className="absolute inset-0 bg-radial-vignette pointer-events-none z-10" />
 
             {/* Content Details Layer */}
