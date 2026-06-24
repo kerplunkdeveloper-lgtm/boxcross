@@ -106,7 +106,7 @@ export default function CommunityCards() {
 
   return (
     <section id="join-community-section" className="bg-black text-white pb-20 pt-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           
           {/* Card 1: Join the Community */}
@@ -117,7 +117,7 @@ export default function CommunityCards() {
             <div className="card-border-spin-inner rounded-3xl p-6 md:p-8 flex flex-col justify-between h-full">
               <div>
                 <h2 
-                  className="text-[#E5FF00] text-3xl md:text-4xl font-black text-center md:text-left  uppercase tracking-wide mb-8"
+                  className="text-white text-3xl md:text-4xl font-black text-center md:text-left  uppercase tracking-wide mb-8"
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   JOIN THE COMMUNITY
@@ -160,7 +160,7 @@ export default function CommunityCards() {
             <div className="card-border-spin-inner rounded-3xl p-6 md:p-8 flex flex-col justify-between h-full">
               <div>
                 <h2 
-                  className="text-[#E5FF00] text-3xl md:text-4xl font-black text-center md:text-left  uppercase tracking-wide mb-8"
+                  className="text-white text-3xl md:text-4xl font-black text-center md:text-left  uppercase tracking-wide mb-8"
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   TRIBE EVENTS

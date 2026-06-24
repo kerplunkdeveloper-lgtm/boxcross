@@ -214,8 +214,7 @@ const Navbar = () => {
                   HOME
                 </a>
 
-
-                   {/* THE ARENA */}
+                {/* THE ARENA */}
 
                 <div
                   className="relative"
@@ -264,11 +263,7 @@ const Navbar = () => {
                   )}
                 </div>
 
-
-
-
-
-              {/* COACHING */}
+                {/* COACHING */}
 
                 <a
                   href="https://boxandcross.com/coaching/"
@@ -281,9 +276,6 @@ const Navbar = () => {
                 >
                   COACHING
                 </a>
-
-
-
 
                 {/* MEMBERSHIP */}
 
@@ -354,7 +346,6 @@ const Navbar = () => {
                   )}
                 </div>
 
-
                 {/* COMMUNITY DROPDOWN */}
 
                 <div
@@ -412,15 +403,6 @@ const Navbar = () => {
                   )}
                 </div>
 
-                
-
-
-
-
-
-             
-
-              
                 {/* CONTACT */}
 
                 <a
@@ -432,7 +414,7 @@ const Navbar = () => {
                     fontSize: "14px",
                   }}
                 >
-                  CONTACT 
+                  CONTACT
                 </a>
               </div>
 
@@ -530,8 +512,6 @@ const Navbar = () => {
                   <div className="w-5 h-[2px] bg-white rounded-full transition-all duration-300 group-hover:w-7"></div>
                 </button>
               </div>
-
-
             </div>
           </div>
         </nav>
@@ -632,8 +612,6 @@ const Navbar = () => {
             </a>
           </div>
 
-         
-
           {/* MEMBERSHIP */}
 
           <div className="border-b border-[#1f1f1f]">
@@ -688,7 +666,7 @@ const Navbar = () => {
             </div>
           </div>
 
-           {/* COMMUNITY */}
+          {/* COMMUNITY */}
 
           <div className="border-b border-[#1f1f1f]">
             <div className="flex justify-between items-center py-2">
@@ -726,7 +704,9 @@ const Navbar = () => {
                     onClick={closeOffcanvas}
                     className={({ isActive }) =>
                       `text-sm font-medium tracking-wider transition-colors ${
-                        isActive ? "text-[#e5ff00]" : "text-gray-400 hover:text-white"
+                        isActive
+                          ? "text-[#e5ff00]"
+                          : "text-gray-400 hover:text-white"
                       }`
                     }
                   >
@@ -802,17 +782,16 @@ const Navbar = () => {
         </div>
 
         <p
-          className="text-gray-400 text-[18px] mb-12 leading-relaxed"
+          className="text-gray-300 text-[19px] mb-12 leading-relaxed"
           style={{
-            fontFamily: '"Brutal Font Light", sans-serif',
+            fontFamily: '"Brutal Font", sans-serif',
             fontWeight: 400,
           }}
         >
           Welcome to{" "}
           <span className="text-[#e5ff00] font-bold">Box & Cross</span>, where
           passion meets performance and fitness <br /> becomes a lifestyle. Our
-          mission is to empower individuals of all ages and <br />
-          abilities to build strength, move better, and train with purpose  — in a space <br /> built for results.
+          mission is to empower individuals of all ages and <br /> fitness
         </p>
 
         <div className="grid grid-cols-2 gap-12">
@@ -871,14 +850,14 @@ const Navbar = () => {
                     EMAIL US
                   </h4>
                   <a
-                    href="mailto:hello@boxandcross.com"
+                    href="mailto:getfit@boxandcross.com"
                     className="text-white text-lg hover:text-[#e5ff00] transition-colors block"
                     style={{
                       fontFamily: '"Brutal Font Light", sans-serif',
                       fontWeight: 600,
                     }}
                   >
-                    hello@boxandcross.com
+                    getfit@boxandcross.com
                   </a>
                 </div>
               </div>
@@ -900,7 +879,7 @@ const Navbar = () => {
                   <p
                     className="text-white leading-relaxed"
                     style={{
-                      fontFamily: '"Brutal Font Light", sans-serif',
+                      fontFamily: '"Brutal Font", sans-serif',
                       fontWeight: 400,
                       fontSize: "16px",
                     }}

@@ -72,7 +72,7 @@ export default function CommunitySection() {
         <div className="mb-20">
           <h2 
             data-aos="fade-up"
-            className="text-3xl text-[#E5FF00] font-black mb-10 text-center  uppercase tracking-wide" 
+            className="text-3xl text-white font-black mb-10 text-center  uppercase tracking-wide" 
             style={{ fontFamily: '"Bebas Neue", sans-serif' }}
           >
             MEMBER STORIES
@@ -124,7 +124,7 @@ export default function CommunitySection() {
         >
           <div className="card-border-spin-inner rounded-[22px] md:rounded-[33px] p-6 md:p-10 flex flex-col justify-between">
             <h2 
-              className="text-3xl text-[#E5FF00] font-black mb-10 text-center uppercase tracking-wide" 
+              className="text-3xl text-white font-black mb-10 text-center uppercase tracking-wide" 
               style={{ fontFamily: '"Bebas Neue", sans-serif' }}
             >
               Instagram Wall
@@ -150,7 +150,7 @@ export default function CommunitySection() {
             </div>
             
             <div className="flex flex-col items-center justify-center mt-8">
-              <h1 className="text-sm sm:text-base md:text-xl font-bold uppercase tracking-wider text-zinc-300 text-center">
+              <h1 className="text-sm sm:text-base md:text-xl font-bold uppercase tracking-wider text-[#E5FF00] text-center">
                 Every Sunday. Every Fight Night. Every PR. Every First Session.
               </h1>
               <a 

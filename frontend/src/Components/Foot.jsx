@@ -255,13 +255,13 @@ const Foot = () => {
 
             <div className="space-y-4 flex flex-col">
               <a
-                href="mailto:hello@boxandcross.com"
+                href="mailto:getfit@boxandcross.com"
                 className="text-[#827979] hover:text-[#d9ff00] transition-all duration-300 w-fit"
                 style={{
                   fontWeight: "600",
                 }}
               >
-                hello@boxandcross.com
+                getfit@boxandcross.com
               </a>
 
               <a
@@ -277,8 +277,6 @@ const Foot = () => {
           </div>
         </div>
       </div>
-
-
     </footer>
   );
 };
