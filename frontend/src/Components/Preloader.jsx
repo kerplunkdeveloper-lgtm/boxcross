@@ -12,16 +12,16 @@ const Preloader = ({ onComplete }) => {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#050505]">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#000818]">
       <div className="relative w-20 h-20 flex items-center justify-center">
         {/* Outer Ring */}
-        <div className="absolute w-18 h-18 rounded-full border-[3px] border-transparent border-l-white border-b-[#e5ff00] animate-spin-slow"></div>
+        <div className="absolute w-20 h-20 rounded-full border-[4px] border-transparent border-l-white border-b-[#e5ff00] animate-spin-slow"></div>
 
         {/* Middle Ring */}
-        <div className="absolute w-13 h-13 rounded-full border-[3px] border-transparent border-r-white border-t-[#e5ff00] animate-spin-reverse"></div>
+        <div className="absolute w-16 h-16 rounded-full border-[4px] border-transparent border-r-white border-t-[#e5ff00] animate-spin-reverse"></div>
 
         {/* Inner Ring */}
-        <div className="absolute w-9 h-9 rounded-full border-[3px] border-transparent border-l-white border-b-[#e5ff00] animate-spin-fast"></div>
+        <div className="absolute w-11 h-11 rounded-full border-[4px] border-transparent border-l-white border-b-[#e5ff00] animate-spin-fast"></div>
       </div>
 
       <style>
