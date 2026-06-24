@@ -8,8 +8,7 @@ import TrainingZones from "../Components/TrainingZones";
 // import BuildProgress from "../Components/BuildProgress";
 import BookForm from "../Components/BookForm";
 import Founding from "../Components/Founding";
-import Foot from "../Components/Foot";
-import GymMarquee from "../Components/GymMarquee";
+
 
 const Membership = () => {
   useEffect(() => {
@@ -217,8 +216,7 @@ const Membership = () => {
           <TrainingZones />
         </div>
       </div>
-       <Foot  />
-      <GymMarquee  />
+      
     </div>
   );
 };

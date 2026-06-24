@@ -35,6 +35,9 @@ const DashboardHomec1 = lazy(() => import("./pages/DashboardHomec1"));
 const DashboardHomec2 = lazy(() => import("./pages/DashboardHomec2"));
 const DashboardHomec3 = lazy(() => import("./pages/DashboardHomec3"));
 const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
+const Foot = lazy(() => import("./Components/Foot"));
+const GymMarquee = lazy(() => import("./Components/GymMarquee"));
+
 
 // import LeadModal from "./Components/LeadModal";
 
@@ -48,6 +51,8 @@ const Layout = () => {
       <main className="flex-grow">
         <Outlet />
       </main>
+      <Foot/>
+      <GymMarquee />
       <Footer />
     </div>
   );

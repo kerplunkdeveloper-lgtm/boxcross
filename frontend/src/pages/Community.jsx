@@ -7,6 +7,7 @@ import TribeSection from '../Components/TribeSection'
 import CommunitySection from '../Components/CommunitySection'
 import EventList from '../Components/Event/EventList'
 
+
 const Community = () => {
   useEffect(() => {
     const initAOS = () => {
@@ -29,6 +30,7 @@ const Community = () => {
       <CommunityCards/>
       <EventList/>
       <CommunitySection/>
+   
     </div>
   )
 }

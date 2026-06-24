@@ -191,7 +191,7 @@ export default function CommunitySection() {
 
             {/* Content Wrapper */}
             <div className="relative z-10 flex flex-col justify-between h-full w-full">
-              <div className="max-w-full lg:max-w-[75%]">
+              <div className="max-w-full lg:max-w-[45%]">
                 {/* Tech Badge */}
                 <div 
                   className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E5FF00]/10 border border-[#E5FF00]/30 text-[#E5FF00] text-xs uppercase tracking-widest font-extrabold w-fit mb-6"
@@ -202,14 +202,14 @@ export default function CommunitySection() {
                 </div>
 
                 <h2 
-                  className="text-3xl sm:text-5xl md:text-5xl font-black text-white leading-none uppercase tracking-tight" 
-                  style={{ fontFamily: '"Bebas Neue", sans-serif' , lineHeight: '1.7' }}
+                  className="text-3xl sm:text-5xl md:text-4xl font-black text-white leading-none uppercase tracking-tight" 
+                  style={{ fontFamily: '"Bebas Neue", sans-serif' , lineHeight: '1.2' }}
                 >
                   THE TRIBE IS <br className="hidden sm:block" /> ALREADY TRAINING.
                 </h2>
 
                 <h3 
-                  className="text-[#E5FF00] text-xl sm:text-3xl md:text-4xl italic   mt-3 " 
+                  className="text-[#E5FF00] text-xl sm:text-3xl md:text-3xl italic   mt-3 " 
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   YOUR FIRST SESSION IS FREE.
@@ -269,70 +269,6 @@ export default function CommunitySection() {
             </div>
           </div>
         </div>
-
-        {/* Sub-Footer */}
-        <div className="mt-16 pt-10 border-t border-zinc-900/60 mb-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            {/* Location Card */}
-            <div className="card-border-spin-container rounded-2xl p-[1px] h-full">
-              <a
-                href="https://maps.google.com/?q=No.+69,+Church+Street,+Krishna+Nagar,+Lawspet,+Pondicherry+-+605008"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="card-border-spin-inner !flex !flex-row !items-start gap-4 p-5 rounded-[15px] bg-[#0c0c0c]/90 hover:bg-[#0c0c0c]/85 transition-all duration-300 group cursor-pointer h-full"
-              >
-                <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
-                  <FaMapMarkerAlt className="text-lg text-[#E5FF00] group-hover:text-black transition-colors duration-300" />
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Location</span>
-                  <span className="text-sm text-zinc-300 group-hover:text-white transition-colors duration-300 leading-relaxed font-medium">
-                    No. 69, Church Street, Krishna Nagar, Lawspet, Pondicherry - 605008
-                  </span>
-                </div>
-              </a>
-            </div>
-
-            {/* Phone Card */}
-            <div className="card-border-spin-container rounded-2xl p-[1px] h-full">
-              <a
-                href="tel:+918925556800"
-                className="card-border-spin-inner !flex !flex-row !items-center gap-4 p-5 rounded-[15px] bg-[#0c0c0c]/90 hover:bg-[#0c0c0c]/85 transition-all duration-300 group cursor-pointer h-full"
-              >
-                <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
-                  <FaPhoneAlt className="text-lg text-[#E5FF00] group-hover:text-black transition-colors duration-300" />
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Call Us</span>
-                  <span className="text-sm md:text-base text-zinc-300 group-hover:text-white transition-colors duration-300 font-bold tracking-wide">
-                    +91 89255 56800
-                  </span>
-                </div>
-              </a>
-            </div>
-
-            {/* Email Card */}
-            <div className="card-border-spin-container rounded-2xl p-[1px] h-full">
-              <a
-                href="mailto:getfit@boxandcross.com"
-                className="card-border-spin-inner !flex !flex-row !items-center gap-4 p-5 rounded-[15px] bg-[#0c0c0c]/90 hover:bg-[#0c0c0c]/85 transition-all duration-300 group cursor-pointer h-full"
-              >
-                <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
-                  <FaEnvelope className="text-lg text-[#E5FF00] group-hover:text-black transition-colors duration-300" />
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Email Us</span>
-                  <span className="text-sm md:text-base text-zinc-300 group-hover:text-white transition-colors duration-300 font-bold tracking-wide">
-                    getfit@boxandcross.com
-                  </span>
-                </div>
-              </a>
-            </div>
-          </div>
-
-        
-        </div>
-
       </div>
     </section>
   );
