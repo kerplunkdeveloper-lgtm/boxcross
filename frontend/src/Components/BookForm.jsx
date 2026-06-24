@@ -142,13 +142,13 @@ const BookForm = () => {
           {/* HEADER */}
           <div className="text-center">
             <h1
-              className="text-white uppercase text-[35px] md:text-[40px] text-center"
+              className="text-white  text-[30px] md:text-[40px] text-center"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: 700,
               }}
             >
-              BOOK YOUR FREE <span className="text-[#e5ff00]"> GYM TOUR</span>
+              Book Your Free <span className="text-[#e5ff00]"> GYM TOUR</span>
             </h1>
           </div>
 
@@ -539,7 +539,7 @@ const BookForm = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={isLoading}
-                  className={`h-12 md:h-14 px-8 md:px-10 rounded-xl bg-[#e5ff00] text-black font-black tracking-[0.12em] uppercase transition-all shadow-[0_0_30px_rgba(217,255,0,0.35)] flex items-center gap-2 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:scale-105"}`}
+                  className={`h-12 md:h-14 px-8 md:px-10 rounded-xl bg-[#e5ff00] text-black font-bold tracking-[0.12em] uppercase transition-all shadow-[0_0_30px_rgba(217,255,0,0.35)] flex items-center gap-2 ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:scale-105"}`}
                   style={{
                     fontFamily: '"Bebas Neue", sans-serif',
                   }}
@@ -565,7 +565,7 @@ const BookForm = () => {
                       Booking...
                     </>
                   ) : (
-                    "Book Your Free Gym Tour"
+                    "Submit"
                   )}
                 </button>
               )}
