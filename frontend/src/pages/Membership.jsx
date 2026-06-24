@@ -195,6 +195,55 @@ const Membership = () => {
         </div>
       </section>
 
+      {/* marquee */}
+      {/* Infinite Text Marquee */}
+      <div className="w-full bg-black py-4 md:py-6 border-y border-zinc-900/60 overflow-hidden select-none pointer-events-none">
+        <div className="marquee-experience-wrapper">
+          <div className="marquee-experience-track">
+            {Array(8).fill([
+              { text: "BOXING.", outline: false },
+              { text: "STRENGTH.", outline: true },
+              { text: "HYROX.", outline: false },
+              { text: "FIGHT CLUB.", outline: true },
+            ]).flat().map((item, idx) => (
+              <span
+                key={idx}
+                className="text-[40px] sm:text-[55px] md:text-[75px] lg:text-[80px] font-black uppercase tracking-tight mx-4 sm:mx-6 md:mx-8 inline-block"
+                style={{
+                  fontFamily: '"Bebas Neue", sans-serif',
+                  color: item.outline ? "transparent" : "#ffffff",
+                  WebkitTextStroke: item.outline ? "1px rgba(255, 255, 255, 0.75)" : "none",
+                  whiteSpace: "nowrap"
+                }}
+              >
+                {item.text}
+              </span>
+            ))}
+          </div>
+        </div>
+        <style>{`
+          .marquee-experience-wrapper {
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+          }
+          .marquee-experience-track {
+            display: flex;
+            white-space: nowrap;
+            width: max-content;
+            animation: scrollLeftExperienceMarquee 95s linear infinite;
+          }
+          @keyframes scrollLeftExperienceMarquee {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+        `}</style>
+      </div>
+
       {/* MEMBERSHIP SECTION */}
       <div className="relative z-20">
         <div data-aos="fade-up">

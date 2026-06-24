@@ -106,7 +106,53 @@ export default function CommunityCards() {
 
   return (
     <section id="join-community-section" className="bg-black text-white pb-20 pt-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-8xl mx-auto">
+         {/* Infinite Text Marquee */}
+        <div className="w-full bg-black py-6 md:py-10 border-y border-zinc-900/60 overflow-hidden select-none pointer-events-none mb-20">
+          <div className="marquee-experience-wrapper">
+            <div className="marquee-experience-track">
+              {Array(10).fill([
+                "JOIN THE COMMUNITY",
+                "*"
+               
+              ]).flat().map((word, idx) => (
+                <span
+                  key={idx}
+                  className="text-[60px] sm:text-[65px] md:text-[85px] lg:text-[105px] font-black uppercase tracking-wider mx-6 sm:mx-10 inline-block"
+                  style={{
+                    fontFamily: '"Bebas Neue", sans-serif',
+                    color: "transparent",
+                    WebkitTextStroke: "1px rgba(255, 255, 255, 0.45)",
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  {word}
+                </span>
+              ))}
+            </div>
+          </div>
+          <style>{`
+            .marquee-experience-wrapper {
+              width: 100%;
+              overflow: hidden;
+              display: flex;
+            }
+            .marquee-experience-track {
+              display: flex;
+              white-space: nowrap;
+              width: max-content;
+              animation: scrollLeftExperienceMarquee 200s linear infinite;
+            }
+            @keyframes scrollLeftExperienceMarquee {
+              0% {
+                transform: translateX(0);
+              }
+              100% {
+                transform: translateX(-50%);
+              }
+            }
+          `}</style>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           
           {/* Card 1: Join the Community */}
