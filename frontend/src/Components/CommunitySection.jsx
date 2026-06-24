@@ -66,7 +66,7 @@ export default function CommunitySection() {
 
   return (
     <section className="bg-black text-white py-0 md:py-20 md:px-5 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-8xl mx-auto">
 
         {/* Member Stories Section */}
         <div className="mb-20">
@@ -168,18 +168,18 @@ export default function CommunitySection() {
         {/* CTA Section Box wrapped in Spin Border */}
         <div
           data-aos="zoom-in"
-          className="card-border-spin-container rounded-[30px] p-[1.5px] mb-12"
+          className="card-border-spin-container rounded-[32px] p-[1.5px] mb-12"
         >
           <div 
-            className="card-border-spin-inner relative rounded-[40px] overflow-hidden p-6 sm:p-10 md:p-12 bg-cover bg-right flex flex-col justify-between"
+            className="card-border-spin-inner relative rounded-[30px] overflow-hidden p-8 sm:p-12 md:p-16 lg:p-20 bg-cover bg-right flex flex-col justify-between"
             style={{ backgroundImage: `url(${bannerBg})` }}
           >
             {/* Overlay to ensure text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 md:via-black/75 to-black/35 z-0"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/95 md:via-black/85 to-black/35 z-0"></div>
 
             {/* Outlined BXC Logo in Top-Right */}
             <div 
-              className="absolute top-6 right-8 text-[80px] md:text-[110px] font-black opacity-15 select-none pointer-events-none hidden md:block" 
+              className="absolute top-4 right-4 sm:top-6 sm:right-8 text-[60px] sm:text-[80px] md:text-[120px] font-black opacity-10 sm:opacity-15 select-none pointer-events-none" 
               style={{ 
                 fontFamily: '"Bebas Neue", sans-serif',
                 WebkitTextStroke: "2px #E5FF00",
@@ -191,69 +191,79 @@ export default function CommunitySection() {
 
             {/* Content Wrapper */}
             <div className="relative z-10 flex flex-col justify-between h-full w-full">
-              <div className="max-w-full lg:max-w-[70%]">
-                <span 
-                  className="text-[#E5FF00] uppercase tracking-widest text-md md:text-sm font-bold"
+              <div className="max-w-full lg:max-w-[75%]">
+                {/* Tech Badge */}
+                <div 
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E5FF00]/10 border border-[#E5FF00]/30 text-[#E5FF00] text-xs uppercase tracking-widest font-extrabold w-fit mb-6"
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#E5FF00] animate-pulse"></span>
                   Join The Movement
-                </span>
+                </div>
 
-                <h1 
-                  className="text-3xl  sm:text-2xl md:text-3xl  font-black mt-4 leading-none uppercase text-white" 
+                <h2 
+                  className="text-3xl sm:text-5xl md:text-5xl font-black text-white leading-none uppercase tracking-tight" 
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
-                  THE TRIBE IS ALREADY TRAINING.
-                </h1>
+                  THE TRIBE IS <br className="hidden sm:block" /> ALREADY TRAINING.
+                </h2>
 
-                <h1 
-                  className="text-[#E5FF00] mt-4 text-2xl sm:text-2xl md:text-3xl font-black mt-2 leading-none uppercase" 
+                <h3 
+                  className="text-[#E5FF00] text-xl sm:text-3xl md:text-4xl  font-black mt-3 uppercase tracking-tight" 
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >
                   YOUR FIRST SESSION IS FREE.
-                </h1>
+                </h3>
               </div>
 
-              {/* Features Row */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-12 text-md md:text-sm font-bold text-zinc-300">
-                <div className="flex items-center gap-2.5">
-                  <FaUser className="text-[#E5FF00] flex-shrink-0 text-md md:text-base" />
-                  <span>Expert Coaches</span>
-                </div>
-
-                <div className="flex items-center gap-2.5">
-                  <FaStar className="text-[#E5FF00] flex-shrink-0 text-sm md:text-base" />
-                  <span>World Class Training</span>
-                </div>
-
-                <div className="flex items-center gap-2.5">
-                  <FaUsers className="text-[#E5FF00] flex-shrink-0 text-sm md:text-base" />
-                  <span>Supportive Community</span>
-                </div>
-
-                <div className="flex items-center gap-2.5">
-                  <FaBolt className="text-[#E5FF00] flex-shrink-0 text-sm md:text-base" />
-                  <span>Premium Facilities</span>
-                </div>
+              {/* Features Grid Badges */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10 w-full">
+                {[
+                  { icon: FaUser, text: "Expert Coaches" },
+                  { icon: FaStar, text: "World Class Training" },
+                  { icon: FaUsers, text: "Supportive Community" },
+                  { icon: FaBolt, text: "Premium Facilities" },
+                ].map((item, idx) => {
+                  const Icon = item.icon;
+                  return (
+                    <div 
+                      key={idx}
+                      className="flex items-center gap-3.5 p-4 rounded-2xl bg-zinc-950/40 border border-zinc-900/50 backdrop-blur-md hover:border-[#E5FF00]/30 hover:bg-zinc-900/60 transition-all duration-300 group"
+                    >
+                      <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-800/80 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
+                        <Icon className="text-[#E5FF00] group-hover:text-black transition-colors duration-300 text-sm md:text-base" />
+                      </div>
+                      <span className="text-sm font-bold text-zinc-300 group-hover:text-white transition-colors duration-300">
+                        {item.text}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
 
               {/* Action Buttons Row */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-8 md:mt-12 w-full">
+              <div className="flex flex-col sm:flex-row gap-4 mt-10 w-full">
+                {/* Book Free Trial */}
                 <button 
                   onClick={handleBookTrial}
-                  className="bg-[#E5FF00] hover:bg-white text-black px-8 py-4 rounded-xl font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-3 transition duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full sm:w-auto"
+                  className="group relative overflow-hidden bg-[#E5FF00] text-black px-8 py-4.5 rounded-xl font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-3 transition-all duration-300 hover:shadow-[0_0_25px_rgba(229,255,0,0.35)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full sm:w-auto"
                 >
-                  <span>BOOK FREE TRIAL</span>
-                  <FaArrowRight className="text-xs md:text-sm" />
+                  <span className="relative z-10 flex items-center gap-3">
+                    <span>BOOK FREE TRIAL</span>
+                    <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
                 </button>
 
+                {/* WhatsApp Community */}
                 <button 
                   onClick={handleWhatsappJoin}
-                  className="border border-[#E5FF00]/40 text-[#E5FF00] hover:bg-[#E5FF00] hover:text-black px-8 py-4 rounded-xl font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-3 transition duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer bg-black/40 backdrop-blur-sm w-full sm:w-auto"
+                  className="group relative overflow-hidden border border-zinc-850 text-[#E5FF00] hover:text-black px-8 py-4.5 rounded-xl font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-3 transition-all duration-300 hover:bg-[#E5FF00] hover:border-[#E5FF00] hover:shadow-[0_0_20px_rgba(229,255,0,0.15)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer bg-zinc-950/60 backdrop-blur-sm w-full sm:w-auto"
                 >
-                  <FaWhatsapp className="text-sm md:text-lg" />
-                  <span>JOIN WHATSAPP COMMUNITY</span>
-                  <FaArrowRight className="text-xs" />
+                  <span className="relative z-10 flex items-center gap-3">
+                    <FaWhatsapp className="text-base" />
+                    <span>JOIN WHATSAPP COMMUNITY</span>
+                    <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
                 </button>
               </div>
             </div>
@@ -261,24 +271,66 @@ export default function CommunitySection() {
         </div>
 
         {/* Sub-Footer */}
-        <div className="mt-12 pt-8 border-t border-zinc-900/60 mb-10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs md:text-sm text-zinc-500 font-medium">
-          <div className="flex flex-wrap justify-center md:justify-start gap-6">
-            <div className="flex items-center gap-2 hover:text-zinc-300 transition duration-300">
-              <FaMapMarkerAlt className="text-[#E5FF00]" />
-              <span>Multiple Locations</span>
+        <div className="mt-16 pt-10 border-t border-zinc-900/60 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {/* Location Card */}
+            <div className="card-border-spin-container rounded-2xl p-[1px] h-full">
+              <a
+                href="https://maps.google.com/?q=No.+69,+Church+Street,+Krishna+Nagar,+Lawspet,+Pondicherry+-+605008"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="card-border-spin-inner !flex !flex-row !items-start gap-4 p-5 rounded-[15px] bg-[#0c0c0c]/90 hover:bg-[#0c0c0c]/85 transition-all duration-300 group cursor-pointer h-full"
+              >
+                <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
+                  <FaMapMarkerAlt className="text-lg text-[#E5FF00] group-hover:text-black transition-colors duration-300" />
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Location</span>
+                  <span className="text-sm text-zinc-300 group-hover:text-white transition-colors duration-300 leading-relaxed font-medium">
+                    No. 69, Church Street, Krishna Nagar, Lawspet, Pondicherry - 605008
+                  </span>
+                </div>
+              </a>
             </div>
-            <div className="flex items-center gap-2 hover:text-zinc-300 transition duration-300">
-              <FaPhoneAlt className="text-[#E5FF00]" />
-              <span>+91 89255 56800</span>
+
+            {/* Phone Card */}
+            <div className="card-border-spin-container rounded-2xl p-[1px] h-full">
+              <a
+                href="tel:+918925556800"
+                className="card-border-spin-inner !flex !flex-row !items-center gap-4 p-5 rounded-[15px] bg-[#0c0c0c]/90 hover:bg-[#0c0c0c]/85 transition-all duration-300 group cursor-pointer h-full"
+              >
+                <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
+                  <FaPhoneAlt className="text-lg text-[#E5FF00] group-hover:text-black transition-colors duration-300" />
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Call Us</span>
+                  <span className="text-sm md:text-base text-zinc-300 group-hover:text-white transition-colors duration-300 font-bold tracking-wide">
+                    +91 89255 56800
+                  </span>
+                </div>
+              </a>
             </div>
-            <div className="flex items-center gap-2 hover:text-zinc-300 transition duration-300">
-              <FaEnvelope className="text-[#E5FF00]" />
-              <span>hello@bxc.fit</span>
+
+            {/* Email Card */}
+            <div className="card-border-spin-container rounded-2xl p-[1px] h-full">
+              <a
+                href="mailto:getfit@boxandcross.com"
+                className="card-border-spin-inner !flex !flex-row !items-center gap-4 p-5 rounded-[15px] bg-[#0c0c0c]/90 hover:bg-[#0c0c0c]/85 transition-all duration-300 group cursor-pointer h-full"
+              >
+                <div className="p-3 rounded-xl bg-zinc-900 border border-zinc-800 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
+                  <FaEnvelope className="text-lg text-[#E5FF00] group-hover:text-black transition-colors duration-300" />
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Email Us</span>
+                  <span className="text-sm md:text-base text-zinc-300 group-hover:text-white transition-colors duration-300 font-bold tracking-wide">
+                    getfit@boxandcross.com
+                  </span>
+                </div>
+              </a>
             </div>
           </div>
-          <div className="text-center md:text-right">
-            <span>© 2024 BXC. All rights reserved.</span>
-          </div>
+
+        
         </div>
 
       </div>
