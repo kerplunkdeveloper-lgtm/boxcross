@@ -431,40 +431,40 @@ const Membership = () => {
 
   
   useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  const plan = params.get("plan");
+    const params = new URLSearchParams(window.location.search);
+    const plan = params.get("plan");
 
-  if (plan) {
-    setActiveTab(plan);
+    if (plan) {
+      setActiveTab(plan);
 
-    // Start tab default
-    if (plan === "start") {
-      setSubTabs((prev) => ({
-        ...prev,
-        start: "start_fight",
-      }));
+      // Start tab default
+      if (plan === "start") {
+        setSubTabs((prev) => ({
+          ...prev,
+          start: "start_fight",
+        }));
+      }
+
+      // Perform tab default
+      if (plan === "perform") {
+        setSubTabs((prev) => ({
+          ...prev,
+          perform: "perform_hyrox",
+        }));
+      }
+
+      setTimeout(() => {
+        const pricingSection = document.getElementById("pricing");
+
+        if (pricingSection) {
+          pricingSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }, 800);
     }
-
-    // Perform tab default
-    if (plan === "perform") {
-      setSubTabs((prev) => ({
-        ...prev,
-        perform: "perform_hyrox",
-      }));
-    }
-  }
-
-  setTimeout(() => {
-    const pricingSection = document.getElementById("pricing");
-
-    if (pricingSection) {
-      pricingSection.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  }, 800);
-}, []);
+  }, []);
   const [subTabs, setSubTabs] = useState({
     start: "start_fight",
     perform: "perform_hyrox",
