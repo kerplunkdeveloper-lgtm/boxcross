@@ -33,17 +33,17 @@ const Community = () => {
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://boxandcross.com/community" />
+        <meta property="og:url" content="https://membership.boxandcross.com/community" />
         <meta property="og:title" content="Community & Tribe | Box & Cross" />
         <meta property="og:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
-        <meta property="og:image" content={`https://boxandcross.com${comImg}`} />
+        <meta property="og:image" content={`https://membership.boxandcross.com/community${comImg}`} />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://boxandcross.com/community" />
+        <meta property="twitter:url" content="https://membership.boxandcross.com/community" />
         <meta property="twitter:title" content="Community & Tribe | Box & Cross" />
         <meta property="twitter:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
-        <meta property="twitter:image" content={`https://boxandcross.com${comImg}`} />
+        <meta property="twitter:image" content={`https://membership.boxandcross.com/community${comImg}`} />
       </Helmet>
       <Communitybanner/>
       <TribeSection/>
