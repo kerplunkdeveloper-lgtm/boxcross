@@ -1,5 +1,22 @@
 {
+  "functions": {
+    "api/serve.js": {
+      "includeFiles": "dist/index.html"
+    }
+  },
   "rewrites": [
+    {
+      "source": "/",
+      "destination": "/api/serve"
+    },
+    {
+      "source": "/events",
+      "destination": "/api/serve"
+    },
+    {
+      "source": "/community",
+      "destination": "/api/serve"
+    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
