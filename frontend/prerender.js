@@ -97,24 +97,24 @@ routes.forEach(route => {
   console.log(`Prerendered SEO HTML for route: /${route.path}`);
 });
 
-// Also update the main index.html to use the og-membership.png instead of logg.jpeg
+// Also update the main index.html to match the default screenshot preview
 const membershipMetaTags = `<!-- SEO_START -->
-  <title>Membership Plans | Box & Cross</title>
-  <meta name="description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
+  <title>Box & Cross – Performance Arena</title>
+  <meta name="description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://membership.boxandcross.com/" />  
-  <meta property="og:title" content="Membership Plans | Box & Cross" />
-  <meta property="og:description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
-  <meta property="og:image" content="https://membership.boxandcross.com/og-membership.png" />
+  <meta property="og:title" content="Box & Cross – Performance Arena" />
+  <meta property="og:description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
+  <meta property="og:image" content="https://membership.boxandcross.com/logg.jpeg" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://membership.boxandcross.com/" />
-  <meta property="twitter:title" content="Membership Plans | Box & Cross" />
-  <meta property="twitter:description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
-  <meta property="twitter:image" content="https://membership.boxandcross.com/og-membership.png" />
+  <meta property="twitter:title" content="Box & Cross – Performance Arena" />
+  <meta property="twitter:description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
+  <meta property="twitter:image" content="https://membership.boxandcross.com/logg.jpeg" />
   <!-- SEO_END -->`;
 
 const updatedMainHtml = originalHtml.replace(
@@ -122,4 +122,5 @@ const updatedMainHtml = originalHtml.replace(
   membershipMetaTags
 );
 fs.writeFileSync(indexPath, updatedMainHtml, 'utf8');
-console.log('Updated landing page index.html with og-membership.png fallback.');
+console.log('Updated landing page index.html with default screenshot fallback.');
+
