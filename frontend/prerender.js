@@ -12,8 +12,8 @@ const srcAssetsPath = path.resolve(__dirname, 'src', 'assets');
 
 // 1. Copy the social sharing images to public/ and dist/ folders
 const filesToCopy = [
-  { src: 'banner.png', dest: 'og-membership.png' },
-  { src: 'cover.jpg', dest: 'og-events.jpg' },
+  { src: 'box3.png', dest: 'og-membership.png' },
+  { src: 'box2.png', dest: 'og-events.jpg' },
   { src: 'com.png', dest: 'og-community.png' }
 ];
 
@@ -105,14 +105,14 @@ const membershipMetaTags = `<!-- SEO_START -->
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://membership.boxandcross.com/" />  
-  <meta property="og:title" content="Box & Cross – Performance Arena" />
+  <meta property="og:title" content="Membership Plans | Box & Cross – Performance Arena" />
   <meta property="og:description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
   <meta property="og:image" content="https://membership.boxandcross.com/logg.jpeg" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://membership.boxandcross.com/" />
-  <meta property="twitter:title" content="Box & Cross – Performance Arena" />
+  <meta property="twitter:title" content="Membership Plans | Box & Cross – Performance Arena" />
   <meta property="twitter:description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
   <meta property="twitter:image" content="https://membership.boxandcross.com/logg.jpeg" />
   <!-- SEO_END -->`;
