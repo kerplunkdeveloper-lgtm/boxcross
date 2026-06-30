@@ -12,9 +12,9 @@ const srcAssetsPath = path.resolve(__dirname, 'src', 'assets');
 
 // 1. Copy the social sharing images to public/ and dist/ folders
 const filesToCopy = [
-  { src: 'box3.png', dest: 'og-membership.png' },
-  { src: 'box2.png', dest: 'og-events.jpg' },
-  { src: 'com.png', dest: 'og-community.png' }
+  { src: 'og-membership.png', dest: 'og-membership.png' },
+  { src: 'og-events.jpg', dest: 'og-events.jpg' },
+  { src: 'og-community.jpg', dest: 'og-community.jpg' }
 ];
 
 filesToCopy.forEach(file => {
@@ -58,7 +58,7 @@ const routes = [
     path: 'community',
     title: 'Community & Tribe | Box & Cross',
     description: 'The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here.',
-    image: 'https://membership.boxandcross.com/og-community.png',
+    image: 'https://membership.boxandcross.com/og-community.jpg',
     url: 'https://membership.boxandcross.com/community'
   }
 ];
@@ -107,14 +107,14 @@ const membershipMetaTags = `<!-- SEO_START -->
   <meta property="og:url" content="https://membership.boxandcross.com/" />  
   <meta property="og:title" content="Membership Plans | Box & Cross – Performance Arena" />
   <meta property="og:description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
-  <meta property="og:image" content="https://membership.boxandcross.com/logg.jpeg" />
+  <meta property="og:image" content="https://membership.boxandcross.com/og-membership.png" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://membership.boxandcross.com/" />
   <meta property="twitter:title" content="Membership Plans | Box & Cross – Performance Arena" />
   <meta property="twitter:description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
-  <meta property="twitter:image" content="https://membership.boxandcross.com/logg.jpeg" />
+  <meta property="twitter:image" content="https://membership.boxandcross.com/og-membership.png" />
   <!-- SEO_END -->`;
 
 const updatedMainHtml = originalHtml.replace(
