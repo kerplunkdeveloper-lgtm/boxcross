@@ -2,7 +2,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import Eventbanner from '../../Components/Event/Eventbanner'
 import EventList from '../../Components/Event/EventList'
-import coverImg from '../../assets/cover.jpg'
 
 const Eventpage = () => {
   return (
@@ -10,6 +9,7 @@ const Eventpage = () => {
       <Helmet>
         <title>Events & Class Schedules | Box & Cross</title>
         <meta name="description" content="View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross." />
+<<<<<<< HEAD
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -24,6 +24,8 @@ const Eventpage = () => {
         <meta property="twitter:title" content="Events & Class Schedules | Box & Cross" />
         <meta property="twitter:description" content="View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross." />
         <meta property="twitter:image" content={`https://membership.boxandcross.com${coverImg}`} />
+=======
+>>>>>>> parent of 049e5a8 (commit)
       </Helmet>
       {/*............................ banner section for events page............................*/}
       <Eventbanner/>

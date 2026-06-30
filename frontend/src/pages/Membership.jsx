@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 import MembershipPlans from "../Components/Membership";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -28,6 +27,7 @@ const Membership = () => {
 
   return (
     <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden ">
+<<<<<<< HEAD
       <Helmet>
         <title>Membership Plans | Box & Cross</title>
         <meta name="description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
@@ -46,6 +46,8 @@ const Membership = () => {
         <meta property="twitter:description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
         <meta property="twitter:image" content={`https://membership.boxandcross.com${bannerImg}`} />
       </Helmet>
+=======
+>>>>>>> parent of 049e5a8 (commit)
       {/* HERO SECTION */}
       <section className="relative mt-[80px] md:mt-0 w-full h-[40vh] md:h-[70vh]   flex items-center justify-center overflow-hidden mb-10">
         {/* IMAGE BACKGROUND */}
