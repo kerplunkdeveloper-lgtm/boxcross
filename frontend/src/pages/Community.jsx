@@ -27,7 +27,6 @@ const Community = () => {
 
   return (
     <div className="bg-black min-h-screen overflow-x-hidden w-full relative">
-<<<<<<< HEAD
       <Helmet>
         <title>Community & Tribe | Box & Cross</title>
         <meta name="description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
@@ -46,8 +45,6 @@ const Community = () => {
         <meta property="twitter:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
         <meta property="twitter:image" content={`https://membership.boxandcross.com${comImg}`} />
       </Helmet>
-=======
->>>>>>> parent of 049e5a8 (commit)
       <Communitybanner/>
       <TribeSection/>
       <CommunityCards/>
