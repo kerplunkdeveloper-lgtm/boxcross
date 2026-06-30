@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import { Helmet } from 'react-helmet-async'
 import Communitybanner from '../Components/Communitybanner'
 import CommunityCards from '../Components/CommunityCards'
 import TribeSection from '../Components/TribeSection'
 import CommunitySection from '../Components/CommunitySection'
 import EventList from '../Components/Event/EventList'
+import comImg from '../assets/com.png'
 
 
 const Community = () => {
