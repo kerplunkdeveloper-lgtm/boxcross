@@ -36,14 +36,14 @@ const Community = () => {
         <meta property="og:url" content="https://membership.boxandcross.com/community" />
         <meta property="og:title" content="Community & Tribe | Box & Cross" />
         <meta property="og:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
-        <meta property="og:image" content="https://membership.boxandcross.com/og-community.png" />
+        <meta property="og:image" content={`https://membership.boxandcross.com${comImg}`} />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content="https://membership.boxandcross.com/community" />
         <meta property="twitter:title" content="Community & Tribe | Box & Cross" />
         <meta property="twitter:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
-        <meta property="twitter:image" content="https://membership.boxandcross.com/og-community.png" />
+        <meta property="twitter:image" content={`https://membership.boxandcross.com${comImg}`} />
       </Helmet>
       <Communitybanner/>
       <TribeSection/>
