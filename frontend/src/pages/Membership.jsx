@@ -32,7 +32,19 @@ const Membership = () => {
         <title>Membership Plans | Box & Cross</title>
         <meta name="description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
         
-       
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://membership.boxandcross.com/" />
+        <meta property="og:title" content="Membership Plans | Box & Cross" />
+        <meta property="og:description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
+        <meta property="og:image" content={`https://membership.boxandcross.com${bannerImg}`} />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://membership.boxandcross.com/" />
+        <meta property="twitter:title" content="Membership Plans | Box & Cross" />
+        <meta property="twitter:description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
+        <meta property="twitter:image" content={`https://membership.boxandcross.com${bannerImg}`} />
       </Helmet>
       {/* HERO SECTION */}
       <section className="relative mt-[80px] md:mt-0 w-full h-[40vh] md:h-[70vh]   flex items-center justify-center overflow-hidden mb-10">
