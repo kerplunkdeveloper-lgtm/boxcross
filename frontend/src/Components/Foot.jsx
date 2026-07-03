@@ -74,7 +74,9 @@ const Foot = () => {
             </a>
 
             <a
-              href="/"
+              href="https://www.instagram.com/boxandcrossboxing/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="
                 w-[36px]
                 h-[36px]
@@ -111,6 +113,7 @@ const Foot = () => {
 
           <ul className="mt-8 space-y-5">
             {[
+              { name: "HYROX Lab", path: "https://boxandcross.com/hyrox-lab/" },
               {
                 name: "Fight Club",
                 path: "https://boxandcross.com/fight-club/",
@@ -127,10 +130,9 @@ const Foot = () => {
                 name: "Fight Performance",
                 path: "https://boxandcross.com/fight-performance/",
               },
-              { name: "HYROX Lab", path: "https://boxandcross.com/hyrox-lab/" },
               {
-                name: "Junior Athletes",
-                path: "https://boxandcross.com/junior-athletes/",
+                name: "1:1 Coaching",
+                path: "https://boxandcross.com/service/11-performance-coaching/",
               },
             ].map((item, index) => (
               <li key={index}>
@@ -181,15 +183,16 @@ const Foot = () => {
           >
             <div>
               <p
-                className="text-[#827979] leading-[1.8]"
+                className="text-[#bebebe] leading-[1.8]"
                 style={{
                   fontWeight: "600",
+                  fontSize: "17px",
                 }}
               >
-                Morning 05:00 Am -
+                Morning: 5:00 Am -
               </p>
               <p
-                className="text-[#827979] leading-[1.8]"
+                className="text-[#b3aeae] leading-[1.8]"
                 style={{
                   fontWeight: "600",
                 }}
@@ -200,15 +203,15 @@ const Foot = () => {
 
             <div>
               <p
-                className="text-[#827979] leading-[1.8]"
+                className="text-[#b3aeae] leading-[1.8]"
                 style={{
                   fontWeight: "600",
                 }}
               >
-                Evening 04:00 Pm -
+                Evening:  04:00 Pm -
               </p>
               <p
-                className="text-[#827979] leading-[1.8]"
+                className="text-[#b3aeae] leading-[1.8]"
                 style={{
                   fontWeight: "600",
                 }}
@@ -240,9 +243,11 @@ const Foot = () => {
             }}
           >
             <p
-              className="text-[#827979] leading-[1.8] max-w-[300px]"
+              className="text-[#afabab] leading-[1.8] max-w-[300px]"
               style={{
-                fontWeight: "600",
+                fontWeight: "700",
+                lineHeight: "2",
+                fontSize:"15px"
               }}
             >
               No. 69, Church Street,
@@ -256,9 +261,10 @@ const Foot = () => {
             <div className="space-y-4 flex flex-col">
               <a
                 href="mailto:getfit@boxandcross.com"
-                className="text-[#827979] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+                className="text-[#b0abab] hover:text-[#d9ff00] transition-all duration-300 w-fit"
                 style={{
-                  fontWeight: "600",
+                  fontWeight: "700",
+                  fontSize:"16px"
                 }}
               >
                 getfit@boxandcross.com
@@ -266,7 +272,7 @@ const Foot = () => {
 
               <a
                 href="tel:+918925556800"
-                className="text-[#827979] hover:text-[#d9ff00] transition-all duration-300 w-fit"
+                className="text-[#b0abab] hover:text-[#d9ff00] transition-all duration-300 w-fit"
                 style={{
                   fontWeight: "600",
                 }}
