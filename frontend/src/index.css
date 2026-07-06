@@ -244,7 +244,7 @@ html {
   background: conic-gradient(
     transparent,
     transparent,
-    #e5ff00,
+    var(--spin-glow-color, #e5ff00),
     transparent,
     transparent
   );

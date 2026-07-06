@@ -3,13 +3,14 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { Helmet } from 'react-helmet-async'
 import Communitybanner from '../Components/Communitybanner'
+import CommunityMarquee from '../Components/CommunityMarquee'
 import CommunityCards from '../Components/CommunityCards'
 import TribeSection from '../Components/TribeSection'
+import TribeDashboard from '../Components/TribeDashboard'
 import CommunitySection from '../Components/CommunitySection'
 import EventList from '../Components/Event/EventList'
 import comImg from '../assets/com.png'
-
-
+import TrialCTA from '../Components/TrialCTA'
 const Community = () => {
   useEffect(() => {
     const initAOS = () => {
@@ -46,10 +47,15 @@ const Community = () => {
         <meta property="twitter:image" content={`https://membership.boxandcross.com${comImg}`} />
       </Helmet>
       <Communitybanner/>
+      <CommunityMarquee/>
+      
       <TribeSection/>
-      <CommunityCards/>
+       <CommunityCards/>
+      <TribeDashboard/>
+     
       <EventList/>
       <CommunitySection/>
+      <TrialCTA/>
    
     </div>
   )

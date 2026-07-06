@@ -66,10 +66,10 @@ export default function CommunitySection() {
 
   return (
     <section className="bg-black text-white py-0 md:py-20 md:px-5 overflow-hidden">
-      <div className="max-w-8xl mx-auto">
+      <div className="max-w-8xl mx-auto ">
 
         {/* Member Stories Section */}
-        <div className="mb-20">
+        <div className="mb-20 lg:px-10">
           <h2 
             data-aos="fade-up"
             className="text-3xl text-white font-black mb-10 text-center  uppercase tracking-wide" 
@@ -212,110 +212,7 @@ export default function CommunitySection() {
           </div>
         </div>
 
-        {/* CTA Section Box wrapped in Spin Border */}
-        <div
-          data-aos="zoom-in"
-          className="card-border-spin-container rounded-[32px] p-[1.5px] mb-12"
-        >
-          <div 
-            className="card-border-spin-inner relative rounded-[30px] overflow-hidden p-8 sm:p-12 md:p-16 lg:p-20 bg-cover bg-right flex flex-col justify-between"
-            style={{ backgroundImage: `url(${bannerBg})` }}
-          >
-            {/* Overlay to ensure text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/95 md:via-black/85 to-black/35 z-0"></div>
-
-            {/* Outlined BXC Logo in Top-Right */}
-            <div 
-              className="absolute top-4 right-4 sm:top-6 sm:right-8 text-[60px] sm:text-[80px] md:text-[120px] font-black opacity-10 sm:opacity-15 select-none pointer-events-none" 
-              style={{ 
-                fontFamily: '"Bebas Neue", sans-serif',
-                WebkitTextStroke: "2px #E5FF00",
-                color: "transparent"
-              }}
-            >
-              BXC
-            </div>
-
-            {/* Content Wrapper */}
-            <div className="relative z-10 flex flex-col justify-between h-full w-full">
-              <div className="max-w-full lg:max-w-[45%]">
-                {/* Tech Badge */}
-                <div 
-                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E5FF00]/10 border border-[#E5FF00]/30 text-[#E5FF00] text-xs uppercase tracking-widest font-extrabold w-fit mb-6"
-                  style={{ fontFamily: '"Bebas Neue", sans-serif' }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#E5FF00] animate-pulse"></span>
-                  Join The Movement
-                </div>
-
-                <h2 
-                  className="text-3xl sm:text-5xl md:text-4xl font-black text-white leading-none uppercase tracking-tight" 
-                  style={{ fontFamily: '"Bebas Neue", sans-serif' , lineHeight: '1.2' }}
-                >
-                  THE TRIBE IS <br className="hidden sm:block" /> ALREADY TRAINING.
-                </h2>
-
-                <h3 
-                  className="text-[#E5FF00] text-xl sm:text-3xl md:text-3xl italic   mt-3 " 
-                  style={{ fontFamily: '"Bebas Neue", sans-serif' }}
-                >
-                  YOUR FIRST SESSION IS FREE.
-                </h3>
-              </div>
-
-              {/* Features Grid Badges */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10 w-full">
-                {[
-                  { icon: FaUser, text: "Expert Coaches" },
-                  { icon: FaStar, text: "World Class Training" },
-                  { icon: FaUsers, text: "Supportive Community" },
-                  { icon: FaBolt, text: "Premium Facilities" },
-                ].map((item, idx) => {
-                  const Icon = item.icon;
-                  return (
-                    <div 
-                      key={idx}
-                      className="flex items-center gap-3.5 p-4 rounded-2xl bg-zinc-950/40 border border-zinc-900/50 backdrop-blur-md hover:border-[#E5FF00]/30 hover:bg-zinc-900/60 transition-all duration-300 group"
-                    >
-                      <div className="p-2 rounded-lg bg-zinc-900 border border-zinc-800/80 group-hover:bg-[#E5FF00] group-hover:border-[#E5FF00] transition-all duration-300 flex-shrink-0">
-                        <Icon className="text-[#E5FF00] group-hover:text-black transition-colors duration-300 text-xl md:text-base" />
-                      </div>
-                      <span className="text-xl font-bold text-zinc-300 group-hover:text-white transition-colors duration-300">
-                        {item.text}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Action Buttons Row */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-10 w-full">
-                {/* Book Free Trial */}
-                <button 
-                  onClick={handleBookTrial}
-                  className="group relative overflow-hidden bg-[#E5FF00] text-black px-8 py-4.5 rounded-xl font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-3 transition-all duration-300 hover:shadow-[0_0_25px_rgba(229,255,0,0.35)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer w-full sm:w-auto"
-                >
-                  <span className="relative z-10 flex items-center gap-3">
-                    <span>BOOK FREE TRIAL</span>
-                    <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </button>
-
-                {/* WhatsApp Community */}
-                <button 
-                  onClick={handleWhatsappJoin}
-                  className="group relative overflow-hidden border border-zinc-850 text-[#E5FF00] hover:text-black px-8 py-4.5 rounded-xl font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-3 transition-all duration-300 hover:bg-[#E5FF00] hover:border-[#E5FF00] hover:shadow-[0_0_20px_rgba(229,255,0,0.15)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer bg-zinc-950/60 backdrop-blur-sm w-full sm:w-auto"
-                >
-                  <span className="relative z-10 flex items-center gap-3">
-                    <FaWhatsapp className="text-base" />
-                    <span>JOIN WHATSAPP COMMUNITY</span>
-                    <FaArrowRight className="text-xs transition-transform duration-300 group-hover:translate-x-1" />
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+       
       </div>
     </section>
   );
