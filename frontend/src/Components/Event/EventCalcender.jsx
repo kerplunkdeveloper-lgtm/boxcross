@@ -201,10 +201,7 @@ const EventCalender = ({ events = [] }) => {
                        )}
                      </div>
 
-                     <button className="w-full relative z-10 bg-[#e5ff00] text-black font-black uppercase tracking-widest text-[13px] py-4 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center justify-center gap-2 group/btn cursor-pointer">
-                       Book This Session
-                       <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                     </button>
+                   
                    </div>
                  );
                })
