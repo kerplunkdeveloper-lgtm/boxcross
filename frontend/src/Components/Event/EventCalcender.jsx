@@ -54,7 +54,7 @@ const EventCalender = ({ events = [] }) => {
   const month = selectedFullDate.toLocaleDateString('en-GB', { month: 'short' });
 
   return (
-    <div className="w-full py-16 px-4 md:px-8 max-w-7xl mx-auto">
+    <div className="w-full py-17 px-2 md:px-8 max-w-7xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start lg:items-stretch">
         
         {/* Left Side: Premium Calendar UI */}
@@ -133,14 +133,7 @@ const EventCalender = ({ events = [] }) => {
 
         {/* Right Side: Event Details Card */}
         <div className="w-full lg:w-[50%] flex flex-col justify-start">
-           <div className="flex items-center gap-3 mb-6 px-2">
-             <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-[#e5ff00]">
-               <Calendar size={24} strokeWidth={2.5} />
-             </div>
-             <h2 className="text-2xl md:text-3xl font-black text-white tracking-wide" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
-               {weekday} {month} <span className="text-[#e5ff00]">{selectedDate}</span> {currentYear}
-             </h2>
-           </div>
+          
 
            <div className="space-y-6">
              {selectedEvents.length > 0 ? (
@@ -151,14 +144,21 @@ const EventCalender = ({ events = [] }) => {
                  return (
                    <div key={idx} className="bg-[#0a0a0a] rounded-[2rem] p-6 md:p-8 border border-white/5 shadow-2xl relative overflow-hidden group hover:border-white/10 transition-colors duration-500">
                      <div className="absolute inset-0 bg-gradient-to-br from-[#e5ff00]/0 via-[#e5ff00]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                     
+                      <div className="flex items-center gap-3 mb-6 px-2">
+             <div className=" rounded-xl bg-white/5 border border-white/10 text-[#e5ff00]">
+               <Calendar size={25} strokeWidth={2.5} />
+             </div>
+             <h2 className="text-2xl md:text-3xl font-black text-white tracking-wide" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+               {weekday} {month} <span className="text-[#e5ff00]">{selectedDate}</span> {currentYear}
+             </h2>
+           </div>
                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-8 relative z-10">
                        <h3 className="text-xl md:text-2xl font-black text-white leading-tight sm:pr-4" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                          {event.title}
                        </h3>
                        {event.price !== null && event.price !== undefined && (
                          <div className="bg-[#e5ff00]/10 border border-[#e5ff00]/30 px-4 py-2 rounded-xl shrink-0">
-                           <span className="text-xl font-black text-[#e5ff00]">₹{event.price}</span>
+                           <span className="text-lg font-black text-[#e5ff00]">₹{event.price}</span>
                          </div>
                        )}
                      </div>
@@ -167,33 +167,33 @@ const EventCalender = ({ events = [] }) => {
                        {timeSlot && (
                          <div className="flex items-start gap-4 text-gray-300 group/item">
                            <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#e5ff00] group-hover/item:bg-[#e5ff00]/10 transition-colors">
-                             <Timer size={18} />
+                             <Timer size={20} />
                            </div>
                            <div className="flex flex-col mt-0.5">
-                             <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Time</span>
-                             <span className="text-sm font-semibold tracking-wide text-gray-200">{timeSlot.time}</span>
+                             <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Time</span>
+                             <span className="text-lg font-semibold tracking-wide text-gray-200">{timeSlot.time}</span>
                            </div>
                          </div>
                        )}
 
                        <div className="flex items-start gap-4 text-gray-300 group/item">
                          <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#e5ff00] group-hover/item:bg-[#e5ff00]/10 transition-colors">
-                           <MapPin size={18} />
+                           <MapPin size={20} />
                          </div>
                          <div className="flex flex-col mt-0.5">
-                           <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Location</span>
-                           <span className="text-sm font-semibold tracking-wide text-gray-200 leading-relaxed">{event.location}</span>
+                           <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Location</span>
+                           <span className="text-lg font-semibold tracking-wide text-gray-200 leading-relaxed">{event.location}</span>
                          </div>
                        </div>
 
                        {timeSlot && (
                          <div className="flex items-start gap-4 text-gray-300 group/item">
                            <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#e5ff00] group-hover/item:bg-[#e5ff00]/10 transition-colors">
-                             <Users size={18} />
+                             <Users size={20} />
                            </div>
                            <div className="flex flex-col mt-0.5">
-                             <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Availability</span>
-                             <span className="text-sm font-semibold tracking-wide text-gray-200">
+                             <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">Availability</span>
+                             <span className="text-lg font-semibold tracking-wide text-gray-200">
                                {timeSlot.slots - (timeSlot.booked || 0)} spots available
                              </span>
                            </div>
