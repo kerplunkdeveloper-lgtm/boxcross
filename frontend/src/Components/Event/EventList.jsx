@@ -24,6 +24,7 @@ import {
 } from "../../api/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
+import EventCalender from "./EventCalcender";
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -431,6 +432,29 @@ const EventList = () => {
                       alt={event.title}
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
+                    
+                    {/* Stacked Date Badge Overlay */}
+                    {(() => {
+                      const dateStr = event.schedules?.[0]?.date;
+                      if (!dateStr || dateStr === "TBA") return null;
+                      const d = new Date(dateStr);
+                      if (isNaN(d.getTime())) return null;
+                      
+                      const month = d.toLocaleDateString('en-GB', { month: 'short' });
+                      const day = d.toLocaleDateString('en-GB', { day: '2-digit' });
+
+                      return (
+                        <div className="absolute top-3 left-3 bg-[#111111] border border-white/10 rounded-lg shadow-xl flex flex-col items-center overflow-hidden z-10 w-[50px] group-hover:scale-105 transition-transform duration-300">
+                          <div className="bg-[#e5ff00] w-full text-center py-1 text-[10px] font-black uppercase text-black tracking-widest leading-none">
+                            {month}
+                          </div>
+                          <div className="bg-[#111111] text-white w-full text-center py-1.5 text-lg font-black leading-none" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                            {day}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
                     {/* Subtle Top-Bottom Gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
                   </div>
@@ -445,6 +469,32 @@ const EventList = () => {
                       >
                         {event.title}
                       </h3>
+
+                      {/* Date & Time */}
+                      <div className="flex flex-wrap items-center gap-3 mb-3 mt-1">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
+                          <Calendar size={13} className="text-[#e5ff00]" />
+                          <span 
+                            className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            {event.schedules?.[0]?.date 
+                              ? (isNaN(new Date(event.schedules[0].date).getTime()) 
+                                  ? event.schedules[0].date 
+                                  : new Date(event.schedules[0].date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }))
+                              : "TBA"}
+                          </span>
+                        </div>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
+                          <Timer size={13} className="text-[#e5ff00]" />
+                          <span 
+                            className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            {event.schedules?.[0]?.timeSlots?.[0]?.time || "TBA"}
+                          </span>
+                        </div>
+                      </div>
 
                       {/* Location venue */}
                       <div className="flex items-start gap-1.5 text-gray-200 hover:text-gray-300 transition-colors mb-4">
@@ -1836,6 +1886,9 @@ const EventList = () => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Event Calendar */}
+      <EventCalender events={displayEvents} />
     </section>
   );
 };

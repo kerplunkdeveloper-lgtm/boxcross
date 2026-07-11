@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet-async'
 import Eventbanner from '../../Components/Event/Eventbanner'
 import EventList from '../../Components/Event/EventList'
 import coverImg from '../../assets/cover.jpg'
+import Eventlastcontact from './Eventlastcontact'
+import Eventhighlight from './Eventhighlight'
 
 const Eventpage = () => {
   return (
@@ -28,6 +30,10 @@ const Eventpage = () => {
       <Eventbanner/>
       {/*............................ event listing section............................*/}
       <EventList/>
+      {/*............................ event highlight section............................*/}
+      <Eventhighlight/>
+      {/*............................ last contact form............................*/}
+      <Eventlastcontact/>
     </div>
   )
 }   
