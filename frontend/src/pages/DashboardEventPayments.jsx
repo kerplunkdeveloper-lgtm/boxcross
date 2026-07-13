@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  CreditCard, Search, DollarSign, CheckCircle, AlertTriangle, Calendar, Filter, Trash2, Users, ArrowUpDown
+  CreditCard, Search, DollarSign, CheckCircle, AlertTriangle, Calendar, Filter, Trash2, Users, ArrowUpDown, Download
 } from "lucide-react";
 import { getEventBookings, deleteEventBooking } from "../api/api";
 import { toast } from "react-hot-toast";
@@ -97,6 +97,123 @@ const DashboardEventPayments = () => {
       booking.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  const handleExportToExcel = () => {
+    const headers = [
+      { name: "Name", width: 180 },
+      { name: "Email", width: 260 },
+      { name: "Phone", width: 150 },
+      { name: "Event Title", width: 250 },
+      { name: "Schedule Date", width: 150 },
+      { name: "Schedule Time Slot", width: 150 },
+      { name: "Seats", width: 80 },
+      { name: "Total Amount", width: 130 },
+      { name: "Razorpay Order ID", width: 220 },
+      { name: "Razorpay Payment ID", width: 220 },
+      { name: "Status", width: 160 }
+    ];
+
+    const rows = filteredBookings.map((booking) => [
+      booking.name || "",
+      booking.email || "",
+      booking.phone || "",
+      booking.event?.title || "Deleted Event",
+      booking.date || "",
+      booking.timeSlot || "",
+      booking.seats || 0,
+      Number(booking.totalAmount) === 0 ? "Free Plan" : `₹${booking.totalAmount}`,
+      booking.razorpayOrderId || "N/A",
+      booking.razorpayPaymentId || "N/A",
+      booking.status || ""
+    ]);
+
+    // Construct the XML/HTML spreadsheet template for Excel
+    let html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!--[if gte mso 9]>
+        <xml>
+          <x:ExcelWorkbook>
+            <x:ExcelWorksheets>
+              <x:ExcelWorksheet>
+                <x:Name>Event Bookings</x:Name>
+                <x:WorksheetOptions>
+                  <x:DisplayGridlines/>
+                </x:WorksheetOptions>
+              </x:ExcelWorksheet>
+            </x:ExcelWorksheets>
+          </x:ExcelWorkbook>
+        </xml>
+        <![endif]-->
+        <style>
+          table { border-collapse: collapse; }
+          th { 
+            background-color: #e5ff00; 
+            color: #000000; 
+            font-weight: bold; 
+            font-family: Arial, sans-serif; 
+            font-size: 11pt;
+            border: 1px solid #cccccc; 
+            text-align: left;
+            padding: 8px;
+          }
+          td { 
+            font-weight: bold; 
+            font-family: Arial, sans-serif; 
+            font-size: 10pt;
+            border: 1px solid #cccccc; 
+            padding: 8px;
+            vertical-align: middle;
+          }
+        </style>
+      </head>
+      <body>
+        <table>
+          <thead>
+            <tr>
+    `;
+
+    headers.forEach(h => {
+      html += `              <th width="${h.width}">${h.name}</th>\n`;
+    });
+
+    html += `            </tr>
+          </thead>
+          <tbody>
+    `;
+
+    rows.forEach(row => {
+      html += `            <tr>\n`;
+      row.forEach(cell => {
+        // Escape special HTML chars to prevent tag breaking
+        const escapedCell = String(cell)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+        html += `              <td>${escapedCell}</td>\n`;
+      });
+      html += `            </tr>\n`;
+    });
+
+    html += `          </tbody>
+        </table>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob([html], { type: "application/vnd.ms-excel;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `Event_Bookings_${new Date().toISOString().split('T')[0]}.xls`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
@@ -242,6 +359,16 @@ const DashboardEventPayments = () => {
                   <option value="failed" className="bg-[var(--db-card)] text-[var(--db-text)]">Failed</option>
                 </select>
               </div>
+
+              {/* Export to Excel Button */}
+              <button
+                onClick={handleExportToExcel}
+                className="flex items-center gap-1.5 px-4 h-9 bg-[#e5ff00] hover:bg-[#d4eb00] active:scale-95 text-black font-black uppercase tracking-wider text-[10px] rounded-full shadow-lg shadow-[#e5ff00]/10 transition-all cursor-pointer"
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                <Download size={12} />
+                Export to Excel
+              </button>
             </div>
           </div>
 
@@ -255,49 +382,59 @@ const DashboardEventPayments = () => {
               <span>Loading event bookings...</span>
             </div>
           ) : filteredBookings.length > 0 ? (
-            <div className="overflow-x-auto w-full">
-              <table className="w-full text-left border-collapse min-w-[1000px]">
+            <div className="overflow-x-auto w-full custom-scrollbar pb-2">
+              <table className="w-full text-left border-collapse min-w-[1300px]">
                 <thead>
                   <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
-                    <th className="py-4 px-4 rounded-l-xl">User Info</th>
-                    <th className="py-4 px-4">Event Details</th>
-                    <th className="py-4 px-4">Schedule Date/Time</th>
-                    <th className="py-4 px-4">Seats</th>
-                    <th className="py-4 px-4">Total Amount</th>
-                    <th className="py-4 px-4">Razorpay Order ID</th>
-                    <th className="py-4 px-4">Razorpay Payment ID</th>
-                    <th className="py-4 px-4">Status</th>
+                    <th className="py-4 px-4 rounded-l-xl border-r border-[var(--db-card-border)]/40">Name</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Email</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Phone</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Event Details</th>
+                    <th className="py-4 px-4 min-w-[180px] whitespace-nowrap border-r border-[var(--db-card-border)]/40">Schedule Date/Time</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Seats</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Total Amount</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Razorpay Order ID</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Razorpay Payment ID</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Status</th>
                     <th className="py-4 px-4 text-center rounded-r-xl">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--db-card-border)]">
                   {filteredBookings.map((booking) => (
                     <tr key={booking._id} className="hover:bg-[var(--db-table-hover)] transition-colors">
-                      {/* User Info */}
-                      <td className="py-4 px-4 text-left">
-                        <div className="font-bold text-[var(--db-text)] text-sm">{booking.name}</div>
-                        <div className="text-[10px] text-[var(--db-text-muted)] mt-0.5">{booking.email}</div>
-                        <div className="text-[10px] text-[var(--db-text-muted)]">{booking.phone}</div>
+                      {/* Name */}
+                      <td className="py-4 px-4 text-left font-bold text-[var(--db-text)] text-sm whitespace-nowrap border-r border-[var(--db-card-border)]/30">
+                        {booking.name}
+                      </td>
+
+                      {/* Email */}
+                      <td className="py-4 px-4 text-left text-xs text-[var(--db-text-muted)] font-medium border-r border-[var(--db-card-border)]/30">
+                        {booking.email}
+                      </td>
+
+                      {/* Phone */}
+                      <td className="py-4 px-4 text-left text-xs text-[var(--db-text-muted)] font-mono whitespace-nowrap border-r border-[var(--db-card-border)]/30">
+                        {booking.phone}
                       </td>
 
                       {/* Event Details */}
-                      <td className="py-4 px-4 text-sm text-[var(--db-text)] font-semibold max-w-[200px] truncate">
+                      <td className="py-4 px-4 text-sm text-[var(--db-text)] font-semibold max-w-[200px] truncate border-r border-[var(--db-card-border)]/30">
                         {booking.event?.title || "Deleted Event"}
                       </td>
 
                       {/* Schedule Date/Time */}
-                      <td className="py-4 px-4 text-xs text-[var(--db-text-muted)]">
+                      <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] min-w-[180px] whitespace-nowrap border-r border-[var(--db-card-border)]/30">
                         <span className="font-bold text-[var(--db-accent-highlight)] uppercase block">{booking.date}</span>
                         <span className="text-[10px] text-[var(--db-text-muted)] block mt-0.5">{booking.timeSlot}</span>
                       </td>
 
                       {/* Seats */}
-                      <td className="py-4 px-4 text-sm text-[var(--db-text)] font-bold font-mono">
+                      <td className="py-4 px-4 text-sm text-[var(--db-text)] font-bold font-mono border-r border-[var(--db-card-border)]/30">
                         {booking.seats}
                       </td>
 
                       {/* Amount Paid */}
-                      <td className="py-4 px-4 text-sm text-[var(--db-accent-highlight)] font-extrabold font-mono">
+                      <td className="py-4 px-4 text-sm text-[var(--db-accent-highlight)] font-extrabold font-mono border-r border-[var(--db-card-border)]/30">
                         {Number(booking.totalAmount) === 0 ? (
                           <span className="text-xs font-black uppercase tracking-wider text-[#e5ff00]">Free Plan</span>
                         ) : (
@@ -306,17 +443,17 @@ const DashboardEventPayments = () => {
                       </td>
 
                       {/* Razorpay Order ID */}
-                      <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] font-mono">
+                      <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] font-mono border-r border-[var(--db-card-border)]/30">
                         {booking.razorpayOrderId || "N/A"}
                       </td>
 
                       {/* Razorpay Payment ID */}
-                      <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] font-mono">
+                      <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] font-mono border-r border-[var(--db-card-border)]/30">
                         {booking.razorpayPaymentId || "N/A"}
                       </td>
 
                       {/* Status */}
-                      <td className="py-4 px-4">
+                      <td className="py-4 px-4 border-r border-[var(--db-card-border)]/30">
                         {Number(booking.totalAmount) === 0 && (booking.status === 'payment successfully' || booking.status === 'confirmed') ? (
                           <span className="inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00]">
                             Free Entry Successful
