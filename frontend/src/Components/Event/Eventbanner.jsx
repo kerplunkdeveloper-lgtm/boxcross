@@ -39,7 +39,7 @@ const Eventbanner = () => {
         "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1920&auto=format&fit=crop",
       mediaType: "image",
     },
-  ]; 
+  ];
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -164,7 +164,7 @@ const Eventbanner = () => {
 
   return (
     <section
-      className="relative w-full h-[50vh] sm:h-[65vh] md:h-[80vh] overflow-hidden select-none z-10 border-b border-white/5"
+      className="relative w-full h-[50vh] sm:h-[65vh] md:h-[500px] overflow-hidden select-none z-10 border-b border-white/5"
       onMouseEnter={stopAutoplay}
       onMouseLeave={startAutoplay}
     >
@@ -187,7 +187,11 @@ const Eventbanner = () => {
                   <video
                     src={currentBanner.mediaUrl}
                     className="w-full h-full object-cover object-center min-h-full min-w-full"
-                    style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                    style={{
+                      objectFit: "cover",
+                      width: "100%",
+                      height: "100%",
+                    }}
                     autoPlay
                     muted={isMuted}
                     loop
@@ -214,7 +218,7 @@ const Eventbanner = () => {
                   src={currentBanner.mediaUrl}
                   alt={currentBanner.title}
                   className="w-full h-full object-cover object-center min-h-full min-w-full"
-                  style={{ objectFit: "fill", width: "100%", height: "100%" }}
+                  style={{ objectFit: "cover", width: "100%", height: "100%" }}
                   loading="eager"
                 />
               )}
@@ -274,7 +278,9 @@ const Eventbanner = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      document.getElementById("event-list")?.scrollIntoView({ behavior: "smooth" });
+                      document
+                        .getElementById("event-list")
+                        ?.scrollIntoView({ behavior: "smooth" });
                     }}
                     className="inline-flex items-center gap-2 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[14px] sm:text-[16px] px-6 py-2.5 sm:py-3 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
