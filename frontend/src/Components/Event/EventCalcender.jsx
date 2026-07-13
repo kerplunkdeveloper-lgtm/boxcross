@@ -54,7 +54,7 @@ const EventCalender = ({ events = [] }) => {
   const month = selectedFullDate.toLocaleDateString('en-GB', { month: 'short' });
 
   return (
-    <div className="w-full py-17 px-2 md:px-8 max-w-7xl mx-auto">
+    <div className="w-full py-5 md:py-17 px-0 md:px-8 max-w-7xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start lg:items-stretch">
         
         {/* Left Side: Premium Calendar UI */}
