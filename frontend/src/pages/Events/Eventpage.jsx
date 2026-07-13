@@ -9,7 +9,7 @@ import Eventhighlight from './Eventhighlight'
 
 const Eventpage = () => {
   return (
-    <div className='w-full '>
+    <div className='w-full  '>
       <Helmet>
         <title>Events & Class Schedules | Box & Cross</title>
         <meta name="description" content="View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross." />

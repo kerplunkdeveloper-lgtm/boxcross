@@ -214,7 +214,7 @@ const Eventbanner = () => {
                   src={currentBanner.mediaUrl}
                   alt={currentBanner.title}
                   className="w-full h-full object-cover object-center min-h-full min-w-full"
-                  style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                  style={{ objectFit: "fill", width: "100%", height: "100%" }}
                   loading="eager"
                 />
               )}
