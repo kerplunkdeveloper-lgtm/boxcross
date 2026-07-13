@@ -44,7 +44,7 @@ const GymMarquee = lazy(() => import("./Components/GymMarquee"));
 // Layout with Navbar and Footer
 const Layout = () => {
   const location = useLocation();
-  const isEventsPage = location.pathname === "/events";
+  const isEventsPage = location.pathname.startsWith("/events");
 
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
@@ -75,9 +75,12 @@ const RoutePreloader = ({ setIsLoading }) => {
 
   useEffect(() => {
     if (location.pathname !== prevPath) {
+      const isCurrentEvents = location.pathname.startsWith("/events");
+      const isPrevEvents = prevPath.startsWith("/events");
+
       if (
         location.pathname === "/" ||
-        location.pathname === "/events" ||
+        (isCurrentEvents && !isPrevEvents) ||
         location.pathname === "/community"
       ) {
         window.isPreloaderDone = false;
@@ -126,6 +129,7 @@ const App = () => {
                 <Route element={<Layout />}>
                   <Route path="/" element={<MembershipPage />} />
                   <Route path="/events" element={<Eventpage />} />
+                  <Route path="/events/:id" element={<Eventpage />} />
                   <Route path="/community" element={<Community />} />
                 </Route>
 

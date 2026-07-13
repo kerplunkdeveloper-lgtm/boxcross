@@ -17,6 +17,7 @@ import {
   Timer,
   Flame,
 } from "lucide-react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   getEventsList,
   bookEventItem,
@@ -27,6 +28,11 @@ import { toast } from "react-hot-toast";
 import EventCalender from "./EventCalcender";
 
 const EventList = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const isBooking = searchParams.get("book") === "true";
+
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -49,6 +55,25 @@ const EventList = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [createdBooking, setCreatedBooking] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+
+  // Open booking screen
+  const handleOpenBooking = (event) => {
+    setBookingEvent(event);
+    setActiveDateIndex(0);
+    setSelectedSlot(null);
+    setSeatsCount(1);
+    setShowSeatsDrawer(false);
+    setShowContactForm(false);
+
+    // Clear user info and reset checkout state
+    setCustomerName("");
+    setCustomerEmail("");
+    setCustomerPhone("");
+    setCheckoutStep(1);
+    setTermsAccepted(false);
+    setCreatedBooking(null);
+    setBookingSuccess(false);
+  };
 
   const fetchEvents = async () => {
     try {
@@ -90,6 +115,29 @@ const EventList = () => {
     }
   }, [displayEvents]);
 
+  // Sync selected event and booking flow from URL parameters
+  useEffect(() => {
+    if (id && events.length > 0) {
+      const found = events.find((e) => e._id === id);
+      if (found) {
+        setSelectedEvent(found);
+        if (isBooking) {
+          if (!bookingEvent || bookingEvent._id !== id) {
+            handleOpenBooking(found);
+          }
+        } else {
+          setBookingEvent(null);
+        }
+      } else {
+        setSelectedEvent(null);
+        setBookingEvent(null);
+      }
+    } else if (!id) {
+      setSelectedEvent(null);
+      setBookingEvent(null);
+    }
+  }, [id, events, isBooking]);
+
   // Lock body scroll when any modal is open (this also triggers FloatingActions to hide)
   useEffect(() => {
     if (selectedEvent || bookingEvent) {
@@ -126,24 +174,7 @@ const EventList = () => {
     },
   };
 
-  // Open booking screen
-  const handleOpenBooking = (event) => {
-    setBookingEvent(event);
-    setActiveDateIndex(0);
-    setSelectedSlot(null);
-    setSeatsCount(1);
-    setShowSeatsDrawer(false);
-    setShowContactForm(false);
 
-    // Clear user info and reset checkout state
-    setCustomerName("");
-    setCustomerEmail("");
-    setCustomerPhone("");
-    setCheckoutStep(1);
-    setTermsAccepted(false);
-    setCreatedBooking(null);
-    setBookingSuccess(false);
-  };
 
   // Utility to dynamically inject checkout.js script of Razorpay
   const loadRazorpayScript = () => {
@@ -430,7 +461,7 @@ const EventList = () => {
               <motion.div
                 key={event._id}
                 variants={itemVariants}
-                onClick={() => setSelectedEvent(event)}
+                onClick={() => navigate(`/events/${event._id}`)}
                 className="group relative p-[1.5px] rounded-2xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-black/70 card-border-spin-container"
               >
                 <div className="card-border-spin-inner">
@@ -618,7 +649,7 @@ const EventList = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleOpenBooking(event);
+                          navigate(`/events/${event._id}?book=true`);
                         }}
                         className="inline-flex items-center gap-1.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -648,7 +679,7 @@ const EventList = () => {
             {/* Backdrop click to close */}
             <div
               className="absolute inset-0 z-0"
-              onClick={() => setSelectedEvent(null)}
+              onClick={() => navigate("/events")}
             />
 
             <motion.div
@@ -671,7 +702,7 @@ const EventList = () => {
 
                 {/* Premium Back Arrow Button on mobile */}
                 <button
-                  onClick={() => setSelectedEvent(null)}
+                  onClick={() => navigate("/events")}
                   className="absolute top-4 left-4 p-2.5 bg-black/60 hover:bg-black/90 hover:scale-105 text-white backdrop-blur-md border border-white/10 rounded-full transition-all cursor-pointer z-30 md:hidden flex items-center justify-center shadow-lg"
                   aria-label="Go back"
                 >
@@ -683,7 +714,7 @@ const EventList = () => {
               <div className="w-full md:w-1/2 flex flex-col md:overflow-hidden flex-grow md:h-full relative">
                 {/* Close Button on desktop */}
                 <button
-                  onClick={() => setSelectedEvent(null)}
+                  onClick={() => navigate("/events")}
                   className="absolute top-6 right-6 p-3 bg-white/5 hover:bg-white/15 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30 hidden md:block"
                   aria-label="Close details"
                 >
@@ -1034,7 +1065,7 @@ const EventList = () => {
                   </div>
 
                   <button
-                    onClick={() => handleOpenBooking(selectedEvent)}
+                    onClick={() => navigate(`/events/${selectedEvent._id}?book=true`)}
                     className="inline-flex items-center justify-center gap-2 bg-[#e5ff00] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#e5ff00]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
@@ -1061,7 +1092,7 @@ const EventList = () => {
             {/* Header Block */}
             <div className="w-full max-w-5xl  bg-[#d2ec07] border-b md:border border-white/10 md:rounded-t-3xl h-16 flex items-center gap-3 px-4 shrink-0">
               <button
-                onClick={() => setBookingEvent(null)}
+                onClick={() => navigate(`/events/${bookingEvent._id}`)}
                 className="p-2 bg-white/5 hover:bg-white/10 text-black  rounded-xl transition-all border border-white/5 cursor-pointer"
                 title="Go Back"
               >
@@ -1418,8 +1449,7 @@ const EventList = () => {
                           if (bookingSuccess) {
                             setShowContactForm(false);
                             setShowSeatsDrawer(false);
-                            setBookingEvent(null);
-                            setSelectedEvent(null);
+                            navigate("/events");
                           } else {
                             setShowContactForm(false);
                           }
@@ -1512,8 +1542,7 @@ const EventList = () => {
                           onClick={() => {
                             setShowContactForm(false);
                             setShowSeatsDrawer(false);
-                            setBookingEvent(null);
-                            setSelectedEvent(null);
+                            navigate("/events");
                           }}
                           className="px-8 py-3.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-xs rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -2038,7 +2067,7 @@ const EventList = () => {
                             setShowDiscardConfirmation(false);
                             setShowContactForm(false);
                             setShowSeatsDrawer(false);
-                            setBookingEvent(null);
+                            navigate(`/events/${bookingEvent._id}`);
                           }}
                           className="w-full py-4 bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500/20 hover:border-red-500/30 font-bold uppercase tracking-wider text-xs rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
                         >
