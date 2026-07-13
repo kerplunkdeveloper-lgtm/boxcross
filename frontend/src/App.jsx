@@ -43,17 +43,20 @@ const GymMarquee = lazy(() => import("./Components/GymMarquee"));
 
 // Layout with Navbar and Footer
 const Layout = () => {
+  const location = useLocation();
+  const isEventsPage = location.pathname === "/events";
+
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
-      <Navbar />
+      {!isEventsPage && <Navbar />}
       <ScrollToTop />
       {/* <LeadModal /> */}
       <main className="flex-grow">
         <Outlet />
       </main>
-      <Foot/>
-      <GymMarquee />
-      <Footer />
+      {!isEventsPage && <Foot />}
+      {!isEventsPage && <GymMarquee />}
+      {!isEventsPage && <Footer />}
     </div>
   );
 };
