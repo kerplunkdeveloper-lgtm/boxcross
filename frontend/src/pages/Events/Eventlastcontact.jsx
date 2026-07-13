@@ -5,7 +5,7 @@ const Eventlastcontact = () => {
   return (
     <div className="w-full flex justify-center items-center py-14 px-4">
       <div className="max-w-7xl w-full bg-[#111111] rounded-2xl shadow-sm p-8 md:p-20 text-center flex flex-col items-center">
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+        <h2 className="text-3xl md:text-5xl font-bold text-[#e5ff00] mb-7">
           More Exciting Workshops Coming Soon!
         </h2>
         <p className="text-white italic  mb-8 text-sm md:text-base max-w-2xl mx-auto">

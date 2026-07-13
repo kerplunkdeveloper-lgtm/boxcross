@@ -198,7 +198,7 @@ const Eventbanner = () => {
                       e.stopPropagation();
                       setIsMuted(!isMuted);
                     }}
-                    className="absolute bottom-24 sm:bottom-20 right-6 sm:right-10 z-30 p-2 sm:p-2.5 bg-black/80 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer"
+                    className="absolute bottom-24 sm:bottom-20 right-6 sm:right-10 z-30 p-2 sm:p-2.5 bg-black/50 hover:bg-black/90 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer"
                     title={isMuted ? "Unmute Audio" : "Mute Audio"}
                   >
                     {isMuted ? (
@@ -219,7 +219,7 @@ const Eventbanner = () => {
             </div>
 
             {/* Premium Dark Vignette and Gradient Overlay */}
-            <div className="absolute inset-0 bg-black/30 z-10" />
+            <div className="absolute inset-0 bg-black/50 z-10" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20 z-10" />
             <div className="absolute inset-0 bg-radial-vignette pointer-events-none z-10" />
 
@@ -255,7 +255,7 @@ const Eventbanner = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="text-gray-300 text-[13px] sm:text-sm md:text-base ml-0 md:ml-5 lg:text-lg font-medium leading-relaxed mb-3 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3 text-white/80"
+                    className="text-white text-[16px] sm:text-sm md:text-md ml-0 md:ml-5 lg:text-lg font-bold leading-relaxed mb-3 sm:mb-6 max-w-2xl line-clamp-2 sm:line-clamp-3"
                     style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
                   >
                     {currentBanner.description}
