@@ -103,7 +103,7 @@ const DashboardEventPayments = () => {
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
       
-      <div className="max-w-6xl mx-auto space-y-6 relative z-10">
+      <div className="max-w-8xl mx-auto space-y-6 relative z-10">
         
         {/* Header Title */}
         <div className="text-left">
@@ -298,7 +298,11 @@ const DashboardEventPayments = () => {
 
                       {/* Amount Paid */}
                       <td className="py-4 px-4 text-sm text-[var(--db-accent-highlight)] font-extrabold font-mono">
-                        ₹{booking.totalAmount.toLocaleString()}
+                        {Number(booking.totalAmount) === 0 ? (
+                          <span className="text-xs font-black uppercase tracking-wider text-[#e5ff00]">Free Plan</span>
+                        ) : (
+                          `₹${booking.totalAmount.toLocaleString()}`
+                        )}
                       </td>
 
                       {/* Razorpay Order ID */}
@@ -313,15 +317,21 @@ const DashboardEventPayments = () => {
 
                       {/* Status */}
                       <td className="py-4 px-4">
-                        <span className={`inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black ${
-                          booking.status === 'payment successfully' || booking.status === 'confirmed'
-                            ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                            : booking.status === 'not payment'
-                            ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-500'
-                            : 'bg-red-500/10 border border-red-500/20 text-red-400'
-                        }`}>
-                          {booking.status}
-                        </span>
+                        {Number(booking.totalAmount) === 0 && (booking.status === 'payment successfully' || booking.status === 'confirmed') ? (
+                          <span className="inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00]">
+                            Free Entry Successful
+                          </span>
+                        ) : (
+                          <span className={`inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black ${
+                            booking.status === 'payment successfully' || booking.status === 'confirmed'
+                              ? 'bg-green-500/10 border border-green-500/20 text-green-400'
+                              : booking.status === 'not payment'
+                              ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-500'
+                              : 'bg-red-500/10 border border-red-500/20 text-red-400'
+                          }`}>
+                            {booking.status}
+                          </span>
+                        )}
                       </td>
 
                       {/* Delete Action Button */}

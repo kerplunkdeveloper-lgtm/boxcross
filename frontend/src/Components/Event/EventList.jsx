@@ -48,6 +48,7 @@ const EventList = () => {
   const [checkoutStep, setCheckoutStep] = useState(1);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [createdBooking, setCreatedBooking] = useState(null);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   const fetchEvents = async () => {
     try {
@@ -141,6 +142,7 @@ const EventList = () => {
     setCheckoutStep(1);
     setTermsAccepted(false);
     setCreatedBooking(null);
+    setBookingSuccess(false);
   };
 
   // Utility to dynamically inject checkout.js script of Razorpay
@@ -171,7 +173,11 @@ const EventList = () => {
     }
 
     setSubmittingBooking(true);
-    const toastId = toast.loading("Saving contact details...");
+    const toastId = toast.loading(
+      Number(bookingEvent.price) === 0
+        ? "Registering your entry..."
+        : "Saving contact details...",
+    );
 
     try {
       const { data } = await bookEventItem({
@@ -185,9 +191,15 @@ const EventList = () => {
       });
 
       if (data.success) {
-        toast.success("Contact details saved!", { id: toastId });
-        setCreatedBooking(data); // Stores bookingId and Razorpay order info
-        setCheckoutStep(2); // Move to Step 2 (Review & Pay)
+        if (Number(bookingEvent.price) === 0 || data.isFree) {
+          toast.success("Registered successfully!", { id: toastId });
+          await fetchEvents();
+          setBookingSuccess(true);
+        } else {
+          toast.success("Contact details saved!", { id: toastId });
+          setCreatedBooking(data); // Stores bookingId and Razorpay order info
+          setCheckoutStep(2); // Move to Step 2 (Review & Pay)
+        }
       } else {
         toast.error(data.message || "Failed to save details", { id: toastId });
       }
@@ -232,10 +244,7 @@ const EventList = () => {
             if (verifyData.success) {
               toast.success("Payment successfully!", { id: verifyToastId });
               await fetchEvents();
-              setShowContactForm(false);
-              setShowSeatsDrawer(false);
-              setBookingEvent(null);
-              setSelectedEvent(null);
+              setBookingSuccess(true);
             } else {
               toast.error("Mock verification failed", { id: verifyToastId });
             }
@@ -282,10 +291,7 @@ const EventList = () => {
             if (verifyData.success) {
               toast.success("Payment successfully!", { id: verifyToastId });
               await fetchEvents();
-              setShowContactForm(false);
-              setShowSeatsDrawer(false);
-              setBookingEvent(null);
-              setSelectedEvent(null);
+              setBookingSuccess(true);
             } else {
               toast.error("Payment verification failed", { id: verifyToastId });
             }
@@ -337,7 +343,10 @@ const EventList = () => {
   };
 
   return (
-    <section id="event-list" className="py-16 md:py-24 px-6 md:px-16 lg:px-24 bg-[#030303] relative overflow-hidden select-none">
+    <section
+      id="event-list"
+      className="py-16 md:py-24 px-6 md:px-16 lg:px-24 bg-[#030303] relative overflow-hidden select-none"
+    >
       {/* Background Radial Glow */}
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#e5ff00]/3 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#ff9e00]/2 rounded-full blur-[140px] pointer-events-none" />
@@ -358,7 +367,7 @@ const EventList = () => {
             className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white mt-3"
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
-           Events & Workshops
+            Events & Workshops
           </h2>
           <p
             className="text-gray-200 text-md md:text-xl mt-5 max-w-xl text-center"
@@ -432,23 +441,32 @@ const EventList = () => {
                       alt={event.title}
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
-                    
+
                     {/* Stacked Date Badge Overlay */}
                     {(() => {
                       const dateStr = event.schedules?.[0]?.date;
                       if (!dateStr || dateStr === "TBA") return null;
                       const d = new Date(dateStr);
                       if (isNaN(d.getTime())) return null;
-                      
-                      const month = d.toLocaleDateString('en-GB', { month: 'short' });
-                      const day = d.toLocaleDateString('en-GB', { day: '2-digit' });
+
+                      const month = d.toLocaleDateString("en-GB", {
+                        month: "short",
+                      });
+                      const day = d.toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                      });
 
                       return (
                         <div className="absolute top-3 left-3 bg-[#111111] border border-white/10 rounded-lg shadow-xl flex flex-col items-center overflow-hidden z-10 w-[50px] group-hover:scale-105 transition-transform duration-300">
                           <div className="bg-[#e5ff00] w-full text-center py-1 text-[10px] font-black uppercase text-black tracking-widest leading-none">
                             {month}
                           </div>
-                          <div className="bg-[#111111] text-white w-full text-center py-1.5 text-lg font-black leading-none" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                          <div
+                            className="bg-[#111111] text-white w-full text-center py-1.5 text-lg font-black leading-none"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
                             {day}
                           </div>
                         </div>
@@ -474,24 +492,37 @@ const EventList = () => {
                       <div className="flex flex-wrap items-center gap-3 mb-3 mt-1">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
                           <Calendar size={13} className="text-[#e5ff00]" />
-                          <span 
+                          <span
                             className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
                           >
-                            {event.schedules?.[0]?.date 
-                              ? (isNaN(new Date(event.schedules[0].date).getTime()) 
-                                  ? event.schedules[0].date 
-                                  : new Date(event.schedules[0].date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }))
+                            {event.schedules?.[0]?.date
+                              ? isNaN(
+                                  new Date(event.schedules[0].date).getTime(),
+                                )
+                                ? event.schedules[0].date
+                                : new Date(
+                                    event.schedules[0].date,
+                                  ).toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                  })
                               : "TBA"}
                           </span>
                         </div>
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
                           <Timer size={13} className="text-[#e5ff00]" />
-                          <span 
+                          <span
                             className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
                           >
-                            {event.schedules?.[0]?.timeSlots?.[0]?.time || "TBA"}
+                            {event.schedules?.[0]?.timeSlots?.[0]?.time ||
+                              "TBA"}
                           </span>
                         </div>
                       </div>
@@ -560,15 +591,28 @@ const EventList = () => {
                             ₹{event.originalPrice}
                           </span>
                         )}
-                        <span
-                          className="text-4xl mt-1 font-black text-gray-200 leading-none"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          ₹{event.price}{" "}
-                          <span className="text-[15px] text-gray-400 font-normal ml-0.5 lowercase">
-                            onwards
+                        {Number(event.price) === 0 ? (
+                          <span
+                            className="text-lg font-black text-[#e5ff00] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 rounded-lg inline-block self-start"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
+                            Free Entry
                           </span>
-                        </span>
+                        ) : (
+                          <span
+                            className="text-4xl mt-1 font-black text-gray-200 leading-none"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
+                            ₹{event.price}{" "}
+                            <span className="text-[15px] text-gray-400 font-normal ml-0.5 lowercase">
+                              onwards
+                            </span>
+                          </span>
+                        )}
                       </div>
 
                       <button
@@ -600,7 +644,7 @@ const EventList = () => {
       {/* Dynamic Detail Modal */}
       <AnimatePresence>
         {selectedEvent && (
-          <div className="fixed inset-0 z-[9998] flex items-center justify-center p-0 md:p-4 bg-black/85 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[9998] flex items-center justify-center p-0 bg-black/95">
             {/* Backdrop click to close */}
             <div
               className="absolute inset-0 z-0"
@@ -608,14 +652,14 @@ const EventList = () => {
             />
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 15 }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.92, y: 15 }}
-              transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="bg-[#0a0a0a] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full md:h-auto max-h-screen md:max-h-[90vh] md:max-w-9xl overflow-y-auto md:overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row animate-in fade-in zoom-in duration-200"
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 28 }}
+              className="bg-[#0a0a0a] w-full h-full overflow-y-auto md:overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row animate-in fade-in zoom-in duration-200"
             >
               {/* Left side: Image banner section */}
-              <div className="relative w-full md:w-1/2 aspect-[16/10] md:aspect-auto md:min-h-[450px] overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-white/5">
+              <div className="relative w-full md:w-1/2 aspect-[16/10] md:aspect-auto h-[40vh] md:h-full overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-white/5">
                 <img
                   src={selectedEvent.imageUrl}
                   alt={selectedEvent.title}
@@ -636,18 +680,18 @@ const EventList = () => {
               </div>
 
               {/* Right side: Details + Footer wrapper */}
-              <div className="w-full md:w-1/2 flex flex-col md:overflow-hidden flex-grow md:max-h-[90vh] relative">
+              <div className="w-full md:w-1/2 flex flex-col md:overflow-hidden flex-grow md:h-full relative">
                 {/* Close Button on desktop */}
                 <button
                   onClick={() => setSelectedEvent(null)}
-                  className="absolute top-4 right-4 p-3 bg-white/5 hover:bg-white/15 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30 hidden md:block"
+                  className="absolute top-6 right-6 p-3 bg-white/5 hover:bg-white/15 hover:scale-105 text-white border border-white/10 rounded-full transition-all cursor-pointer z-30 hidden md:block"
                   aria-label="Close details"
                 >
                   <X size={19} />
                 </button>
 
                 {/* Scrollable details wrapper */}
-                <div className="p-6 md:overflow-y-auto space-y-4 flex-grow md:custom-scrollbar">
+                <div className="p-6 md:p-12 md:overflow-y-auto space-y-6 flex-grow md:custom-scrollbar">
                   {/* Event Location Pin */}
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[14px] font-black uppercase tracking-wider mb-1">
                     <MapPin size={14} className="text-[#e5ff00]" />
@@ -663,8 +707,6 @@ const EventList = () => {
                   >
                     {selectedEvent.title}
                   </h3>
-
-                 
 
                   {/* Premium Badges */}
                   {(selectedEvent.category ||
@@ -863,7 +905,10 @@ const EventList = () => {
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
-                                {step.duration} <span className="text-gray-500 font-normal">mins</span>
+                                {step.duration}{" "}
+                                <span className="text-gray-500 font-normal">
+                                  mins
+                                </span>
                               </span>
                             </div>
                           );
@@ -961,22 +1006,31 @@ const EventList = () => {
                 </div>
 
                 {/* Modal Footer Pricing + Call To Action */}
-                <div className="p-6 border-t border-white/5 bg-[#080808] flex items-center justify-between gap-4 shrink-0 mt-auto">
+                <div className="p-6 md:p-10 border-t border-white/5 bg-[#080808] flex items-center justify-between gap-4 shrink-0 mt-auto">
                   <div className="flex flex-col text-left">
                     {selectedEvent.originalPrice && (
                       <span className="text-[20px] text-gray-500 line-through font-semibold leading-none mb-1">
                         ₹{selectedEvent.originalPrice}
                       </span>
                     )}
-                    <span
-                      className="text-[30px] font-black text-gray-200 leading-none"
-                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                    >
-                      ₹{selectedEvent.price}
-                      <span className="text-[20px] text-gray-400 font-normal ml-0.5 lowercase">
-                        onwards
+                    {Number(selectedEvent.price) === 0 ? (
+                      <span
+                        className="text-xl font-black text-[#e5ff00] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 rounded-lg inline-block self-start"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        Free Entry
                       </span>
-                    </span>
+                    ) : (
+                      <span
+                        className="text-[30px] font-black text-gray-200 leading-none"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        ₹{selectedEvent.price}
+                        <span className="text-[20px] text-gray-400 font-normal ml-0.5 lowercase">
+                          onwards
+                        </span>
+                      </span>
+                    )}
                   </div>
 
                   <button
@@ -1136,9 +1190,15 @@ const EventList = () => {
                         ₹{bookingEvent.originalPrice}
                       </span>
                     )}
-                    <span className="text-xs font-bold text-[#ff9e00]">
-                      ₹{bookingEvent.price} onwards
-                    </span>
+                    {Number(bookingEvent.price) === 0 ? (
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#e5ff00] px-2 py-0.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 rounded-md">
+                        Free Entry
+                      </span>
+                    ) : (
+                      <span className="text-xs font-bold text-[#ff9e00]">
+                        ₹{bookingEvent.price} onwards
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1289,23 +1349,25 @@ const EventList = () => {
                     </div>
 
                     {/* Calculation block */}
-                    <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-3">
-                      <div className="flex items-center justify-between text-xs text-gray-400">
-                        <span>
-                          {seatsCount} Seats x ₹{bookingEvent.price}
-                        </span>
-                        <span className="font-bold text-white">
-                          ₹{(seatsCount * bookingEvent.price).toFixed(2)}
-                        </span>
+                    {Number(bookingEvent.price) > 0 && (
+                      <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-3">
+                        <div className="flex items-center justify-between text-xs text-gray-400">
+                          <span>
+                            {seatsCount} Seats x ₹{bookingEvent.price}
+                          </span>
+                          <span className="font-bold text-white">
+                            ₹{(seatsCount * bookingEvent.price).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="h-px bg-white/5" />
+                        <div className="flex items-center justify-between text-sm font-black">
+                          <span className="text-gray-300">Total Amount</span>
+                          <span className="text-[#ff9e00] text-base">
+                            ₹{(seatsCount * bookingEvent.price).toFixed(2)}
+                          </span>
+                        </div>
                       </div>
-                      <div className="h-px bg-white/5" />
-                      <div className="flex items-center justify-between text-sm font-black">
-                        <span className="text-gray-300">Total Amount</span>
-                        <span className="text-[#ff9e00] text-base">
-                          ₹{(seatsCount * bookingEvent.price).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
+                    )}
 
                     {/* Action button */}
                     <button
@@ -1332,479 +1394,590 @@ const EventList = () => {
                   >
                     <div className="h-16 flex items-center justify-between bg-[#e5ff00] px-6 border-b border-white/5">
                       <div className="flex items-center gap-3 ">
-                        <button
-                          type="button"
-                          onClick={() => setShowDiscardConfirmation(true)}
-                          className="p-1 text-black  rounded-lg transition-all cursor-pointer"
-                        >
-                          <ChevronLeft size={18} />
-                        </button>
+                        {!bookingSuccess && (
+                          <button
+                            type="button"
+                            onClick={() => setShowDiscardConfirmation(true)}
+                            className="p-1 text-black  rounded-lg transition-all cursor-pointer"
+                          >
+                            <ChevronLeft size={18} />
+                          </button>
+                        )}
                         <h3
                           className="font-bold uppercase text-xl tracking-wider  text-black"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
-                          Session Details
+                          {bookingSuccess
+                            ? "Booking Confirmed"
+                            : "Session Details"}
                         </h3>
                       </div>
                       <button
                         type="button"
-                        onClick={() => setShowContactForm(false)}
+                        onClick={() => {
+                          if (bookingSuccess) {
+                            setShowContactForm(false);
+                            setShowSeatsDrawer(false);
+                            setBookingEvent(null);
+                            setSelectedEvent(null);
+                          } else {
+                            setShowContactForm(false);
+                          }
+                        }}
                         className="p-1 text-black rounded-lg transition-all cursor-pointer"
                       >
                         <X size={16} />
                       </button>
                     </div>
 
-                    <div className="flex flex-col lg:flex-row max-h-[calc(100vh-64px)] lg:max-h-[85vh] overflow-y-auto custom-scrollbar flex-grow">
-                      {/* Left: Event Details Overview */}
-                      <div className="w-full lg:w-5/12 p-2 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505]">
-                        <div className="relative rounded-2xl overflow-hidden mb-6 group shadow-lg shadow-black/60">
-                          <img
-                            src={bookingEvent.imageUrl}
-                            alt={bookingEvent.title}
-                            className="w-full h-48 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                          <div className="absolute bottom-4 left-4 right-4">
-                            <span className="px-3 py-1 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-widest rounded-md shadow-md mb-2 inline-block">
-                              Selected Event
-                            </span>
-                            <h4
-                              className="text-xl md:text-2xl font-black uppercase text-white leading-tight drop-shadow-xl"
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              {bookingEvent.title}
-                            </h4>
+                    {bookingSuccess ? (
+                      <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-[#0a0a0a] min-h-[50vh] flex-grow overflow-y-auto custom-scrollbar">
+                        {/* Animated Neon Success Ring */}
+                        <div className="relative mb-6">
+                          <div className="absolute inset-0 bg-[#e5ff00]/20 rounded-full blur-xl scale-125 animate-pulse"></div>
+                          <div className="w-20 h-20 bg-[#e5ff00] rounded-full flex items-center justify-center shadow-lg shadow-[#e5ff00]/30 relative z-10">
+                            <CheckCircle
+                              size={40}
+                              className="text-black"
+                              strokeWidth={3}
+                            />
                           </div>
                         </div>
 
-                        <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
-                          {/* Date */}
-                          <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
-                              <Calendar size={18} />
-                            </div>
-                            <div>
-                              <p
-                                className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                Booking Date
-                              </p>
-                              <p
-                                className="text-sm font-bold text-gray-200"
-                                style={{
-                                  fontFamily: '"Brutal Font Light", sans-serif',
-                                }}
-                              >
-                                {bookingEvent.schedules[activeDateIndex].date}
-                              </p>
-                            </div>
-                          </div>
+                        <h3
+                          className="text-2xl sm:text-4xl font-black uppercase text-white tracking-wide mb-3"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          Registration Confirmed!
+                        </h3>
 
-                          {/* Time */}
-                          <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="18"
-                                height="18"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12 6 12 12 16 14" />
-                              </svg>
-                            </div>
+                        <p
+                          className="text-xs sm:text-sm text-gray-300 max-w-md leading-relaxed mb-6"
+                          style={{
+                            fontFamily: '"Brutal Font Light", sans-serif',
+                          }}
+                        >
+                          Thanks for registering for the event. We've reserved
+                          your spot and look forward to seeing you.
+                        </p>
+
+                        {/* Booking Details Card */}
+                        <div className="w-full max-w-md bg-white/[0.02] border border-white/10 rounded-2xl p-5 mb-8 text-left space-y-4 shadow-inner shadow-black">
+                          <h4 className="text-[10px] font-black uppercase tracking-wider text-gray-400 border-b border-white/5 pb-2">
+                            Reservation Summary
+                          </h4>
+                          <div>
+                            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                              Event
+                            </p>
+                            <p className="text-sm font-extrabold text-[#e5ff00]">
+                              {bookingEvent.title}
+                            </p>
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <p
-                                className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                Time Slot
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                                Date & Time
                               </p>
-                              <p
-                                className="text-sm font-bold text-gray-200"
-                                style={{
-                                  fontFamily: '"Brutal Font Light", sans-serif',
-                                }}
-                              >
+                              <p className="text-xs font-bold text-gray-200">
+                                {bookingEvent.schedules[activeDateIndex].date}{" "}
+                                <br />
                                 {selectedSlot.time}
                               </p>
                             </div>
-                          </div>
-
-                          {/* Location */}
-                          <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
-                              <MapPin size={18} />
-                            </div>
                             <div>
-                              <p
-                                className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                Location
+                              <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                                Seats
                               </p>
-                              <p
-                                className="text-xs md:text-sm font-bold text-gray-200 leading-snug"
-                                style={{
-                                  fontFamily: '"Brutal Font Light", sans-serif',
-                                }}
-                              >
-                                {bookingEvent.location}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Seats */}
-                          <div className="flex items-start gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-[#e5ff00]/10 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-[#e5ff00]/20">
-                              <Ticket size={18} />
-                            </div>
-                            <div>
-                              <p
-                                className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                Reserved Seats
-                              </p>
-                              <p
-                                className="text-sm font-black text-[#e5ff00]"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
+                              <p className="text-xs font-bold text-gray-200">
                                 {seatsCount} Seat{seatsCount > 1 ? "s" : ""}
                               </p>
                             </div>
                           </div>
+                          <div className="border-t border-white/5 pt-3">
+                            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                              Attendee
+                            </p>
+                            <p className="text-xs font-bold text-gray-200">
+                              {customerName}
+                            </p>
+                            <p className="text-[10px] text-gray-400">
+                              {customerEmail} • {customerPhone}
+                            </p>
+                          </div>
                         </div>
+
+                        {/* Close button */}
+                        <button
+                          onClick={() => {
+                            setShowContactForm(false);
+                            setShowSeatsDrawer(false);
+                            setBookingEvent(null);
+                            setSelectedEvent(null);
+                          }}
+                          className="px-8 py-3.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-xs rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          Back to Events
+                        </button>
                       </div>
-
-                      {/* Right: Contact Form */}
-                      <div className="w-full lg:w-7/12 flex flex-col justify-center">
-                        {checkoutStep === 1 ? (
-                          <form
-                            onSubmit={handleSaveDetails}
-                            className="p-6 lg:p-10 space-y-6"
-                          >
-                            <div>
+                    ) : (
+                      <div className="flex flex-col lg:flex-row max-h-[calc(100vh-64px)] lg:max-h-[85vh] overflow-y-auto custom-scrollbar flex-grow">
+                        {/* Left: Event Details Overview */}
+                        <div className="w-full lg:w-5/12 p-2 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505]">
+                          <div className="relative rounded-2xl overflow-hidden mb-6 group shadow-lg shadow-black/60">
+                            <img
+                              src={bookingEvent.imageUrl}
+                              alt={bookingEvent.title}
+                              className="w-full h-48 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                            <div className="absolute bottom-4 left-4 right-4">
+                              <span className="px-3 py-1 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-widest rounded-md shadow-md mb-2 inline-block">
+                                Selected Event
+                              </span>
                               <h4
-                                className="text-lg font-black uppercase text-white tracking-wide mb-1"
+                                className="text-xl md:text-2xl font-black uppercase text-white leading-tight drop-shadow-xl"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
-                                Primary Contact
+                                {bookingEvent.title}
                               </h4>
-                              <p
-                                className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4"
-                                style={{
-                                  fontFamily: '"Brutal Font Light", sans-serif',
-                                }}
-                              >
-                                Enter attendee details for confirmation
-                              </p>
                             </div>
+                          </div>
 
-                            {/* Name */}
-                            <div className="space-y-1.5">
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                                Full Name
-                              </label>
-                              <div className="relative group">
-                                <User
-                                  size={16}
-                                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
-                                />
-                                <input
-                                  type="text"
-                                  value={customerName}
-                                  onChange={(e) =>
-                                    setCustomerName(e.target.value)
-                                  }
-                                  placeholder="Enter your name"
-                                  className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
-                                  required
-                                />
+                          <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
+                            {/* Date */}
+                            <div className="flex items-start gap-4">
+                              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                <Calendar size={18} />
                               </div>
-                            </div>
-
-                            {/* Email & Phone Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                              {/* Email */}
-                              <div className="space-y-1.5">
-                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                                  Email Address
-                                </label>
-                                <div className="relative group">
-                                  <Mail
-                                    size={16}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
-                                  />
-                                  <input
-                                    type="email"
-                                    value={customerEmail}
-                                    onChange={(e) =>
-                                      setCustomerEmail(e.target.value)
-                                    }
-                                    placeholder="Enter your email"
-                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
-                                    required
-                                  />
-                                </div>
-                              </div>
-
-                              {/* Phone */}
-                              <div className="space-y-1.5">
-                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                                  Phone Number
-                                </label>
-                                <div className="relative group">
-                                  <Phone
-                                    size={16}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
-                                  />
-                                  <input
-                                    type="tel"
-                                    value={customerPhone}
-                                    onChange={(e) =>
-                                      setCustomerPhone(e.target.value)
-                                    }
-                                    placeholder="Enter your phone number"
-                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
-                                    required
-                                  />
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Form action buttons */}
-                            <div className="pt-6">
-                              <button
-                                type="submit"
-                                disabled={submittingBooking}
-                                className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 cursor-pointer"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                {submittingBooking ? (
-                                  <>
-                                    <Loader2
-                                      size={18}
-                                      className="animate-spin"
-                                    />
-                                    Saving Details...
-                                  </>
-                                ) : (
-                                  <>
-                                    Save Details & Continue
-                                    <ArrowRight size={18} strokeWidth={3} />
-                                  </>
-                                )}
-                              </button>
-                            </div>
-                          </form>
-                        ) : (
-                          <div className="p-6 lg:p-10 space-y-6 flex flex-col h-full justify-center">
-                            <div>
-                              <div className="flex items-center justify-between mb-2">
-                                <h4
-                                  className="text-lg font-black uppercase text-white tracking-wide"
+                              <div>
+                                <p
+                                  className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
                                   style={{
                                     fontFamily: '"BrutalTypeBold", sans-serif',
                                   }}
                                 >
-                                  Review & Pay
-                                </h4>
-                                <button
-                                  onClick={() => setCheckoutStep(1)}
-                                  className="text-[10px] uppercase font-bold text-gray-400 hover:text-white underline decoration-white/20 hover:decoration-white transition-all cursor-pointer"
-                                >
-                                  Edit Contact
-                                </button>
-                              </div>
-
-                              {/* Readonly contact details */}
-                              <div className="bg-white/5 border border-white/5 rounded-xl p-3 mb-4 flex items-center gap-3 shadow-inner shadow-black/20">
-                                <div className="w-8 h-8 rounded-full bg-[#e5ff00]/10 flex items-center justify-center text-[#e5ff00] shrink-0">
-                                  <User size={14} />
-                                </div>
-                                <div className="truncate">
-                                  <p className="text-xs font-bold text-white truncate">
-                                    {customerName}
-                                  </p>
-                                  <p className="text-[10px] text-gray-400 truncate">
-                                    {customerEmail} • {customerPhone}
-                                  </p>
-                                </div>
-                              </div>
-
-                              {/* Price Breakdown */}
-                              <div className="bg-[#050505] border border-white/10 rounded-2xl p-5 text-sm space-y-3 mt-4 relative overflow-hidden shadow-inner shadow-black/50">
-                                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#e5ff00]"></div>
-
-                                <h5 className="text-white font-bold uppercase tracking-wider text-xs mb-3 flex items-center gap-2">
-                                  <Ticket
-                                    size={14}
-                                    className="text-[#e5ff00]"
-                                  />
-                                  Order Breakdown
-                                </h5>
-
-                                {bookingEvent.originalPrice &&
-                                  bookingEvent.originalPrice >
-                                    bookingEvent.price && (
-                                    <div className="flex justify-between items-center text-gray-500 text-xs">
-                                      <span>
-                                        Original Price ({seatsCount} x ₹
-                                        {bookingEvent.originalPrice})
-                                      </span>
-                                      <span className="font-semibold line-through">
-                                        ₹
-                                        {(
-                                          seatsCount *
-                                          bookingEvent.originalPrice
-                                        ).toFixed(2)}
-                                      </span>
-                                    </div>
-                                  )}
-
-                                <div className="flex justify-between items-center text-gray-300">
-                                  <span>
-                                    Ticket Price ({seatsCount} x ₹
-                                    {bookingEvent.price})
-                                  </span>
-                                  <span className="font-semibold text-white">
-                                    ₹
-                                    {(seatsCount * bookingEvent.price).toFixed(
-                                      2,
-                                    )}
-                                  </span>
-                                </div>
-
-                                {bookingEvent.originalPrice &&
-                                  bookingEvent.originalPrice >
-                                    bookingEvent.price && (
-                                    <div className="flex justify-between items-center text-[#e5ff00]/90 text-xs">
-                                      <span>Special Discount</span>
-                                      <span className="font-bold">
-                                        - ₹
-                                        {(
-                                          seatsCount *
-                                          (bookingEvent.originalPrice -
-                                            bookingEvent.price)
-                                        ).toFixed(2)}
-                                      </span>
-                                    </div>
-                                  )}
-
-                                <div className="flex justify-between items-center text-gray-400 text-xs">
-                                  <span>Taxes & Platform Fees</span>
-                                  <span className="font-semibold text-green-400">
-                                    Included
-                                  </span>
-                                </div>
-
-                                <div className="h-px bg-white/10 w-full my-3"></div>
-
-                                <div className="flex justify-between items-center">
-                                  <span className="uppercase text-xs tracking-wider text-gray-300 font-bold">
-                                    Total Payable
-                                  </span>
-                                  <span className="text-2xl font-black text-[#e5ff00] tracking-tight">
-                                    ₹
-                                    {(seatsCount * bookingEvent.price).toFixed(
-                                      2,
-                                    )}
-                                  </span>
-                                </div>
-                              </div>
-
-                              {/* Terms and conditions */}
-                              <label className="flex items-start gap-3 cursor-pointer group mt-6">
-                                <div className="relative flex items-center justify-center mt-0.5 shrink-0">
-                                  <input
-                                    type="checkbox"
-                                    className="appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-[#050505] checked:bg-[#e5ff00] checked:border-[#e5ff00] transition-colors cursor-pointer peer"
-                                    checked={termsAccepted}
-                                    onChange={(e) =>
-                                      setTermsAccepted(e.target.checked)
-                                    }
-                                  />
-                                  <svg
-                                    className="absolute w-3 h-3 pointer-events-none opacity-0 peer-checked:opacity-100 text-black stroke-current"
-                                    viewBox="0 0 14 10"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M1 5L4.5 8.5L13 1"
-                                      strokeWidth="2"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                </div>
-                                <p className="text-[11px] md:text-xs text-gray-400 leading-relaxed select-none group-hover:text-gray-300 transition-colors">
-                                  I accept the{" "}
-                                  <a
-                                    href="#"
-                                    className="text-white hover:text-[#e5ff00] underline decoration-white/20 transition-colors"
-                                  >
-                                    Terms and Conditions
-                                  </a>
-                                  , including the cancellation policy and
-                                  facility rules.
+                                  Booking Date
                                 </p>
-                              </label>
+                                <p
+                                  className="text-sm font-bold text-gray-200"
+                                  style={{
+                                    fontFamily:
+                                      '"Brutal Font Light", sans-serif',
+                                  }}
+                                >
+                                  {bookingEvent.schedules[activeDateIndex].date}
+                                </p>
+                              </div>
                             </div>
 
-                            <div className="pt-6">
-                              <button
-                                onClick={handleProceedToPay}
-                                disabled={submittingBooking || !termsAccepted}
-                                className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed cursor-pointer"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                {submittingBooking ? (
-                                  <>
-                                    <Loader2
-                                      size={18}
-                                      className="animate-spin"
-                                    />
-                                    Processing Payment...
-                                  </>
-                                ) : (
-                                  <>
-                                    Proceed to Pay
-                                    <ArrowRight size={18} strokeWidth={3} />
-                                  </>
-                                )}
-                              </button>
+                            {/* Time */}
+                            <div className="flex items-start gap-4">
+                              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <circle cx="12" cy="12" r="10" />
+                                  <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                              </div>
+                              <div>
+                                <p
+                                  className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  Time Slot
+                                </p>
+                                <p
+                                  className="text-sm font-bold text-gray-200"
+                                  style={{
+                                    fontFamily:
+                                      '"Brutal Font Light", sans-serif',
+                                  }}
+                                >
+                                  {selectedSlot.time}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Location */}
+                            <div className="flex items-start gap-4">
+                              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                <MapPin size={18} />
+                              </div>
+                              <div>
+                                <p
+                                  className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  Location
+                                </p>
+                                <p
+                                  className="text-xs md:text-sm font-bold text-gray-200 leading-snug"
+                                  style={{
+                                    fontFamily:
+                                      '"Brutal Font Light", sans-serif',
+                                  }}
+                                >
+                                  {bookingEvent.location}
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Seats */}
+                            <div className="flex items-start gap-4">
+                              <div className="w-10 h-10 rounded-xl bg-[#e5ff00]/10 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-[#e5ff00]/20">
+                                <Ticket size={18} />
+                              </div>
+                              <div>
+                                <p
+                                  className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  Reserved Seats
+                                </p>
+                                <p
+                                  className="text-sm font-black text-[#e5ff00]"
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  {seatsCount} Seat{seatsCount > 1 ? "s" : ""}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        )}
+                        </div>
+
+                        {/* Right: Contact Form */}
+                        <div className="w-full lg:w-7/12 flex flex-col justify-center">
+                          {checkoutStep === 1 ? (
+                            <form
+                              onSubmit={handleSaveDetails}
+                              className="p-6 lg:p-10 space-y-6"
+                            >
+                              <div>
+                                <h4
+                                  className="text-lg font-black uppercase text-white tracking-wide mb-1"
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  Primary Contact
+                                </h4>
+                                <p
+                                  className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-4"
+                                  style={{
+                                    fontFamily:
+                                      '"Brutal Font Light", sans-serif',
+                                  }}
+                                >
+                                  Enter attendee details for confirmation
+                                </p>
+                              </div>
+
+                              {/* Name */}
+                              <div className="space-y-1.5">
+                                <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                  Full Name
+                                </label>
+                                <div className="relative group">
+                                  <User
+                                    size={16}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
+                                  />
+                                  <input
+                                    type="text"
+                                    value={customerName}
+                                    onChange={(e) =>
+                                      setCustomerName(e.target.value)
+                                    }
+                                    placeholder="Enter your name"
+                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                    required
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Email & Phone Grid */}
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                {/* Email */}
+                                <div className="space-y-1.5">
+                                  <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                    Email Address
+                                  </label>
+                                  <div className="relative group">
+                                    <Mail
+                                      size={16}
+                                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
+                                    />
+                                    <input
+                                      type="email"
+                                      value={customerEmail}
+                                      onChange={(e) =>
+                                        setCustomerEmail(e.target.value)
+                                      }
+                                      placeholder="Enter your email"
+                                      className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* Phone */}
+                                <div className="space-y-1.5">
+                                  <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                    Phone Number
+                                  </label>
+                                  <div className="relative group">
+                                    <Phone
+                                      size={16}
+                                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
+                                    />
+                                    <input
+                                      type="tel"
+                                      value={customerPhone}
+                                      onChange={(e) =>
+                                        setCustomerPhone(e.target.value)
+                                      }
+                                      placeholder="Enter your phone number"
+                                      className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Form action buttons */}
+                              <div className="pt-6">
+                                <button
+                                  type="submit"
+                                  disabled={submittingBooking}
+                                  className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 cursor-pointer"
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  {submittingBooking ? (
+                                    <>
+                                      <Loader2
+                                        size={18}
+                                        className="animate-spin"
+                                      />
+                                      Saving Details...
+                                    </>
+                                  ) : (
+                                    <>
+                                      Save Details & Continue
+                                      <ArrowRight size={18} strokeWidth={3} />
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                            </form>
+                          ) : (
+                            <div className="p-6 lg:p-10 space-y-6 flex flex-col h-full justify-center">
+                              <div>
+                                <div className="flex items-center justify-between mb-2">
+                                  <h4
+                                    className="text-lg font-black uppercase text-white tracking-wide"
+                                    style={{
+                                      fontFamily:
+                                        '"BrutalTypeBold", sans-serif',
+                                    }}
+                                  >
+                                    Review & Pay
+                                  </h4>
+                                  <button
+                                    onClick={() => setCheckoutStep(1)}
+                                    className="text-[10px] uppercase font-bold text-gray-400 hover:text-white underline decoration-white/20 hover:decoration-white transition-all cursor-pointer"
+                                  >
+                                    Edit Contact
+                                  </button>
+                                </div>
+
+                                {/* Readonly contact details */}
+                                <div className="bg-white/5 border border-white/5 rounded-xl p-3 mb-4 flex items-center gap-3 shadow-inner shadow-black/20">
+                                  <div className="w-8 h-8 rounded-full bg-[#e5ff00]/10 flex items-center justify-center text-[#e5ff00] shrink-0">
+                                    <User size={14} />
+                                  </div>
+                                  <div className="truncate">
+                                    <p className="text-xs font-bold text-white truncate">
+                                      {customerName}
+                                    </p>
+                                    <p className="text-[10px] text-gray-400 truncate">
+                                      {customerEmail} • {customerPhone}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                {/* Price Breakdown */}
+                                <div className="bg-[#050505] border border-white/10 rounded-2xl p-5 text-sm space-y-3 mt-4 relative overflow-hidden shadow-inner shadow-black/50">
+                                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#e5ff00]"></div>
+
+                                  <h5 className="text-white font-bold uppercase tracking-wider text-xs mb-3 flex items-center gap-2">
+                                    <Ticket
+                                      size={14}
+                                      className="text-[#e5ff00]"
+                                    />
+                                    Order Breakdown
+                                  </h5>
+
+                                  {bookingEvent.originalPrice &&
+                                    bookingEvent.originalPrice >
+                                      bookingEvent.price && (
+                                      <div className="flex justify-between items-center text-gray-500 text-xs">
+                                        <span>
+                                          Original Price ({seatsCount} x ₹
+                                          {bookingEvent.originalPrice})
+                                        </span>
+                                        <span className="font-semibold line-through">
+                                          ₹
+                                          {(
+                                            seatsCount *
+                                            bookingEvent.originalPrice
+                                          ).toFixed(2)}
+                                        </span>
+                                      </div>
+                                    )}
+
+                                  <div className="flex justify-between items-center text-gray-300">
+                                    <span>
+                                      Ticket Price ({seatsCount} x ₹
+                                      {bookingEvent.price})
+                                    </span>
+                                    <span className="font-semibold text-white">
+                                      ₹
+                                      {(
+                                        seatsCount * bookingEvent.price
+                                      ).toFixed(2)}
+                                    </span>
+                                  </div>
+
+                                  {bookingEvent.originalPrice &&
+                                    bookingEvent.originalPrice >
+                                      bookingEvent.price && (
+                                      <div className="flex justify-between items-center text-[#e5ff00]/90 text-xs">
+                                        <span>Special Discount</span>
+                                        <span className="font-bold">
+                                          - ₹
+                                          {(
+                                            seatsCount *
+                                            (bookingEvent.originalPrice -
+                                              bookingEvent.price)
+                                          ).toFixed(2)}
+                                        </span>
+                                      </div>
+                                    )}
+
+                                  <div className="flex justify-between items-center text-gray-400 text-xs">
+                                    <span>Taxes & Platform Fees</span>
+                                    <span className="font-semibold text-green-400">
+                                      Included
+                                    </span>
+                                  </div>
+
+                                  <div className="h-px bg-white/10 w-full my-3"></div>
+
+                                  <div className="flex justify-between items-center">
+                                    <span className="uppercase text-xs tracking-wider text-gray-300 font-bold">
+                                      Total Payable
+                                    </span>
+                                    <span className="text-2xl font-black text-[#e5ff00] tracking-tight">
+                                      ₹
+                                      {(
+                                        seatsCount * bookingEvent.price
+                                      ).toFixed(2)}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {/* Terms and conditions */}
+                                <label className="flex items-start gap-3 cursor-pointer group mt-6">
+                                  <div className="relative flex items-center justify-center mt-0.5 shrink-0">
+                                    <input
+                                      type="checkbox"
+                                      className="appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-[#050505] checked:bg-[#e5ff00] checked:border-[#e5ff00] transition-colors cursor-pointer peer"
+                                      checked={termsAccepted}
+                                      onChange={(e) =>
+                                        setTermsAccepted(e.target.checked)
+                                      }
+                                    />
+                                    <svg
+                                      className="absolute w-3 h-3 pointer-events-none opacity-0 peer-checked:opacity-100 text-black stroke-current"
+                                      viewBox="0 0 14 10"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M1 5L4.5 8.5L13 1"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </svg>
+                                  </div>
+                                  <p className="text-[11px] md:text-xs text-gray-400 leading-relaxed select-none group-hover:text-gray-300 transition-colors">
+                                    I accept the{" "}
+                                    <a
+                                      href="#"
+                                      className="text-white hover:text-[#e5ff00] underline decoration-white/20 transition-colors"
+                                    >
+                                      Terms and Conditions
+                                    </a>
+                                    , including the cancellation policy and
+                                    facility rules.
+                                  </p>
+                                </label>
+                              </div>
+
+                              <div className="pt-6">
+                                <button
+                                  onClick={handleProceedToPay}
+                                  disabled={submittingBooking || !termsAccepted}
+                                  className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed cursor-pointer"
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  {submittingBooking ? (
+                                    <>
+                                      <Loader2
+                                        size={18}
+                                        className="animate-spin"
+                                      />
+                                      Processing Payment...
+                                    </>
+                                  ) : (
+                                    <>
+                                      Proceed to Pay
+                                      <ArrowRight size={18} strokeWidth={3} />
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </motion.div>
                 </div>
               )}

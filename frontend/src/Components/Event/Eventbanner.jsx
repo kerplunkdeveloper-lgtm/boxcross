@@ -164,7 +164,7 @@ const Eventbanner = () => {
 
   return (
     <section
-      className="relative w-full h-[70vh] sm:h-[65vh] md:h-[100vh] overflow-hidden select-none z-10 border-b border-white/5"
+      className="relative w-full h-[50vh] sm:h-[65vh] md:h-[80vh] overflow-hidden select-none z-10 border-b border-white/5"
       onMouseEnter={stopAutoplay}
       onMouseLeave={startAutoplay}
     >
@@ -187,7 +187,7 @@ const Eventbanner = () => {
                   <video
                     src={currentBanner.mediaUrl}
                     className="w-full h-full object-cover object-center min-h-full min-w-full"
-                    style={{ objectFit: "fit", width: "100%", height: "100%" }}
+                    style={{ objectFit: "cover", width: "100%", height: "100%" }}
                     autoPlay
                     muted={isMuted}
                     loop
@@ -213,8 +213,8 @@ const Eventbanner = () => {
                 <img
                   src={currentBanner.mediaUrl}
                   alt={currentBanner.title}
-                  className="w-full h-full  min-h-full min-w-full"
-                  style={{ objectFit: "fill", width: "100%", height: "100%" }}
+                  className="w-full h-full object-cover object-center min-h-full min-w-full"
+                  style={{ objectFit: "cover", width: "100%", height: "100%" }}
                   loading="eager"
                 />
               )}

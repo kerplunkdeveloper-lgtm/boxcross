@@ -372,6 +372,43 @@ const bookEvent = async (req, res) => {
     // Calculate total amount
     const totalAmount = event.price * Number(seats);
 
+    if (totalAmount === 0) {
+      // Free Event booking: confirm immediately
+      const booking = await EventBooking.create({
+        event: eventId,
+        date,
+        timeSlot,
+        seats: Number(seats),
+        totalAmount: 0,
+        name,
+        email,
+        phone,
+        status: "payment successfully",
+        razorpayOrderId: `free_event_${Date.now()}`,
+        razorpayPaymentId: `free_pay_${Date.now()}`,
+        razorpaySignature: "free_sig",
+      });
+
+      // Increment booked seats count in Event schedule slot
+      const schedule = event.schedules.find((s) => s.date === date);
+      if (schedule) {
+        const slot = schedule.timeSlots.find((t) => t.time === timeSlot);
+        if (slot) {
+          slot.booked += Number(seats);
+          event.markModified("schedules");
+          await event.save();
+        }
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: "Free event booking registered successfully!",
+        isFree: true,
+        bookingId: booking._id,
+        data: booking,
+      });
+    }
+
     // Initialize Razorpay and create order
     let order;
     try {

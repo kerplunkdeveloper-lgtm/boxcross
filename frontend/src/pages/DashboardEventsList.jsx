@@ -148,6 +148,7 @@ const DashboardEventsList = () => {
   const [description, setDescription] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [price, setPrice] = useState("");
+  const [isFreeEntry, setIsFreeEntry] = useState(false);
   const [bookingLink, setBookingLink] = useState("");
   const [schedules, setSchedules] = useState([]);
   const [inclusions, setInclusions] = useState("");
@@ -242,6 +243,7 @@ const DashboardEventsList = () => {
     ]);
     setImageFile(null);
     setImagePreview("");
+    setIsFreeEntry(false);
     setShowModal(true);
   };
 
@@ -254,6 +256,7 @@ const DashboardEventsList = () => {
     setDescription(event.description || "");
     setOriginalPrice(event.originalPrice ? String(event.originalPrice) : "");
     setPrice(String(event.price));
+    setIsFreeEntry(Number(event.price) === 0);
     setBookingLink(event.bookingLink || "");
     setInclusions(event.inclusions ? event.inclusions.join("\n") : "");
     setExclusions(event.exclusions ? event.exclusions.join("\n") : "");
@@ -272,7 +275,8 @@ const DashboardEventsList = () => {
   // Handle Submit (Create/Update)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim() || !location.trim() || !price) {
+    const finalPrice = isFreeEntry ? "0" : price;
+    if (!title.trim() || !location.trim() || (!isFreeEntry && !price)) {
       toast.error("Title, Location, and Price are required fields");
       return;
     }
@@ -292,7 +296,7 @@ const DashboardEventsList = () => {
       formData.append("title", title.trim());
       formData.append("location", location.trim());
       formData.append("description", description.trim());
-      formData.append("price", price);
+      formData.append("price", finalPrice);
       formData.append("schedules", JSON.stringify(schedules));
 
       const incArray = inclusions.split("\n").map((s) => s.trim()).filter(Boolean);
@@ -390,7 +394,7 @@ const DashboardEventsList = () => {
               className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
-              Events Listing
+              Events Listings
             </h1>
           </div>
 
@@ -485,7 +489,7 @@ const DashboardEventsList = () => {
 
                   {/* Price pill */}
                   <div className="absolute bottom-3 left-3 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-lg">
-                    ₹{event.price} onwards
+                    {Number(event.price) === 0 ? "Free Entry" : `₹${event.price} onwards`}
                   </div>
                 </div>
 
@@ -949,21 +953,47 @@ const DashboardEventsList = () => {
                       Pricing & External Bookings
                     </h4>
 
+                    <div className="flex items-center gap-2 mb-2 p-1">
+                      <input
+                        type="checkbox"
+                        id="isFreeEntry"
+                        checked={isFreeEntry}
+                        onChange={(e) => {
+                          setIsFreeEntry(e.target.checked);
+                          if (e.target.checked) {
+                            setPrice("0");
+                          } else {
+                            setPrice("");
+                          }
+                        }}
+                        className="rounded border-[var(--db-input-border)] text-[var(--db-accent-highlight)] focus:ring-[var(--db-accent-highlight)]/30 w-4 h-4 bg-[var(--db-input-bg)] cursor-pointer"
+                      />
+                      <label htmlFor="isFreeEntry" className="text-xs font-bold uppercase tracking-wider text-[var(--db-text)] cursor-pointer select-none">
+                        Free Entry Event (Zero Cost)
+                      </label>
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Price */}
                       <div className="space-y-1">
                         <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
                           Active Booking Price (₹){" "}
-                          <span className="text-red-500">*</span>
+                          {!isFreeEntry && <span className="text-red-500">*</span>}
                         </label>
-                        <input
-                          type="number"
-                          value={price}
-                          onChange={(e) => setPrice(e.target.value)}
-                          placeholder="e.g. 2790"
-                          className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
-                          required
-                        />
+                        {isFreeEntry ? (
+                          <div className="w-full bg-[var(--db-input-bg)]/50 border border-[var(--db-input-border)] rounded-xl px-4 py-3 text-xs text-[var(--db-text-muted)] select-none">
+                            Free Event (0)
+                          </div>
+                        ) : (
+                          <input
+                            type="number"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            placeholder="e.g. 2790"
+                            className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
+                            required
+                          />
+                        )}
                       </div>
 
                       {/* Original Price */}
