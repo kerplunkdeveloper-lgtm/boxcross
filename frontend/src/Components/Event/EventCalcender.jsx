@@ -72,7 +72,7 @@ const EventCalender = ({ events = [] }) => {
   });
 
   return (
-    <div className="w-full py-5 md:py-17 px-0 md:px-8 max-w-7xl mx-auto">
+    <div className="w-full py-5 md:py-17 px-0 md:px-8 max-w-8xl mx-auto">
       <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start lg:items-stretch">
         {/* Left Side: Premium Calendar UI */}
         <div className="w-full lg:w-[50%] bg-[#0a0a0a] rounded-[2rem] p-6 md:p-10 border border-white/5 shadow-2xl relative overflow-hidden h-fit">

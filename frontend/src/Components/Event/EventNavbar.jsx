@@ -1,11 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Phone } from "lucide-react";
 import logo from "../../assets/eventlogo.png";
 import { Link } from "react-router-dom";
 
 const EventNavbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className="w-full flex items-center  justify-between px-6 md:px-12 py-4 bg-black/10 backdrop-blur-md border-b border-white/5 fixed top-0 left-0 right-0 z-[9990] h-18 md:h-20">
+    <nav
+      className={`w-full flex items-center justify-between px-6 md:px-12 py-4 fixed top-0 left-0 right-0 z-[9990] h-18 md:h-20 transition-all duration-300 ${
+        scrolled
+          ? "bg-black/85 backdrop-blur-md border-b border-white/5 shadow-lg shadow-black/20"
+          : "bg-transparent backdrop-blur-none border-b border-transparent"
+      }`}
+    >
       {/* Left side: Logo */}
       <div className="flex items-center">
         <div className="flex items-center">

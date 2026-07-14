@@ -1,10 +1,25 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Flame, Dumbbell } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Flame, Dumbbell, ArrowUpRight } from "lucide-react";
 
 const Commingsoon = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-[#030303] text-white flex flex-col items-center justify-center relative overflow-hidden px-6 selection:bg-[#e5ff00] selection:text-black">
+      {/* Top Right "Go to Events" Link */}
+      <motion.button
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.8 }}
+        onClick={() => navigate("/events")}
+        className="absolute top-6 right-6 z-20 flex items-center gap-1.5 bg-[#e5ff00] text-black border border-white/10 hover:border-[#e5ff00] font-bold uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-lg transition-all duration-300 cursor-pointer active:scale-95 group"
+        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+      >
+        <span>Go to Events</span>
+        <ArrowUpRight size={13} className="transform transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      </motion.button>
       {/* Background Radial Glow Orbs */}
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#e5ff00]/5 rounded-full blur-[130px] pointer-events-none animate-pulse duration-[8000ms]" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#ff9e00]/3 rounded-full blur-[150px] pointer-events-none animate-pulse duration-[10000ms]" />

@@ -204,8 +204,6 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
     },
   };
 
-
-
   // Utility to dynamically inject checkout.js script of Razorpay
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -408,44 +406,48 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
       id="event-list"
       className="py-16 md:py-24 px-6 md:px-16 lg:px-24 bg-[#030303] relative overflow-hidden select-none"
     >
-      {selectedEvent && (() => {
-        const BASE_URL = "https://membership.boxandcross.com";
-        const eventUrl = `${BASE_URL}/events/${selectedEvent._id}`;
-        const eventTitle = `${selectedEvent.title} | Box & Cross`;
-        const rawDesc = selectedEvent.description || "";
-        const plainDesc = rawDesc.replace(/<[^>]*>/g, "").trim();
-        const eventDesc = plainDesc.length > 0
-          ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
-          : `Join ${selectedEvent.title} at Box & Cross. View schedule, timings, and book your slot now!`;
-        const eventImage = selectedEvent.imageUrl
-          ? `${selectedEvent.imageUrl}?v=${new Date(selectedEvent.updatedAt || Date.now()).getTime()}`
-          : `${BASE_URL}/og-events.jpg?v=1`;
+      {selectedEvent &&
+        (() => {
+          const BASE_URL = "https://membership.boxandcross.com";
+          const eventUrl = `${BASE_URL}/events/${selectedEvent._id}`;
+          const eventTitle = `${selectedEvent.title} | Box & Cross`;
+          const rawDesc = selectedEvent.description || "";
+          const plainDesc = rawDesc.replace(/<[^>]*>/g, "").trim();
+          const eventDesc =
+            plainDesc.length > 0
+              ? plainDesc.length > 155
+                ? plainDesc.substring(0, 152) + "..."
+                : plainDesc
+              : `Join ${selectedEvent.title} at Box & Cross. View schedule, timings, and book your slot now!`;
+          const eventImage = selectedEvent.imageUrl
+            ? `${selectedEvent.imageUrl}?v=${new Date(selectedEvent.updatedAt || Date.now()).getTime()}`
+            : `${BASE_URL}/og-events.jpg?v=1`;
 
-        return (
-          <Helmet>
-            <title>{eventTitle}</title>
-            <meta name="description" content={eventDesc} />
+          return (
+            <Helmet>
+              <title>{eventTitle}</title>
+              <meta name="description" content={eventDesc} />
 
-            {/* Open Graph / Facebook / WhatsApp */}
-            <meta property="og:type" content="website" />
-            <meta property="og:site_name" content="Box &amp; Cross" />
-            <meta property="og:url" content={eventUrl} />
-            <meta property="og:title" content={eventTitle} />
-            <meta property="og:description" content={eventDesc} />
-            <meta property="og:image" content={eventImage} />
-            <meta property="og:image:width" content="1200" />
-            <meta property="og:image:height" content="630" />
-            <meta property="og:image:alt" content={selectedEvent.title} />
+              {/* Open Graph / Facebook / WhatsApp */}
+              <meta property="og:type" content="website" />
+              <meta property="og:site_name" content="Box &amp; Cross" />
+              <meta property="og:url" content={eventUrl} />
+              <meta property="og:title" content={eventTitle} />
+              <meta property="og:description" content={eventDesc} />
+              <meta property="og:image" content={eventImage} />
+              <meta property="og:image:width" content="1200" />
+              <meta property="og:image:height" content="630" />
+              <meta property="og:image:alt" content={selectedEvent.title} />
 
-            {/* Twitter Card */}
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:url" content={eventUrl} />
-            <meta name="twitter:title" content={eventTitle} />
-            <meta name="twitter:description" content={eventDesc} />
-            <meta name="twitter:image" content={eventImage} />
-          </Helmet>
-        );
-      })()}
+              {/* Twitter Card */}
+              <meta name="twitter:card" content="summary_large_image" />
+              <meta name="twitter:url" content={eventUrl} />
+              <meta name="twitter:title" content={eventTitle} />
+              <meta name="twitter:description" content={eventDesc} />
+              <meta name="twitter:image" content={eventImage} />
+            </Helmet>
+          );
+        })()}
       {/* Background Radial Glow */}
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#e5ff00]/3 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#ff9e00]/2 rounded-full blur-[140px] pointer-events-none" />
@@ -456,20 +458,20 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
           <div className="flex items-center gap-2 mb-2">
             <span className="h-[2px] w-8 bg-[#e5ff00]"></span>
             <span
-              className="text-[#e5ff00] text-[14px] md:text-xl font-black uppercase tracking-widest"
+              className="text-[#e5ff00] text-[14px] md:text-md font-black uppercase tracking-widest"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               Special Schedules
             </span>
           </div>
           <h2
-            className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white mt-3"
+            className="text-3xl md:text-4xl font-black uppercase tracking-tight text-white mt-3"
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
             Events & Workshops
           </h2>
           <p
-            className="text-gray-200 text-md md:text-xl mt-5 max-w-xl text-center"
+            className="text-gray-200 text-md md:text-md italic mt-5 max-w-xl text-center"
             style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
           >
             Click on any card to view detailed schedules, descriptions, and
@@ -1133,7 +1135,9 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   </div>
 
                   <button
-                    onClick={() => navigate(`/events/${selectedEvent._id}?book=true`)}
+                    onClick={() =>
+                      navigate(`/events/${selectedEvent._id}?book=true`)
+                    }
                     className="inline-flex items-center justify-center gap-2 bg-[#e5ff00] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#e5ff00]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
@@ -1614,7 +1618,9 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               navigate("/events");
                             }}
                             className="w-full sm:w-auto px-8 py-3.5 bg-white/5 border border-white/10 hover:border-white/20 text-white font-black uppercase tracking-wider text-xs rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
                           >
                             Back to Events
                           </button>
@@ -1622,7 +1628,9 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           <button
                             onClick={handleShareToWhatsApp}
                             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-[#25D366] text-white font-black uppercase tracking-wider text-xs rounded-full shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer hover:bg-[#20ba5a] shadow-[#25D366]/20 border border-[#25d366]/10"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
                           >
                             <svg
                               className="w-4 h-4 fill-current"

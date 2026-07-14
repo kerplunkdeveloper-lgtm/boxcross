@@ -13,7 +13,7 @@ const Eventpage = () => {
   const { id } = useParams();
 
   return (
-    <div className='w-full mt-20 '>
+    <div className='w-full  '>
       {!id && (
         <Helmet>
           <title>Events &amp; Class Schedules | Box &amp; Cross</title>
@@ -52,4 +52,4 @@ const Eventpage = () => {
   )
 }   
 
-export default Eventpage
+export default Eventpage

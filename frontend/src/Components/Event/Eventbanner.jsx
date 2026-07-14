@@ -164,7 +164,7 @@ const Eventbanner = () => {
 
   return (
     <section
-      className="relative w-full h-[50vh] sm:h-[65vh] md:h-[500px] overflow-hidden select-none z-10 border-b border-white/5"
+      className="relative w-full h-[50vh] sm:h-[65vh] md:h-[580px] overflow-hidden select-none z-10 border-b border-white/5"
       onMouseEnter={stopAutoplay}
       onMouseLeave={startAutoplay}
     >
@@ -225,7 +225,7 @@ const Eventbanner = () => {
             </div>
 
             {/* Premium Dark Vignette and Gradient Overlay */}
-            <div className="absolute inset-0 bg-black/50 z-10" />
+            <div className="absolute inset-0 bg-black/70 z-10" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/20 z-10" />
             <div className="absolute inset-0 bg-radial-vignette pointer-events-none z-10" />
 
@@ -250,7 +250,7 @@ const Eventbanner = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.5 }}
-                    className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white mb-2 sm:mb-4 leading-none"
+                    className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-black uppercase tracking-tight text-white mb-2 sm:mb-4 leading-none"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     {currentBanner.title}
