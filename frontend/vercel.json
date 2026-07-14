@@ -5,8 +5,8 @@
       "has": [
         {
           "type": "header",
-          "key": "user-agent",
-          "value": "(?i)(facebookexternalhit|twitterbot|whatsapp|slackbot|telegrambot|discordbot|linkedinbot|googlebot|bingbot|baiduspider|yandexbot|embedly)"
+          "key": "User-Agent",
+          "value": ".*(facebookexternalhit|WhatsApp|whatsapp|twitterbot|Twitterbot|telegrambot|TelegramBot|discordbot|Discordbot|slackbot|Slackbot|linkedinbot|LinkedInBot|googlebot|Googlebot|bingbot|Bingbot|baiduspider|yandexbot|embedly).*"
         }
       ],
       "destination": "https://mediumblue-llama-100354.hostingersite.com/api/events/:id/og"

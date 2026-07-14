@@ -626,6 +626,7 @@ const deleteEventBooking = async (req, res) => {
 const getEventOGMeta = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(`[OG META REQUEST] Fetched for event ID: ${id} | User-Agent: ${req.headers["user-agent"]}`);
 
     // Validate MongoDB ID format
     if (!id.match(/^[0-9a-fA-F]{24}$/)) {
