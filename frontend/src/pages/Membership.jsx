@@ -10,6 +10,9 @@ import TrainingZones from "../Components/TrainingZones";
 import BookForm from "../Components/BookForm";
 import Founding from "../Components/Founding";
 
+const BASE_URL = "https://membership.boxandcross.com";
+
+
 
 const Membership = () => {
   useEffect(() => {
@@ -29,22 +32,26 @@ const Membership = () => {
   return (
     <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden ">
       <Helmet>
-        <title>Membership Plans | Box & Cross</title>
-        <meta name="description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
+        <title>Membership Plans | Box &amp; Cross – Performance Arena</title>
+        <meta name="description" content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
         
-        {/* Open Graph / Facebook */}
+        {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://membership.boxandcross.com/" />
-        <meta property="og:title" content="Membership Plans | Box & Cross" />
-        <meta property="og:description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
-        <meta property="og:image" content={`https://membership.boxandcross.com${bannerImg}`} />
+        <meta property="og:site_name" content="Box &amp; Cross" />
+        <meta property="og:url" content={`${BASE_URL}/`} />
+        <meta property="og:title" content="Membership Plans | Box &amp; Cross – Performance Arena" />
+        <meta property="og:description" content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
+        <meta property="og:image" content={`${BASE_URL}/og-membership.png`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Box and Cross Membership" />
 
         {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://membership.boxandcross.com/" />
-        <meta property="twitter:title" content="Membership Plans | Box & Cross" />
-        <meta property="twitter:description" content="At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
-        <meta property="twitter:image" content={`https://membership.boxandcross.com${bannerImg}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={`${BASE_URL}/`} />
+        <meta name="twitter:title" content="Membership Plans | Box &amp; Cross – Performance Arena" />
+        <meta name="twitter:description" content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community." />
+        <meta name="twitter:image" content={`${BASE_URL}/og-membership.png`} />
       </Helmet>
       {/* HERO SECTION */}
       <section className="relative mt-[80px] md:mt-0 w-full h-[40vh] md:h-[70vh]   flex items-center justify-center overflow-hidden mb-10">

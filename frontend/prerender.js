@@ -45,20 +45,45 @@ if (!fs.existsSync(indexPath)) {
 
 const originalHtml = fs.readFileSync(indexPath, 'utf8');
 
+const buildMetaTags = (route) => `<!-- SEO_START -->
+  <title>${route.title}</title>
+  <meta name="description" content="${route.description}" />
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Box &amp; Cross" />
+  <meta property="og:url" content="${route.url}" />
+  <meta property="og:title" content="${route.title}" />
+  <meta property="og:description" content="${route.description}" />
+  <meta property="og:image" content="${route.image}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="${route.imageAlt}" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="${route.url}" />
+  <meta name="twitter:title" content="${route.title}" />
+  <meta name="twitter:description" content="${route.description}" />
+  <meta name="twitter:image" content="${route.image}" />
+  <!-- SEO_END -->`;
+
 // Configuration for each route we want to prerender
 const routes = [
   {
     path: 'events',
-    title: 'Events & Class Schedules | Box & Cross',
+    title: 'Events &amp; Class Schedules | Box &amp; Cross',
     description: 'View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross.',
     image: 'https://membership.boxandcross.com/og-events.jpg',
+    imageAlt: 'Box and Cross Events and Schedules',
     url: 'https://membership.boxandcross.com/events'
   },
   {
     path: 'community',
-    title: 'Community & Tribe | Box & Cross',
+    title: 'Community &amp; Tribe | Box &amp; Cross',
     description: 'The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here.',
     image: 'https://membership.boxandcross.com/og-community.jpg',
+    imageAlt: 'Box and Cross Community and Tribe',
     url: 'https://membership.boxandcross.com/community'
   }
 ];
@@ -69,24 +94,7 @@ routes.forEach(route => {
     fs.mkdirSync(routeDir, { recursive: true });
   }
 
-  const metaTagsString = `<!-- SEO_START -->
-  <title>${route.title}</title>
-  <meta name="description" content="${route.description}" />
-
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="${route.url}" />
-  <meta property="og:title" content="${route.title}" />
-  <meta property="og:description" content="${route.description}" />
-  <meta property="og:image" content="${route.image}" />
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="${route.url}" />
-  <meta property="twitter:title" content="${route.title}" />
-  <meta property="twitter:description" content="${route.description}" />
-  <meta property="twitter:image" content="${route.image}" />
-  <!-- SEO_END -->`;
+  const metaTagsString = buildMetaTags(route);
 
   const routeHtml = originalHtml.replace(
     /<!-- SEO_START -->[\s\S]*?<!-- SEO_END -->/,
@@ -97,30 +105,21 @@ routes.forEach(route => {
   console.log(`Prerendered SEO HTML for route: /${route.path}`);
 });
 
-// Also update the main index.html to match the default screenshot preview
-const membershipMetaTags = `<!-- SEO_START -->
-  <title>Box & Cross – Performance Arena</title>
-  <meta name="description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
+// Update the main index.html for the membership/home page
+const membershipRoute = {
+  title: 'Membership Plans | Box &amp; Cross \u2013 Performance Arena',
+  description: 'At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals.',
+  image: 'https://membership.boxandcross.com/og-membership.png',
+  imageAlt: 'Box and Cross Membership Plans',
+  url: 'https://membership.boxandcross.com/'
+};
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://membership.boxandcross.com/" />  
-  <meta property="og:title" content="Membership Plans | Box & Cross – Performance Arena" />
-  <meta property="og:description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
-  <meta property="og:image" content="https://membership.boxandcross.com/og-membership.png" />
-
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://membership.boxandcross.com/" />
-  <meta property="twitter:title" content="Membership Plans | Box & Cross – Performance Arena" />
-  <meta property="twitter:description" content="Experience premium boxing, fitness, and performance training at Box & Cross." />
-  <meta property="twitter:image" content="https://membership.boxandcross.com/og-membership.png" />
-  <!-- SEO_END -->`;
-
+const membershipMetaTags = buildMetaTags(membershipRoute);
 const updatedMainHtml = originalHtml.replace(
   /<!-- SEO_START -->[\s\S]*?<!-- SEO_END -->/,
   membershipMetaTags
 );
 fs.writeFileSync(indexPath, updatedMainHtml, 'utf8');
-console.log('Updated landing page index.html with default screenshot fallback.');
+console.log('Updated landing page index.html with membership OG meta tags.');
+
 

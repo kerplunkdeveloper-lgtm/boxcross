@@ -3,29 +3,35 @@ import { Helmet } from 'react-helmet-async'
 import EventNavbar from '../../Components/Event/EventNavbar'
 import Eventbanner from '../../Components/Event/Eventbanner'
 import EventList from '../../Components/Event/EventList'
-import coverImg from '../../assets/cover.jpg'
 import Eventlastcontact from './Eventlastcontact'
 import Eventhighlight from './Eventhighlight'
+
+const BASE_URL = "https://membership.boxandcross.com";
 
 const Eventpage = () => {
   return (
     <div className='w-full mt-20 '>
       <Helmet>
-        <title>Events & Class Schedules | Box & Cross</title>
+        <title>Events &amp; Class Schedules | Box &amp; Cross</title>
         <meta name="description" content="View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross." />
-        {/* Open Graph / Facebook */}
+
+        {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://membership.boxandcross.com/events" />
-        <meta property="og:title" content="Events & Class Schedules | Box & Cross" />
+        <meta property="og:site_name" content="Box &amp; Cross" />
+        <meta property="og:url" content={`${BASE_URL}/events`} />
+        <meta property="og:title" content="Events &amp; Class Schedules | Box &amp; Cross" />
         <meta property="og:description" content="View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross." />
-        <meta property="og:image" content={`https://membership.boxandcross.com${coverImg}`} />
+        <meta property="og:image" content={`${BASE_URL}/og-events.jpg`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Box and Cross Events" />
 
         {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://membership.boxandcross.com/events" />
-        <meta property="twitter:title" content="Events & Class Schedules | Box & Cross" />
-        <meta property="twitter:description" content="View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross." />
-        <meta property="twitter:image" content={`https://membership.boxandcross.com${coverImg}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={`${BASE_URL}/events`} />
+        <meta name="twitter:title" content="Events &amp; Class Schedules | Box &amp; Cross" />
+        <meta name="twitter:description" content="View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross." />
+        <meta name="twitter:image" content={`${BASE_URL}/og-events.jpg`} />
       </Helmet>
       {/*............................ separate navbar for event page............................*/}
       <EventNavbar />
@@ -41,4 +47,4 @@ const Eventpage = () => {
   )
 }   
 
-export default Eventpage
+export default Eventpage

@@ -408,26 +408,42 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
       id="event-list"
       className="py-16 md:py-24 px-6 md:px-16 lg:px-24 bg-[#030303] relative overflow-hidden select-none"
     >
-      {selectedEvent && (
-        <Helmet>
-          <title>{selectedEvent.title} | Box & Cross</title>
-          <meta name="description" content={selectedEvent.description || "Join this event at Box & Cross!"} />
-          
-          {/* Open Graph / Facebook */}
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content={`https://membership.boxandcross.com/events/${selectedEvent._id}`} />
-          <meta property="og:title" content={`${selectedEvent.title} | Box & Cross`} />
-          <meta property="og:description" content={selectedEvent.description || "Join this event at Box & Cross!"} />
-          <meta property="og:image" content={selectedEvent.imageUrl} />
+      {selectedEvent && (() => {
+        const BASE_URL = "https://membership.boxandcross.com";
+        const eventUrl = `${BASE_URL}/events/${selectedEvent._id}`;
+        const eventTitle = `${selectedEvent.title} | Box & Cross`;
+        const rawDesc = selectedEvent.description || "";
+        const plainDesc = rawDesc.replace(/<[^>]*>/g, "").trim();
+        const eventDesc = plainDesc.length > 0
+          ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
+          : `Join ${selectedEvent.title} at Box & Cross. View schedule, timings, and book your slot now!`;
+        const eventImage = selectedEvent.imageUrl || `${BASE_URL}/og-events.jpg`;
 
-          {/* Twitter */}
-          <meta property="twitter:card" content="summary_large_image" />
-          <meta property="twitter:url" content={`https://membership.boxandcross.com/events/${selectedEvent._id}`} />
-          <meta property="twitter:title" content={`${selectedEvent.title} | Box & Cross`} />
-          <meta property="twitter:description" content={selectedEvent.description || "Join this event at Box & Cross!"} />
-          <meta property="twitter:image" content={selectedEvent.imageUrl} />
-        </Helmet>
-      )}
+        return (
+          <Helmet>
+            <title>{eventTitle}</title>
+            <meta name="description" content={eventDesc} />
+
+            {/* Open Graph / Facebook / WhatsApp */}
+            <meta property="og:type" content="website" />
+            <meta property="og:site_name" content="Box &amp; Cross" />
+            <meta property="og:url" content={eventUrl} />
+            <meta property="og:title" content={eventTitle} />
+            <meta property="og:description" content={eventDesc} />
+            <meta property="og:image" content={eventImage} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:image:alt" content={selectedEvent.title} />
+
+            {/* Twitter Card */}
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:url" content={eventUrl} />
+            <meta name="twitter:title" content={eventTitle} />
+            <meta name="twitter:description" content={eventDesc} />
+            <meta name="twitter:image" content={eventImage} />
+          </Helmet>
+        );
+      })()}
       {/* Background Radial Glow */}
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#e5ff00]/3 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#ff9e00]/2 rounded-full blur-[140px] pointer-events-none" />

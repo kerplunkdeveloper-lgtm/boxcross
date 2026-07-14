@@ -9,8 +9,10 @@ import TribeSection from '../Components/TribeSection'
 import TribeDashboard from '../Components/TribeDashboard'
 import CommunitySection from '../Components/CommunitySection'
 import EventList from '../Components/Event/EventList'
-import comImg from '../assets/com.png'
 import TrialCTA from '../Components/TrialCTA'
+
+const BASE_URL = "https://membership.boxandcross.com";
+
 const Community = () => {
   useEffect(() => {
     const initAOS = () => {
@@ -29,22 +31,26 @@ const Community = () => {
   return (
     <div className="bg-black min-h-screen overflow-x-hidden w-full relative">
       <Helmet>
-        <title>Community & Tribe | Box & Cross</title>
+        <title>Community &amp; Tribe | Box &amp; Cross</title>
         <meta name="description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
 
-        {/* Open Graph / Facebook */}
+        {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://membership.boxandcross.com/community" />
-        <meta property="og:title" content="Community & Tribe | Box & Cross" />
+        <meta property="og:site_name" content="Box &amp; Cross" />
+        <meta property="og:url" content={`${BASE_URL}/community`} />
+        <meta property="og:title" content="Community &amp; Tribe | Box &amp; Cross" />
         <meta property="og:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
-        <meta property="og:image" content={`https://membership.boxandcross.com${comImg}`} />
+        <meta property="og:image" content={`${BASE_URL}/og-community.jpg`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Box and Cross Community" />
 
         {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://membership.boxandcross.com/community" />
-        <meta property="twitter:title" content="Community & Tribe | Box & Cross" />
-        <meta property="twitter:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
-        <meta property="twitter:image" content={`https://membership.boxandcross.com${comImg}`} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={`${BASE_URL}/community`} />
+        <meta name="twitter:title" content="Community &amp; Tribe | Box &amp; Cross" />
+        <meta name="twitter:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
+        <meta name="twitter:image" content={`${BASE_URL}/og-community.jpg`} />
       </Helmet>
       <Communitybanner/>
       <CommunityMarquee/>
