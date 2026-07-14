@@ -8,13 +8,13 @@ const EventNavbar = () => {
     <nav className="w-full flex items-center  justify-between px-6 md:px-12 py-4 bg-black/10 backdrop-blur-md border-b border-white/5 fixed top-0 left-0 right-0 z-[9990] h-18 md:h-20">
       {/* Left side: Logo */}
       <div className="flex items-center">
-        <Link to={'/'} className="flex items-center">
+        <div className="flex items-center">
           <img
             src={logo}
             alt="Box & Cross Logo"
             className="h-10 md:h-12 w-auto object-contain"
           />
-        </Link>
+        </div>
       </div>
 
       {/* Right side: Responsive Call Number */}

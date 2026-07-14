@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import h1 from '../../assets/h1.jpeg'
+import h2 from '../../assets/h2.jpeg'
+import h3 from '../../assets/h3.jpeg'
+import h4 from '../../assets/h4.jpeg'
+
+
+
 
 const highlightImages = [
-  "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=800&auto=format&fit=crop",
+  h1, h2, h3, h4
 ];
 
 const Eventhighlight = () => {
