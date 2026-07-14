@@ -417,7 +417,9 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
         const eventDesc = plainDesc.length > 0
           ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
           : `Join ${selectedEvent.title} at Box & Cross. View schedule, timings, and book your slot now!`;
-        const eventImage = selectedEvent.imageUrl || `${BASE_URL}/og-events.jpg`;
+        const eventImage = selectedEvent.imageUrl
+          ? `${selectedEvent.imageUrl}?v=${new Date(selectedEvent.updatedAt || Date.now()).getTime()}`
+          : `${BASE_URL}/og-events.jpg?v=1`;
 
         return (
           <Helmet>

@@ -33,7 +33,9 @@ export default async function handler(req, res) {
               ? (plainDesc.length > 150 ? plainDesc.substring(0, 147) + "..." : plainDesc)
               : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
             
-            imageUrl = event.imageUrl || `${frontendUrl}/og-events.jpg`;
+            imageUrl = event.imageUrl
+              ? `${event.imageUrl}?v=${new Date(event.updatedAt || Date.now()).getTime()}`
+              : `${frontendUrl}/og-events.jpg?v=1`;
           }
         }
       }
