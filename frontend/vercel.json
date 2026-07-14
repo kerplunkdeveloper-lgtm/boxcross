@@ -9,14 +9,14 @@
           "value": ".*(facebookexternalhit|WhatsApp|whatsapp|twitterbot|Twitterbot|telegrambot|TelegramBot|discordbot|Discordbot|slackbot|Slackbot|linkedinbot|LinkedInBot|googlebot|Googlebot|bingbot|Bingbot|baiduspider|yandexbot|embedly).*"
         }
       ],
-      "destination": "/api/og?id=:id"
+      "destination": "https://mediumblue-llama-100354.hostingersite.com/api/events/:id/og"
     },
     {
       "source": "/api/:path*",
-      "destination": "/api/:path*"
+      "destination": "https://mediumblue-llama-100354.hostingersite.com/api/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]
