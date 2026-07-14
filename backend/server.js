@@ -32,6 +32,7 @@ const allowedOrigins = [
   "http://127.0.0.1:5500",
   "https://boxandcross.com",
   "https://boxandcross.com/contact-us",
+  "https://membership.boxandcross.com",
 ];
 
 app.use(
