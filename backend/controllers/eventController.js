@@ -620,6 +620,120 @@ const deleteEventBooking = async (req, res) => {
   }
 };
 
+let cachedIndexHtml = "";
+let cacheTimestamp = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+// @desc    Get event page HTML with dynamic OG tags
+// @route   GET /api/events/:id/og
+// @access  Public
+const getEventOGMeta = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ID format (avoid crashing MongoDB on invalid ID)
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(400).send("Invalid Event ID");
+    }
+
+    const event = await Event.findById(id);
+    if (!event) {
+      return res.status(404).send("Event not found");
+    }
+
+    // Determine the frontend base URL
+    let frontendUrl = "https://membership.boxandcross.com";
+    if (process.env.FRONTEND_URL) {
+      frontendUrl = process.env.FRONTEND_URL.split(",")[0];
+    } else if (req.headers["x-forwarded-host"]) {
+      const protocol = req.headers["x-forwarded-proto"] || "https";
+      frontendUrl = `${protocol}://${req.headers["x-forwarded-host"]}`;
+    }
+
+    const targetUrl = `${frontendUrl}/events/${event._id}`;
+    const title = `${event.title} | Box & Cross`;
+    const description = event.description 
+      ? (event.description.length > 150 ? event.description.substring(0, 147) + "..." : event.description)
+      : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
+    const imageUrl = event.imageUrl || `${frontendUrl}/og-events.jpg`;
+
+    // Fetch the index.html from the frontend (with caching)
+    let htmlContent = "";
+    const now = Date.now();
+    if (cachedIndexHtml && (now - cacheTimestamp < CACHE_DURATION)) {
+      htmlContent = cachedIndexHtml;
+    } else {
+      try {
+        const response = await fetch(`${frontendUrl}/index.html`);
+        if (response.ok) {
+          htmlContent = await response.text();
+          cachedIndexHtml = htmlContent;
+          cacheTimestamp = now;
+        } else {
+          throw new Error(`Failed to fetch index.html, status: ${response.status}`);
+        }
+      } catch (fetchErr) {
+        console.error("Error fetching index.html, using fallback:", fetchErr.message);
+        if (cachedIndexHtml) {
+          htmlContent = cachedIndexHtml; // fallback to stale cache
+        } else {
+          // Fallback minimal HTML in case frontend is unreachable
+          htmlContent = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- SEO_START -->
+  <!-- SEO_END -->
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>`;
+        }
+      }
+    }
+
+    // Construct the meta tags
+    const metaTagsString = `<!-- SEO_START -->
+  <title>${title}</title>
+  <meta name="description" content="${description}" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="${targetUrl}" />
+  <meta property="og:title" content="${title}" />
+  <meta property="og:description" content="${description}" />
+  <meta property="og:image" content="${imageUrl}" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="${targetUrl}" />
+  <meta property="twitter:title" content="${title}" />
+  <meta property="twitter:description" content="${description}" />
+  <meta property="twitter:image" content="${imageUrl}" />
+  <!-- SEO_END -->`;
+
+    // Replace the default SEO placeholder
+    let updatedHtml = htmlContent;
+    if (updatedHtml.includes("<!-- SEO_START -->") && updatedHtml.includes("<!-- SEO_END -->")) {
+      updatedHtml = updatedHtml.replace(
+        /<!-- SEO_START -->[\s\S]*?<!-- SEO_END -->/,
+        metaTagsString
+      );
+    } else {
+      // If template tags are not present, inject inside head
+      updatedHtml = updatedHtml.replace("</head>", `${metaTagsString}\n</head>`);
+    }
+
+    res.setHeader("Content-Type", "text/html");
+    return res.status(200).send(updatedHtml);
+  } catch (error) {
+    console.error("Get Event OG Meta Error:", error.message);
+    return res.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   getEvents,
   getAllEventsAdmin,
@@ -630,4 +744,5 @@ module.exports = {
   verifyEventPayment,
   getEventBookings,
   deleteEventBooking,
+  getEventOGMeta,
 };

@@ -1,6 +1,17 @@
 {
   "rewrites": [
     {
+      "source": "/events/:id",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i)(facebookexternalhit|twitterbot|whatsapp|slackbot|telegrambot|discordbot|linkedinbot|googlebot|bingbot|baiduspider|yandexbot|embedly)"
+        }
+      ],
+      "destination": "https://mediumblue-llama-100354.hostingersite.com/api/events/:id/og"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

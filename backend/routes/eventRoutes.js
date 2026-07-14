@@ -12,12 +12,14 @@ const {
   verifyEventPayment,
   getEventBookings,
   deleteEventBooking,
+  getEventOGMeta,
 } = require("../controllers/eventController");
 
 // Public routes
 router.get("/", getEvents);
 router.post("/book", bookEvent);
 router.post("/verify", verifyEventPayment);
+router.get("/:id/og", getEventOGMeta);
 
 // Admin protected routes
 router.get("/admin", protect, authorize("admin"), getAllEventsAdmin);
