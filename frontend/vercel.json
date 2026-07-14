@@ -9,11 +9,7 @@
           "value": ".*(facebookexternalhit|WhatsApp|whatsapp|twitterbot|Twitterbot|telegrambot|TelegramBot|discordbot|Discordbot|slackbot|Slackbot|linkedinbot|LinkedInBot|googlebot|Googlebot|bingbot|Bingbot|baiduspider|yandexbot|embedly).*"
         }
       ],
-      "destination": "https://mediumblue-llama-100354.hostingersite.com/api/events/:id/og"
-    },
-    {
-      "source": "/api/:path*",
-      "destination": "https://mediumblue-llama-100354.hostingersite.com/api/:path*"
+      "destination": "/api/og?id=:id"
     },
     {
       "source": "/:path*",
