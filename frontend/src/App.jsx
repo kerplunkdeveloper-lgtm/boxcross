@@ -10,6 +10,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Toaster } from "react-hot-toast";
 import { HelmetProvider } from "react-helmet-async";
+import Commingsoon from "./pages/Commingsoon";
 
 // Lazy-load page components for code splitting & optimized initial bundle sizes
 const MembershipPage = lazy(() => import("./pages/Membership"));
@@ -37,6 +38,7 @@ const DashboardHomec3 = lazy(() => import("./pages/DashboardHomec3"));
 const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
 const Foot = lazy(() => import("./Components/Foot"));
 const GymMarquee = lazy(() => import("./Components/GymMarquee"));
+
 
 
 // import LeadModal from "./Components/LeadModal";
@@ -127,13 +129,14 @@ const App = () => {
               <Routes>
                 {/* Routes WITH Navbar and Footer */}
                 <Route element={<Layout />}>
-                  <Route path="/" element={<MembershipPage />} />
+                  {/* <Route path="/" element={<MembershipPage />} /> */}
                   <Route path="/events" element={<Eventpage />} />
                   <Route path="/events/:id" element={<Eventpage />} />
                   <Route path="/community" element={<Community />} />
                 </Route>
 
                 {/* Routes WITHOUT Navbar and Footer */}
+                <Route path="/" element={<Commingsoon />} />
                 <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />
                 <Route
