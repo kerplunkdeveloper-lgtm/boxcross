@@ -10,7 +10,7 @@ const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = async () => {
     const res = await logout();

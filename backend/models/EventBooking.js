@@ -42,7 +42,6 @@ const eventBookingSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["not payment", "payment successfully", "cancelled", "failed"],
       default: "not payment",
     },
     razorpayOrderId: {
@@ -54,6 +53,25 @@ const eventBookingSchema = new mongoose.Schema(
     razorpaySignature: {
       type: String,
     },
+    lastContact: {
+      type: String,
+      default: "",
+    },
+    nextFollowUp: {
+      type: String,
+      default: "",
+    },
+    notes: {
+      type: String,
+      default: "",
+    },
+    timeline: [
+      {
+        time: { type: String },
+        activity: { type: String },
+        type: { type: String, default: "system" },
+      }
+    ],
   },
   {
     timestamps: true,

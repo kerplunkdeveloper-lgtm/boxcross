@@ -12,6 +12,7 @@ const {
   verifyEventPayment,
   getEventBookings,
   deleteEventBooking,
+  updateEventBooking,
   getEventOGMeta,
 } = require("../controllers/eventController");
 
@@ -24,6 +25,7 @@ router.get("/:id/og", getEventOGMeta);
 // Admin protected routes
 router.get("/admin", protect, authorize("admin"), getAllEventsAdmin);
 router.get("/bookings", protect, authorize("admin"), getEventBookings);
+router.put("/bookings/:id", protect, authorize("admin"), updateEventBooking);
 router.delete("/bookings/:id", protect, authorize("admin"), deleteEventBooking);
 router.post("/", protect, authorize("admin"), upload.single("image"), createEvent);
 router.put("/:id", protect, authorize("admin"), upload.single("image"), updateEvent);

@@ -28,6 +28,12 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
   const { theme } = useTheme();
   const location = useLocation();
 
+  const closeSidebarOnMobile = () => {
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
+  };
+
   const [eventsOpen, setEventsOpen] = useState(() => {
     return (
       location.pathname.includes("/events") ||
@@ -120,16 +126,18 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
 
   return (
     <aside
-      className={`fixed inset-y-0 left-0 z-30 w-64 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform transition-transform duration-300 lg:translate-x-0 lg:static lg:flex-shrink-0 transition-colors ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      className={`fixed lg:static inset-y-0 left-0 z-30 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform lg:translate-x-0 lg:flex-shrink-0 transition-all duration-300 ${
+        sidebarOpen 
+          ? "translate-x-0 w-[210px] lg:w-[210px]" 
+          : "-translate-x-full lg:w-0 lg:opacity-0 lg:overflow-hidden lg:border-r-0"
       }`}
     >
       {/* Header with logo */}
-      <div className="h-20 flex items-center justify-between px-6 border-b border-[var(--db-sidebar-border)] flex-shrink-0">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-[var(--db-sidebar-border)] flex-shrink-0">
         <img
           src={theme === "light" ? logo2 : logo}
           alt="Box & Cross"
-          className="w-[150px] object-contain"
+          className="w-[115px] object-contain"
         />
         <button
           className="lg:hidden text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
@@ -140,8 +148,8 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       </div>
 
       {/* Menu Nav Links (Scrollable) */}
-      <div className="flex-grow overflow-y-auto custom-scrollbar py-6">
-        <nav className="px-4 space-y-2">
+      <div className="flex-grow overflow-y-auto custom-scrollbar py-4">
+        <nav className="px-3 space-y-1">
           {baseMenuItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -149,9 +157,9 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 key={item.name}
                 to={item.path}
                 end={item.path === "/dashboard"}
-                onClick={() => setSidebarOpen(false)}
+                onClick={closeSidebarOnMobile}
                 className={({ isActive }) =>
-                  `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                  `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold tracking-wider transition-all cursor-pointer ${
                     isActive
                       ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)]"
                       : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -159,7 +167,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 }
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
-                <Icon size={18} />
+                <Icon size={16} />
                 {item.name}
               </NavLink>
             );
@@ -170,7 +178,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
             <div className="space-y-1">
               <button
                 onClick={() => setMembershipOpen(!membershipOpen)}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3.5 py-2 rounded-lg text-[13px] font-semibold tracking-wider transition-all cursor-pointer ${
                   location.pathname.includes("/memberships") ||
                   location.pathname.includes("/payments")
                     ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
@@ -178,12 +186,12 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 }`}
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
-                <div className="flex items-center gap-3">
-                  <CreditCard size={18} className={location.pathname.includes("/memberships") || location.pathname.includes("/payments") ? "text-[var(--db-accent-highlight)]" : ""} />
+                <div className="flex items-center gap-2.5">
+                  <CreditCard size={16} className={location.pathname.includes("/memberships") || location.pathname.includes("/payments") ? "text-[var(--db-accent-highlight)]" : ""} />
                   <span>Membership</span>
                 </div>
                 <ChevronDown
-                  size={16}
+                  size={14}
                   className={`transition-transform duration-300 ${
                     membershipOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
                   }`}
@@ -191,14 +199,14 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
               </button>
 
               {membershipOpen && (
-                <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
-                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+                <div className="relative pl-4 ml-4 mt-1 space-y-1 transition-all">
+                  <div className="absolute left-[2px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
 
                   <NavLink
                     to="/dashboard/memberships"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -206,15 +214,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <CreditCard size={14} />
+                    <CreditCard size={12} />
                     Membership edit
                   </NavLink>
 
                   <NavLink
                     to="/dashboard/payments"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -222,7 +230,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <DollarSign size={14} />
+                    <DollarSign size={12} />
                     Payment details
                   </NavLink>
                 </div>
@@ -235,7 +243,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
             <div className="space-y-1">
               <button
                 onClick={() => setOfferFoundersOpen(!offerFoundersOpen)}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3.5 py-2 rounded-lg text-[13px] font-semibold tracking-wider transition-all cursor-pointer ${
                   location.pathname.includes("/founding-members") ||
                   location.pathname.includes("/founding-offer")
                     ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
@@ -243,12 +251,12 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 }`}
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
-                <div className="flex items-center gap-3">
-                  <Crown size={18} className={location.pathname.includes("/founding-members") || location.pathname.includes("/founding-offer") ? "text-[var(--db-accent-highlight)]" : ""} />
+                <div className="flex items-center gap-2.5">
+                  <Crown size={16} className={location.pathname.includes("/founding-members") || location.pathname.includes("/founding-offer") ? "text-[var(--db-accent-highlight)]" : ""} />
                   <span>Offer Founders</span>
                 </div>
                 <ChevronDown
-                  size={16}
+                  size={14}
                   className={`transition-transform duration-300 ${
                     offerFoundersOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
                   }`}
@@ -256,14 +264,14 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
               </button>
 
               {offerFoundersOpen && (
-                <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
-                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+                <div className="relative pl-4 ml-4 mt-1 space-y-1 transition-all">
+                  <div className="absolute left-[2px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
 
                   <NavLink
                     to="/dashboard/founding-offer"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -271,15 +279,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <Crown size={14} />
+                    <Crown size={12} />
                     Offer details edit
                   </NavLink>
                   
                   <NavLink
                     to="/dashboard/founding-members"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -287,7 +295,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <Users size={14} />
+                    <Users size={12} />
                     Founding members
                   </NavLink>
                 </div>
@@ -300,7 +308,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
             <div className="space-y-1">
               <button
                 onClick={() => setEventsOpen(!eventsOpen)}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3.5 py-2 rounded-lg text-[13px] font-semibold tracking-wider transition-all cursor-pointer ${
                   location.pathname.includes("/events") ||
                   location.pathname.includes("/events-list") ||
                   location.pathname.includes("/event-payments") ||
@@ -310,12 +318,12 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 }`}
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
-                <div className="flex items-center gap-3">
-                  <Sparkles size={18} className={location.pathname.includes("/events") || location.pathname.includes("/events-list") || location.pathname.includes("/event-payments") || location.pathname.includes("/event-participants") ? "text-[var(--db-accent-highlight)]" : ""} />
+                <div className="flex items-center gap-2.5">
+                  <Sparkles size={16} className={location.pathname.includes("/events") || location.pathname.includes("/events-list") || location.pathname.includes("/event-payments") || location.pathname.includes("/event-participants") ? "text-[var(--db-accent-highlight)]" : ""} />
                   <span>Events</span>
                 </div>
                 <ChevronDown
-                  size={16}
+                  size={14}
                   className={`transition-transform duration-300 ${
                     eventsOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
                   }`}
@@ -323,14 +331,14 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
               </button>
 
               {eventsOpen && (
-                <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
-                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+                <div className="relative pl-4 ml-4 mt-1 space-y-1 transition-all">
+                  <div className="absolute left-[2px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
 
                   <NavLink
                     to="/dashboard/events"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -338,15 +346,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <Image size={14} />
+                    <Image size={12} />
                     Event banners
                   </NavLink>
 
                   <NavLink
                     to="/dashboard/events-list"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -354,15 +362,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <Calendar size={14} />
+                    <Calendar size={12} />
                     Events list
                   </NavLink>
 
                   <NavLink
                     to="/dashboard/event-payments"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -370,15 +378,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <DollarSign size={14} />
+                    <DollarSign size={12} />
                     Event payments
                   </NavLink>
 
                   <NavLink
                     to="/dashboard/event-participants"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -386,7 +394,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <Users size={14} />
+                    <Users size={12} />
                     Participants
                   </NavLink>
                 </div>
@@ -399,7 +407,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
             <div className="space-y-1">
               <button
                 onClick={() => setEnquiriesOpen(!enquiriesOpen)}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3.5 py-2 rounded-lg text-[13px] font-semibold tracking-wider transition-all cursor-pointer ${
                   location.pathname.includes("/homec1") ||
                   location.pathname.includes("/homec2") ||
                   location.pathname.includes("/homec3") ||
@@ -409,12 +417,12 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 }`}
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
-                <div className="flex items-center gap-3">
-                  <FileText size={18} className={location.pathname.includes("/homec1") || location.pathname.includes("/homec2") || location.pathname.includes("/homec3") || location.pathname.includes("/bookings") ? "text-[var(--db-accent-highlight)]" : ""} />
+                <div className="flex items-center gap-2.5">
+                  <FileText size={16} className={location.pathname.includes("/homec1") || location.pathname.includes("/homec2") || location.pathname.includes("/homec3") || location.pathname.includes("/bookings") ? "text-[var(--db-accent-highlight)]" : ""} />
                   <span>Enquiry forms</span>
                 </div>
                 <ChevronDown
-                  size={16}
+                  size={14}
                   className={`transition-transform duration-300 ${
                     enquiriesOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
                   }`}
@@ -422,14 +430,14 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
               </button>
 
               {enquiriesOpen && (
-                <div className="relative pl-6 ml-6 mt-1 space-y-1 transition-all">
-                  <div className="absolute left-[3px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+                <div className="relative pl-4 ml-4 mt-1 space-y-1 transition-all">
+                  <div className="absolute left-[2px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
 
                   <NavLink
                     to="/dashboard/bookings"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -437,15 +445,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <BookOpen size={14} />
+                    <BookOpen size={12} />
                     Book gym free tour
                   </NavLink>
 
                   <NavLink
                     to="/dashboard/homec1"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -453,15 +461,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <FileText size={14} />
+                    <FileText size={12} />
                     Home/trialform
                   </NavLink>
 
                   <NavLink
                     to="/dashboard/homec2"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -469,15 +477,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <Users size={14} />
+                    <Users size={12} />
                     Consult us form
                   </NavLink>
 
                   <NavLink
                     to="/dashboard/homec3"
-                    onClick={() => setSidebarOpen(false)}
+                    onClick={closeSidebarOnMobile}
                     className={({ isActive }) =>
-                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                      `w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold tracking-wider transition-all cursor-pointer relative ${
                         isActive
                           ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
                           : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -485,7 +493,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                     }
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    <MessageSquare size={14} />
+                    <MessageSquare size={12} />
                     Contact Form
                   </NavLink>
                 </div>
@@ -500,9 +508,9 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
               <NavLink
                 key={item.name}
                 to={item.path}
-                onClick={() => setSidebarOpen(false)}
+                onClick={closeSidebarOnMobile}
                 className={({ isActive }) =>
-                  `w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
+                  `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold tracking-wider transition-all cursor-pointer ${
                     isActive
                       ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)]"
                       : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -510,7 +518,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 }
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
-                <Icon size={18} />
+                <Icon size={16} />
                 {item.name}
               </NavLink>
             );
@@ -519,13 +527,13 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
       </div>
 
       {/* Footer logout */}
-      <div className="p-4 border-t border-[var(--db-sidebar-border)] flex-shrink-0">
+      <div className="p-3 border-t border-[var(--db-sidebar-border)] flex-shrink-0">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold tracking-wider text-red-400 bg-[var(--db-sidebar-link-hover)] hover:text-red-400 transition-all cursor-pointer"
+          className="w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold tracking-wider text-red-400 bg-[var(--db-sidebar-link-hover)] hover:text-red-400 transition-all cursor-pointer"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
-          <LogOut size={18} />
+          <LogOut size={16} />
           Logout
         </button>
       </div>

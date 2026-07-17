@@ -448,15 +448,15 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
   };
 
   return (
-    <header className="h-20 bg-[var(--db-header)] border-b border-[var(--db-header-border)] px-6 md:px-8 flex items-center justify-between flex-shrink-0 transition-colors relative">
-      <div className="flex items-center gap-4">
+    <header className="h-16 bg-[var(--db-header)] border-b border-[var(--db-header-border)] px-4 md:px-6 flex items-center justify-between flex-shrink-0 transition-colors relative">
+      <div className="flex items-center gap-3">
         <button
-          className="lg:hidden text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
-          onClick={() => setSidebarOpen(true)}
+          className="text-[var(--db-text-muted)] hover:text-[var(--db-text)] p-1.5 rounded-lg hover:bg-[var(--db-sidebar-link-hover)] cursor-pointer"
+          onClick={() => setSidebarOpen(prev => !prev)}
         >
-          <Menu size={24} />
+          <Menu size={20} />
         </button>
-        <h2 className="text-[12px] md:text-xl font-bold uppercase tracking-wider text-[var(--db-text-title)]">
+        <h2 className="text-[13px] md:text-[15px] font-bold uppercase tracking-wider text-[var(--db-text-title)]">
           {activeTitle}
         </h2>
       </div>
@@ -467,7 +467,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="p-2.5 rounded-full hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-all cursor-pointer relative"
+            className="p-2 rounded-full hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-all cursor-pointer relative"
             title="Activity Notifications"
           >
             <Bell size={18} />
@@ -493,7 +493,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.97 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
-                className="fixed sm:absolute top-20 sm:top-14 left-3 right-3 sm:left-auto sm:right-0 w-auto sm:w-[400px] bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] z-50 overflow-hidden"
+                className="fixed sm:absolute top-16 sm:top-12 left-3 right-3 sm:left-auto sm:right-0 w-auto sm:w-[400px] bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] z-50 overflow-hidden"
               >
                 {/* Header */}
                 <div className={`flex items-center justify-between px-4 py-3.5 border-b border-[var(--db-card-border)] ${theme === "dark" ? "bg-[rgba(229,255,0,0.06)]" : "bg-slate-50"}`}>

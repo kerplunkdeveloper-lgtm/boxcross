@@ -698,6 +698,41 @@ const getEventOGMeta = async (req, res) => {
   }
 };
 
+const updateEventBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { notes, status, lastContact, nextFollowUp, timeline } = req.body;
+
+    const booking = await EventBooking.findById(id);
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking record not found",
+      });
+    }
+
+    if (notes !== undefined) booking.notes = notes;
+    if (status !== undefined) booking.status = status;
+    if (lastContact !== undefined) booking.lastContact = lastContact;
+    if (nextFollowUp !== undefined) booking.nextFollowUp = nextFollowUp;
+    if (timeline !== undefined) booking.timeline = timeline;
+
+    await booking.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Booking updated successfully",
+      data: booking,
+    });
+  } catch (error) {
+    console.error("Update Event Booking Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Could not update booking.",
+    });
+  }
+};
+
 module.exports = {
   getEvents,
   getAllEventsAdmin,
@@ -708,5 +743,6 @@ module.exports = {
   verifyEventPayment,
   getEventBookings,
   deleteEventBooking,
+  updateEventBooking,
   getEventOGMeta,
 };
