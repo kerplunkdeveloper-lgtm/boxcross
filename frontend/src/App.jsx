@@ -28,6 +28,9 @@ const DashboardEventsList = lazy(() => import("./pages/DashboardEventsList"));
 const DashboardEventPayments = lazy(
   () => import("./pages/DashboardEventPayments"),
 );
+const DashboardEventParticipants = lazy(
+  () => import("./pages/DashboardEventParticipants"),
+);
 const DashboardProfile = lazy(() => import("./pages/DashboardProfile"));
 const DashboardCalendar = lazy(() => import("./pages/DashboardCalendar"));
 const Eventpage = lazy(() => import("./pages/Events/Eventpage"));
@@ -169,6 +172,10 @@ const App = () => {
                   <Route
                     path="event-payments"
                     element={<DashboardEventPayments />}
+                  />
+                  <Route
+                    path="event-participants"
+                    element={<DashboardEventParticipants />}
                   />
                   <Route path="profile" element={<DashboardProfile />} />
                   <Route path="homec1" element={<DashboardHomec1 />} />

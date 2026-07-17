@@ -32,7 +32,8 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     return (
       location.pathname.includes("/events") ||
       location.pathname.includes("/events-list") ||
-      location.pathname.includes("/event-payments")
+      location.pathname.includes("/event-payments") ||
+      location.pathname.includes("/event-participants")
     );
   });
 
@@ -63,7 +64,8 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     if (
       location.pathname.includes("/events") ||
       location.pathname.includes("/events-list") ||
-      location.pathname.includes("/event-payments")
+      location.pathname.includes("/event-payments") ||
+      location.pathname.includes("/event-participants")
     ) {
       setEventsOpen(true);
     }
@@ -301,14 +303,15 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                 className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold tracking-wider transition-all cursor-pointer ${
                   location.pathname.includes("/events") ||
                   location.pathname.includes("/events-list") ||
-                  location.pathname.includes("/event-payments")
+                  location.pathname.includes("/event-payments") ||
+                  location.pathname.includes("/event-participants")
                     ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
                     : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
                 }`}
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
                 <div className="flex items-center gap-3">
-                  <Sparkles size={18} className={location.pathname.includes("/events") || location.pathname.includes("/events-list") || location.pathname.includes("/event-payments") ? "text-[var(--db-accent-highlight)]" : ""} />
+                  <Sparkles size={18} className={location.pathname.includes("/events") || location.pathname.includes("/events-list") || location.pathname.includes("/event-payments") || location.pathname.includes("/event-participants") ? "text-[var(--db-accent-highlight)]" : ""} />
                   <span>Events</span>
                 </div>
                 <ChevronDown
@@ -369,6 +372,22 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
                   >
                     <DollarSign size={14} />
                     Event payments
+                  </NavLink>
+
+                  <NavLink
+                    to="/dashboard/event-participants"
+                    onClick={() => setSidebarOpen(false)}
+                    className={({ isActive }) =>
+                      `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold tracking-wider transition-all cursor-pointer relative ${
+                        isActive
+                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                      }`
+                    }
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <Users size={14} />
+                    Participants
                   </NavLink>
                 </div>
               )}
