@@ -38,10 +38,42 @@ import {
 } from "../api/api";
 import { toast } from "react-hot-toast";
 
+// ─── Formatting Helper for Follow-up Dates ────────────────────────
+const formatFollowUpDisplay = (val) => {
+  if (!val) return "";
+
+  if (
+    val.includes("T") &&
+    new RegExp("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}").test(val)
+  ) {
+    const d = new Date(val);
+    const isToday = d.toDateString() === new Date().toDateString();
+    const timeStr = d.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    return isToday
+      ? `Today, ${timeStr}`
+      : `${d.toLocaleDateString("en-US", { day: "numeric", month: "short" })}, ${timeStr}`;
+  }
+
+  if (new RegExp("^\\d{4}-\\d{2}-\\d{2}$").test(val)) {
+    const d = new Date(val);
+    const isToday = d.toDateString() === new Date().toDateString();
+    return isToday
+      ? "Today"
+      : d.toLocaleDateString("en-US", { day: "numeric", month: "short" });
+  }
+
+  return val;
+};
+
 // ─── Bottom Analytics Panel (3-column) ───────────────────────────────────────
 const EventOverviewPanel = ({
   activeBookings,
   confirmedCount,
+  attendedCount,
   awaitingCount,
   noResponseCount,
   notComingCount,
@@ -51,7 +83,10 @@ const EventOverviewPanel = ({
   onSelectBooking,
 }) => {
   const total = activeBookings.length;
-  const confirmPct = total > 0 ? Math.round((confirmedCount / total) * 100) : 0;
+  const confirmPct =
+    total > 0
+      ? Math.round(((confirmedCount + attendedCount) / total) * 100)
+      : 0;
 
   // Donut segments
   const segments = [
@@ -60,6 +95,12 @@ const EventOverviewPanel = ({
       count: confirmedCount,
       color: "#4ade80",
       dotColor: "#22c55e",
+    },
+    {
+      label: "Attended",
+      count: attendedCount,
+      color: "#34d399",
+      dotColor: "#10b981",
     },
     {
       label: "Awaiting",
@@ -146,23 +187,16 @@ const EventOverviewPanel = ({
     pts.map((p) => `L${p.x},${p.y}`).join(" ") +
     ` L${pts[pts.length - 1].x},${PAD_T + chartH} Z`;
 
-  // Today's follow-ups
-  const todayStr = new Date().toLocaleDateString(undefined, {
-    day: "numeric",
-    month: "short",
-  });
-  const todayFollowUps = activeBookings.filter(
-    (b) =>
-      b.nextFollowUp &&
-      (b.nextFollowUp.includes(todayStr) ||
-        b.nextFollowUp.toLowerCase().includes("today")),
-  );
+  // Scheduled follow-ups
+  const scheduledFollowUps = activeBookings
+    .filter((b) => b.nextFollowUp && b.nextFollowUp.trim() !== "")
+    .sort((a, b) => new Date(a.nextFollowUp) - new Date(b.nextFollowUp));
 
   const [hoveredIdx, setHoveredIdx] = useState(null);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {/* ── Col 1: Today's Follow-ups ── */}
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 xl:gap-6">
+      {/* ── Col 1: Scheduled Follow-ups ── */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -174,42 +208,39 @@ const EventOverviewPanel = ({
             className="text-sm font-black uppercase tracking-wider text-[var(--db-text)]"
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
-            Today's Follow-ups
+            Scheduled Follow-ups
             <span className="ml-2 px-1.5 py-0.5 rounded-full bg-[#e5ff00] text-black text-[9px] font-black">
-              {todayFollowUps.length}
+              {scheduledFollowUps.length}
             </span>
           </h3>
-          <span className="text-[10px] font-bold text-[var(--db-accent-highlight)] cursor-pointer hover:underline">
-            View All
-          </span>
         </div>
         <div
           className="flex flex-col gap-1 overflow-y-auto"
           style={{ maxHeight: "220px" }}
         >
-          {todayFollowUps.length === 0 ? (
+          {scheduledFollowUps.length === 0 ? (
             <p className="text-[11px] text-[var(--db-text-muted)] italic py-4 text-center">
-              No follow-ups for today.
+              No scheduled follow-ups.
             </p>
           ) : (
-            todayFollowUps.map((b) => (
+            scheduledFollowUps.map((b) => (
               <div
                 key={b._id}
                 onClick={() => onSelectBooking && onSelectBooking(b)}
-                className="flex items-center justify-between gap-2 py-2 border-b border-[var(--db-card-border)] cursor-pointer hover:bg-[var(--db-sidebar-link-hover)] px-1 rounded transition-colors"
+                className="flex items-center gap-2 xl:gap-3 py-2 border-b border-[var(--db-card-border)] cursor-pointer hover:bg-[var(--db-sidebar-link-hover)] px-2 rounded transition-colors"
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <Clock size={10} className="text-orange-400 flex-shrink-0" />
-                  <span className="text-[11px] font-bold text-[var(--db-text)] truncate">
+                <Clock size={15} className="text-[#eab308] flex-shrink-0" />
+                <div className="flex flex-col min-w-0 flex-1">
+                  <span className="text-[12px] font-bold text-[var(--db-text)] truncate">
                     {b.name}
                   </span>
-                </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className="text-[10px] font-mono text-[var(--db-text-muted)]">
+                  <span className="text-[10px] font-mono text-[var(--db-text-muted)] truncate block">
                     {b.phone}
                   </span>
-                  <span className="text-[10px] font-black text-orange-400 whitespace-nowrap">
-                    {b.nextFollowUp}
+                </div>
+                <div className="flex-shrink-0 text-right">
+                  <span className="text-[11px] font-black text-[#eab308] whitespace-nowrap">
+                    {formatFollowUpDisplay(b.nextFollowUp)}
                   </span>
                 </div>
               </div>
@@ -687,6 +718,9 @@ const DashboardEventParticipants = () => {
     ) {
       return "Confirmed";
     }
+    if (status === "Attended" || status === "attended") {
+      return "Attended";
+    }
     if (
       status === "cancelled" ||
       status === "failed" ||
@@ -730,6 +764,10 @@ const DashboardEventParticipants = () => {
 
   const confirmedCount = activeBookings.filter(
     (b) => getNormalizedStatus(b) === "Confirmed",
+  ).length;
+
+  const attendedCount = activeBookings.filter(
+    (b) => getNormalizedStatus(b) === "Attended",
   ).length;
 
   const awaitingCount = activeBookings.filter(
@@ -787,7 +825,7 @@ const DashboardEventParticipants = () => {
     let matchesStatus = true;
     const normalized = getNormalizedStatus(booking);
     if (statusFilter === "confirmed") {
-      matchesStatus = normalized === "Confirmed";
+      matchesStatus = normalized === "Confirmed" || normalized === "Attended";
     } else if (statusFilter === "awaiting") {
       matchesStatus = normalized === "Awaiting";
     } else if (statusFilter === "followup") {
@@ -801,7 +839,7 @@ const DashboardEventParticipants = () => {
     return matchesSearch && matchesStatus;
   });
 
-  // Set the first booking as selected on initial load or filter change
+  // Set the first booking as selected on initial load or filter change (desktop only)
   useEffect(() => {
     if (filteredBookings.length > 0) {
       const freshBooking = selectedBooking
@@ -809,7 +847,8 @@ const DashboardEventParticipants = () => {
         : null;
       if (freshBooking) {
         setSelectedBooking(freshBooking);
-      } else {
+      } else if (window.innerWidth >= 1280) {
+        // Only auto-select on desktop to prevent mobile modal from popping up
         setSelectedBooking(filteredBookings[0]);
       }
     } else {
@@ -898,8 +937,11 @@ const DashboardEventParticipants = () => {
   };
 
   const handleDeleteTimelineLog = async (idxToDelete) => {
-    if (!window.confirm("Are you sure you want to delete this timeline log?")) return;
-    const updatedTimeline = selectedBooking.timeline.filter((_, idx) => idx !== idxToDelete);
+    if (!window.confirm("Are you sure you want to delete this timeline log?"))
+      return;
+    const updatedTimeline = selectedBooking.timeline.filter(
+      (_, idx) => idx !== idxToDelete,
+    );
     await handleUpdateBooking(selectedBooking._id, {
       timeline: updatedTimeline,
     });
@@ -912,37 +954,23 @@ const DashboardEventParticipants = () => {
 
   const handleExportToExcel = () => {
     const headers = [
-      { name: "Participant Name", width: 180 },
-      { name: "Email", width: 260 },
+      { name: "Name", width: 220 },
       { name: "Phone", width: 150 },
-      { name: "Event Title", width: 250 },
-      { name: "Schedule Date", width: 150 },
-      { name: "Time Slot", width: 150 },
-      { name: "Seats Booked", width: 100 },
-      { name: "Ticket Type", width: 120 },
-      { name: "Registration Date", width: 180 },
-      { name: "Status", width: 160 },
+      { name: "Seats", width: 80 },
+      { name: "Status", width: 140 },
+      { name: "Last Contact", width: 200 },
+      { name: "Follow-up", width: 160 },
+      { name: "Notes", width: 350 },
     ];
 
     const rows = filteredBookings.map((booking) => [
-      booking.name || "",
-      booking.email || "",
-      booking.phone || "",
-      booking.event?.title || "Deleted Event",
-      booking.date || "",
-      booking.timeSlot || "",
+      booking.name || "-",
+      booking.phone || "-",
       booking.seats || 0,
-      Number(booking.totalAmount) === 0 ? "Free Entry" : "Paid Ticket",
-      booking.createdAt
-        ? new Date(booking.createdAt).toLocaleDateString(undefined, {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })
-        : "N/A",
-      booking.status || "",
+      getNormalizedStatus(booking),
+      booking.lastContact || "-",
+      booking.nextFollowUp ? formatFollowUpDisplay(booking.nextFollowUp) : "-",
+      booking.notes || "-",
     ]);
 
     let html = `
@@ -964,23 +992,23 @@ const DashboardEventParticipants = () => {
         </xml>
         <![endif]-->
         <style>
-          table { border-collapse: collapse; }
+          table { border-collapse: collapse; font-family: 'Segoe UI', Arial, sans-serif; }
           th { 
             background-color: #e5ff00; 
-            color: #000000; 
-            font-weight: bold; 
-            font-family: Arial, sans-serif; 
-            font-size: 11px;
-            border: 1px solid #cccccc; 
+            color: #111827; 
+            font-weight: 800; 
+            font-size: 13px;
+            border: 1px solid #d1d5db; 
             text-align: left;
-            padding: 8px;
+            padding: 12px 16px;
+            text-transform: uppercase;
           }
           td { 
-            font-weight: bold; 
-            font-family: Arial, sans-serif; 
-            font-size: 10pt;
-            border: 1px solid #cccccc; 
-            padding: 8px;
+            color: #374151;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #d1d5db; 
+            padding: 10px 16px;
             vertical-align: middle;
           }
         </style>
@@ -1037,7 +1065,14 @@ const DashboardEventParticipants = () => {
   };
 
   return (
-    <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
+      <style>{`
+        .custom-datetime-picker::-webkit-calendar-picker-indicator {
+          filter: invert(1);
+          transform: scale(1.1);
+          cursor: pointer;
+        }
+      `}</style>
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
 
@@ -1060,8 +1095,6 @@ const DashboardEventParticipants = () => {
                 setEventFilter("all");
                 setCurrentPage(1);
               }}
-
-
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                 eventFilter === "all"
                   ? "bg-[#e5ff00] text-black shadow-md border border-[#e5ff00]"
@@ -1099,22 +1132,22 @@ const DashboardEventParticipants = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3.5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3.5">
           {/* Card 1: Total Registrations */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[20px] p-4 flex items-center gap-3 shadow-lg transition-colors"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[16px] xl:rounded-[20px] p-3 xl:p-4 flex flex-col xl:flex-row items-start xl:items-center gap-2 xl:gap-3 shadow-lg transition-colors overflow-hidden"
           >
-            <div className="w-11 h-11 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.15)] flex-shrink-0">
-              <Users size={18} />
+            <div className="w-8 h-8 xl:w-11 xl:h-11 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.15)] flex-shrink-0">
+              <Users className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
             </div>
-            <div className="text-left min-w-0">
-              <h3 className="text-2xl font-black text-[var(--db-text)] leading-none">
+            <div className="text-left min-w-0 w-full">
+              <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
                 {totalRegistrations}
               </h3>
-              <p className="text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 whitespace-nowrap">
+              <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate">
                 Total Registrations
               </p>
             </div>
@@ -1125,17 +1158,37 @@ const DashboardEventParticipants = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.05 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[20px] p-4 flex items-center gap-3 shadow-lg transition-colors"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[16px] xl:rounded-[20px] p-3 xl:p-4 flex flex-col xl:flex-row items-start xl:items-center gap-2 xl:gap-3 shadow-lg transition-colors overflow-hidden"
           >
-            <div className="w-11 h-11 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.15)] flex-shrink-0">
-              <Check size={18} />
+            <div className="w-8 h-8 xl:w-11 xl:h-11 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-green-400 shadow-[0_0_15px_rgba(34,197,94,0.15)] flex-shrink-0">
+              <Check className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
             </div>
-            <div className="text-left min-w-0">
-              <h3 className="text-2xl font-black text-[var(--db-text)] leading-none">
+            <div className="text-left min-w-0 w-full">
+              <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
                 {confirmedCount}
               </h3>
-              <p className="text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 whitespace-nowrap">
+              <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate">
                 Confirmed
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Card 2.5: Attendance */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.07 }}
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[16px] xl:rounded-[20px] p-3 xl:p-4 flex flex-col xl:flex-row items-start xl:items-center gap-2 xl:gap-3 shadow-lg transition-colors overflow-hidden"
+          >
+            <div className="w-8 h-8 xl:w-11 xl:h-11 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.15)] flex-shrink-0">
+              <Award className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
+            </div>
+            <div className="text-left min-w-0 w-full">
+              <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
+                {attendedCount}
+              </h3>
+              <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate">
+                Attendance
               </p>
             </div>
           </motion.div>
@@ -1145,17 +1198,17 @@ const DashboardEventParticipants = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[20px] p-4 flex items-center gap-3 shadow-lg transition-colors"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[16px] xl:rounded-[20px] p-3 xl:p-4 flex flex-col xl:flex-row items-start xl:items-center gap-2 xl:gap-3 shadow-lg transition-colors overflow-hidden"
           >
-            <div className="w-11 h-11 rounded-full bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.15)] flex-shrink-0">
-              <Clock size={18} />
+            <div className="w-8 h-8 xl:w-11 xl:h-11 rounded-full bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.15)] flex-shrink-0">
+              <Clock className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
             </div>
-            <div className="text-left min-w-0">
-              <h3 className="text-2xl font-black text-[var(--db-text)] leading-none">
+            <div className="text-left min-w-0 w-full">
+              <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
                 {awaitingCount}
               </h3>
-              <p className="text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 whitespace-nowrap">
-                Awaiting Confirmation
+              <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate" title="Awaiting Confirmation">
+                Awaiting Conf.
               </p>
             </div>
           </motion.div>
@@ -1165,17 +1218,17 @@ const DashboardEventParticipants = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.15 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[20px] p-4 flex items-center gap-3 shadow-lg transition-colors"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[16px] xl:rounded-[20px] p-3 xl:p-4 flex flex-col xl:flex-row items-start xl:items-center gap-2 xl:gap-3 shadow-lg transition-colors overflow-hidden"
           >
-            <div className="w-11 h-11 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.15)] flex-shrink-0">
-              <Phone size={18} />
+            <div className="w-8 h-8 xl:w-11 xl:h-11 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 shadow-[0_0_15px_rgba(249,115,22,0.15)] flex-shrink-0">
+              <Phone className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
             </div>
-            <div className="text-left min-w-0">
-              <h3 className="text-2xl font-black text-[var(--db-text)] leading-none">
+            <div className="text-left min-w-0 w-full">
+              <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
                 {followUpCount}
               </h3>
-              <p className="text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 whitespace-nowrap">
-                Follow-up Pending
+              <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate">
+                Follow-ups
               </p>
             </div>
           </motion.div>
@@ -1185,16 +1238,16 @@ const DashboardEventParticipants = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[20px] p-4 flex items-center gap-3 shadow-lg transition-colors"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[16px] xl:rounded-[20px] p-3 xl:p-4 flex flex-col xl:flex-row items-start xl:items-center gap-2 xl:gap-3 shadow-lg transition-colors overflow-hidden"
           >
-            <div className="w-11 h-11 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.15)] flex-shrink-0">
-              <XCircle size={18} />
+            <div className="w-8 h-8 xl:w-11 xl:h-11 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 shadow-[0_0_15px_rgba(239,68,68,0.15)] flex-shrink-0">
+              <XCircle className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
             </div>
-            <div className="text-left min-w-0">
-              <h3 className="text-2xl font-black text-[var(--db-text)] leading-none">
+            <div className="text-left min-w-0 w-full">
+              <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
                 {notComingCount}
               </h3>
-              <p className="text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 whitespace-nowrap">
+              <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate">
                 Not Coming
               </p>
             </div>
@@ -1205,20 +1258,20 @@ const DashboardEventParticipants = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.25 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[20px] p-4 flex items-center gap-3 shadow-lg transition-colors"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[16px] xl:rounded-[20px] p-3 xl:p-4 flex flex-col xl:flex-row items-start xl:items-center gap-2 xl:gap-3 shadow-lg transition-colors overflow-hidden"
           >
-            <div className="w-11 h-11 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.15)] flex-shrink-0">
-              <Ticket size={18} />
+            <div className="w-8 h-8 xl:w-11 xl:h-11 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.15)] flex-shrink-0">
+              <Ticket className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
             </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-2xl font-black text-[var(--db-text)] leading-none">
+            <div className="text-left min-w-0 w-full">
+              <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
                 {availableSlots}
               </h3>
-              <div className="flex items-baseline justify-between mt-1">
-                <p className="text-[11px] text-[var(--db-text-muted)] font-semibold whitespace-nowrap">
+              <div className="flex items-center gap-1 mt-1 truncate">
+                <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold truncate">
                   Available Seats
                 </p>
-                <span className="text-[11px] text-[var(--db-text-muted)] font-bold whitespace-nowrap pl-1">
+                <span className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-bold truncate">
                   of {totalSlots}
                 </span>
               </div>
@@ -1327,6 +1380,14 @@ const DashboardEventParticipants = () => {
 
                 {/* Right: Options Menu */}
                 <div className="relative flex items-center gap-2">
+                  <button
+                    onClick={handleExportToExcel}
+                    className="flex items-center gap-1.5 h-8 px-3 bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] hover:bg-[#e5ff00]/20 text-[10px] font-black uppercase tracking-wider rounded-full transition-all cursor-pointer"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <Download size={11} /> Export to Excel
+                  </button>
+
                   {isSelectMode && selectedRows.length > 0 && (
                     <button
                       onClick={handleBulkDelete}
@@ -1461,7 +1522,9 @@ const DashboardEventParticipants = () => {
                         <th className="py-2.5 px-2 text-center whitespace-nowrap">
                           Follow-up
                         </th>
-                        <th className="py-2.5 px-2 text-center whitespace-nowrap">Notes</th>
+                        <th className="py-2.5 px-2 text-center whitespace-nowrap">
+                          Notes
+                        </th>
                         <th className="py-2.5 px-2 text-center whitespace-nowrap">
                           Actions
                         </th>
@@ -1527,6 +1590,8 @@ const DashboardEventParticipants = () => {
                                 const statusColorMap = {
                                   Confirmed:
                                     "border-green-500/30 text-green-400 bg-green-500/10",
+                                  Attended:
+                                    "border-emerald-500/30 text-emerald-400 bg-emerald-500/10",
                                   Awaiting:
                                     "border-yellow-500/30 text-yellow-400 bg-yellow-500/10",
                                   "Follow-up":
@@ -1543,6 +1608,7 @@ const DashboardEventParticipants = () => {
                                       const val = e.target.value;
                                       const toDb = {
                                         Confirmed: "payment successfully",
+                                        Attended: "Attended",
                                         Awaiting: "Awaiting",
                                         "Follow-up": "Follow-up",
                                         "No Response": "No Response",
@@ -1559,6 +1625,12 @@ const DashboardEventParticipants = () => {
                                       className="bg-[#121212] text-green-400"
                                     >
                                       Confirmed
+                                    </option>
+                                    <option
+                                      value="Attended"
+                                      className="bg-[#121212] text-emerald-400"
+                                    >
+                                      Attended
                                     </option>
                                     <option
                                       value="Awaiting"
@@ -1595,17 +1667,38 @@ const DashboardEventParticipants = () => {
                               onClick={(e) => e.stopPropagation()}
                             >
                               <textarea
-                                key={booking._id + "-lc-" + (booking.lastContact || "")}
-                                ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
-                                defaultValue={booking.lastContact || ""}
-                                rows={1}
-                                onInput={(e) => { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }}
-                                onBlur={(e) => {
-                                  if (e.target.value !== (booking.lastContact || "")) {
-                                    handleUpdateBooking(booking._id, { lastContact: e.target.value });
+                                key={
+                                  booking._id +
+                                  "-lc-" +
+                                  (booking.lastContact || "")
+                                }
+                                ref={(el) => {
+                                  if (el) {
+                                    el.style.height = "auto";
+                                    el.style.height = el.scrollHeight + "px";
                                   }
                                 }}
-                                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) e.target.blur(); }}
+                                defaultValue={booking.lastContact || ""}
+                                rows={1}
+                                onInput={(e) => {
+                                  e.target.style.height = "auto";
+                                  e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                                }}
+                                onBlur={(e) => {
+                                  if (
+                                    e.target.value !==
+                                    (booking.lastContact || "")
+                                  ) {
+                                    handleUpdateBooking(booking._id, {
+                                      lastContact: e.target.value,
+                                    });
+                                  }
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter" && !e.shiftKey)
+                                    e.target.blur();
+                                }}
                                 placeholder="-"
                                 className="w-full bg-transparent border-b border-transparent hover:border-gray-700 focus:border-[var(--db-accent-highlight)] focus:bg-[var(--db-input-bg)] text-[var(--db-text)] text-[10px] font-semibold text-center leading-snug px-1 py-0.5 focus:outline-none transition-all rounded resize-none overflow-hidden"
                               />
@@ -1616,20 +1709,44 @@ const DashboardEventParticipants = () => {
                               className="py-2 px-2 align-middle"
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <textarea
-                                key={booking._id + "-nf-" + (booking.nextFollowUp || "")}
-                                ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
-                                defaultValue={booking.nextFollowUp || ""}
-                                rows={1}
-                                onInput={(e) => { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }}
+                              <input
+                                key={
+                                  booking._id +
+                                  "-nf-" +
+                                  (booking.nextFollowUp || "")
+                                }
+                                type="datetime-local"
+                                defaultValue={(() => {
+                                  if (!booking.nextFollowUp) return "";
+                                  const val = String(booking.nextFollowUp);
+                                  if (
+                                    new RegExp(
+                                      "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}",
+                                    ).test(val)
+                                  )
+                                    return val;
+                                  if (
+                                    new RegExp("^\\d{4}-\\d{2}-\\d{2}$").test(
+                                      val,
+                                    )
+                                  )
+                                    return `${val}T09:00`;
+                                  return "";
+                                })()}
                                 onBlur={(e) => {
-                                  if (e.target.value !== (booking.nextFollowUp || "")) {
-                                    handleUpdateBooking(booking._id, { nextFollowUp: e.target.value });
+                                  if (
+                                    e.target.value !==
+                                    (booking.nextFollowUp || "")
+                                  ) {
+                                    handleUpdateBooking(booking._id, {
+                                      nextFollowUp: e.target.value,
+                                    });
                                   }
                                 }}
-                                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) e.target.blur(); }}
-                                placeholder="-"
-                                className="w-full bg-transparent border-b border-transparent hover:border-gray-700 focus:border-[var(--db-accent-highlight)] focus:bg-[var(--db-input-bg)] text-[10px] font-extrabold text-orange-400 text-center leading-snug px-1 py-0.5 focus:outline-none transition-all rounded resize-none overflow-hidden"
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") e.target.blur();
+                                }}
+                                className="custom-datetime-picker w-full bg-transparent border-b border-transparent hover:border-gray-700 focus:border-[var(--db-accent-highlight)] focus:bg-[var(--db-input-bg)] text-[10px] font-extrabold text-orange-400 text-center leading-snug px-1 py-0.5 focus:outline-none transition-all rounded"
                               />
                             </td>
 
@@ -1639,17 +1756,35 @@ const DashboardEventParticipants = () => {
                               onClick={(e) => e.stopPropagation()}
                             >
                               <textarea
-                                key={booking._id + "-nt-" + (booking.notes || "")}
-                                ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
-                                defaultValue={booking.notes || ""}
-                                rows={1}
-                                onInput={(e) => { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }}
-                                onBlur={(e) => {
-                                  if (e.target.value !== (booking.notes || "")) {
-                                    handleUpdateBooking(booking._id, { notes: e.target.value });
+                                key={
+                                  booking._id + "-nt-" + (booking.notes || "")
+                                }
+                                ref={(el) => {
+                                  if (el) {
+                                    el.style.height = "auto";
+                                    el.style.height = el.scrollHeight + "px";
                                   }
                                 }}
-                                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) e.target.blur(); }}
+                                defaultValue={booking.notes || ""}
+                                rows={1}
+                                onInput={(e) => {
+                                  e.target.style.height = "auto";
+                                  e.target.style.height =
+                                    e.target.scrollHeight + "px";
+                                }}
+                                onBlur={(e) => {
+                                  if (
+                                    e.target.value !== (booking.notes || "")
+                                  ) {
+                                    handleUpdateBooking(booking._id, {
+                                      notes: e.target.value,
+                                    });
+                                  }
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter" && !e.shiftKey)
+                                    e.target.blur();
+                                }}
                                 placeholder="-"
                                 className="w-full bg-transparent border-b border-transparent hover:border-gray-700 focus:border-[var(--db-accent-highlight)] focus:bg-[var(--db-input-bg)] text-[var(--db-text)] text-[10px] text-center leading-snug px-1 py-0.5 focus:outline-none transition-all rounded resize-none overflow-hidden"
                               />
@@ -1730,6 +1865,17 @@ const DashboardEventParticipants = () => {
                                             className="w-full px-3 py-2 text-left text-[11px] font-bold hover:bg-[var(--db-sidebar-link-hover)] text-green-400 cursor-pointer"
                                           >
                                             ✓ Confirmed
+                                          </button>
+                                          <button
+                                            onClick={() => {
+                                              handleUpdateBooking(booking._id, {
+                                                status: "Attended",
+                                              });
+                                              setActiveMenuId(null);
+                                            }}
+                                            className="w-full px-3 py-2 text-left text-[11px] font-bold hover:bg-[var(--db-sidebar-link-hover)] text-emerald-400 cursor-pointer"
+                                          >
+                                            🏆 Attended
                                           </button>
                                           <button
                                             onClick={() => {
@@ -1852,6 +1998,7 @@ const DashboardEventParticipants = () => {
             <EventOverviewPanel
               activeBookings={activeBookings}
               confirmedCount={confirmedCount}
+              attendedCount={attendedCount}
               awaitingCount={awaitingCount}
               noResponseCount={noResponseCount}
               notComingCount={notComingCount}
@@ -1866,40 +2013,85 @@ const DashboardEventParticipants = () => {
           {/* Right Sliding Detail Panel */}
           <AnimatePresence>
             {selectedBooking && (
-              <motion.div
-                initial={{ opacity: 0, x: 80 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 80 }}
-                transition={{ duration: 0.3 }}
-                className="w-full xl:w-[310px] 2xl:w-[330px] flex-shrink-0 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-4 shadow-2xl xl:sticky text-left space-y-4 overflow-y-auto"
-                style={{ top: "24px", maxHeight: "calc(100vh - 48px)" }}
-              >
-                {/* Panel Header */}
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <h2 className="text-xl font-black text-[var(--db-text)] uppercase tracking-wide leading-tight">
-                      {selectedBooking.name}
-                    </h2>
-                    {(() => {
-                      const ns = getNormalizedStatus(selectedBooking);
-                      const statusColorMap = {
-                        Confirmed: "border-green-500/30 text-green-400 bg-green-500/10",
-                        Awaiting: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10",
-                        "Follow-up": "border-blue-500/30 text-blue-400 bg-blue-500/10",
-                        "No Response": "border-gray-500/30 text-gray-400 bg-gray-500/10",
-                        "Not Coming": "border-red-500/30 text-red-400 bg-red-500/10",
-                      };
-                      return (
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded text-[12px] uppercase tracking-widest font-black border ${statusColorMap[ns] || "border-gray-500/30 text-gray-400 bg-gray-500/10"}`}
-                        >
-                          {ns}
-                        </span>
-                      );
-                    })()}
+              <>
+                {/* Mobile Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 bg-black/60 z-40 xl:hidden backdrop-blur-sm"
+                  onClick={() => setSelectedBooking(null)}
+                />
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 100, x: 0 }}
+                  animate={{ opacity: 1, y: 0, x: 0 }}
+                  exit={{ opacity: 0, y: 100, x: 0 }}
+                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                  className="fixed bottom-0 left-0 right-0 z-50 h-[85vh] bg-[var(--db-card)] border-t border-[var(--db-card-border)] rounded-t-[32px] p-5 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] overflow-y-auto custom-scrollbar xl:sticky xl:h-[calc(100vh-48px)] xl:w-[310px] 2xl:w-[330px] xl:border xl:rounded-[24px] xl:p-5 xl:shadow-2xl xl:top-[24px] flex flex-col gap-5 xl:gap-6"
+                >
+                  {/* Close button for mobile */}
+                  <div className="absolute top-4 right-4 xl:hidden z-10">
+                    <button 
+                      onClick={() => setSelectedBooking(null)} 
+                      className="p-2 bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-full text-[var(--db-text-muted)] hover:text-white cursor-pointer transition-colors"
+                    >
+                      <X size={16} />
+                    </button>
                   </div>
-                </div>
 
+                  {/* Panel Header */}
+                  <div className="flex items-start justify-between pr-10 xl:pr-0">
+                    <div className="flex items-start justify-between w-full">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <h2 className="text-xl font-black text-[var(--db-text)] uppercase tracking-wide leading-tight break-words">
+                          {selectedBooking.name}
+                        </h2>
+                        {(() => {
+                          const ns = getNormalizedStatus(selectedBooking);
+                          const statusColorMap = {
+                            Confirmed:
+                              "border-green-500/30 text-green-400 bg-green-500/10",
+                            Attended:
+                              "border-cyan-500/30 text-cyan-400 bg-cyan-500/10",
+                            Awaiting:
+                              "border-yellow-500/30 text-yellow-400 bg-yellow-500/10",
+                            "Follow-up":
+                              "border-blue-500/30 text-blue-400 bg-blue-500/10",
+                            "No Response":
+                              "border-gray-500/30 text-gray-400 bg-gray-500/10",
+                            "Not Coming":
+                              "border-red-500/30 text-red-400 bg-red-500/10",
+                          };
+                          return (
+                            <span
+                              className={`inline-block px-2 py-0.5 rounded text-[12px] uppercase tracking-widest font-black border ${statusColorMap[ns] || "border-gray-500/30 text-gray-400 bg-gray-500/10"}`}
+                            >
+                              {ns}
+                            </span>
+                          );
+                        })()}
+                      </div>
+
+                      {/* Quick Attendance Checkbox */}
+                      <button
+                        onClick={() => {
+                          const isAttended = getNormalizedStatus(selectedBooking) === "Attended";
+                          handleUpdateBooking(selectedBooking._id, {
+                            status: isAttended ? "Confirmed" : "Attended"
+                          });
+                        }}
+                        className={`ml-3 mt-1 flex-shrink-0 w-6 h-6 md:w-7 md:h-7 rounded-md border-2 flex items-center justify-center transition-all cursor-pointer ${
+                          getNormalizedStatus(selectedBooking) === "Attended"
+                            ? "bg-cyan-500 border-cyan-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.5)]"
+                            : "border-[var(--db-card-border)] bg-[var(--db-input-bg)] hover:border-cyan-500/50"
+                        }`}
+                        title={getNormalizedStatus(selectedBooking) === "Attended" ? "Revert to Confirmed" : "Mark as Attended"}
+                      >
+                        {getNormalizedStatus(selectedBooking) === "Attended" && <Check size={16} strokeWidth={4} />}
+                      </button>
+                    </div>
+                  </div>
                 {/* Direct Contacts */}
                 <div className="space-y-2 pb-3 border-b border-[var(--db-card-border)]">
                   <div className="flex items-center gap-1.5 text-[12px] text-[var(--db-text-muted)] font-semibold">
@@ -1961,15 +2153,16 @@ const DashboardEventParticipants = () => {
                               {item.activity}
                             </div>
                           </div>
-                          {selectedBooking.timeline && selectedBooking.timeline.length > 0 && (
-                            <button
-                              onClick={() => handleDeleteTimelineLog(idx)}
-                              className="opacity-0 group-hover:opacity-100 p-1 text-red-500 hover:bg-red-500/10 rounded transition-all ml-2"
-                              title="Delete Log"
-                            >
-                              <Trash2 size={12} />
-                            </button>
-                          )}
+                          {selectedBooking.timeline &&
+                            selectedBooking.timeline.length > 0 && (
+                              <button
+                                onClick={() => handleDeleteTimelineLog(idx)}
+                                className="opacity-0 group-hover:opacity-100 p-1 text-red-500 hover:bg-red-500/10 rounded transition-all ml-2"
+                                title="Delete Log"
+                              >
+                                <Trash2 size={12} />
+                              </button>
+                            )}
                         </div>
                       </div>
                     ))}
@@ -2115,6 +2308,7 @@ const DashboardEventParticipants = () => {
                   </button>
                 </div>
               </motion.div>
+              </>
             )}
           </AnimatePresence>
         </div>
