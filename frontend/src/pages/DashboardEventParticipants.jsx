@@ -970,7 +970,7 @@ const DashboardEventParticipants = () => {
             color: #000000; 
             font-weight: bold; 
             font-family: Arial, sans-serif; 
-            font-size: 11pt;
+            font-size: 11px;
             border: 1px solid #cccccc; 
             text-align: left;
             padding: 8px;
@@ -1060,6 +1060,8 @@ const DashboardEventParticipants = () => {
                 setEventFilter("all");
                 setCurrentPage(1);
               }}
+
+
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                 eventFilter === "all"
                   ? "bg-[#e5ff00] text-black shadow-md border border-[#e5ff00]"
@@ -1231,10 +1233,10 @@ const DashboardEventParticipants = () => {
             {/* Left Table Panel */}
             <motion.div
               layout
-              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 shadow-2xl transition-all duration-300 w-full min-w-0"
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-2 shadow-2xl transition-all duration-300 w-full min-w-0"
             >
               {/* Table Header controls */}
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-6 pb-4 border-b border-[var(--db-card-border)]">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2 mb-6 pb-4 border-b border-[var(--db-card-border)]">
                 {/* Left: Status Filter Tabs */}
                 <div className="flex flex-wrap items-center gap-2">
                   <button
@@ -1418,20 +1420,20 @@ const DashboardEventParticipants = () => {
                 <div className="overflow-x-auto w-full custom-scrollbar pb-2">
                   <table
                     className="w-full text-left border-collapse table-fixed"
-                    style={{ minWidth: "820px" }}
+                    style={{ minWidth: "1050px" }}
                   >
                     <colgroup>
-                      <col style={{ width: "18%" }} /> {/* Name */}
-                      <col style={{ width: "14%" }} /> {/* Phone */}
-                      <col style={{ width: "5%" }} /> {/* Seats */}
-                      <col style={{ width: "12%" }} /> {/* Status */}
-                      <col style={{ width: "15%" }} /> {/* Last Contact */}
-                      <col style={{ width: "13%" }} /> {/* Follow-up */}
-                      <col style={{ width: "13%" }} /> {/* Notes */}
-                      <col style={{ width: "10%" }} /> {/* Actions */}
+                      <col style={{ width: "14%" }} /> {/* Name */}
+                      <col style={{ width: "11%" }} /> {/* Phone */}
+                      <col style={{ width: "7%" }} /> {/* Seats */}
+                      <col style={{ width: "14%" }} /> {/* Status */}
+                      <col style={{ width: "18%" }} /> {/* Last Contact */}
+                      <col style={{ width: "14%" }} /> {/* Follow-up */}
+                      <col style={{ width: "14%" }} /> {/* Notes */}
+                      <col style={{ width: "8%" }} /> {/* Actions */}
                     </colgroup>
                     <thead>
-                      <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[9px] uppercase font-extrabold tracking-wider">
+                      <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[12px] uppercase font-extrabold tracking-wider">
                         {isSelectMode && (
                           <th className="py-2.5 px-2 w-7">
                             <input
@@ -1496,12 +1498,12 @@ const DashboardEventParticipants = () => {
                             )}
 
                             {/* Name */}
-                            <td className="py-2 px-3 font-bold text-[var(--db-text)] text-[11px] whitespace-nowrap">
+                            <td className="py-2 px-3 font-bold text-[var(--db-text)] text-[14px] whitespace-nowrap">
                               {booking.name}
                             </td>
 
                             {/* Phone */}
-                            <td className="py-2 px-3 text-[11px] text-[var(--db-text-muted)] whitespace-nowrap">
+                            <td className="py-2 px-3 text-[14px] text-[var(--db-text-muted)] whitespace-nowrap">
                               <div className="flex items-center gap-1.5">
                                 <Phone size={11} className="text-gray-500" />
                                 <span className="font-mono">
@@ -1511,7 +1513,7 @@ const DashboardEventParticipants = () => {
                             </td>
 
                             {/* Seats */}
-                            <td className="py-2 px-2 text-center text-[11px] font-black text-[var(--db-text)]">
+                            <td className="py-2 px-2 text-center text-[14px] font-black text-[var(--db-text)]">
                               {booking.seats}
                             </td>
 
@@ -1550,7 +1552,7 @@ const DashboardEventParticipants = () => {
                                         status: toDb[val] || val,
                                       });
                                     }}
-                                    className={`px-1.5 py-0.5 rounded-sm text-[8px] uppercase tracking-wider font-extrabold border cursor-pointer focus:outline-none transition-all ${statusColorMap[ns] || "border-gray-500/30 text-gray-400 bg-gray-500/10"}`}
+                                    className={`px-1.5 py-0.5 rounded-sm text-[13px] uppercase tracking-wider font-extrabold border cursor-pointer focus:outline-none transition-all ${statusColorMap[ns] || "border-gray-500/30 text-gray-400 bg-gray-500/10"}`}
                                   >
                                     <option
                                       value="Confirmed"
@@ -1668,8 +1670,8 @@ const DashboardEventParticipants = () => {
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    width="15"
-                                    height="15"
+                                    width="18"
+                                    height="18"
                                     viewBox="0 0 24 24"
                                     fill="currentColor"
                                   >
@@ -1681,14 +1683,14 @@ const DashboardEventParticipants = () => {
                                   className="p-1.5 hover:bg-yellow-500/10 text-yellow-400 rounded-md transition-all cursor-pointer"
                                   title="Call Participant"
                                 >
-                                  <Phone size={13} />
+                                  <Phone size={18} />
                                 </a>
                                 <button
                                   onClick={() => setSelectedBooking(booking)}
                                   className="p-1.5 hover:bg-purple-500/10 text-purple-400 rounded-md transition-all cursor-pointer"
                                   title="Edit notes & timeline"
                                 >
-                                  <Clipboard size={13} />
+                                  <Clipboard size={18} />
                                 </button>
 
                                 {/* 3-dots actions menu */}
@@ -1703,7 +1705,7 @@ const DashboardEventParticipants = () => {
                                     }
                                     className="p-1.5 hover:bg-gray-500/10 text-[var(--db-text-muted)] rounded-md transition-all cursor-pointer"
                                   >
-                                    <MoreVertical size={13} />
+                                    <MoreVertical size={18} />
                                   </button>
                                   <AnimatePresence>
                                     {activeMenuId === booking._id && (
@@ -1875,11 +1877,11 @@ const DashboardEventParticipants = () => {
                 {/* Panel Header */}
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <h2 className="text-sm font-black text-[var(--db-text)] uppercase tracking-wide leading-tight">
+                    <h2 className="text-xl font-black text-[var(--db-text)] uppercase tracking-wide leading-tight">
                       {selectedBooking.name}
                     </h2>
                     <span
-                      className={`inline-block px-2 py-0.5 rounded text-[8px] uppercase tracking-widest font-black ${
+                      className={`inline-block px-2 py-0.5 rounded text-[12px] uppercase tracking-widest font-black ${
                         selectedBooking.status === "payment successfully" ||
                         selectedBooking.status === "confirmed"
                           ? "bg-green-500/10 border border-green-500/20 text-green-400"
@@ -1900,11 +1902,11 @@ const DashboardEventParticipants = () => {
 
                 {/* Direct Contacts */}
                 <div className="space-y-2 pb-3 border-b border-[var(--db-card-border)]">
-                  <div className="flex items-center gap-1.5 text-[10px] text-[var(--db-text-muted)] font-semibold">
+                  <div className="flex items-center gap-1.5 text-[12px] text-[var(--db-text-muted)] font-semibold">
                     <Phone size={11} className="text-gray-500" />
                     <span className="font-mono">{selectedBooking.phone}</span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[10px] text-[var(--db-text-muted)] font-semibold truncate">
+                  <div className="flex items-center gap-1.5 text-[12px] text-[var(--db-text-muted)] font-semibold truncate">
                     <Mail size={11} className="text-gray-500 flex-shrink-0" />
                     <span className="truncate">{selectedBooking.email}</span>
                   </div>
@@ -1913,18 +1915,18 @@ const DashboardEventParticipants = () => {
                 {/* Grid stats */}
                 <div className="grid grid-cols-2 gap-3 pb-3 border-b border-[var(--db-card-border)]">
                   <div>
-                    <div className="text-[8px] text-[var(--db-text-muted)] font-black uppercase tracking-wider">
+                    <div className="text-[12px] text-[var(--db-text-muted)] font-black uppercase tracking-wider">
                       Seats
                     </div>
-                    <div className="text-xs font-extrabold mt-0.5">
+                    <div className="text-sm font-extrabold mt-0.5">
                       {selectedBooking.seats}
                     </div>
                   </div>
                   <div>
-                    <div className="text-[8px] text-[var(--db-text-muted)] font-black uppercase tracking-wider">
+                    <div className="text-[12px] text-[var(--db-text-muted)] font-black uppercase tracking-wider">
                       Registered On
                     </div>
-                    <div className="text-[10px] font-semibold mt-0.5">
+                    <div className="text-[12px] font-semibold mt-0.5">
                       {selectedBooking.createdAt
                         ? new Date(
                             selectedBooking.createdAt,
@@ -1941,7 +1943,7 @@ const DashboardEventParticipants = () => {
 
                 {/* Timeline */}
                 <div className="space-y-4">
-                  <h3 className="text-xs font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                  <h3 className="text-sm font-black uppercase tracking-widest text-[var(--db-text-muted)]">
                     Communication Timeline
                   </h3>
 
