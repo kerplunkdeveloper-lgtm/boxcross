@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import DashboardSidebar from "./DashboardSidebar";
+import { Helmet } from 'react-helmet-async'
 import DashboardHeader from "./DashboardHeader";
 import { toast } from "react-hot-toast";
 
@@ -27,6 +28,12 @@ const DashboardLayout = () => {
   return (
     <div className={`h-screen font-['Poppins'] flex overflow-hidden ${theme === 'dark' ? 'dashboard-dark' : 'dashboard-light'} bg-[var(--db-bg)] text-[var(--db-text)]`}>
       {/* Sidebar */}
+      <Helmet>
+      <title>Dashboard | Box &amp; Cross</title>
+      <meta name="description" content="Dashboard | Box &amp; Cross" />
+      <meta name="keywords" content="Box &amp; Cross, Dashboard" />
+      
+    </Helmet>
       <DashboardSidebar 
         sidebarOpen={sidebarOpen} 
         setSidebarOpen={setSidebarOpen} 
