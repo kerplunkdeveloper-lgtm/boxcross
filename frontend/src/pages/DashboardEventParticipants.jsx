@@ -1880,23 +1880,23 @@ const DashboardEventParticipants = () => {
                     <h2 className="text-xl font-black text-[var(--db-text)] uppercase tracking-wide leading-tight">
                       {selectedBooking.name}
                     </h2>
-                    <span
-                      className={`inline-block px-2 py-0.5 rounded text-[12px] uppercase tracking-widest font-black ${
-                        selectedBooking.status === "payment successfully" ||
-                        selectedBooking.status === "confirmed"
-                          ? "bg-green-500/10 border border-green-500/20 text-green-400"
-                          : selectedBooking.status === "not payment"
-                            ? "bg-yellow-500/10 border border-yellow-500/20 text-yellow-500"
-                            : "bg-red-500/10 border border-red-500/20 text-red-400"
-                      }`}
-                    >
-                      {selectedBooking.status === "payment successfully" ||
-                      selectedBooking.status === "confirmed"
-                        ? "Confirmed"
-                        : selectedBooking.status === "not payment"
-                          ? "Awaiting"
-                          : "Not Coming"}
-                    </span>
+                    {(() => {
+                      const ns = getNormalizedStatus(selectedBooking);
+                      const statusColorMap = {
+                        Confirmed: "border-green-500/30 text-green-400 bg-green-500/10",
+                        Awaiting: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10",
+                        "Follow-up": "border-blue-500/30 text-blue-400 bg-blue-500/10",
+                        "No Response": "border-gray-500/30 text-gray-400 bg-gray-500/10",
+                        "Not Coming": "border-red-500/30 text-red-400 bg-red-500/10",
+                      };
+                      return (
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded text-[12px] uppercase tracking-widest font-black border ${statusColorMap[ns] || "border-gray-500/30 text-gray-400 bg-gray-500/10"}`}
+                        >
+                          {ns}
+                        </span>
+                      );
+                    })()}
                   </div>
                 </div>
 
