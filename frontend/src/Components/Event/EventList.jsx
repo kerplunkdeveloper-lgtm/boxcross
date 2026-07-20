@@ -109,7 +109,21 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
     try {
       const { data } = await getEventsList();
       if (data.success) {
-        setEvents(data.data);
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+
+        const upcomingEvents = data.data.filter((event) => {
+          if (!event.schedules || event.schedules.length === 0) return true;
+          return event.schedules.some((schedule) => {
+            if (!schedule.date || schedule.date === "TBA") return true;
+            const scheduleDate = new Date(schedule.date);
+            if (isNaN(scheduleDate.getTime())) return true;
+            scheduleDate.setHours(0, 0, 0, 0);
+            return scheduleDate >= currentDate;
+          });
+        });
+
+        setEvents(upcomingEvents);
       }
     } catch (error) {
       console.error("Failed to load events:", error);
@@ -511,14 +525,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
               No Events Available Right Now
             </h3>
 
-            <p
-              className="text-gray-400 text-sm max-w-md mx-auto leading-relaxed relative z-10"
-              style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
-            >
-              We are currently engineering our next high-octane fitness events
-              and workshops. Stay tuned and check back soon for our upcoming
-              schedules!
-            </p>
+           
           </motion.div>
         ) : (
           <motion.div

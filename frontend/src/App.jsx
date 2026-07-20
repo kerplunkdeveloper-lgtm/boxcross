@@ -132,14 +132,14 @@ const App = () => {
               <Routes>
                 {/* Routes WITH Navbar and Footer */}
                 <Route element={<Layout />}>
-                  {/* <Route path="/" element={<MembershipPage />} /> */}
+                  <Route path="/" element={<MembershipPage />} />
                   <Route path="/events" element={<Eventpage />} />
                   <Route path="/events/:id" element={<Eventpage />} />
                   <Route path="/community" element={<Community />} />
                 </Route>
 
                 {/* Routes WITHOUT Navbar and Footer */}
-                <Route path="/" element={<Commingsoon />} />
+                {/* <Route path="/" element={<Commingsoon />} /> */}
                 <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />
                 <Route
