@@ -171,7 +171,21 @@ const DashboardEventsList = () => {
     try {
       const { data } = await getEventsListAdmin();
       if (data.success) {
-        setEvents(data.data);
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+
+        const upcomingEvents = data.data.filter((event) => {
+          if (!event.schedules || event.schedules.length === 0) return true;
+          return event.schedules.some((schedule) => {
+            if (!schedule.date || schedule.date === "TBA") return true;
+            const scheduleDate = new Date(schedule.date);
+            if (isNaN(scheduleDate.getTime())) return true;
+            scheduleDate.setHours(0, 0, 0, 0);
+            return scheduleDate >= currentDate;
+          });
+        });
+
+        setEvents(upcomingEvents);
       }
     } catch (error) {
       console.error(error);
