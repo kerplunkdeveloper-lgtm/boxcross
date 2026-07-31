@@ -21,7 +21,7 @@ const seedDB = async () => {
       {
         name: "Vasanth",
         email: "admin@boxcross.com",
-        password: "admin123", // Will be hashed automatically by user pre-save hook
+        password: "admin@123", // Will be hashed automatically by user pre-save hook
         role: "admin",
       }
     ];
