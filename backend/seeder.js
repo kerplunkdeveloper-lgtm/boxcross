@@ -102,7 +102,7 @@ const seedDB = async () => {
     console.log("-------------------------------------------");
     console.log("1. ADMIN ACCOUNT:");
     console.log("   Email:    admin@boxcross.com");
-    console.log("   Password: admin123");
+    console.log("   Password: admin@123");
     console.log("   Role:     admin");
     console.log("-------------------------------------------\n");
 
