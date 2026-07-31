@@ -10,6 +10,20 @@ const API = axios.create({
   withCredentials: true, // Crucial for sending HttpOnly cookies
 });
 
+// Request interceptor to attach Bearer token if it exists in localStorage
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("boxcross_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // ──────────────── AUTH API ────────────────
 
 export const registerUser = (data) => API.post("/auth/register", data);

@@ -29,6 +29,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await loginUser({ email, password });
       if (data.success) {
+        if (data.token) {
+          localStorage.setItem("boxcross_token", data.token);
+        }
         setUser(data.user);
         return { success: true };
       }
@@ -44,6 +47,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await registerUser({ name, email, password });
       if (data.success) {
+        if (data.token) {
+          localStorage.setItem("boxcross_token", data.token);
+        }
         setUser(data.user);
         return { success: true };
       }
@@ -58,10 +64,13 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await logoutUser();
+      localStorage.removeItem("boxcross_token");
       setUser(null);
       return { success: true };
     } catch (error) {
-      return { success: false, message: "Logout failed" };
+      localStorage.removeItem("boxcross_token");
+      setUser(null);
+      return { success: true };
     }
   };
 
