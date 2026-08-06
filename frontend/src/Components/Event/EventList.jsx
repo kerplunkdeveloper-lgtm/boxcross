@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   MapPin,
   Calendar,
@@ -35,6 +35,8 @@ const EventList = () => {
   const [searchParams] = useSearchParams();
   const isBooking = searchParams.get("book") === "true";
 
+  const scrollContainerRef = useRef(null);
+
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -63,6 +65,12 @@ const EventList = () => {
   const [paymentScreenshotFile, setPaymentScreenshotFile] = useState(null);
   const [paymentScreenshotPreview, setPaymentScreenshotPreview] = useState("");
   const [showFullQR, setShowFullQR] = useState(false);
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [checkoutStep, selectedPaymentMethod, showContactForm]);
 
   // Open booking screen
   const handleOpenBooking = (event) => {
@@ -1716,39 +1724,39 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
                       </div>
                     ) : (
-                      <div className="flex flex-col lg:flex-row flex-grow overflow-y-auto lg:overflow-hidden">
+                      <div ref={scrollContainerRef} className="flex flex-col lg:flex-row flex-grow overflow-y-auto lg:overflow-hidden">
                         {/* Left: Event Details Overview or Barcode QR Panel */}
-                        <div className="w-full lg:w-5/12 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505] lg:overflow-y-auto custom-scrollbar lg:max-h-[calc(90vh-64px)]">
+                        <div className="w-full lg:w-5/12 p-4 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505] lg:overflow-y-auto custom-scrollbar lg:max-h-[calc(90vh-64px)]">
                           {checkoutStep === 2 && selectedPaymentMethod === "barcode" ? (
-                            <div className="flex flex-col items-center justify-center text-center space-y-6 h-full min-h-[350px]">
+                            <div className="flex flex-col items-center justify-start lg:justify-center text-center space-y-4 lg:space-y-6 lg:h-full lg:min-h-[350px] py-4 lg:py-0">
                               <div className="space-y-1">
-                                <span className="px-3 py-1 bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] text-[10px] font-black uppercase tracking-widest rounded-md">
+                                <span className="px-2.5 py-0.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] text-[9px] lg:text-[10px] font-black uppercase tracking-widest rounded-md">
                                   Scan to Pay
                                 </span>
                                 <h4
-                                  className="text-lg md:text-xl font-black uppercase text-white tracking-wide pt-3"
+                                  className="text-base lg:text-xl font-black uppercase text-white tracking-wide pt-2"
                                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                                 >
                                   UPI QR BARCODE
                                 </h4>
-                                <p className="text-[11px] text-gray-500 max-w-xs mx-auto">
+                                <p className="text-[10px] lg:text-[11px] text-gray-500 max-w-xs mx-auto">
                                   Open GPay, PhonePe, Paytm, or any UPI app to scan and complete the transaction.
                                 </p>
                               </div>
 
-                              {/* Large Barcode Card */}
+                              {/* Responsive Barcode Card */}
                               <div
                                 onClick={() => setShowFullQR(true)}
-                                className="relative p-3.5 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-w-[240px] w-full border border-gray-200 cursor-pointer group transition-all duration-300 hover:scale-102"
+                                className="relative p-2.5 lg:p-3.5 bg-white rounded-xl lg:rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.8)] max-w-[150px] lg:max-w-[240px] w-full border border-gray-200 cursor-pointer group transition-all duration-300 hover:scale-102"
                                 title="Click to view full size"
                               >
                                 <img
                                   src="/barcode.png"
                                   alt="UPI QR Code"
-                                  className="w-full h-auto object-contain rounded-xl"
+                                  className="w-full h-auto object-contain rounded-lg lg:rounded-xl"
                                 />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
-                                  <span className="text-xs text-white font-extrabold uppercase tracking-widest">
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl lg:rounded-2xl">
+                                  <span className="text-[10px] lg:text-xs text-white font-extrabold uppercase tracking-widest">
                                     🔍 Zoom Code
                                   </span>
                                 </div>
@@ -1756,16 +1764,16 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               <button
                                 type="button"
                                 onClick={() => setShowFullQR(true)}
-                                className="text-[10px] text-gray-500 hover:text-white underline tracking-wider cursor-pointer font-bold uppercase transition-colors"
+                                className="text-[9px] lg:text-[10px] text-gray-500 hover:text-white underline tracking-wider cursor-pointer font-bold uppercase transition-colors"
                               >
                                 View Full Size
                               </button>
 
-                              {/* UPI Copy Box */}
-                              <div className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-xs flex items-center justify-between w-full max-w-[280px] shadow-inner shadow-black">
+                              {/* Responsive UPI Copy Box */}
+                              <div className="bg-white/[0.02] border border-white/10 rounded-xl px-3.5 py-2.5 lg:px-4 lg:py-3 text-xs flex items-center justify-between w-full max-w-[240px] lg:max-w-[280px] shadow-inner shadow-black">
                                 <div className="flex flex-col text-left">
-                                  <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">UPI ID Address</span>
-                                  <span className="text-white font-mono select-all font-bold">BOXCROSSGYM@iob</span>
+                                  <span className="text-[8px] lg:text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">UPI ID Address</span>
+                                  <span className="text-[11px] lg:text-[12px] text-white font-mono select-all font-bold">BOXCROSSGYM@iob</span>
                                 </div>
                                 <button
                                   type="button"
@@ -1773,7 +1781,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     navigator.clipboard.writeText("BOXCROSSGYM@iob");
                                     toast.success("UPI ID copied!");
                                   }}
-                                  className="text-[#e5ff00] hover:underline font-extrabold text-[10px] uppercase cursor-pointer"
+                                  className="text-[#e5ff00] hover:underline font-extrabold text-[9px] lg:text-[10px] uppercase cursor-pointer"
                                 >
                                   Copy
                                 </button>

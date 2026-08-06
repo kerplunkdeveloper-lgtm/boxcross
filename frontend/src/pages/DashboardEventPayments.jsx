@@ -473,8 +473,16 @@ const DashboardEventPayments = () => {
                       </td>
 
                       {/* Payment Method */}
-                      <td className="py-4 px-4 text-xs font-bold text-[var(--db-text)] uppercase border-r border-[var(--db-card-border)]/30">
-                        {booking.paymentMethod || "razorpay"}
+                      <td className="py-4 px-4 text-xs font-bold border-r border-[var(--db-card-border)]/30">
+                        {(booking.paymentMethod || "razorpay").toLowerCase() === "barcode" ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] uppercase text-[10px] tracking-wide font-black">
+                            🤳 Barcode
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-blue-500/10 border border-blue-500/20 text-blue-400 uppercase text-[10px] tracking-wide font-black">
+                            💳 Razorpay
+                          </span>
+                        )}
                       </td>
 
                       {/* Payment Screenshot */}
