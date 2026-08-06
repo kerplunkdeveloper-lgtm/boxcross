@@ -1,11 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  CreditCard, Search, DollarSign, CheckCircle, AlertTriangle, Calendar, Filter, Trash2, Users, ArrowUpDown, Download, X
+import {
+  CreditCard,
+  Search,
+  DollarSign,
+  CheckCircle,
+  AlertTriangle,
+  Calendar,
+  Filter,
+  Trash2,
+  Users,
+  ArrowUpDown,
+  Download,
+  X,
 } from "lucide-react";
-import { getEventBookings, deleteEventBooking, updateEventBooking } from "../api/api";
+import {
+  getEventBookings,
+  deleteEventBooking,
+  updateEventBooking,
+} from "../api/api";
 import { toast } from "react-hot-toast";
+
+// Helper function to format date string (e.g. YYYY-MM-DD) into DD / MM / YYYY
+const formatDateToDMY = (dateVal) => {
+  if (!dateVal) return "";
+  
+  // Try matching YYYY-MM-DD
+  const yyyymmddMatch = String(dateVal).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (yyyymmddMatch) {
+    const [_, year, month, day] = yyyymmddMatch;
+    return `${day} / ${month} / ${year}`;
+  }
+
+  // Try matching DD-MM-YYYY or DD/MM/YYYY
+  const dmyMatch = String(dateVal).match(/^(\d{2})[-/](\d{2})[-/](\d{4})$/);
+  if (dmyMatch) {
+    const [_, day, month, year] = dmyMatch;
+    return `${day} / ${month} / ${year}`;
+  }
+
+  // Fallback to standard JS Date parsing
+  const date = new Date(dateVal);
+  if (isNaN(date.getTime())) {
+    return String(dateVal);
+  }
+  
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  
+  return `${day} / ${month} / ${year}`;
+};
 
 const DashboardEventPayments = () => {
   const { user } = useAuth();
@@ -45,7 +91,11 @@ const DashboardEventPayments = () => {
 
   // Handle Delete
   const handleDeleteBooking = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this event booking record? This will also revert the booked seat slots.")) {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this event booking record? This will also revert the booked seat slots.",
+      )
+    ) {
       return;
     }
 
@@ -57,7 +107,9 @@ const DashboardEventPayments = () => {
     try {
       const { data } = await deleteEventBooking(id);
       if (data.success) {
-        toast.success(data.message || "Record deleted successfully", { id: toastId });
+        toast.success(data.message || "Record deleted successfully", {
+          id: toastId,
+        });
         fetchBookings(false);
       } else {
         // Rollback
@@ -68,7 +120,9 @@ const DashboardEventPayments = () => {
       console.error(error);
       // Rollback
       setBookings(originalBookings);
-      toast.error("An error occurred while deleting the booking record.", { id: toastId });
+      toast.error("An error occurred while deleting the booking record.", {
+        id: toastId,
+      });
     } finally {
       setDeletingId(null);
     }
@@ -76,17 +130,21 @@ const DashboardEventPayments = () => {
 
   // Compute stats
   const totalVolume = bookings
-    .filter(b => b.status === "payment successfully" || b.status === "confirmed")
+    .filter(
+      (b) => b.status === "payment successfully" || b.status === "confirmed",
+    )
     .reduce((sum, b) => sum + b.totalAmount, 0);
 
-  const successfulTxns = bookings.filter(b => b.status === "payment successfully" || b.status === "confirmed").length;
-  const pendingTxns = bookings.filter(b => b.status === "not payment").length;
-  const failedTxns = bookings.filter(b => b.status === "failed").length;
+  const successfulTxns = bookings.filter(
+    (b) => b.status === "payment successfully" || b.status === "confirmed",
+  ).length;
+  const pendingTxns = bookings.filter((b) => b.status === "not payment").length;
+  const failedTxns = bookings.filter((b) => b.status === "failed").length;
 
   // Filter bookings
-  const filteredBookings = bookings.filter(booking => {
+  const filteredBookings = bookings.filter((booking) => {
     const query = searchQuery.toLowerCase();
-    const matchesSearch = 
+    const matchesSearch =
       booking.name.toLowerCase().includes(query) ||
       booking.email.toLowerCase().includes(query) ||
       booking.phone.toLowerCase().includes(query) ||
@@ -94,11 +152,10 @@ const DashboardEventPayments = () => {
       (booking.razorpayOrderId || "").toLowerCase().includes(query) ||
       (booking.razorpayPaymentId || "").toLowerCase().includes(query);
 
-    const matchesStatus = 
-      statusFilter === "all" || 
-      booking.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "all" || booking.status === statusFilter;
 
-    const matchesPaymentMethod = 
+    const matchesPaymentMethod =
       paymentMethodFilter === "all" ||
       (booking.paymentMethod || "razorpay") === paymentMethodFilter;
 
@@ -119,7 +176,7 @@ const DashboardEventPayments = () => {
       { name: "Payment Screenshot", width: 300 },
       { name: "Razorpay Order ID", width: 220 },
       { name: "Razorpay Payment ID", width: 220 },
-      { name: "Status", width: 160 }
+      { name: "Status", width: 160 },
     ];
 
     const rows = filteredBookings.map((booking) => [
@@ -130,12 +187,14 @@ const DashboardEventPayments = () => {
       booking.date || "",
       booking.timeSlot || "",
       booking.seats || 0,
-      Number(booking.totalAmount) === 0 ? "Free Plan" : `₹${booking.totalAmount}`,
+      Number(booking.totalAmount) === 0
+        ? "Free Plan"
+        : `₹${booking.totalAmount}`,
       booking.paymentMethod || "razorpay",
       booking.paymentScreenshot || "N/A",
       booking.razorpayOrderId || "N/A",
       booking.razorpayPaymentId || "N/A",
-      booking.status || ""
+      booking.status || "",
     ]);
 
     // Construct the XML/HTML spreadsheet template for Excel
@@ -185,7 +244,7 @@ const DashboardEventPayments = () => {
             <tr>
     `;
 
-    headers.forEach(h => {
+    headers.forEach((h) => {
       html += `              <th width="${h.width}">${h.name}</th>\n`;
     });
 
@@ -194,9 +253,9 @@ const DashboardEventPayments = () => {
           <tbody>
     `;
 
-    rows.forEach(row => {
+    rows.forEach((row) => {
       html += `            <tr>\n`;
-      row.forEach(cell => {
+      row.forEach((cell) => {
         // Escape special HTML chars to prevent tag breaking
         const escapedCell = String(cell)
           .replace(/&/g, "&amp;")
@@ -215,11 +274,16 @@ const DashboardEventPayments = () => {
       </html>
     `;
 
-    const blob = new Blob([html], { type: "application/vnd.ms-excel;charset=utf-8;" });
+    const blob = new Blob([html], {
+      type: "application/vnd.ms-excel;charset=utf-8;",
+    });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `Event_Bookings_${new Date().toISOString().split('T')[0]}.xls`);
+    link.setAttribute(
+      "download",
+      `Event_Bookings_${new Date().toISOString().split("T")[0]}.xls`,
+    );
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
@@ -230,16 +294,19 @@ const DashboardEventPayments = () => {
     <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
-      
+
       <div className="max-w-8xl mx-auto space-y-6 relative z-10">
-        
         {/* Header Title */}
         <div className="text-left">
-          <h1 className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+          <h1
+            className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+            style={{ fontFamily: '"Brutal Font", sans-serif' }}
+          >
             Event Payments & Bookings
           </h1>
           <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-1">
-            View details of users who registered for fitness events, track transaction status, and manage reservations.
+            View details of users who registered for fitness events, track
+            transaction status, and manage reservations.
           </p>
         </div>
 
@@ -336,7 +403,10 @@ const DashboardEventPayments = () => {
           {/* List Header controls */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[var(--db-card-border)]">
             <div className="flex items-center gap-2 text-left">
-              <CreditCard size={18} className="text-[var(--db-accent-highlight)]" />
+              <CreditCard
+                size={18}
+                className="text-[var(--db-accent-highlight)]"
+              />
               <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                 Event Booking Records
               </span>
@@ -346,7 +416,10 @@ const DashboardEventPayments = () => {
             <div className="flex flex-wrap items-center gap-3">
               {/* Search Bar */}
               <div className="relative">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                <Search
+                  size={14}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                />
                 <input
                   type="text"
                   placeholder="Search user, event, order..."
@@ -364,13 +437,48 @@ const DashboardEventPayments = () => {
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="bg-transparent border-none text-[var(--db-text)] outline-none cursor-pointer pr-1 text-xs"
                 >
-                  <option value="all" className="bg-[var(--db-card)] text-[var(--db-text)]">All Status</option>
-                  <option value="payment successfully" className="bg-[var(--db-card)] text-[var(--db-text)]">Payment Successfully</option>
-                  <option value="pending barcode verification" className="bg-[var(--db-card)] text-[var(--db-text)]">Pending Barcode</option>
-                  <option value="not payment" className="bg-[var(--db-card)] text-[var(--db-text)]">Not Payment</option>
-                  <option value="confirmed" className="bg-[var(--db-card)] text-[var(--db-text)]">Confirmed</option>
-                  <option value="failed" className="bg-[var(--db-card)] text-[var(--db-text)]">Failed</option>
-                  <option value="cancelled" className="bg-[var(--db-card)] text-[var(--db-text)]">Cancelled</option>
+                  <option
+                    value="all"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    All Status
+                  </option>
+                  <option
+                    value="payment successfully"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    Payment Successfully
+                  </option>
+                  <option
+                    value="pending barcode verification"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    Pending Barcode
+                  </option>
+                  <option
+                    value="not payment"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    Not Payment
+                  </option>
+                  <option
+                    value="confirmed"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    Confirmed
+                  </option>
+                  <option
+                    value="failed"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    Failed
+                  </option>
+                  <option
+                    value="cancelled"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    Cancelled
+                  </option>
                 </select>
               </div>
 
@@ -382,9 +490,24 @@ const DashboardEventPayments = () => {
                   onChange={(e) => setPaymentMethodFilter(e.target.value)}
                   className="bg-transparent border-none text-[var(--db-text)] outline-none cursor-pointer pr-1 text-xs"
                 >
-                  <option value="all" className="bg-[var(--db-card)] text-[var(--db-text)]">All Methods</option>
-                  <option value="razorpay" className="bg-[var(--db-card)] text-[var(--db-text)]">Razorpay</option>
-                  <option value="barcode" className="bg-[var(--db-card)] text-[var(--db-text)]">Barcode Scan</option>
+                  <option
+                    value="all"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    All Methods
+                  </option>
+                  <option
+                    value="razorpay"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    Razorpay
+                  </option>
+                  <option
+                    value="barcode"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    Barcode Scan
+                  </option>
                 </select>
               </div>
 
@@ -403,9 +526,24 @@ const DashboardEventPayments = () => {
           {/* Table */}
           {loading ? (
             <div className="py-12 flex flex-col items-center justify-center text-[var(--db-text-muted)] text-xs gap-2">
-              <svg className="animate-spin h-6 w-6 text-[var(--db-accent-highlight)]" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              <svg
+                className="animate-spin h-6 w-6 text-[var(--db-accent-highlight)]"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
               </svg>
               <span>Loading event bookings...</span>
             </div>
@@ -414,24 +552,53 @@ const DashboardEventPayments = () => {
               <table className="w-full text-left border-collapse min-w-[1300px]">
                 <thead>
                   <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
-                    <th className="py-4 px-4 rounded-l-xl border-r border-[var(--db-card-border)]/40">Name</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Email</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Phone</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Event Details</th>
-                    <th className="py-4 px-4 min-w-[180px] whitespace-nowrap border-r border-[var(--db-card-border)]/40">Schedule Date/Time</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Seats</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Total Amount</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Method</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40 text-center">Screenshot</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Razorpay Order ID</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Razorpay Payment ID</th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Status</th>
-                    <th className="py-4 px-4 text-center rounded-r-xl">Action</th>
+                    <th className="py-4 px-4 rounded-l-xl border-r border-[var(--db-card-border)]/40">
+                      Name
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Email
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Phone
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Event Details
+                    </th>
+                    <th className="py-4 px-4 min-w-[180px] whitespace-nowrap border-r border-[var(--db-card-border)]/40">
+                      Schedule Date/Time
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Seats
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Total Amount
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Method
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40 text-center">
+                      Screenshot
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Razorpay Order ID
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Razorpay Payment ID
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                      Status
+                    </th>
+                    <th className="py-4 px-4 text-center rounded-r-xl">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--db-card-border)]">
                   {filteredBookings.map((booking) => (
-                    <tr key={booking._id} className="hover:bg-[var(--db-table-hover)] transition-colors">
+                    <tr
+                      key={booking._id}
+                      className="hover:bg-[var(--db-table-hover)] transition-colors"
+                    >
                       {/* Name */}
                       <td className="py-4 px-4 text-left font-bold text-[var(--db-text)] text-sm whitespace-nowrap border-r border-[var(--db-card-border)]/30">
                         {booking.name}
@@ -454,8 +621,12 @@ const DashboardEventPayments = () => {
 
                       {/* Schedule Date/Time */}
                       <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] min-w-[180px] whitespace-nowrap border-r border-[var(--db-card-border)]/30">
-                        <span className="font-bold text-[var(--db-accent-highlight)] uppercase block">{booking.date}</span>
-                        <span className="text-[10px] text-[var(--db-text-muted)] block mt-0.5">{booking.timeSlot}</span>
+                        <span className="font-bold text-[var(--db-accent-highlight)] uppercase block">
+                          {formatDateToDMY(booking.date)}
+                        </span>
+                        <span className="inline-block mt-1.5 px-2 py-0.5 text-[10px] font-semibold text-[var(--db-text-muted)] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-md">
+                          {booking.timeSlot}
+                        </span>
                       </td>
 
                       {/* Seats */}
@@ -466,7 +637,9 @@ const DashboardEventPayments = () => {
                       {/* Amount Paid */}
                       <td className="py-4 px-4 text-sm text-[var(--db-accent-highlight)] font-extrabold font-mono border-r border-[var(--db-card-border)]/30">
                         {Number(booking.totalAmount) === 0 ? (
-                          <span className="text-xs font-black uppercase tracking-wider text-[#e5ff00]">Free Plan</span>
+                          <span className="text-xs font-black uppercase tracking-wider text-[#e5ff00]">
+                            Free Plan
+                          </span>
                         ) : (
                           `₹${booking.totalAmount.toLocaleString()}`
                         )}
@@ -474,7 +647,8 @@ const DashboardEventPayments = () => {
 
                       {/* Payment Method */}
                       <td className="py-4 px-4 text-xs font-bold border-r border-[var(--db-card-border)]/30">
-                        {(booking.paymentMethod || "razorpay").toLowerCase() === "barcode" ? (
+                        {(booking.paymentMethod || "razorpay").toLowerCase() ===
+                        "barcode" ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] uppercase text-[10px] tracking-wide font-black">
                             🤳 Barcode
                           </span>
@@ -489,13 +663,17 @@ const DashboardEventPayments = () => {
                       <td className="py-4 px-4 text-center border-r border-[var(--db-card-border)]/30">
                         {booking.paymentScreenshot ? (
                           <button
-                            onClick={() => setViewScreenshotUrl(booking.paymentScreenshot)}
+                            onClick={() =>
+                              setViewScreenshotUrl(booking.paymentScreenshot)
+                            }
                             className="px-2.5 py-1 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] text-[10px] font-black uppercase rounded-lg cursor-pointer transition-all duration-200"
                           >
                             View
                           </button>
                         ) : (
-                          <span className="text-[10px] text-[var(--db-text-muted)]">-</span>
+                          <span className="text-[10px] text-[var(--db-text-muted)]">
+                            -
+                          </span>
                         )}
                       </td>
 
@@ -511,7 +689,9 @@ const DashboardEventPayments = () => {
 
                       {/* Status */}
                       <td className="py-4 px-4 border-r border-[var(--db-card-border)]/30">
-                        {Number(booking.totalAmount) === 0 && (booking.status === 'payment successfully' || booking.status === 'confirmed') ? (
+                        {Number(booking.totalAmount) === 0 &&
+                        (booking.status === "payment successfully" ||
+                          booking.status === "confirmed") ? (
                           <span className="inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00]">
                             Free Entry Successful
                           </span>
@@ -520,33 +700,52 @@ const DashboardEventPayments = () => {
                             value={booking.status}
                             onChange={async (e) => {
                               const newStatus = e.target.value;
-                              const toastId = toast.loading("Updating booking status...");
+                              const toastId = toast.loading(
+                                "Updating booking status...",
+                              );
                               try {
-                                const { data } = await updateEventBooking(booking._id, { status: newStatus });
+                                const { data } = await updateEventBooking(
+                                  booking._id,
+                                  { status: newStatus },
+                                );
                                 if (data.success) {
-                                  toast.success("Booking status updated successfully!", { id: toastId });
+                                  toast.success(
+                                    "Booking status updated successfully!",
+                                    { id: toastId },
+                                  );
                                   fetchBookings();
                                 } else {
-                                  toast.error(data.message || "Failed to update status", { id: toastId });
+                                  toast.error(
+                                    data.message || "Failed to update status",
+                                    { id: toastId },
+                                  );
                                 }
                               } catch (err) {
                                 console.error(err);
-                                toast.error("Error updating booking status", { id: toastId });
+                                toast.error("Error updating booking status", {
+                                  id: toastId,
+                                });
                               }
                             }}
                             className={`px-2 py-1 rounded text-[10px] uppercase font-bold bg-[var(--db-input-bg)] border border-[var(--db-input-border)] cursor-pointer outline-none ${
-                              booking.status === 'payment successfully' || booking.status === 'confirmed'
-                                ? 'text-green-400 border-green-500/20'
-                                : booking.status === 'pending barcode verification'
-                                ? 'text-blue-400 border-blue-500/20'
-                                : booking.status === 'not payment'
-                                ? 'text-yellow-500 border-yellow-500/20'
-                                : 'text-red-400 border-red-500/20'
+                              booking.status === "payment successfully" ||
+                              booking.status === "confirmed"
+                                ? "text-green-400 border-green-500/20"
+                                : booking.status ===
+                                    "pending barcode verification"
+                                  ? "text-blue-400 border-blue-500/20"
+                                  : booking.status === "not payment"
+                                    ? "text-yellow-500 border-yellow-500/20"
+                                    : "text-red-400 border-red-500/20"
                             }`}
                           >
                             <option value="not payment">Not Payment</option>
-                            <option value="pending barcode verification">Pending Barcode</option>
-                            <option value="payment successfully">Payment Successfully</option>
+                            <option value="pending barcode verification">
+                              Pending Barcode
+                            </option>
+                            <option value="payment successfully">
+                              Payment Successfully
+                            </option>
                             <option value="confirmed">Confirmed</option>
                             <option value="failed">Failed</option>
                             <option value="cancelled">Cancelled</option>

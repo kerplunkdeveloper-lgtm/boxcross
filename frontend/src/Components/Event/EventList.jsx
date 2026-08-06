@@ -1789,26 +1789,18 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             </div>
                           ) : (
                             <>
-                              <div className="relative rounded-2xl overflow-hidden mb-6 group shadow-lg shadow-black/60">
-                                <img
-                                  src={bookingEvent.imageUrl}
-                                  alt={bookingEvent.title}
-                                  className="w-full h-48 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                                <div className="absolute bottom-4 left-4 right-4">
-                                  <span className="px-3 py-1 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-widest rounded-md shadow-md mb-2 inline-block">
-                                    Selected Event
-                                  </span>
-                                  <h4
-                                    className="text-xl md:text-2xl font-black uppercase text-white leading-tight drop-shadow-xl"
-                                    style={{
-                                      fontFamily: '"BrutalTypeBold", sans-serif',
-                                    }}
-                                  >
-                                    {bookingEvent.title}
-                                  </h4>
-                                </div>
+                              <div className="mb-6 text-left">
+                                <span className="px-3 py-1 bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] text-[10px] font-black uppercase tracking-widest rounded-md mb-3 inline-block">
+                                  Selected Event
+                                </span>
+                                <h4
+                                  className="text-xl md:text-2xl font-black uppercase text-white leading-tight"
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  {bookingEvent.title}
+                                </h4>
                               </div>
 
                               <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
