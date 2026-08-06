@@ -94,7 +94,17 @@ export const updateEventItem = (id, formData) => API.put(`/events/${id}`, formDa
 });
 export const deleteEventItem = (id) => API.delete(`/events/${id}`);
 export const bookEventItem = (data) => API.post("/events/book", data);
+export const bookEventBarcode = (formData) => API.post("/events/book-barcode", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
 export const verifyEventPayment = (data) => API.post("/events/verify", data);
+export const verifyEventPaymentBarcode = (formData) => API.post("/events/verify-barcode", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
 export const getEventBookings = () => API.get("/events/bookings");
 export const updateEventBooking = (id, data) => API.put(`/events/bookings/${id}`, data);
 export const deleteEventBooking = (id) => API.delete(`/events/bookings/${id}`);

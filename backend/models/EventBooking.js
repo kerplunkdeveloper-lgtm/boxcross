@@ -53,6 +53,16 @@ const eventBookingSchema = new mongoose.Schema(
     razorpaySignature: {
       type: String,
     },
+    paymentMethod: {
+      type: String,
+      default: "razorpay",
+    },
+    paymentScreenshot: {
+      type: String,
+    },
+    paymentScreenshotPublicId: {
+      type: String,
+    },
     lastContact: {
       type: String,
       default: "",

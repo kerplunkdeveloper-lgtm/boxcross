@@ -161,6 +161,7 @@ const DashboardEventsList = () => {
   const [agenda, setAgenda] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+  const [paymentMethods, setPaymentMethods] = useState(["razorpay"]);
 
   const fileInputRef = useRef(null);
 
@@ -258,6 +259,7 @@ const DashboardEventsList = () => {
     setImageFile(null);
     setImagePreview("");
     setIsFreeEntry(false);
+    setPaymentMethods(["razorpay"]);
     setShowModal(true);
   };
 
@@ -283,6 +285,7 @@ const DashboardEventsList = () => {
     setSchedules(event.schedules || []);
     setImageFile(null);
     setImagePreview(event.imageUrl);
+    setPaymentMethods(event.paymentMethods || ["razorpay"]);
     setShowModal(true);
   };
 
@@ -333,6 +336,8 @@ const DashboardEventsList = () => {
       } else {
         formData.append("originalPrice", "");
       }
+
+      formData.append("paymentMethods", JSON.stringify(paymentMethods));
 
       formData.append("bookingLink", bookingLink.trim() || "#");
 
@@ -588,6 +593,13 @@ const DashboardEventsList = () => {
                     ) : (
                       <span>No discount set</span>
                     )}
+                    <div className="flex gap-1 mt-1.5">
+                      {(event.paymentMethods || ["razorpay"]).map((m, idx) => (
+                        <span key={idx} className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[8px] font-black uppercase text-[var(--db-accent-highlight)] leading-none">
+                          {m}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
                   {event.bookingLink && event.bookingLink !== "#" ? (
@@ -1022,6 +1034,53 @@ const DashboardEventsList = () => {
                           placeholder="e.g. 3100"
                           className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
                         />
+                      </div>
+                    </div>
+
+                    {/* Allowed Payment Methods */}
+                    <div className="space-y-1.5">
+                      <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                        Allowed Payment Methods <span className="text-red-500">*</span>
+                      </label>
+                      <div className="flex flex-wrap gap-4 p-1">
+                        <label className="flex items-center gap-2 text-xs text-[var(--db-text)] cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={paymentMethods.includes("razorpay")}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setPaymentMethods([...paymentMethods, "razorpay"]);
+                              } else {
+                                if (paymentMethods.length > 1) {
+                                  setPaymentMethods(paymentMethods.filter(m => m !== "razorpay"));
+                                } else {
+                                  toast.error("At least one payment method is required");
+                                }
+                              }
+                            }}
+                            className="rounded border-[var(--db-input-border)] text-[var(--db-accent-highlight)] focus:ring-[var(--db-accent-highlight)]/30 w-4 h-4 bg-[var(--db-input-bg)] cursor-pointer"
+                          />
+                          Razorpay Online Payment
+                        </label>
+                        <label className="flex items-center gap-2 text-xs text-[var(--db-text)] cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={paymentMethods.includes("barcode")}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setPaymentMethods([...paymentMethods, "barcode"]);
+                              } else {
+                                if (paymentMethods.length > 1) {
+                                  setPaymentMethods(paymentMethods.filter(m => m !== "barcode"));
+                                } else {
+                                  toast.error("At least one payment method is required");
+                                }
+                              }
+                            }}
+                            className="rounded border-[var(--db-input-border)] text-[var(--db-accent-highlight)] focus:ring-[var(--db-accent-highlight)]/30 w-4 h-4 bg-[var(--db-input-bg)] cursor-pointer"
+                          />
+                          Barcode QR Scan & Pay
+                        </label>
                       </div>
                     </div>
 

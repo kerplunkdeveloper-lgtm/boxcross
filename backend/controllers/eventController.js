@@ -87,7 +87,8 @@ const createEvent = async (req, res) => {
       duration,
       calories,
       benefits,
-      agenda
+      agenda,
+      paymentMethods
     } = req.body;
 
     if (!title || !location || !price) {
@@ -139,6 +140,15 @@ const createEvent = async (req, res) => {
       try { parsedAgenda = typeof agenda === "string" ? JSON.parse(agenda) : agenda; } catch(e) {}
     }
 
+    let parsedPaymentMethods = ["razorpay"];
+    if (paymentMethods) {
+      try {
+        parsedPaymentMethods = typeof paymentMethods === "string" ? JSON.parse(paymentMethods) : paymentMethods;
+      } catch (e) {
+        console.error("PaymentMethods parsing error:", e);
+      }
+    }
+
     // Upload to Cloudinary
     const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
 
@@ -160,6 +170,7 @@ const createEvent = async (req, res) => {
       calories: calories || "",
       benefits: parsedBenefits,
       agenda: parsedAgenda,
+      paymentMethods: parsedPaymentMethods,
     });
 
     res.status(201).json({
@@ -197,7 +208,8 @@ const updateEvent = async (req, res) => {
       duration,
       calories,
       benefits,
-      agenda
+      agenda,
+      paymentMethods
     } = req.body;
 
     let event = await Event.findById(id);
@@ -253,6 +265,10 @@ const updateEvent = async (req, res) => {
 
     if (agenda !== undefined) {
       try { updateData.agenda = typeof agenda === "string" ? JSON.parse(agenda) : agenda; } catch(e) {}
+    }
+
+    if (paymentMethods !== undefined) {
+      try { updateData.paymentMethods = typeof paymentMethods === "string" ? JSON.parse(paymentMethods) : paymentMethods; } catch(e) {}
     }
 
     // If new image is uploaded, replace existing image in Cloudinary
@@ -554,6 +570,87 @@ const verifyEventPayment = async (req, res) => {
   }
 };
 
+// @desc    Verify event payment barcode (uploads screenshot & marks booking as pending verification)
+// @route   POST /api/events/verify-barcode
+// @access  Public
+const verifyEventPaymentBarcode = async (req, res) => {
+  try {
+    const { bookingId } = req.body;
+
+    if (!bookingId) {
+      return res.status(400).json({
+        success: false,
+        message: "Booking ID is required",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Please upload a payment screenshot",
+      });
+    }
+
+    const booking = await EventBooking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking record not found",
+      });
+    }
+
+    const event = await Event.findById(booking.event);
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Associated event not found",
+      });
+    }
+
+    // Double check seat availability before saving
+    const schedule = event.schedules.find((s) => s.date === booking.date);
+    if (schedule) {
+      const slot = schedule.timeSlots.find((t) => t.time === booking.timeSlot);
+      if (slot) {
+        const availableSeats = slot.slots - slot.booked;
+        if (availableSeats < booking.seats) {
+          return res.status(400).json({
+            success: false,
+            message: `Sorry, only ${availableSeats} seats left for this slot now.`,
+          });
+        }
+        
+        // Increment booked slots
+        slot.booked += booking.seats;
+        event.markModified("schedules");
+        await event.save();
+      }
+    }
+
+    // Upload to Cloudinary
+    const uploadResult = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+
+    // Update booking fields
+    booking.paymentMethod = "barcode";
+    booking.paymentScreenshot = uploadResult.secure_url;
+    booking.paymentScreenshotPublicId = uploadResult.public_id;
+    booking.status = "pending barcode verification";
+    await booking.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Payment screenshot submitted successfully! Booking pending verification.",
+      data: booking,
+    });
+  } catch (error) {
+    console.error("Verify Barcode Payment Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Could not upload screenshot.",
+    });
+  }
+};
+
 // @desc    Get all event bookings
 // @route   GET /api/events/bookings
 // @access  Private/Admin
@@ -593,7 +690,7 @@ const deleteEventBooking = async (req, res) => {
 
     // Restore slots if confirmed/successful
     const event = await Event.findById(booking.event);
-    if (event && (booking.status === "payment successfully" || booking.status === "confirmed")) {
+    if (event && (booking.status === "payment successfully" || booking.status === "confirmed" || booking.status === "pending barcode verification")) {
       const schedule = event.schedules.find((s) => s.date === booking.date);
       if (schedule) {
         const slot = schedule.timeSlots.find((t) => t.time === booking.timeSlot);
@@ -712,7 +809,46 @@ const updateEventBooking = async (req, res) => {
     }
 
     if (notes !== undefined) booking.notes = notes;
-    if (status !== undefined) booking.status = status;
+    
+    if (status !== undefined && status !== booking.status) {
+      const oldStatus = booking.status;
+      const newStatus = status;
+
+      const wasBlocked = ["payment successfully", "confirmed", "pending barcode verification"].includes(oldStatus);
+      const isBlocked = ["payment successfully", "confirmed", "pending barcode verification"].includes(newStatus);
+
+      if (wasBlocked && !isBlocked) {
+        // Restore slots (decrement booked)
+        const event = await Event.findById(booking.event);
+        if (event) {
+          const schedule = event.schedules.find((s) => s.date === booking.date);
+          if (schedule) {
+            const slot = schedule.timeSlots.find((t) => t.time === booking.timeSlot);
+            if (slot) {
+              slot.booked = Math.max(0, slot.booked - booking.seats);
+              event.markModified("schedules");
+              await event.save();
+            }
+          }
+        }
+      } else if (!wasBlocked && isBlocked) {
+        // Block slots (increment booked)
+        const event = await Event.findById(booking.event);
+        if (event) {
+          const schedule = event.schedules.find((s) => s.date === booking.date);
+          if (schedule) {
+            const slot = schedule.timeSlots.find((t) => t.time === booking.timeSlot);
+            if (slot) {
+              slot.booked = Math.min(slot.slots, slot.booked + booking.seats);
+              event.markModified("schedules");
+              await event.save();
+            }
+          }
+        }
+      }
+      booking.status = status;
+    }
+
     if (lastContact !== undefined) booking.lastContact = lastContact;
     if (nextFollowUp !== undefined) booking.nextFollowUp = nextFollowUp;
     if (timeline !== undefined) booking.timeline = timeline;
@@ -733,6 +869,102 @@ const updateEventBooking = async (req, res) => {
   }
 };
 
+// @desc    Book an event via Barcode (creates pending booking with payment screenshot upload)
+// @route   POST /api/events/book-barcode
+// @access  Public
+const bookEventBarcode = async (req, res) => {
+  try {
+    const { eventId, date, timeSlot, seats, name, email, phone } = req.body;
+
+    if (!eventId || !date || !timeSlot || !seats || !name || !email || !phone) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required to complete booking",
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Please upload a payment screenshot",
+      });
+    }
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    // Find the schedule and slot
+    const schedule = event.schedules.find((s) => s.date === date);
+    if (!schedule) {
+      return res.status(400).json({
+        success: false,
+        message: `Date ${date} is not available for this event`,
+      });
+    }
+
+    const slot = schedule.timeSlots.find((t) => t.time === timeSlot);
+    if (!slot) {
+      return res.status(400).json({
+        success: false,
+        message: `Time slot ${timeSlot} is not available on ${date}`,
+      });
+    }
+
+    const availableSeats = slot.slots - slot.booked;
+    if (availableSeats < Number(seats)) {
+      return res.status(400).json({
+        success: false,
+        message: `Only ${availableSeats} seats left for this slot`,
+      });
+    }
+
+    // Calculate total amount
+    const totalAmount = event.price * Number(seats);
+
+    // Upload screenshot to Cloudinary
+    const uploadResult = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+
+    // Create event booking with "pending barcode verification" status
+    const booking = await EventBooking.create({
+      event: eventId,
+      date,
+      timeSlot,
+      seats: Number(seats),
+      totalAmount,
+      name,
+      email,
+      phone,
+      paymentMethod: "barcode",
+      paymentScreenshot: uploadResult.secure_url,
+      paymentScreenshotPublicId: uploadResult.public_id,
+      status: "pending barcode verification",
+    });
+
+    // Increment booked seats count in Event schedule slot immediately
+    slot.booked += Number(seats);
+    event.markModified("schedules");
+    await event.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Barcode booking submitted successfully! Awaiting verification.",
+      bookingId: booking._id,
+      data: booking,
+    });
+  } catch (error) {
+    console.error("Book Event Barcode Error:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Could not submit booking.",
+    });
+  }
+};
+
 module.exports = {
   getEvents,
   getAllEventsAdmin,
@@ -745,4 +977,6 @@ module.exports = {
   deleteEventBooking,
   updateEventBooking,
   getEventOGMeta,
+  bookEventBarcode,
+  verifyEventPaymentBarcode,
 };

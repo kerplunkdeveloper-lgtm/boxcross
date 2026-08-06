@@ -83,3 +83,19 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
+// Copy barcode image to frontend public directory on startup
+const fs = require("fs");
+const path = require("path");
+const srcBarcode = "C:/Users/Admin/.gemini/antigravity-ide/brain/bb465527-de2b-4ae6-a542-45b6fbe0f108/media__1786000584749.png";
+const destBarcode = path.join(__dirname, "../frontend/public/barcode.png");
+try {
+  if (fs.existsSync(srcBarcode)) {
+    fs.copyFileSync(srcBarcode, destBarcode);
+    console.log("✅ UPI QR Barcode copied to frontend/public/barcode.png");
+  } else {
+    console.warn("⚠️ Reference barcode source image not found at expected path:", srcBarcode);
+  }
+} catch (err) {
+  console.error("❌ Failed to copy barcode image:", err.message);
+}

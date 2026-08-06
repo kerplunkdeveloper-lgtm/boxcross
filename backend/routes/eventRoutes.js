@@ -14,12 +14,16 @@ const {
   deleteEventBooking,
   updateEventBooking,
   getEventOGMeta,
+  bookEventBarcode,
+  verifyEventPaymentBarcode,
 } = require("../controllers/eventController");
 
 // Public routes
 router.get("/", getEvents);
 router.post("/book", bookEvent);
+router.post("/book-barcode", upload.single("screenshot"), bookEventBarcode);
 router.post("/verify", verifyEventPayment);
+router.post("/verify-barcode", upload.single("screenshot"), verifyEventPaymentBarcode);
 router.get("/:id/og", getEventOGMeta);
 
 // Admin protected routes

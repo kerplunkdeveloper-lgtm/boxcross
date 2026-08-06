@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  CreditCard, Search, DollarSign, CheckCircle, AlertTriangle, Calendar, Filter, Trash2, Users, ArrowUpDown, Download
+  CreditCard, Search, DollarSign, CheckCircle, AlertTriangle, Calendar, Filter, Trash2, Users, ArrowUpDown, Download, X
 } from "lucide-react";
-import { getEventBookings, deleteEventBooking } from "../api/api";
+import { getEventBookings, deleteEventBooking, updateEventBooking } from "../api/api";
 import { toast } from "react-hot-toast";
 
 const DashboardEventPayments = () => {
@@ -13,6 +13,8 @@ const DashboardEventPayments = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState("all");
+  const [viewScreenshotUrl, setViewScreenshotUrl] = useState("");
   const [deletingId, setDeletingId] = useState(null);
 
   const fetchBookings = async (showLoader = false) => {
@@ -95,7 +97,12 @@ const DashboardEventPayments = () => {
     const matchesStatus = 
       statusFilter === "all" || 
       booking.status === statusFilter;
-    return matchesSearch && matchesStatus;
+
+    const matchesPaymentMethod = 
+      paymentMethodFilter === "all" ||
+      (booking.paymentMethod || "razorpay") === paymentMethodFilter;
+
+    return matchesSearch && matchesStatus && matchesPaymentMethod;
   });
 
   const handleExportToExcel = () => {
@@ -108,6 +115,8 @@ const DashboardEventPayments = () => {
       { name: "Schedule Time Slot", width: 150 },
       { name: "Seats", width: 80 },
       { name: "Total Amount", width: 130 },
+      { name: "Payment Method", width: 150 },
+      { name: "Payment Screenshot", width: 300 },
       { name: "Razorpay Order ID", width: 220 },
       { name: "Razorpay Payment ID", width: 220 },
       { name: "Status", width: 160 }
@@ -122,6 +131,8 @@ const DashboardEventPayments = () => {
       booking.timeSlot || "",
       booking.seats || 0,
       Number(booking.totalAmount) === 0 ? "Free Plan" : `₹${booking.totalAmount}`,
+      booking.paymentMethod || "razorpay",
+      booking.paymentScreenshot || "N/A",
       booking.razorpayOrderId || "N/A",
       booking.razorpayPaymentId || "N/A",
       booking.status || ""
@@ -355,8 +366,25 @@ const DashboardEventPayments = () => {
                 >
                   <option value="all" className="bg-[var(--db-card)] text-[var(--db-text)]">All Status</option>
                   <option value="payment successfully" className="bg-[var(--db-card)] text-[var(--db-text)]">Payment Successfully</option>
+                  <option value="pending barcode verification" className="bg-[var(--db-card)] text-[var(--db-text)]">Pending Barcode</option>
                   <option value="not payment" className="bg-[var(--db-card)] text-[var(--db-text)]">Not Payment</option>
+                  <option value="confirmed" className="bg-[var(--db-card)] text-[var(--db-text)]">Confirmed</option>
                   <option value="failed" className="bg-[var(--db-card)] text-[var(--db-text)]">Failed</option>
+                  <option value="cancelled" className="bg-[var(--db-card)] text-[var(--db-text)]">Cancelled</option>
+                </select>
+              </div>
+
+              {/* Payment Method Filter Dropdown */}
+              <div className="relative flex items-center bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-full px-3 h-9 text-xs text-[var(--db-text-muted)]">
+                <Filter size={12} className="mr-1.5 text-gray-500" />
+                <select
+                  value={paymentMethodFilter}
+                  onChange={(e) => setPaymentMethodFilter(e.target.value)}
+                  className="bg-transparent border-none text-[var(--db-text)] outline-none cursor-pointer pr-1 text-xs"
+                >
+                  <option value="all" className="bg-[var(--db-card)] text-[var(--db-text)]">All Methods</option>
+                  <option value="razorpay" className="bg-[var(--db-card)] text-[var(--db-text)]">Razorpay</option>
+                  <option value="barcode" className="bg-[var(--db-card)] text-[var(--db-text)]">Barcode Scan</option>
                 </select>
               </div>
 
@@ -393,6 +421,8 @@ const DashboardEventPayments = () => {
                     <th className="py-4 px-4 min-w-[180px] whitespace-nowrap border-r border-[var(--db-card-border)]/40">Schedule Date/Time</th>
                     <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Seats</th>
                     <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Total Amount</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Method</th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40 text-center">Screenshot</th>
                     <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Razorpay Order ID</th>
                     <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Razorpay Payment ID</th>
                     <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">Status</th>
@@ -442,6 +472,25 @@ const DashboardEventPayments = () => {
                         )}
                       </td>
 
+                      {/* Payment Method */}
+                      <td className="py-4 px-4 text-xs font-bold text-[var(--db-text)] uppercase border-r border-[var(--db-card-border)]/30">
+                        {booking.paymentMethod || "razorpay"}
+                      </td>
+
+                      {/* Payment Screenshot */}
+                      <td className="py-4 px-4 text-center border-r border-[var(--db-card-border)]/30">
+                        {booking.paymentScreenshot ? (
+                          <button
+                            onClick={() => setViewScreenshotUrl(booking.paymentScreenshot)}
+                            className="px-2.5 py-1 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] text-[10px] font-black uppercase rounded-lg cursor-pointer transition-all duration-200"
+                          >
+                            View
+                          </button>
+                        ) : (
+                          <span className="text-[10px] text-[var(--db-text-muted)]">-</span>
+                        )}
+                      </td>
+
                       {/* Razorpay Order ID */}
                       <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] font-mono border-r border-[var(--db-card-border)]/30">
                         {booking.razorpayOrderId || "N/A"}
@@ -459,15 +508,41 @@ const DashboardEventPayments = () => {
                             Free Entry Successful
                           </span>
                         ) : (
-                          <span className={`inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black ${
-                            booking.status === 'payment successfully' || booking.status === 'confirmed'
-                              ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                              : booking.status === 'not payment'
-                              ? 'bg-yellow-500/10 border border-yellow-500/20 text-yellow-500'
-                              : 'bg-red-500/10 border border-red-500/20 text-red-400'
-                          }`}>
-                            {booking.status}
-                          </span>
+                          <select
+                            value={booking.status}
+                            onChange={async (e) => {
+                              const newStatus = e.target.value;
+                              const toastId = toast.loading("Updating booking status...");
+                              try {
+                                const { data } = await updateEventBooking(booking._id, { status: newStatus });
+                                if (data.success) {
+                                  toast.success("Booking status updated successfully!", { id: toastId });
+                                  fetchBookings();
+                                } else {
+                                  toast.error(data.message || "Failed to update status", { id: toastId });
+                                }
+                              } catch (err) {
+                                console.error(err);
+                                toast.error("Error updating booking status", { id: toastId });
+                              }
+                            }}
+                            className={`px-2 py-1 rounded text-[10px] uppercase font-bold bg-[var(--db-input-bg)] border border-[var(--db-input-border)] cursor-pointer outline-none ${
+                              booking.status === 'payment successfully' || booking.status === 'confirmed'
+                                ? 'text-green-400 border-green-500/20'
+                                : booking.status === 'pending barcode verification'
+                                ? 'text-blue-400 border-blue-500/20'
+                                : booking.status === 'not payment'
+                                ? 'text-yellow-500 border-yellow-500/20'
+                                : 'text-red-400 border-red-500/20'
+                            }`}
+                          >
+                            <option value="not payment">Not Payment</option>
+                            <option value="pending barcode verification">Pending Barcode</option>
+                            <option value="payment successfully">Payment Successfully</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="failed">Failed</option>
+                            <option value="cancelled">Cancelled</option>
+                          </select>
                         )}
                       </td>
 
@@ -494,6 +569,47 @@ const DashboardEventPayments = () => {
           )}
         </motion.div>
       </div>
+
+      {/* Screenshot Lightbox Preview Modal */}
+      <AnimatePresence>
+        {viewScreenshotUrl && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl overflow-hidden max-w-2xl w-full max-h-[85vh] flex flex-col relative shadow-2xl"
+            >
+              <div className="h-14 flex items-center justify-between px-6 border-b border-[var(--db-card-border)]">
+                <span className="font-extrabold uppercase text-xs tracking-wider text-[var(--db-accent-highlight)]">
+                  Payment Screenshot
+                </span>
+                <button
+                  onClick={() => setViewScreenshotUrl("")}
+                  className="p-1.5 text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg hover:bg-[var(--db-sidebar-link-hover)] transition-colors cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="p-4 flex-1 overflow-auto flex items-center justify-center bg-black">
+                <img
+                  src={viewScreenshotUrl}
+                  alt="Payment Screenshot"
+                  className="max-h-[60vh] object-contain rounded-lg border border-white/5 shadow-2xl"
+                />
+              </div>
+              <div className="p-4 bg-white/[0.01] border-t border-[var(--db-card-border)] flex justify-end">
+                <button
+                  onClick={() => setViewScreenshotUrl("")}
+                  className="px-4 py-2 border border-[var(--db-input-border)] hover:bg-white/5 rounded-xl text-xs font-bold uppercase transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

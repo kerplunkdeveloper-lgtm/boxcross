@@ -22,6 +22,7 @@ import {
   getEventsList,
   bookEventItem,
   verifyEventPayment,
+  verifyEventPaymentBarcode,
 } from "../../api/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
@@ -57,6 +58,12 @@ const EventList = () => {
   const [createdBooking, setCreatedBooking] = useState(null);
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState("razorpay");
+  const [paymentScreenshotFile, setPaymentScreenshotFile] = useState(null);
+  const [paymentScreenshotPreview, setPaymentScreenshotPreview] = useState("");
+  const [showFullQR, setShowFullQR] = useState(false);
+
   // Open booking screen
   const handleOpenBooking = (event) => {
     setBookingEvent(event);
@@ -74,6 +81,10 @@ const EventList = () => {
     setTermsAccepted(false);
     setCreatedBooking(null);
     setBookingSuccess(false);
+    setSelectedPaymentMethod("razorpay");
+    setPaymentScreenshotFile(null);
+    setPaymentScreenshotPreview("");
+    setShowFullQR(false);
   };
 
   const handleShareToWhatsApp = () => {
@@ -284,8 +295,64 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
     }
   };
 
+  useEffect(() => {
+    if (bookingEvent) {
+      const allowed = bookingEvent.paymentMethods || ["razorpay"];
+      if (allowed.length === 1) {
+        setSelectedPaymentMethod(allowed[0]);
+      } else if (!allowed.includes(selectedPaymentMethod)) {
+        setSelectedPaymentMethod(allowed[0] || "razorpay");
+      }
+    }
+  }, [bookingEvent]);
+
+  const handleBarcodePayment = async () => {
+    if (!createdBooking) {
+      toast.error(
+        "Booking details missing. Please go back and save details again.",
+      );
+      return;
+    }
+
+    if (!paymentScreenshotFile) {
+      toast.error("Please upload a payment screenshot receipt.");
+      return;
+    }
+
+    setSubmittingBooking(true);
+    const toastId = toast.loading("Uploading payment screenshot...");
+
+    try {
+      const formData = new FormData();
+      formData.append("bookingId", createdBooking.bookingId);
+      formData.append("screenshot", paymentScreenshotFile);
+
+      const { data } = await verifyEventPaymentBarcode(formData);
+      if (data.success) {
+        toast.success("Payment screenshot uploaded successfully!", {
+          id: toastId,
+        });
+        await fetchEvents();
+        setBookingSuccess(true);
+      } else {
+        toast.error(data.message || "Upload verification failed", {
+          id: toastId,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error submitting payment screenshot", { id: toastId });
+    } finally {
+      setSubmittingBooking(false);
+    }
+  };
+
   // Step 2: Proceed to Pay (Razorpay checkout)
   const handleProceedToPay = async () => {
+    if (selectedPaymentMethod === "barcode") {
+      handleBarcodePayment();
+      return;
+    }
     if (!createdBooking) {
       toast.error(
         "Booking details missing. Please go back and save details again.",
@@ -524,8 +591,6 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
             >
               No Events Available Right Now
             </h3>
-
-           
           </motion.div>
         ) : (
           <motion.div
@@ -1500,7 +1565,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-[#0c0c0c] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full max-h-screen md:h-auto md:max-h-[90vh] md:max-w-5xl overflow-hidden shadow-2xl relative flex flex-col"
+                    className="bg-[#0c0c0c] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full max-h-screen md:h-auto md:max-h-[100vh] md:max-w-7xl overflow-hidden shadow-2xl relative flex flex-col"
                   >
                     <div className="h-16 flex items-center justify-between bg-[#e5ff00] px-6 border-b border-white/5">
                       <div className="flex items-center gap-3 ">
@@ -1651,156 +1716,220 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
                       </div>
                     ) : (
-                      <div className="flex flex-col lg:flex-row max-h-[calc(100vh-64px)] lg:max-h-[85vh] overflow-y-auto custom-scrollbar flex-grow">
-                        {/* Left: Event Details Overview */}
-                        <div className="w-full lg:w-5/12 p-2 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505]">
-                          <div className="relative rounded-2xl overflow-hidden mb-6 group shadow-lg shadow-black/60">
-                            <img
-                              src={bookingEvent.imageUrl}
-                              alt={bookingEvent.title}
-                              className="w-full h-48 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
-                            <div className="absolute bottom-4 left-4 right-4">
-                              <span className="px-3 py-1 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-widest rounded-md shadow-md mb-2 inline-block">
-                                Selected Event
-                              </span>
-                              <h4
-                                className="text-xl md:text-2xl font-black uppercase text-white leading-tight drop-shadow-xl"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
+                      <div className="flex flex-col lg:flex-row flex-grow overflow-y-auto lg:overflow-hidden">
+                        {/* Left: Event Details Overview or Barcode QR Panel */}
+                        <div className="w-full lg:w-5/12 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505] lg:overflow-y-auto custom-scrollbar lg:max-h-[calc(90vh-64px)]">
+                          {checkoutStep === 2 && selectedPaymentMethod === "barcode" ? (
+                            <div className="flex flex-col items-center justify-center text-center space-y-6 h-full min-h-[350px]">
+                              <div className="space-y-1">
+                                <span className="px-3 py-1 bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] text-[10px] font-black uppercase tracking-widest rounded-md">
+                                  Scan to Pay
+                                </span>
+                                <h4
+                                  className="text-lg md:text-xl font-black uppercase text-white tracking-wide pt-3"
+                                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                                >
+                                  UPI QR BARCODE
+                                </h4>
+                                <p className="text-[11px] text-gray-500 max-w-xs mx-auto">
+                                  Open GPay, PhonePe, Paytm, or any UPI app to scan and complete the transaction.
+                                </p>
+                              </div>
+
+                              {/* Large Barcode Card */}
+                              <div
+                                onClick={() => setShowFullQR(true)}
+                                className="relative p-3.5 bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] max-w-[240px] w-full border border-gray-200 cursor-pointer group transition-all duration-300 hover:scale-102"
+                                title="Click to view full size"
                               >
-                                {bookingEvent.title}
-                              </h4>
-                            </div>
-                          </div>
+                                <img
+                                  src="/barcode.png"
+                                  alt="UPI QR Code"
+                                  className="w-full h-auto object-contain rounded-xl"
+                                />
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-2xl">
+                                  <span className="text-xs text-white font-extrabold uppercase tracking-widest">
+                                    🔍 Zoom Code
+                                  </span>
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setShowFullQR(true)}
+                                className="text-[10px] text-gray-500 hover:text-white underline tracking-wider cursor-pointer font-bold uppercase transition-colors"
+                              >
+                                View Full Size
+                              </button>
 
-                          <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
-                            {/* Date */}
-                            <div className="flex items-start gap-4">
-                              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
-                                <Calendar size={18} />
-                              </div>
-                              <div>
-                                <p
-                                  className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
-                                  style={{
-                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                              {/* UPI Copy Box */}
+                              <div className="bg-white/[0.02] border border-white/10 rounded-xl px-4 py-3 text-xs flex items-center justify-between w-full max-w-[280px] shadow-inner shadow-black">
+                                <div className="flex flex-col text-left">
+                                  <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">UPI ID Address</span>
+                                  <span className="text-white font-mono select-all font-bold">BOXCROSSGYM@iob</span>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText("BOXCROSSGYM@iob");
+                                    toast.success("UPI ID copied!");
                                   }}
+                                  className="text-[#e5ff00] hover:underline font-extrabold text-[10px] uppercase cursor-pointer"
                                 >
-                                  Booking Date
-                                </p>
-                                <p
-                                  className="text-sm font-bold text-gray-200"
-                                  style={{
-                                    fontFamily:
-                                      '"Brutal Font Light", sans-serif',
-                                  }}
-                                >
-                                  {bookingEvent.schedules[activeDateIndex].date}
-                                </p>
+                                  Copy
+                                </button>
                               </div>
                             </div>
+                          ) : (
+                            <>
+                              <div className="relative rounded-2xl overflow-hidden mb-6 group shadow-lg shadow-black/60">
+                                <img
+                                  src={bookingEvent.imageUrl}
+                                  alt={bookingEvent.title}
+                                  className="w-full h-48 lg:h-56 object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                                <div className="absolute bottom-4 left-4 right-4">
+                                  <span className="px-3 py-1 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-widest rounded-md shadow-md mb-2 inline-block">
+                                    Selected Event
+                                  </span>
+                                  <h4
+                                    className="text-xl md:text-2xl font-black uppercase text-white leading-tight drop-shadow-xl"
+                                    style={{
+                                      fontFamily: '"BrutalTypeBold", sans-serif',
+                                    }}
+                                  >
+                                    {bookingEvent.title}
+                                  </h4>
+                                </div>
+                              </div>
 
-                            {/* Time */}
-                            <div className="flex items-start gap-4">
-                              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="18"
-                                  height="18"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                >
-                                  <circle cx="12" cy="12" r="10" />
-                                  <polyline points="12 6 12 12 16 14" />
-                                </svg>
-                              </div>
-                              <div>
-                                <p
-                                  className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
-                                  style={{
-                                    fontFamily: '"BrutalTypeBold", sans-serif',
-                                  }}
-                                >
-                                  Time Slot
-                                </p>
-                                <p
-                                  className="text-sm font-bold text-gray-200"
-                                  style={{
-                                    fontFamily:
-                                      '"Brutal Font Light", sans-serif',
-                                  }}
-                                >
-                                  {selectedSlot.time}
-                                </p>
-                              </div>
-                            </div>
+                              <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
+                                {/* Date */}
+                                <div className="flex items-start gap-4">
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                    <Calendar size={18} />
+                                  </div>
+                                  <div>
+                                    <p
+                                      className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                      style={{
+                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                      }}
+                                    >
+                                      Booking Date
+                                    </p>
+                                    <p
+                                      className="text-sm font-bold text-gray-200"
+                                      style={{
+                                        fontFamily:
+                                          '"Brutal Font Light", sans-serif',
+                                      }}
+                                    >
+                                      {bookingEvent.schedules[activeDateIndex].date}
+                                    </p>
+                                  </div>
+                                </div>
 
-                            {/* Location */}
-                            <div className="flex items-start gap-4">
-                              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
-                                <MapPin size={18} />
-                              </div>
-                              <div>
-                                <p
-                                  className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
-                                  style={{
-                                    fontFamily: '"BrutalTypeBold", sans-serif',
-                                  }}
-                                >
-                                  Location
-                                </p>
-                                <p
-                                  className="text-xs md:text-sm font-bold text-gray-200 leading-snug"
-                                  style={{
-                                    fontFamily:
-                                      '"Brutal Font Light", sans-serif',
-                                  }}
-                                >
-                                  {bookingEvent.location}
-                                </p>
-                              </div>
-                            </div>
+                                {/* Time */}
+                                <div className="flex items-start gap-4">
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="18"
+                                      height="18"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <circle cx="12" cy="12" r="10" />
+                                      <polyline points="12 6 12 12 16 14" />
+                                    </svg>
+                                  </div>
+                                  <div>
+                                    <p
+                                      className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                      style={{
+                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                      }}
+                                    >
+                                      Time Slot
+                                    </p>
+                                    <p
+                                      className="text-sm font-bold text-gray-200"
+                                      style={{
+                                        fontFamily:
+                                          '"Brutal Font Light", sans-serif',
+                                      }}
+                                    >
+                                      {selectedSlot.time}
+                                    </p>
+                                  </div>
+                                </div>
 
-                            {/* Seats */}
-                            <div className="flex items-start gap-4">
-                              <div className="w-10 h-10 rounded-xl bg-[#e5ff00]/10 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-[#e5ff00]/20">
-                                <Ticket size={18} />
+                                {/* Location */}
+                                <div className="flex items-start gap-4">
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                    <MapPin size={18} />
+                                  </div>
+                                  <div>
+                                    <p
+                                      className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                      style={{
+                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                      }}
+                                    >
+                                      Location
+                                    </p>
+                                    <p
+                                      className="text-xs md:text-sm font-bold text-gray-200 leading-snug"
+                                      style={{
+                                        fontFamily:
+                                          '"Brutal Font Light", sans-serif',
+                                      }}
+                                    >
+                                      {bookingEvent.location}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                {/* Seats */}
+                                <div className="flex items-start gap-4">
+                                  <div className="w-10 h-10 rounded-xl bg-[#e5ff00]/10 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-[#e5ff00]/20">
+                                    <Ticket size={18} />
+                                  </div>
+                                  <div>
+                                    <p
+                                      className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
+                                      style={{
+                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                      }}
+                                    >
+                                      Reserved Seats
+                                    </p>
+                                    <p
+                                      className="text-sm font-black text-[#e5ff00]"
+                                      style={{
+                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                      }}
+                                    >
+                                      {seatsCount} Seat{seatsCount > 1 ? "s" : ""}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
-                              <div>
-                                <p
-                                  className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
-                                  style={{
-                                    fontFamily: '"BrutalTypeBold", sans-serif',
-                                  }}
-                                >
-                                  Reserved Seats
-                                </p>
-                                <p
-                                  className="text-sm font-black text-[#e5ff00]"
-                                  style={{
-                                    fontFamily: '"BrutalTypeBold", sans-serif',
-                                  }}
-                                >
-                                  {seatsCount} Seat{seatsCount > 1 ? "s" : ""}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
+                            </>
+                          )}
                         </div>
 
                         {/* Right: Contact Form */}
-                        <div className="w-full lg:w-7/12 flex flex-col justify-center">
+                        <div className="w-full lg:w-7/12 flex flex-col justify-start lg:overflow-y-auto custom-scrollbar lg:max-h-[calc(90vh-64px)]">
                           {checkoutStep === 1 ? (
                             <form
                               onSubmit={handleSaveDetails}
-                              className="p-6 lg:p-10 space-y-6"
+                              className="p-6 lg:p-8 space-y-6"
                             >
                               <div>
                                 <h4
@@ -1881,8 +2010,9 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                       className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
                                     />
                                     <input
-                                      type="tel"
+                                      type="number"
                                       value={customerPhone}
+                                      
                                       onChange={(e) =>
                                         setCustomerPhone(e.target.value)
                                       }
@@ -1922,7 +2052,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               </div>
                             </form>
                           ) : (
-                            <div className="p-6 lg:p-10 space-y-6 flex flex-col h-full justify-center">
+                            <div className="p-6 lg:p-8 space-y-6 flex flex-col justify-start">
                               <div>
                                 <div className="flex items-center justify-between mb-2">
                                   <h4
@@ -1956,6 +2086,151 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     </p>
                                   </div>
                                 </div>
+
+                                {/* Payment Method Selector */}
+                                {(() => {
+                                  const allowed =
+                                    bookingEvent.paymentMethods || ["razorpay"];
+                                  if (
+                                    allowed.includes("razorpay") &&
+                                    allowed.includes("barcode")
+                                  ) {
+                                    return (
+                                      <div className="mt-4 space-y-2 text-left">
+                                        <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                          Select Payment Method
+                                        </label>
+                                        <div className="grid grid-cols-2 gap-3">
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              setSelectedPaymentMethod(
+                                                "razorpay",
+                                              )
+                                            }
+                                            className={`p-3 rounded-xl border text-left transition-all relative flex flex-col justify-center h-14 ${
+                                              selectedPaymentMethod ===
+                                              "razorpay"
+                                                ? "bg-[#e5ff00]/10 border-[#e5ff00] text-white"
+                                                : "bg-white/[0.02] border-white/5 hover:border-white/10 text-gray-400 hover:text-white cursor-pointer"
+                                            }`}
+                                          >
+                                            <span className="text-xs font-bold">
+                                              💳 Razorpay
+                                            </span>
+                                            <span className="text-[9px] text-gray-500 mt-0.5">
+                                              Pay online instantly
+                                            </span>
+                                          </button>
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              setSelectedPaymentMethod(
+                                                "barcode",
+                                              )
+                                            }
+                                            className={`p-3 rounded-xl border text-left transition-all relative flex flex-col justify-center h-14 ${
+                                              selectedPaymentMethod ===
+                                              "barcode"
+                                                ? "bg-[#e5ff00]/10 border-[#e5ff00] text-white"
+                                                : "bg-white/[0.02] border-white/5 hover:border-white/10 text-gray-400 hover:text-white cursor-pointer"
+                                            }`}
+                                          >
+                                            <span className="text-xs font-bold">
+                                              🤳 Scan Barcode
+                                            </span>
+                                            <span className="text-[9px] text-gray-500 mt-0.5">
+                                              Scan QR & upload receipt
+                                            </span>
+                                          </button>
+                                        </div>
+                                      </div>
+                                    );
+                                  }
+                                  return null;
+                                })()}
+
+                                {/* Receipt Image Upload Field */}
+                                {selectedPaymentMethod === "barcode" && (
+                                  <div className="mt-4 space-y-2.5 bg-white/[0.02] border border-white/5 rounded-2xl p-5 text-left shadow-inner shadow-black/45">
+                                    <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                      Upload Payment Receipt Screenshot <span className="text-red-500">*</span>
+                                    </label>
+                                    {paymentScreenshotPreview ? (
+                                      <div className="aspect-[16/8] w-full bg-black border border-white/10 rounded-xl relative overflow-hidden flex items-center justify-center shadow-md">
+                                        <img
+                                          src={paymentScreenshotPreview}
+                                          alt="Screenshot Preview"
+                                          className="w-full h-full object-cover"
+                                        />
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setPaymentScreenshotFile(null);
+                                            setPaymentScreenshotPreview("");
+                                          }}
+                                          className="absolute top-2 right-2 p-1.5 bg-black/85 text-red-400 hover:text-red-300 rounded-full border border-red-500/20 cursor-pointer z-10"
+                                        >
+                                          <X size={12} />
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <div
+                                        onClick={() =>
+                                          document
+                                            .getElementById("payment-screenshot-input")
+                                            .click()
+                                        }
+                                        className="border-2 border-dashed border-white/10 hover:border-[#e5ff00]/50 bg-black/30 rounded-xl p-5 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group"
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="20"
+                                          height="20"
+                                          viewBox="0 0 24 24"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          className="text-gray-500 group-hover:text-[#e5ff00] transition-colors"
+                                        >
+                                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                          <polyline points="17 8 12 3 7 8" />
+                                          <line x1="12" y1="3" x2="12" y2="15" />
+                                        </svg>
+                                        <div>
+                                          <p className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">
+                                            Upload Payment Receipt Screenshot
+                                          </p>
+                                          <p className="text-[9px] text-gray-500 mt-0.5">
+                                            Supports JPEG, PNG (Max 10MB)
+                                          </p>
+                                        </div>
+                                      </div>
+                                    )}
+                                    <input
+                                      id="payment-screenshot-input"
+                                      type="file"
+                                      accept="image/*"
+                                      className="hidden"
+                                      onChange={(e) => {
+                                        const file = e.target.files[0];
+                                        if (!file) return;
+                                        if (file.size > 10 * 1024 * 1024) {
+                                          toast.error(
+                                            "Image too large. Max size is 10MB.",
+                                          );
+                                          return;
+                                        }
+                                        setPaymentScreenshotFile(file);
+                                        setPaymentScreenshotPreview(
+                                          URL.createObjectURL(file),
+                                        );
+                                      }}
+                                    />
+                                  </div>
+                                )}
 
                                 {/* Price Breakdown */}
                                 <div className="bg-[#050505] border border-white/10 rounded-2xl p-5 text-sm space-y-3 mt-4 relative overflow-hidden shadow-inner shadow-black/50">
@@ -2080,7 +2355,12 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               <div className="pt-6">
                                 <button
                                   onClick={handleProceedToPay}
-                                  disabled={submittingBooking || !termsAccepted}
+                                  disabled={
+                                    submittingBooking ||
+                                    !termsAccepted ||
+                                    (selectedPaymentMethod === "barcode" &&
+                                      !paymentScreenshotFile)
+                                  }
                                   className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed cursor-pointer"
                                   style={{
                                     fontFamily: '"BrutalTypeBold", sans-serif',
@@ -2092,11 +2372,15 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                         size={18}
                                         className="animate-spin"
                                       />
-                                      Processing Payment...
+                                      {selectedPaymentMethod === "barcode"
+                                        ? "Uploading Receipt..."
+                                        : "Processing Payment..."}
                                     </>
                                   ) : (
                                     <>
-                                      Proceed to Pay
+                                      {selectedPaymentMethod === "barcode"
+                                        ? "Confirm & Submit Screenshot"
+                                        : "Proceed to Pay"}
                                       <ArrowRight size={18} strokeWidth={3} />
                                     </>
                                   )}
@@ -2107,6 +2391,69 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
                       </div>
                     )}
+                  </motion.div>
+                </div>
+              )}
+            </AnimatePresence>
+
+            {/* Full Barcode QR Lightbox Modal */}
+            <AnimatePresence>
+              {showFullQR && (
+                <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+                  <div
+                    className="absolute inset-0 z-0 cursor-pointer"
+                    onClick={() => setShowFullQR(false)}
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="bg-[#0c0c0c] border border-white/10 rounded-3xl overflow-hidden max-w-md w-full relative shadow-2xl flex flex-col z-10"
+                  >
+                    <div className="h-14 flex items-center justify-between px-6 border-b border-white/5 bg-white/5">
+                      <span className="font-extrabold uppercase text-xs tracking-wider text-[#e5ff00]">
+                        Scan QR Code
+                      </span>
+                      <button
+                        onClick={() => setShowFullQR(false)}
+                        className="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+                    <div className="p-8 flex items-center justify-center bg-white">
+                      <img
+                        src="/barcode.png"
+                        alt="UPI QR Code Full"
+                        className="max-h-[60vh] object-contain rounded-lg shadow-2xl"
+                      />
+                    </div>
+                    <div className="p-4 bg-black/80 border-t border-white/5 flex flex-col gap-2.5">
+                      <div className="flex items-center justify-between bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-xs">
+                        <span className="text-gray-400 font-medium">
+                          UPI ID:{" "}
+                          <span className="text-white font-mono select-all font-bold">
+                            BOXCROSSGYM@iob
+                          </span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard.writeText("BOXCROSSGYM@iob");
+                            toast.success("UPI ID copied!");
+                          }}
+                          className="text-[#e5ff00] hover:underline font-extrabold text-[10px] uppercase cursor-pointer"
+                        >
+                          Copy
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => setShowFullQR(false)}
+                        className="w-full py-3 bg-[#e5ff00] hover:bg-[#d4eb00] text-black font-black uppercase tracking-wider text-xs rounded-xl transition-all cursor-pointer"
+                      >
+                        Close
+                      </button>
+                    </div>
                   </motion.div>
                 </div>
               )}

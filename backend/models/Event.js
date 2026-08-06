@@ -106,6 +106,11 @@ const eventSchema = new mongoose.Schema(
         ],
       },
     ],
+    paymentMethods: {
+      type: [String],
+      enum: ["razorpay", "barcode"],
+      default: ["razorpay"],
+    },
   },
   {
     timestamps: true,
