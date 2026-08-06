@@ -3,6 +3,35 @@ export default async function handler(req, res) {
   const frontendUrl = "https://membership.boxandcross.com";
   const defaultRedirect = `${frontendUrl}/events`;
 
+  // Dynamic backend base URL from Vercel environment variables or local fallback
+  const backendBaseUrl = (process.env.VITE_API_URL || "https://mediumblue-llama-100354.hostingersite.com").replace(/\/$/, "");
+
+  // 1. Primary Strategy: Try to fetch the fully compiled HTML with OG tags from the backend
+  if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
+    try {
+      const ogEndpoint = `${backendBaseUrl}/api/events/${id}/og`;
+      console.log(`Attempting to proxy OG metadata from: ${ogEndpoint}`);
+      
+      const backendRes = await fetch(ogEndpoint, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      });
+
+      if (backendRes.ok) {
+        const html = await backendRes.text();
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.setHeader("Cache-Control", "public, max-age=3600");
+        return res.status(200).send(html);
+      } else {
+        console.warn(`Backend OG route returned status ${backendRes.status}. Falling back to list query.`);
+      }
+    } catch (err) {
+      console.error("Failed to proxy from backend OG endpoint:", err.message);
+    }
+  }
+
+  // 2. Fallback Strategy: Retrieve all events and build the OG HTML page locally
   // Default SEO fallback values (if event not found or fetch fails)
   let title = "Events & Class Schedules | Box & Cross";
   let description = "View and register for active training sessions, elite gym schedules, and competitive athletic events at Box & Cross.";
@@ -12,7 +41,9 @@ export default async function handler(req, res) {
   if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
     try {
       // Fetch all events from Hostinger backend using a standard browser User-Agent
-      const backendRes = await fetch("https://mediumblue-llama-100354.hostingersite.com/api/events", {
+      const eventsEndpoint = `${backendBaseUrl}/api/events`;
+      console.log(`Fetching events list from: ${eventsEndpoint}`);
+      const backendRes = await fetch(eventsEndpoint, {
         headers: {
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
@@ -40,7 +71,7 @@ export default async function handler(req, res) {
         }
       }
     } catch (err) {
-      console.error("Vercel Serverless OG Generator Error:", err.message);
+      console.error("Vercel Serverless OG Generator Fallback Error:", err.message);
     }
   }
 
