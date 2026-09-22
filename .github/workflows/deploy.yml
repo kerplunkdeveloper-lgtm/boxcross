@@ -1,0 +1,101 @@
+name: Deploy Box & Cross
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to AWS EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          port: 22
+          script_stop: true
+
+          script: |
+            set -e
+
+            echo "================================="
+            echo "Starting deployment..."
+            echo "================================="
+
+            cd /var/www/boxcross
+
+            echo "Pulling latest code..."
+            git fetch origin
+            git reset --hard origin/main
+
+            echo "================================="
+            echo "Backend deployment"
+            echo "================================="
+
+            cd /var/www/boxcross/backend
+
+            # Verify .env exists before deploying
+            if [ ! -f .env ]; then
+              echo "ERROR: backend/.env file not found on server!"
+              exit 1
+            fi
+
+            npm ci --omit=dev
+
+            echo "Restarting backend..."
+            # startOrRestart: process இல்லன்னா start பண்ணும், இருந்தா restart பண்ணும்
+            pm2 startOrRestart ecosystem.config.cjs --env production 2>/dev/null || \
+            pm2 startOrRestart ecosystem.config.js --env production 2>/dev/null || \
+            pm2 restart boxcross-backend --update-env
+
+            echo "Checking backend health..."
+            sleep 5
+
+            # Backend really online-ஆ nu verify பண்றோம்
+            pm2 status
+            if ! pm2 list | grep -q "boxcross-backend.*online"; then
+              echo "ERROR: Backend process is not online!"
+              pm2 logs boxcross-backend --lines 20
+              exit 1
+            fi
+
+            echo "Backend is online ✓"
+
+            echo "================================="
+            echo "Frontend deployment"
+            echo "================================="
+
+            cd /var/www/boxcross/frontend
+
+            # Verify .env.production exists before building
+            if [ ! -f .env.production ]; then
+              echo "WARNING: frontend/.env.production not found, build may use wrong API URLs"
+            fi
+
+            npm ci
+
+            npm run build
+
+            echo "Frontend build completed ✓"
+
+            echo "================================="
+            echo "Testing Nginx"
+            echo "================================="
+
+            sudo nginx -t
+
+            echo "Reloading Nginx..."
+
+            sudo systemctl reload nginx
+
+            echo "================================="
+            echo "Deployment completed successfully!"
+            echo "================================="
