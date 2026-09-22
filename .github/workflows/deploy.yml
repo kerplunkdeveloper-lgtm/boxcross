@@ -11,10 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # ==========================================
+      # CHECKOUT
+      # ==========================================
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Deploy to EC2
+      # ==========================================
+      # DEPLOY TO AWS
+      # ==========================================
+      - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.AWS_HOST }}
@@ -26,76 +32,202 @@ jobs:
           script: |
             set -e
 
-            echo "================================="
-            echo "Starting deployment..."
-            echo "================================="
+            echo "=========================================="
+            echo "🚀 BOX & CROSS DEPLOYMENT STARTED"
+            echo "=========================================="
+
+            # ==========================================
+            # PROJECT
+            # ==========================================
 
             cd /var/www/boxcross
 
-            echo "Pulling latest code..."
+            echo "📥 Pulling latest code..."
+
             git fetch origin
             git reset --hard origin/main
 
-            echo "================================="
-            echo "Backend deployment"
-            echo "================================="
+            echo "✅ Latest code pulled"
+
+            # ==========================================
+            # BACKEND
+            # ==========================================
+
+            echo "=========================================="
+            echo "🔧 BACKEND DEPLOYMENT"
+            echo "=========================================="
 
             cd /var/www/boxcross/backend
 
-            # Verify .env exists before deploying
+            # Check backend environment
             if [ ! -f .env ]; then
-              echo "ERROR: backend/.env file not found on server!"
+              echo "❌ ERROR: backend/.env not found"
               exit 1
             fi
+
+            echo "📦 Installing backend dependencies..."
 
             npm ci --omit=dev
 
-            echo "Restarting backend..."
-            # startOrRestart: process இல்லன்னா start பண்ணும், இருந்தா restart பண்ணும்
-            pm2 startOrRestart ecosystem.config.cjs --env production 2>/dev/null || \
-            pm2 startOrRestart ecosystem.config.js --env production 2>/dev/null || \
-            pm2 restart boxcross-backend --update-env
+            echo "✅ Backend dependencies installed"
 
-            echo "Checking backend health..."
-            sleep 5
+            # ==========================================
+            # PM2
+            # ==========================================
 
-            # Backend really online-ஆ nu verify பண்றோம்
-            pm2 status
-            if ! pm2 list | grep -q "boxcross-backend.*online"; then
-              echo "ERROR: Backend process is not online!"
-              pm2 logs boxcross-backend --lines 20
-              exit 1
+            echo "🔄 Checking PM2 backend process..."
+
+            if pm2 describe boxcross-backend > /dev/null 2>&1; then
+
+              echo "♻️ Restarting existing backend..."
+
+              pm2 restart boxcross-backend --update-env
+
+            else
+
+              echo "🆕 Starting backend..."
+
+              pm2 start server.js \
+                --name boxcross-backend \
+                --update-env
+
             fi
 
-            echo "Backend is online ✓"
+            # Save PM2 process list
+            pm2 save
 
-            echo "================================="
-            echo "Frontend deployment"
-            echo "================================="
+            echo "⏳ Waiting for backend..."
+
+            sleep 5
+
+            # ==========================================
+            # PM2 HEALTH CHECK
+            # ==========================================
+
+            echo "🔍 Checking PM2 status..."
+
+            pm2 status
+
+            if ! pm2 describe boxcross-backend | grep -q "online"; then
+
+              echo "❌ Backend process is NOT online"
+
+              pm2 logs boxcross-backend \
+                --lines 50 \
+                --nostream
+
+              exit 1
+
+            fi
+
+            echo "✅ Backend process is online"
+
+            # ==========================================
+            # API HEALTH CHECK
+            # ==========================================
+
+            echo "🔍 Checking backend API..."
+
+            if ! curl -fsS \
+              --max-time 10 \
+              http://127.0.0.1:5000/ \
+              > /dev/null; then
+
+              echo "❌ Backend API health check FAILED"
+
+              pm2 logs boxcross-backend \
+                --lines 50 \
+                --nostream
+
+              exit 1
+
+            fi
+
+            echo "✅ Backend API is healthy"
+
+            # ==========================================
+            # FRONTEND
+            # ==========================================
+
+            echo "=========================================="
+            echo "🎨 FRONTEND DEPLOYMENT"
+            echo "=========================================="
 
             cd /var/www/boxcross/frontend
 
-            # Verify .env.production exists before building
-            if [ ! -f .env.production ]; then
-              echo "WARNING: frontend/.env.production not found, build may use wrong API URLs"
-            fi
+            echo "📦 Installing frontend dependencies..."
 
             npm ci
 
+            echo "🏗️ Building frontend..."
+
             npm run build
 
-            echo "Frontend build completed ✓"
+            # ==========================================
+            # FRONTEND BUILD CHECK
+            # ==========================================
 
-            echo "================================="
-            echo "Testing Nginx"
-            echo "================================="
+            if [ ! -f dist/index.html ]; then
+
+              echo "❌ ERROR: Frontend build failed"
+              echo "dist/index.html not found"
+
+              exit 1
+
+            fi
+
+            echo "✅ Frontend build completed"
+
+            # ==========================================
+            # NGINX
+            # ==========================================
+
+            echo "=========================================="
+            echo "🌐 NGINX DEPLOYMENT"
+            echo "=========================================="
+
+            echo "🔍 Testing Nginx configuration..."
 
             sudo nginx -t
 
-            echo "Reloading Nginx..."
+            echo "🔄 Reloading Nginx..."
 
             sudo systemctl reload nginx
 
-            echo "================================="
-            echo "Deployment completed successfully!"
-            echo "================================="
+            echo "✅ Nginx reloaded"
+
+            # ==========================================
+            # FRONTEND HEALTH CHECK
+            # ==========================================
+
+            echo "🔍 Checking frontend..."
+
+            if ! curl -fsS \
+              --max-time 10 \
+              http://127.0.0.1/ \
+              -H "Host: membership.boxandcross.com" \
+              > /dev/null; then
+
+              echo "❌ Frontend health check FAILED"
+
+              exit 1
+
+            fi
+
+            echo "✅ Frontend is healthy"
+
+            # ==========================================
+            # FINAL
+            # ==========================================
+
+            echo "=========================================="
+            echo "🎉 DEPLOYMENT SUCCESSFUL"
+            echo "=========================================="
+
+            echo "Frontend:"
+            echo "https://membership.boxandcross.com"
+
+            echo "Backend:"
+            echo "https://api.boxandcross.com"
+
+            echo "=========================================="
