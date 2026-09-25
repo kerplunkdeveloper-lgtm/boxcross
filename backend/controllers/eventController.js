@@ -848,7 +848,19 @@ const getEventOGMeta = async (req, res) => {
       ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
       : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
 
-    const imageUrl = event.imageUrl || `${frontendUrl}/og-events.jpg`;
+    let rawImageUrl = (event.imageUrl || `${frontendUrl}/og-events.jpg`).replace(/^http:\/\//, "https://");
+
+    // Automatically optimize Cloudinary URLs for WhatsApp / Social Crawlers:
+    // Resize to 1200x630, convert to progressive JPEG, and compress to <150KB (WhatsApp max is 300KB)
+    let imageUrl = rawImageUrl;
+    if (imageUrl.includes("res.cloudinary.com") && imageUrl.includes("/upload/")) {
+      if (!imageUrl.includes("/upload/c_fill") && !imageUrl.includes("/upload/w_")) {
+        imageUrl = imageUrl.replace(
+          "/upload/",
+          "/upload/c_fill,w_1200,h_630,g_auto,q_auto:good,f_jpg/"
+        );
+      }
+    }
 
     // Build a standalone HTML page — social crawlers only read static HTML, no JS
     const html = `<!DOCTYPE html>
@@ -867,6 +879,7 @@ const getEventOGMeta = async (req, res) => {
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${imageUrl}" />
   <meta property="og:image:secure_url" content="${imageUrl}" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="${escapeHtml(event.title)}" />

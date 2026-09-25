@@ -510,9 +510,15 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 ? plainDesc.substring(0, 152) + "..."
                 : plainDesc
               : `Join ${selectedEvent.title} at Box & Cross. View schedule, timings, and book your slot now!`;
-          const eventImage = selectedEvent.imageUrl
-            ? `${selectedEvent.imageUrl}?v=${new Date(selectedEvent.updatedAt || Date.now()).getTime()}`
-            : `${BASE_URL}/og-events.jpg?v=1`;
+          let eventImage = selectedEvent.imageUrl || `${BASE_URL}/og-events.jpg?v=1`;
+          if (eventImage.includes("res.cloudinary.com") && eventImage.includes("/upload/")) {
+            eventImage = eventImage.replace(
+              "/upload/",
+              "/upload/c_fill,w_1200,h_630,g_auto,q_auto:good,f_jpg/"
+            );
+          } else if (selectedEvent.imageUrl) {
+            eventImage = `${selectedEvent.imageUrl}?v=${new Date(selectedEvent.updatedAt || Date.now()).getTime()}`;
+          }
 
           return (
             <Helmet>
@@ -527,6 +533,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
               <meta property="og:description" content={eventDesc} />
               <meta property="og:image" content={eventImage} />
               <meta property="og:image:secure_url" content={eventImage} />
+              <meta property="og:image:type" content="image/jpeg" />
               <meta property="og:image:width" content="1200" />
               <meta property="og:image:height" content="630" />
               <meta property="og:image:alt" content={selectedEvent.title} />

@@ -64,9 +64,15 @@ export default async function handler(req, res) {
               ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
               : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
             
-            imageUrl = event.imageUrl
-              ? `${event.imageUrl}?v=${new Date(event.updatedAt || Date.now()).getTime()}`
-              : `${frontendUrl}/og-events.jpg?v=1`;
+            let rawImg = event.imageUrl || `${frontendUrl}/og-events.jpg`;
+            if (rawImg.includes("res.cloudinary.com") && rawImg.includes("/upload/")) {
+              imageUrl = rawImg.replace(
+                "/upload/",
+                "/upload/c_fill,w_1200,h_630,g_auto,q_auto:good,f_jpg/"
+              );
+            } else {
+              imageUrl = `${rawImg}?v=${new Date(event.updatedAt || Date.now()).getTime()}`;
+            }
           }
         }
       }
@@ -92,6 +98,7 @@ export default async function handler(req, res) {
   <meta property="og:description" content="${description}" />
   <meta property="og:image" content="${imageUrl}" />
   <meta property="og:image:secure_url" content="${imageUrl}" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="${title}" />
