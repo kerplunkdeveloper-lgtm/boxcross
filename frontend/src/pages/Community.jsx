@@ -41,8 +41,8 @@ const Community = () => {
         <meta property="og:title" content="Community &amp; Tribe | Box &amp; Cross" />
         <meta property="og:description" content="The community that forms when serious people train together long enough to become something more than training partners. You train here. You belong here." />
         <meta property="og:image" content={`${BASE_URL}/og-community.jpg`} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:width" content="1080" />
+        <meta property="og:image:height" content="1350" />
         <meta property="og:image:alt" content="Box and Cross Community" />
 
         {/* Twitter */}

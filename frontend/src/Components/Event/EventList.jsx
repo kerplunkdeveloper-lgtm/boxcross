@@ -33,7 +33,7 @@ import { Helmet } from "react-helmet-async";
 
 const BASE_URL = "https://membership.boxandcross.com";
 
-// Safely format Cloudinary images to Landscape 1.91:1 (1200x630) and compress to ~80-130KB
+// Safely format Cloudinary images to Portrait 4:5 (1080x1350) and compress to ~80-130KB
 const getOptimizedOgImageUrl = (rawUrl, fallback = `${BASE_URL}/og-events.jpg`) => {
   if (!rawUrl || typeof rawUrl !== "string" || !rawUrl.trim()) {
     return fallback;
@@ -52,7 +52,7 @@ const getOptimizedOgImageUrl = (rawUrl, fallback = `${BASE_URL}/og-events.jpg`) 
       afterUpload = afterUpload.replace(/^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/, "");
     }
 
-    return `${base}c_fill,w_1200,h_630,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
+    return `${base}c_fill,w_1080,h_1350,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
   }
 
   return url;
@@ -560,8 +560,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
               <meta property="og:image" content={eventImage} />
               <meta property="og:image:secure_url" content={eventImage} />
               <meta property="og:image:type" content="image/jpeg" />
-              <meta property="og:image:width" content="1200" />
-              <meta property="og:image:height" content="630" />
+              <meta property="og:image:width" content="1080" />
+              <meta property="og:image:height" content="1350" />
               <meta property="og:image:alt" content={selectedEvent.title} />
 
               {/* Twitter Card */}

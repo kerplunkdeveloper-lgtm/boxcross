@@ -15,9 +15,9 @@ const escapeHtml = (str) => {
     .replace(/>/g, "&gt;");
 };
 
-// Safely format Cloudinary images to Landscape 1.91:1 (1200x630) and compress to ~80-130KB
+// Safely format Cloudinary images to Portrait 4:5 (1080x1350) and compress to ~80-130KB
 // This ensures:
-// 1. WhatsApp mobile always displays the large banner card (image on top, vertical layout)
+// 1. Meta / WhatsApp platforms display full portrait posters without horizontal cropping
 // 2. Image never exceeds WhatsApp's strict 300KB limit
 const getOptimizedOgImageUrl = (rawUrl, fallback = "https://membership.boxandcross.com/og-events.jpg") => {
   if (!rawUrl || typeof rawUrl !== "string" || !rawUrl.trim()) {
@@ -35,12 +35,12 @@ const getOptimizedOgImageUrl = (rawUrl, fallback = "https://membership.boxandcro
     if (vIndex !== -1) {
       afterUpload = afterUpload.substring(vIndex);
     } else {
-      // Strip any leading transform segment like c_fill,w_1200,.../
+      // Strip any leading transform segment like c_fill,w_1200,.../ or c_fill,w_1080,.../
       afterUpload = afterUpload.replace(/^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/, "");
     }
 
-    // Force 1.91:1 Landscape (1200x630) with q_auto:eco (< 150KB) and universal progressive JPEG
-    return `${base}c_fill,w_1200,h_630,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
+    // Force 4:5 Portrait (1080x1350) with q_auto:eco (< 150KB) and universal progressive JPEG
+    return `${base}c_fill,w_1080,h_1350,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
   }
 
   return url;
@@ -86,8 +86,8 @@ const syncEventPrerender = (event) => {
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${imageUrl}" />
   <meta property="og:image:secure_url" content="${imageUrl}" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:width" content="1080" />
+  <meta property="og:image:height" content="1350" />
   <meta property="og:image:alt" content="${escapeHtml(event.title)}" />
 
   <!-- Twitter Card -->
@@ -900,8 +900,8 @@ const getEventOGMeta = async (req, res) => {
   <meta property="og:image" content="${imageUrl}" />
   <meta property="og:image:secure_url" content="${imageUrl}" />
   <meta property="og:image:type" content="image/jpeg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:width" content="1080" />
+  <meta property="og:image:height" content="1350" />
   <meta property="og:image:alt" content="${escapeHtml(event.title)}" />
 
   <!-- Twitter Card -->

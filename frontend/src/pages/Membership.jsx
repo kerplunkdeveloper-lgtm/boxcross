@@ -42,8 +42,8 @@ const Membership = () => {
         <meta property="og:title" content="Membership Plans | Box &amp; Cross – Performance Arena" />
         <meta property="og:description" content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
         <meta property="og:image" content={`${BASE_URL}/og-membership.png`} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:width" content="1080" />
+        <meta property="og:image:height" content="1350" />
         <meta property="og:image:alt" content="Box and Cross Membership" />
 
         {/* Twitter */}

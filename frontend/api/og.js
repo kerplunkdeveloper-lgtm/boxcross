@@ -16,7 +16,8 @@ const getOptimizedOgImageUrl = (rawUrl, fallback = "https://membership.boxandcro
       afterUpload = afterUpload.replace(/^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/, "");
     }
 
-    return `${base}c_fill,w_1200,h_630,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
+    // Force 4:5 Portrait (1080x1350) with q_auto:eco (< 150KB) and universal progressive JPEG
+    return `${base}c_fill,w_1080,h_1350,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
   }
 
   return url;
@@ -115,8 +116,8 @@ export default async function handler(req, res) {
   <meta property="og:image" content="${imageUrl}" />
   <meta property="og:image:secure_url" content="${imageUrl}" />
   <meta property="og:image:type" content="image/jpeg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
+  <meta property="og:image:width" content="1080" />
+  <meta property="og:image:height" content="1350" />
   <meta property="og:image:alt" content="${title}" />
 
   <!-- Twitter Card -->
