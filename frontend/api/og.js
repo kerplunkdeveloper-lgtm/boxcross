@@ -1,3 +1,27 @@
+const getOptimizedOgImageUrl = (rawUrl, fallback = "https://membership.boxandcross.com/og-events.jpg") => {
+  if (!rawUrl || typeof rawUrl !== "string" || !rawUrl.trim()) {
+    return fallback;
+  }
+  let url = rawUrl.trim().replace(/^http:\/\//i, "https://");
+
+  if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+    const uploadIdx = url.indexOf("/upload/");
+    const base = url.substring(0, uploadIdx + "/upload/".length);
+    let afterUpload = url.substring(uploadIdx + "/upload/".length);
+
+    const vIndex = afterUpload.search(/v\d+\//);
+    if (vIndex !== -1) {
+      afterUpload = afterUpload.substring(vIndex);
+    } else {
+      afterUpload = afterUpload.replace(/^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/, "");
+    }
+
+    return `${base}c_fill,w_1200,h_630,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
+  }
+
+  return url;
+};
+
 export default async function handler(req, res) {
   const { id } = req.query;
   const frontendUrl = "https://membership.boxandcross.com";
@@ -64,15 +88,7 @@ export default async function handler(req, res) {
               ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
               : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
             
-            let rawImg = event.imageUrl || `${frontendUrl}/og-events.jpg`;
-            if (rawImg.includes("res.cloudinary.com") && rawImg.includes("/upload/")) {
-              imageUrl = rawImg.replace(
-                "/upload/",
-                "/upload/c_fill,w_1200,h_630,g_auto,q_auto:good,f_jpg/"
-              );
-            } else {
-              imageUrl = `${rawImg}?v=${new Date(event.updatedAt || Date.now()).getTime()}`;
-            }
+            imageUrl = getOptimizedOgImageUrl(event.imageUrl, `${frontendUrl}/og-events.jpg`);
           }
         }
       }

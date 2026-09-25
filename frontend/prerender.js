@@ -24,6 +24,31 @@ const escapeHtml = (str) => {
     .replace(/>/g, '&gt;');
 };
 
+// Safely format Cloudinary images to Landscape 1.91:1 (1200x630) and compress to ~80-130KB
+const getOptimizedOgImageUrl = (rawUrl, fallback = 'https://membership.boxandcross.com/og-events.jpg') => {
+  if (!rawUrl || typeof rawUrl !== 'string' || !rawUrl.trim()) {
+    return fallback;
+  }
+  let url = rawUrl.trim().replace(/^http:\/\//i, 'https://');
+
+  if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    const uploadIdx = url.indexOf('/upload/');
+    const base = url.substring(0, uploadIdx + '/upload/'.length);
+    let afterUpload = url.substring(uploadIdx + '/upload/'.length);
+
+    const vIndex = afterUpload.search(/v\d+\//);
+    if (vIndex !== -1) {
+      afterUpload = afterUpload.substring(vIndex);
+    } else {
+      afterUpload = afterUpload.replace(/^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/, '');
+    }
+
+    return `${base}c_fill,w_1200,h_630,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
+  }
+
+  return url;
+};
+
 // 1. Copy the social sharing images to public/ and dist/ folders
 const filesToCopy = [
   { src: 'og-membership.png', dest: 'og-membership.png' },
@@ -201,11 +226,12 @@ async function runPrerender() {
         ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + '...' : plainDesc)
         : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
 
+      const cleanImageUrl = getOptimizedOgImageUrl(event.imageUrl, `${frontendUrl}/og-events.jpg`);
       const eventRoute = {
         path: `events/${eventId}`,
         title: `${event.title} | Box & Cross`,
         description: cleanDesc,
-        image: event.imageUrl || `${frontendUrl}/og-events.jpg`,
+        image: cleanImageUrl,
         imageAlt: event.title,
         url: `${frontendUrl}/events/${eventId}`
       };

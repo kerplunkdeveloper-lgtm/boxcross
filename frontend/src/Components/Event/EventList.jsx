@@ -31,6 +31,33 @@ import { toast } from "react-hot-toast";
 import EventCalender from "./EventCalcender";
 import { Helmet } from "react-helmet-async";
 
+const BASE_URL = "https://membership.boxandcross.com";
+
+// Safely format Cloudinary images to Landscape 1.91:1 (1200x630) and compress to ~80-130KB
+const getOptimizedOgImageUrl = (rawUrl, fallback = `${BASE_URL}/og-events.jpg`) => {
+  if (!rawUrl || typeof rawUrl !== "string" || !rawUrl.trim()) {
+    return fallback;
+  }
+  let url = rawUrl.trim().replace(/^http:\/\//i, "https://");
+
+  if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+    const uploadIdx = url.indexOf("/upload/");
+    const base = url.substring(0, uploadIdx + "/upload/".length);
+    let afterUpload = url.substring(uploadIdx + "/upload/".length);
+
+    const vIndex = afterUpload.search(/v\d+\//);
+    if (vIndex !== -1) {
+      afterUpload = afterUpload.substring(vIndex);
+    } else {
+      afterUpload = afterUpload.replace(/^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/, "");
+    }
+
+    return `${base}c_fill,w_1200,h_630,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
+  }
+
+  return url;
+};
+
 const EventList = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -503,22 +530,21 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
           const eventUrl = `${BASE_URL}/events/${selectedEvent._id}`;
           const eventTitle = `${selectedEvent.title} | Box & Cross`;
           const rawDesc = selectedEvent.description || "";
-          const plainDesc = rawDesc.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+          const plainDesc = rawDesc
+            .replace(/<[^>]*>/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
           const eventDesc =
             plainDesc.length > 0
               ? plainDesc.length > 155
                 ? plainDesc.substring(0, 152) + "..."
                 : plainDesc
               : `Join ${selectedEvent.title} at Box & Cross. View schedule, timings, and book your slot now!`;
-          let eventImage = selectedEvent.imageUrl || `${BASE_URL}/og-events.jpg?v=1`;
-          if (eventImage.includes("res.cloudinary.com") && eventImage.includes("/upload/")) {
-            eventImage = eventImage.replace(
-              "/upload/",
-              "/upload/c_fill,w_1200,h_630,g_auto,q_auto:good,f_jpg/"
-            );
-          } else if (selectedEvent.imageUrl) {
-            eventImage = `${selectedEvent.imageUrl}?v=${new Date(selectedEvent.updatedAt || Date.now()).getTime()}`;
-          }
+
+          const eventImage = getOptimizedOgImageUrl(
+            selectedEvent.imageUrl,
+            `${BASE_URL}/og-events.jpg`
+          );
 
           return (
             <Helmet>
@@ -645,9 +671,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 remaining > 0 &&
                 (remaining <= 5 || remaining / totalSlots <= 0.35);
               const percentLeft =
-                totalSlots > 0
-                  ? Math.round((remaining / totalSlots) * 100)
-                  : 0;
+                totalSlots > 0 ? Math.round((remaining / totalSlots) * 100) : 0;
               const bookedPercent =
                 totalSlots > 0
                   ? Math.min(100, Math.round((totalBooked / totalSlots) * 100))
@@ -655,335 +679,362 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
               return (
                 <motion.div
-                key={event._id}
-                variants={itemVariants}
-                onClick={() => navigate(`/events/${event._id}`)}
-                className="group relative p-[1.5px] rounded-2xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-black/70 card-border-spin-container"
-              >
-                <div className="card-border-spin-inner">
-                  {/* Media Image Wrap */}
-                  <div className="relative aspect-[16/10] overflow-hidden bg-black shrink-0">
-                    <img
-                      src={event.imageUrl}
-                      alt={event.title}
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                    />
+                  key={event._id}
+                  variants={itemVariants}
+                  onClick={() => navigate(`/events/${event._id}`)}
+                  className="group relative p-[1.5px] rounded-2xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-black/70 card-border-spin-container"
+                >
+                  <div className="card-border-spin-inner">
+                    {/* Media Image Wrap */}
+                    <div className="relative aspect-[16/10] overflow-hidden bg-black shrink-0">
+                      <img
+                        src={event.imageUrl}
+                        alt={event.title}
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      />
 
-                    {/* Stacked Date Badge Overlay */}
-                    {(() => {
-                      const dateStr = event.schedules?.[0]?.date;
-                      if (!dateStr || dateStr === "TBA") return null;
-                      const d = new Date(dateStr);
-                      if (isNaN(d.getTime())) return null;
+                      {/* Stacked Date Badge Overlay */}
+                      {(() => {
+                        const dateStr = event.schedules?.[0]?.date;
+                        if (!dateStr || dateStr === "TBA") return null;
+                        const d = new Date(dateStr);
+                        if (isNaN(d.getTime())) return null;
 
-                      const month = d.toLocaleDateString("en-GB", {
-                        month: "short",
-                      });
-                      const day = d.toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                      });
+                        const month = d.toLocaleDateString("en-GB", {
+                          month: "short",
+                        });
+                        const day = d.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                        });
 
-                      return (
-                        <div className="absolute top-3 left-3 bg-[#111111] border border-white/10 rounded-lg shadow-xl flex flex-col items-center overflow-hidden z-10 w-[50px] group-hover:scale-105 transition-transform duration-300">
-                          <div className="bg-[#e5ff00] w-full text-center py-1 text-[10px] font-black uppercase text-black tracking-widest leading-none">
-                            {month}
-                          </div>
-                          <div
-                            className="bg-[#111111] text-white w-full text-center py-1.5 text-lg font-black leading-none"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
-                          >
-                            {day}
-                          </div>
-                        </div>
-                      );
-                    })()}
-
-                    {/* Top-Right Slot Availability Status Pill */}
-                    {hasSlots && totalSlots > 0 && (
-                      <div className="absolute top-3 right-3 z-10">
-                        {isSoldOut ? (
-                          <div className="px-2.5 py-1 rounded-full bg-red-950/85 border border-red-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
-                            <span
-                              className="text-[10px] font-black uppercase tracking-wider text-red-300"
-                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                            >
-                              Sold Out
-                            </span>
-                          </div>
-                        ) : isFillingFast ? (
-                          <div className="px-2.5 py-1 rounded-full bg-orange-950/85 border border-orange-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-                            <Flame size={12} className="text-orange-400 fill-orange-400 animate-bounce" />
-                            <span
-                              className="text-[10px] font-black uppercase tracking-wider text-orange-200"
-                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                            >
-                              Only {remaining} {remaining === 1 ? "Slot" : "Slots"} Left
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="px-2.5 py-1 rounded-full bg-black/75 border border-white/15 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#e5ff00]" />
-                            <span
-                              className="text-[10px] font-black uppercase tracking-wider text-gray-200"
-                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                            >
-                              <strong className="text-[#e5ff00] font-black">{remaining}</strong> / {totalSlots} Left
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Subtle Top-Bottom Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
-                  </div>
-
-                  {/* Card Content details */}
-                  <div className="p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      {/* Event Title */}
-                      <h3
-                        className="text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#e5ff00] transition-colors line-clamp-1 mb-2"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                      >
-                        {event.title}
-                      </h3>
-
-                      {/* Date & Time */}
-                      <div className="flex flex-wrap items-center gap-3 mb-3 mt-1">
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
-                          <Calendar size={13} className="text-[#e5ff00]" />
-                          <span
-                            className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
-                          >
-                            {event.schedules?.[0]?.date
-                              ? isNaN(
-                                  new Date(event.schedules[0].date).getTime(),
-                                )
-                                ? event.schedules[0].date
-                                : new Date(
-                                    event.schedules[0].date,
-                                  ).toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                  })
-                              : "TBA"}
-                          </span>
-                        </div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
-                          <Timer size={13} className="text-[#e5ff00]" />
-                          <span
-                            className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
-                          >
-                            {event.schedules?.[0]?.timeSlots?.[0]?.time ||
-                              "TBA"}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Location venue */}
-                      <div className="flex items-start gap-1.5 text-gray-200 hover:text-gray-300 transition-colors mb-4">
-                        <MapPin
-                          size={16}
-                          className="text-gray-200 shrink-0 mt-0.5"
-                        />
-                        <span
-                          className="text-sm font-semibold leading-relaxed line-clamp-1"
-                          style={{
-                            fontFamily: '"Brutal Font Light", sans-serif',
-                          }}
-                        >
-                          {event.location}
-                        </span>
-                      </div>
-
-                      {/* Mini Badges on Card */}
-                      {(event.category || event.duration || event.calories) && (
-                        <div className="flex flex-wrap gap-1.5 mb-4">
-                          {event.category && (
-                            <span
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-[#e5ff00]"
+                        return (
+                          <div className="absolute top-3 left-3 bg-[#111111] border border-white/10 rounded-lg shadow-xl flex flex-col items-center overflow-hidden z-10 w-[50px] group-hover:scale-105 transition-transform duration-300">
+                            <div className="bg-[#e5ff00] w-full text-center py-1 text-[10px] font-black uppercase text-black tracking-widest leading-none">
+                              {month}
+                            </div>
+                            <div
+                              className="bg-[#111111] text-white w-full text-center py-1.5 text-lg font-black leading-none"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
                             >
-                              <Dumbbell size={9} strokeWidth={2.5} />
-                              {event.category}
-                            </span>
-                          )}
-                          {event.duration && (
-                            <span
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-gray-400"
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              <Timer size={9} strokeWidth={2.5} />
-                              {event.duration}
-                            </span>
-                          )}
-                          {event.calories && (
-                            <span
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-gray-400"
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              <Flame size={9} strokeWidth={2.5} />
-                              {event.calories}
-                            </span>
+                              {day}
+                            </div>
+                          </div>
+                        );
+                      })()}
+
+                      {/* Top-Right Slot Availability Status Pill */}
+                      {hasSlots && totalSlots > 0 && (
+                        <div className="absolute top-3 right-3 z-10">
+                          {isSoldOut ? (
+                            <div className="px-2.5 py-1 rounded-full bg-red-950/85 border border-red-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                              <span
+                                className="text-[10px] font-black uppercase tracking-wider text-red-300"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                Sold Out
+                              </span>
+                            </div>
+                          ) : isFillingFast ? (
+                            <div className="px-2.5 py-1 rounded-full bg-orange-950/85 border border-orange-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+                              <Flame
+                                size={12}
+                                className="text-orange-400 fill-orange-400 animate-bounce"
+                              />
+                              <span
+                                className="text-[10px] font-black uppercase tracking-wider text-orange-200"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                Only {remaining}{" "}
+                                {remaining === 1 ? "Slot" : "Slots"} Left
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="px-2.5 py-1 rounded-full bg-black/75 border border-white/15 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#e5ff00]" />
+                              <span
+                                className="text-[10px] font-black uppercase tracking-wider text-gray-200"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                <strong className="text-[#e5ff00] font-black">
+                                  {remaining}
+                                </strong>{" "}
+                                / {totalSlots} Left
+                              </span>
+                            </div>
                           )}
                         </div>
                       )}
+
+                      {/* Subtle Top-Bottom Gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
                     </div>
 
-                    {/* Compact Slot Availability Indicator */}
-                    {hasSlots && totalSlots > 0 && (
-                      <div className="my-2.5 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/15 transition-all">
-                        <div className="flex items-center justify-between text-xs mb-1.5">
-                          <div className="flex items-center gap-2">
-                            <span className="relative flex h-2 w-2 shrink-0">
-                              {isSoldOut ? (
-                                <span className="h-2 w-2 rounded-full bg-red-500" />
-                              ) : isFillingFast ? (
-                                <>
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
-                                </>
-                              ) : (
-                                <span className="h-2 w-2 rounded-full bg-[#e5ff00]" />
-                              )}
-                            </span>
+                    {/* Card Content details */}
+                    <div className="p-4 flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Event Title */}
+                        <h3
+                          className="text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#e5ff00] transition-colors line-clamp-1 mb-2"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          {event.title}
+                        </h3>
 
-                            <span className="text-gray-300 font-medium text-[11px]">
-                              {isSoldOut ? (
-                                <span className="text-red-400 font-bold uppercase tracking-wider text-[10px]">
-                                  Sold Out
-                                </span>
-                              ) : (
-                                <span>
-                                  <strong className="text-white font-black text-xs">
-                                    {remaining}
-                                  </strong>
-                                  <span className="text-gray-400 font-normal">
-                                    {" "}of {totalSlots} spots left
-                                  </span>
-                                </span>
-                              )}
+                        {/* Date & Time */}
+                        <div className="flex flex-wrap items-center gap-3 mb-3 mt-1">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
+                            <Calendar size={13} className="text-[#e5ff00]" />
+                            <span
+                              className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
+                              {event.schedules?.[0]?.date
+                                ? isNaN(
+                                    new Date(event.schedules[0].date).getTime(),
+                                  )
+                                  ? event.schedules[0].date
+                                  : new Date(
+                                      event.schedules[0].date,
+                                    ).toLocaleDateString("en-GB", {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    })
+                                : "TBA"}
                             </span>
                           </div>
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
+                            <Timer size={13} className="text-[#e5ff00]" />
+                            <span
+                              className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
+                              {event.schedules?.[0]?.timeSlots?.[0]?.time ||
+                                "TBA"}
+                            </span>
+                          </div>
+                        </div>
 
-                          <div className="text-[10px] font-bold uppercase tracking-wider">
-                            {isSoldOut ? (
-                              <span className="text-red-400/80">Waitlist</span>
-                            ) : isFillingFast ? (
-                              <span className="text-orange-400 flex items-center gap-1">
-                                <Flame size={11} className="fill-orange-400 text-orange-400 animate-pulse shrink-0" />
-                                Filling Fast
+                        {/* Location venue */}
+                        <div className="flex items-start gap-1.5 text-gray-200 hover:text-gray-300 transition-colors mb-4">
+                          <MapPin
+                            size={16}
+                            className="text-gray-200 shrink-0 mt-0.5"
+                          />
+                          <span
+                            className="text-sm font-semibold leading-relaxed line-clamp-1"
+                            style={{
+                              fontFamily: '"Brutal Font Light", sans-serif',
+                            }}
+                          >
+                            {event.location}
+                          </span>
+                        </div>
+
+                        {/* Mini Badges on Card */}
+                        {(event.category ||
+                          event.duration ||
+                          event.calories) && (
+                          <div className="flex flex-wrap gap-1.5 mb-4">
+                            {event.category && (
+                              <span
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-[#e5ff00]"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                <Dumbbell size={9} strokeWidth={2.5} />
+                                {event.category}
                               </span>
-                            ) : (
-                              <span className="text-gray-400 font-medium normal-case">
-                                {totalBooked > 0 ? `${totalBooked} booked` : "Available"}
+                            )}
+                            {event.duration && (
+                              <span
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-gray-400"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                <Timer size={9} strokeWidth={2.5} />
+                                {event.duration}
+                              </span>
+                            )}
+                            {event.calories && (
+                              <span
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-gray-400"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                <Flame size={9} strokeWidth={2.5} />
+                                {event.calories}
                               </span>
                             )}
                           </div>
-                        </div>
-
-                        {/* Slim Minimalist Progress Line */}
-                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full transition-all duration-700 ease-out ${
-                              isSoldOut
-                                ? "bg-red-500 w-full"
-                                : isFillingFast
-                                ? "bg-gradient-to-r from-amber-500 to-orange-500"
-                                : "bg-gradient-to-r from-lime-400 to-[#e5ff00]"
-                            }`}
-                            style={{
-                              width: isSoldOut
-                                ? "100%"
-                                : `${Math.min(100, Math.max(6, bookedPercent))}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Pricing and Action Panel */}
-                    <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
-                      <div className="flex flex-col">
-                        {event.originalPrice && (
-                          <span className="text-xl text-gray-500 line-through font-semibold leading-none mb-1">
-                            ₹{event.originalPrice}
-                          </span>
-                        )}
-                        {Number(event.price) === 0 ? (
-                          <span
-                            className="text-lg font-black text-[#e5ff00] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 rounded-lg inline-block self-start"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
-                          >
-                            Free Entry
-                          </span>
-                        ) : (
-                          <span
-                            className="text-4xl mt-1 font-black text-gray-200 leading-none"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
-                          >
-                            ₹{event.price}{" "}
-                            <span className="text-[15px] text-gray-400 font-normal ml-0.5 lowercase">
-                              onwards
-                            </span>
-                          </span>
                         )}
                       </div>
 
-                      {isSoldOut ? (
-                        <button
-                          disabled
-                          className="inline-flex items-center gap-1.5 bg-neutral-900 border border-white/10 text-gray-500 font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full cursor-not-allowed opacity-60"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          Sold Out
-                        </button>
-                      ) : (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/events/${event._id}?book=true`);
-                          }}
-                          className="inline-flex items-center gap-1.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
-                            Book Now
-                          </span>
-                          <ArrowRight
-                            size={12}
-                            strokeWidth={3}
-                            className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
-                          />
-                        </button>
+                      {/* Compact Slot Availability Indicator */}
+                      {hasSlots && totalSlots > 0 && (
+                        <div className="my-2.5 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/15 transition-all">
+                          <div className="flex items-center justify-between text-xs mb-1.5">
+                            <div className="flex items-center gap-2">
+                              <span className="relative flex h-2 w-2 shrink-0">
+                                {isSoldOut ? (
+                                  <span className="h-2 w-2 rounded-full bg-red-500" />
+                                ) : isFillingFast ? (
+                                  <>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
+                                  </>
+                                ) : (
+                                  <span className="h-2 w-2 rounded-full bg-[#e5ff00]" />
+                                )}
+                              </span>
+
+                              <span className="text-gray-300 font-medium text-[11px]">
+                                {isSoldOut ? (
+                                  <span className="text-red-400 font-bold uppercase tracking-wider text-[10px]">
+                                    Sold Out
+                                  </span>
+                                ) : (
+                                  <span>
+                                    <strong className="text-white font-black text-xs">
+                                      {remaining}
+                                    </strong>
+                                    <span className="text-gray-400 font-normal">
+                                      {" "}
+                                      of {totalSlots} spots left
+                                    </span>
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+
+                            <div className="text-[10px] font-bold uppercase tracking-wider">
+                              {isSoldOut ? (
+                                <span className="text-red-400/80">
+                                  Waitlist
+                                </span>
+                              ) : isFillingFast ? (
+                                <span className="text-orange-400 flex items-center gap-1">
+                                  <Flame
+                                    size={11}
+                                    className="fill-orange-400 text-orange-400 animate-pulse shrink-0"
+                                  />
+                                  Filling Fast
+                                </span>
+                              ) : (
+                                <span className="text-gray-400 font-medium normal-case">
+                                  {totalBooked > 0
+                                    ? `${totalBooked} booked`
+                                    : "Available"}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Slim Minimalist Progress Line */}
+                          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all duration-700 ease-out ${
+                                isSoldOut
+                                  ? "bg-red-500 w-full"
+                                  : isFillingFast
+                                    ? "bg-gradient-to-r from-amber-500 to-orange-500"
+                                    : "bg-gradient-to-r from-lime-400 to-[#e5ff00]"
+                              }`}
+                              style={{
+                                width: isSoldOut
+                                  ? "100%"
+                                  : `${Math.min(100, Math.max(6, bookedPercent))}%`,
+                              }}
+                            />
+                          </div>
+                        </div>
                       )}
+
+                      {/* Pricing and Action Panel */}
+                      <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
+                        <div className="flex flex-col">
+                          {event.originalPrice && (
+                            <span className="text-xl text-gray-500 line-through font-semibold leading-none mb-1">
+                              ₹{event.originalPrice}
+                            </span>
+                          )}
+                          {Number(event.price) === 0 ? (
+                            <span
+                              className="text-lg font-black text-[#e5ff00] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 rounded-lg inline-block self-start"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
+                              Free Entry
+                            </span>
+                          ) : (
+                            <span
+                              className="text-4xl mt-1 font-black text-gray-200 leading-none"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
+                              ₹{event.price}{" "}
+                              <span className="text-[15px] text-gray-400 font-normal ml-0.5 lowercase">
+                                onwards
+                              </span>
+                            </span>
+                          )}
+                        </div>
+
+                        {isSoldOut ? (
+                          <button
+                            disabled
+                            className="inline-flex items-center gap-1.5 bg-neutral-900 border border-white/10 text-gray-500 font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full cursor-not-allowed opacity-60"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
+                            Sold Out
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/events/${event._id}?book=true`);
+                            }}
+                            className="inline-flex items-center gap-1.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
+                            <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
+                              Book Now
+                            </span>
+                            <ArrowRight
+                              size={12}
+                              strokeWidth={3}
+                              className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
+                            />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            );
-          })}
+                </motion.div>
+              );
+            })}
           </motion.div>
         )}
       </div>
@@ -1890,10 +1941,14 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
                       </div>
                     ) : (
-                      <div ref={scrollContainerRef} className="flex flex-col lg:flex-row flex-grow overflow-y-auto lg:overflow-hidden">
+                      <div
+                        ref={scrollContainerRef}
+                        className="flex flex-col lg:flex-row flex-grow overflow-y-auto lg:overflow-hidden"
+                      >
                         {/* Left: Event Details Overview or Barcode QR Panel */}
                         <div className="w-full lg:w-5/12 p-4 lg:p-8 border-b lg:border-b-0 lg:border-r border-white/5 bg-[#050505] lg:overflow-y-auto custom-scrollbar lg:max-h-[calc(90vh-64px)]">
-                          {checkoutStep === 2 && selectedPaymentMethod === "barcode" ? (
+                          {checkoutStep === 2 &&
+                          selectedPaymentMethod === "barcode" ? (
                             <div className="flex flex-col items-center justify-start lg:justify-center text-center space-y-4 lg:space-y-6 lg:h-full lg:min-h-[350px] py-4 lg:py-0">
                               <div className="space-y-1">
                                 <span className="px-2.5 py-0.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] text-[9px] lg:text-[10px] font-black uppercase tracking-widest rounded-md">
@@ -1901,12 +1956,15 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 </span>
                                 <h4
                                   className="text-base lg:text-xl font-black uppercase text-white tracking-wide pt-2"
-                                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
                                 >
                                   UPI QR BARCODE
                                 </h4>
                                 <p className="text-[10px] lg:text-[11px] text-gray-500 max-w-xs mx-auto">
-                                  Open GPay, PhonePe, Paytm, or any UPI app to scan and complete the transaction.
+                                  Open GPay, PhonePe, Paytm, or any UPI app to
+                                  scan and complete the transaction.
                                 </p>
                               </div>
 
@@ -1938,13 +1996,19 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               {/* Responsive UPI Copy Box */}
                               <div className="bg-white/[0.02] border border-white/10 rounded-xl px-3.5 py-2.5 lg:px-4 lg:py-3 text-xs flex items-center justify-between w-full max-w-[240px] lg:max-w-[280px] shadow-inner shadow-black">
                                 <div className="flex flex-col text-left">
-                                  <span className="text-[8px] lg:text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">UPI ID Address</span>
-                                  <span className="text-[11px] lg:text-[12px] text-white font-mono select-all font-bold">BOXCROSSGYM@iob</span>
+                                  <span className="text-[8px] lg:text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-0.5">
+                                    UPI ID Address
+                                  </span>
+                                  <span className="text-[11px] lg:text-[12px] text-white font-mono select-all font-bold">
+                                    BOXCROSSGYM@iob
+                                  </span>
                                 </div>
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    navigator.clipboard.writeText("BOXCROSSGYM@iob");
+                                    navigator.clipboard.writeText(
+                                      "BOXCROSSGYM@iob",
+                                    );
                                     toast.success("UPI ID copied!");
                                   }}
                                   className="text-[#e5ff00] hover:underline font-extrabold text-[9px] lg:text-[10px] uppercase cursor-pointer"
@@ -1979,7 +2043,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     <p
                                       className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
                                       style={{
-                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                        fontFamily:
+                                          '"BrutalTypeBold", sans-serif',
                                       }}
                                     >
                                       Booking Date
@@ -1991,7 +2056,10 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                           '"Brutal Font Light", sans-serif',
                                       }}
                                     >
-                                      {bookingEvent.schedules[activeDateIndex].date}
+                                      {
+                                        bookingEvent.schedules[activeDateIndex]
+                                          .date
+                                      }
                                     </p>
                                   </div>
                                 </div>
@@ -2018,7 +2086,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     <p
                                       className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
                                       style={{
-                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                        fontFamily:
+                                          '"BrutalTypeBold", sans-serif',
                                       }}
                                     >
                                       Time Slot
@@ -2044,7 +2113,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     <p
                                       className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
                                       style={{
-                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                        fontFamily:
+                                          '"BrutalTypeBold", sans-serif',
                                       }}
                                     >
                                       Location
@@ -2070,7 +2140,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     <p
                                       className="text-[10px] text-gray-500 font-bold uppercase tracking-wider mb-0.5"
                                       style={{
-                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                        fontFamily:
+                                          '"BrutalTypeBold", sans-serif',
                                       }}
                                     >
                                       Reserved Seats
@@ -2078,10 +2149,12 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     <p
                                       className="text-sm font-black text-[#e5ff00]"
                                       style={{
-                                        fontFamily: '"BrutalTypeBold", sans-serif',
+                                        fontFamily:
+                                          '"BrutalTypeBold", sans-serif',
                                       }}
                                     >
-                                      {seatsCount} Seat{seatsCount > 1 ? "s" : ""}
+                                      {seatsCount} Seat
+                                      {seatsCount > 1 ? "s" : ""}
                                     </p>
                                   </div>
                                 </div>
@@ -2178,7 +2251,6 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     <input
                                       type="number"
                                       value={customerPhone}
-                                      
                                       onChange={(e) =>
                                         setCustomerPhone(e.target.value)
                                       }
@@ -2320,7 +2392,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 {selectedPaymentMethod === "barcode" && (
                                   <div className="mt-4 space-y-2.5 bg-white/[0.02] border border-white/5 rounded-2xl p-5 text-left shadow-inner shadow-black/45">
                                     <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                                      Upload Payment Receipt Screenshot <span className="text-red-500">*</span>
+                                      Upload Payment Receipt Screenshot{" "}
+                                      <span className="text-red-500">*</span>
                                     </label>
                                     {paymentScreenshotPreview ? (
                                       <div className="aspect-[16/8] w-full bg-black border border-white/10 rounded-xl relative overflow-hidden flex items-center justify-center shadow-md">
@@ -2344,7 +2417,9 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                       <div
                                         onClick={() =>
                                           document
-                                            .getElementById("payment-screenshot-input")
+                                            .getElementById(
+                                              "payment-screenshot-input",
+                                            )
                                             .click()
                                         }
                                         className="border-2 border-dashed border-white/10 hover:border-[#e5ff00]/50 bg-black/30 rounded-xl p-5 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group"
@@ -2363,7 +2438,12 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                         >
                                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                           <polyline points="17 8 12 3 7 8" />
-                                          <line x1="12" y1="3" x2="12" y2="15" />
+                                          <line
+                                            x1="12"
+                                            y1="3"
+                                            x2="12"
+                                            y2="15"
+                                          />
                                         </svg>
                                         <div>
                                           <p className="text-[10px] font-bold text-gray-300 uppercase tracking-wider">

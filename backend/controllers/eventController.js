@@ -15,6 +15,37 @@ const escapeHtml = (str) => {
     .replace(/>/g, "&gt;");
 };
 
+// Safely format Cloudinary images to Landscape 1.91:1 (1200x630) and compress to ~80-130KB
+// This ensures:
+// 1. WhatsApp mobile always displays the large banner card (image on top, vertical layout)
+// 2. Image never exceeds WhatsApp's strict 300KB limit
+const getOptimizedOgImageUrl = (rawUrl, fallback = "https://membership.boxandcross.com/og-events.jpg") => {
+  if (!rawUrl || typeof rawUrl !== "string" || !rawUrl.trim()) {
+    return fallback;
+  }
+  let url = rawUrl.trim().replace(/^http:\/\//i, "https://");
+
+  if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+    const uploadIdx = url.indexOf("/upload/");
+    const base = url.substring(0, uploadIdx + "/upload/".length);
+    let afterUpload = url.substring(uploadIdx + "/upload/".length);
+
+    // If an existing version tag (e.g. v12345/...) exists, strip any prior transformations before it
+    const vIndex = afterUpload.search(/v\d+\//);
+    if (vIndex !== -1) {
+      afterUpload = afterUpload.substring(vIndex);
+    } else {
+      // Strip any leading transform segment like c_fill,w_1200,.../
+      afterUpload = afterUpload.replace(/^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/, "");
+    }
+
+    // Force 1.91:1 Landscape (1200x630) with q_auto:eco (< 150KB) and universal progressive JPEG
+    return `${base}c_fill,w_1200,h_630,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
+  }
+
+  return url;
+};
+
 // Real-time synchronization of prerendered HTML file for new or edited events
 const syncEventPrerender = (event) => {
   try {
@@ -41,7 +72,7 @@ const syncEventPrerender = (event) => {
       ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
       : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
 
-    const imageUrl = event.imageUrl || `${frontendUrl}/og-events.jpg`;
+    const imageUrl = getOptimizedOgImageUrl(event.imageUrl, `${frontendUrl}/og-events.jpg`);
 
     const metaTags = `<!-- SEO_START -->
   <title>${escapeHtml(title)}</title>
@@ -849,18 +880,7 @@ const getEventOGMeta = async (req, res) => {
       : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
 
     let rawImageUrl = (event.imageUrl || `${frontendUrl}/og-events.jpg`).replace(/^http:\/\//, "https://");
-
-    // Automatically optimize Cloudinary URLs for WhatsApp / Social Crawlers:
-    // Resize to 1200x630, convert to progressive JPEG, and compress to <150KB (WhatsApp max is 300KB)
-    let imageUrl = rawImageUrl;
-    if (imageUrl.includes("res.cloudinary.com") && imageUrl.includes("/upload/")) {
-      if (!imageUrl.includes("/upload/c_fill") && !imageUrl.includes("/upload/w_")) {
-        imageUrl = imageUrl.replace(
-          "/upload/",
-          "/upload/c_fill,w_1200,h_630,g_auto,q_auto:good,f_jpg/"
-        );
-      }
-    }
+    const imageUrl = getOptimizedOgImageUrl(rawImageUrl, `${frontendUrl}/og-events.jpg`);
 
     // Build a standalone HTML page — social crawlers only read static HTML, no JS
     const html = `<!DOCTYPE html>
