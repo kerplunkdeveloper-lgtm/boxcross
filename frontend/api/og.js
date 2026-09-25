@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const defaultRedirect = `${frontendUrl}/events`;
 
   // Dynamic backend base URL from Vercel environment variables or local fallback
-  const backendBaseUrl = (process.env.VITE_API_URL || "https://mediumblue-llama-100354.hostingersite.com").replace(/\/$/, "");
+  const backendBaseUrl = (process.env.VITE_API_URL || "https://api.boxandcross.com").replace(/\/$/, "");
 
   // 1. Primary Strategy: Try to fetch the fully compiled HTML with OG tags from the backend
   if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
 
   if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
     try {
-      // Fetch all events from Hostinger backend using a standard browser User-Agent
+      // Fetch all events from backend using a standard browser User-Agent
       const eventsEndpoint = `${backendBaseUrl}/api/events`;
       console.log(`Fetching events list from: ${eventsEndpoint}`);
       const backendRes = await fetch(eventsEndpoint, {
@@ -59,9 +59,9 @@ export default async function handler(req, res) {
             
             // Clean description - strip HTML tags and limit character count
             const rawDesc = event.description || "";
-            const plainDesc = rawDesc.replace(/<[^>]*>/g, "").trim();
+            const plainDesc = rawDesc.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
             description = plainDesc.length > 0
-              ? (plainDesc.length > 150 ? plainDesc.substring(0, 147) + "..." : plainDesc)
+              ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
               : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
             
             imageUrl = event.imageUrl
@@ -91,6 +91,7 @@ export default async function handler(req, res) {
   <meta property="og:title" content="${title}" />
   <meta property="og:description" content="${description}" />
   <meta property="og:image" content="${imageUrl}" />
+  <meta property="og:image:secure_url" content="${imageUrl}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="${title}" />
@@ -102,10 +103,13 @@ export default async function handler(req, res) {
   <meta name="twitter:description" content="${description}" />
   <meta name="twitter:image" content="${imageUrl}" />
 
-  <!-- Redirect real users to the SPA page immediately -->
-  <meta http-equiv="refresh" content="0; url=${targetUrl}" />
+  <!-- Canonical -->
   <link rel="canonical" href="${targetUrl}" />
-  <script>window.location.replace("${targetUrl}");</script>
+  <script>
+    if (!/bot|crawler|spider|whatsapp|facebookexternalhit|twitterbot|slackbot|discordbot|telegrambot/i.test(navigator.userAgent)) {
+      window.location.replace("${targetUrl}");
+    }
+  </script>
 </head>
 <body>
   <p>Redirecting to <a href="${targetUrl}">${title}</a>...</p>

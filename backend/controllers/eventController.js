@@ -1,5 +1,97 @@
 const Event = require("../models/Event");
 const cloudinary = require("../config/cloudinary");
+const fs = require("fs");
+const path = require("path");
+
+// Helper to escape HTML characters in meta tags safely without double escaping
+const escapeHtml = (str) => {
+  if (!str) return "";
+  return String(str)
+    .replace(/&amp;/g, "&")
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+};
+
+// Real-time synchronization of prerendered HTML file for new or edited events
+const syncEventPrerender = (event) => {
+  try {
+    const distPath = path.resolve(__dirname, "../../frontend/dist");
+    const templatePath = path.join(distPath, "index.html");
+    if (!fs.existsSync(templatePath)) return;
+
+    const eventId = (event._id || "").toString();
+    if (!eventId) return;
+
+    const eventDir = path.join(distPath, "events", eventId);
+    if (!fs.existsSync(eventDir)) {
+      fs.mkdirSync(eventDir, { recursive: true });
+    }
+
+    const templateHtml = fs.readFileSync(templatePath, "utf8");
+    const frontendUrl = "https://membership.boxandcross.com";
+    const targetUrl = `${frontendUrl}/events/${eventId}`;
+    const title = `${event.title} | Box & Cross`;
+
+    const rawDesc = event.description || "";
+    const plainDesc = rawDesc.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
+    const description = plainDesc.length > 0
+      ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
+      : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
+
+    const imageUrl = event.imageUrl || `${frontendUrl}/og-events.jpg`;
+
+    const metaTags = `<!-- SEO_START -->
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Box &amp; Cross" />
+  <meta property="og:url" content="${targetUrl}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${imageUrl}" />
+  <meta property="og:image:secure_url" content="${imageUrl}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="${escapeHtml(event.title)}" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="${targetUrl}" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${imageUrl}" />
+  <!-- SEO_END -->`;
+
+    const eventHtml = /<!-- SEO_START -->[\s\S]*?<!-- SEO_END -->/.test(templateHtml)
+      ? templateHtml.replace(/<!-- SEO_START -->[\s\S]*?<!-- SEO_END -->/, metaTags)
+      : templateHtml
+          .replace(/<title>[\s\S]*?<\/title>/i, "")
+          .replace(/<\/head>/i, `${metaTags}\n</head>`);
+
+    fs.writeFileSync(path.join(eventDir, "index.html"), eventHtml, "utf8");
+    console.log(`[SEO Sync] Synced prerender HTML for event ${eventId}`);
+  } catch (err) {
+    console.error("[SEO Sync] Error syncing prerender HTML:", err.message);
+  }
+};
+
+const deleteEventPrerender = (eventId) => {
+  try {
+    const distPath = path.resolve(__dirname, "../../frontend/dist");
+    const eventDir = path.join(distPath, "events", eventId.toString());
+    if (fs.existsSync(eventDir)) {
+      fs.rmSync(eventDir, { recursive: true, force: true });
+      console.log(`[SEO Sync] Removed prerender HTML for event ${eventId}`);
+    }
+  } catch (err) {
+    console.error("[SEO Sync] Error removing prerender HTML:", err.message);
+  }
+};
 
 // Helper function to upload file buffer to Cloudinary
 const uploadToCloudinary = (fileBuffer, mimetype) => {
@@ -173,6 +265,9 @@ const createEvent = async (req, res) => {
       paymentMethods: parsedPaymentMethods,
     });
 
+    // Sync SEO static prerender HTML
+    syncEventPrerender(event);
+
     res.status(201).json({
       success: true,
       message: "Event created successfully",
@@ -288,6 +383,9 @@ const updateEvent = async (req, res) => {
       runValidators: true,
     });
 
+    // Sync SEO static prerender HTML
+    syncEventPrerender(event);
+
     res.status(200).json({
       success: true,
       message: "Event updated successfully",
@@ -322,6 +420,9 @@ const deleteEvent = async (req, res) => {
 
     // Delete document from database
     await Event.findByIdAndDelete(id);
+
+    // Remove SEO static prerender HTML
+    deleteEventPrerender(id);
 
     res.status(200).json({
       success: true,
@@ -740,11 +841,11 @@ const getEventOGMeta = async (req, res) => {
 
     const title = `${event.title} | Box & Cross`;
 
-    // Clean description - strip any HTML tags, limit to 150 chars
+    // Clean description - strip any HTML tags, limit to 155 chars
     const rawDesc = event.description || "";
-    const plainDesc = rawDesc.replace(/<[^>]*>/g, "").trim();
+    const plainDesc = rawDesc.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
     const description = plainDesc.length > 0
-      ? (plainDesc.length > 150 ? plainDesc.substring(0, 147) + "..." : plainDesc)
+      ? (plainDesc.length > 155 ? plainDesc.substring(0, 152) + "..." : plainDesc)
       : `Join the ${event.title} event at Box & Cross. View schedule and book your slot now!`;
 
     const imageUrl = event.imageUrl || `${frontendUrl}/og-events.jpg`;
@@ -755,34 +856,39 @@ const getEventOGMeta = async (req, res) => {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title}</title>
-  <meta name="description" content="${description}" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
 
   <!-- Open Graph / Facebook / WhatsApp -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Box &amp; Cross" />
   <meta property="og:url" content="${targetUrl}" />
-  <meta property="og:title" content="${title}" />
-  <meta property="og:description" content="${description}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${imageUrl}" />
+  <meta property="og:image:secure_url" content="${imageUrl}" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="${event.title}" />
+  <meta property="og:image:alt" content="${escapeHtml(event.title)}" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:url" content="${targetUrl}" />
-  <meta name="twitter:title" content="${title}" />
-  <meta name="twitter:description" content="${description}" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
   <meta name="twitter:image" content="${imageUrl}" />
 
-  <!-- Redirect real users to the SPA page immediately -->
-  <meta http-equiv="refresh" content="0; url=${targetUrl}" />
+  <!-- Canonical Link -->
   <link rel="canonical" href="${targetUrl}" />
-  <script>window.location.replace("${targetUrl}");</script>
+  <script>
+    // Only redirect real human browsers, never crawlers
+    if (!/bot|crawler|spider|whatsapp|facebookexternalhit|twitterbot|slackbot|discordbot|telegrambot/i.test(navigator.userAgent)) {
+      window.location.replace("${targetUrl}");
+    }
+  </script>
 </head>
 <body>
-  <p>Redirecting to <a href="${targetUrl}">${title}</a>...</p>
+  <p>Redirecting to <a href="${targetUrl}">${escapeHtml(title)}</a>...</p>
 </body>
 </html>`;
 

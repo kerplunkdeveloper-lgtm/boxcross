@@ -8,6 +8,8 @@ import {
   ChevronLeft,
   ArrowRight,
   User,
+  Users,
+  Zap,
   Mail,
   Phone,
   Ticket,
@@ -501,7 +503,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
           const eventUrl = `${BASE_URL}/events/${selectedEvent._id}`;
           const eventTitle = `${selectedEvent.title} | Box & Cross`;
           const rawDesc = selectedEvent.description || "";
-          const plainDesc = rawDesc.replace(/<[^>]*>/g, "").trim();
+          const plainDesc = rawDesc.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
           const eventDesc =
             plainDesc.length > 0
               ? plainDesc.length > 155
@@ -524,6 +526,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
               <meta property="og:title" content={eventTitle} />
               <meta property="og:description" content={eventDesc} />
               <meta property="og:image" content={eventImage} />
+              <meta property="og:image:secure_url" content={eventImage} />
               <meta property="og:image:width" content="1200" />
               <meta property="og:image:height" content="630" />
               <meta property="og:image:alt" content={selectedEvent.title} />
@@ -607,8 +610,44 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
             animate="show"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12"
           >
-            {displayEvents.map((event) => (
-              <motion.div
+            {displayEvents.map((event) => {
+              // Calculate slot availability stats
+              let totalSlots = 0;
+              let totalBooked = 0;
+              let hasSlots = false;
+
+              if (event.schedules && Array.isArray(event.schedules)) {
+                event.schedules.forEach((schedule) => {
+                  if (schedule.timeSlots && Array.isArray(schedule.timeSlots)) {
+                    schedule.timeSlots.forEach((slot) => {
+                      const cap = Number(slot.slots) || 0;
+                      const bkd = Number(slot.booked) || 0;
+                      totalSlots += cap;
+                      totalBooked += bkd;
+                      hasSlots = true;
+                    });
+                  }
+                });
+              }
+
+              const remaining = Math.max(0, totalSlots - totalBooked);
+              const isSoldOut = hasSlots && totalSlots > 0 && remaining === 0;
+              const isFillingFast =
+                hasSlots &&
+                totalSlots > 0 &&
+                remaining > 0 &&
+                (remaining <= 5 || remaining / totalSlots <= 0.35);
+              const percentLeft =
+                totalSlots > 0
+                  ? Math.round((remaining / totalSlots) * 100)
+                  : 0;
+              const bookedPercent =
+                totalSlots > 0
+                  ? Math.min(100, Math.round((totalBooked / totalSlots) * 100))
+                  : 0;
+
+              return (
+                <motion.div
                 key={event._id}
                 variants={itemVariants}
                 onClick={() => navigate(`/events/${event._id}`)}
@@ -653,6 +692,43 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
                       );
                     })()}
+
+                    {/* Top-Right Slot Availability Status Pill */}
+                    {hasSlots && totalSlots > 0 && (
+                      <div className="absolute top-3 right-3 z-10">
+                        {isSoldOut ? (
+                          <div className="px-2.5 py-1 rounded-full bg-red-950/85 border border-red-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                            <span
+                              className="text-[10px] font-black uppercase tracking-wider text-red-300"
+                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            >
+                              Sold Out
+                            </span>
+                          </div>
+                        ) : isFillingFast ? (
+                          <div className="px-2.5 py-1 rounded-full bg-orange-950/85 border border-orange-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+                            <Flame size={12} className="text-orange-400 fill-orange-400 animate-bounce" />
+                            <span
+                              className="text-[10px] font-black uppercase tracking-wider text-orange-200"
+                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            >
+                              Only {remaining} {remaining === 1 ? "Slot" : "Slots"} Left
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="px-2.5 py-1 rounded-full bg-black/75 border border-white/15 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#e5ff00]" />
+                            <span
+                              className="text-[10px] font-black uppercase tracking-wider text-gray-200"
+                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            >
+                              <strong className="text-[#e5ff00] font-black">{remaining}</strong> / {totalSlots} Left
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {/* Subtle Top-Bottom Gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
@@ -764,6 +840,78 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       )}
                     </div>
 
+                    {/* Compact Slot Availability Indicator */}
+                    {hasSlots && totalSlots > 0 && (
+                      <div className="my-2.5 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/15 transition-all">
+                        <div className="flex items-center justify-between text-xs mb-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className="relative flex h-2 w-2 shrink-0">
+                              {isSoldOut ? (
+                                <span className="h-2 w-2 rounded-full bg-red-500" />
+                              ) : isFillingFast ? (
+                                <>
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
+                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
+                                </>
+                              ) : (
+                                <span className="h-2 w-2 rounded-full bg-[#e5ff00]" />
+                              )}
+                            </span>
+
+                            <span className="text-gray-300 font-medium text-[11px]">
+                              {isSoldOut ? (
+                                <span className="text-red-400 font-bold uppercase tracking-wider text-[10px]">
+                                  Sold Out
+                                </span>
+                              ) : (
+                                <span>
+                                  <strong className="text-white font-black text-xs">
+                                    {remaining}
+                                  </strong>
+                                  <span className="text-gray-400 font-normal">
+                                    {" "}of {totalSlots} spots left
+                                  </span>
+                                </span>
+                              )}
+                            </span>
+                          </div>
+
+                          <div className="text-[10px] font-bold uppercase tracking-wider">
+                            {isSoldOut ? (
+                              <span className="text-red-400/80">Waitlist</span>
+                            ) : isFillingFast ? (
+                              <span className="text-orange-400 flex items-center gap-1">
+                                <Flame size={11} className="fill-orange-400 text-orange-400 animate-pulse shrink-0" />
+                                Filling Fast
+                              </span>
+                            ) : (
+                              <span className="text-gray-400 font-medium normal-case">
+                                {totalBooked > 0 ? `${totalBooked} booked` : "Available"}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Slim Minimalist Progress Line */}
+                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all duration-700 ease-out ${
+                              isSoldOut
+                                ? "bg-red-500 w-full"
+                                : isFillingFast
+                                ? "bg-gradient-to-r from-amber-500 to-orange-500"
+                                : "bg-gradient-to-r from-lime-400 to-[#e5ff00]"
+                            }`}
+                            style={{
+                              width: isSoldOut
+                                ? "100%"
+                                : `${Math.min(100, Math.max(6, bookedPercent))}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
                     {/* Pricing and Action Panel */}
                     <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
                       <div className="flex flex-col">
@@ -796,28 +944,39 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         )}
                       </div>
 
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/events/${event._id}?book=true`);
-                        }}
-                        className="inline-flex items-center gap-1.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                      >
-                        <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
-                          Book Now
-                        </span>
-                        <ArrowRight
-                          size={12}
-                          strokeWidth={3}
-                          className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
-                        />
-                      </button>
+                      {isSoldOut ? (
+                        <button
+                          disabled
+                          className="inline-flex items-center gap-1.5 bg-neutral-900 border border-white/10 text-gray-500 font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full cursor-not-allowed opacity-60"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          Sold Out
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/events/${event._id}?book=true`);
+                          }}
+                          className="inline-flex items-center gap-1.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
+                            Book Now
+                          </span>
+                          <ArrowRight
+                            size={12}
+                            strokeWidth={3}
+                            className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
+                          />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
               </motion.div>
-            ))}
+            );
+          })}
           </motion.div>
         )}
       </div>
