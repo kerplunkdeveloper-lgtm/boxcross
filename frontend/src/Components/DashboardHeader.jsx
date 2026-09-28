@@ -166,6 +166,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
     location.pathname.includes("/usermanagementdetails")
   ) {
     activeTitle = "User Management";
+  } else if (
+    location.pathname.includes("/goals-readiness") ||
+    location.pathname.includes("/goals-and-readiness")
+  ) {
+    activeTitle = "Goals & Readiness";
   }
 
   // Fetch real-time data and aggregate as notifications

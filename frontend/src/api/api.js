@@ -151,4 +151,12 @@ export const loginAthlete = (data) => API.post("/athletes/login", data);
 export const getAthleteMe = () => API.get("/athletes/me");
 export const impersonateAthlete = (id) => API.post(`/athletes/impersonate/${id}`);
 
+// ──────────────── GOALS & READINESS API ────────────────
+export const getGoalsReadiness = (params) => API.get("/goals-readiness", { params });
+export const getGoalsReadinessById = (id) => API.get(`/goals-readiness/${id}`);
+export const createGoalsReadiness = (data) => API.post("/goals-readiness", data);
+export const updateGoalsReadiness = (id, data) => API.put(`/goals-readiness/${id}`, data);
+export const deleteGoalsReadiness = (id) => API.delete(`/goals-readiness/${id}`);
+export const getGoalsReadinessStats = () => API.get("/goals-readiness/stats");
+
 export default API;

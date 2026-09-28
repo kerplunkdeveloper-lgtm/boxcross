@@ -16,6 +16,7 @@ const homec3routes = require("./routes/homec3routes");
 const founderRoutes = require("./routes/founderRoutes");
 const foundingOfferRoutes = require("./routes/foundingOfferRoutes");
 const athleteRoutes = require("./routes/athleteRoutes");
+const goalsReadinessRoutes = require("./routes/goalsReadinessRoutes");
 
 // Load env
 dotenv.config();
@@ -75,6 +76,7 @@ app.use("/api/founders", founderRoutes);
 app.use("/api/founding-offer", foundingOfferRoutes);
 app.use("/api/athletes", athleteRoutes);
 app.use("/api/user-management", athleteRoutes);
+app.use("/api/goals-readiness", goalsReadinessRoutes);
 
 // Health check
 app.get("/", (req, res) => {

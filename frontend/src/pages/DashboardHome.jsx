@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   User, Mail, Calendar, ShieldCheck, Award, Clock, ArrowRight, Sparkles, Users, 
   MapPin, DollarSign, ArrowUpRight, Plus, Loader2, CreditCard 
 } from "lucide-react";
+import boxerBanner from "../assets/boxer-banner.png";
 import gymhm from "../assets/gymhm.png";
 import { getBookings, getPayments, getEventsListAdmin, getEventBookings, getFounders } from "../api/api";
 
 const DashboardHome = () => {
   const { user } = useAuth();
+  const { theme } = useTheme();
   const navigate = useNavigate();
   const [visitorCount, setVisitorCount] = useState(0);
   const [totalPayments, setTotalPayments] = useState(0);
@@ -119,9 +122,9 @@ const DashboardHome = () => {
 
       <div className="max-w-9xl mx-auto z-10 relative space-y-10">
         
-        {/* Welcome Section with Glassmorphism and Real-Time Clock */}
+        {/* Welcome Section with Boxer Background Image and Real-Time Clock */}
         <div 
-          className="relative overflow-hidden p-6 md:p-8 rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+          className="relative overflow-hidden py-8 px-6 md:py-11 md:px-10 min-h-[160px] sm:min-h-[180px] md:min-h-[205px] rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 group"
           style={{
             background: "var(--db-glass-bg)",
             borderColor: "var(--db-glass-border)",
@@ -129,9 +132,27 @@ const DashboardHome = () => {
             WebkitBackdropFilter: "blur(24px)"
           }}
         >
+          {/* Boxer Background Image Layer */}
+          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+            <img 
+              src={boxerBanner} 
+              alt="Dashboard Banner Background" 
+              className="w-full h-full object-cover object-center transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
+            />
+            {/* Cinematic Gradient Overlays to preserve legibility and aesthetic contrast */}
+            <div 
+              className="absolute inset-0 transition-opacity duration-300"
+              style={{
+                background: theme === "light"
+                  ? "linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.72) 45%, rgba(255,255,255,0.90) 100%)"
+                  : "linear-gradient(90deg, rgba(7,7,7,0.88) 0%, rgba(7,7,7,0.52) 45%, rgba(7,7,7,0.82) 100%)"
+              }}
+            />
+          </div>
+
           {/* Subtle accent light reflection inside the card */}
-          <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40" />
-          <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20" />
+          <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40 z-[1]" />
+          <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20 z-[1]" />
           
           <div className="flex items-center gap-4 sm:gap-6 z-10">
             {/* Profile Image with Increased Size & Enhanced UI/UX */}

@@ -18,6 +18,7 @@ import {
   X,
   ChevronDown,
   ShieldCheck,
+  ClipboardCheck,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -412,7 +413,13 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                 to: "/dashboard/user-management",
                 name: "User Management",
                 icon: Users,
-               
+              })}
+
+              {/* Goals & Readiness */}
+              {renderSingleItem({
+                to: "/dashboard/goals-readiness",
+                name: "Goals & Readiness",
+                icon: ClipboardCheck,
               })}
 
               {/* Memberships Accordion / Flyout */}
