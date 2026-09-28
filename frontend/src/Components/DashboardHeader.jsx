@@ -15,7 +15,6 @@ import {
   Trash2,
   X,
   ExternalLink,
-  UserCheck,
   Search,
   Sparkles,
 } from "lucide-react";
@@ -31,8 +30,6 @@ import {
   getHomec3,
   getLeadsAdmin,
   getFounders,
-  getAthletes,
-  impersonateAthlete,
 } from "../api/api";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -118,54 +115,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
     }
   };
 
-  // Switch User Impersonation States
-  const [showSwitchUserModal, setShowSwitchUserModal] = useState(false);
-  const [athletesList, setAthletesList] = useState([]);
-  const [athletesLoading, setAthletesLoading] = useState(false);
-  const [athleteSearch, setAthleteSearch] = useState("");
 
-  const handleOpenSwitchUserModal = async () => {
-    setShowSwitchUserModal(true);
-    setAthletesLoading(true);
-    try {
-      const { data } = await getAthletes();
-      if (data && data.success && Array.isArray(data.data)) {
-        setAthletesList(data.data);
-      }
-    } catch (err) {
-      console.error("Failed to load athletes for switch user", err);
-    } finally {
-      setAthletesLoading(false);
-    }
-  };
-
-  const handleImpersonateFromHeader = async (athlete) => {
-    try {
-      toast.loading(`Switching to ${athlete.athleteName}...`, { id: "switch-user" });
-      const { data } = await impersonateAthlete(athlete._id);
-      if (data && data.success) {
-        localStorage.setItem(
-          "boxcross_impersonator_admin",
-          JSON.stringify({
-            id: currentUser?._id,
-            name: currentUser?.name || "Admin",
-            email: currentUser?.email,
-            role: currentUser?.role || "admin",
-            returnUrl: location.pathname,
-          })
-        );
-        localStorage.setItem("boxcross_athlete_token", data.token);
-        localStorage.setItem("boxcross_athlete", JSON.stringify(data.athlete));
-        setShowSwitchUserModal(false);
-        toast.success(`Logged in as ${data.athlete.athleteName}!`, { id: "switch-user" });
-        navigate("/athlete-dashboard");
-      } else {
-        toast.error(data?.message || "Failed to switch user", { id: "switch-user" });
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Impersonation login failed", { id: "switch-user" });
-    }
-  };
 
   // Load read notification IDs from localStorage
   const [readIds, setReadIds] = useState(() => {
@@ -534,17 +484,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
 
       {/* Action panel & User info */}
       <div className="flex items-center gap-2 sm:gap-3.5">
-        {/* Switch User Quick Action (Admin Only) */}
-        {isAdmin && (
-          <button
-            onClick={handleOpenSwitchUserModal}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 transition-all cursor-pointer shadow-sm"
-            title="Switch User / Impersonate Athlete"
-          >
-            <UserCheck size={12} className="text-amber-400" />
-            <span className="hidden sm:inline">Switch User</span>
-          </button>
-        )}
+
 
         {/* Live Website Quick Link */}
         <a
@@ -844,21 +784,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                     Settings
                   </button>
 
-                  {isAdmin && (
-                    <button
-                      onClick={() => {
-                        setShowProfileDropdown(false);
-                        handleOpenSwitchUserModal();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer text-left"
-                    >
-                      <UserCheck
-                        size={14}
-                        className="text-amber-400"
-                      />
-                      Switch User / Impersonate
-                    </button>
-                  )}
+
                 </div>
 
                 {/* Logout Button */}
@@ -936,149 +862,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         )}
       </AnimatePresence>
 
-      {/* Switch User / Impersonation Modal */}
-      <AnimatePresence>
-        {showSwitchUserModal && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowSwitchUserModal(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-md"
-            />
 
-            {/* Modal Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              transition={{ duration: 0.2 }}
-              className="relative w-full max-w-xl bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[85vh]"
-            >
-              {/* Top Accent Gradient */}
-              <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500" />
-
-              {/* Modal Header */}
-              <div className="p-4 sm:p-5 border-b border-[var(--db-card-border)] flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-                    <UserCheck size={18} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm sm:text-base font-black text-[var(--db-text)] uppercase tracking-wider flex items-center gap-2">
-                      Switch User / Impersonate
-                    </h3>
-                    <p className="text-[10.5px] text-[var(--db-text-muted)] font-medium">
-                      Select an athlete or member to test the Athlete Portal
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setShowSwitchUserModal(false)}
-                  className="p-1.5 rounded-xl text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors cursor-pointer"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              {/* Search Bar */}
-              <div className="p-3 sm:p-4 border-b border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40">
-                <div className="relative">
-                  <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--db-text-muted)]" />
-                  <input
-                    type="text"
-                    placeholder="Search by name, Member ID, phone, coach..."
-                    value={athleteSearch}
-                    onChange={(e) => setAthleteSearch(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] text-xs text-[var(--db-text)] placeholder:text-[var(--db-text-muted)]/60 focus:outline-none focus:border-amber-400 transition-all font-medium"
-                    autoFocus
-                  />
-                  {athleteSearch && (
-                    <button
-                      onClick={() => setAthleteSearch("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--db-text-muted)] hover:text-white"
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Athlete List */}
-              <div className="flex-1 overflow-y-auto custom-scrollbar p-2 sm:p-3 divide-y divide-[var(--db-card-border)]">
-                {athletesLoading ? (
-                  <div className="py-14 flex flex-col items-center justify-center gap-3 text-[var(--db-text-muted)]">
-                    <div className="w-7 h-7 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
-                    <p className="text-xs font-semibold">Loading athletes database...</p>
-                  </div>
-                ) : (() => {
-                  const filtered = athletesList.filter((a) => {
-                    const q = athleteSearch.toLowerCase();
-                    return (
-                      (a.athleteName || "").toLowerCase().includes(q) ||
-                      (a.memberId || "").toLowerCase().includes(q) ||
-                      (a.coach || "").toLowerCase().includes(q) ||
-                      (a.phone || "").toLowerCase().includes(q)
-                    );
-                  });
-
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="py-10 text-center text-[var(--db-text-muted)] space-y-2">
-                        <User size={24} className="mx-auto text-zinc-500 opacity-60" />
-                        <p className="text-xs font-bold uppercase tracking-wider">No matching athletes found</p>
-                        <p className="text-[11px]">Try searching by name or Member ID (e.g. BC-0001)</p>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((athlete) => (
-                    <div
-                      key={athlete._id}
-                      className="py-2.5 px-3 flex items-center justify-between gap-3 hover:bg-[var(--db-sidebar-link-hover)]/50 rounded-xl transition-all"
-                    >
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 font-black text-xs flex items-center justify-center shrink-0">
-                          {athlete.athleteName?.charAt(0)?.toUpperCase() || "A"}
-                        </div>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-xs font-bold text-[var(--db-text)] truncate">
-                              {athlete.athleteName}
-                            </p>
-                            <span className="px-1.5 py-0.5 rounded text-[8.5px] font-mono font-bold bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/20">
-                              {athlete.memberId}
-                            </span>
-                          </div>
-                          <p className="text-[10px] text-[var(--db-text-muted)] truncate mt-0.5">
-                            Coach: {athlete.coach || "General"} • {athlete.gender || "Athlete"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() => handleImpersonateFromHeader(athlete)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 hover:brightness-110 text-black text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md shrink-0"
-                      >
-                        <UserCheck size={12} />
-                        <span>Login</span>
-                      </button>
-                    </div>
-                  ));
-                })()}
-              </div>
-
-              {/* Modal Footer */}
-              <div className="p-3 px-4 border-t border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40 flex items-center justify-between text-[11px] text-[var(--db-text-muted)]">
-                <span>Total: {athletesList.length} athletes</span>
-                <span className="text-[10px] text-amber-400 font-semibold">Admin Impersonation Mode</span>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </header>
   );
 };

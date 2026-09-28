@@ -743,19 +743,19 @@ const Usermanagementdetails = () => {
               </button>
             </div>
           ) : (
-            <div className="overflow-x-auto w-full">
-              <table className="w-full text-left border-collapse min-w-[950px]">
+            <div className="overflow-x-auto w-full custom-scrollbar">
+              <table className="w-full text-left border-collapse min-w-[1260px]">
                 <thead>
-                  <tr className="bg-[var(--db-input-bg)]/60 text-[var(--db-text-muted)] text-[10px] uppercase font-black tracking-widest border-b border-[var(--db-card-border)]">
-                    <th className="py-3.5 px-4">Member ID</th>
-                    <th className="py-3.5 px-4">Athlete / User Name</th>
-                    <th className="py-3.5 px-4">Portal Password</th>
-                    <th className="py-3.5 px-4">Age</th>
-                    <th className="py-3.5 px-4">Gender</th>
-                    <th className="py-3.5 px-4">Date of Joining</th>
-                    <th className="py-3.5 px-4">Assigned Coach</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4 text-right">Actions</th>
+                  <tr className="bg-[var(--db-input-bg)]/80 text-[var(--db-text-muted)] text-[11px] uppercase font-black tracking-widest border-b border-[var(--db-card-border)] select-none">
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[140px] text-left">Member ID</th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[260px] text-left">Athlete / User Name</th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[170px] text-left">Portal Password</th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[95px] text-center">Age</th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[110px] text-center">Gender</th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[150px] text-left">Date of Joining</th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[160px] text-left">Assigned Coach</th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[120px] text-center">Status</th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[200px] text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--db-card-border)] text-xs">
@@ -764,89 +764,101 @@ const Usermanagementdetails = () => {
                     return (
                       <tr
                         key={athlete._id}
-                        className="hover:bg-[var(--db-sidebar-link-hover)]/40 transition-colors"
+                        className="hover:bg-[var(--db-sidebar-link-hover)]/70 transition-colors group/row"
                       >
                         {/* Member ID */}
-                        <td className="py-3.5 px-4 font-mono font-bold">
+                        <td className="py-4 px-5 whitespace-nowrap align-middle">
                           <button
                             onClick={() => {
                               navigator.clipboard.writeText(athlete.memberId);
                               toast.success(`Copied ${athlete.memberId}`);
                             }}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/25 hover:border-[var(--db-accent-highlight)] text-[11px] transition-all cursor-pointer group"
+                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/30 hover:bg-[var(--db-accent-highlight)]/20 hover:border-[var(--db-accent-highlight)] font-mono font-bold text-xs tracking-wider transition-all cursor-pointer group shadow-sm"
                             title="Click to copy Member ID"
                           >
-                            <span>{athlete.memberId}</span>
+                            <span className="whitespace-nowrap">{athlete.memberId}</span>
                             <Copy
-                              size={11}
-                              className="opacity-60 group-hover:opacity-100"
+                              size={12}
+                              className="opacity-60 group-hover:opacity-100 transition-opacity shrink-0"
                             />
                           </button>
                         </td>
 
                         {/* Athlete Name + Quick Contact */}
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-5 whitespace-nowrap align-middle">
                           <div
                             onClick={() => setViewingAthlete(athlete)}
-                            className="flex items-center gap-3 cursor-pointer group"
+                            className="flex items-center gap-3.5 cursor-pointer group/name"
                           >
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-bold text-xs text-[var(--db-accent-highlight)] flex-shrink-0 group-hover:border-[var(--db-accent-highlight)] transition-colors">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-black text-sm text-[var(--db-accent-highlight)] shrink-0 group-hover/name:border-[var(--db-accent-highlight)] group-hover/name:scale-105 transition-all shadow-md">
                               {athlete.athleteName
                                 ? athlete.athleteName.charAt(0).toUpperCase()
                                 : "A"}
                             </div>
-                            <div>
-                              <p className="font-bold text-[var(--db-text)] text-sm group-hover:text-[var(--db-accent-highlight)] transition-colors">
+                            <div className="min-w-0">
+                              <p className="font-bold text-[var(--db-text)] text-sm group-hover/name:text-[var(--db-accent-highlight)] transition-colors whitespace-nowrap">
                                 {athlete.athleteName}
                               </p>
                               {(athlete.phone || athlete.email) && (
-                                <p className="text-[10px] text-[var(--db-text-muted)] flex items-center gap-2 mt-0.5">
-                                  {athlete.phone && <span>📞 {athlete.phone}</span>}
-                                  {athlete.email && <span>✉️ {athlete.email}</span>}
-                                </p>
+                                <div className="flex items-center gap-3 text-[11px] text-[var(--db-text-muted)] mt-0.5 whitespace-nowrap">
+                                  {athlete.phone && (
+                                    <span className="inline-flex items-center gap-1 font-medium">
+                                      <Phone size={11} className="text-[var(--db-accent-highlight)]/70 shrink-0" />
+                                      <span>{athlete.phone}</span>
+                                    </span>
+                                  )}
+                                  {athlete.email && (
+                                    <span className="inline-flex items-center gap-1 font-medium text-[var(--db-text-muted)] truncate max-w-[180px]" title={athlete.email}>
+                                      <Mail size={11} className="text-sky-400/70 shrink-0" />
+                                      <span>{athlete.email}</span>
+                                    </span>
+                                  )}
+                                </div>
                               )}
                             </div>
                           </div>
                         </td>
 
                         {/* Portal Password Column */}
-                        <td className="py-3.5 px-4">
-                          <div className="inline-flex items-center gap-1.5 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] px-2 py-1 rounded-lg">
-                            <span className="font-mono text-xs font-bold text-[var(--db-text)]">
+                        <td className="py-4 px-5 whitespace-nowrap align-middle">
+                          <div className="inline-flex items-center gap-2 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] px-3 py-1.5 rounded-xl shadow-inner">
+                            <span className="font-mono text-xs font-bold text-[var(--db-text)] tracking-wider">
                               {isRevealed
                                 ? athlete.initialPassword || "bxc12345"
                                 : "••••••••"}
                             </span>
-                            <button
-                              type="button"
-                              onClick={() => toggleRevealPassword(athlete._id)}
-                              className="text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-colors cursor-pointer"
-                              title={isRevealed ? "Hide Password" : "Show Password"}
-                            >
-                              {isRevealed ? <EyeOff size={12} /> : <Eye size={12} />}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleCopyCredentials(athlete)}
-                              className="text-[var(--db-accent-highlight)] hover:text-white transition-colors cursor-pointer ml-1"
-                              title="Copy Full Login Credentials (ID + Password)"
-                            >
-                              <Copy size={12} />
-                            </button>
+                            <div className="flex items-center gap-1 pl-1.5 border-l border-[var(--db-card-border)]">
+                              <button
+                                type="button"
+                                onClick={() => toggleRevealPassword(athlete._id)}
+                                className="p-1 rounded-md text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-white/5 transition-colors cursor-pointer"
+                                title={isRevealed ? "Hide Password" : "Show Password"}
+                              >
+                                {isRevealed ? <EyeOff size={13} /> : <Eye size={13} />}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleCopyCredentials(athlete)}
+                                className="p-1 rounded-md text-[var(--db-accent-highlight)] hover:text-white hover:bg-[var(--db-accent-highlight)]/15 transition-colors cursor-pointer"
+                                title="Copy Full Login Credentials (ID + Password)"
+                              >
+                                <Copy size={13} />
+                              </button>
+                            </div>
                           </div>
                         </td>
 
                         {/* Age */}
-                        <td className="py-3.5 px-4 font-semibold text-[var(--db-text)]">
-                          <span className="px-2 py-0.5 rounded bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs font-mono">
-                            {athlete.age} yrs
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-center font-semibold text-[var(--db-text)]">
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs font-mono font-bold whitespace-nowrap shadow-sm">
+                            {athlete.age ? `${athlete.age} yrs` : "—"}
                           </span>
                         </td>
 
                         {/* Gender */}
-                        <td className="py-3.5 px-4 font-semibold">
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-center font-semibold">
                           <span
-                            className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow-sm ${
                               athlete.gender === "Male"
                                 ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
                                 : athlete.gender === "Female"
@@ -854,15 +866,15 @@ const Usermanagementdetails = () => {
                                 : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
                             }`}
                           >
-                            {athlete.gender}
+                            {athlete.gender || "N/A"}
                           </span>
                         </td>
 
                         {/* Date of Joining */}
-                        <td className="py-3.5 px-4 text-[var(--db-text-muted)]">
-                          <div className="flex items-center gap-1.5 font-medium">
-                            <Calendar size={13} className="text-[var(--db-accent-highlight)]" />
-                            <span>
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-[var(--db-text-muted)]">
+                          <div className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--db-text)] whitespace-nowrap">
+                            <Calendar size={13} className="text-[var(--db-accent-highlight)] shrink-0" />
+                            <span className="whitespace-nowrap">
                               {athlete.dateOfJoining
                                 ? new Date(athlete.dateOfJoining).toLocaleDateString(
                                     "en-GB",
@@ -878,59 +890,65 @@ const Usermanagementdetails = () => {
                         </td>
 
                         {/* Coach */}
-                        <td className="py-3.5 px-4 font-semibold">
-                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] text-xs">
-                            <Dumbbell size={12} className="text-amber-400 flex-shrink-0" />
-                            <span>{athlete.coach}</span>
+                        <td className="py-4 px-5 whitespace-nowrap align-middle font-semibold">
+                          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] text-xs font-bold shadow-sm whitespace-nowrap">
+                            <Dumbbell size={13} className="text-amber-400 shrink-0" />
+                            <span className="whitespace-nowrap">{athlete.coach || "Unassigned"}</span>
                           </div>
                         </td>
 
                         {/* Status */}
-                        <td className="py-3.5 px-4">
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-center">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap ${
                               athlete.status === "Active"
-                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                                : "bg-neutral-700/30 text-neutral-400 border border-neutral-700"
+                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                                : "bg-neutral-800 text-neutral-400 border border-neutral-700"
                             }`}
                           >
                             <span
-                              className={`w-1.5 h-1.5 rounded-full ${
+                              className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                                 athlete.status === "Active"
-                                  ? "bg-emerald-400 animate-ping"
+                                  ? "bg-emerald-400 animate-pulse"
                                   : "bg-neutral-400"
                               }`}
                             />
-                            {athlete.status || "Active"}
+                            <span>{athlete.status || "Active"}</span>
                           </span>
                         </td>
 
                         {/* Actions */}
-                        <td className="py-3.5 px-4 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-right">
+                          <div className="inline-flex items-center justify-end gap-2">
                             {/* Impersonate / Switch User */}
                             <button
                               onClick={() => handleImpersonateAthlete(athlete)}
                               title={`Login as ${athlete.athleteName} (Impersonate)`}
-                              className="px-2 py-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 transition-all cursor-pointer flex items-center gap-1 font-bold text-[11px]"
+                              className="px-3 py-1.5 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 font-extrabold text-[11px] uppercase tracking-wider transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
                             >
-                              <UserCheck size={13} />
-                              <span className="hidden xl:inline">Login As</span>
+                              <UserCheck size={13} className="shrink-0" />
+                              <span className="whitespace-nowrap">Login As</span>
                             </button>
+
+                            {/* View QR Pass */}
                             <button
                               onClick={() => setViewingAthlete(athlete)}
                               title="View Full Pass & Details"
-                              className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/10 transition-colors cursor-pointer"
+                              className="p-2 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/15 hover:border-[var(--db-accent-highlight)]/40 transition-all cursor-pointer shadow-sm hover:scale-105"
                             >
                               <QrCode size={14} />
                             </button>
+
+                            {/* Edit Athlete */}
                             <button
                               onClick={() => handleOpenEditModal(athlete)}
                               title="Edit Athlete"
-                              className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-accent-highlight)] hover:border-[var(--db-accent-highlight)]/40 transition-colors cursor-pointer"
+                              className="p-2 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-sm hover:scale-105"
                             >
                               <Edit2 size={14} />
                             </button>
+
+                            {/* Delete Athlete */}
                             <button
                               onClick={() =>
                                 handleDelete(
@@ -940,7 +958,7 @@ const Usermanagementdetails = () => {
                                 )
                               }
                               title="Delete Athlete"
-                              className="p-1.5 rounded-lg border border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors cursor-pointer"
+                              className="p-2 rounded-xl border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all cursor-pointer shadow-sm hover:scale-105"
                             >
                               <Trash2 size={14} />
                             </button>
