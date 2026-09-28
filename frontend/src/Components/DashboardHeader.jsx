@@ -14,6 +14,10 @@ import {
   ChevronDown,
   Trash2,
   X,
+  ExternalLink,
+  UserCheck,
+  Search,
+  Sparkles,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
@@ -26,16 +30,20 @@ import {
   getHomec2,
   getHomec3,
   getLeadsAdmin,
-  getFounders
+  getFounders,
+  getAthletes,
+  impersonateAthlete,
 } from "../api/api";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 
-const DashboardHeader = ({ setSidebarOpen, user }) => {
+const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
-  const { logout } = useAuth();
+  const { logout, user: authUser } = useAuth();
+  const currentUser = user || authUser;
+  const isAdmin = (currentUser?.role || "").toLowerCase() === "admin";
 
   // Notification States
   const [notifications, setNotifications] = useState([]);
@@ -110,6 +118,55 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     }
   };
 
+  // Switch User Impersonation States
+  const [showSwitchUserModal, setShowSwitchUserModal] = useState(false);
+  const [athletesList, setAthletesList] = useState([]);
+  const [athletesLoading, setAthletesLoading] = useState(false);
+  const [athleteSearch, setAthleteSearch] = useState("");
+
+  const handleOpenSwitchUserModal = async () => {
+    setShowSwitchUserModal(true);
+    setAthletesLoading(true);
+    try {
+      const { data } = await getAthletes();
+      if (data && data.success && Array.isArray(data.data)) {
+        setAthletesList(data.data);
+      }
+    } catch (err) {
+      console.error("Failed to load athletes for switch user", err);
+    } finally {
+      setAthletesLoading(false);
+    }
+  };
+
+  const handleImpersonateFromHeader = async (athlete) => {
+    try {
+      toast.loading(`Switching to ${athlete.athleteName}...`, { id: "switch-user" });
+      const { data } = await impersonateAthlete(athlete._id);
+      if (data && data.success) {
+        localStorage.setItem(
+          "boxcross_impersonator_admin",
+          JSON.stringify({
+            id: currentUser?._id,
+            name: currentUser?.name || "Admin",
+            email: currentUser?.email,
+            role: currentUser?.role || "admin",
+            returnUrl: location.pathname,
+          })
+        );
+        localStorage.setItem("boxcross_athlete_token", data.token);
+        localStorage.setItem("boxcross_athlete", JSON.stringify(data.athlete));
+        setShowSwitchUserModal(false);
+        toast.success(`Logged in as ${data.athlete.athleteName}!`, { id: "switch-user" });
+        navigate("/athlete-dashboard");
+      } else {
+        toast.error(data?.message || "Failed to switch user", { id: "switch-user" });
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Impersonation login failed", { id: "switch-user" });
+    }
+  };
+
   // Load read notification IDs from localStorage
   const [readIds, setReadIds] = useState(() => {
     try {
@@ -121,7 +178,7 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
   });
 
   // Resolve current active title based on path
-  let activeTitle = "Dashboard";
+  let activeTitle = isAdmin ? "Admin Dashboard" : "Dashboard";
   if (location.pathname.includes("/bookings")) {
     activeTitle = "Enquiry Members";
   } else if (location.pathname.includes("/memberships")) {
@@ -134,6 +191,8 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     activeTitle = "Event Banners";
   } else if (location.pathname.includes("/event-payments")) {
     activeTitle = "Event Payments";
+  } else if (location.pathname.includes("/event-participants")) {
+    activeTitle = "Event Participants";
   } else if (location.pathname.includes("/profile")) {
     activeTitle = "Profile Settings";
   } else if (location.pathname.includes("/settings")) {
@@ -152,6 +211,11 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
     activeTitle = "Founding Members";
   } else if (location.pathname.includes("/founding-offer")) {
     activeTitle = "Offer Details Edit";
+  } else if (
+    location.pathname.includes("/user-management") ||
+    location.pathname.includes("/usermanagementdetails")
+  ) {
+    activeTitle = "User Management";
   }
 
   // Fetch real-time data and aggregate as notifications
@@ -448,26 +512,57 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
   };
 
   return (
-    <header className="h-16 bg-[var(--db-header)] border-b border-[var(--db-header-border)] px-4 md:px-6 flex items-center justify-between flex-shrink-0 transition-colors relative">
-      <div className="flex items-center gap-3">
+    <header className="h-14 bg-[var(--db-header)] border-b border-[var(--db-header-border)] px-3.5 md:px-5 flex items-center justify-between flex-shrink-0 transition-colors relative">
+      <div className="flex items-center gap-2.5">
         <button
-          className="text-[var(--db-text-muted)] hover:text-[var(--db-text)] p-1.5 rounded-lg hover:bg-[var(--db-sidebar-link-hover)] cursor-pointer"
+          className="text-[var(--db-text-muted)] hover:text-[var(--db-text)] p-1.5 rounded-lg hover:bg-[var(--db-sidebar-link-hover)] cursor-pointer transition-colors"
           onClick={() => setSidebarOpen(prev => !prev)}
+          title={sidebarOpen ? "Collapse sidebar (icons only)" : "Expand sidebar"}
         >
-          <Menu size={20} />
+          <Menu size={18} />
         </button>
-        <h2 className="text-[13px] md:text-[15px] font-bold uppercase tracking-wider text-[var(--db-text-title)]">
-          {activeTitle}
-        </h2>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[11px] font-semibold text-[var(--db-text-muted)]/70 uppercase tracking-wider hidden sm:inline">
+            Dashboard
+          </span>
+          <span className="text-[10px] text-[var(--db-text-muted)]/40 hidden sm:inline">/</span>
+          <h2 className="text-[12px] md:text-[13px] font-black uppercase tracking-wider text-[var(--db-text-title)]">
+            {activeTitle}
+          </h2>
+        </div>
       </div>
 
       {/* Action panel & User info */}
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-2 sm:gap-3.5">
+        {/* Switch User Quick Action (Admin Only) */}
+        {isAdmin && (
+          <button
+            onClick={handleOpenSwitchUserModal}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10.5px] font-bold bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 transition-all cursor-pointer shadow-sm"
+            title="Switch User / Impersonate Athlete"
+          >
+            <UserCheck size={12} className="text-amber-400" />
+            <span className="hidden sm:inline">Switch User</span>
+          </button>
+        )}
+
+        {/* Live Website Quick Link */}
+        <a
+          href="/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden md:flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10.5px] font-bold text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] border border-[var(--db-card-border)] transition-all cursor-pointer"
+          title="View public website in new tab"
+        >
+          <span>Live Site</span>
+          <ExternalLink size={11} />
+        </a>
+
         {/* Real-time Notifications Bell Icon with Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="p-2 rounded-full hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-all cursor-pointer relative"
+            className="p-1.5 rounded-full hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-all cursor-pointer relative"
             title="Activity Notifications"
           >
             <Bell size={18} />
@@ -652,9 +747,9 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
         <div className="relative" ref={profileDropdownRef}>
           <button
             onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-            className="flex items-center gap-3 p-1.5 pr-3 rounded-xl hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-left"
+            className="flex items-center gap-2 p-1 pr-2 rounded-lg hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-left"
           >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
               {user && user.profileImage ? (
                 <img
                   src={user.profileImage}
@@ -662,20 +757,20 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <User size={20} className="text-[var(--db-accent-highlight)]" />
+                <User size={15} className="text-[var(--db-accent-highlight)]" />
               )}
             </div>
             <div className="hidden sm:block text-left">
               <div className="flex items-center gap-1">
-                <p className="text-xs font-bold text-[var(--db-text)] line-clamp-1">
+                <p className="text-[11.5px] font-bold text-[var(--db-text)] line-clamp-1">
                   {user.name}
                 </p>
                 <ChevronDown
-                  size={12}
+                  size={11}
                   className={`text-[var(--db-text-muted)] transition-transform duration-200 ${showProfileDropdown ? "rotate-180" : ""}`}
                 />
               </div>
-              <p className="text-[9px] text-[var(--db-accent-highlight)] font-semibold uppercase tracking-wider">
+              <p className="text-[8.5px] text-[var(--db-accent-highlight)] font-bold uppercase tracking-wider">
                 {user.role}
               </p>
             </div>
@@ -748,6 +843,22 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
                     />
                     Settings
                   </button>
+
+                  {isAdmin && (
+                    <button
+                      onClick={() => {
+                        setShowProfileDropdown(false);
+                        handleOpenSwitchUserModal();
+                      }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition-all cursor-pointer text-left"
+                    >
+                      <UserCheck
+                        size={14}
+                        className="text-amber-400"
+                      />
+                      Switch User / Impersonate
+                    </button>
+                  )}
                 </div>
 
                 {/* Logout Button */}
@@ -822,6 +933,150 @@ const DashboardHeader = ({ setSidebarOpen, user }) => {
               className="h-0.5 bg-[var(--db-accent)]/50"
             />
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Switch User / Impersonation Modal */}
+      <AnimatePresence>
+        {showSwitchUserModal && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSwitchUserModal(false)}
+              className="fixed inset-0 bg-black/80 backdrop-blur-md"
+            />
+
+            {/* Modal Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-xl bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col max-h-[85vh]"
+            >
+              {/* Top Accent Gradient */}
+              <div className="h-1 w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500" />
+
+              {/* Modal Header */}
+              <div className="p-4 sm:p-5 border-b border-[var(--db-card-border)] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                    <UserCheck size={18} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-black text-[var(--db-text)] uppercase tracking-wider flex items-center gap-2">
+                      Switch User / Impersonate
+                    </h3>
+                    <p className="text-[10.5px] text-[var(--db-text-muted)] font-medium">
+                      Select an athlete or member to test the Athlete Portal
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowSwitchUserModal(false)}
+                  className="p-1.5 rounded-xl text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors cursor-pointer"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Search Bar */}
+              <div className="p-3 sm:p-4 border-b border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40">
+                <div className="relative">
+                  <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--db-text-muted)]" />
+                  <input
+                    type="text"
+                    placeholder="Search by name, Member ID, phone, coach..."
+                    value={athleteSearch}
+                    onChange={(e) => setAthleteSearch(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] text-xs text-[var(--db-text)] placeholder:text-[var(--db-text-muted)]/60 focus:outline-none focus:border-amber-400 transition-all font-medium"
+                    autoFocus
+                  />
+                  {athleteSearch && (
+                    <button
+                      onClick={() => setAthleteSearch("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[var(--db-text-muted)] hover:text-white"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Athlete List */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-2 sm:p-3 divide-y divide-[var(--db-card-border)]">
+                {athletesLoading ? (
+                  <div className="py-14 flex flex-col items-center justify-center gap-3 text-[var(--db-text-muted)]">
+                    <div className="w-7 h-7 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+                    <p className="text-xs font-semibold">Loading athletes database...</p>
+                  </div>
+                ) : (() => {
+                  const filtered = athletesList.filter((a) => {
+                    const q = athleteSearch.toLowerCase();
+                    return (
+                      (a.athleteName || "").toLowerCase().includes(q) ||
+                      (a.memberId || "").toLowerCase().includes(q) ||
+                      (a.coach || "").toLowerCase().includes(q) ||
+                      (a.phone || "").toLowerCase().includes(q)
+                    );
+                  });
+
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="py-10 text-center text-[var(--db-text-muted)] space-y-2">
+                        <User size={24} className="mx-auto text-zinc-500 opacity-60" />
+                        <p className="text-xs font-bold uppercase tracking-wider">No matching athletes found</p>
+                        <p className="text-[11px]">Try searching by name or Member ID (e.g. BC-0001)</p>
+                      </div>
+                    );
+                  }
+
+                  return filtered.map((athlete) => (
+                    <div
+                      key={athlete._id}
+                      className="py-2.5 px-3 flex items-center justify-between gap-3 hover:bg-[var(--db-sidebar-link-hover)]/50 rounded-xl transition-all"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 font-black text-xs flex items-center justify-center shrink-0">
+                          {athlete.athleteName?.charAt(0)?.toUpperCase() || "A"}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-xs font-bold text-[var(--db-text)] truncate">
+                              {athlete.athleteName}
+                            </p>
+                            <span className="px-1.5 py-0.5 rounded text-[8.5px] font-mono font-bold bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/20">
+                              {athlete.memberId}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-[var(--db-text-muted)] truncate mt-0.5">
+                            Coach: {athlete.coach || "General"} • {athlete.gender || "Athlete"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleImpersonateFromHeader(athlete)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 hover:brightness-110 text-black text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md shrink-0"
+                      >
+                        <UserCheck size={12} />
+                        <span>Login</span>
+                      </button>
+                    </div>
+                  ));
+                })()}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-3 px-4 border-t border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40 flex items-center justify-between text-[11px] text-[var(--db-text-muted)]">
+                <span>Total: {athletesList.length} athletes</span>
+                <span className="text-[10px] text-amber-400 font-semibold">Admin Impersonation Mode</span>
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </header>

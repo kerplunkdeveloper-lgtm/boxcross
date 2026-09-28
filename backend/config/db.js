@@ -2,12 +2,23 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 8000,
+    });
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`❌ MongoDB Error: ${error.message}`);
-    process.exit(1);
+    console.error(`❌ MongoDB Connection Error: ${error.message}`);
+    console.log("Retrying MongoDB connection in 5 seconds...");
+    setTimeout(connectDB, 5000);
   }
 };
+
+mongoose.connection.on("disconnected", () => {
+  console.warn("⚠️ MongoDB disconnected! Waiting for network/reconnection...");
+});
+
+mongoose.connection.on("reconnected", () => {
+  console.log("✅ MongoDB successfully reconnected!");
+});
 
 module.exports = connectDB;

@@ -105,15 +105,13 @@ const DashboardFoundingOffer = () => {
 
   return (
     <div className="p-4 sm:p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-8xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="relative bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.2)] overflow-hidden"
         >
-          {/* Subtle Glow Effect in the background */}
-          <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-[var(--db-accent-highlight)]/5 blur-[100px] rounded-full pointer-events-none" />
 
           {/* Header */}
           <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between mb-10 pb-6 border-b border-[var(--db-card-border)]/50 gap-4">

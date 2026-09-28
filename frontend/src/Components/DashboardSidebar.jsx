@@ -1,30 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
-  Home,
-  BookOpen,
-  Settings,
-  LogOut,
-  X,
+  LayoutDashboard,
+  Calendar,
+  Users,
   CreditCard,
   DollarSign,
-  Image,
-  Calendar,
-  User,
-  Users,
-  FileText,
-  MessageSquare,
-  ChevronDown,
-  Sparkles,
   Crown,
+  Sparkles,
+  Image,
+  FileText,
+  BookOpen,
+  MessageSquare,
+  Settings,
+  User,
+  LogOut,
+  X,
+  ChevronDown,
+  ShieldCheck,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 
-const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
-  const { user } = useAuth();
+const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: propUser }) => {
+  const { user: authUser } = useAuth();
+  const user = propUser || authUser;
+  const isAdmin = (user?.role || "").toLowerCase() === "admin";
   const { theme } = useTheme();
   const location = useLocation();
 
@@ -34,6 +37,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     }
   };
 
+  // Dropdown states with path-matching initialization
   const [eventsOpen, setEventsOpen] = useState(() => {
     return (
       location.pathname.includes("/events") ||
@@ -66,6 +70,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     );
   });
 
+  // Keep dropdowns open if active route is within them
   useEffect(() => {
     if (
       location.pathname.includes("/events") ||
@@ -106,436 +111,534 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout }) => {
     }
   }, [location.pathname]);
 
-  const baseMenuItems = [
-    { name: "Dashboard", path: "/dashboard", icon: Home },
-    { name: "Calendar", path: "/dashboard/calendar", icon: Calendar },
-  ];
+  // Style helpers for items
+  const getItemClass = (isActive) => {
+    if (isActive) {
+      return theme === "dark"
+        ? "bg-[#e5ff00]/12 text-[#e5ff00] border border-[#e5ff00]/30 shadow-[0_0_12px_rgba(229,255,0,0.1)] font-bold"
+        : "bg-slate-900 text-white font-bold shadow-sm";
+    }
+    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
+  };
 
-  const footerMenuItems = [
-    {
-      name: "Profile settings",
-      path: "/dashboard/profile",
-      icon: User,
-    },
-    {
-      name: "Settings",
-      path: "/dashboard/settings",
-      icon: Settings,
-    },
-  ];
+  const getSubItemClass = (isActive) => {
+    if (isActive) {
+      return theme === "dark"
+        ? "bg-[#e5ff00]/15 text-[#e5ff00] border border-[#e5ff00]/35 font-bold shadow-sm"
+        : "bg-slate-800 text-white font-bold shadow-sm";
+    }
+    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
+  };
+
+  const getTriggerClass = (hasActive) => {
+    if (hasActive) {
+      return theme === "dark"
+        ? "text-[#e5ff00] bg-[#e5ff00]/8 border border-[#e5ff00]/20 font-bold"
+        : "text-slate-900 bg-slate-100 border border-slate-200 font-bold";
+    }
+    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
+  };
+
+  // Helper to render single nav item with tooltip for collapsed state
+  const renderSingleItem = ({ to, name, icon: Icon, end = false, badge = null }) => {
+    return (
+      <div key={to} className="relative group hover:z-50">
+        <NavLink
+          to={to}
+          end={end}
+          onClick={closeSidebarOnMobile}
+          className={({ isActive }) =>
+            sidebarOpen
+              ? `w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12px] font-bold tracking-wide transition-all duration-150 cursor-pointer ${getItemClass(
+                  isActive
+                )}`
+              : `w-9 h-9 mx-auto flex items-center justify-center rounded-xl transition-all duration-150 cursor-pointer ${getItemClass(
+                  isActive
+                )}`
+          }
+        >
+          {sidebarOpen ? (
+            <>
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Icon size={15} className="shrink-0" />
+                <span className="truncate">{name}</span>
+              </div>
+              {badge && (
+                <span className="text-[8px] font-black uppercase px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  {badge}
+                </span>
+              )}
+            </>
+          ) : (
+            <Icon size={16} className="shrink-0" />
+          )}
+        </NavLink>
+
+        {/* Hover Tooltip when sidebar is collapsed (Desktop only) */}
+        {!sidebarOpen && (
+          <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
+            <div className="relative px-2.5 py-1.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-2xl flex items-center gap-1.5 whitespace-nowrap">
+              <span className="text-[11.5px] font-bold text-[var(--db-text)]">
+                {name}
+              </span>
+              {badge && (
+                <span className="text-[8px] font-black uppercase px-1 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  {badge}
+                </span>
+              )}
+              {/* Tooltip arrow pointer */}
+              <div className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-[var(--db-card-border)]" />
+              <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Helper to render dropdown group with flyout menu for collapsed state
+  const renderDropdownGroup = ({
+    title,
+    icon: Icon,
+    isOpen,
+    setIsOpen,
+    pathMatch,
+    items,
+  }) => {
+    const hasActiveChild = pathMatch.some((path) => location.pathname.includes(path));
+
+    return (
+      <div key={title} className="relative group hover:z-50">
+        {sidebarOpen ? (
+          <div>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12px] font-bold tracking-wide transition-all duration-150 cursor-pointer ${getTriggerClass(
+                hasActiveChild
+              )}`}
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Icon size={15} className="shrink-0" />
+                <span className="truncate">{title}</span>
+              </div>
+              <ChevronDown
+                size={13}
+                className={`shrink-0 transition-transform duration-200 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {isOpen && (
+              <div className="ml-2.5 pl-2.5 border-l border-[var(--db-card-border)] space-y-0.5 my-1">
+                {items.map((sub) => {
+                  const SubIcon = sub.icon;
+                  return (
+                    <NavLink
+                      key={sub.path}
+                      to={sub.path}
+                      onClick={closeSidebarOnMobile}
+                      className={({ isActive }) =>
+                        `w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] font-medium tracking-wide transition-all duration-150 cursor-pointer ${getSubItemClass(
+                          isActive
+                        )}`
+                      }
+                    >
+                      <SubIcon size={13} className="shrink-0" />
+                      <span className="truncate">{sub.name}</span>
+                    </NavLink>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Collapsed View: Icon button + Flyout popover */
+          <div className="flex justify-center">
+            <button
+              className={`w-9 h-9 mx-auto flex items-center justify-center rounded-xl transition-all duration-150 cursor-pointer ${getTriggerClass(
+                hasActiveChild
+              )}`}
+            >
+              <Icon size={16} className="shrink-0" />
+            </button>
+
+            {/* Flyout Submenu Popover on Hover (Desktop only) */}
+            <div className="hidden lg:group-hover:block absolute left-full top-0 pl-2.5 z-50">
+              <div className="w-52 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.45)] p-2 space-y-1 backdrop-blur-md">
+                {/* Popover Header */}
+                <div className="px-2 py-1 border-b border-[var(--db-card-border)] mb-1 flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                    {title}
+                  </span>
+                  <span className="text-[9px] font-bold text-[var(--db-accent-highlight)]">
+                    {items.length} links
+                  </span>
+                </div>
+
+                {/* Sub-item links */}
+                {items.map((sub) => {
+                  const SubIcon = sub.icon;
+                  return (
+                    <NavLink
+                      key={sub.path}
+                      to={sub.path}
+                      onClick={closeSidebarOnMobile}
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
+                          isActive
+                            ? "bg-[var(--db-accent)]/15 text-[var(--db-accent-highlight)] font-bold border border-[var(--db-accent-highlight)]/30"
+                            : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                        }`
+                      }
+                    >
+                      <SubIcon size={13} className="shrink-0" />
+                      <span className="truncate">{sub.name}</span>
+                    </NavLink>
+                  );
+                })}
+
+                {/* Flyout pointer arrow */}
+                <div className="absolute right-full top-3 border-[6px] border-transparent border-r-[var(--db-card-border)]" />
+                <div className="absolute right-full top-3 border-[5px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Helper for Section Category Header
+  const renderSectionHeader = (title) => {
+    if (sidebarOpen) {
+      return (
+        <div className="px-2 pb-1 text-[9.5px] font-black uppercase tracking-[0.14em] text-[var(--db-text-muted)]/60 flex items-center justify-between select-none">
+          <span>{title}</span>
+        </div>
+      );
+    }
+    return <div className="h-[1px] bg-[var(--db-card-border)]/60 my-2 mx-1.5" />;
+  };
 
   return (
     <aside
-      className={`fixed lg:static inset-y-0 left-0 z-30 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform lg:translate-x-0 lg:flex-shrink-0 transition-all duration-300 ${
-        sidebarOpen 
-          ? "translate-x-0 w-[245px] lg:w-[245px]" 
-          : "-translate-x-full lg:w-0 lg:opacity-0 lg:overflow-hidden lg:border-r-0"
+      className={`fixed lg:static inset-y-0 left-0 z-30 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform transition-all duration-300 select-none ${
+        sidebarOpen
+          ? "translate-x-0 w-[232px] lg:w-[232px]"
+          : "-translate-x-full lg:w-[68px] lg:translate-x-0"
       }`}
     >
-      {/* Header with logo */}
-      <div className="h-16 flex items-center justify-between px-5 border-b border-[var(--db-sidebar-border)] flex-shrink-0">
-        <img
-          src={theme === "light" ? logo2 : logo}
-          alt="Box & Cross"
-          className="w-[125px] object-contain"
-        />
-        <button
-          className="lg:hidden text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
-          onClick={() => setSidebarOpen(false)}
-        >
-          <X size={20} />
-        </button>
+      {/* Brand Header */}
+      <div
+        className={`h-14 flex items-center border-b border-[var(--db-sidebar-border)] flex-shrink-0 bg-[var(--db-sidebar)] ${
+          sidebarOpen ? "justify-between px-3.5" : "justify-center px-2"
+        }`}
+      >
+        {sidebarOpen ? (
+          <>
+            <div className="flex items-center gap-2">
+              <img
+                src={theme === "light" ? logo2 : logo}
+                alt="Box & Cross"
+                className="w-[105px] h-7 object-contain"
+              />
+              {isAdmin && (
+                <span className="text-[9px] text-blue-500 font-black px-2 py-0.5 rounded-md bg-[var(--db-accent)] tracking-wider shadow-[0_0_10px_rgba(229,255,0,0.25)] select-none shrink-0">
+                  <span style={{ fontFamily: '"Brutal Font", sans-serif' }}>ADMIN</span>
+                </span>
+              )}
+            </div>
+            <button
+              className="lg:hidden p-1 rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors cursor-pointer"
+              onClick={() => setSidebarOpen(false)}
+              title="Close sidebar"
+            >
+              <X size={17} />
+            </button>
+          </>
+        ) : (
+          <div className="relative group">
+            <div
+              onClick={() => setSidebarOpen(true)}
+              className="w-8 h-8 rounded-xl bg-[var(--db-accent)] text-black flex items-center justify-center font-black text-xs shadow-[0_0_12px_rgba(229,255,0,0.3)] cursor-pointer"
+            >
+              BX
+            </div>
+            {/* Tooltip on logo */}
+            <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
+              <div className="relative px-2.5 py-1 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-xl text-[11px] font-bold text-[var(--db-text)] whitespace-nowrap">
+                Box & Cross Admin
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card-border)]" />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Menu Nav Links (Scrollable) */}
-      <div className="flex-grow overflow-y-auto custom-scrollbar py-5">
-        <nav className="px-4 space-y-1.5">
-          {baseMenuItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <NavLink
-                key={item.name}
-                to={item.path}
-                end={item.path === "/dashboard"}
-                onClick={closeSidebarOnMobile}
-                className={({ isActive }) =>
-                  `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 cursor-pointer ${
-                    isActive
-                      ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)] scale-[1.02]"
-                      : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                  }`
-                }
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                <Icon size={17} />
-                {item.name}
-              </NavLink>
-            );
-          })}
+      {/* Categorized Nav Area */}
+      <div
+        className={`flex-grow py-3 space-y-3 ${
+          sidebarOpen
+            ? "overflow-y-auto custom-scrollbar px-2"
+            : "overflow-visible lg:overflow-visible px-2"
+        }`}
+      >
+        {/* SECTION 1: OVERVIEW */}
+        <div>
+          {renderSectionHeader("Overview")}
+          <div className="space-y-0.5">
+            {renderSingleItem({
+              to: "/dashboard",
+              name: "Dashboard",
+              icon: LayoutDashboard,
+              end: true,
+            })}
+            {renderSingleItem({
+              to: "/dashboard/calendar",
+              name: "Schedule & Calendar",
+              icon: Calendar,
+            })}
+          </div>
+        </div>
 
-          {/* Membership dropdown for Admin */}
-          {user && user.role === "admin" && (
-            <div className="space-y-1">
-              <button
-                onClick={() => setMembershipOpen(!membershipOpen)}
-                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 cursor-pointer ${
-                  location.pathname.includes("/memberships") ||
-                  location.pathname.includes("/payments")
-                    ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
-                    : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                <div className="flex items-center gap-3">
-                  <CreditCard size={17} className={location.pathname.includes("/memberships") || location.pathname.includes("/payments") ? "text-[var(--db-accent-highlight)]" : ""} />
-                  <span>Membership</span>
-                </div>
-                <ChevronDown
-                  size={15}
-                  className={`transition-transform duration-300 ${
-                    membershipOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
-                  }`}
-                />
-              </button>
+        {/* SECTION 2: MANAGEMENT */}
+        {user && user.role === "admin" && (
+          <div>
+            {renderSectionHeader("Management")}
+            <div className="space-y-0.5">
+              {/* User Management */}
+              {renderSingleItem({
+                to: "/dashboard/user-management",
+                name: "User Management",
+                icon: Users,
+               
+              })}
 
-              {membershipOpen && (
-                <div className="relative pl-4 ml-4 mt-1.5 space-y-1 transition-all">
-                  <div className="absolute left-[2px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
+              {/* Memberships Accordion / Flyout */}
+              {renderDropdownGroup({
+                title: "Memberships",
+                icon: CreditCard,
+                isOpen: membershipOpen,
+                setIsOpen: setMembershipOpen,
+                pathMatch: ["/memberships", "/payments"],
+                items: [
+                  {
+                    name: "Membership Plans",
+                    path: "/dashboard/memberships",
+                    icon: CreditCard,
+                  },
+                  {
+                    name: "Payment History",
+                    path: "/dashboard/payments",
+                    icon: DollarSign,
+                  },
+                ],
+              })}
 
-                  <NavLink
-                    to="/dashboard/memberships"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <CreditCard size={13} />
-                    Membership edit
-                  </NavLink>
+              {/* Founders Club Accordion / Flyout */}
+              {renderDropdownGroup({
+                title: "Founders Club",
+                icon: Crown,
+                isOpen: offerFoundersOpen,
+                setIsOpen: setOfferFoundersOpen,
+                pathMatch: ["/founding-members", "/founding-offer"],
+                items: [
+                  {
+                    name: "Offer Details Edit",
+                    path: "/dashboard/founding-offer",
+                    icon: Sparkles,
+                  },
+                  {
+                    name: "Founding Members",
+                    path: "/dashboard/founding-members",
+                    icon: Users,
+                  },
+                ],
+              })}
 
-                  <NavLink
-                    to="/dashboard/payments"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <DollarSign size={13} />
-                    Payment details
-                  </NavLink>
-                </div>
-              )}
+              {/* Events Accordion / Flyout */}
+              {renderDropdownGroup({
+                title: "Events & Galas",
+                icon: Sparkles,
+                isOpen: eventsOpen,
+                setIsOpen: setEventsOpen,
+                pathMatch: [
+                  "/events",
+                  "/events-list",
+                  "/event-payments",
+                  "/event-participants",
+                ],
+                items: [
+                  {
+                    name: "Event Banners",
+                    path: "/dashboard/events",
+                    icon: Image,
+                  },
+                  {
+                    name: "Events List",
+                    path: "/dashboard/events-list",
+                    icon: Calendar,
+                  },
+                  {
+                    name: "Event Payments",
+                    path: "/dashboard/event-payments",
+                    icon: DollarSign,
+                  },
+                  {
+                    name: "Participants",
+                    path: "/dashboard/event-participants",
+                    icon: Users,
+                  },
+                ],
+              })}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Offer Founders dropdown for Admin */}
-          {user && user.role === "admin" && (
-            <div className="space-y-1">
-              <button
-                onClick={() => setOfferFoundersOpen(!offerFoundersOpen)}
-                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 cursor-pointer ${
-                  location.pathname.includes("/founding-members") ||
-                  location.pathname.includes("/founding-offer")
-                    ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
-                    : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                <div className="flex items-center gap-3">
-                  <Crown size={17} className={location.pathname.includes("/founding-members") || location.pathname.includes("/founding-offer") ? "text-[var(--db-accent-highlight)]" : ""} />
-                  <span>Offer Founders</span>
-                </div>
-                <ChevronDown
-                  size={15}
-                  className={`transition-transform duration-300 ${
-                    offerFoundersOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
-                  }`}
-                />
-              </button>
-
-              {offerFoundersOpen && (
-                <div className="relative pl-4 ml-4 mt-1.5 space-y-1 transition-all">
-                  <div className="absolute left-[2px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
-
-                  <NavLink
-                    to="/dashboard/founding-offer"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <Crown size={13} />
-                    Offer details edit
-                  </NavLink>
-                  
-                  <NavLink
-                    to="/dashboard/founding-members"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <Users size={13} />
-                    Founding members
-                  </NavLink>
-                </div>
-              )}
+        {/* SECTION 3: CLIENT INQUIRIES */}
+        {user && user.role === "admin" && (
+          <div>
+            {renderSectionHeader("Client Inquiries")}
+            <div className="space-y-0.5">
+              {renderDropdownGroup({
+                title: "Enquiry Leads",
+                icon: FileText,
+                isOpen: enquiriesOpen,
+                setIsOpen: setEnquiriesOpen,
+                pathMatch: [
+                  "/homec1",
+                  "/homec2",
+                  "/homec3",
+                  "/bookings",
+                ],
+                items: [
+                  {
+                    name: "Gym Tour Bookings",
+                    path: "/dashboard/bookings",
+                    icon: BookOpen,
+                  },
+                  {
+                    name: "Free Trial Form",
+                    path: "/dashboard/homec1",
+                    icon: FileText,
+                  },
+                  {
+                    name: "Consultation Requests",
+                    path: "/dashboard/homec2",
+                    icon: Users,
+                  },
+                  {
+                    name: "Contact Messages",
+                    path: "/dashboard/homec3",
+                    icon: MessageSquare,
+                  },
+                ],
+              })}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Events dropdown for Admin */}
-          {user && user.role === "admin" && (
-            <div className="space-y-1">
-              <button
-                onClick={() => setEventsOpen(!eventsOpen)}
-                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 cursor-pointer ${
-                  location.pathname.includes("/events") ||
-                  location.pathname.includes("/events-list") ||
-                  location.pathname.includes("/event-payments") ||
-                  location.pathname.includes("/event-participants")
-                    ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
-                    : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                <div className="flex items-center gap-3">
-                  <Sparkles size={17} className={location.pathname.includes("/events") || location.pathname.includes("/events-list") || location.pathname.includes("/event-payments") || location.pathname.includes("/event-participants") ? "text-[var(--db-accent-highlight)]" : ""} />
-                  <span>Events</span>
-                </div>
-                <ChevronDown
-                  size={15}
-                  className={`transition-transform duration-300 ${
-                    eventsOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
-                  }`}
-                />
-              </button>
-
-              {eventsOpen && (
-                <div className="relative pl-4 ml-4 mt-1.5 space-y-1 transition-all">
-                  <div className="absolute left-[2px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
-
-                  <NavLink
-                    to="/dashboard/events"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <Image size={13} />
-                    Event banners
-                  </NavLink>
-
-                  <NavLink
-                    to="/dashboard/events-list"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <Calendar size={13} />
-                    Events list
-                  </NavLink>
-
-                  <NavLink
-                    to="/dashboard/event-payments"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <DollarSign size={13} />
-                    Event payments
-                  </NavLink>
-
-                  <NavLink
-                    to="/dashboard/event-participants"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <Users size={13} />
-                    Participants
-                  </NavLink>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Website Enquiry form dropdown for Admin */}
-          {user && user.role === "admin" && (
-            <div className="space-y-1">
-              <button
-                onClick={() => setEnquiriesOpen(!enquiriesOpen)}
-                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 cursor-pointer ${
-                  location.pathname.includes("/homec1") ||
-                  location.pathname.includes("/homec2") ||
-                  location.pathname.includes("/homec3") ||
-                  location.pathname.includes("/bookings")
-                    ? "text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/5 border border-[var(--db-accent-highlight)]/20"
-                    : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                <div className="flex items-center gap-3">
-                  <FileText size={17} className={location.pathname.includes("/homec1") || location.pathname.includes("/homec2") || location.pathname.includes("/homec3") || location.pathname.includes("/bookings") ? "text-[var(--db-accent-highlight)]" : ""} />
-                  <span>Enquiry forms</span>
-                </div>
-                <ChevronDown
-                  size={15}
-                  className={`transition-transform duration-300 ${
-                    enquiriesOpen ? "rotate-180 text-[var(--db-accent-highlight)]" : "text-[var(--db-text-muted)]"
-                  }`}
-                />
-              </button>
-
-              {enquiriesOpen && (
-                <div className="relative pl-4 ml-4 mt-1.5 space-y-1 transition-all">
-                  <div className="absolute left-[2px] top-0 bottom-4 w-[2px] bg-gradient-to-b from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent rounded-full" />
-
-                  <NavLink
-                    to="/dashboard/bookings"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <BookOpen size={13} />
-                    Book gym free tour
-                  </NavLink>
-
-                  <NavLink
-                    to="/dashboard/homec1"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <FileText size={13} />
-                    Home/trialform
-                  </NavLink>
-
-                  <NavLink
-                    to="/dashboard/homec2"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <Users size={13} />
-                    Consult us form
-                  </NavLink>
-
-                  <NavLink
-                    to="/dashboard/homec3"
-                    onClick={closeSidebarOnMobile}
-                    className={({ isActive }) =>
-                      `w-full flex items-center gap-2.5 px-3.5 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer relative ${
-                        isActive
-                          ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-[1.01]"
-                          : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                      }`
-                    }
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    <MessageSquare size={13} />
-                    Contact Form
-                  </NavLink>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Settings items */}
-          {footerMenuItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <NavLink
-                key={item.name}
-                to={item.path}
-                onClick={closeSidebarOnMobile}
-                className={({ isActive }) =>
-                  `w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wider transition-all duration-200 cursor-pointer ${
-                    isActive
-                      ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-lg shadow-[var(--db-accent-glow)] scale-[1.02]"
-                      : "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:translate-x-1"
-                  }`
-                }
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                <Icon size={17} />
-                {item.name}
-              </NavLink>
-            );
-          })}
-        </nav>
+        {/* SECTION 4: PREFERENCES & SETTINGS */}
+        <div>
+          {renderSectionHeader("Preferences")}
+          <div className="space-y-0.5">
+            {renderSingleItem({
+              to: "/dashboard/profile",
+              name: "Profile Settings",
+              icon: User,
+            })}
+            {renderSingleItem({
+              to: "/dashboard/settings",
+              name: "System Settings",
+              icon: Settings,
+            })}
+          </div>
+        </div>
       </div>
 
-      {/* Footer logout */}
-      <div className="p-4 border-t border-[var(--db-sidebar-border)] flex-shrink-0">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold tracking-wider text-red-400 bg-[var(--db-sidebar-link-hover)] hover:bg-red-500/10 hover:text-red-400 transition-all duration-200 cursor-pointer"
-          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-        >
-          <LogOut size={17} />
-          Logout
-        </button>
+      {/* Footer Profile Snapshot & Logout */}
+      <div className="p-2 border-t border-[var(--db-sidebar-border)] flex-shrink-0 bg-[var(--db-sidebar)] space-y-2">
+        {sidebarOpen ? (
+          <div className="flex items-center justify-between p-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)]">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+                {user?.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    alt={user.name || "Admin"}
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#e5ff00] text-black font-black text-xs flex items-center justify-center rounded-xl">
+                    {user?.name?.charAt(0)?.toUpperCase() || "A"}
+                  </div>
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11.5px] font-bold text-[var(--db-text)] truncate leading-tight">
+                  {user?.name || "Admin"}
+                </p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[9px] font-bold text-[var(--db-accent-highlight)] uppercase tracking-wider">
+                    {user?.role || "ADMIN"}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              title="Log out of session"
+              className="p-1.5 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors cursor-pointer"
+            >
+              <LogOut size={15} />
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-1.5 flex flex-col items-center">
+            {/* Profile Avatar Icon with Tooltip */}
+            <div className="relative group hover:z-50">
+              <div className="w-8 h-8 rounded-xl overflow-hidden border border-[var(--db-accent-highlight)]/30 flex items-center justify-center cursor-pointer">
+                {user?.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    alt={user.name || "Admin"}
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#e5ff00] text-black font-black text-xs flex items-center justify-center rounded-xl">
+                    {user?.name?.charAt(0)?.toUpperCase() || "A"}
+                  </div>
+                )}
+              </div>
+              <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
+                <div className="relative px-2.5 py-1.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-xl text-[11px] font-bold text-[var(--db-text)] whitespace-nowrap">
+                  <p className="font-bold text-[var(--db-text)]">{user?.name || "Admin"}</p>
+                  <p className="text-[9px] text-[var(--db-accent-highlight)] uppercase font-black">{user?.role || "ADMIN"}</p>
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card-border)]" />
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[3px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
+                </div>
+              </div>
+            </div>
+
+            {/* Logout Icon with Tooltip */}
+            <div className="relative group hover:z-50">
+              <button
+                onClick={handleLogout}
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500/15 hover:text-red-300 transition-colors cursor-pointer"
+              >
+                <LogOut size={14} />
+              </button>
+              <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
+                <div className="relative px-2.5 py-1 bg-red-950/90 border border-red-500/30 rounded-lg shadow-xl text-[11px] font-bold text-red-300 whitespace-nowrap">
+                  Logout
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-red-500/30" />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   );

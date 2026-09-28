@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   User, Mail, Calendar, ShieldCheck, Award, Clock, ArrowRight, Sparkles, Users, 
-  MapPin, DollarSign, ArrowUpRight, Plus, Loader2 
+  MapPin, DollarSign, ArrowUpRight, Plus, Loader2, CreditCard 
 } from "lucide-react";
 import gymhm from "../assets/gymhm.png";
 import { getBookings, getPayments, getEventsListAdmin, getEventBookings, getFounders } from "../api/api";
@@ -102,6 +102,14 @@ const DashboardHome = () => {
     }
   }, [user]);
 
+  const getGreeting = () => {
+    const hour = currentTime.getHours();
+    if (hour >= 5 && hour < 12) return "Good Morning";
+    if (hour >= 12 && hour < 16) return "Good Afternoon";
+    if (hour >= 16 && hour < 22) return "Good Evening";
+    return "Good Night";
+  };
+
   if (!user) return null;
 
   return (
@@ -125,28 +133,43 @@ const DashboardHome = () => {
           <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40" />
           <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20" />
           
-          <div className="flex items-center gap-4 z-10">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-highlight)]/40 via-transparent to-[var(--db-accent-highlight)]/10 border-2 border-[var(--db-accent-highlight)]/30 flex items-center justify-center overflow-hidden shadow-lg shadow-[var(--db-accent-glow)] shrink-0">
-              {user.profileImage ? (
-                <img 
-                  src={user.profileImage} 
-                  alt={user.name} 
-                  className="w-full h-full object-cover rounded-full"
-                />
-              ) : (
-                <User size={30} className="text-[var(--db-accent-highlight)]" />
-              )}
+          <div className="flex items-center gap-4 sm:gap-6 z-10">
+            {/* Profile Image with Increased Size & Enhanced UI/UX */}
+            <div 
+              onClick={() => navigate('/dashboard/profile')}
+              className="relative group cursor-pointer shrink-0"
+              title="Click to view profile"
+            >
+              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full p-1 bg-gradient-to-tr from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent border-2 border-[var(--db-accent-highlight)]/40 shadow-xl shadow-[var(--db-accent-glow)] ring-2 ring-[var(--db-accent-highlight)]/20 ring-offset-2 ring-offset-[var(--db-card)] transition-all duration-300 group-hover:scale-105 group-hover:border-[var(--db-accent-highlight)]">
+                <div className="w-full h-full rounded-full overflow-hidden bg-neutral-900 flex items-center justify-center">
+                  {user.profileImage ? (
+                    <img 
+                      src={user.profileImage} 
+                      alt={user.name} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 rounded-full"
+                    />
+                  ) : (
+                    <User size={40} className="text-[var(--db-accent-highlight)]" />
+                  )}
+                </div>
+              </div>
+
+              {/* Active Online Status Indicator */}
+              <div 
+                className="absolute bottom-0 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[var(--db-card)] flex items-center justify-center shadow-md"
+                title="Status: Online & Active"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              </div>
             </div>
+
             <div className="text-left">
               <div className="flex items-center gap-2">
                 <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  Hi, <span className="text-[var(--db-accent-highlight)]" style={{fontFamily:"'BrutalType Bold', sans-serif"}}> {user.name}</span>
+                  {getGreeting()}, <span className="text-[var(--db-accent-highlight)]" style={{fontFamily:"'BrutalType Bold', sans-serif"}}> {user.name}</span>
                 </h1>
                 <Sparkles size={16} className="text-[var(--db-accent-highlight)] animate-pulse" />
               </div>
-              <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-0.5 font-semibold leading-relaxed max-w-md">
-                Welcome back to your Box & Cross Athlete Portal. Ready to crush it?
-              </p>
             </div>
           </div>
 
@@ -190,145 +213,157 @@ const DashboardHome = () => {
 
    
 
-        {/* Dashboard Grid Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Dashboard Executive KPI Stats - 5 Cards Aligned in 1 Row on Desktop */}
+        {(() => {
+          const statCards = [
+            {
+              id: "visitors",
+              title: "Total Free Gym Visitors",
+              shortTitle: "Free Visitors",
+              value: visitorCount,
+              displayValue: visitorCount.toLocaleString("en-IN"),
+              icon: Users,
+              accentText: "text-[#e5ff00]",
+              iconBg: "bg-[#e5ff00]/10 text-[#e5ff00] border-[#e5ff00]/25 shadow-[0_0_14px_rgba(229,255,0,0.15)]",
+              glowBg: "bg-[#e5ff00]",
+              borderHover: "hover:border-[#e5ff00]/40 hover:shadow-[0_8px_24px_rgba(229,255,0,0.12)]",
+              dotBg: "bg-[#e5ff00]",
+              loaderColor: "text-[#e5ff00]",
+              badgeText: "Visitors",
+              link: "/dashboard/bookings"
+            },
+            {
+              id: "event-payments",
+              title: "No. of Event Payment",
+              shortTitle: "Event Payments",
+              value: totalPayments,
+              displayValue: `₹${totalPayments.toLocaleString("en-IN")}`,
+              icon: CreditCard,
+              accentText: "text-sky-400",
+              iconBg: "bg-sky-500/10 text-sky-400 border-sky-500/25 shadow-[0_0_14px_rgba(56,189,248,0.15)]",
+              glowBg: "bg-sky-500",
+              borderHover: "hover:border-sky-500/40 hover:shadow-[0_8px_24px_rgba(56,189,248,0.12)]",
+              dotBg: "bg-sky-400",
+              loaderColor: "text-sky-400",
+              badgeText: "Payments",
+              link: "/dashboard/event-payments"
+            },
+            {
+              id: "events",
+              title: "No. of Events",
+              shortTitle: "Events",
+              value: events.length,
+              displayValue: events.length.toLocaleString("en-IN"),
+              icon: Calendar,
+              accentText: "text-amber-400",
+              iconBg: "bg-amber-500/10 text-amber-400 border-amber-500/25 shadow-[0_0_14px_rgba(245,158,11,0.15)]",
+              glowBg: "bg-amber-500",
+              borderHover: "hover:border-amber-500/40 hover:shadow-[0_8px_24px_rgba(245,158,11,0.12)]",
+              dotBg: "bg-amber-400",
+              loaderColor: "text-amber-400",
+              badgeText: "Events",
+              link: "/dashboard/events-list"
+            },
+            {
+              id: "collection",
+              title: "Event Collection",
+              shortTitle: "Collection",
+              value: eventRevenue,
+              displayValue: `₹${eventRevenue.toLocaleString("en-IN")}`,
+              icon: DollarSign,
+              accentText: "text-emerald-400",
+              iconBg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25 shadow-[0_0_14px_rgba(16,185,129,0.15)]",
+              glowBg: "bg-emerald-500",
+              borderHover: "hover:border-emerald-500/40 hover:shadow-[0_8px_24px_rgba(16,185,129,0.12)]",
+              dotBg: "bg-emerald-400",
+              loaderColor: "text-emerald-400",
+              badgeText: "Revenue",
+              link: "/dashboard/event-payments"
+            },
+            {
+              id: "founders",
+              title: "Paid Founders",
+              shortTitle: "Founders",
+              value: paidFounders,
+              displayValue: paidFounders.toLocaleString("en-IN"),
+              icon: ShieldCheck,
+              accentText: "text-purple-400",
+              iconBg: "bg-purple-500/10 text-purple-400 border-purple-500/25 shadow-[0_0_14px_rgba(168,85,247,0.15)]",
+              glowBg: "bg-purple-500",
+              borderHover: "hover:border-purple-500/40 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]",
+              dotBg: "bg-purple-400",
+              loaderColor: "text-purple-400",
+              badgeText: "Founders",
+              link: "/dashboard/founding-members"
+            }
+          ];
 
-          {/* VISITOR COUNT CARD */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.05 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
-          >
-            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
-            <div className="flex items-center gap-3 z-10">
-              <div className="p-2.5 rounded-xl bg-[var(--db-accent-glow)]/10 text-[var(--db-accent-highlight)] shrink-0">
-                <Users size={20} />
-              </div>
-              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                Total free gym visitors
-              </span>
-            </div>
-            <div className="z-10 shrink-0">
-              {loading ? (
-                <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
-              ) : (
-                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  {visitorCount}
-                </p>
-              )}
-            </div>
-          </motion.div>
+          return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-3.5 2xl:gap-4">
+              {statCards.map((card, idx) => {
+                const Icon = card.icon;
+                return (
+                  <motion.div
+                    key={card.id}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.04 * idx }}
+                    whileHover={{ y: -3, transition: { duration: 0.18 } }}
+                    onClick={() => card.link && navigate(card.link)}
+                    className={`group relative overflow-hidden rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] ${card.borderHover} p-3.5 sm:p-4 flex flex-col justify-between min-h-[114px] sm:min-h-[120px] shadow-lg hover:shadow-2xl transition-all duration-300 text-left cursor-pointer select-none`}
+                    title={`${card.title}: ${card.displayValue}`}
+                  >
+                    {/* Ambient Glow in Top-Right Corner */}
+                    <div
+                      className={`absolute -top-6 -right-6 w-24 h-24 rounded-full blur-2xl pointer-events-none opacity-20 group-hover:opacity-45 transition-opacity duration-300 ${card.glowBg}`}
+                    />
 
-          {/* TOTAL PAYMENT CARD */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
-          >
-            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
-            <div className="flex items-center gap-3 z-10">
-              <div className="p-2.5 rounded-xl bg-[var(--db-accent-glow)]/10 text-[var(--db-accent-highlight)] shrink-0">
-                <DollarSign size={20} />
-              </div>
-              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                No.of Event payment
-              </span>
-            </div>
-            <div className="z-10 shrink-0">
-              {loading ? (
-                <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
-              ) : (
-                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  ₹{totalPayments.toLocaleString("en-IN")}
-                </p>
-              )}
-            </div>
-          </motion.div>
+                    {/* Top Row: Themed Icon Badge + Status Tag with Micro-Arrow */}
+                    <div className="flex items-center justify-between z-10 mb-2.5">
+                      <div
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-transform duration-300 group-hover:scale-105 ${card.iconBg}`}
+                      >
+                        <Icon size={18} />
+                      </div>
+                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+                        <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${card.dotBg}`} />
+                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors">
+                          {card.badgeText}
+                        </span>
+                        <ArrowUpRight
+                          size={11}
+                          className="text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200"
+                        />
+                      </div>
+                    </div>
 
-          {/* ACTIVE EVENTS CARD */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
-          >
-            <div className="absolute top-0 right-0 bg-[var(--db-accent-glow)] w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
-            <div className="flex items-center gap-3 z-10">
-              <div className="p-2.5 rounded-xl bg-[var(--db-accent-glow)]/10 text-[var(--db-accent-highlight)] shrink-0">
-                <Calendar size={20} />
-              </div>
-              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                No.of Events
-              </span>
+                    {/* Bottom Row: Large Numeric Value + Uppercase Label */}
+                    <div className="z-10 mt-auto">
+                      {loading ? (
+                        <div className="h-7 sm:h-8 flex items-center">
+                          <Loader2 size={20} className={`animate-spin ${card.loaderColor}`} />
+                        </div>
+                      ) : (
+                        <div
+                          className="text-xl sm:text-2xl lg:text-[21px] xl:text-2xl 2xl:text-3xl font-black text-[var(--db-text-title)] tracking-tight leading-tight truncate"
+                          style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                        >
+                          {card.displayValue}
+                        </div>
+                      )}
+                      <p
+                        className="text-[10px] 2xl:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] mt-1 truncate group-hover:text-[var(--db-text)] transition-colors"
+                        title={card.title}
+                      >
+                        {card.title}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
-            <div className="z-10 shrink-0">
-              {loading ? (
-                <Loader2 size={24} className="animate-spin text-[var(--db-accent-highlight)]" />
-              ) : (
-                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  {events.length}
-                </p>
-              )}
-            </div>
-          </motion.div>
-
-          {/* EVENT COLLECTION CARD */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
-          >
-            <div className="absolute top-0 right-0 bg-green-500/20 w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
-            <div className="flex items-center gap-3 z-10">
-              <div className="p-2.5 rounded-xl bg-green-500/10 text-green-400 shrink-0 border border-green-500/20">
-                <DollarSign size={20} />
-              </div>
-              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                Event Collection
-              </span>
-            </div>
-            <div className="z-10 shrink-0">
-              {loading ? (
-                <Loader2 size={24} className="animate-spin text-green-400" />
-              ) : (
-                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  ₹{eventRevenue.toLocaleString()}
-                </p>
-              )}
-            </div>
-          </motion.div>
-
-          {/* PAID FOUNDING MEMBERS CARD */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.25 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-5 md:p-6 flex items-center justify-between relative overflow-hidden shadow-2xl transition-colors text-left"
-          >
-            <div className="absolute top-0 right-0 bg-purple-500/20 w-16 h-16 rounded-bl-[60px] pointer-events-none opacity-40" />
-            <div className="flex items-center gap-3 z-10">
-              <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 shrink-0 border border-purple-500/20">
-                <ShieldCheck size={20} />
-              </div>
-              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                Paid Founders
-              </span>
-            </div>
-            <div className="z-10 shrink-0">
-              {loading ? (
-                <Loader2 size={24} className="animate-spin text-purple-400" />
-              ) : (
-                <p className="text-2xl md:text-3xl font-black text-[var(--db-text-title)] tracking-wide" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  {paidFounders}
-                </p>
-              )}
-            </div>
-          </motion.div>
-
-        </div>
+          );
+        })()}
 
 
 

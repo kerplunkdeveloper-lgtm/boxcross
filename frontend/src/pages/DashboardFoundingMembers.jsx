@@ -82,7 +82,7 @@ const DashboardFoundingMembers = () => {
 
   return (
     <div className="p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="max-w-8xl mx-auto space-y-6">
         
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

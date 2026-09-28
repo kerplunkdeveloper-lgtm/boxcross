@@ -536,20 +536,17 @@ const DashboardCalendar = () => {
       {/* Glow effect */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
 
-      <div className="max-w-6xl mx-auto space-y-6 relative z-10">
+      <div className="max-w-8xl mx-auto space-y-6 relative z-10">
         {/* Title Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="text-left">
             <h1
-              className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              className="text-xl md:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
-              Athlete & Events Schedule
+             SCHEDULE CALENDAR
             </h1>
-            <p className="text-[var(--db-text-muted)] text-[10px] md:text-sm mt-1">
-              Visual monthly calendar view. Click any day to create events.
-              Manage bookings and class schedules in real-time.
-            </p>
+           
           </div>
 
           {user?.role === "admin" && (

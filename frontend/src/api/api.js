@@ -139,4 +139,16 @@ export const deleteFounder = (id) => API.delete(`/founders/${id}`);
 export const getFoundingOffer = () => API.get("/founding-offer");
 export const updateFoundingOffer = (id, data) => API.put(`/founding-offer/${id}`, data);
 
+// ──────────────── USER / ATHLETE MANAGEMENT API ────────────────
+export const getAthletes = (params) => API.get("/athletes", { params });
+export const getAthleteById = (id) => API.get(`/athletes/${id}`);
+export const getNextMemberId = () => API.get("/athletes/next-id");
+export const createAthlete = (data) => API.post("/athletes", data);
+export const updateAthlete = (id, data) => API.put(`/athletes/${id}`, data);
+export const deleteAthlete = (id) => API.delete(`/athletes/${id}`);
+export const getAthleteStats = () => API.get("/athletes/stats");
+export const loginAthlete = (data) => API.post("/athletes/login", data);
+export const getAthleteMe = () => API.get("/athletes/me");
+export const impersonateAthlete = (id) => API.post(`/athletes/impersonate/${id}`);
+
 export default API;

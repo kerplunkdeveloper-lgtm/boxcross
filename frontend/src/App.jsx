@@ -38,6 +38,10 @@ const Community = lazy(() => import("./pages/Community"));
 const DashboardHomec1 = lazy(() => import("./pages/DashboardHomec1"));
 const DashboardHomec2 = lazy(() => import("./pages/DashboardHomec2"));
 const DashboardHomec3 = lazy(() => import("./pages/DashboardHomec3"));
+const Usermanagementdetails = lazy(
+  () => import("./pages/Usermanagementdetails"),
+);
+const AthleteDashboard = lazy(() => import("./pages/AthleteDashboard"));
 const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
 const Foot = lazy(() => import("./Components/Foot"));
 const GymMarquee = lazy(() => import("./Components/GymMarquee"));
@@ -142,6 +146,9 @@ const App = () => {
                 {/* <Route path="/" element={<Commingsoon />} /> */}
                 <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />
+                <Route path="/athlete-login" element={<Auth />} />
+                <Route path="/athlete-dashboard" element={<AthleteDashboard />} />
+                <Route path="/member-dashboard" element={<AthleteDashboard />} />
                 <Route
                   path="/dashboard"
                   element={
@@ -183,6 +190,8 @@ const App = () => {
                   <Route path="homec3" element={<DashboardHomec3 />} />
                   <Route path="settings" element={<DashboardSettings />} />
                   <Route path="calendar" element={<DashboardCalendar />} />
+                  <Route path="user-management" element={<Usermanagementdetails />} />
+                  <Route path="usermanagementdetails" element={<Usermanagementdetails />} />
                 </Route>
               </Routes>
             </Suspense>

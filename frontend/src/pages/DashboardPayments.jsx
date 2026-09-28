@@ -90,7 +90,7 @@ const DashboardPayments = () => {
 
   return (
     <div className="p-6 md:p-8 space-y-6 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-8xl mx-auto space-y-6">
         
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">

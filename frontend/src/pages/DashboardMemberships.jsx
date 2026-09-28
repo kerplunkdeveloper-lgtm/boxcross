@@ -107,7 +107,7 @@ const DashboardMemberships = () => {
 
   return (
     <div className="p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-8xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
