@@ -161,7 +161,7 @@ const DashboardHome = () => {
       <div className="max-w-9xl mx-auto z-10 relative space-y-10">
         {/* Welcome Section with Boxer Background Image and Real-Time Clock */}
         <div
-          className="relative overflow-hidden py-8 px-6 md:py-11 md:px-10 min-h-[160px] sm:min-h-[180px] md:min-h-[205px] rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 group"
+          className="relative overflow-hidden py-7 px-6 md:py-9 md:px-10 min-h-[175px] sm:min-h-[195px] md:min-h-[220px] rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 group"
           style={{
             background: "var(--db-glass-bg)",
             borderColor: "var(--db-glass-border)",
@@ -192,14 +192,14 @@ const DashboardHome = () => {
           <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40 z-[1]" />
           <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20 z-[1]" />
 
-          <div className="flex items-center gap-4 sm:gap-6 z-10">
+          <div className="flex items-center gap-4 sm:gap-6 md:gap-7 z-10">
             {/* Profile Image with Increased Size & Enhanced UI/UX */}
             <div
               onClick={() => navigate("/dashboard/profile")}
               className="relative group cursor-pointer shrink-0"
               title="Click to view profile"
             >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full p-1 bg-gradient-to-tr from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent border-2 border-[var(--db-accent-highlight)]/40 shadow-xl shadow-[var(--db-accent-glow)] ring-2 ring-[var(--db-accent-highlight)]/20 ring-offset-2 ring-offset-[var(--db-card)] transition-all duration-300 group-hover:scale-105 group-hover:border-[var(--db-accent-highlight)]">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full p-1.5 bg-gradient-to-tr from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent border-2 sm:border-[3px] border-[var(--db-accent-highlight)]/40 shadow-2xl shadow-[var(--db-accent-glow)] ring-2 sm:ring-[3px] ring-[var(--db-accent-highlight)]/25 ring-offset-2 sm:ring-offset-4 ring-offset-[var(--db-card)] transition-all duration-300 group-hover:scale-105 group-hover:border-[var(--db-accent-highlight)]">
                 <div className="w-full h-full rounded-full overflow-hidden bg-neutral-900 flex items-center justify-center">
                   {user.profileImage ? (
                     <img
@@ -209,7 +209,7 @@ const DashboardHome = () => {
                     />
                   ) : (
                     <User
-                      size={40}
+                      size={54}
                       className="text-[var(--db-accent-highlight)]"
                     />
                   )}
@@ -218,10 +218,10 @@ const DashboardHome = () => {
 
               {/* Active Online Status Indicator */}
               <div
-                className="absolute bottom-0 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[var(--db-card)] flex items-center justify-center shadow-md"
+                className="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-emerald-500 border-2 sm:border-[3px] border-[var(--db-card)] flex items-center justify-center shadow-lg"
                 title="Status: Online & Active"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
               </div>
             </div>
 
