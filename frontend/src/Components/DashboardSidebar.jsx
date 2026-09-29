@@ -17,8 +17,6 @@ import {
   LogOut,
   X,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   ShieldCheck,
   ClipboardCheck,
 } from "lucide-react";
@@ -114,154 +112,32 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
     }
   }, [location.pathname]);
 
-  // Micro-animation mapping based on icon type / purpose
-  const getIconAnimation = (name = "") => {
-    const n = name.toLowerCase();
-    if (n.includes("setting")) return "group-hover:rotate-90 group-hover:scale-120";
-    if (n.includes("calendar") || n.includes("schedule")) return "group-hover:-translate-y-1 group-hover:scale-115";
-    if (n.includes("dashboard")) return "group-hover:scale-120 group-hover:rotate-6";
-    if (n.includes("user") || n.includes("participant") || n.includes("consultation")) return "group-hover:scale-115 group-hover:translate-x-0.5";
-    if (n.includes("readiness") || n.includes("goal") || n.includes("clipboard")) return "group-hover:scale-120 group-hover:-rotate-6";
-    if (n.includes("membership") || n.includes("plan")) return "group-hover:scale-120 group-hover:-rotate-12";
-    if (n.includes("payment") || n.includes("dollar")) return "group-hover:scale-125 group-hover:rotate-12";
-    if (n.includes("founder") || n.includes("crown")) return "group-hover:scale-125 group-hover:-translate-y-1 group-hover:rotate-12";
-    if (n.includes("event") || n.includes("sparkle") || n.includes("offer")) return "group-hover:scale-125 group-hover:rotate-45";
-    if (n.includes("banner") || n.includes("image")) return "group-hover:scale-115 group-hover:-rotate-6 group-hover:-translate-y-0.5";
-    if (n.includes("lead") || n.includes("enquir") || n.includes("trial") || n.includes("form") || n.includes("file")) return "group-hover:scale-115 group-hover:-translate-y-0.5";
-    if (n.includes("booking") || n.includes("book")) return "group-hover:scale-120 group-hover:-rotate-6";
-    if (n.includes("message") || n.includes("contact")) return "group-hover:scale-120 group-hover:rotate-12 group-hover:-translate-y-0.5";
-    if (n.includes("profile")) return "group-hover:scale-115 group-hover:-translate-y-0.5";
-    if (n.includes("logout")) return "group-hover:-translate-x-1 group-hover:scale-115";
-    return "group-hover:scale-120 group-hover:-translate-y-0.5";
-  };
-
-  // Dedicated NavIconPod Component with rich glow, glint, and spring physics
-  const NavIconPod = ({
-    Icon,
-    name,
-    isActive = false,
-    collapsed = false,
-    size = 15,
-  }) => {
-    const animClass = getIconAnimation(name);
-
-    if (collapsed) {
-      return (
-        <div
-          className={`sidebar-icon-spring relative w-10 h-10 mx-auto flex items-center justify-center rounded-xl overflow-hidden cursor-pointer select-none ${
-            isActive
-              ? theme === "dark"
-                ? "bg-[#e5ff00] text-black shadow-[0_0_18px_rgba(229,255,0,0.55)] ring-2 ring-[#e5ff00]/50 scale-105 font-black"
-                : "bg-[#e5ff00] text-black shadow-[0_4px_14px_rgba(216,245,0,0.6)] border border-black/15 ring-2 ring-[#e5ff00]/60 scale-105 font-black"
-              : theme === "dark"
-                ? "bg-white/[0.04] border border-white/[0.08] text-zinc-300 group-hover:text-[#e5ff00] group-hover:bg-[#e5ff00]/15 group-hover:border-[#e5ff00]/40 group-hover:shadow-[0_0_16px_rgba(229,255,0,0.35)] group-hover:scale-105 group-hover:-translate-y-0.5"
-                : "bg-slate-100/90 border border-slate-200/80 text-slate-600 group-hover:text-black group-hover:bg-[#e5ff00]/30 group-hover:border-[#cbee00] group-hover:shadow-[0_2px_12px_rgba(229,255,0,0.35)] group-hover:scale-105 group-hover:-translate-y-0.5"
-          }`}
-        >
-          {/* Ambient Backlight Aura on Hover */}
-          <span
-            className={`absolute inset-0 rounded-xl pointer-events-none transition-opacity duration-300 ${
-              isActive
-                ? "opacity-60 bg-[#e5ff00]/40 blur-sm"
-                : "opacity-0 group-hover:opacity-100 bg-[#e5ff00]/25 blur-md"
-            }`}
-          />
-
-          {/* Micro Sheen Light Sweep on Hover */}
-          <span className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
-            <span className="absolute -inset-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-          </span>
-
-          {/* Left Indicator Pill on Collapsed Tile */}
-          <span
-            className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 rounded-r-full transition-all duration-300 ${
-              isActive
-                ? theme === "dark"
-                  ? "h-5 bg-[#e5ff00] shadow-[0_0_12px_#e5ff00]"
-                  : "h-5 bg-[#090d16] shadow-sm"
-                : theme === "dark"
-                  ? "h-0 bg-[#e5ff00] group-hover:h-3.5 group-hover:opacity-100 opacity-0 shadow-[0_0_8px_rgba(229,255,0,0.6)]"
-                  : "h-0 bg-[#cbee00] group-hover:h-3.5 group-hover:opacity-100 opacity-0"
-            }`}
-          />
-
-          {/* Icon */}
-          <Icon
-            size={17}
-            className={`sidebar-icon-spring relative z-10 shrink-0 ${animClass}`}
-          />
-        </div>
-      );
-    }
-
-    // Expanded View Icon Pod
-    return (
-      <div
-        className={`sidebar-icon-spring relative w-7 h-7 rounded-lg flex items-center justify-center shrink-0 overflow-hidden select-none ${
-          isActive
-            ? theme === "dark"
-              ? "bg-[#e5ff00] text-black shadow-[0_0_14px_rgba(229,255,0,0.55)] ring-1 ring-[#e5ff00]/60 font-black"
-              : "bg-[#e5ff00] text-black shadow-[0_2px_10px_rgba(216,245,0,0.55)] border border-black/15 ring-1 ring-[#e5ff00]/60 font-black"
-            : theme === "dark"
-              ? "bg-white/[0.04] border border-white/[0.08] text-zinc-300 group-hover:text-[#e5ff00] group-hover:bg-[#e5ff00]/15 group-hover:border-[#e5ff00]/40 group-hover:shadow-[0_0_12px_rgba(229,255,0,0.3)] group-hover:-translate-y-0.5"
-              : "bg-slate-100/90 border border-slate-200/80 text-slate-600 group-hover:text-black group-hover:bg-[#e5ff00]/30 group-hover:border-[#cbee00] group-hover:shadow-[0_2px_10px_rgba(229,255,0,0.35)] group-hover:-translate-y-0.5"
-        }`}
-      >
-        {/* Ambient Backlight Aura on Hover */}
-        <span
-          className={`absolute inset-0 rounded-lg pointer-events-none transition-opacity duration-300 ${
-            isActive
-              ? "opacity-60 bg-[#e5ff00]/30 blur-sm"
-              : "opacity-0 group-hover:opacity-100 bg-[#e5ff00]/25 blur-md"
-          }`}
-        />
-
-        {/* Micro Sheen Light Sweep on Hover */}
-        <span className="absolute inset-0 pointer-events-none overflow-hidden rounded-lg">
-          <span className="absolute -inset-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out" />
-        </span>
-
-        {/* Icon */}
-        <Icon
-          size={size}
-          className={`sidebar-icon-spring relative z-10 shrink-0 ${animClass}`}
-        />
-      </div>
-    );
-  };
-
   // Style helpers for items
   const getItemClass = (isActive) => {
     if (isActive) {
       return theme === "dark"
-        ? "bg-gradient-to-r from-[#e5ff00]/18 via-[#e5ff00]/08 to-transparent !text-[#e5ff00] border border-[#e5ff00]/35 shadow-[0_0_16px_rgba(229,255,0,0.18)] font-black"
-        : "bg-gradient-to-r from-[#e5ff00]/35 via-[#e5ff00]/20 to-transparent !text-slate-950 border border-[#cbee00] shadow-[0_2px_12px_rgba(216,245,0,0.25)] font-black";
+        ? "bg-[#e5ff00]/12 text-[#e5ff00] border border-[#e5ff00]/30 shadow-[0_0_12px_rgba(229,255,0,0.1)] font-bold"
+        : "bg-slate-900 text-white font-bold shadow-sm";
     }
-    return theme === "dark"
-      ? "text-zinc-300 font-bold hover:text-white hover:bg-white/[0.06] hover:border-white/10 border border-transparent"
-      : "text-slate-600 font-bold hover:text-slate-950 hover:bg-slate-100/90 hover:border-slate-200/80 border border-transparent";
+    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
   };
 
   const getSubItemClass = (isActive) => {
     if (isActive) {
       return theme === "dark"
-        ? "bg-gradient-to-r from-[#e5ff00]/16 via-[#e5ff00]/06 to-transparent !text-[#e5ff00] border border-[#e5ff00]/35 font-black shadow-[0_0_12px_rgba(229,255,0,0.12)]"
-        : "bg-[#e5ff00]/25 !text-slate-950 border border-[#cbee00]/80 font-black shadow-sm";
+        ? "bg-[#e5ff00]/15 text-[#e5ff00] border border-[#e5ff00]/35 font-bold shadow-sm"
+        : "bg-slate-800 text-white font-bold shadow-sm";
     }
-    return theme === "dark"
-      ? "text-zinc-400 font-medium hover:text-white hover:bg-white/[0.05] hover:border-white/10 border border-transparent"
-      : "text-slate-600 font-medium hover:text-slate-950 hover:bg-slate-100/90 hover:border-slate-200/80 border border-transparent";
+    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
   };
 
   const getTriggerClass = (hasActive) => {
     if (hasActive) {
       return theme === "dark"
-        ? "!text-[#e5ff00] bg-gradient-to-r from-[#e5ff00]/15 via-[#e5ff00]/06 to-transparent border border-[#e5ff00]/30 font-black shadow-[0_0_12px_rgba(229,255,0,0.1)]"
-        : "!text-slate-950 bg-gradient-to-r from-[#e5ff00]/25 via-[#e5ff00]/15 to-transparent border border-[#cbee00]/70 font-black shadow-sm";
+        ? "text-[#e5ff00] bg-[#e5ff00]/8 border border-[#e5ff00]/20 font-bold"
+        : "text-slate-900 bg-slate-100 border border-slate-200 font-bold";
     }
-    return theme === "dark"
-      ? "text-zinc-300 font-bold hover:text-white hover:bg-white/[0.06] hover:border-white/10 border border-transparent"
-      : "text-slate-600 font-bold hover:text-slate-950 hover:bg-slate-100/90 hover:border-slate-200/80 border border-transparent";
+    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
   };
 
   // Helper to render single nav item with tooltip for collapsed state
@@ -274,91 +150,46 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
           onClick={closeSidebarOnMobile}
           className={({ isActive }) =>
             sidebarOpen
-              ? `relative w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-[12px] font-bold tracking-wide transition-all duration-200 cursor-pointer overflow-hidden ${getItemClass(
+              ? `w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12px] font-bold tracking-wide transition-all duration-150 cursor-pointer ${getItemClass(
                   isActive
                 )}`
-              : `relative w-full flex items-center justify-center py-0.5 transition-all duration-200 cursor-pointer`
+              : `w-9 h-9 mx-auto flex items-center justify-center rounded-xl transition-all duration-150 cursor-pointer ${getItemClass(
+                  isActive
+                )}`
           }
         >
-          {({ isActive }) => (
+          {sidebarOpen ? (
             <>
-              {sidebarOpen ? (
-                <>
-                  {/* Left Active/Hover Glowing Pill Indicator */}
-                  <span
-                    className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 rounded-r-full transition-all duration-300 ${
-                      isActive
-                        ? theme === "dark"
-                          ? "h-5 bg-[#e5ff00] shadow-[0_0_12px_#e5ff00]"
-                          : "h-5 bg-[#090d16] shadow-sm"
-                        : theme === "dark"
-                          ? "h-0 bg-[#e5ff00] group-hover:h-3.5 group-hover:opacity-100 opacity-0 shadow-[0_0_8px_rgba(229,255,0,0.6)]"
-                          : "h-0 bg-[#cbee00] group-hover:h-3.5 group-hover:opacity-100 opacity-0"
-                    }`}
-                  />
-
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <NavIconPod
-                      Icon={Icon}
-                      name={name}
-                      isActive={isActive}
-                      collapsed={false}
-                    />
-                    <span
-                      className={`truncate group-hover:translate-x-0.5 transition-transform duration-200 ${
-                        isActive
-                          ? theme === "dark"
-                            ? "!text-[#e5ff00] font-black"
-                            : "!text-slate-950 font-black"
-                          : "text-inherit"
-                      }`}
-                    >
-                      {name}
-                    </span>
-                  </div>
-                  {badge && (
-                    <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 group-hover:scale-105 transition-transform duration-200">
-                      {badge}
-                    </span>
-                  )}
-                </>
-              ) : (
-                <NavIconPod
-                  Icon={Icon}
-                  name={name}
-                  isActive={isActive}
-                  collapsed={true}
-                />
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Icon size={15} className="shrink-0" />
+                <span className="truncate">{name}</span>
+              </div>
+              {badge && (
+                <span className="text-[8px] font-black uppercase px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                  {badge}
+                </span>
               )}
             </>
+          ) : (
+            <Icon size={16} className="shrink-0" />
           )}
         </NavLink>
 
         {/* Hover Tooltip when sidebar is collapsed (Desktop only) */}
         {!sidebarOpen && (
-          <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-3 z-50 items-center">
-            <div className={`relative px-3 py-1.5 rounded-xl border flex items-center gap-2 whitespace-nowrap animate-in fade-in zoom-in-95 duration-200 backdrop-blur-xl ${
-              theme === "dark"
-                ? "bg-[#0b0c10]/95 border-white/15 shadow-[0_12px_30px_rgba(0,0,0,0.8),0_0_15px_rgba(229,255,0,0.06)]"
-                : "bg-white/95 border-slate-200 shadow-[0_12px_25px_rgba(15,23,42,0.12)]"
-            }`}>
-              <span className={`text-[11.5px] font-bold tracking-wide ${
-                theme === "dark" ? "text-zinc-100" : "text-slate-900"
-              }`}>
+          <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
+            <div className="relative px-2.5 py-1.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-2xl flex items-center gap-1.5 whitespace-nowrap">
+              <span className="text-[11.5px] font-bold text-[var(--db-text)]">
                 {name}
               </span>
               {badge && (
-                <span className="text-[8px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <span className="text-[8px] font-black uppercase px-1 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                   {badge}
                 </span>
               )}
               {/* Tooltip arrow pointer */}
-              <div className={`absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent ${
-                theme === "dark" ? "border-r-white/15" : "border-r-slate-200"
-              }`} />
-              <div className={`absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent ${
-                theme === "dark" ? "border-r-[#0b0c10]" : "border-r-white"
-              } mr-[-1px]`} />
+              <div className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-[var(--db-card-border)]" />
+              <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
             </div>
           </div>
         )}
@@ -383,60 +214,24 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
           <div>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`relative w-full flex items-center justify-between px-2.5 py-1.5 rounded-xl text-[12px] font-bold tracking-wide transition-all duration-200 cursor-pointer overflow-hidden ${getTriggerClass(
+              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12px] font-bold tracking-wide transition-all duration-150 cursor-pointer ${getTriggerClass(
                 hasActiveChild
               )}`}
             >
-              {/* Left Active/Hover Glowing Pill */}
-              <span
-                className={`absolute left-0 top-1/2 -translate-y-1/2 w-1 rounded-r-full transition-all duration-300 ${
-                  hasActiveChild
-                    ? theme === "dark"
-                      ? "h-5 bg-[#e5ff00] shadow-[0_0_12px_#e5ff00]"
-                      : "h-5 bg-[#090d16] shadow-sm"
-                    : theme === "dark"
-                      ? "h-0 bg-[#e5ff00] group-hover:h-3.5 group-hover:opacity-100 opacity-0 shadow-[0_0_8px_rgba(229,255,0,0.6)]"
-                      : "h-0 bg-[#cbee00] group-hover:h-3.5 group-hover:opacity-100 opacity-0"
+              <div className="flex items-center gap-2.5 min-w-0">
+                <Icon size={15} className="shrink-0" />
+                <span className="truncate">{title}</span>
+              </div>
+              <ChevronDown
+                size={13}
+                className={`shrink-0 transition-transform duration-200 ${
+                  isOpen ? "rotate-180" : ""
                 }`}
               />
-
-              <div className="flex items-center gap-2.5 min-w-0">
-                <NavIconPod
-                  Icon={Icon}
-                  name={title}
-                  isActive={hasActiveChild}
-                  collapsed={false}
-                />
-                <span
-                  className={`truncate group-hover:translate-x-0.5 transition-transform duration-200 ${
-                    hasActiveChild
-                      ? theme === "dark"
-                        ? "!text-[#e5ff00] font-black"
-                        : "!text-slate-950 font-black"
-                      : "text-inherit"
-                  }`}
-                >
-                  {title}
-                </span>
-              </div>
-              <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all duration-200 ${
-                theme === "dark"
-                  ? "group-hover:bg-white/[0.08] text-zinc-400 group-hover:text-zinc-200"
-                  : "group-hover:bg-black/[0.05] text-slate-500 group-hover:text-black"
-              }`}>
-                <ChevronDown
-                  size={13}
-                  className={`shrink-0 sidebar-icon-spring ${
-                    isOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </div>
             </button>
 
             {isOpen && (
-              <div className={`ml-3 pl-2.5 border-l space-y-1 my-1 ${
-                theme === "dark" ? "border-white/[0.08]" : "border-slate-200"
-              }`}>
+              <div className="ml-2.5 pl-2.5 border-l border-[var(--db-card-border)] space-y-0.5 my-1">
                 {items.map((sub) => {
                   const SubIcon = sub.icon;
                   return (
@@ -445,59 +240,13 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                       to={sub.path}
                       onClick={closeSidebarOnMobile}
                       className={({ isActive }) =>
-                        `group/sub relative w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-[11px] font-medium tracking-wide transition-all duration-200 cursor-pointer ${getSubItemClass(
+                        `w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] font-medium tracking-wide transition-all duration-150 cursor-pointer ${getSubItemClass(
                           isActive
                         )}`
                       }
                     >
-                      {({ isActive }) => (
-                        <>
-                          {/* Sub connector pip */}
-                          <span
-                            className={`w-1.5 h-1.5 rounded-full transition-all duration-200 shrink-0 ${
-                              isActive
-                                ? theme === "dark"
-                                  ? "bg-[#e5ff00] scale-125 shadow-[0_0_8px_#e5ff00]"
-                                  : "bg-[#090d16] scale-125 shadow-sm"
-                                : theme === "dark"
-                                  ? "bg-zinc-600/80 group-hover/sub:bg-[#e5ff00] group-hover/sub:scale-125 group-hover/sub:shadow-[0_0_8px_rgba(229,255,0,0.6)]"
-                                  : "bg-slate-300 group-hover/sub:bg-[#cbee00] group-hover/sub:scale-125 group-hover/sub:shadow-[0_0_6px_rgba(229,255,0,0.6)]"
-                            }`}
-                          />
-
-                          {/* Sub-item Icon Pod */}
-                          <div
-                            className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all duration-200 ${
-                              isActive
-                                ? theme === "dark"
-                                  ? "bg-[#e5ff00] text-black shadow-[0_0_10px_rgba(229,255,0,0.4)]"
-                                  : "bg-[#e5ff00] text-black shadow-sm border border-black/10"
-                                : theme === "dark"
-                                  ? "text-zinc-400 group-hover/sub:text-[#e5ff00] group-hover/sub:bg-[#e5ff00]/15 group-hover/sub:scale-110"
-                                  : "text-slate-600 group-hover/sub:text-black group-hover/sub:bg-[#e5ff00]/25 group-hover/sub:scale-110"
-                            }`}
-                          >
-                            <SubIcon
-                              size={12}
-                              className={`shrink-0 transition-all duration-200 group-hover/sub:scale-115 ${getIconAnimation(
-                                sub.name
-                              )}`}
-                            />
-                          </div>
-
-                          <span
-                            className={`truncate group-hover/sub:translate-x-1 transition-transform duration-200 ${
-                              isActive
-                                ? theme === "dark"
-                                  ? "!text-[#e5ff00] font-black"
-                                  : "!text-slate-950 font-black"
-                                : "text-inherit"
-                            }`}
-                          >
-                            {sub.name}
-                          </span>
-                        </>
-                      )}
+                      <SubIcon size={13} className="shrink-0" />
+                      <span className="truncate">{sub.name}</span>
                     </NavLink>
                   );
                 })}
@@ -506,36 +255,24 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
           </div>
         ) : (
           /* Collapsed View: Icon button + Flyout popover */
-          <div className="flex justify-center py-0.5">
-            <div className="cursor-pointer">
-              <NavIconPod
-                Icon={Icon}
-                name={title}
-                isActive={hasActiveChild}
-                collapsed={true}
-              />
-            </div>
+          <div className="flex justify-center">
+            <button
+              className={`w-9 h-9 mx-auto flex items-center justify-center rounded-xl transition-all duration-150 cursor-pointer ${getTriggerClass(
+                hasActiveChild
+              )}`}
+            >
+              <Icon size={16} className="shrink-0" />
+            </button>
 
             {/* Flyout Submenu Popover on Hover (Desktop only) */}
-            <div className="hidden lg:group-hover:block absolute left-full top-0 pl-3 z-50">
-              <div className={`w-56 rounded-2xl p-2.5 space-y-1 backdrop-blur-2xl animate-in fade-in zoom-in-95 duration-200 ${
-                theme === "dark"
-                  ? "bg-[#0b0c10]/95 border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(229,255,0,0.06)]"
-                  : "bg-white/95 border border-slate-200/90 shadow-[0_20px_40px_rgba(15,23,42,0.12)]"
-              }`}>
+            <div className="hidden lg:group-hover:block absolute left-full top-0 pl-2.5 z-50">
+              <div className="w-52 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.45)] p-2 space-y-1 backdrop-blur-md">
                 {/* Popover Header */}
-                <div className={`px-2.5 py-1.5 border-b mb-1.5 flex items-center justify-between ${
-                  theme === "dark" ? "border-white/[0.08]" : "border-slate-200"
-                }`}>
-                  <span className={`text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 ${
-                    theme === "dark" ? "text-zinc-400" : "text-slate-500"
-                  }`}>
-                    <Icon size={12} className={theme === "dark" ? "text-[#e5ff00]" : "text-black"} />
+                <div className="px-2 py-1 border-b border-[var(--db-card-border)] mb-1 flex items-center justify-between">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
                     {title}
                   </span>
-                  <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full tracking-wider ${
-                    theme === "dark" ? "bg-[#e5ff00]/15 !text-[#e5ff00] border border-[#e5ff00]/30 shadow-[0_0_8px_rgba(229,255,0,0.2)]" : "bg-[#e5ff00] text-black border border-black/10 font-bold"
-                  }`}>
+                  <span className="text-[9px] font-bold text-[var(--db-accent-highlight)]">
                     {items.length} links
                   </span>
                 </div>
@@ -549,61 +286,20 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                       to={sub.path}
                       onClick={closeSidebarOnMobile}
                       className={({ isActive }) =>
-                        `group/sub relative flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-[11px] font-semibold transition-all duration-200 cursor-pointer ${
+                        `flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${getSubItemClass(
                           isActive
-                            ? theme === "dark"
-                              ? "bg-gradient-to-r from-[#e5ff00]/20 via-[#e5ff00]/10 to-transparent !text-[#e5ff00] border border-[#e5ff00]/40 font-black shadow-[0_0_14px_rgba(229,255,0,0.2)]"
-                              : "bg-gradient-to-r from-[#e5ff00]/35 to-[#e5ff00]/15 !text-slate-950 border border-[#cbee00] font-black shadow-sm"
-                            : theme === "dark"
-                              ? "text-zinc-400 hover:text-white hover:bg-white/[0.06] hover:border-white/10 border border-transparent"
-                              : "text-slate-600 hover:text-slate-950 hover:bg-slate-100 border border-transparent"
-                        }`
+                        )}`
                       }
                     >
-                      {({ isActive }) => (
-                        <>
-                          <div
-                            className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 transition-all duration-200 ${
-                              isActive
-                                ? theme === "dark"
-                                  ? "bg-[#e5ff00] text-black shadow-[0_0_10px_rgba(229,255,0,0.4)]"
-                                  : "bg-[#e5ff00] text-black shadow-sm border border-black/10"
-                                : theme === "dark"
-                                  ? "bg-white/[0.04] text-zinc-400 group-hover/sub:text-[#e5ff00] group-hover/sub:bg-[#e5ff00]/15 group-hover/sub:scale-110"
-                                  : "bg-slate-100 text-slate-600 group-hover/sub:text-black group-hover/sub:bg-[#e5ff00]/25 group-hover/sub:scale-110"
-                            }`}
-                          >
-                            <SubIcon
-                              size={13}
-                              className={`shrink-0 transition-transform duration-200 ${getIconAnimation(
-                                sub.name
-                              )}`}
-                            />
-                          </div>
-                          <span
-                            className={`truncate group-hover/sub:translate-x-0.5 transition-transform duration-200 ${
-                              isActive
-                                ? theme === "dark"
-                                  ? "!text-[#e5ff00] font-black"
-                                  : "!text-slate-950 font-black"
-                                : "text-inherit"
-                            }`}
-                          >
-                            {sub.name}
-                          </span>
-                        </>
-                      )}
+                      <SubIcon size={13} className="shrink-0" />
+                      <span className="truncate">{sub.name}</span>
                     </NavLink>
                   );
                 })}
 
                 {/* Flyout pointer arrow */}
-                <div className={`absolute right-full top-3.5 border-[6px] border-transparent ${
-                  theme === "dark" ? "border-r-white/15" : "border-r-slate-200"
-                }`} />
-                <div className={`absolute right-full top-3.5 border-[5px] border-transparent ${
-                  theme === "dark" ? "border-r-[#0b0c10]" : "border-r-white"
-                } mr-[-1px]`} />
+                <div className="absolute right-full top-3 border-[6px] border-transparent border-r-[var(--db-card-border)]" />
+                <div className="absolute right-full top-3 border-[5px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
               </div>
             </div>
           </div>
@@ -616,36 +312,22 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
   const renderSectionHeader = (title) => {
     if (sidebarOpen) {
       return (
-        <div className={`px-2 pb-1.5 pt-1 text-[9.5px] font-black uppercase tracking-[0.16em] flex items-center justify-between select-none ${
-          theme === "dark" ? "text-zinc-400 font-extrabold" : "text-slate-400 font-extrabold"
-        }`}>
+        <div className="px-2 pb-1 text-[9.5px] font-black uppercase tracking-[0.14em] text-[var(--db-text-muted)]/60 flex items-center justify-between select-none">
           <span>{title}</span>
-          {theme === "dark" && (
-            <span className="flex-1 ml-2.5 h-[1px] bg-gradient-to-r from-white/[0.08] to-transparent" />
-          )}
         </div>
       );
     }
-    return <div className={`h-[1px] my-2 mx-1.5 ${theme === "dark" ? "bg-white/[0.08]" : "bg-slate-200/80"}`} />;
+    return <div className="h-[1px] bg-[var(--db-card-border)]/60 my-2 mx-1.5" />;
   };
 
   return (
     <aside
-      className={`fixed lg:static inset-y-0 left-0 z-30 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform transition-all duration-300 select-none overflow-hidden ${
-        theme === "dark"
-          ? "shadow-[4px_0_30px_rgba(0,0,0,0.55)]"
-          : "shadow-[2px_0_16px_rgba(15,23,42,0.03)]"
-      } ${
+      className={`fixed lg:static inset-y-0 left-0 z-30 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform transition-all duration-300 select-none ${
         sidebarOpen
           ? "translate-x-0 w-[232px] lg:w-[232px]"
           : "-translate-x-full lg:w-[68px] lg:translate-x-0"
       }`}
     >
-      {/* Subtle Ambient Backlight Glow for Dark Mode */}
-      {theme === "dark" && (
-        <div className="pointer-events-none absolute -top-24 -left-24 w-64 h-64 bg-[#e5ff00]/[0.03] rounded-full blur-3xl" />
-      )}
-
       {/* Brand Header */}
       <div
         className={`h-14 flex items-center border-b border-[var(--db-sidebar-border)] flex-shrink-0 bg-[var(--db-sidebar)] ${
@@ -661,67 +343,32 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                 className="w-[105px] h-7 object-contain"
               />
               {isAdmin && (
-                <span className={`text-[9px] font-black px-2 py-0.5 rounded-md tracking-wider select-none shrink-0 ${
-                  theme === "dark"
-                    ? "bg-[#e5ff00] text-black shadow-[0_0_12px_rgba(229,255,0,0.45)] border border-[#e5ff00]/40"
-                    : "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-xs border border-black/10"
-                }`}>
+                <span className="text-[9px] text-blue-500 font-black px-2 py-0.5 rounded-md bg-[var(--db-accent)] tracking-wider shadow-[0_0_10px_rgba(229,255,0,0.25)] select-none shrink-0">
                   <span style={{ fontFamily: '"Brutal Font", sans-serif' }}>ADMIN</span>
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1">
-              {/* Desktop Collapse Button */}
-              <button
-                className={`hidden lg:flex p-1.5 rounded-lg transition-all duration-200 cursor-pointer hover:scale-105 active:scale-95 ${
-                  theme === "dark"
-                    ? "text-zinc-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.05] hover:border-white/15"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-100 border border-slate-200/70"
-                }`}
-                onClick={() => setSidebarOpen(false)}
-                title="Collapse sidebar (icons only)"
-              >
-                <ChevronLeft size={16} className="transition-transform duration-200 hover:-translate-x-0.5" />
-              </button>
-              {/* Mobile Close Button */}
-              <button
-                className={`lg:hidden p-1.5 rounded-lg transition-all duration-200 hover:rotate-90 hover:scale-110 cursor-pointer ${
-                  theme === "dark"
-                    ? "text-zinc-400 hover:text-white hover:bg-white/[0.08]"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
-                }`}
-                onClick={() => setSidebarOpen(false)}
-                title="Close sidebar"
-              >
-                <X size={17} />
-              </button>
-            </div>
+            <button
+              className="lg:hidden p-1 rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors cursor-pointer"
+              onClick={() => setSidebarOpen(false)}
+              title="Close sidebar"
+            >
+              <X size={17} />
+            </button>
           </>
         ) : (
           <div className="relative group">
             <div
               onClick={() => setSidebarOpen(true)}
-              className="group/bx sidebar-icon-spring relative w-9 h-9 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] flex items-center justify-center font-black text-xs shadow-[0_0_12px_rgba(229,255,0,0.3)] hover:shadow-[0_0_20px_rgba(229,255,0,0.65)] hover:scale-110 hover:-translate-y-0.5 active:scale-95 cursor-pointer overflow-hidden select-none"
+              className="w-8 h-8 rounded-xl bg-[var(--db-accent)] text-black flex items-center justify-center font-black text-xs shadow-[0_0_12px_rgba(229,255,0,0.3)] cursor-pointer"
             >
-              <span className="absolute -inset-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover/bx:translate-x-full transition-transform duration-700 ease-out pointer-events-none" />
-              <span className="relative z-10 transition-transform duration-300 group-hover/bx:scale-110">
-                BX
-              </span>
+              BX
             </div>
             {/* Tooltip on logo */}
-            <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-3 z-50 items-center">
-              <div className={`relative px-3 py-1.5 rounded-xl border whitespace-nowrap animate-in fade-in zoom-in-95 duration-200 ${
-                theme === "dark"
-                  ? "bg-[#0b0c10]/95 border-white/15 shadow-2xl text-[11px] font-bold text-zinc-100"
-                  : "bg-white border-slate-200 shadow-xl text-[11px] font-bold text-slate-900"
-              }`}>
-                Box & Cross Admin (Click to expand)
-                <div className={`absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent ${
-                  theme === "dark" ? "border-r-white/15" : "border-r-slate-200"
-                }`} />
-                <div className={`absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent ${
-                  theme === "dark" ? "border-r-[#0b0c10]" : "border-r-white"
-                } mr-[-1px]`} />
+            <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
+              <div className="relative px-2.5 py-1 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-xl text-[11px] font-bold text-[var(--db-text)] whitespace-nowrap">
+                Box & Cross Admin
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card-border)]" />
               </div>
             </div>
           </div>
@@ -916,19 +563,11 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
       </div>
 
       {/* Footer Profile Snapshot & Logout */}
-      <div className="p-2.5 border-t border-[var(--db-sidebar-border)] flex-shrink-0 bg-[var(--db-sidebar)] space-y-2">
+      <div className="p-2 border-t border-[var(--db-sidebar-border)] flex-shrink-0 bg-[var(--db-sidebar)] space-y-2">
         {sidebarOpen ? (
-          <div className={`flex items-center justify-between p-2 rounded-xl border transition-all ${
-            theme === "dark"
-              ? "bg-gradient-to-r from-white/[0.04] to-white/[0.015] border-white/[0.08] hover:border-[#e5ff00]/40 hover:shadow-[0_0_16px_rgba(229,255,0,0.12)] hover:bg-white/[0.06]"
-              : "bg-gradient-to-r from-slate-50 to-slate-100/90 border-slate-200/90 hover:border-[#cbee00] hover:shadow-sm"
-          }`}>
-            <div className="flex items-center gap-2.5 min-w-0 group/profile cursor-pointer">
-              <div className={`sidebar-icon-spring relative w-8 h-8 rounded-xl flex items-center justify-center overflow-hidden shrink-0 transition-all ${
-                theme === "dark"
-                  ? "bg-gradient-to-tr from-[#e5ff00]/25 to-transparent border border-[#e5ff00]/40 group-hover/profile:scale-105 group-hover/profile:shadow-[0_0_14px_rgba(229,255,0,0.45)] group-hover/profile:border-[#e5ff00]"
-                  : "bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-black/15 group-hover/profile:scale-105 group-hover/profile:shadow-[0_2px_10px_rgba(216,245,0,0.4)]"
-              }`}>
+          <div className="flex items-center justify-between p-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)]">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
                 {user?.profileImage ? (
                   <img
                     src={user.profileImage}
@@ -942,20 +581,12 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                 )}
               </div>
               <div className="min-w-0">
-                <p className={`text-[11.5px] font-bold truncate leading-tight transition-colors ${
-                  theme === "dark"
-                    ? "text-zinc-200 group-hover/profile:text-[#e5ff00]"
-                    : "text-[var(--db-text)] group-hover/profile:text-[var(--db-accent-highlight)]"
-                }`}>
+                <p className="text-[11.5px] font-bold text-[var(--db-text)] truncate leading-tight">
                   {user?.name || "Admin"}
                 </p>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
-                  <span className={`text-[9px] font-black uppercase tracking-wider ${
-                    theme === "dark"
-                      ? "text-[#e5ff00] bg-[#e5ff00]/15 px-1.5 py-0.5 rounded border border-[#e5ff00]/30 shadow-[0_0_8px_rgba(229,255,0,0.2)]"
-                      : "text-black bg-[#e5ff00] px-1.5 py-0.5 rounded border border-black/10 shadow-xs"
-                  }`}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-[9px] font-bold text-[var(--db-accent-highlight)] uppercase tracking-wider">
                     {user?.role || "ADMIN"}
                   </span>
                 </div>
@@ -964,23 +595,16 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
             <button
               onClick={handleLogout}
               title="Log out of session"
-              className="group/logout relative p-2 rounded-xl text-red-400 hover:text-red-300 hover:bg-red-500/15 border border-transparent hover:border-red-500/30 transition-all duration-300 hover:shadow-[0_0_12px_rgba(239,68,68,0.25)] hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center shrink-0"
+              className="p-1.5 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors cursor-pointer"
             >
-              <LogOut
-                size={15}
-                className="transition-transform duration-300 group-hover/logout:-translate-x-0.5 group-hover/logout:scale-115"
-              />
+              <LogOut size={15} />
             </button>
           </div>
         ) : (
-          <div className="space-y-2 flex flex-col items-center">
+          <div className="space-y-1.5 flex flex-col items-center">
             {/* Profile Avatar Icon with Tooltip */}
             <div className="relative group hover:z-50">
-              <div className={`sidebar-icon-spring relative w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center cursor-pointer hover:scale-105 hover:-translate-y-0.5 ${
-                theme === "dark"
-                  ? "border border-white/10 hover:border-[#e5ff00] hover:shadow-[0_0_16px_rgba(229,255,0,0.35)]"
-                  : "border border-slate-200 hover:border-[#cbee00] hover:shadow-[0_2px_12px_rgba(216,245,0,0.35)]"
-              }`}>
+              <div className="w-8 h-8 rounded-xl overflow-hidden border border-[var(--db-accent-highlight)]/30 flex items-center justify-center cursor-pointer">
                 {user?.profileImage ? (
                   <img
                     src={user.profileImage}
@@ -993,20 +617,12 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                   </div>
                 )}
               </div>
-              <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-3 z-50 items-center">
-                <div className={`relative px-3 py-1.5 rounded-xl border whitespace-nowrap animate-in fade-in zoom-in-95 duration-200 ${
-                  theme === "dark"
-                    ? "bg-[#0b0c10]/95 border-white/15 shadow-2xl text-[11px] font-bold text-zinc-100"
-                    : "bg-white border-slate-200 shadow-xl text-[11px] font-bold text-slate-900"
-                }`}>
-                  <p className="font-bold">{user?.name || "Admin"}</p>
-                  <p className="text-[9px] text-[#e5ff00] uppercase font-black">{user?.role || "ADMIN"}</p>
-                  <div className={`absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent ${
-                    theme === "dark" ? "border-r-white/15" : "border-r-slate-200"
-                  }`} />
-                  <div className={`absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent ${
-                    theme === "dark" ? "border-r-[#0b0c10]" : "border-r-white"
-                  } mr-[-1px]`} />
+              <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
+                <div className="relative px-2.5 py-1.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-xl text-[11px] font-bold text-[var(--db-text)] whitespace-nowrap">
+                  <p className="font-bold text-[var(--db-text)]">{user?.name || "Admin"}</p>
+                  <p className="text-[9px] text-[var(--db-accent-highlight)] uppercase font-black">{user?.role || "ADMIN"}</p>
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card-border)]" />
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[3px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
                 </div>
               </div>
             </div>
@@ -1015,21 +631,14 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
             <div className="relative group hover:z-50">
               <button
                 onClick={handleLogout}
-                className="group/logout sidebar-icon-spring relative w-10 h-10 rounded-xl flex items-center justify-center text-red-400 hover:text-red-300 bg-red-500/5 hover:bg-red-500/15 border border-red-500/20 hover:border-red-500/40 hover:shadow-[0_0_16px_rgba(239,68,68,0.35)] hover:scale-105 hover:-translate-y-0.5 active:scale-95 cursor-pointer overflow-hidden"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500/15 hover:text-red-300 transition-colors cursor-pointer"
               >
-                <span className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
-                  <span className="absolute -inset-full bg-gradient-to-r from-transparent via-red-400/20 to-transparent -translate-x-full group-hover/logout:translate-x-full transition-transform duration-700 ease-out" />
-                </span>
-                <LogOut
-                  size={16}
-                  className="transition-transform duration-300 group-hover/logout:-translate-x-0.5 group-hover/logout:scale-115"
-                />
+                <LogOut size={14} />
               </button>
-              <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-3 z-50 items-center">
-                <div className="relative px-3 py-1.5 bg-red-950/95 border border-red-500/30 rounded-xl shadow-2xl text-[11px] font-bold text-red-300 whitespace-nowrap animate-in fade-in zoom-in-95 duration-200">
+              <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
+                <div className="relative px-2.5 py-1 bg-red-950/90 border border-red-500/30 rounded-lg shadow-xl text-[11px] font-bold text-red-300 whitespace-nowrap">
                   Logout
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-red-500/30" />
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-red-950/95 mr-[-1px]" />
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-red-500/30" />
                 </div>
               </div>
             </div>

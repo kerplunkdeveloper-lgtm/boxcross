@@ -86,59 +86,58 @@ html {
   --db-card-border: rgba(255, 255, 255, 0.08);
   --db-text: #ffffff;
   --db-text-muted: #9ca3af;
-  --db-sidebar: #090a0f;
-  --db-sidebar-border: rgba(255, 255, 255, 0.07);
-  --db-header: #090a0f;
-  --db-header-border: rgba(255, 255, 255, 0.07);
+  --db-sidebar: #0a0a0a;
+  --db-sidebar-border: rgba(255, 255, 255, 0.05);
+  --db-header: #0a0a0a;
+  --db-header-border: rgba(255, 255, 255, 0.05);
   --db-input-bg: rgba(255, 255, 255, 0.03);
   --db-input-border: rgba(255, 255, 255, 0.1);
   --db-text-title: #ffffff;
-  --db-sidebar-link-hover: rgba(255, 255, 255, 0.06);
-  --db-sidebar-link-text: #d4d4d8;
-  --db-table-hover: rgba(255, 255, 255, 0.03);
-  --db-accent-dim: rgba(229, 255, 0, 0.12);
-  --db-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
-  --db-glass-bg: rgba(9, 10, 15, 0.7);
+  --db-sidebar-link-hover: rgba(255, 255, 255, 0.05);
+  --db-sidebar-link-text: #9ca3af;
+  --db-table-hover: rgba(255, 255, 255, 0.02);
+  --db-accent-dim: rgba(222, 251, 2, 0.1);
+  --db-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --db-glass-bg: rgba(10, 10, 10, 0.45);
   --db-glass-border: rgba(255, 255, 255, 0.08);
 
+
   /* Dynamic Accent Brand Tokens */
-  --db-accent: #e5ff00;
+ --db-accent: #e5ff00;
   --db-accent-text: #000000;
-  --db-accent-hover: #d5ee00;
+  --db-accent-hover: #e5ff00;
   --db-accent-highlight: #e5ff00;
-  --db-accent-glow: rgba(229, 255, 0, 0.35);
+  --db-accent-glow: rgba(222, 251, 2, 0.15);
 }
 
 .dashboard-light {
-  /* Ultra-Premium Porcelain Slate Backdrop — Enhances White Card Contrast & Depth */
-  --db-bg: #f1f4f9;
+  --db-bg: #f8fafc;
   --db-card: #ffffff;
   --db-card-border: rgba(15, 23, 42, 0.08);
-  --db-card-border-hover: rgba(15, 23, 42, 0.16);
   --db-text: #1e293b;
   --db-text-muted: #64748b;
   --db-sidebar: #ffffff;
-  --db-sidebar-border: rgba(226, 232, 240, 0.85);
-  --db-header: rgba(255, 255, 255, 0.94);
-  --db-header-border: rgba(226, 232, 240, 0.85);
-  --db-input-bg: #f8fafc;
-  --db-input-border: #cbd5e1;
-  --db-text-title: #090d16;
-  --db-sidebar-link-hover: #f1f5f9;
+  --db-sidebar-border: rgba(15, 23, 42, 0.06);
+  --db-header: #ffffff;
+  --db-header-border: rgba(15, 23, 42, 0.06);
+  --db-input-bg: #f1f5f9;
+  --db-input-border: rgba(15, 23, 42, 0.12);
+  --db-text-title: #0f172a;
+  --db-sidebar-link-hover: rgba(15, 23, 42, 0.04);
   --db-sidebar-link-text: #475569;
-  --db-table-hover: rgba(241, 245, 249, 0.85);
-  --db-accent-dim: rgba(229, 255, 0, 0.18);
-  --db-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 6px 10px -4px rgba(15, 23, 42, 0.03);
-  --db-shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.08), 0 10px 15px -5px rgba(15, 23, 42, 0.04);
-  --db-glass-bg: rgba(255, 255, 255, 0.88);
-  --db-glass-border: rgba(226, 232, 240, 0.95);
+  --db-table-hover: rgba(15, 23, 42, 0.01);
+  --db-accent-dim: rgba(15, 23, 42, 0.08);
+  --db-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --db-glass-bg: rgba(255, 255, 255, 0.45);
+  --db-glass-border: rgba(15, 23, 42, 0.08);
 
-  /* Dynamic Accent Brand Tokens — Iconic Box & Cross Athletic Volt */
-  --db-accent: #e5ff00;
-  --db-accent-text: #050505;
-  --db-accent-hover: #d5ee00;
-  --db-accent-highlight: #090d16;
-  --db-accent-glow: rgba(216, 245, 0, 0.45);
+
+  /* Dynamic Accent Brand Tokens */
+  --db-accent:#000000;
+  --db-accent-text: white;
+  --db-accent-hover: #111111;
+  --db-accent-highlight: #111111;
+  --db-accent-glow: rgba(119, 119, 119, 0.12);
 }
 
 /* Force Brutal Font on all dashboard views */
@@ -193,52 +192,17 @@ html {
   background: var(--db-accent-hover) !important;
 }
 
-[class~="bg-[var(--db-accent)]"] {
+[class*="bg-[var(--db-accent)]"]:not([class*="bg-[var(--db-accent)]/"]) {
   background: var(--db-accent) !important;
 }
-[class~="hover:bg-[var(--db-accent)]"]:hover {
+[class*="hover:bg-[var(--db-accent)]"]:not([class*="hover:bg-[var(--db-accent)]/"]):hover {
   background: var(--db-accent) !important;
 }
-[class~="bg-[var(--db-accent-hover)]"] {
+[class*="bg-[var(--db-accent-hover)]"]:not([class*="bg-[var(--db-accent-hover)]/"]) {
   background: var(--db-accent-hover) !important;
 }
-[class~="hover:bg-[var(--db-accent-hover)]"]:hover {
+[class*="hover:bg-[var(--db-accent-hover)]"]:not([class*="hover:bg-[var(--db-accent-hover)]/"]):hover {
   background: var(--db-accent-hover) !important;
-}
-
-/* ── Premium High-Performance Dashboard Buttons ── */
-.dashboard-light button[class*="bg-[var(--db-accent)]"],
-.dashboard-light a[class*="bg-[var(--db-accent)]"],
-.dashboard-light [class~="bg-[var(--db-accent)]"] {
-  background: linear-gradient(180deg, #edff26 0%, #d8f500 100%) !important;
-  color: #050505 !important;
-  border: 1px solid rgba(0, 0, 0, 0.14) !important;
-  box-shadow: 0 4px 14px 0 rgba(216, 245, 0, 0.45), 0 1px 3px 0 rgba(0, 0, 0, 0.08) !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.03em !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.dashboard-light button[class*="bg-[var(--db-accent)]"]:hover,
-.dashboard-light a[class*="bg-[var(--db-accent)]"]:hover,
-.dashboard-light [class~="bg-[var(--db-accent)]"]:hover {
-  background: linear-gradient(180deg, #f5ff4a 0%, #cbee00 100%) !important;
-  box-shadow: 0 6px 20px 0 rgba(216, 245, 0, 0.65), 0 2px 6px 0 rgba(0, 0, 0, 0.12) !important;
-  transform: translateY(-1.5px) scale(1.015) !important;
-}
-
-.dashboard-light button[class*="bg-[var(--db-accent)]"]:active,
-.dashboard-light a[class*="bg-[var(--db-accent)]"]:active,
-.dashboard-light [class~="bg-[var(--db-accent)]"]:active {
-  transform: translateY(0px) scale(0.98) !important;
-  box-shadow: 0 2px 6px 0 rgba(216, 245, 0, 0.35) !important;
-}
-
-/* Secondary Button Polish in Light Mode */
-.dashboard-light button[class*="border-[var(--db-card-border)]"]:hover,
-.dashboard-light a[class*="border-[var(--db-card-border)]"]:hover {
-  border-color: rgba(15, 23, 42, 0.2) !important;
-  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.08) !important;
 }
 
 @keyframes spin-slow {
@@ -327,55 +291,34 @@ html {
   transform: translate(250%, 0) skewX(-20deg);
 }
 
-/* ── Premium Sidebar Icon Spring & Sheen Effects ── */
-.sidebar-icon-spring {
-  transition: transform 320ms cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 320ms cubic-bezier(0.34, 1.56, 0.64, 1),
-              background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
-              color 200ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-  will-change: transform, box-shadow;
-}
-
-@keyframes icon-shine-sweep {
-  0% {
-    transform: translateX(-100%) skewX(-15deg);
-  }
-  100% {
-    transform: translateX(250%) skewX(-15deg);
-  }
-}
-
-.icon-shine-sweep {
-  animation: icon-shine-sweep 0.75s ease-out;
-}
-
-
 /* ── Premium Scrollbar — DARK MODE ── */
 .dashboard-dark .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 .dashboard-dark .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 9999px;
 }
 
 .dashboard-dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.14) !important;
+  background: #e5ff00 !important;
   border-radius: 9999px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 6px rgba(229, 255, 0, 0.4);
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .dashboard-dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #e5ff00 !important;
-  box-shadow: 0 0 10px rgba(229, 255, 0, 0.7);
+  background: #cddc00 !important;
+  box-shadow: 0 0 10px rgba(229, 255, 0, 0.65);
 }
 
 /* Firefox — dark */
 .dashboard-dark .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
+  scrollbar-color: #e5ff00 rgba(255, 255, 255, 0.03);
 }
 
 /* ── Premium Scrollbar — LIGHT MODE ── */
@@ -385,23 +328,23 @@ html {
 }
 
 .dashboard-light .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.04);
+  background: rgba(15, 23, 42, 0.06);
   border-radius: 9999px;
 }
 
 .dashboard-light .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1 !important;
+  background: #1e293b !important;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(15, 23, 42, 0.12);
   transition: background 0.2s ease;
 }
 
 .dashboard-light .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8 !important;
+  background: #334155 !important;
 }
 
 /* Firefox — light */
 .dashboard-light .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 rgba(15, 23, 42, 0.04);
+  scrollbar-color: #1e293b rgba(15, 23, 42, 0.06);
 }

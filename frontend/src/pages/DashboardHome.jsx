@@ -244,14 +244,12 @@ const DashboardHome = () => {
               value: visitorCount,
               displayValue: visitorCount.toLocaleString("en-IN"),
               icon: Users,
-              accentText: theme === "dark" ? "text-[#e5ff00]" : "text-lime-700",
-              iconBg: theme === "dark" 
-                ? "bg-[#e5ff00]/10 text-[#e5ff00] border-[#e5ff00]/25 shadow-[0_0_14px_rgba(229,255,0,0.15)]"
-                : "bg-[#e5ff00] text-black border-black/15 shadow-[0_0_14px_rgba(229,255,0,0.35)]",
+              accentText: "text-[#e5ff00]",
+              iconBg: "bg-[#e5ff00]/10 text-[#e5ff00] border-[#e5ff00]/25 shadow-[0_0_14px_rgba(229,255,0,0.15)]",
               glowBg: "bg-[#e5ff00]",
-              borderHover: "hover:border-[#e5ff00]/60 hover:shadow-[0_8px_24px_rgba(229,255,0,0.2)]",
-              dotBg: theme === "dark" ? "bg-[#e5ff00]" : "bg-lime-600",
-              loaderColor: theme === "dark" ? "text-[#e5ff00]" : "text-lime-700",
+              borderHover: "hover:border-[#e5ff00]/40 hover:shadow-[0_8px_24px_rgba(229,255,0,0.12)]",
+              dotBg: "bg-[#e5ff00]",
+              loaderColor: "text-[#e5ff00]",
               badgeText: "Visitors",
               link: "/dashboard/bookings"
             },
@@ -348,7 +346,7 @@ const DashboardHome = () => {
                       >
                         <Icon size={18} />
                       </div>
-                      <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full ${theme === "dark" ? "bg-white/[0.04] border border-white/[0.08]" : "bg-slate-100 border border-slate-200/90"} backdrop-blur-sm`}>
+                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
                         <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${card.dotBg}`} />
                         <span className="text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors">
                           {card.badgeText}
@@ -409,7 +407,7 @@ const DashboardHome = () => {
               
               {/* Content Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 text-left flex flex-col items-start">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#e5ff00] text-black shadow-lg mb-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[var(--db-accent-highlight)] text-black shadow-lg mb-3">
                   Box & Cross Club
                 </span>
                 <h3 className="text-xl md:text-2xl font-black uppercase text-white tracking-wide leading-tight" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
@@ -437,7 +435,7 @@ const DashboardHome = () => {
               
               <button 
                 onClick={() => navigate("/dashboard/calendar")}
-                className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--db-text-title)] hover:opacity-75 transition-opacity duration-200 cursor-pointer group"
+                className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)] hover:text-white transition-colors duration-300 cursor-pointer group"
               >
                 Go to Calendar View
                 <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

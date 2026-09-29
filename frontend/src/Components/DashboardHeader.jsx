@@ -513,12 +513,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
             <Bell size={18} />
             {unreadCount > 0 && (
               <span
-                className="absolute top-0.5 right-0.5 rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center select-none"
+                className="absolute top-0.5 right-0.5 rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center"
                 style={{
-                  background: "#e5ff00",
-                  color:      "#000000",
-                  border:     theme === "light" ? "1px solid rgba(0,0,0,0.14)" : "none",
-                  boxShadow:  "0 0 10px rgba(229,255,0,0.45)",
+                  background: theme === "dark" ? "#e5ff00" : "#1e293b",
+                  color:      theme === "dark" ? "#000000" : "#ffffff",
+                  boxShadow:  theme === "dark" ? "0 0 10px rgba(229,255,0,0.5)" : "none",
                 }}
               >
                 {unreadCount}
@@ -539,8 +538,8 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                 {/* Header */}
                 <div className={`flex items-center justify-between px-4 py-3.5 border-b border-[var(--db-card-border)] ${theme === "dark" ? "bg-[rgba(229,255,0,0.06)]" : "bg-slate-50"}`}>
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-[#e5ff00] text-black shadow-[0_0_12px_rgba(229,255,0,0.35)] border border-black/10">
-                      <Bell size={13} className="text-black" />
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${theme === "dark" ? "bg-[#e5ff00] shadow-[0_0_12px_rgba(229,255,0,0.35)]" : "bg-slate-800"}`}>
+                      <Bell size={13} className="text-black" style={{ color: theme === "dark" ? "#000" : "#fff" }} />
                     </div>
                     <div>
                       <span
@@ -551,7 +550,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                       </span>
                       {unreadCount > 0 && (
                         <span
-                          className="ml-2 px-1.5 py-0.5 text-[9px] font-black rounded-full bg-[#e5ff00] text-black border border-black/10 shadow-sm"
+                          className="ml-2 px-1.5 py-0.5 text-[9px] font-black rounded-full"
+                          style={{
+                            background: theme === "dark" ? "#e5ff00" : "#1e293b",
+                            color: theme === "dark" ? "#000" : "#fff",
+                          }}
                         >
                           {unreadCount} new
                         </span>
@@ -676,14 +679,10 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         {/* Theme Switcher Toggle button */}
         <button
           onClick={toggleTheme}
-          className={`p-2 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-center ${
-            theme === "dark"
-              ? "bg-white/[0.04] border-white/10 text-amber-300 hover:text-amber-200 hover:bg-white/[0.08] hover:border-amber-300/30"
-              : "bg-slate-100 border-slate-200/90 text-slate-700 hover:text-slate-900 hover:bg-slate-200 hover:border-slate-300 shadow-sm"
-          }`}
+          className="p-2.5 rounded-full hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-accent-highlight)] transition-all cursor-pointer"
           title={theme === "dark" ? "Toggle Light Mode" : "Toggle Dark Mode"}
         >
-          {theme === "dark" ? <Sun size={17} className="transition-transform duration-300 hover:rotate-45" /> : <Moon size={17} className="transition-transform duration-300 hover:-rotate-12" />}
+          {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
         </button>
 
         {/* Vertical divider line */}
