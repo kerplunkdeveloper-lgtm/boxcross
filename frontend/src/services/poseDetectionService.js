@@ -104,17 +104,29 @@ export class PoseDetectionService {
         this.stopCamera(videoElement);
       }
 
+      const facing = options.facingMode || "user";
       const constraints = {
         video: {
           width: { ideal: 1280 },
           height: { ideal: 720 },
-          facingMode: options.facingMode || "user",
+          facingMode: options.deviceId ? undefined : { ideal: facing },
           deviceId: options.deviceId ? { exact: options.deviceId } : undefined,
         },
         audio: false,
       };
 
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+      } catch (firstErr) {
+        console.warn("Primary camera constraint failed, retrying with simple facingMode:", firstErr);
+        // Fallback retry with basic facingMode constraint
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facing },
+          audio: false,
+        });
+      }
+
       this.videoStream = stream;
       if (videoElement) {
         videoElement.srcObject = stream;

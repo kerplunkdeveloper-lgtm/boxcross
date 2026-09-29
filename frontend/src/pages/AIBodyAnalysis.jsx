@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
+import { useTheme } from "../context/ThemeContext";
 
 // Services
 import { postureAnalysisService } from "../services/postureAnalysisService";
@@ -91,6 +92,9 @@ const FALLBACK_ATHLETES = [
 ];
 
 const AIBodyAnalysis = () => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   // Mode & Member Selection
   const [currentMode, setCurrentMode] = useState("Posture Analysis");
   const [athletes, setAthletes] = useState(FALLBACK_ATHLETES);
@@ -99,7 +103,7 @@ const AIBodyAnalysis = () => {
 
   // Session & Camera State
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisDuration, setAnalysisDuration] = useState(12); // Initial baseline 12s matching mockup "00:12"
+  const [analysisDuration, setAnalysisDuration] = useState(0); // Ready at 0s, starts counting upon activation
   const timerIntervalRef = useRef(null);
 
   // Real-time Kinematic Metrics
@@ -329,62 +333,59 @@ const AIBodyAnalysis = () => {
   };
 
   return (
-    <div
-      className="p-4 md:p-6 lg:p-7 space-y-5 max-w-[1520px] mx-auto select-none min-h-screen text-white"
-      style={{ background: "#0c1319" }}
-    >
+    <div className="p-3.5 sm:p-5 md:p-6 lg:p-7 space-y-4 sm:space-y-5 lg:space-y-6 max-w-[1580px] mx-auto select-none min-h-screen text-[var(--db-text)] bg-[var(--db-bg)] transition-colors duration-200">
       <Helmet>
-        <title>AI Body & Posture Analysis | Box & Cross</title>
+        <title>AI Body &amp; Posture Analysis | Box &amp; Cross</title>
         <meta
           name="description"
           content="Real-time AI analysis to detect posture, body alignment and exercise form."
         />
       </Helmet>
 
-      {/* ── 1. HEADER ROW (matching user mockup image) ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* ── 1. HEADER ROW ── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-1">
         {/* Left: Title & Subtitle */}
         <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-xl sm:text-xl  font-extrabold text-[var(--db-text-title)] tracking-tight">
             AI Body &amp; Posture Analysis
           </h1>
-          <p className="text-xs md:text-sm text-gray-400 font-normal mt-0.5">
+          <p className="text-xs sm:text-sm text-[var(--db-text-muted)] font-normal mt-0.5">
             Real-time AI analysis to detect posture, body alignment and exercise form.
           </p>
         </div>
 
         {/* Right: Select Member + Date Card */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
           {/* Select Member Box */}
-          <div className="relative">
-            <span className="text-[10px] font-semibold text-gray-400 block mb-1">
+          <div className="relative flex-1 sm:flex-initial min-w-[160px]">
+            <span className="text-[10px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider block mb-1">
               Select Member
             </span>
             <div
               onClick={() => setShowMemberDropdown(!showMemberDropdown)}
-              className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#131d27] border border-[#1f2d3d] hover:border-gray-600 transition-all cursor-pointer shadow-md min-w-[170px]"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-[var(--db-accent-highlight)]/50 transition-all cursor-pointer shadow-sm w-full sm:min-w-[185px]"
             >
               {/* Member Avatar */}
-              <div className="w-7 h-7 rounded-full bg-neutral-700 border border-neutral-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
+              <div className="w-7 h-7 rounded-full bg-[var(--db-accent)]/15 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/30 flex items-center justify-center text-xs font-bold shrink-0">
                 {selectedMember?.athleteName?.charAt(0) || "K"}
               </div>
 
               {/* Name & ID */}
-              <div className="flex flex-col flex-1 leading-tight">
-                <span className="text-xs font-bold text-white">
+              <div className="flex flex-col flex-1 leading-tight min-w-0">
+                <span className="text-xs font-bold text-[var(--db-text-title)] truncate">
                   {selectedMember?.athleteName || "Karthik S"}
                 </span>
-                <span className="text-[10px] text-gray-400 font-mono">
+                <span className="text-[10px] text-[var(--db-text-muted)] font-mono">
                   #{selectedMember?.memberId || "GYM0012"}
                 </span>
               </div>
 
-              <ChevronDown size={14} className="text-gray-400" />
+              <ChevronDown size={14} className="text-[var(--db-text-muted)] shrink-0" />
             </div>
 
             {/* Member Dropdown Menu */}
             {showMemberDropdown && (
-              <div className="absolute right-0 mt-1 w-56 bg-[#131d27] border border-[#1f2d3d] rounded-xl shadow-2xl z-30 py-1 overflow-hidden">
+              <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-64 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-40 py-1.5 overflow-hidden backdrop-blur-md">
                 {athletes.map((a) => (
                   <button
                     key={a._id}
@@ -392,18 +393,18 @@ const AIBodyAnalysis = () => {
                       setSelectedMember(a);
                       setShowMemberDropdown(false);
                     }}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 text-left hover:bg-neutral-800 transition-all cursor-pointer ${
-                      selectedMember?._id === a._id ? "bg-neutral-800/80" : ""
+                    className={`w-full flex items-center gap-2.5 px-3.5 py-2 text-left hover:bg-[var(--db-input-bg)] transition-all cursor-pointer ${
+                      selectedMember?._id === a._id ? "bg-[var(--db-input-bg)]" : ""
                     }`}
                   >
-                    <div className="w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center text-[11px] font-bold">
+                    <div className="w-6 h-6 rounded-full bg-[var(--db-accent)]/20 text-[var(--db-accent-highlight)] flex items-center justify-center text-[11px] font-bold">
                       {a.athleteName?.charAt(0)}
                     </div>
-                    <div className="flex flex-col leading-tight">
-                      <span className="text-xs font-semibold text-white">
+                    <div className="flex flex-col leading-tight min-w-0">
+                      <span className="text-xs font-semibold text-[var(--db-text-title)] truncate">
                         {a.athleteName}
                       </span>
-                      <span className="text-[10px] text-gray-400 font-mono">
+                      <span className="text-[10px] text-[var(--db-text-muted)] font-mono">
                         #{a.memberId}
                       </span>
                     </div>
@@ -414,20 +415,25 @@ const AIBodyAnalysis = () => {
           </div>
 
           {/* Date Card */}
-          <div>
-            <span className="text-[10px] font-semibold text-gray-400 block mb-1">
-              &nbsp;
+          <div className="flex-1 sm:flex-initial min-w-[140px]">
+            <span className="text-[10px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider block mb-1">
+              Date &amp; Time
             </span>
-            <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#131d27] border border-[#1f2d3d] shadow-md">
-              <div className="p-1 rounded-lg bg-neutral-800 text-gray-300">
-                <Calendar size={15} />
+            <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-sm">
+              <div className="p-1.5 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-text-muted)] shrink-0">
+                <Calendar size={14} />
               </div>
-              <div className="flex flex-col leading-tight">
-                <span className="text-[10px] font-semibold text-gray-400">
-                  Today
+              <div className="flex flex-col leading-tight min-w-0">
+                <span className="text-[10px] font-semibold text-[var(--db-text-muted)]">
+                  Session
                 </span>
-                <span className="text-xs font-bold text-white">
-                  29 Sep 2026, 11:45 AM
+                <span className="text-xs font-bold text-[var(--db-text-title)] truncate">
+                  {new Date().toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                  , 11:45 AM
                 </span>
               </div>
             </div>
@@ -435,8 +441,8 @@ const AIBodyAnalysis = () => {
         </div>
       </div>
 
-      {/* ── 2. MODE TABS (matching user mockup image) ── */}
-      <div className="flex items-center gap-2.5 overflow-x-auto pb-1 select-none">
+      {/* ── 2. MODE TABS ── */}
+      <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-1.5 select-none custom-scrollbar -mx-1 px-1">
         {ANALYSIS_MODES.map((m) => {
           const isActive = currentMode === m.label;
           const Icon = m.icon;
@@ -444,23 +450,23 @@ const AIBodyAnalysis = () => {
             <button
               key={m.label}
               onClick={() => handleSelectMode(m.label)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shadow-sm ${
+              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap shadow-sm ${
                 isActive
-                  ? "bg-[#4ade80] text-black shadow-[0_0_15px_rgba(74,222,128,0.35)]"
-                  : "bg-[#131d27] border border-[#1f2d3d] text-gray-300 hover:text-white hover:border-gray-600"
+                  ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold shadow-md shadow-[var(--db-accent-glow)] scale-[1.02]"
+                  : "bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text-title)] hover:bg-[var(--db-input-bg)] hover:border-[var(--db-accent-highlight)]/40"
               }`}
             >
-              <Icon size={14} className={isActive ? "text-black" : "text-gray-400"} />
+              <Icon size={14} className={isActive ? "text-[var(--db-accent-text)]" : "text-[var(--db-text-muted)]"} />
               <span>{m.label}</span>
             </button>
           );
         })}
       </div>
 
-      {/* ── 3. MIDDLE SECTION (3 Columns matching user mockup image) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-        {/* Column 1: Live Video Camera Viewport (~44% width = 5.5 cols on 12-col grid) */}
-        <div className="lg:col-span-5 flex flex-col">
+      {/* ── 3. MIDDLE SECTION (Responsive Multi-Column) ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-4 lg:gap-5 items-stretch">
+        {/* Column 1: Live Video Camera Viewport */}
+        <div className="col-span-1 md:col-span-2 xl:col-span-5 flex flex-col">
           <CameraAnalyzer
             onLandmarksDetected={handleLandmarksDetected}
             currentMode={currentMode}
@@ -475,8 +481,8 @@ const AIBodyAnalysis = () => {
           />
         </div>
 
-        {/* Column 2: Overall Posture Score & Key Insights (~28% width = 3.5 cols) */}
-        <div className="lg:col-span-3 flex flex-col justify-between gap-5">
+        {/* Column 2: Overall Posture Score & Key Insights / Exercise Stats */}
+        <div className="col-span-1 md:col-span-1 xl:col-span-4 flex flex-col gap-4 lg:gap-5 h-full">
           {/* Top: Overall Posture Score */}
           <PostureScoreCard
             score={
@@ -510,8 +516,8 @@ const AIBodyAnalysis = () => {
           )}
         </div>
 
-        {/* Column 3: Body Alignment & Posture Type (~28% width = 3.5 cols) */}
-        <div className="lg:col-span-4 flex flex-col justify-between gap-5">
+        {/* Column 3: Body Alignment & Posture Type */}
+        <div className="col-span-1 md:col-span-1 xl:col-span-3 flex flex-col gap-4 lg:gap-5 h-full">
           {/* Top: Body Alignment */}
           <AlignmentPanel metrics={postureMetrics.alignmentMetrics} />
 
@@ -520,40 +526,46 @@ const AIBodyAnalysis = () => {
         </div>
       </div>
 
-      {/* ── 4. BOTTOM SECTION (3 Columns matching user mockup image) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
+      {/* ── 4. BOTTOM SECTION (Responsive 3 Cards) ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5 items-stretch">
         {/* Card 1: Posture Comparison */}
-        <PostureComparisonCard
-          currentScore={postureMetrics.overallScore}
-          detectedIssues={postureMetrics.detectedIssues}
-          alignmentMetrics={postureMetrics.alignmentMetrics}
-        />
+        <div className="col-span-1 flex flex-col">
+          <PostureComparisonCard
+            currentScore={postureMetrics.overallScore}
+            detectedIssues={postureMetrics.detectedIssues}
+            alignmentMetrics={postureMetrics.alignmentMetrics}
+          />
+        </div>
 
         {/* Card 2: AI Recommendations */}
-        <AIRecommendationsCard
-          recommendations={postureMetrics.recommendations}
-          insights={postureMetrics.insights}
-        />
+        <div className="col-span-1 flex flex-col">
+          <AIRecommendationsCard
+            recommendations={postureMetrics.recommendations}
+            insights={postureMetrics.insights}
+          />
+        </div>
 
         {/* Card 3: Progress History */}
-        <ProgressChart />
+        <div className="col-span-1 md:col-span-2 xl:col-span-1 flex flex-col">
+          <ProgressChart />
+        </div>
       </div>
 
       {/* ── 5. SECONDARY UTILITY BAR: SAVE, REPORT & ARCHIVES ── */}
-      <div className="flex items-center justify-between pt-2 border-t border-[#1f2d3d]/60 text-xs text-gray-400">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[var(--db-card-border)] text-xs text-[var(--db-text-muted)]">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowHistoryTable(!showHistoryTable)}
-            className="text-gray-400 hover:text-white transition-all cursor-pointer underline decoration-dotted"
+            className="text-[var(--db-text-muted)] hover:text-[var(--db-text-title)] font-semibold transition-all cursor-pointer underline decoration-dotted"
           >
             {showHistoryTable ? "Hide Analysis Archives" : "View Member Analysis Archives"}
           </button>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
           <button
             onClick={() => handleOpenReport()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-900 border border-neutral-700 text-gray-200 hover:text-white transition-all cursor-pointer text-xs"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text)] hover:text-[var(--db-text-title)] hover:border-[var(--db-accent-highlight)]/50 hover:bg-[var(--db-input-bg)] transition-all cursor-pointer text-xs font-semibold shadow-sm"
           >
             <FileText size={13} />
             <span>Generate Full Report</span>
@@ -561,7 +573,7 @@ const AIBodyAnalysis = () => {
 
           <button
             onClick={handleSaveAnalysis}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#4ade80] text-black font-bold hover:opacity-90 transition-all cursor-pointer text-xs shadow-md"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold hover:scale-105 active:scale-95 transition-all cursor-pointer text-xs shadow-md shadow-[var(--db-accent-glow)]"
           >
             <Save size={13} />
             <span>Save Analysis</span>

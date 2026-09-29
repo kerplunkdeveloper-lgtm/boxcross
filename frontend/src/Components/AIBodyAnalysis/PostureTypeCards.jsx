@@ -1,7 +1,11 @@
 import React from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Activity } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   // Determine active posture type
   const isGood = !detectedType || detectedType.toLowerCase().includes("good");
   const isForwardHead = detectedType?.toLowerCase().includes("forward");
@@ -10,7 +14,7 @@ const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
   const cards = [
     {
       id: "good",
-      title: "Good",
+      title: "Good Posture",
       active: isGood || (!isForwardHead && !isRounded),
       color: "emerald",
       svg: (
@@ -62,36 +66,47 @@ const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
   ];
 
   return (
-    <div
-      className="p-5 rounded-2xl border shadow-xl flex flex-col justify-between"
-      style={{
-        background: "var(--db-card, #131d27)",
-        borderColor: "var(--db-card-border, #1f2d3d)",
-      }}
-    >
+    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
       {/* Header */}
-      <h3 className="text-sm font-bold text-white tracking-wide mb-3">
-        Posture Type
-      </h3>
+      <div className="flex items-center justify-between mb-2 sm:mb-3">
+        <h3 className="text-xs sm:text-sm font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-1.5">
+          <Activity size={15} className="text-emerald-500 shrink-0" />
+          <span>Posture Type</span>
+        </h3>
+        <span className="text-[9px] sm:text-[10px] font-semibold text-[var(--db-text-muted)] uppercase tracking-wider">
+          Classification
+        </span>
+      </div>
 
       {/* 3 Silhouette Cards Row */}
-      <div className="grid grid-cols-3 gap-2.5 my-1">
+      <div className="grid grid-cols-3 gap-2 sm:gap-2.5 my-1">
         {cards.map((c) => {
           const isAct = c.active;
           const isEmerald = c.color === "emerald" || isAct;
 
+          let cardClasses = "";
+          if (isAct && isEmerald) {
+            cardClasses = isDark
+              ? "bg-emerald-950/25 border-2 border-emerald-500 shadow-[0_0_12px_rgba(34,197,94,0.25)]"
+              : "bg-emerald-50/90 border-2 border-emerald-500 shadow-sm";
+          } else if (isAct && !isEmerald) {
+            cardClasses = isDark
+              ? "bg-rose-950/25 border-2 border-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.25)]"
+              : "bg-rose-50/90 border-2 border-rose-500 shadow-sm";
+          } else {
+            cardClasses = isDark
+              ? "bg-neutral-900/60 border border-neutral-800 hover:border-neutral-700"
+              : "bg-slate-50 border border-slate-200 hover:border-slate-300";
+          }
+
           return (
             <div
               key={c.id}
-              className={`relative rounded-xl p-2.5 flex flex-col items-center justify-between transition-all duration-300 ${
-                isAct
-                  ? "bg-emerald-950/20 border-2 border-emerald-500 shadow-[0_0_12px_rgba(34,197,94,0.2)]"
-                  : "bg-neutral-900/60 border border-neutral-800/80 hover:border-neutral-700"
-              }`}
+              className={`relative rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-between transition-all duration-300 ${cardClasses}`}
             >
               {/* Checkmark icon for active good posture */}
               {isAct && isEmerald && (
-                <div className="absolute top-1.5 right-1.5 text-emerald-400">
+                <div className="absolute top-1.5 right-1.5 text-emerald-500">
                   <CheckCircle2 size={13} className="fill-emerald-500/20" />
                 </div>
               )}
@@ -101,11 +116,11 @@ const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
                 className={`my-1 ${
                   isAct
                     ? isEmerald
-                      ? "text-emerald-400"
-                      : "text-red-400"
+                      ? "text-emerald-500"
+                      : "text-rose-500"
                     : c.color === "red"
-                    ? "text-red-500/60"
-                    : "text-gray-500"
+                    ? "text-rose-400/60"
+                    : "text-slate-400 dark:text-neutral-500"
                 }`}
               >
                 {c.svg}
@@ -113,12 +128,12 @@ const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
 
               {/* Title */}
               <span
-                className={`text-[10.5px] font-bold text-center tracking-tight truncate w-full ${
+                className={`text-[9.5px] sm:text-[10.5px] text-center tracking-tight truncate w-full ${
                   isAct && isEmerald
-                    ? "text-emerald-400 font-black"
+                    ? "text-emerald-600 dark:text-emerald-400 font-extrabold"
                     : isAct && !isEmerald
-                    ? "text-red-400 font-black"
-                    : "text-gray-400"
+                    ? "text-rose-600 dark:text-rose-400 font-extrabold"
+                    : "text-[var(--db-text-muted)] font-semibold"
                 }`}
               >
                 {c.title}

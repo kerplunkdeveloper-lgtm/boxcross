@@ -1,7 +1,11 @@
 import React from "react";
-import { CheckCircle2, AlertTriangle } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Sparkles } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 const KeyInsightsCard = ({ metrics = {}, insights = [] }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
   // Compute real-time insight items based on live alignment data
   const headOk = (metrics.headPosition ?? 92) >= 80;
   const shoulderOk = (metrics.shoulderAlignment ?? 86) >= 80;
@@ -33,32 +37,36 @@ const KeyInsightsCard = ({ metrics = {}, insights = [] }) => {
   ];
 
   return (
-    <div
-      className="p-5 rounded-2xl border shadow-xl flex flex-col justify-between"
-      style={{
-        background: "var(--db-card, #131d27)",
-        borderColor: "var(--db-card-border, #1f2d3d)",
-      }}
-    >
+    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
       {/* Header */}
-      <h3 className="text-sm font-bold text-white tracking-wide mb-3">
-        Key Insights
+      <h3 className="text-xs sm:text-sm font-bold text-[var(--db-text-title)] tracking-wide mb-2 sm:mb-3 flex items-center gap-1.5">
+        <Sparkles size={15} className="text-emerald-500 shrink-0" />
+        <span>Key Insights</span>
       </h3>
 
-      {/* Insights List matching mockup */}
-      <div className="space-y-2.5 my-1">
+      {/* Insights List */}
+      <div className="space-y-2 sm:space-y-2.5 my-1">
         {items.map((item, idx) => {
           const isPos = item.type === "positive";
           return (
-            <div key={idx} className="flex items-center gap-2.5 text-xs text-gray-200">
+            <div
+              key={idx}
+              className="flex items-center gap-2.5 text-xs text-[var(--db-text)] p-1 rounded-lg hover:bg-[var(--db-input-bg)] transition-colors"
+            >
               {isPos ? (
-                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                <CheckCircle2 size={15} className="text-emerald-500 shrink-0" />
               ) : (
-                <div className="w-4 h-4 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
-                  <AlertTriangle size={11} className="text-amber-400" />
+                <div
+                  className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${
+                    isDark ? "bg-amber-500/20 text-amber-400" : "bg-amber-100 text-amber-700"
+                  }`}
+                >
+                  <AlertTriangle size={11} />
                 </div>
               )}
-              <span className="font-medium tracking-normal">{item.text}</span>
+              <span className="font-medium tracking-normal text-[var(--db-text)]">
+                {item.text}
+              </span>
             </div>
           );
         })}
