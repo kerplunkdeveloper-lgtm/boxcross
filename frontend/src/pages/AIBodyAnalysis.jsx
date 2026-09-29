@@ -188,7 +188,7 @@ const AIBodyAnalysis = () => {
     if (selectedMember?.memberId) {
       loadHistory(selectedMember.memberId);
     }
-  }, [selectedMember]);
+  }, [selectedMember?.memberId]);
 
   // Handle Mode Change
   const handleSelectMode = (mode) => {

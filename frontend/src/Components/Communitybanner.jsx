@@ -39,16 +39,16 @@ const Communitybanner = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/35 to-[#050505] z-[2]"></div>
 
         {/* HUGE BACKGROUND TEXT (Outline) */}
-        <div 
+        <div
           data-aos="zoom-in"
           data-aos-duration="1200"
           className="absolute inset-x-0 top-10 md:top-30 flex justify-center pointer-events-none z-[5] overflow-hidden"
         >
-          <span 
-            className="text-transparent font-black uppercase text-[50px] md:text-[150px] whitespace-nowrap select-none tracking-widest leading-none" 
-            style={{ 
+          <span
+            className="text-transparent font-black uppercase text-[50px] md:text-[150px] whitespace-nowrap select-none tracking-widest leading-none"
+            style={{
               WebkitTextStroke: "1px rgba(255, 255, 255, 0.25)",
-              fontFamily: '"BrutalTypeBold", Arial, sans-serif'
+              fontFamily: '"BrutalTypeBold", Arial, sans-serif',
             }}
           >
             COMMUNITY
@@ -57,9 +57,8 @@ const Communitybanner = () => {
 
         {/* CONTENT */}
         <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between md:gap-16 pt-20 md:pt-0">
-          
           {/* LEFT SIDE: HEADING */}
-          <div 
+          <div
             data-aos="fade-right"
             className="flex-1 w-full flex flex-col justify-center text-center md:text-left z-10"
           >
@@ -82,7 +81,7 @@ const Communitybanner = () => {
           </div>
 
           {/* RIGHT SIDE: SUBTITLE & BUTTONS */}
-          <div 
+          <div
             data-aos="fade-left"
             data-aos-delay="200"
             className="flex-1 w-full flex flex-col justify-center items-start md:max-w-lg z-10 text-left"
@@ -94,7 +93,8 @@ const Communitybanner = () => {
               }}
             >
               The community that forms when serious people train together long
-              enough to become something more than training partners. You train here. You belong here.
+              enough to become something more than training partners. You train
+              here. You belong here.
             </p>
 
             <div
@@ -107,7 +107,7 @@ const Communitybanner = () => {
               {/* JOIN THE TRIBE BUTTON */}
               <button
                 onClick={handleScrollToJoin}
-                className="group relative overflow-hidden px-4 py-3 md:px-8 md:py-3.5 bg-[#e5ff00] text-black uppercase tracking-wider md:tracking-[0.05em] rounded-lg transition-all duration-500 cursor-pointer flex justify-center items-center shadow-[0_0_20px_rgba(229,255,0,0.15)]"
+                className="group relative overflow-hidden px-4 py-3 md:px-8 md:py-3.5 bg-[#ccf141] text-black uppercase tracking-wider md:tracking-[0.05em] rounded-lg transition-all duration-500 cursor-pointer flex justify-center items-center shadow-[0_0_20px_rgba(229,255,0,0.15)]"
               >
                 <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
@@ -126,7 +126,7 @@ const Communitybanner = () => {
                 onClick={handleBookTrial}
                 className="group relative overflow-hidden px-4 py-3 md:px-8 md:py-3.5 bg-white text-black uppercase tracking-wider md:tracking-[0.05em] rounded-lg transition-all duration-500 cursor-pointer flex justify-center items-center"
               >
-                <span className="absolute inset-0 bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
+                <span className="absolute inset-0 bg-[#ccf141] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
                   className="relative z-10 text-[11px] sm:text-[13px] md:text-[15px] whitespace-nowrap"
                   style={{
@@ -139,7 +139,6 @@ const Communitybanner = () => {
               </button>
             </div>
           </div>
-
         </div>
       </section>
     </>

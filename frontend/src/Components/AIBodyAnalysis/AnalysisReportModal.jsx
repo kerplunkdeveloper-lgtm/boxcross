@@ -23,13 +23,23 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
   if (!isOpen || !reportData) return null;
 
   const [trainerNotes, setTrainerNotes] = useState(
-    reportData.trainerNotes || "Athlete displays solid biomechanical baseline with minor forward head deviation. Focus on cervical retractions and thoracic extensions during warmups."
+    reportData.trainerNotes ||
+      "Athlete displays solid biomechanical baseline with minor forward head deviation. Focus on cervical retractions and thoracic extensions during warmups.",
   );
 
   const formatDate = (dateStr) => {
-    if (!dateStr) return new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+    if (!dateStr)
+      return new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
     const d = new Date(dateStr);
-    return d.toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+    return d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
   };
 
   const handlePrint = () => {
@@ -98,21 +108,29 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/80 backdrop-blur-md overflow-y-auto custom-scrollbar">
-      <div className={`relative w-full max-w-4xl rounded-3xl border shadow-2xl overflow-hidden my-auto print:border-none print:shadow-none print:w-full print:max-w-none transition-colors duration-200 ${
-        isDark ? "bg-[#0a0a0a] border-[var(--db-card-border)] text-white" : "bg-white border-slate-200 text-slate-900"
-      }`}>
-        {/* Header Bar */}
-        <div className={`p-4 md:p-6 border-b flex items-center justify-between flex-wrap gap-3 print:hidden ${
+      <div
+        className={`relative w-full max-w-4xl rounded-3xl border shadow-2xl overflow-hidden my-auto print:border-none print:shadow-none print:w-full print:max-w-none transition-colors duration-200 ${
           isDark
-            ? "bg-gradient-to-r from-black via-[#0d0d0d] to-black border-[var(--db-card-border)]"
-            : "bg-slate-50 border-slate-200"
-        }`}>
+            ? "bg-[#0a0a0a] border-[var(--db-card-border)] text-white"
+            : "bg-white border-slate-200 text-slate-900"
+        }`}
+      >
+        {/* Header Bar */}
+        <div
+          className={`p-4 md:p-6 border-b flex items-center justify-between flex-wrap gap-3 print:hidden ${
+            isDark
+              ? "bg-gradient-to-r from-black via-[#0d0d0d] to-black border-[var(--db-card-border)]"
+              : "bg-slate-50 border-slate-200"
+          }`}
+        >
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500 dark:bg-[#e5ff00] text-white dark:text-black flex items-center justify-center font-black">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500 dark:bg-[#ccf141] text-white dark:text-black flex items-center justify-center font-black">
               BX
             </div>
             <div>
-              <h3 className={`text-sm md:text-base font-black uppercase tracking-wider ${isDark ? "text-white" : "text-slate-900"}`}>
+              <h3
+                className={`text-sm md:text-base font-black uppercase tracking-wider ${isDark ? "text-white" : "text-slate-900"}`}
+              >
                 AI Diagnostic &amp; Fitness Performance Report
               </h3>
               <p className="text-[11px] text-[var(--db-text-muted)] font-bold">
@@ -126,7 +144,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
             <button
               onClick={handlePrint}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                isDark ? "bg-white/10 hover:bg-white/15 text-white" : "bg-slate-200 hover:bg-slate-300 text-slate-800"
+                isDark
+                  ? "bg-white/10 hover:bg-white/15 text-white"
+                  : "bg-slate-200 hover:bg-slate-300 text-slate-800"
               }`}
               title="Print Report"
             >
@@ -137,7 +157,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
             <button
               onClick={handleDownloadPDF}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                isDark ? "bg-white/10 hover:bg-white/15 text-white" : "bg-slate-200 hover:bg-slate-300 text-slate-800"
+                isDark
+                  ? "bg-white/10 hover:bg-white/15 text-white"
+                  : "bg-slate-200 hover:bg-slate-300 text-slate-800"
               }`}
               title="Download PDF"
             >
@@ -148,7 +170,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
             <button
               onClick={handleShare}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                isDark ? "bg-white/10 hover:bg-white/15 text-white" : "bg-slate-200 hover:bg-slate-300 text-slate-800"
+                isDark
+                  ? "bg-white/10 hover:bg-white/15 text-white"
+                  : "bg-slate-200 hover:bg-slate-300 text-slate-800"
               }`}
               title="Share Report"
             >
@@ -159,7 +183,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
             <button
               onClick={onClose}
               className={`p-1.5 rounded-xl transition-all cursor-pointer ml-1 ${
-                isDark ? "bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white" : "bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900"
+                isDark
+                  ? "bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white"
+                  : "bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900"
               }`}
             >
               <X size={18} />
@@ -168,11 +194,13 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
         </div>
 
         {/* Printable Document Body */}
-        <div className={`p-6 md:p-8 space-y-6 ${isDark ? "text-gray-200" : "text-slate-700"}`}>
+        <div
+          className={`p-6 md:p-8 space-y-6 ${isDark ? "text-gray-200" : "text-slate-700"}`}
+        >
           {/* Member & Header Banner */}
           <div className="p-5 rounded-2xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 dark:bg-gradient-to-tr dark:from-[#e5ff00]/30 dark:to-black border border-emerald-500/30 dark:border-[#e5ff00]/40 flex items-center justify-center font-black text-xl text-emerald-600 dark:text-white">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 dark:bg-gradient-to-tr dark:from-[#ccf141]/30 dark:to-black border border-emerald-500/30 dark:border-[#ccf141]/40 flex items-center justify-center font-black text-xl text-emerald-600 dark:text-white">
                 {reportData.memberName?.charAt(0) || "K"}
               </div>
               <div>
@@ -180,7 +208,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
                   {reportData.memberName || "Karthik S"}
                 </h4>
                 <div className="flex items-center gap-2 mt-0.5 text-xs text-[var(--db-text-muted)] font-bold">
-                  <span className="text-emerald-600 dark:text-[#e5ff00]">#{reportData.memberId || "GYM0012"}</span>
+                  <span className="text-emerald-600 dark:text-[#ccf141]">
+                    #{reportData.memberId || "GYM0012"}
+                  </span>
                   <span>•</span>
                   <span>{reportData.analysisType || "Posture Analysis"}</span>
                   <span>•</span>
@@ -208,7 +238,7 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
               <span className="text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
                 Overall Score
               </span>
-              <p className="text-3xl font-black font-mono text-emerald-600 dark:text-[#e5ff00] my-1">
+              <p className="text-3xl font-black font-mono text-emerald-600 dark:text-[#ccf141] my-1">
                 {reportData.overallScore || 86}
               </p>
               <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
@@ -223,7 +253,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
               <p className="text-3xl font-black font-mono text-[var(--db-text-title)] my-1">
                 {reportData.postureScore || 86}
               </p>
-              <span className="text-[10px] font-bold text-[var(--db-text-muted)]">Plumbline Balance</span>
+              <span className="text-[10px] font-bold text-[var(--db-text-muted)]">
+                Plumbline Balance
+              </span>
             </div>
 
             <div className="p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
@@ -233,7 +265,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
               <p className="text-3xl font-black font-mono text-emerald-600 dark:text-emerald-400 my-1">
                 {reportData.formScore ? `${reportData.formScore}%` : "84%"}
               </p>
-              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">Kinematic Rating</span>
+              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                Kinematic Rating
+              </span>
             </div>
 
             <div className="p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
@@ -241,9 +275,13 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
                 Symmetry
               </span>
               <p className="text-3xl font-black font-mono text-blue-600 dark:text-blue-400 my-1">
-                {reportData.symmetryScore ? `${reportData.symmetryScore}%` : "88%"}
+                {reportData.symmetryScore
+                  ? `${reportData.symmetryScore}%`
+                  : "88%"}
               </p>
-              <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">Bilateral Harmony</span>
+              <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">
+                Bilateral Harmony
+              </span>
             </div>
           </div>
 
@@ -260,7 +298,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
                     <span className="capitalize text-[var(--db-text)]">
                       {key.replace(/([A-Z])/g, " $1")}
                     </span>
-                    <span className="font-mono font-bold text-emerald-600 dark:text-[#e5ff00]">{val}%</span>
+                    <span className="font-mono font-bold text-emerald-600 dark:text-[#ccf141]">
+                      {val}%
+                    </span>
                   </div>
                 ))}
               </div>
@@ -277,7 +317,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
                     <span className="capitalize text-[var(--db-text)]">
                       {key.replace(/([A-Z])/g, " $1")}
                     </span>
-                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{val}%</span>
+                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                      {val}%
+                    </span>
                   </div>
                 ))}
               </div>
@@ -287,8 +329,12 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
           {/* Section 3: Issues & Recommendations */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Identified Issues */}
-            <div className={`p-4 rounded-xl border ${isDark ? "bg-amber-500/10 border-amber-500/25 text-amber-200" : "bg-amber-50 border-amber-200 text-amber-800"}`}>
-              <h5 className={`text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-1.5 ${isDark ? "text-amber-400" : "text-amber-800"}`}>
+            <div
+              className={`p-4 rounded-xl border ${isDark ? "bg-amber-500/10 border-amber-500/25 text-amber-200" : "bg-amber-50 border-amber-200 text-amber-800"}`}
+            >
+              <h5
+                className={`text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-1.5 ${isDark ? "text-amber-400" : "text-amber-800"}`}
+              >
                 <AlertTriangle size={13} />
                 <span>Identified Posture Divergences</span>
               </h5>
@@ -303,8 +349,12 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
             </div>
 
             {/* AI Recommendations */}
-            <div className={`p-4 rounded-xl border ${isDark ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-200" : "bg-emerald-50 border-emerald-200 text-emerald-800"}`}>
-              <h5 className={`text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-1.5 ${isDark ? "text-emerald-400" : "text-emerald-800"}`}>
+            <div
+              className={`p-4 rounded-xl border ${isDark ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-200" : "bg-emerald-50 border-emerald-200 text-emerald-800"}`}
+            >
+              <h5
+                className={`text-xs font-black uppercase tracking-wider mb-3 flex items-center gap-1.5 ${isDark ? "text-emerald-400" : "text-emerald-800"}`}
+              >
                 <CheckCircle2 size={13} />
                 <span>AI Corrective Action Items</span>
               </h5>
@@ -327,7 +377,7 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
               </h5>
               <button
                 onClick={handleSaveNotes}
-                className="px-2.5 py-1 rounded bg-emerald-500 dark:bg-[#e5ff00] text-white dark:text-black font-black text-[10px] uppercase tracking-wider hover:opacity-90 cursor-pointer print:hidden shadow-sm"
+                className="px-2.5 py-1 rounded bg-emerald-500 dark:bg-[#ccf141] text-white dark:text-black font-black text-[10px] uppercase tracking-wider hover:opacity-90 cursor-pointer print:hidden shadow-sm"
               >
                 Save Notes
               </button>
@@ -336,8 +386,10 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
               rows={3}
               value={trainerNotes}
               onChange={(e) => setTrainerNotes(e.target.value)}
-              className={`w-full p-2.5 rounded-lg border text-xs focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#e5ff00]/60 resize-none font-medium leading-relaxed ${
-                isDark ? "bg-black/50 border-white/10 text-gray-200" : "bg-white border-slate-200 text-slate-800"
+              className={`w-full p-2.5 rounded-lg border text-xs focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#ccf141]/60 resize-none font-medium leading-relaxed ${
+                isDark
+                  ? "bg-black/50 border-white/10 text-gray-200"
+                  : "bg-white border-slate-200 text-slate-800"
               }`}
               placeholder="Add trainer instructions, prescribed sets/reps, or corrective drills..."
             />
@@ -345,7 +397,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
 
           {/* Legal / Medical Safety Disclaimer */}
           <div className="pt-2 text-center text-[9.5px] text-[var(--db-text-muted)] font-medium">
-            Box &amp; Cross AI Body &amp; Posture Assessment System • For physical fitness guidance and exercise performance tracking only. Not intended to replace clinical medical diagnosis.
+            Box &amp; Cross AI Body &amp; Posture Assessment System • For
+            physical fitness guidance and exercise performance tracking only.
+            Not intended to replace clinical medical diagnosis.
           </div>
         </div>
       </div>

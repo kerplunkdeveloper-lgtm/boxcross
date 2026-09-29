@@ -63,7 +63,7 @@ const Dashboard = () => {
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                     isActive
-                      ? "bg-[#e5ff00] text-black shadow-lg shadow-[#e5ff00]/10"
+                      ? "bg-[#ccf141] text-black shadow-lg shadow-[#ccf141]/10"
                       : "text-gray-400 hover:text-white hover:bg-white/5"
                   }`}
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -109,12 +109,12 @@ const Dashboard = () => {
           <div className="flex items-center gap-3">
             <div className="hidden sm:block text-right">
               <p className="text-xs font-bold text-gray-300">{user.name}</p>
-              <p className="text-[10px] text-[#e5ff00] font-semibold uppercase tracking-widest">
+              <p className="text-[10px] text-[#ccf141] font-semibold uppercase tracking-widest">
                 {user.role}
               </p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#e5ff00]/20 to-transparent border border-[#e5ff00]/40 flex items-center justify-center">
-              <User size={20} className="text-[#e5ff00]" />
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#ccf141]/20 to-transparent border border-[#ccf141]/40 flex items-center justify-center">
+              <User size={20} className="text-[#ccf141]" />
             </div>
           </div>
         </header>
@@ -123,11 +123,11 @@ const Dashboard = () => {
         <main className="flex-grow p-6 md:p-8 flex items-center justify-center bg-[#050505]">
           <div className="w-full min-h-[300px] bg-[#0a0a0a] border border-white/5 rounded-3xl p-8 flex items-center justify-center shadow-inner relative overflow-hidden">
             {/* Background Graphic elements */}
-            <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-[#e5ff00]/5 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-[#ccf141]/5 rounded-full blur-[100px] pointer-events-none" />
 
             <div className="text-center z-10">
               <p
-                className="text-5xl font-black uppercase tracking-widest text-[#e5ff00] mb-2"
+                className="text-5xl font-black uppercase tracking-widest text-[#ccf141] mb-2"
                 style={{ fontFamily: '"Brutal Font", sans-serif' }}
               >
                 hello

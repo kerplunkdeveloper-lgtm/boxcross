@@ -77,7 +77,7 @@ const EventCalender = ({ events = [] }) => {
         {/* Left Side: Premium Calendar UI */}
         <div className="w-full lg:w-[50%] bg-[#0a0a0a] rounded-[2rem] p-6 md:p-10 border border-white/5 shadow-2xl relative overflow-hidden h-fit">
           {/* Subtle background glow */}
-          <div className="absolute -top-32 -left-32 w-64 h-64 bg-[#e5ff00]/10 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute -top-32 -left-32 w-64 h-64 bg-[#ccf141]/10 rounded-full blur-[80px] pointer-events-none" />
 
           {/* Calendar Header */}
           <div className="flex items-center justify-between mb-8 relative z-10">
@@ -133,15 +133,15 @@ const EventCalender = ({ events = [] }) => {
               let dotColor = null;
 
               if (isSelected && hasEvents) {
-                bgClass = "bg-[#e5ff00]/10";
-                borderClass = "border-[#e5ff00]/50";
-                textClass = "text-[#e5ff00] font-black";
-                dotColor = "bg-[#e5ff00]";
+                bgClass = "bg-[#ccf141]/10";
+                borderClass = "border-[#ccf141]/50";
+                textClass = "text-[#ccf141] font-black";
+                dotColor = "bg-[#ccf141]";
               } else if (hasEvents) {
                 bgClass = "bg-white/[0.03]";
                 borderClass = "border-white/10";
                 textClass = "text-white font-bold";
-                dotColor = "bg-[#e5ff00]";
+                dotColor = "bg-[#ccf141]";
               } else if (isSelected) {
                 bgClass = "bg-white/10";
                 borderClass = "border-white/20";
@@ -185,9 +185,9 @@ const EventCalender = ({ events = [] }) => {
                     key={idx}
                     className="bg-[#0a0a0a] rounded-[2rem] p-6 md:p-8 border border-white/5 shadow-2xl relative overflow-hidden group hover:border-white/10 transition-colors duration-500"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#e5ff00]/0 via-[#e5ff00]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#ccf141]/0 via-[#ccf141]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
                     <div className="flex items-center gap-3 mb-6 px-2">
-                      <div className=" rounded-xl bg-white/5 border border-white/10 text-[#e5ff00]">
+                      <div className=" rounded-xl bg-white/5 border border-white/10 text-[#ccf141]">
                         <Calendar size={25} strokeWidth={2.5} />
                       </div>
                       <h2
@@ -195,7 +195,7 @@ const EventCalender = ({ events = [] }) => {
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         {weekday} {month}{" "}
-                        <span className="text-[#e5ff00]">{selectedDate}</span>{" "}
+                        <span className="text-[#ccf141]">{selectedDate}</span>{" "}
                         {currentYear}
                       </h2>
                     </div>
@@ -207,8 +207,8 @@ const EventCalender = ({ events = [] }) => {
                         {event.title}
                       </h3>
                       {event.price !== null && event.price !== undefined && (
-                        <div className="bg-[#e5ff00]/10 border border-[#e5ff00]/30 px-4 py-2 rounded-xl shrink-0">
-                          <span className="text-lg font-black text-[#e5ff00]">
+                        <div className="bg-[#ccf141]/10 border border-[#ccf141]/30 px-4 py-2 rounded-xl shrink-0">
+                          <span className="text-lg font-black text-[#ccf141]">
                             ₹{event.price}
                           </span>
                         </div>
@@ -218,7 +218,7 @@ const EventCalender = ({ events = [] }) => {
                     <div className="space-y-5 relative z-10 mb-8">
                       {timeSlot && (
                         <div className="flex items-start gap-4 text-gray-300 group/item">
-                          <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#e5ff00] group-hover/item:bg-[#e5ff00]/10 transition-colors">
+                          <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#ccf141] group-hover/item:bg-[#ccf141]/10 transition-colors">
                             <Timer size={20} />
                           </div>
                           <div className="flex flex-col mt-0.5">
@@ -233,7 +233,7 @@ const EventCalender = ({ events = [] }) => {
                       )}
 
                       <div className="flex items-start gap-4 text-gray-300 group/item">
-                        <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#e5ff00] group-hover/item:bg-[#e5ff00]/10 transition-colors">
+                        <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#ccf141] group-hover/item:bg-[#ccf141]/10 transition-colors">
                           <MapPin size={20} />
                         </div>
                         <div className="flex flex-col mt-0.5">
@@ -248,7 +248,7 @@ const EventCalender = ({ events = [] }) => {
 
                       {timeSlot && (
                         <div className="flex items-start gap-4 text-gray-300 group/item">
-                          <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#e5ff00] group-hover/item:bg-[#e5ff00]/10 transition-colors">
+                          <div className="p-2 rounded-lg bg-white/5 text-gray-400 group-hover/item:text-[#ccf141] group-hover/item:bg-[#ccf141]/10 transition-colors">
                             <Users size={20} />
                           </div>
                           <div className="flex flex-col mt-0.5">

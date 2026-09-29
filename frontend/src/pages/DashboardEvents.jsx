@@ -192,7 +192,7 @@ const DashboardEvents = () => {
   return (
     <div className="p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       {/* Background Radial Glow */}
-      <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[#e5ff00]/5 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[#ccf141]/5 rounded-full blur-[140px] pointer-events-none z-0" />
 
       <div className="max-w-8xl mx-auto z-10 relative">
         {/* Header Block */}

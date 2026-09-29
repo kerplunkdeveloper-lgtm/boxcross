@@ -126,7 +126,11 @@ const SkeletonOverlay = ({
     const avgKneeDeg = Math.round((leftKneeDeg + rightKneeDeg) / 2);
 
     const leftElbowDeg = getAngleDegrees(pLeftShoulder, pLeftElbow, pLeftWrist);
-    const rightElbowDeg = getAngleDegrees(pRightShoulder, pRightElbow, pRightWrist);
+    const rightElbowDeg = getAngleDegrees(
+      pRightShoulder,
+      pRightElbow,
+      pRightWrist,
+    );
     const avgElbowDeg = Math.round((leftElbowDeg + rightElbowDeg) / 2);
 
     const leftHipDeg = getAngleDegrees(pLeftShoulder, pLeftHip, pLeftKnee);
@@ -140,16 +144,27 @@ const SkeletonOverlay = ({
 
     // Squat parallel depth check: hip y reaches knee y level
     const avgHipY = (pLeftHip.y + pRightHip.y) / 2;
-    const avgKneeY = (pLeftKnee ? pLeftKnee.y : h) * 0.5 + (pRightKnee ? pRightKnee.y : h) * 0.5;
+    const avgKneeY =
+      (pLeftKnee ? pLeftKnee.y : h) * 0.5 +
+      (pRightKnee ? pRightKnee.y : h) * 0.5;
     const isParallelDepth = isSquat && avgHipY >= avgKneeY - 14;
 
     // Knee valgus check: knees closer together than ankles during squat descent
-    const kneeSpacing = pLeftKnee && pRightKnee ? Math.abs(pLeftKnee.x - pRightKnee.x) : 100;
-    const ankleSpacing = pLeftAnkle && pRightAnkle ? Math.abs(pLeftAnkle.x - pRightAnkle.x) : 100;
-    const isKneeValgus = isSquat && avgKneeDeg < 135 && kneeSpacing < ankleSpacing * 0.88;
+    const kneeSpacing =
+      pLeftKnee && pRightKnee ? Math.abs(pLeftKnee.x - pRightKnee.x) : 100;
+    const ankleSpacing =
+      pLeftAnkle && pRightAnkle ? Math.abs(pLeftAnkle.x - pRightAnkle.x) : 100;
+    const isKneeValgus =
+      isSquat && avgKneeDeg < 135 && kneeSpacing < ankleSpacing * 0.88;
 
     // Helper: Draw dynamic anatomical bone with glow & inner core
-    const drawBone = (p1, p2, color = "#10b981", lineWidth = 4.5, isDashed = false) => {
+    const drawBone = (
+      p1,
+      p2,
+      color = "#10b981",
+      lineWidth = 4.5,
+      isDashed = false,
+    ) => {
       if (!p1 || !p2 || p1.visibility < 0.3 || p2.visibility < 0.3) return;
       ctx.save();
       ctx.beginPath();
@@ -175,7 +190,7 @@ const SkeletonOverlay = ({
     };
 
     // Helper: Draw anatomical joint node
-    const drawJoint = (p, label = "", color = "#e5ff00", radius = 5.5) => {
+    const drawJoint = (p, label = "", color = "#ccf141", radius = 5.5) => {
       if (!p || p.visibility < 0.3) return;
       ctx.save();
       // Outer glow circle
@@ -208,7 +223,7 @@ const SkeletonOverlay = ({
     };
 
     // Helper: Draw curved angle arc directly at joint vertex
-    const drawAngleArc = (A, B, C, deg, color = "#e5ff00", label = "") => {
+    const drawAngleArc = (A, B, C, deg, color = "#ccf141", label = "") => {
       if (!A || !B || !C || !deg || deg <= 0) return;
       const vBAx = A.x - B.x;
       const vBAy = A.y - B.y;
@@ -273,9 +288,15 @@ const SkeletonOverlay = ({
     // 5 Vertebral segment nodes along spine
     for (let i = 1; i <= 4; i++) {
       const t = i / 5;
-      const sx = (1 - t) * (1 - t) * pMidShoulder.x + 2 * (1 - t) * t * pSternum.x + t * t * pMidHip.x;
-      const sy = (1 - t) * (1 - t) * pMidShoulder.y + 2 * (1 - t) * t * pSternum.y + t * t * pMidHip.y;
-      ctx.fillStyle = "#e5ff00";
+      const sx =
+        (1 - t) * (1 - t) * pMidShoulder.x +
+        2 * (1 - t) * t * pSternum.x +
+        t * t * pMidHip.x;
+      const sy =
+        (1 - t) * (1 - t) * pMidShoulder.y +
+        2 * (1 - t) * t * pSternum.y +
+        t * t * pMidHip.y;
+      ctx.fillStyle = "#ccf141";
       ctx.beginPath();
       ctx.arc(sx, sy, 3, 0, Math.PI * 2);
       ctx.fill();
@@ -289,7 +310,8 @@ const SkeletonOverlay = ({
 
     // Arms (Left & Right)
     const leftArmColor = isPushup && leftElbowDeg < 100 ? "#10b981" : "#3b82f6";
-    const rightArmColor = isPushup && rightElbowDeg < 100 ? "#10b981" : "#3b82f6";
+    const rightArmColor =
+      isPushup && rightElbowDeg < 100 ? "#10b981" : "#3b82f6";
     drawBone(pLeftShoulder, pLeftElbow, leftArmColor, 4.5);
     drawBone(pLeftElbow, pLeftWrist, leftArmColor, 4);
     drawBone(pRightShoulder, pRightElbow, rightArmColor, 4.5);
@@ -303,8 +325,10 @@ const SkeletonOverlay = ({
     // Legs (Thigh / Femur & Shin / Tibia)
     let legColor = "#10b981";
     if (isSquat) {
-      if (isKneeValgus) legColor = "#ef4444"; // Red on valgus cave
-      else if (isParallelDepth) legColor = "#e5ff00"; // Neon yellow at depth
+      if (isKneeValgus)
+        legColor = "#ef4444"; // Red on valgus cave
+      else if (isParallelDepth)
+        legColor = "#ccf141"; // Neon yellow at depth
       else legColor = "#10b981";
     }
 
@@ -327,7 +351,7 @@ const SkeletonOverlay = ({
       ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
-      drawJoint(pNose, "", "#e5ff00", 4.5);
+      drawJoint(pNose, "", "#ccf141", 4.5);
     }
 
     // Shoulder & Elbow Joints
@@ -350,29 +374,65 @@ const SkeletonOverlay = ({
     if (showAngles) {
       // Knee Angle Arc (Left & Right)
       if (pLeftKnee && leftKneeDeg > 0) {
-        const kColor = isKneeValgus ? "#ef4444" : isParallelDepth ? "#10b981" : "#e5ff00";
-        drawAngleArc(pLeftHip, pLeftKnee, pLeftAnkle, leftKneeDeg, kColor, "Knee");
+        const kColor = isKneeValgus
+          ? "#ef4444"
+          : isParallelDepth
+            ? "#10b981"
+            : "#ccf141";
+        drawAngleArc(
+          pLeftHip,
+          pLeftKnee,
+          pLeftAnkle,
+          leftKneeDeg,
+          kColor,
+          "Knee",
+        );
       }
-      if (pRightKnee && rightKneeDeg > 0 && Math.abs(leftKneeDeg - rightKneeDeg) > 8) {
-        drawAngleArc(pRightHip, pRightKnee, pRightAnkle, rightKneeDeg, "#e5ff00", "R-Knee");
+      if (
+        pRightKnee &&
+        rightKneeDeg > 0 &&
+        Math.abs(leftKneeDeg - rightKneeDeg) > 8
+      ) {
+        drawAngleArc(
+          pRightHip,
+          pRightKnee,
+          pRightAnkle,
+          rightKneeDeg,
+          "#ccf141",
+          "R-Knee",
+        );
       }
 
       // Elbow Angle Arc (for Pushups / Bench)
       if (isPushup && pLeftElbow && leftElbowDeg > 0) {
         const eColor = leftElbowDeg <= 95 ? "#10b981" : "#3b82f6";
-        drawAngleArc(pLeftShoulder, pLeftElbow, pLeftWrist, leftElbowDeg, eColor, "Elbow");
+        drawAngleArc(
+          pLeftShoulder,
+          pLeftElbow,
+          pLeftWrist,
+          leftElbowDeg,
+          eColor,
+          "Elbow",
+        );
       }
 
       // Hip Hinge Angle Arc (for Squats / Deadlifts)
       if (pLeftHip && leftHipDeg > 0 && !isPushup) {
-        drawAngleArc(pLeftShoulder, pLeftHip, pLeftKnee, leftHipDeg, "#a78bfa", "Hip");
+        drawAngleArc(
+          pLeftShoulder,
+          pLeftHip,
+          pLeftKnee,
+          leftHipDeg,
+          "#a78bfa",
+          "Hip",
+        );
       }
     }
 
     // ── 5. EXERCISE DEPTH TARGET & WARNING OVERLAYS ──
     if (isSquat && showGuides) {
       // Parallel Depth Plane Guide through knees
-      const kneeY = (pLeftKnee?.y || avgKneeY);
+      const kneeY = pLeftKnee?.y || avgKneeY;
       ctx.save();
       ctx.lineWidth = isParallelDepth ? 2.5 : 1.5;
       ctx.setLineDash(isParallelDepth ? [] : [6, 4]);
@@ -384,19 +444,29 @@ const SkeletonOverlay = ({
 
       // Parallel Depth Status Label
       ctx.font = "black 11px sans-serif";
-      const labelText = isParallelDepth ? "✓ PARALLEL DEPTH REACHED" : "— SQUAT PARALLEL PLANE —";
+      const labelText = isParallelDepth
+        ? "✓ PARALLEL DEPTH REACHED"
+        : "— SQUAT PARALLEL PLANE —";
       const textWidth = ctx.measureText(labelText).width;
-      ctx.fillStyle = isParallelDepth ? "rgba(16, 185, 129, 0.9)" : "rgba(0, 0, 0, 0.75)";
+      ctx.fillStyle = isParallelDepth
+        ? "rgba(16, 185, 129, 0.9)"
+        : "rgba(0, 0, 0, 0.75)";
       ctx.strokeStyle = isParallelDepth ? "#10b981" : "rgba(229, 255, 0, 0.4)";
       if (ctx.roundRect) {
-        ctx.roundRect(w / 2 - textWidth / 2 - 8, kneeY - 22, textWidth + 16, 20, 6);
+        ctx.roundRect(
+          w / 2 - textWidth / 2 - 8,
+          kneeY - 22,
+          textWidth + 16,
+          20,
+          6,
+        );
       } else {
         ctx.rect(w / 2 - textWidth / 2 - 8, kneeY - 22, textWidth + 16, 20);
       }
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = isParallelDepth ? "#ffffff" : "#e5ff00";
+      ctx.fillStyle = isParallelDepth ? "#ffffff" : "#ccf141";
       ctx.textAlign = "center";
       ctx.fillText(labelText, w / 2, kneeY - 8);
       ctx.restore();
@@ -445,7 +515,8 @@ const SkeletonOverlay = ({
 
       // Center of gravity point on ground
       ctx.setLineDash([]);
-      ctx.fillStyle = Math.abs(pSternum.x - baseOfSupportX) < 18 ? "#10b981" : "#f59e0b";
+      ctx.fillStyle =
+        Math.abs(pSternum.x - baseOfSupportX) < 18 ? "#10b981" : "#f59e0b";
       ctx.beginPath();
       ctx.arc(pSternum.x, groundY, 4, 0, Math.PI * 2);
       ctx.fill();

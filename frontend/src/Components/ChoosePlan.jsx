@@ -21,56 +21,48 @@ const ChoosePlan = React.forwardRef(
           className=" mb-8"
         >
           <div className="text-center mb-8 flex flex-col items-center justify-center gap-4">
-             
-             <div>
-                <span
-            className="px-4 py-2 rounded-md  border border-[#e5ff00]/30 bg-[#e5ff00]/10 text-[#e5ff00] uppercase"
-            style={{
-              fontFamily: '"BrutalTypeBold", sans-serif',
-              fontSize: "16px",
-              fontWeight: "600",
-            }}
-          >
-            STEP 2
-          </span>
-             </div>
-             <div className="flex justify-center flex-col items-center">
+            <div>
+              <span
+                className="px-4 py-2 rounded-md  border border-[#ccf141]/30 bg-[#ccf141]/10 text-[#ccf141] uppercase"
+                style={{
+                  fontFamily: '"BrutalTypeBold", sans-serif',
+                  fontSize: "16px",
+                  fontWeight: "600",
+                }}
+              >
+                STEP 2
+              </span>
+            </div>
+            <div className="flex justify-center flex-col items-center">
               <h2
-             className="mt-2 md:mt-4 mb-0 text-[32px] md:w-[70%]  md:text-[40px] leading-[40px] md:leading-[55px]"
-            style={{
-              fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "700",
-            }}
-          >
-            CHOOSE YOUR{" "}
-            <span className="text-[#e5ff00] ">{activeData.title}</span>
-          </h2>
+                className="mt-2 md:mt-4 mb-0 text-[32px] md:w-[70%]  md:text-[40px] leading-[40px] md:leading-[55px]"
+                style={{
+                  fontFamily: '"BrutalTypeBold", sans-serif',
+                  fontWeight: "700",
+                }}
+              >
+                CHOOSE YOUR{" "}
+                <span className="text-[#ccf141] ">{activeData.title}</span>
+              </h2>
 
-            <div
-            className="flex flex-wrap items-center justify-center gap-3 mt-4 md:mt-5 text-gray-400 text-[11px] md:text-[12px]"
-            style={{
-              fontWeight: "500",
-              fontFamily: '"Brutal Type Regular", sans-serif',
-            }}
-          >
-            {activeData.features.map((feature, i) => (
-              <React.Fragment key={i}>
-                <span className="flex items-center gap-1">
-                  <Check size={12} className="text-[#e5ff00]" /> {feature}
-                </span>
-                {i < activeData.features.length - 1 && <span>•</span>}
-              </React.Fragment>
-            ))}
+              <div
+                className="flex flex-wrap items-center justify-center gap-3 mt-4 md:mt-5 text-gray-400 text-[11px] md:text-[12px]"
+                style={{
+                  fontWeight: "500",
+                  fontFamily: '"Brutal Type Regular", sans-serif',
+                }}
+              >
+                {activeData.features.map((feature, i) => (
+                  <React.Fragment key={i}>
+                    <span className="flex items-center gap-1">
+                      <Check size={12} className="text-[#ccf141]" /> {feature}
+                    </span>
+                    {i < activeData.features.length - 1 && <span>•</span>}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
           </div>
-             </div>
-             
-             
-          </div>
-          
-        
-
-        
-        
 
           {/* Sub-Tabs for Step 2 */}
           {(() => {
@@ -99,7 +91,7 @@ const ChoosePlan = React.forwardRef(
                           {isActive && (
                             <motion.div
                               layoutId={`active-tab-${activeProg.id}`}
-                              className="absolute inset-0 bg-[#e5ff00] rounded-full shadow-[0_0_15px_rgba(222,251,2,0.2)]"
+                              className="absolute inset-0 bg-[#ccf141] rounded-full shadow-[0_0_15px_rgba(222,251,2,0.2)]"
                               style={{ zIndex: -1 }}
                               transition={{
                                 type: "spring",
@@ -136,12 +128,13 @@ const ChoosePlan = React.forwardRef(
                 transition={{ duration: 0.5, delay: i * 0.15 }}
                 className={`bg-[#111] rounded-xl flex flex-col relative border h-full ${
                   plan.isPopular
-                    ? "border-[#e5ff00] shadow-[0_0_15px_rgba(222,251,2,0.15)] z-10"
+                    ? "border-[#ccf141] shadow-[0_0_15px_rgba(222,251,2,0.15)] z-10"
                     : "border-gray-800"
                 }`}
               >
                 {plan.tag && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#e5ff00] text-black  font-bold px-4 py-1 rounded-sm tracking-wider uppercase whitespace-nowrap z-10"
+                  <div
+                    className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#ccf141] text-black  font-bold px-4 py-1 rounded-sm tracking-wider uppercase whitespace-nowrap z-10"
                     style={{
                       fontSize: "10px",
                       fontFamily: '"Brutal Font", sans-serif',
@@ -161,7 +154,7 @@ const ChoosePlan = React.forwardRef(
                     {plan.months}
                   </h3>
                   <p
-                    className="text-[#e5ff00] text-[12px] md:text-[14px] font-extrabold tracking-widest uppercase mb-4"
+                    className="text-[#ccf141] text-[12px] md:text-[14px] font-extrabold tracking-widest uppercase mb-4"
                     style={{
                       fontFamily: '"Brutal Font", sans-serif',
                     }}
@@ -198,7 +191,7 @@ const ChoosePlan = React.forwardRef(
                       >
                         <Check
                           size={16}
-                          className="text-[#e5ff00] shrink-0 mt-0.5"
+                          className="text-[#ccf141] shrink-0 mt-0.5"
                         />
                         <span
                           className="leading-snug"
@@ -222,7 +215,7 @@ const ChoosePlan = React.forwardRef(
                     }
                     className={`group/planbtn relative overflow-hidden w-full py-3.5 text-xs font-bold uppercase tracking-widest transition-colors rounded-lg ${
                       plan.isPopular
-                        ? "bg-[#e5ff00] text-black"
+                        ? "bg-[#ccf141] text-black"
                         : "border border-gray-600 text-white hover:border-white"
                     }`}
                   >
@@ -244,7 +237,7 @@ const ChoosePlan = React.forwardRef(
           {/* STARTER ACCESS CARD */}
           <div className="w-full lg:w-[240px] flex flex-col gap-4 mt-6 lg:mt-8">
             <div className="bg-[#111] border border-gray-800 rounded-xl p-6 text-center flex flex-col items-center justify-center flex-1 hover:border-gray-600 transition-colors cursor-pointer group">
-              <Calendar size={28} className="text-[#e5ff00] mb-3" />
+              <Calendar size={28} className="text-[#ccf141] mb-3" />
               <p className="text-[11px] md:text-xs text-gray-400 uppercase tracking-widest font-bold mb-2 group-hover:text-gray-300">
                 NOT SURE?
               </p>
@@ -274,7 +267,7 @@ const ChoosePlan = React.forwardRef(
             </div>
 
             <div className="bg-[#111] border border-gray-800 rounded-xl p-6 text-center hover:border-gray-600 transition-colors">
-              <Shield size={24} className="text-[#e5ff00] mx-auto mb-2" />
+              <Shield size={24} className="text-[#ccf141] mx-auto mb-2" />
               <h4 className="text-sm font-black mb-1.5">
                 Flexible
                 <br />

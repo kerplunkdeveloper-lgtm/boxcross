@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const CommunityMarquee = () => {
   const items = [
@@ -10,7 +10,7 @@ const CommunityMarquee = () => {
     "LIFTING CLUB",
     "RUN CLUB",
     "HYROX LAB",
-    "HYBRID PERFORMANCE"
+    "HYBRID PERFORMANCE",
   ];
 
   return (
@@ -20,8 +20,8 @@ const CommunityMarquee = () => {
           <div key={arrayIdx} className="flex items-center shrink-0">
             {items.map((item, idx) => (
               <React.Fragment key={`${arrayIdx}-${idx}`}>
-                <div className="w-1.5 h-2 bg-[#E5FF00] mx-8 md:mx-12 shrink-0 shadow-[0_0_8px_rgba(229,255,0,0.4)]"></div>
-                <span 
+                <div className="w-1.5 h-2 bg-[#ccf141] mx-8 md:mx-12 shrink-0 shadow-[0_0_8px_rgba(229,255,0,0.4)]"></div>
+                <span
                   className="text-zinc-500 font-bold text-xs md:text-2xl tracking-[0.2em] uppercase shrink-0"
                   style={{ fontFamily: '"Bebas Neue", sans-serif' }}
                 >

@@ -1,5 +1,11 @@
 import React from "react";
-import { TrendingUp, ArrowUpRight, History, Calendar, CheckCircle } from "lucide-react";
+import {
+  TrendingUp,
+  ArrowUpRight,
+  History,
+  Calendar,
+  CheckCircle,
+} from "lucide-react";
 
 const ProgressComparisonCard = ({
   previousScore = 72,
@@ -47,7 +53,7 @@ const ProgressComparisonCard = ({
       <div className="flex items-center justify-between mb-4 pb-2 border-b border-[var(--db-card-border)]">
         <div>
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] flex items-center gap-1.5">
-            <History size={12} className="text-[#e5ff00]" />
+            <History size={12} className="text-[#ccf141]" />
             Longitudinal Tracking
           </span>
           <h3 className="text-sm font-black uppercase tracking-wide text-[var(--db-text-title)] mt-0.5">
@@ -67,19 +73,23 @@ const ProgressComparisonCard = ({
             Previous Analysis
           </span>
           <p className="text-xl font-black font-mono text-gray-300 mt-1">
-            {previousScore} <span className="text-[10px] text-gray-500">/ 100</span>
+            {previousScore}{" "}
+            <span className="text-[10px] text-gray-500">/ 100</span>
           </p>
-          <span className="text-[8.5px] text-gray-500 font-bold">14 Days Ago</span>
+          <span className="text-[8.5px] text-gray-500 font-bold">
+            14 Days Ago
+          </span>
         </div>
 
-        <div className="p-3 rounded-xl bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-center shadow-[0_0_15px_rgba(229,255,0,0.1)]">
-          <span className="text-[9px] font-black uppercase text-[#e5ff00] tracking-wider">
+        <div className="p-3 rounded-xl bg-[#ccf141]/10 border border-[#ccf141]/30 text-center shadow-[0_0_15px_rgba(229,255,0,0.1)]">
+          <span className="text-[9px] font-black uppercase text-[#ccf141] tracking-wider">
             Current Analysis
           </span>
           <p className="text-xl font-black font-mono text-white mt-1">
-            {currentScore} <span className="text-[10px] text-gray-400">/ 100</span>
+            {currentScore}{" "}
+            <span className="text-[10px] text-gray-400">/ 100</span>
           </p>
-          <span className="text-[8.5px] text-[#e5ff00] font-bold">Today</span>
+          <span className="text-[8.5px] text-[#ccf141] font-bold">Today</span>
         </div>
 
         <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center">
@@ -87,9 +97,12 @@ const ProgressComparisonCard = ({
             Total Gain
           </span>
           <p className="text-xl font-black font-mono text-emerald-400 mt-1">
-            +{diffOverall} <span className="text-[10px] text-emerald-500/80">PTS</span>
+            +{diffOverall}{" "}
+            <span className="text-[10px] text-emerald-500/80">PTS</span>
           </p>
-          <span className="text-[8.5px] text-emerald-400 font-bold">+{( (diffOverall / previousScore) * 100 ).toFixed(0)}% Growth</span>
+          <span className="text-[8.5px] text-emerald-400 font-bold">
+            +{((diffOverall / previousScore) * 100).toFixed(0)}% Growth
+          </span>
         </div>
       </div>
 

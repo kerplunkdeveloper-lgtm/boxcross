@@ -34,7 +34,10 @@ import { Helmet } from "react-helmet-async";
 const BASE_URL = "https://membership.boxandcross.com";
 
 // Safely format Cloudinary images to Portrait 4:5 (1080x1350) and compress to ~80-130KB
-const getOptimizedOgImageUrl = (rawUrl, fallback = `${BASE_URL}/og-events.jpg`) => {
+const getOptimizedOgImageUrl = (
+  rawUrl,
+  fallback = `${BASE_URL}/og-events.jpg`,
+) => {
   if (!rawUrl || typeof rawUrl !== "string" || !rawUrl.trim()) {
     return fallback;
   }
@@ -49,7 +52,10 @@ const getOptimizedOgImageUrl = (rawUrl, fallback = `${BASE_URL}/og-events.jpg`) 
     if (vIndex !== -1) {
       afterUpload = afterUpload.substring(vIndex);
     } else {
-      afterUpload = afterUpload.replace(/^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/, "");
+      afterUpload = afterUpload.replace(
+        /^(?:(?:[a-zA-Z0-9_]+_[a-zA-Z0-9_:,.-]+,?)+\/)+/,
+        "",
+      );
     }
 
     return `${base}c_fill,w_1080,h_1350,g_auto,q_auto:eco,f_jpg/${afterUpload}`;
@@ -483,7 +489,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
           contact: customerPhone,
         },
         theme: {
-          color: "#e5ff00",
+          color: "#ccf141",
         },
         modal: {
           ondismiss: function () {
@@ -543,7 +549,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
           const eventImage = getOptimizedOgImageUrl(
             selectedEvent.imageUrl,
-            `${BASE_URL}/og-events.jpg`
+            `${BASE_URL}/og-events.jpg`,
           );
 
           return (
@@ -574,16 +580,16 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
           );
         })()}
       {/* Background Radial Glow */}
-      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#e5ff00]/3 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#ccf141]/3 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#ff9e00]/2 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto  relative z-10">
         {/* Title Block */}
         <div className="flex flex-col items-center text-center mb-12 md:mb-16">
           <div className="flex items-center gap-2 mb-2">
-            <span className="h-[2px] w-8 bg-[#e5ff00]"></span>
+            <span className="h-[2px] w-8 bg-[#ccf141]"></span>
             <span
-              className="text-[#e5ff00] text-[14px] md:text-md font-black uppercase tracking-widest"
+              className="text-[#ccf141] text-[14px] md:text-md font-black uppercase tracking-widest"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               Special Schedules
@@ -607,7 +613,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
         {/* Loading */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 gap-4">
-            <Loader2 className="animate-spin text-[#e5ff00]" size={36} />
+            <Loader2 className="animate-spin text-[#ccf141]" size={36} />
             <p className="text-xs uppercase tracking-widest text-gray-500 font-bold">
               Loading Event Listings...
             </p>
@@ -620,12 +626,12 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
             className="flex flex-col items-center justify-center py-24 px-4 text-center bg-[#0c0c0c] border border-white/5 rounded-3xl shadow-2xl relative overflow-hidden group"
           >
             {/* Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#e5ff00]/5 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover:bg-[#e5ff00]/10" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover:bg-[#ccf141]/10" />
 
             <div className="w-24 h-24 mb-6 bg-white/[0.02] border border-white/10 rounded-2xl flex items-center justify-center shadow-inner shadow-black/50 rotate-3 group-hover:-rotate-3 transition-transform duration-500 relative z-10">
               <Calendar
                 size={36}
-                className="text-gray-500 group-hover:text-[#e5ff00] transition-colors duration-500"
+                className="text-gray-500 group-hover:text-[#ccf141] transition-colors duration-500"
               />
             </div>
 
@@ -709,7 +715,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                         return (
                           <div className="absolute top-3 left-3 bg-[#111111] border border-white/10 rounded-lg shadow-xl flex flex-col items-center overflow-hidden z-10 w-[50px] group-hover:scale-105 transition-transform duration-300">
-                            <div className="bg-[#e5ff00] w-full text-center py-1 text-[10px] font-black uppercase text-black tracking-widest leading-none">
+                            <div className="bg-[#ccf141] w-full text-center py-1 text-[10px] font-black uppercase text-black tracking-widest leading-none">
                               {month}
                             </div>
                             <div
@@ -757,14 +763,14 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             </div>
                           ) : (
                             <div className="px-2.5 py-1 rounded-full bg-black/75 border border-white/15 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#e5ff00]" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141]" />
                               <span
                                 className="text-[10px] font-black uppercase tracking-wider text-gray-200"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
-                                <strong className="text-[#e5ff00] font-black">
+                                <strong className="text-[#ccf141] font-black">
                                   {remaining}
                                 </strong>{" "}
                                 / {totalSlots} Left
@@ -783,7 +789,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       <div>
                         {/* Event Title */}
                         <h3
-                          className="text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#e5ff00] transition-colors line-clamp-1 mb-2"
+                          className="text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#ccf141] transition-colors line-clamp-1 mb-2"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           {event.title}
@@ -792,7 +798,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         {/* Date & Time */}
                         <div className="flex flex-wrap items-center gap-3 mb-3 mt-1">
                           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
-                            <Calendar size={13} className="text-[#e5ff00]" />
+                            <Calendar size={13} className="text-[#ccf141]" />
                             <span
                               className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
                               style={{
@@ -815,7 +821,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             </span>
                           </div>
                           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
-                            <Timer size={13} className="text-[#e5ff00]" />
+                            <Timer size={13} className="text-[#ccf141]" />
                             <span
                               className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
                               style={{
@@ -851,7 +857,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           <div className="flex flex-wrap gap-1.5 mb-4">
                             {event.category && (
                               <span
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-[#e5ff00]"
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-[#ccf141]"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
@@ -900,7 +906,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
                                   </>
                                 ) : (
-                                  <span className="h-2 w-2 rounded-full bg-[#e5ff00]" />
+                                  <span className="h-2 w-2 rounded-full bg-[#ccf141]" />
                                 )}
                               </span>
 
@@ -954,7 +960,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                   ? "bg-red-500 w-full"
                                   : isFillingFast
                                     ? "bg-gradient-to-r from-amber-500 to-orange-500"
-                                    : "bg-gradient-to-r from-lime-400 to-[#e5ff00]"
+                                    : "bg-gradient-to-r from-lime-400 to-[#ccf141]"
                               }`}
                               style={{
                                 width: isSoldOut
@@ -976,7 +982,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           )}
                           {Number(event.price) === 0 ? (
                             <span
-                              className="text-lg font-black text-[#e5ff00] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 rounded-lg inline-block self-start"
+                              className="text-lg font-black text-[#ccf141] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#ccf141]/10 border border-[#ccf141]/20 rounded-lg inline-block self-start"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -1014,7 +1020,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               e.stopPropagation();
                               navigate(`/events/${event._id}?book=true`);
                             }}
-                            className="inline-flex items-center gap-1.5 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                            className="inline-flex items-center gap-1.5 bg-[#ccf141] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1092,7 +1098,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 <div className="p-6 md:p-12 md:overflow-y-auto space-y-6 flex-grow md:custom-scrollbar">
                   {/* Event Location Pin */}
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[14px] font-black uppercase tracking-wider mb-1">
-                    <MapPin size={14} className="text-[#e5ff00]" />
+                    <MapPin size={14} className="text-[#ccf141]" />
                     <span>
                       {selectedEvent.location.split(",").pop() || "Venue"}
                     </span>
@@ -1115,7 +1121,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
                           <Dumbbell
                             size={16}
-                            className="text-[#e5ff00] mb-1.5 shrink-0"
+                            className="text-[#ccf141] mb-1.5 shrink-0"
                           />
                           <span
                             className="text-[15px] font-black uppercase tracking-wider text-gray-400"
@@ -1131,7 +1137,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
                           <Timer
                             size={16}
-                            className="text-[#e5ff00] mb-1.5 shrink-0"
+                            className="text-[#ccf141] mb-1.5 shrink-0"
                           />
                           <span
                             className="text-[15px] font-black uppercase tracking-wider text-gray-400"
@@ -1147,7 +1153,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
                           <Flame
                             size={16}
-                            className="text-[#e5ff00] mb-1.5 shrink-0"
+                            className="text-[#ccf141] mb-1.5 shrink-0"
                           />
                           <span
                             className="text-[15px] font-black uppercase tracking-wider text-gray-400"
@@ -1165,7 +1171,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   {/* Description Box */}
                   <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                     <h4
-                      className="text-[20px] font-black uppercase tracking-wider text-[#e5ff00] mb-2"
+                      className="text-[20px] font-black uppercase tracking-wider text-[#ccf141] mb-2"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       About The Event
@@ -1183,7 +1189,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   {selectedEvent.benefits?.length > 0 && (
                     <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                       <h4
-                        className="text-[20px] font-black uppercase tracking-wider text-[#e5ff00] mb-3"
+                        className="text-[20px] font-black uppercase tracking-wider text-[#ccf141] mb-3"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         Benefits
@@ -1216,7 +1222,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left space-y-4">
                       <div className="flex items-baseline justify-between">
                         <h4
-                          className="text-[15px] font-black uppercase tracking-wider text-[#e5ff00]"
+                          className="text-[15px] font-black uppercase tracking-wider text-[#ccf141]"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           A typical {selectedEvent.title} Session
@@ -1323,7 +1329,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       {selectedEvent.inclusions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[20px] font-black tracking-wider text-[#e5ff00] mb-4 flex items-center justify-between"
+                            className="text-[20px] font-black tracking-wider text-[#ccf141] mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1350,7 +1356,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       {selectedEvent.exclusions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[20px] font-black tracking-wider text-[#e5ff00] mb-4 flex items-center justify-between"
+                            className="text-[20px] font-black tracking-wider text-[#ccf141] mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1377,7 +1383,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       {selectedEvent.termsAndConditions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[20px] font-black tracking-wider text-[#e5ff00] mb-4 flex items-center justify-between"
+                            className="text-[20px] font-black tracking-wider text-[#ccf141] mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1413,7 +1419,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     )}
                     {Number(selectedEvent.price) === 0 ? (
                       <span
-                        className="text-xl font-black text-[#e5ff00] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 rounded-lg inline-block self-start"
+                        className="text-xl font-black text-[#ccf141] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#ccf141]/10 border border-[#ccf141]/20 rounded-lg inline-block self-start"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         Free Entry
@@ -1435,7 +1441,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     onClick={() =>
                       navigate(`/events/${selectedEvent._id}?book=true`)
                     }
-                    className="inline-flex items-center justify-center gap-2 bg-[#e5ff00] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#e5ff00]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                    className="inline-flex items-center justify-center gap-2 bg-[#ccf141] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#ccf141]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
@@ -1591,7 +1597,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       </span>
                     )}
                     {Number(bookingEvent.price) === 0 ? (
-                      <span className="text-[10px] font-black uppercase tracking-wider text-[#e5ff00] px-2 py-0.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 rounded-md">
+                      <span className="text-[10px] font-black uppercase tracking-wider text-[#ccf141] px-2 py-0.5 bg-[#ccf141]/10 border border-[#ccf141]/20 rounded-md">
                         Free Entry
                       </span>
                     ) : (
@@ -1638,14 +1644,14 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               isSoldOut
                                 ? "bg-black/50 text-gray-600 border-white/5 cursor-not-allowed opacity-40"
                                 : isSelected
-                                  ? "bg-[#e5ff00]/10 border-[#e5ff00] text-white"
+                                  ? "bg-[#ccf141]/10 border-[#ccf141] text-white"
                                   : "bg-[#0f0f0f] border-white/5 hover:border-white/10 text-white cursor-pointer"
                             }`}
                           >
                             {/* Left indicator accent */}
                             {!isSoldOut && (
                               <span
-                                className={`absolute left-0 top-3 bottom-3 w-1 rounded-r-md ${isSelected ? "bg-[#e5ff00]" : "bg-green-500"}`}
+                                className={`absolute left-0 top-3 bottom-3 w-1 rounded-r-md ${isSelected ? "bg-[#ccf141]" : "bg-green-500"}`}
                               />
                             )}
 
@@ -1772,7 +1778,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     {/* Action button */}
                     <button
                       onClick={() => setShowContactForm(true)}
-                      className="w-full py-4 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-wider text-xs rounded-full shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 cursor-pointer"
+                      className="w-full py-4 bg-white hover:bg-[#ccf141] text-black font-black uppercase tracking-wider text-xs rounded-full shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-95 cursor-pointer"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       Continue
@@ -1792,7 +1798,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="bg-[#0c0c0c] border-0 md:border md:border-white/10 rounded-none md:rounded-3xl w-full h-full max-h-screen md:h-auto md:max-h-[100vh] md:max-w-7xl overflow-hidden shadow-2xl relative flex flex-col"
                   >
-                    <div className="h-16 flex items-center justify-between bg-[#e5ff00] px-6 border-b border-white/5">
+                    <div className="h-16 flex items-center justify-between bg-[#ccf141] px-6 border-b border-white/5">
                       <div className="flex items-center gap-3 ">
                         {!bookingSuccess && (
                           <button
@@ -1833,8 +1839,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center bg-[#0a0a0a] min-h-[50vh] flex-grow overflow-y-auto custom-scrollbar">
                         {/* Animated Neon Success Ring */}
                         <div className="relative mb-6">
-                          <div className="absolute inset-0 bg-[#e5ff00]/20 rounded-full blur-xl scale-125 animate-pulse"></div>
-                          <div className="w-20 h-20 bg-[#e5ff00] rounded-full flex items-center justify-center shadow-lg shadow-[#e5ff00]/30 relative z-10">
+                          <div className="absolute inset-0 bg-[#ccf141]/20 rounded-full blur-xl scale-125 animate-pulse"></div>
+                          <div className="w-20 h-20 bg-[#ccf141] rounded-full flex items-center justify-center shadow-lg shadow-[#ccf141]/30 relative z-10">
                             <CheckCircle
                               size={40}
                               className="text-black"
@@ -1869,7 +1875,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
                               Event
                             </p>
-                            <p className="text-sm font-extrabold text-[#e5ff00]">
+                            <p className="text-sm font-extrabold text-[#ccf141]">
                               {bookingEvent.title}
                             </p>
                           </div>
@@ -1951,7 +1957,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           selectedPaymentMethod === "barcode" ? (
                             <div className="flex flex-col items-center justify-start lg:justify-center text-center space-y-4 lg:space-y-6 lg:h-full lg:min-h-[350px] py-4 lg:py-0">
                               <div className="space-y-1">
-                                <span className="px-2.5 py-0.5 bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] text-[9px] lg:text-[10px] font-black uppercase tracking-widest rounded-md">
+                                <span className="px-2.5 py-0.5 bg-[#ccf141]/10 border border-[#ccf141]/20 text-[#ccf141] text-[9px] lg:text-[10px] font-black uppercase tracking-widest rounded-md">
                                   Scan to Pay
                                 </span>
                                 <h4
@@ -2011,7 +2017,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     );
                                     toast.success("UPI ID copied!");
                                   }}
-                                  className="text-[#e5ff00] hover:underline font-extrabold text-[9px] lg:text-[10px] uppercase cursor-pointer"
+                                  className="text-[#ccf141] hover:underline font-extrabold text-[9px] lg:text-[10px] uppercase cursor-pointer"
                                 >
                                   Copy
                                 </button>
@@ -2020,7 +2026,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           ) : (
                             <>
                               <div className="mb-6 text-left">
-                                <span className="px-3 py-1 bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] text-[10px] font-black uppercase tracking-widest rounded-md mb-3 inline-block">
+                                <span className="px-3 py-1 bg-[#ccf141]/10 border border-[#ccf141]/20 text-[#ccf141] text-[10px] font-black uppercase tracking-widest rounded-md mb-3 inline-block">
                                   Selected Event
                                 </span>
                                 <h4
@@ -2036,7 +2042,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               <div className="space-y-4 bg-white/[0.02] p-5 rounded-2xl border border-white/5">
                                 {/* Date */}
                                 <div className="flex items-start gap-4">
-                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#ccf141] shadow-inner shadow-white/5">
                                     <Calendar size={18} />
                                   </div>
                                   <div>
@@ -2066,7 +2072,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                                 {/* Time */}
                                 <div className="flex items-start gap-4">
-                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#ccf141] shadow-inner shadow-white/5">
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       width="18"
@@ -2106,7 +2112,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                                 {/* Location */}
                                 <div className="flex items-start gap-4">
-                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-white/5">
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0 text-[#ccf141] shadow-inner shadow-white/5">
                                     <MapPin size={18} />
                                   </div>
                                   <div>
@@ -2133,7 +2139,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                                 {/* Seats */}
                                 <div className="flex items-start gap-4">
-                                  <div className="w-10 h-10 rounded-xl bg-[#e5ff00]/10 flex items-center justify-center shrink-0 text-[#e5ff00] shadow-inner shadow-[#e5ff00]/20">
+                                  <div className="w-10 h-10 rounded-xl bg-[#ccf141]/10 flex items-center justify-center shrink-0 text-[#ccf141] shadow-inner shadow-[#ccf141]/20">
                                     <Ticket size={18} />
                                   </div>
                                   <div>
@@ -2147,7 +2153,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                       Reserved Seats
                                     </p>
                                     <p
-                                      className="text-sm font-black text-[#e5ff00]"
+                                      className="text-sm font-black text-[#ccf141]"
                                       style={{
                                         fontFamily:
                                           '"BrutalTypeBold", sans-serif',
@@ -2198,7 +2204,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 <div className="relative group">
                                   <User
                                     size={16}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#ccf141] transition-colors"
                                   />
                                   <input
                                     type="text"
@@ -2207,7 +2213,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                       setCustomerName(e.target.value)
                                     }
                                     placeholder="Enter your name"
-                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                    className="w-full bg-[#050505] border border-white/10 focus:border-[#ccf141]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
                                     required
                                   />
                                 </div>
@@ -2223,7 +2229,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                   <div className="relative group">
                                     <Mail
                                       size={16}
-                                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
+                                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#ccf141] transition-colors"
                                     />
                                     <input
                                       type="email"
@@ -2232,7 +2238,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                         setCustomerEmail(e.target.value)
                                       }
                                       placeholder="Enter your email"
-                                      className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                      className="w-full bg-[#050505] border border-white/10 focus:border-[#ccf141]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
                                       required
                                     />
                                   </div>
@@ -2246,7 +2252,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                   <div className="relative group">
                                     <Phone
                                       size={16}
-                                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#e5ff00] transition-colors"
+                                      className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#ccf141] transition-colors"
                                     />
                                     <input
                                       type="number"
@@ -2255,7 +2261,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                         setCustomerPhone(e.target.value)
                                       }
                                       placeholder="Enter your phone number"
-                                      className="w-full bg-[#050505] border border-white/10 focus:border-[#e5ff00]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
+                                      className="w-full bg-[#050505] border border-white/10 focus:border-[#ccf141]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
                                       required
                                     />
                                   </div>
@@ -2267,7 +2273,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 <button
                                   type="submit"
                                   disabled={submittingBooking}
-                                  className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 cursor-pointer"
+                                  className="w-full py-4.5 bg-white hover:bg-[#ccf141] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#ccf141]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 cursor-pointer"
                                   style={{
                                     fontFamily: '"BrutalTypeBold", sans-serif',
                                   }}
@@ -2312,7 +2318,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                                 {/* Readonly contact details */}
                                 <div className="bg-white/5 border border-white/5 rounded-xl p-3 mb-4 flex items-center gap-3 shadow-inner shadow-black/20">
-                                  <div className="w-8 h-8 rounded-full bg-[#e5ff00]/10 flex items-center justify-center text-[#e5ff00] shrink-0">
+                                  <div className="w-8 h-8 rounded-full bg-[#ccf141]/10 flex items-center justify-center text-[#ccf141] shrink-0">
                                     <User size={14} />
                                   </div>
                                   <div className="truncate">
@@ -2349,7 +2355,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                             className={`p-3 rounded-xl border text-left transition-all relative flex flex-col justify-center h-14 ${
                                               selectedPaymentMethod ===
                                               "razorpay"
-                                                ? "bg-[#e5ff00]/10 border-[#e5ff00] text-white"
+                                                ? "bg-[#ccf141]/10 border-[#ccf141] text-white"
                                                 : "bg-white/[0.02] border-white/5 hover:border-white/10 text-gray-400 hover:text-white cursor-pointer"
                                             }`}
                                           >
@@ -2370,7 +2376,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                             className={`p-3 rounded-xl border text-left transition-all relative flex flex-col justify-center h-14 ${
                                               selectedPaymentMethod ===
                                               "barcode"
-                                                ? "bg-[#e5ff00]/10 border-[#e5ff00] text-white"
+                                                ? "bg-[#ccf141]/10 border-[#ccf141] text-white"
                                                 : "bg-white/[0.02] border-white/5 hover:border-white/10 text-gray-400 hover:text-white cursor-pointer"
                                             }`}
                                           >
@@ -2422,7 +2428,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                             )
                                             .click()
                                         }
-                                        className="border-2 border-dashed border-white/10 hover:border-[#e5ff00]/50 bg-black/30 rounded-xl p-5 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group"
+                                        className="border-2 border-dashed border-white/10 hover:border-[#ccf141]/50 bg-black/30 rounded-xl p-5 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group"
                                       >
                                         <svg
                                           xmlns="http://www.w3.org/2000/svg"
@@ -2434,7 +2440,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                           strokeWidth="2"
                                           strokeLinecap="round"
                                           strokeLinejoin="round"
-                                          className="text-gray-500 group-hover:text-[#e5ff00] transition-colors"
+                                          className="text-gray-500 group-hover:text-[#ccf141] transition-colors"
                                         >
                                           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                           <polyline points="17 8 12 3 7 8" />
@@ -2480,12 +2486,12 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                                 {/* Price Breakdown */}
                                 <div className="bg-[#050505] border border-white/10 rounded-2xl p-5 text-sm space-y-3 mt-4 relative overflow-hidden shadow-inner shadow-black/50">
-                                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#e5ff00]"></div>
+                                  <div className="absolute top-0 left-0 w-1.5 h-full bg-[#ccf141]"></div>
 
                                   <h5 className="text-white font-bold uppercase tracking-wider text-xs mb-3 flex items-center gap-2">
                                     <Ticket
                                       size={14}
-                                      className="text-[#e5ff00]"
+                                      className="text-[#ccf141]"
                                     />
                                     Order Breakdown
                                   </h5>
@@ -2524,7 +2530,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                   {bookingEvent.originalPrice &&
                                     bookingEvent.originalPrice >
                                       bookingEvent.price && (
-                                      <div className="flex justify-between items-center text-[#e5ff00]/90 text-xs">
+                                      <div className="flex justify-between items-center text-[#ccf141]/90 text-xs">
                                         <span>Special Discount</span>
                                         <span className="font-bold">
                                           - ₹
@@ -2550,7 +2556,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     <span className="uppercase text-xs tracking-wider text-gray-300 font-bold">
                                       Total Payable
                                     </span>
-                                    <span className="text-2xl font-black text-[#e5ff00] tracking-tight">
+                                    <span className="text-2xl font-black text-[#ccf141] tracking-tight">
                                       ₹
                                       {(
                                         seatsCount * bookingEvent.price
@@ -2564,7 +2570,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                   <div className="relative flex items-center justify-center mt-0.5 shrink-0">
                                     <input
                                       type="checkbox"
-                                      className="appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-[#050505] checked:bg-[#e5ff00] checked:border-[#e5ff00] transition-colors cursor-pointer peer"
+                                      className="appearance-none w-5 h-5 border-2 border-gray-600 rounded bg-[#050505] checked:bg-[#ccf141] checked:border-[#ccf141] transition-colors cursor-pointer peer"
                                       checked={termsAccepted}
                                       onChange={(e) =>
                                         setTermsAccepted(e.target.checked)
@@ -2588,7 +2594,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     I accept the{" "}
                                     <a
                                       href="#"
-                                      className="text-white hover:text-[#e5ff00] underline decoration-white/20 transition-colors"
+                                      className="text-white hover:text-[#ccf141] underline decoration-white/20 transition-colors"
                                     >
                                       Terms and Conditions
                                     </a>
@@ -2607,7 +2613,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     (selectedPaymentMethod === "barcode" &&
                                       !paymentScreenshotFile)
                                   }
-                                  className="w-full py-4.5 bg-white hover:bg-[#e5ff00] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#e5ff00]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed cursor-pointer"
+                                  className="w-full py-4.5 bg-white hover:bg-[#ccf141] text-black font-black uppercase tracking-widest text-sm rounded-xl shadow-xl shadow-white/5 hover:shadow-[#ccf141]/20 transition-all duration-300 flex items-center justify-center gap-2 hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 disabled:cursor-not-allowed cursor-pointer"
                                   style={{
                                     fontFamily: '"BrutalTypeBold", sans-serif',
                                   }}
@@ -2657,7 +2663,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     className="bg-[#0c0c0c] border border-white/10 rounded-3xl overflow-hidden max-w-md w-full relative shadow-2xl flex flex-col z-10"
                   >
                     <div className="h-14 flex items-center justify-between px-6 border-b border-white/5 bg-white/5">
-                      <span className="font-extrabold uppercase text-xs tracking-wider text-[#e5ff00]">
+                      <span className="font-extrabold uppercase text-xs tracking-wider text-[#ccf141]">
                         Scan QR Code
                       </span>
                       <button
@@ -2688,14 +2694,14 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             navigator.clipboard.writeText("BOXCROSSGYM@iob");
                             toast.success("UPI ID copied!");
                           }}
-                          className="text-[#e5ff00] hover:underline font-extrabold text-[10px] uppercase cursor-pointer"
+                          className="text-[#ccf141] hover:underline font-extrabold text-[10px] uppercase cursor-pointer"
                         >
                           Copy
                         </button>
                       </div>
                       <button
                         onClick={() => setShowFullQR(false)}
-                        className="w-full py-3 bg-[#e5ff00] hover:bg-[#d4eb00] text-black font-black uppercase tracking-wider text-xs rounded-xl transition-all cursor-pointer"
+                        className="w-full py-3 bg-[#ccf141] hover:bg-[#d4eb00] text-black font-black uppercase tracking-wider text-xs rounded-xl transition-all cursor-pointer"
                       >
                         Close
                       </button>

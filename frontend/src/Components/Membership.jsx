@@ -7,13 +7,13 @@ import {
   ArrowRight,
   Activity,
   Zap,
-   ShieldHalf,
+  ShieldHalf,
   Flame,
   Medal,
-   Dumbbell,
-   Trophy,
-   Shield,
-   User,
+  Dumbbell,
+  Trophy,
+  Shield,
+  User,
   Star,
 } from "lucide-react";
 import RazorpayMembershipModal from "./RazorpayMembershipModal";
@@ -38,7 +38,7 @@ const programs = [
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-[#e5ff00]"
+        className="text-[#ccf141]"
       >
         <circle cx="12" cy="13" r="8" />
         <path d="M12 13v-4" />
@@ -72,13 +72,7 @@ const programs = [
   },
   {
     id: "transform",
-    icon: (
-      <Dumbbell
-        size={45}
-        strokeWidth={1.5}
-        className="text-[#e5ff00]"
-      />
-    ),
+    icon: <Dumbbell size={45} strokeWidth={1.5} className="text-[#ccf141]" />,
     title: "TRANSFORM",
     subtitle: "HYBRID PERFORMANCE",
     desc: "Boxing + Strength + Conditioning. The complete transformation for body and mind.",
@@ -94,7 +88,7 @@ const programs = [
         height="45"
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="text-[#e5ff00]"
+        className="text-[#ccf141]"
       >
         <circle cx="12" cy="6" r="2" />
         <path d="M21 16v-2c-2.24 0-4.16-.96-5.6-2.68l-1.34-1.6A1.98 1.98 0 0 0 12.53 9h-1.05c-.59 0-1.15.26-1.53.72l-1.34 1.6C7.16 13.04 5.24 14 3 14v2c2.77 0 5.19-1.17 7-3.25V15l-3.88 1.55c-.67.27-1.12.93-1.12 1.66C5 19.2 5.8 20 6.79 20H9v-.5a2.5 2.5 0 0 1 2.5-2.5h3c.28 0 .5.22.5.5s-.22.5-.5.5h-3c-.83 0-1.5.67-1.5 1.5v.5h7.21c.99 0 1.79-.8 1.79-1.79c0-.73-.45-1.39-1.12-1.66L14 15v-2.25c1.81 2.08 4.23 3.25 7 3.25" />
@@ -429,7 +423,6 @@ const pricingData = {
 const Membership = () => {
   const [activeTab, setActiveTab] = useState("transform");
 
-  
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const plan = params.get("plan");
@@ -589,8 +582,7 @@ const Membership = () => {
       >
         {/* STEP 1: CHOOSE PROGRAM */}
         <div className="w-full max-w-7xl  mx-auto mb-12">
-
-{/*................................................................. Membership Plans heading start.............................. */}
+          {/*................................................................. Membership Plans heading start.............................. */}
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -600,40 +592,30 @@ const Membership = () => {
             className="text-center mb-8 flex flex-col items-center justify-start  gap-4"
           >
             <div>
-               <span
-              className="px-4 py-2 rounded-md  border border-[#e5ff00]/30 bg-[#e5ff00] text-[#1e1111] uppercase"
-              style={{
-                fontFamily: '"BrutalTypeBold", sans-serif',
-                fontSize: "16px",
-                fontWeight: "600",
-              }}
-            >
-              STEP 1
-            </span>
-
+              <span
+                className="px-4 py-2 rounded-md  border border-[#ccf141]/30 bg-[#ccf141] text-[#1e1111] uppercase"
+                style={{
+                  fontFamily: '"BrutalTypeBold", sans-serif',
+                  fontSize: "16px",
+                  fontWeight: "600",
+                }}
+              >
+                STEP 1
+              </span>
             </div>
-           
-           <div>
-            <h2
-              className="mt-2 md:mt-4 mb-0 text-[32px] md:text-[48px] leading-[40px] md:leading-[55px]"
-              style={{
-                fontFamily: '"BrutalTypeBold", sans-serif',
-                fontWeight: "700",
-              }}
-            >
-              CHOOSE YOUR <span className="text-[#e5ff00]">PROGRAM</span>
-            </h2>
-           </div>
-           
+
+            <div>
+              <h2
+                className="mt-2 md:mt-4 mb-0 text-[32px] md:text-[48px] leading-[40px] md:leading-[55px]"
+                style={{
+                  fontFamily: '"BrutalTypeBold", sans-serif',
+                  fontWeight: "700",
+                }}
+              >
+                CHOOSE YOUR <span className="text-[#ccf141]">PROGRAM</span>
+              </h2>
+            </div>
           </motion.div>
-
-
-
-
-
-
-
-
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8  mt-8 md:mt-15 ">
             {dynamicPrograms.map((prog, index) => (
@@ -647,7 +629,7 @@ const Membership = () => {
                 onClick={() => setActiveTab(prog.id)}
                 className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
                   activeTab === prog.id
-                    ? "border-[#e5ff00] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
+                    ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
                     : "border-gray-800 hover:border-gray-600"
                 }`}
               >
@@ -665,7 +647,7 @@ const Membership = () => {
                 </div>
 
                 {prog.popular && (
-                  <div className="absolute top-0 right-0 bg-[#e5ff00] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
+                  <div className="absolute top-0 right-0 bg-[#ccf141] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
                     MOST POPULAR
                   </div>
                 )}
@@ -687,7 +669,7 @@ const Membership = () => {
                       {prog.title}
                     </h3>
                     <p
-                      className="text-[#e5ff00]  tracking-widest uppercase mb-3"
+                      className="text-[#ccf141]  tracking-widest uppercase mb-3"
                       style={{
                         fontFamily: '"BrutalTypeBold", sans-serif',
                         fontWeight: "400",
@@ -716,13 +698,12 @@ const Membership = () => {
                         fontWeight: "600",
                       }}
                     >
-                      FROM 
-                     
+                      FROM
                     </p>
 
-                       <div>
-                        <span
-                        className="text-lg text-[#e5ff00] text-[30px] md:text-[48px] mx-1.5"
+                    <div>
+                      <span
+                        className="text-lg text-[#ccf141] text-[30px] md:text-[48px] mx-1.5"
                         style={{
                           fontFamily: '"BrutalTypeBold", sans-serif',
                           fontWeight: "700",
@@ -731,17 +712,14 @@ const Membership = () => {
                         ₹{prog.price}
                       </span>
                       / MONTH
-                       </div>
-
-
-                    
+                    </div>
 
                     <button
                       onClick={(e) => handleScrollToPlans(e, prog.id)}
                       className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
                         activeTab === prog.id
-                          ? "bg-[#e5ff00] border-[#e5ff00] text-black"
-                          : "border-gray-500 text-white hover:border-[#e5ff00] bg-transparent"
+                          ? "bg-[#ccf141] border-[#ccf141] text-black"
+                          : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
                       }`}
                       style={{
                         fontFamily: '"BrutalTypeBold", sans-serif',
@@ -780,18 +758,14 @@ const Membership = () => {
           programs={dynamicPrograms}
         />
       </section>
-     {
-  createPortal(
-    <RazorpayMembershipModal
-      isOpen={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
-      planDetails={selectedPlan}
-    />,
-    document.body
-  )
-}
-   
-     
+      {createPortal(
+        <RazorpayMembershipModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          planDetails={selectedPlan}
+        />,
+        document.body,
+      )}
     </>
   );
 };

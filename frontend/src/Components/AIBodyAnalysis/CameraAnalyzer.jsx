@@ -41,6 +41,11 @@ const CameraAnalyzer = ({
   const fileInputRef = useRef(null);
   const animFrameIdRef = useRef(null);
   const prevRepsRef = useRef(exerciseStats?.reps || 0);
+  const isAnalyzingRef = useRef(isAnalyzing);
+
+  useEffect(() => {
+    isAnalyzingRef.current = isAnalyzing;
+  }, [isAnalyzing]);
 
   // Play gym rep completion chime
   const playRepChime = () => {
@@ -136,7 +141,7 @@ const CameraAnalyzer = ({
     return () => {
       mounted = false;
       clearCountdownTimers();
-      stopCameraStream();
+      stopCameraStream(false);
     };
   }, []);
 
@@ -274,7 +279,13 @@ const CameraAnalyzer = ({
   };
 
   // Stop Camera & Reset to Ready
-  const stopCameraStream = () => {
+  const stopCameraStream = (showToast = true) => {
+    const wasActive =
+      isAnalyzingRef.current ||
+      isAnalyzing ||
+      isDemoMode ||
+      poseDetectionService.isCameraActive;
+
     clearCountdownTimers();
     if (animFrameIdRef.current) {
       cancelAnimationFrame(animFrameIdRef.current);
@@ -287,7 +298,14 @@ const CameraAnalyzer = ({
     poseDetectionService.isSimulatedMode = false;
     setCurrentLandmarks(null);
     setAnalysisDuration(0);
-    toast("Analysis stopped. Session saved.", { icon: "⏹️" });
+
+    // Only show toast if user explicitly stopped an active session (silent during unmount/cleanup)
+    if (showToast && wasActive) {
+      toast("Analysis stopped. Session saved.", {
+        icon: "⏹️",
+        id: "analysis-stopped",
+      });
+    }
   };
 
   // Pause / Resume / Start from Ready
@@ -453,7 +471,7 @@ const CameraAnalyzer = ({
         <div className="absolute right-2 sm:right-3 md:right-3.5 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-1.5 sm:gap-2 md:gap-2.5">
           {/* Camera Button */}
           <button
-            onClick={isAnalyzing ? stopCameraStream : handleStartCamera}
+            onClick={isAnalyzing ? () => stopCameraStream(true) : handleStartCamera}
             className={`flex flex-col items-center justify-center w-11 h-11 sm:w-12 sm:h-12 md:w-13 md:h-13 lg:w-14 lg:h-14 rounded-xl sm:rounded-2xl transition-all cursor-pointer shadow-lg ${
               isAnalyzing && !isDemoMode
                 ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold shadow-lg shadow-[var(--db-accent-glow)]"
@@ -825,7 +843,7 @@ const CameraAnalyzer = ({
             </button>
           ) : isAnalyzing ? (
             <button
-              onClick={stopCameraStream}
+              onClick={() => stopCameraStream(true)}
               className="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-[11px] sm:text-xs shadow-md shadow-rose-600/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
             >
               <Square size={11} className="fill-white" />

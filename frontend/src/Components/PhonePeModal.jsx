@@ -130,7 +130,7 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-       <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 md:p-6 font-sans">
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 md:p-6 font-sans">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -153,16 +153,16 @@ const PhonePeModal = ({ isOpen, onClose, planDetails }) => {
               scale: 0.96,
               transition: { duration: 0.2 },
             }}
-           className="relative w-full max-w-[1000px] bg-white rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col md:flex-row"
-style={{
-  maxHeight: "90vh",
-}}
+            className="relative w-full max-w-[1000px] bg-white rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col md:flex-row"
+            style={{
+              maxHeight: "90vh",
+            }}
           >
             {/* ═══ LEFT DARK PANEL ═══ */}
             <div className="hidden md:flex flex-col justify-between w-[340px] shrink-0 bg-[#0f0f13] text-white p-8 relative overflow-hidden">
               {/* BG decoration */}
               <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#5f259f]/20 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-20 -right-10 w-56 h-56 bg-[#e5ff00]/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-20 -right-10 w-56 h-56 bg-[#ccf141]/10 rounded-full blur-3xl pointer-events-none" />
 
               <div className="relative z-10">
                 {/* Logo */}
@@ -190,7 +190,7 @@ style={{
                       <div
                         className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-sm border-2 shrink-0 transition-all duration-300 ${
                           step > s.n
-                            ? "bg-[#e5ff00] border-[#e5ff00] text-black"
+                            ? "bg-[#ccf141] border-[#ccf141] text-black"
                             : step === s.n
                               ? "bg-[#5f259f] border-[#5f259f] text-white"
                               : "bg-transparent border-white/20 text-white/30"
@@ -228,7 +228,7 @@ style={{
                       {planDetails.name}
                     </p>
                     <div className="flex items-end gap-1">
-                      <span className="text-[#e5ff00] font-black text-3xl">
+                      <span className="text-[#ccf141] font-black text-3xl">
                         ₹{planDetails.price}
                       </span>
                       <span className="text-white/40 text-[11px] mb-1">
@@ -250,8 +250,8 @@ style={{
                       key={i}
                       className="flex items-center gap-2 text-[10px] text-white/60"
                     >
-                      <div className="w-4 h-4 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 flex items-center justify-center shrink-0">
-                        <Check size={9} className="text-[#e5ff00]" />
+                      <div className="w-4 h-4 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/30 flex items-center justify-center shrink-0">
+                        <Check size={9} className="text-[#ccf141]" />
                       </div>
                       {f}
                     </div>

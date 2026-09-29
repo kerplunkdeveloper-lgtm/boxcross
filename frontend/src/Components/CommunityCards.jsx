@@ -11,9 +11,10 @@ export default function CommunityCards() {
       btnText: "JOIN WHATSAPP →",
       action: () => window.open("https://wa.me/918925556900", "_blank"),
       solid: true,
-      bgImg: "https://static0.anpoimages.com/wordpress/wp-content/uploads/2024/03/whatsapp-24a-ap-hero.jpg",
+      bgImg:
+        "https://static0.anpoimages.com/wordpress/wp-content/uploads/2024/03/whatsapp-24a-ap-hero.jpg",
       overlayColor: "from-green-600/20 via-transparent to-black",
-      spinColor: "#25D366"
+      spinColor: "#25D366",
     },
     {
       label: "INSTAGRAM",
@@ -21,11 +22,13 @@ export default function CommunityCards() {
       titleLines: ["THE VISUAL", "TRIBE."],
       desc: "Training content. Member transformations. Fight Night reels. Sunday Run Club mornings. The visual life of the BXC Hybrid Tribe — posted every week without fail.",
       btnText: "FOLLOW @BXCHYBRIDTRIBE →",
-      action: () => window.open("https://www.instagram.com/boxandcrossboxing/", "_blank"),
+      action: () =>
+        window.open("https://www.instagram.com/boxandcrossboxing/", "_blank"),
       solid: false,
-      bgImg: "https://www.herenow.film/wp-content/uploads/2023/12/Instagram-video-statistics-scaled.jpg",
+      bgImg:
+        "https://www.herenow.film/wp-content/uploads/2023/12/Instagram-video-statistics-scaled.jpg",
       overlayColor: "from-pink-600/20 via-transparent to-black",
-      spinColor: "#ee2a7b"
+      spinColor: "#ee2a7b",
     },
     {
       label: "YOUTUBE",
@@ -33,21 +36,26 @@ export default function CommunityCards() {
       titleLines: ["THE FULL", "STORY."],
       desc: "Full Fight Night footage. Training breakdowns. HYROX simulation race replays. Coach-led technique tutorials. Every major event — documented and kept.",
       btnText: "SUBSCRIBE →",
-      action: () => window.open("https://www.youtube.com/@boxandcross", "_blank"),
+      action: () =>
+        window.open("https://www.youtube.com/@boxandcross", "_blank"),
       solid: false,
-      bgImg: "https://images.unsplash.com/photo-1649180543887-158357417159?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bG9nbyUyMHlvdXR1YmV8ZW58MHx8MHx8fDA%3D",
+      bgImg:
+        "https://images.unsplash.com/photo-1649180543887-158357417159?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8bG9nbyUyMHlvdXR1YmV8ZW58MHx8MHx8fDA%3D",
       overlayColor: "from-red-600/20 via-transparent to-black",
-      spinColor: "#FF0000"
-    }
+      spinColor: "#FF0000",
+    },
   ];
 
   return (
-    <section id="join-community-section" className="bg-[#0e0e0e] text-white py-16 sm:py-24 px-1 md:px-8 lg:px-12">
+    <section
+      id="join-community-section"
+      className="bg-[#0e0e0e] text-white py-16 sm:py-24 px-1 md:px-8 lg:px-12"
+    >
       <div className="max-w-8xl mx-auto">
         {/* Header */}
         <div data-aos="fade-up" className="mb-12">
-          <div className="flex flex-col justify-center items-center gap-2 mb-4 text-[#E5FF00] text-xs font-black tracking-widest uppercase">
-            <span className="w-6 h-[2px] bg-[#E5FF00]"></span>
+          <div className="flex flex-col justify-center items-center gap-2 mb-4 text-[#ccf141] text-xs font-black tracking-widest uppercase">
+            <span className="w-6 h-[2px] bg-[#ccf141]"></span>
             JOIN THE COMMUNITY
           </div>
 
@@ -56,11 +64,12 @@ export default function CommunityCards() {
             style={{ fontFamily: '"Bebas Neue", sans-serif' }}
           >
             THREE
-            <span className="text-[#E5FF00] mx-3">WAYS IN</span>
+            <span className="text-[#ccf141] mx-3">WAYS IN</span>
           </h2>
 
           <p className="text-zinc-500 text-sm text-center p-2 md:text-base font-semibold ">
-            Not ready to train yet? Join the community first. When you are ready — we will be here.
+            Not ready to train yet? Join the community first. When you are ready
+            — we will be here.
           </p>
         </div>
 
@@ -71,23 +80,24 @@ export default function CommunityCards() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
         >
           {cards.map((item, idx) => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               className="card-border-spin-container rounded-[20px] md:rounded-[28px] p-[1.5px] h-full group"
               style={{ "--spin-glow-color": item.spinColor }}
             >
               <div className="card-border-spin-inner relative rounded-[18px] md:rounded-[26px] overflow-hidden bg-zinc-950 h-full p-8 md:p-10 flex flex-col justify-between min-h-[380px]">
-                
                 {/* Background Image Container */}
                 <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
                   {/* Background Image */}
-                  <img 
-                    src={item.bgImg} 
-                    alt="" 
-                    className="w-full h-full object-cover opacity-25 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700" 
+                  <img
+                    src={item.bgImg}
+                    alt=""
+                    className="w-full h-full object-cover opacity-25 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700"
                   />
                   {/* Brand Color Gradient Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-tr ${item.overlayColor} opacity-50`}></div>
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-tr ${item.overlayColor} opacity-50`}
+                  ></div>
                   {/* Dark Vignette Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/25"></div>
                 </div>
@@ -95,12 +105,17 @@ export default function CommunityCards() {
                 {/* Card Content */}
                 <div className="relative z-10">
                   {/* Icon */}
-                  <span className="text-3xl text-[#E5FF00] block mb-4 animate-bounce" role="img" aria-label={item.label} style={{ animationDuration: '3s' }}>
+                  <span
+                    className="text-3xl text-[#ccf141] block mb-4 animate-bounce"
+                    role="img"
+                    aria-label={item.label}
+                    style={{ animationDuration: "3s" }}
+                  >
                     {item.icon}
                   </span>
 
                   {/* Small Label */}
-                  <span className="text-[#E5FF00] text-[10px] md:text-xs font-black tracking-widest block mb-3 uppercase">
+                  <span className="text-[#ccf141] text-[10px] md:text-xs font-black tracking-widest block mb-3 uppercase">
                     {item.label}
                   </span>
 
@@ -127,8 +142,8 @@ export default function CommunityCards() {
                   <button
                     onClick={item.action}
                     className={`w-full sm:w-auto font-black uppercase tracking-wider text-[11px] md:text-xs px-6 py-3.5 transition-all duration-300 active:scale-95 cursor-pointer rounded-none ${
-                      item.solid 
-                        ? "bg-[#E5FF00] text-black hover:brightness-110" 
+                      item.solid
+                        ? "bg-[#ccf141] text-black hover:brightness-110"
                         : "bg-transparent border border-zinc-800 text-zinc-300 hover:border-zinc-500 hover:text-white"
                     }`}
                   >

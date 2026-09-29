@@ -3,13 +3,32 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { 
-  User, Mail, Calendar, ShieldCheck, Award, Clock, ArrowRight, Sparkles, Users, 
-  MapPin, DollarSign, ArrowUpRight, Plus, Loader2, CreditCard 
+import {
+  User,
+  Mail,
+  Calendar,
+  ShieldCheck,
+  Award,
+  Clock,
+  ArrowRight,
+  Sparkles,
+  Users,
+  MapPin,
+  DollarSign,
+  ArrowUpRight,
+  Plus,
+  Loader2,
+  CreditCard,
 } from "lucide-react";
 import boxerBanner from "../assets/boxer-banner.png";
 import gymhm from "../assets/gymhm.png";
-import { getBookings, getPayments, getEventsListAdmin, getEventBookings, getFounders } from "../api/api";
+import {
+  getBookings,
+  getPayments,
+  getEventsListAdmin,
+  getEventBookings,
+  getFounders,
+} from "../api/api";
 
 const DashboardHome = () => {
   const { user } = useAuth();
@@ -30,28 +49,39 @@ const DashboardHome = () => {
     return () => clearInterval(timer);
   }, []);
 
-
   const fetchDashboardStats = async (showLoader = false) => {
     const shouldShow = showLoader === true;
     if (shouldShow) setLoading(true);
     try {
-      const [bookingsRes, paymentsRes, eventsRes, eventBookingsRes, foundersRes] = await Promise.all([
+      const [
+        bookingsRes,
+        paymentsRes,
+        eventsRes,
+        eventBookingsRes,
+        foundersRes,
+      ] = await Promise.all([
         getBookings(),
         getPayments(),
         getEventsListAdmin(),
         getEventBookings(),
-        getFounders()
+        getFounders(),
       ]);
 
       if (bookingsRes.data?.success) {
         setVisitorCount(bookingsRes.data.count || bookingsRes.data.data.length);
       }
-      
+
       if (paymentsRes.data?.success && Array.isArray(paymentsRes.data.data)) {
         const total = paymentsRes.data.data.reduce((sum, item) => {
           const status = item.paymentStatus || item.status;
           if (status === "success" || status === "completed") {
-            return sum + (Number(item.price) || Number(item.amount) || Number(item.planPrice) || 0);
+            return (
+              sum +
+              (Number(item.price) ||
+                Number(item.amount) ||
+                Number(item.planPrice) ||
+                0)
+            );
           }
           return sum;
         }, 0);
@@ -76,16 +106,24 @@ const DashboardHome = () => {
         setEvents(upcomingEvents);
       }
 
-      if (eventBookingsRes.data?.success && Array.isArray(eventBookingsRes.data.data)) {
+      if (
+        eventBookingsRes.data?.success &&
+        Array.isArray(eventBookingsRes.data.data)
+      ) {
         const revenue = eventBookingsRes.data.data
-          .filter(b => b.status === "payment successfully" || b.status === "confirmed")
+          .filter(
+            (b) =>
+              b.status === "payment successfully" || b.status === "confirmed",
+          )
           .reduce((sum, b) => sum + (Number(b.totalAmount) || 0), 0);
         setEventRevenue(revenue);
       }
 
       if (foundersRes.data?.success && Array.isArray(foundersRes.data.data)) {
-        const paidCount = foundersRes.data.data
-          .filter(f => f.paymentStatus === "Completed" || f.paymentStatus === "completed").length;
+        const paidCount = foundersRes.data.data.filter(
+          (f) =>
+            f.paymentStatus === "Completed" || f.paymentStatus === "completed",
+        ).length;
         setPaidFounders(paidCount);
       }
     } catch (error) {
@@ -121,31 +159,31 @@ const DashboardHome = () => {
       <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none z-0" />
 
       <div className="max-w-9xl mx-auto z-10 relative space-y-10">
-        
         {/* Welcome Section with Boxer Background Image and Real-Time Clock */}
-        <div 
+        <div
           className="relative overflow-hidden py-8 px-6 md:py-11 md:px-10 min-h-[160px] sm:min-h-[180px] md:min-h-[205px] rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 group"
           style={{
             background: "var(--db-glass-bg)",
             borderColor: "var(--db-glass-border)",
             backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)"
+            WebkitBackdropFilter: "blur(24px)",
           }}
         >
           {/* Boxer Background Image Layer */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-            <img 
-              src={boxerBanner} 
-              alt="Dashboard Banner Background" 
+            <img
+              src={boxerBanner}
+              alt="Dashboard Banner Background"
               className="w-full h-full object-cover object-center transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
             />
             {/* Cinematic Gradient Overlays to preserve legibility and aesthetic contrast */}
-            <div 
+            <div
               className="absolute inset-0 transition-opacity duration-300"
               style={{
-                background: theme === "light"
-                  ? "linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.72) 45%, rgba(255,255,255,0.90) 100%)"
-                  : "linear-gradient(90deg, rgba(7,7,7,0.88) 0%, rgba(7,7,7,0.52) 45%, rgba(7,7,7,0.82) 100%)"
+                background:
+                  theme === "light"
+                    ? "linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.72) 45%, rgba(255,255,255,0.90) 100%)"
+                    : "linear-gradient(90deg, rgba(7,7,7,0.88) 0%, rgba(7,7,7,0.52) 45%, rgba(7,7,7,0.82) 100%)",
               }}
             />
           </div>
@@ -153,30 +191,33 @@ const DashboardHome = () => {
           {/* Subtle accent light reflection inside the card */}
           <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40 z-[1]" />
           <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20 z-[1]" />
-          
+
           <div className="flex items-center gap-4 sm:gap-6 z-10">
             {/* Profile Image with Increased Size & Enhanced UI/UX */}
-            <div 
-              onClick={() => navigate('/dashboard/profile')}
+            <div
+              onClick={() => navigate("/dashboard/profile")}
               className="relative group cursor-pointer shrink-0"
               title="Click to view profile"
             >
               <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full p-1 bg-gradient-to-tr from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent border-2 border-[var(--db-accent-highlight)]/40 shadow-xl shadow-[var(--db-accent-glow)] ring-2 ring-[var(--db-accent-highlight)]/20 ring-offset-2 ring-offset-[var(--db-card)] transition-all duration-300 group-hover:scale-105 group-hover:border-[var(--db-accent-highlight)]">
                 <div className="w-full h-full rounded-full overflow-hidden bg-neutral-900 flex items-center justify-center">
                   {user.profileImage ? (
-                    <img 
-                      src={user.profileImage} 
-                      alt={user.name} 
+                    <img
+                      src={user.profileImage}
+                      alt={user.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 rounded-full"
                     />
                   ) : (
-                    <User size={40} className="text-[var(--db-accent-highlight)]" />
+                    <User
+                      size={40}
+                      className="text-[var(--db-accent-highlight)]"
+                    />
                   )}
                 </div>
               </div>
 
               {/* Active Online Status Indicator */}
-              <div 
+              <div
                 className="absolute bottom-0 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[var(--db-card)] flex items-center justify-center shadow-md"
                 title="Status: Online & Active"
               >
@@ -186,10 +227,23 @@ const DashboardHome = () => {
 
             <div className="text-left">
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  {getGreeting()}, <span className="text-[var(--db-accent-highlight)]" style={{fontFamily:"'BrutalType Bold', sans-serif"}}> {user.name}</span>
+                <h1
+                  className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]"
+                  style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                >
+                  {getGreeting()},{" "}
+                  <span
+                    className="text-[var(--db-accent-highlight)]"
+                    style={{ fontFamily: "'BrutalType Bold', sans-serif" }}
+                  >
+                    {" "}
+                    {user.name}
+                  </span>
                 </h1>
-                <Sparkles size={16} className="text-[var(--db-accent-highlight)] animate-pulse" />
+                <Sparkles
+                  size={16}
+                  className="text-[var(--db-accent-highlight)] animate-pulse"
+                />
               </div>
             </div>
           </div>
@@ -198,32 +252,60 @@ const DashboardHome = () => {
           <div className="z-10 flex items-center gap-4 self-stretch sm:self-auto justify-between sm:justify-end border-t sm:border-t-0 sm:border-l border-[var(--db-glass-border)] pt-4 sm:pt-0 sm:pl-8">
             <div className="flex flex-col text-left">
               <div className="flex items-center gap-1.5 text-[var(--db-text-muted)] text-[10px] font-black uppercase tracking-widest">
-                <Calendar size={12} className="text-[var(--db-accent-highlight)]" />
+                <Calendar
+                  size={12}
+                  className="text-[var(--db-accent-highlight)]"
+                />
                 <span>
-                  {currentTime.toLocaleDateString([], { weekday: 'short' }).toUpperCase()}, {currentTime.toLocaleDateString([], { month: 'short', day: 'numeric' }).toUpperCase()}
+                  {currentTime
+                    .toLocaleDateString([], { weekday: "short" })
+                    .toUpperCase()}
+                  ,{" "}
+                  {currentTime
+                    .toLocaleDateString([], { month: "short", day: "numeric" })
+                    .toUpperCase()}
                 </span>
               </div>
               <div className="flex items-baseline gap-1 mt-1">
-                <span className="text-2xl md:text-3xl font-black tracking-tighter text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                  {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).split(" ")[0]}
+                <span
+                  className="text-2xl md:text-3xl font-black tracking-tighter text-[var(--db-text-title)]"
+                  style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                >
+                  {
+                    currentTime
+                      .toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .split(" ")[0]
+                  }
                 </span>
                 <span className="text-[10px] md:text-xs font-bold text-[var(--db-accent-highlight)] ml-0.5">
-                  :{currentTime.toLocaleTimeString([], { second: '2-digit' })}
+                  :{currentTime.toLocaleTimeString([], { second: "2-digit" })}
                 </span>
                 <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[var(--db-text-muted)] ml-2">
-                  {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }).split(" ")[1]}
+                  {
+                    currentTime
+                      .toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                      .split(" ")[1]
+                  }
                 </span>
               </div>
             </div>
 
             {/* Premium circular glass clock ornament */}
-            <div 
+            <div
               className="w-12 h-12 rounded-2xl border flex items-center justify-center text-[var(--db-accent-highlight)] shadow-inner relative group overflow-hidden"
               style={{
                 background: "var(--db-glass-bg)",
                 borderColor: "var(--db-glass-border)",
                 backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)"
+                WebkitBackdropFilter: "blur(10px)",
               }}
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent opacity-50 group-hover:scale-110 transition-transform duration-500" />
@@ -231,8 +313,6 @@ const DashboardHome = () => {
             </div>
           </div>
         </div>
-
-   
 
         {/* Dashboard Executive KPI Stats - 5 Cards Aligned in 1 Row on Desktop */}
         {(() => {
@@ -244,14 +324,16 @@ const DashboardHome = () => {
               value: visitorCount,
               displayValue: visitorCount.toLocaleString("en-IN"),
               icon: Users,
-              accentText: "text-[#e5ff00]",
-              iconBg: "bg-[#e5ff00]/10 text-[#e5ff00] border-[#e5ff00]/25 shadow-[0_0_14px_rgba(229,255,0,0.15)]",
-              glowBg: "bg-[#e5ff00]",
-              borderHover: "hover:border-[#e5ff00]/40 hover:shadow-[0_8px_24px_rgba(229,255,0,0.12)]",
-              dotBg: "bg-[#e5ff00]",
-              loaderColor: "text-[#e5ff00]",
+              accentText: "text-[#ccf141]",
+              iconBg:
+                "bg-[#ccf141]/10 text-[#ccf141] border-[#ccf141]/25 shadow-[0_0_14px_rgba(229,255,0,0.15)]",
+              glowBg: "bg-[#ccf141]",
+              borderHover:
+                "hover:border-[#ccf141]/40 hover:shadow-[0_8px_24px_rgba(229,255,0,0.12)]",
+              dotBg: "bg-[#ccf141]",
+              loaderColor: "text-[#ccf141]",
               badgeText: "Visitors",
-              link: "/dashboard/bookings"
+              link: "/dashboard/bookings",
             },
             {
               id: "event-payments",
@@ -261,13 +343,15 @@ const DashboardHome = () => {
               displayValue: `₹${totalPayments.toLocaleString("en-IN")}`,
               icon: CreditCard,
               accentText: "text-sky-400",
-              iconBg: "bg-sky-500/10 text-sky-400 border-sky-500/25 shadow-[0_0_14px_rgba(56,189,248,0.15)]",
+              iconBg:
+                "bg-sky-500/10 text-sky-400 border-sky-500/25 shadow-[0_0_14px_rgba(56,189,248,0.15)]",
               glowBg: "bg-sky-500",
-              borderHover: "hover:border-sky-500/40 hover:shadow-[0_8px_24px_rgba(56,189,248,0.12)]",
+              borderHover:
+                "hover:border-sky-500/40 hover:shadow-[0_8px_24px_rgba(56,189,248,0.12)]",
               dotBg: "bg-sky-400",
               loaderColor: "text-sky-400",
               badgeText: "Payments",
-              link: "/dashboard/event-payments"
+              link: "/dashboard/event-payments",
             },
             {
               id: "events",
@@ -277,13 +361,15 @@ const DashboardHome = () => {
               displayValue: events.length.toLocaleString("en-IN"),
               icon: Calendar,
               accentText: "text-amber-400",
-              iconBg: "bg-amber-500/10 text-amber-400 border-amber-500/25 shadow-[0_0_14px_rgba(245,158,11,0.15)]",
+              iconBg:
+                "bg-amber-500/10 text-amber-400 border-amber-500/25 shadow-[0_0_14px_rgba(245,158,11,0.15)]",
               glowBg: "bg-amber-500",
-              borderHover: "hover:border-amber-500/40 hover:shadow-[0_8px_24px_rgba(245,158,11,0.12)]",
+              borderHover:
+                "hover:border-amber-500/40 hover:shadow-[0_8px_24px_rgba(245,158,11,0.12)]",
               dotBg: "bg-amber-400",
               loaderColor: "text-amber-400",
               badgeText: "Events",
-              link: "/dashboard/events-list"
+              link: "/dashboard/events-list",
             },
             {
               id: "collection",
@@ -293,13 +379,15 @@ const DashboardHome = () => {
               displayValue: `₹${eventRevenue.toLocaleString("en-IN")}`,
               icon: DollarSign,
               accentText: "text-emerald-400",
-              iconBg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/25 shadow-[0_0_14px_rgba(16,185,129,0.15)]",
+              iconBg:
+                "bg-emerald-500/10 text-emerald-400 border-emerald-500/25 shadow-[0_0_14px_rgba(16,185,129,0.15)]",
               glowBg: "bg-emerald-500",
-              borderHover: "hover:border-emerald-500/40 hover:shadow-[0_8px_24px_rgba(16,185,129,0.12)]",
+              borderHover:
+                "hover:border-emerald-500/40 hover:shadow-[0_8px_24px_rgba(16,185,129,0.12)]",
               dotBg: "bg-emerald-400",
               loaderColor: "text-emerald-400",
               badgeText: "Revenue",
-              link: "/dashboard/event-payments"
+              link: "/dashboard/event-payments",
             },
             {
               id: "founders",
@@ -309,14 +397,16 @@ const DashboardHome = () => {
               displayValue: paidFounders.toLocaleString("en-IN"),
               icon: ShieldCheck,
               accentText: "text-purple-400",
-              iconBg: "bg-purple-500/10 text-purple-400 border-purple-500/25 shadow-[0_0_14px_rgba(168,85,247,0.15)]",
+              iconBg:
+                "bg-purple-500/10 text-purple-400 border-purple-500/25 shadow-[0_0_14px_rgba(168,85,247,0.15)]",
               glowBg: "bg-purple-500",
-              borderHover: "hover:border-purple-500/40 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]",
+              borderHover:
+                "hover:border-purple-500/40 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]",
               dotBg: "bg-purple-400",
               loaderColor: "text-purple-400",
               badgeText: "Founders",
-              link: "/dashboard/founding-members"
-            }
+              link: "/dashboard/founding-members",
+            },
           ];
 
           return (
@@ -347,7 +437,9 @@ const DashboardHome = () => {
                         <Icon size={18} />
                       </div>
                       <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
-                        <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${card.dotBg}`} />
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full animate-pulse ${card.dotBg}`}
+                        />
                         <span className="text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors">
                           {card.badgeText}
                         </span>
@@ -362,7 +454,10 @@ const DashboardHome = () => {
                     <div className="z-10 mt-auto">
                       {loading ? (
                         <div className="h-7 sm:h-8 flex items-center">
-                          <Loader2 size={20} className={`animate-spin ${card.loaderColor}`} />
+                          <Loader2
+                            size={20}
+                            className={`animate-spin ${card.loaderColor}`}
+                          />
                         </div>
                       ) : (
                         <div
@@ -386,72 +481,87 @@ const DashboardHome = () => {
           );
         })()}
 
-
-
-
-
-
-
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
           {/* Left: Premium Promo Banner Card */}
           <div className="lg:col-span-5 w-full">
             <div className="relative overflow-hidden rounded-[32px] border border-[var(--db-card-border)] bg-[var(--db-card)] shadow-2xl h-[320px] sm:h-[400px] lg:h-[480px] flex flex-col justify-end group transition-all duration-300 lg:sticky lg:top-6">
-              <img 
-                src={gymhm} 
-                alt="Box & Cross Gym" 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
+              <img
+                src={gymhm}
+                alt="Box & Cross Gym"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
               {/* Premium Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent z-10" />
-              
+
               {/* Content Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 text-left flex flex-col items-start">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[var(--db-accent-highlight)] text-black shadow-lg mb-3">
                   Box & Cross Club
                 </span>
-                <h3 className="text-xl md:text-2xl font-black uppercase text-white tracking-wide leading-tight" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                <h3
+                  className="text-xl md:text-2xl font-black uppercase text-white tracking-wide leading-tight"
+                  style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                >
                   Elite Athlete Arena
                 </h3>
                 <p className="text-xs text-gray-300 font-medium leading-relaxed max-w-xs mt-1.5">
-                  Push your limits in our high-performance facility equipped with state-of-the-art gear and expert coaching.
+                  Push your limits in our high-performance facility equipped
+                  with state-of-the-art gear and expert coaching.
                 </p>
               </div>
             </div>
           </div>
 
-
           {/* Right: CALENDAR EVENTS DETAILS SECTION */}
           <div className="lg:col-span-7 space-y-6 text-left w-full">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-md md:text-xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                <h2
+                  className="text-md md:text-xl font-black uppercase tracking-wide text-[var(--db-text-title)]"
+                  style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                >
                   Active Class & Event Schedules
                 </h2>
                 <p className="text-[var(--db-text-muted)] text-xs mt-0.5">
-                  Overview of current active gym schedules, time slots and participant capacity.
+                  Overview of current active gym schedules, time slots and
+                  participant capacity.
                 </p>
               </div>
-              
-              <button 
+
+              <button
                 onClick={() => navigate("/dashboard/calendar")}
                 className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)] hover:text-white transition-colors duration-300 cursor-pointer group"
               >
                 Go to Calendar View
-                <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight
+                  size={14}
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                />
               </button>
             </div>
 
             {loading ? (
               <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-12 text-center flex flex-col items-center justify-center gap-3">
-                <Loader2 className="animate-spin text-[var(--db-accent-highlight)]" size={32} />
-                <p className="text-xs uppercase tracking-wider text-[var(--db-text-muted)] font-bold">Syncing schedules...</p>
+                <Loader2
+                  className="animate-spin text-[var(--db-accent-highlight)]"
+                  size={32}
+                />
+                <p className="text-xs uppercase tracking-wider text-[var(--db-text-muted)] font-bold">
+                  Syncing schedules...
+                </p>
               </div>
             ) : events.length === 0 ? (
               <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-12 text-center flex flex-col items-center justify-center">
-                <Calendar size={40} className="text-[var(--db-text-muted)] mb-3" />
-                <p className="text-sm font-bold text-[var(--db-text)]">No Scheduled Events Yet</p>
-                <p className="text-xs text-[var(--db-text-muted)] mt-1">Schedules created by gym admins will display here.</p>
+                <Calendar
+                  size={40}
+                  className="text-[var(--db-text-muted)] mb-3"
+                />
+                <p className="text-sm font-bold text-[var(--db-text)]">
+                  No Scheduled Events Yet
+                </p>
+                <p className="text-xs text-[var(--db-text-muted)] mt-1">
+                  Schedules created by gym admins will display here.
+                </p>
                 {user.role === "admin" && (
                   <button
                     onClick={() => navigate("/dashboard/calendar")}
@@ -465,7 +575,7 @@ const DashboardHome = () => {
               <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] overflow-hidden shadow-2xl p-5 md:p-6 transition-colors">
                 <div className="flex flex-col gap-2.5 max-h-[350px] overflow-y-auto custom-scrollbar pr-2">
                   {events.map((evt) => (
-                    <div 
+                    <div
                       key={evt._id}
                       className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 p-4 hover:bg-[var(--db-input-bg)]/25 border border-transparent hover:border-[var(--db-card-border)]/50 rounded-2xl transition-all duration-300"
                     >
@@ -473,10 +583,10 @@ const DashboardHome = () => {
                       <div className="flex items-center gap-4 flex-1 min-w-0 text-left">
                         {/* Small Image */}
                         <div className="w-14 h-14 rounded-xl overflow-hidden bg-black shrink-0 border border-[var(--db-card-border)]">
-                          <img 
-                            src={evt.imageUrl} 
-                            alt={evt.title} 
-                            className="w-full h-full object-cover transition-transform duration-350 hover:scale-105" 
+                          <img
+                            src={evt.imageUrl}
+                            alt={evt.title}
+                            className="w-full h-full object-cover transition-transform duration-350 hover:scale-105"
                           />
                         </div>
                         {/* Title, Location & Price */}
@@ -490,7 +600,10 @@ const DashboardHome = () => {
                             </span>
                           </div>
                           <div className="flex items-center gap-1 text-[var(--db-text-muted)] text-[10px] font-semibold mt-1">
-                            <MapPin size={12} className="shrink-0 text-[var(--db-accent-highlight)]" />
+                            <MapPin
+                              size={12}
+                              className="shrink-0 text-[var(--db-accent-highlight)]"
+                            />
                             <span className="truncate">{evt.location}</span>
                           </div>
                         </div>
@@ -498,40 +611,52 @@ const DashboardHome = () => {
 
                       {/* Right: Time Slots / Schedules in a clean horizontal flow */}
                       <div className="flex flex-wrap gap-2.5 max-w-full sm:max-w-[65%] justify-start sm:justify-end shrink-0">
-                        {evt.schedules && evt.schedules.slice(0, 3).map((sch, sIdx) => (
-                          <div 
-                            key={sIdx}
-                            className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-2xl p-2.5 flex flex-col gap-1.5 min-w-[125px] flex-1 sm:flex-initial transition-all duration-350 hover:border-[var(--db-accent-highlight)]/30 hover:shadow-lg hover:shadow-[var(--db-accent-glow)]/5"
-                          >
-                            <span className="text-[9px] font-extrabold text-[var(--db-text-title)] uppercase flex items-center gap-1 border-b border-[var(--db-card-border)]/50 pb-1 mb-0.5">
-                              <Calendar size={11} className="text-[var(--db-accent-highlight)] shrink-0" />
-                              {sch.date}
-                            </span>
-                            <div className="flex flex-wrap gap-1">
-                              {sch.timeSlots && sch.timeSlots.map((ts, tIdx) => {
-                                const isFull = ts.booked >= ts.slots;
-                                const isAlmostFull = !isFull && (ts.slots - ts.booked <= 3);
+                        {evt.schedules &&
+                          evt.schedules.slice(0, 3).map((sch, sIdx) => (
+                            <div
+                              key={sIdx}
+                              className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-2xl p-2.5 flex flex-col gap-1.5 min-w-[125px] flex-1 sm:flex-initial transition-all duration-350 hover:border-[var(--db-accent-highlight)]/30 hover:shadow-lg hover:shadow-[var(--db-accent-glow)]/5"
+                            >
+                              <span className="text-[9px] font-extrabold text-[var(--db-text-title)] uppercase flex items-center gap-1 border-b border-[var(--db-card-border)]/50 pb-1 mb-0.5">
+                                <Calendar
+                                  size={11}
+                                  className="text-[var(--db-accent-highlight)] shrink-0"
+                                />
+                                {sch.date}
+                              </span>
+                              <div className="flex flex-wrap gap-1">
+                                {sch.timeSlots &&
+                                  sch.timeSlots.map((ts, tIdx) => {
+                                    const isFull = ts.booked >= ts.slots;
+                                    const isAlmostFull =
+                                      !isFull && ts.slots - ts.booked <= 3;
 
-                                let badgeColor = "bg-[var(--db-accent-glow)] text-[var(--db-accent-highlight)] border-[var(--db-card-border)]";
-                                if (isFull) {
-                                  badgeColor = "bg-red-500/10 text-red-400 border-red-500/20";
-                                } else if (isAlmostFull) {
-                                  badgeColor = "bg-amber-500/10 text-amber-400 border-amber-500/20";
-                                }
+                                    let badgeColor =
+                                      "bg-[var(--db-accent-glow)] text-[var(--db-accent-highlight)] border-[var(--db-card-border)]";
+                                    if (isFull) {
+                                      badgeColor =
+                                        "bg-red-500/10 text-red-400 border-red-500/20";
+                                    } else if (isAlmostFull) {
+                                      badgeColor =
+                                        "bg-amber-500/10 text-amber-400 border-amber-500/20";
+                                    }
 
-                                return (
-                                  <span 
-                                    key={tIdx} 
-                                    className={`text-[9px] px-2 py-0.5 rounded-lg border font-mono font-bold transition-all duration-200 ${badgeColor}`}
-                                    title={`Limit: ${ts.slots} | Booked: ${ts.booked}`}
-                                  >
-                                    {ts.time} <span className="opacity-75">({ts.booked}/{ts.slots})</span>
-                                  </span>
-                                );
-                              })}
+                                    return (
+                                      <span
+                                        key={tIdx}
+                                        className={`text-[9px] px-2 py-0.5 rounded-lg border font-mono font-bold transition-all duration-200 ${badgeColor}`}
+                                        title={`Limit: ${ts.slots} | Booked: ${ts.booked}`}
+                                      >
+                                        {ts.time}{" "}
+                                        <span className="opacity-75">
+                                          ({ts.booked}/{ts.slots})
+                                        </span>
+                                      </span>
+                                    );
+                                  })}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
                       </div>
                     </div>
                   ))}
@@ -539,23 +664,7 @@ const DashboardHome = () => {
               </div>
             )}
           </div>
-
-
-
-
         </div>
-
-
-
-
-
-
-
-
-
-
-
-      
       </div>
     </div>
   );

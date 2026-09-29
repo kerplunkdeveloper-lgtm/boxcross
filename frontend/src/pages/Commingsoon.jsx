@@ -7,21 +7,24 @@ const Commingsoon = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white flex flex-col items-center justify-center relative overflow-hidden px-6 selection:bg-[#e5ff00] selection:text-black">
+    <div className="min-h-screen bg-[#030303] text-white flex flex-col items-center justify-center relative overflow-hidden px-6 selection:bg-[#ccf141] selection:text-black">
       {/* Top Right "Go to Events" Link */}
       <motion.button
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.8 }}
         onClick={() => navigate("/events")}
-        className="absolute top-6 right-6 z-20 flex items-center gap-1.5 bg-[#e5ff00] text-black border border-white/10 hover:border-[#e5ff00] font-bold uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-lg transition-all duration-300 cursor-pointer active:scale-95 group"
+        className="absolute top-6 right-6 z-20 flex items-center gap-1.5 bg-[#ccf141] text-black border border-white/10 hover:border-[#ccf141] font-bold uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-lg transition-all duration-300 cursor-pointer active:scale-95 group"
         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
       >
         <span>Go to Events</span>
-        <ArrowUpRight size={13} className="transform transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        <ArrowUpRight
+          size={13}
+          className="transform transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        />
       </motion.button>
       {/* Background Radial Glow Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#e5ff00]/5 rounded-full blur-[130px] pointer-events-none animate-pulse duration-[8000ms]" />
+      <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] bg-[#ccf141]/5 rounded-full blur-[130px] pointer-events-none animate-pulse duration-[8000ms]" />
       <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#ff9e00]/3 rounded-full blur-[150px] pointer-events-none animate-pulse duration-[10000ms]" />
 
       {/* Decorative Grid Lines for futuristic look */}
@@ -41,8 +44,8 @@ const Commingsoon = () => {
           transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
           className="relative mb-8"
         >
-          <div className="absolute inset-0 bg-[#e5ff00]/20 rounded-2xl blur-xl scale-125 animate-pulse" />
-          <div className="w-16 h-16 bg-[#e5ff00] rounded-2xl flex items-center justify-center shadow-lg shadow-[#e5ff00]/30 border border-white/10 relative z-10">
+          <div className="absolute inset-0 bg-[#ccf141]/20 rounded-2xl blur-xl scale-125 animate-pulse" />
+          <div className="w-16 h-16 bg-[#ccf141] rounded-2xl flex items-center justify-center shadow-lg shadow-[#ccf141]/30 border border-white/10 relative z-10">
             <Dumbbell className="text-black w-8 h-8 animate-bounce duration-[2500ms]" />
           </div>
         </motion.div>
@@ -65,7 +68,10 @@ const Commingsoon = () => {
           className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-white mb-6 leading-none cursor-default"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
-          Coming <span className="text-[#e5ff00] drop-shadow-[0_0_15px_rgba(229,255,0,0.3)]">Soon</span>
+          Coming{" "}
+          <span className="text-[#ccf141] drop-shadow-[0_0_15px_rgba(229,255,0,0.3)]">
+            Soon
+          </span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -76,7 +82,8 @@ const Commingsoon = () => {
           className="text-sm sm:text-base text-gray-300 font-light max-w-md leading-relaxed mb-10"
           style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
         >
-          We are currently crafting a premium, high-octane fitness experience for our tribe. The ultimate transformation environment is on its way.
+          We are currently crafting a premium, high-octane fitness experience
+          for our tribe. The ultimate transformation environment is on its way.
         </motion.p>
 
         {/* Futuristic Infinite Loading Bar */}
@@ -89,7 +96,7 @@ const Commingsoon = () => {
               duration: 2.2,
               ease: "easeInOut",
             }}
-            className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-[#e5ff00] to-transparent"
+            className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-[#ccf141] to-transparent"
           />
         </div>
 
@@ -100,7 +107,7 @@ const Commingsoon = () => {
           transition={{ delay: 1.2, duration: 0.8 }}
           className="flex items-center gap-2 text-xs tracking-wider uppercase font-semibold text-gray-500"
         >
-          <Flame size={12} className="text-[#e5ff00]" />
+          <Flame size={12} className="text-[#ccf141]" />
           <span>Where the tribe begins</span>
         </motion.div>
       </motion.div>

@@ -18,6 +18,7 @@ const foundingOfferRoutes = require("./routes/foundingOfferRoutes");
 const athleteRoutes = require("./routes/athleteRoutes");
 const goalsReadinessRoutes = require("./routes/goalsReadinessRoutes");
 const aiAnalysisRoutes = require("./routes/aiAnalysisRoutes");
+const entryBaselineRoutes = require("./routes/entryBaselineRoutes");
 
 // Load env
 dotenv.config();
@@ -79,6 +80,8 @@ app.use("/api/athletes", athleteRoutes);
 app.use("/api/user-management", athleteRoutes);
 app.use("/api/goals-readiness", goalsReadinessRoutes);
 app.use("/api/ai-analysis", aiAnalysisRoutes);
+app.use("/api/entry-baseline", entryBaselineRoutes);
+app.use("/api/entrybaseline", entryBaselineRoutes);
 
 // Health check
 app.get("/", (req, res) => {

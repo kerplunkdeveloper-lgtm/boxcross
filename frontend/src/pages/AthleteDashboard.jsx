@@ -73,7 +73,10 @@ const AthleteDashboard = () => {
         const { data } = await getAthleteMe();
         if (data && data.success && data.athlete) {
           setAthlete(data.athlete);
-          localStorage.setItem("boxcross_athlete", JSON.stringify(data.athlete));
+          localStorage.setItem(
+            "boxcross_athlete",
+            JSON.stringify(data.athlete),
+          );
         }
       } catch (err) {
         console.warn("Using cached athlete data:", err);
@@ -94,11 +97,14 @@ const AthleteDashboard = () => {
   };
 
   const handleExitImpersonation = () => {
-    const returnUrl = impersonatorAdmin?.returnUrl || "/dashboard/user-management";
+    const returnUrl =
+      impersonatorAdmin?.returnUrl || "/dashboard/user-management";
     localStorage.removeItem("boxcross_impersonator_admin");
     localStorage.removeItem("boxcross_athlete_token");
     localStorage.removeItem("boxcross_athlete");
-    toast.success("Exited Impersonation Mode. Welcome back to Admin Dashboard!");
+    toast.success(
+      "Exited Impersonation Mode. Welcome back to Admin Dashboard!",
+    );
     navigate(returnUrl, { replace: true });
   };
 
@@ -123,7 +129,9 @@ const AthleteDashboard = () => {
 
     setUpdatingPassword(true);
     try {
-      const { data } = await updateAthlete(athlete._id, { password: newPassword });
+      const { data } = await updateAthlete(athlete._id, {
+        password: newPassword,
+      });
       if (data && data.success) {
         toast.success("Password changed successfully!");
         setIsPasswordModalOpen(false);
@@ -142,15 +150,16 @@ const AthleteDashboard = () => {
     ? Math.max(
         1,
         Math.floor(
-          (new Date() - new Date(athlete.dateOfJoining)) / (1000 * 60 * 60 * 24)
-        )
+          (new Date() - new Date(athlete.dateOfJoining)) /
+            (1000 * 60 * 60 * 24),
+        ),
       )
     : 1;
 
   if (loading && !athlete) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white gap-4">
-        <div className="w-10 h-10 border-2 border-[#e5ff00]/20 border-t-[#e5ff00] rounded-full animate-spin" />
+        <div className="w-10 h-10 border-2 border-[#ccf141]/20 border-t-[#ccf141] rounded-full animate-spin" />
         <p className="text-xs uppercase tracking-widest text-zinc-400 font-bold">
           Loading Athlete Portal...
         </p>
@@ -159,21 +168,23 @@ const AthleteDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#e5ff00] selection:text-black">
+    <div className="min-h-screen bg-[#070707] text-white selection:bg-[#ccf141] selection:text-black">
       {/* Impersonation Banner (Admin viewing as Athlete) */}
       {impersonatorAdmin && (
         <div className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-black px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3 shadow-xl z-50 sticky top-0 font-sans border-b border-black/20">
           <div className="flex items-center gap-2 text-xs sm:text-sm font-black uppercase tracking-wider">
             <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping shrink-0" />
             <span>👁️ Impersonation Mode:</span>
-            <span className="underline font-black">{athlete?.athleteName} ({athlete?.memberId})</span>
+            <span className="underline font-black">
+              {athlete?.athleteName} ({athlete?.memberId})
+            </span>
             <span className="hidden md:inline text-xs font-semibold text-neutral-800">
               — Admin Session ({impersonatorAdmin?.name || "Admin"})
             </span>
           </div>
           <button
             onClick={handleExitImpersonation}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-black text-[#e5ff00] hover:bg-neutral-900 text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-black text-[#ccf141] hover:bg-neutral-900 text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-md"
           >
             <span>Exit & Return to Admin</span>
             <ArrowRight size={13} />
@@ -182,7 +193,9 @@ const AthleteDashboard = () => {
       )}
 
       {/* Top Navbar */}
-      <header className={`sticky ${impersonatorAdmin ? "top-[46px]" : "top-0"} z-40 bg-[#0d0d0d]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 flex items-center justify-between`}>
+      <header
+        className={`sticky ${impersonatorAdmin ? "top-[46px]" : "top-0"} z-40 bg-[#0d0d0d]/90 backdrop-blur-md border-b border-white/10 px-4 sm:px-8 py-3.5 flex items-center justify-between`}
+      >
         <div className="flex items-center gap-3">
           <img
             src={logo}
@@ -190,7 +203,7 @@ const AthleteDashboard = () => {
             className="h-8 sm:h-9 object-contain cursor-pointer"
             onClick={() => navigate("/")}
           />
-          <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[10px] font-black tracking-widest uppercase">
+          <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-[10px] font-black tracking-widest uppercase">
             Athlete Portal
           </span>
         </div>
@@ -201,7 +214,7 @@ const AthleteDashboard = () => {
             title="Change Password"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs font-semibold text-zinc-300 hover:text-white transition-all cursor-pointer"
           >
-            <Lock size={13} className="text-[#e5ff00]" />
+            <Lock size={13} className="text-[#ccf141]" />
             <span className="hidden md:inline">Change Password</span>
           </button>
 
@@ -219,10 +232,10 @@ const AthleteDashboard = () => {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Welcome Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-zinc-900/90 via-zinc-900/60 to-black p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#e5ff00]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="space-y-2 z-10">
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#e5ff00]">
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#ccf141]">
               <Sparkles size={16} />
               <span>Box & Cross Athlete Dashboard</span>
             </div>
@@ -233,7 +246,8 @@ const AthleteDashboard = () => {
               Welcome back, {athlete?.athleteName || "Athlete"}!
             </h1>
             <p className="text-xs sm:text-sm text-zinc-400 font-medium max-w-xl">
-              Your official Box & Cross member identity, training coach, and performance hub. Stay consistent, push your limits.
+              Your official Box & Cross member identity, training coach, and
+              performance hub. Stay consistent, push your limits.
             </p>
           </div>
 
@@ -259,15 +273,17 @@ const AthleteDashboard = () => {
             className="lg:col-span-7 bg-gradient-to-br from-zinc-900 via-black to-zinc-950 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden flex flex-col justify-between"
           >
             {/* Holographic accent glow */}
-            <div className="absolute -top-24 -right-24 w-60 h-60 bg-[#e5ff00]/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -top-24 -right-24 w-60 h-60 bg-[#ccf141]/15 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute -bottom-24 -left-24 w-60 h-60 bg-white/5 rounded-full blur-3xl pointer-events-none" />
 
             <div>
               {/* Card Header */}
               <div className="flex items-center justify-between pb-6 border-b border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-[#e5ff00]/10 border border-[#e5ff00]/30 flex items-center justify-center font-black text-lg text-[#e5ff00]">
-                    {athlete?.athleteName ? athlete.athleteName.charAt(0).toUpperCase() : "B"}
+                  <div className="w-12 h-12 rounded-2xl bg-[#ccf141]/10 border border-[#ccf141]/30 flex items-center justify-center font-black text-lg text-[#ccf141]">
+                    {athlete?.athleteName
+                      ? athlete.athleteName.charAt(0).toUpperCase()
+                      : "B"}
                   </div>
                   <div>
                     <h2
@@ -289,16 +305,16 @@ const AthleteDashboard = () => {
 
               {/* Member ID Display Hero */}
               <div className="py-6 space-y-2">
-                <p className="text-[10px] uppercase font-black tracking-widest text-[#e5ff00]">
+                <p className="text-[10px] uppercase font-black tracking-widest text-[#ccf141]">
                   Official Member ID
                 </p>
-                <div className="flex items-center justify-between bg-black/50 border border-[#e5ff00]/30 p-4 rounded-2xl">
+                <div className="flex items-center justify-between bg-black/50 border border-[#ccf141]/30 p-4 rounded-2xl">
                   <span className="font-mono text-xl sm:text-2xl font-black tracking-widest text-white">
                     {athlete?.memberId || "BOXCROSS-001"}
                   </span>
                   <button
                     onClick={handleCopyMemberId}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#e5ff00] text-black text-xs font-black uppercase tracking-wider hover:bg-white transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ccf141] text-black text-xs font-black uppercase tracking-wider hover:bg-white transition-all cursor-pointer"
                   >
                     {copiedId ? <Check size={13} /> : <Copy size={13} />}
                     <span>{copiedId ? "Copied" : "Copy ID"}</span>
@@ -309,31 +325,48 @@ const AthleteDashboard = () => {
               {/* Attributes Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-2">
                 <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                  <p className="text-[9px] uppercase font-bold text-zinc-400">Age</p>
-                  <p className="text-sm font-black text-white mt-0.5">{athlete?.age || "—"} yrs</p>
+                  <p className="text-[9px] uppercase font-bold text-zinc-400">
+                    Age
+                  </p>
+                  <p className="text-sm font-black text-white mt-0.5">
+                    {athlete?.age || "—"} yrs
+                  </p>
                 </div>
 
                 <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                  <p className="text-[9px] uppercase font-bold text-zinc-400">Gender</p>
-                  <p className="text-sm font-black text-white mt-0.5">{athlete?.gender || "—"}</p>
+                  <p className="text-[9px] uppercase font-bold text-zinc-400">
+                    Gender
+                  </p>
+                  <p className="text-sm font-black text-white mt-0.5">
+                    {athlete?.gender || "—"}
+                  </p>
                 </div>
 
                 <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                  <p className="text-[9px] uppercase font-bold text-zinc-400">Joined</p>
+                  <p className="text-[9px] uppercase font-bold text-zinc-400">
+                    Joined
+                  </p>
                   <p className="text-xs font-black text-white mt-1">
                     {athlete?.dateOfJoining
-                      ? new Date(athlete.dateOfJoining).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })
+                      ? new Date(athlete.dateOfJoining).toLocaleDateString(
+                          "en-GB",
+                          {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          },
+                        )
                       : "—"}
                   </p>
                 </div>
 
                 <div className="bg-white/5 border border-white/10 p-3 rounded-xl">
-                  <p className="text-[9px] uppercase font-bold text-zinc-400">Active Days</p>
-                  <p className="text-sm font-black text-[#e5ff00] mt-0.5">{daysActive} Days</p>
+                  <p className="text-[9px] uppercase font-bold text-zinc-400">
+                    Active Days
+                  </p>
+                  <p className="text-sm font-black text-[#ccf141] mt-0.5">
+                    {daysActive} Days
+                  </p>
                 </div>
               </div>
             </div>
@@ -343,7 +376,9 @@ const AthleteDashboard = () => {
               <div className="space-y-1">
                 <div className="flex items-center gap-1 h-5 opacity-70">
                   {/* Decorative barcode stripes */}
-                  {[3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 1, 3, 4, 1, 2, 3, 1, 2, 4, 1].map((w, i) => (
+                  {[
+                    3, 1, 2, 4, 1, 3, 2, 1, 4, 2, 1, 3, 4, 1, 2, 3, 1, 2, 4, 1,
+                  ].map((w, i) => (
                     <div
                       key={i}
                       className="bg-white h-full"
@@ -361,7 +396,7 @@ const AthleteDashboard = () => {
                   onClick={() => setShowQR(!showQR)}
                   className="px-3 py-1.5 rounded-xl border border-white/15 bg-white/5 text-[11px] font-bold text-zinc-300 hover:text-white flex items-center gap-1.5 cursor-pointer"
                 >
-                  <QrCode size={13} className="text-[#e5ff00]" />
+                  <QrCode size={13} className="text-[#ccf141]" />
                   <span>{showQR ? "Hide Pass QR" : "Show QR"}</span>
                 </button>
               </div>
@@ -372,7 +407,7 @@ const AthleteDashboard = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="mt-4 p-4 rounded-2xl bg-black border border-[#e5ff00]/40 flex flex-col items-center justify-center text-center space-y-2"
+                className="mt-4 p-4 rounded-2xl bg-black border border-[#ccf141]/40 flex flex-col items-center justify-center text-center space-y-2"
               >
                 <div className="w-36 h-36 bg-white p-2 rounded-xl flex items-center justify-center">
                   {/* Simple QR placeholder representation using CSS grid */}
@@ -407,7 +442,7 @@ const AthleteDashboard = () => {
               className="bg-zinc-900/80 border border-white/10 rounded-3xl p-6 shadow-xl space-y-4"
             >
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#e5ff00] flex items-center gap-1.5">
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#ccf141] flex items-center gap-1.5">
                   <Dumbbell size={14} /> Assigned Head Coach
                 </span>
                 <span className="text-[10px] text-zinc-400 font-bold px-2 py-0.5 rounded bg-white/5 border border-white/10">
@@ -433,7 +468,8 @@ const AthleteDashboard = () => {
               </div>
 
               <p className="text-xs text-zinc-300 leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/5">
-                "Consistency beats talent every single time. Keep showing up, execute the program, and celebrate every milestone."
+                "Consistency beats talent every single time. Keep showing up,
+                execute the program, and celebrate every milestone."
               </p>
 
               <div className="pt-1 flex gap-2">
@@ -447,7 +483,9 @@ const AthleteDashboard = () => {
                   <span>WhatsApp Coach</span>
                 </a>
                 <button
-                  onClick={() => toast.success("Coaching appointment request sent to desk!")}
+                  onClick={() =>
+                    toast.success("Coaching appointment request sent to desk!")
+                  }
                   className="flex-1 py-2.5 px-3 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 text-xs font-bold text-white transition-all cursor-pointer"
                 >
                   Book 1:1 Review
@@ -462,22 +500,28 @@ const AthleteDashboard = () => {
               transition={{ delay: 0.15 }}
               className="bg-zinc-900/80 border border-white/10 rounded-3xl p-6 shadow-xl space-y-4"
             >
-              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#e5ff00]">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#ccf141]">
                 <Clock size={14} /> Arena Operating Hours
               </div>
 
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between items-center py-1.5 border-b border-white/5">
                   <span className="text-zinc-400">Morning Session</span>
-                  <span className="font-bold text-white">05:30 AM – 12:00 PM</span>
+                  <span className="font-bold text-white">
+                    05:30 AM – 12:00 PM
+                  </span>
                 </div>
                 <div className="flex justify-between items-center py-1.5 border-b border-white/5">
                   <span className="text-zinc-400">Evening Session</span>
-                  <span className="font-bold text-white">04:30 PM – 10:00 PM</span>
+                  <span className="font-bold text-white">
+                    04:30 PM – 10:00 PM
+                  </span>
                 </div>
                 <div className="flex justify-between items-center py-1.5">
                   <span className="text-zinc-400">Sunday Recovery</span>
-                  <span className="font-bold text-amber-400">07:00 AM – 01:00 PM</span>
+                  <span className="font-bold text-amber-400">
+                    07:00 AM – 01:00 PM
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -487,14 +531,15 @@ const AthleteDashboard = () => {
         {/* 4 Feature Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-zinc-900/50 border border-white/10 rounded-2xl p-6 space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-[#e5ff00]/10 text-[#e5ff00] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#ccf141]/10 text-[#ccf141] flex items-center justify-center">
               <Flame size={20} />
             </div>
             <h4 className="text-sm font-black uppercase tracking-wider text-white">
               Hyrox & CrossFit Zone
             </h4>
             <p className="text-xs text-zinc-400">
-              Access to simulation sled tracks, Concept2 SkiErgs, Echo bikes, and Olympic platforms with your active pass.
+              Access to simulation sled tracks, Concept2 SkiErgs, Echo bikes,
+              and Olympic platforms with your active pass.
             </p>
           </div>
 
@@ -506,7 +551,8 @@ const AthleteDashboard = () => {
               Upcoming Fight Nights
             </h4>
             <p className="text-xs text-zinc-400">
-              Check out our monthly amateur fight exhibitions, sparring clinics, and workshops via Box & Cross events.
+              Check out our monthly amateur fight exhibitions, sparring clinics,
+              and workshops via Box & Cross events.
             </p>
           </div>
 
@@ -518,7 +564,8 @@ const AthleteDashboard = () => {
               Recovery & Wellness
             </h4>
             <p className="text-xs text-zinc-400">
-              Recharge with ice baths, infrared saunas, and targeted myofascial release protocols after high-volume sessions.
+              Recharge with ice baths, infrared saunas, and targeted myofascial
+              release protocols after high-volume sessions.
             </p>
           </div>
         </div>
@@ -536,7 +583,7 @@ const AthleteDashboard = () => {
             >
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <Lock size={18} className="text-[#e5ff00]" />
+                  <Lock size={18} className="text-[#ccf141]" />
                   <h3
                     className="text-base font-black uppercase tracking-wider"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -552,7 +599,10 @@ const AthleteDashboard = () => {
                 </button>
               </div>
 
-              <form onSubmit={handlePasswordChange} className="space-y-4 text-xs">
+              <form
+                onSubmit={handlePasswordChange}
+                className="space-y-4 text-xs"
+              >
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 mb-1">
                     New Password
@@ -563,7 +613,7 @@ const AthleteDashboard = () => {
                     placeholder="Enter at least 4 characters"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/15 text-white focus:outline-none focus:border-[#e5ff00]"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/15 text-white focus:outline-none focus:border-[#ccf141]"
                   />
                 </div>
 
@@ -577,7 +627,7 @@ const AthleteDashboard = () => {
                     placeholder="Repeat new password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/15 text-white focus:outline-none focus:border-[#e5ff00]"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-black border border-white/15 text-white focus:outline-none focus:border-[#ccf141]"
                   />
                 </div>
 
@@ -592,7 +642,7 @@ const AthleteDashboard = () => {
                   <button
                     type="submit"
                     disabled={updatingPassword}
-                    className="px-5 py-2 rounded-xl bg-[#e5ff00] text-black font-extrabold uppercase tracking-wider shadow-lg hover:bg-white transition-all disabled:opacity-50"
+                    className="px-5 py-2 rounded-xl bg-[#ccf141] text-black font-extrabold uppercase tracking-wider shadow-lg hover:bg-white transition-all disabled:opacity-50"
                   >
                     {updatingPassword ? "Updating..." : "Save Password"}
                   </button>

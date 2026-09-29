@@ -31,7 +31,7 @@ const BodySymmetryCard = ({ symmetry = {} }) => {
   ];
 
   const avgSym = Math.round(
-    items.reduce((acc, curr) => acc + curr.score, 0) / items.length
+    items.reduce((acc, curr) => acc + curr.score, 0) / items.length,
   );
 
   return (
@@ -40,14 +40,14 @@ const BodySymmetryCard = ({ symmetry = {} }) => {
       <div className="flex items-center justify-between mb-4 pb-2 border-b border-[var(--db-card-border)]">
         <div>
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] flex items-center gap-1.5">
-            <Scale size={12} className="text-[#e5ff00]" />
+            <Scale size={12} className="text-[#ccf141]" />
             Bilateral Balance Matrix
           </span>
           <h3 className="text-sm font-black uppercase tracking-wide text-[var(--db-text-title)] mt-0.5">
             Body Symmetry Analysis
           </h3>
         </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/25 text-[#e5ff00] text-xs font-mono font-bold">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/25 text-[#ccf141] text-xs font-mono font-bold">
           <span>{avgSym}% Overall</span>
         </div>
       </div>
@@ -57,8 +57,10 @@ const BodySymmetryCard = ({ symmetry = {} }) => {
         {items.map((item) => (
           <div key={item.name} className="space-y-1.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-[var(--db-text)]">{item.name}</span>
-              <span className="font-mono font-black text-[#e5ff00]">
+              <span className="font-bold text-[var(--db-text)]">
+                {item.name}
+              </span>
+              <span className="font-mono font-black text-[#ccf141]">
                 {item.score}%
               </span>
             </div>
@@ -85,7 +87,9 @@ const BodySymmetryCard = ({ symmetry = {} }) => {
       {/* Footer Info */}
       <div className="mt-4 pt-3 border-t border-[var(--db-card-border)] flex items-center justify-between text-[10px] text-[var(--db-text-muted)]">
         <span>Evaluates coronal plane weight distribution</span>
-        <span className="text-emerald-400 font-bold">High Bilateral Harmony</span>
+        <span className="text-emerald-400 font-bold">
+          High Bilateral Harmony
+        </span>
       </div>
     </div>
   );

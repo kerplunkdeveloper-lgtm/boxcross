@@ -22,7 +22,8 @@ const ExerciseStatsCard = ({
   const reps = stats.reps ?? 18;
   const correctReps = stats.correctReps ?? 15;
   const incorrectReps = stats.incorrectReps ?? 3;
-  const accuracy = stats.accuracy ?? (reps > 0 ? Math.round((correctReps / reps) * 100) : 83);
+  const accuracy =
+    stats.accuracy ?? (reps > 0 ? Math.round((correctReps / reps) * 100) : 83);
   const formScore = stats.formScore ?? 84;
   const depth = stats.depth ?? 92;
   const kneeAngle = stats.kneeAngle ?? 94;
@@ -39,12 +40,12 @@ const ExerciseStatsCard = ({
   return (
     <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between relative overflow-hidden h-full transition-colors duration-200">
       {/* Glow behind counter */}
-      <div className="pointer-events-none absolute top-4 right-4 w-32 h-32 bg-emerald-500/10 dark:bg-[#e5ff00]/10 rounded-full blur-2xl" />
+      <div className="pointer-events-none absolute top-4 right-4 w-32 h-32 bg-emerald-500/10 dark:bg-[#ccf141]/10 rounded-full blur-2xl" />
 
       {/* Header */}
       <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b border-[var(--db-card-border)]">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-500/15 dark:bg-[#e5ff00]/15 text-emerald-600 dark:text-[#e5ff00] flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-500/15 dark:bg-[#ccf141]/15 text-emerald-600 dark:text-[#ccf141] flex items-center justify-center shrink-0">
             <Dumbbell size={15} />
           </div>
           <div>
@@ -85,7 +86,7 @@ const ExerciseStatsCard = ({
           >
             {reps}
           </motion.span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-[#e5ff00] text-[9px] font-bold uppercase tracking-wider">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-[#ccf141] text-[9px] font-bold uppercase tracking-wider">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             {stats.state ? `Phase: ${stats.state}` : "In Motion"}
           </span>
@@ -97,19 +98,23 @@ const ExerciseStatsCard = ({
             FORM SCORE
           </span>
           <div className="my-1">
-            <span className="text-3xl sm:text-4xl font-black font-mono text-emerald-600 dark:text-[#e5ff00] leading-none tracking-tight">
+            <span className="text-3xl sm:text-4xl font-black font-mono text-emerald-600 dark:text-[#ccf141] leading-none tracking-tight">
               {formScore}%
             </span>
           </div>
           <div className="w-full">
             <div className="w-full bg-slate-200 dark:bg-white/10 rounded-full h-1.5 overflow-hidden mb-1">
               <div
-                className="bg-emerald-500 dark:bg-[#e5ff00] h-full rounded-full transition-all duration-300"
+                className="bg-emerald-500 dark:bg-[#ccf141] h-full rounded-full transition-all duration-300"
                 style={{ width: `${Math.min(100, Math.max(0, formScore))}%` }}
               />
             </div>
             <span className="text-[9px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider">
-              {formScore >= 80 ? "Optimal Alignment" : formScore >= 60 ? "Acceptable Form" : "Needs Correction"}
+              {formScore >= 80
+                ? "Optimal Alignment"
+                : formScore >= 60
+                  ? "Acceptable Form"
+                  : "Needs Correction"}
             </span>
           </div>
         </div>
@@ -140,11 +145,13 @@ const ExerciseStatsCard = ({
           <div className="pt-1.5 mt-1 border-t border-[var(--db-card-border)]/60">
             <div className="flex items-center justify-between text-[10px] text-[var(--db-text-muted)] font-semibold mb-1">
               <span>Accuracy</span>
-              <span className="font-mono font-bold text-[var(--db-text-title)]">{accuracy}%</span>
+              <span className="font-mono font-bold text-[var(--db-text-title)]">
+                {accuracy}%
+              </span>
             </div>
             <div className="w-full bg-slate-200 dark:bg-white/10 rounded-full h-1.5 overflow-hidden">
               <div
-                className="bg-emerald-500 dark:bg-[#e5ff00] h-full rounded-full transition-all duration-300"
+                className="bg-emerald-500 dark:bg-[#ccf141] h-full rounded-full transition-all duration-300"
                 style={{ width: `${Math.min(100, Math.max(0, accuracy))}%` }}
               />
             </div>
@@ -159,7 +166,11 @@ const ExerciseStatsCard = ({
           <div className="space-y-1.5 my-auto">
             <div className="flex items-center justify-between text-[11px] sm:text-xs">
               <span className="text-[var(--db-text-muted)] flex items-center gap-1 truncate">
-                <Clock size={11} className="text-emerald-500 dark:text-[#e5ff00] shrink-0" /> Tempo
+                <Clock
+                  size={11}
+                  className="text-emerald-500 dark:text-[#ccf141] shrink-0"
+                />{" "}
+                Tempo
               </span>
               <span className="font-mono font-bold text-[var(--db-text-title)] shrink-0 ml-1">
                 {tempo}s
@@ -167,7 +178,8 @@ const ExerciseStatsCard = ({
             </div>
             <div className="flex items-center justify-between text-[11px] sm:text-xs">
               <span className="text-[var(--db-text-muted)] flex items-center gap-1 truncate">
-                <Compass size={11} className="text-emerald-500 shrink-0" /> Stability
+                <Compass size={11} className="text-emerald-500 shrink-0" />{" "}
+                Stability
               </span>
               <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0 ml-1">
                 {stability}%
@@ -188,7 +200,9 @@ const ExerciseStatsCard = ({
       {/* Real-time Angle Badges */}
       <div
         className={`p-2.5 rounded-xl border mb-3 ${
-          isDark ? "bg-black/40 border-white/5" : "bg-slate-100 border-slate-200"
+          isDark
+            ? "bg-black/40 border-white/5"
+            : "bg-slate-100 border-slate-200"
         }`}
       >
         <div className="flex items-center justify-between mb-1.5">
@@ -201,23 +215,47 @@ const ExerciseStatsCard = ({
           </span>
         </div>
         <div className="grid grid-cols-3 gap-1.5 text-center">
-          <div className={`px-1.5 py-1 rounded-lg border text-xs font-mono ${
-            isDark ? "bg-white/5 border-white/10 text-white" : "bg-white border-slate-200 text-slate-800"
-          }`}>
-            <span className="text-[9px] text-[var(--db-text-muted)] block uppercase font-sans font-bold">Knee</span>
-            <span className="font-bold text-emerald-600 dark:text-[#e5ff00]">{kneeAngle}°</span>
+          <div
+            className={`px-1.5 py-1 rounded-lg border text-xs font-mono ${
+              isDark
+                ? "bg-white/5 border-white/10 text-white"
+                : "bg-white border-slate-200 text-slate-800"
+            }`}
+          >
+            <span className="text-[9px] text-[var(--db-text-muted)] block uppercase font-sans font-bold">
+              Knee
+            </span>
+            <span className="font-bold text-emerald-600 dark:text-[#ccf141]">
+              {kneeAngle}°
+            </span>
           </div>
-          <div className={`px-1.5 py-1 rounded-lg border text-xs font-mono ${
-            isDark ? "bg-white/5 border-white/10 text-white" : "bg-white border-slate-200 text-slate-800"
-          }`}>
-            <span className="text-[9px] text-[var(--db-text-muted)] block uppercase font-sans font-bold">Hip</span>
-            <span className="font-bold text-emerald-600 dark:text-[#e5ff00]">{hipAngle}°</span>
+          <div
+            className={`px-1.5 py-1 rounded-lg border text-xs font-mono ${
+              isDark
+                ? "bg-white/5 border-white/10 text-white"
+                : "bg-white border-slate-200 text-slate-800"
+            }`}
+          >
+            <span className="text-[9px] text-[var(--db-text-muted)] block uppercase font-sans font-bold">
+              Hip
+            </span>
+            <span className="font-bold text-emerald-600 dark:text-[#ccf141]">
+              {hipAngle}°
+            </span>
           </div>
-          <div className={`px-1.5 py-1 rounded-lg border text-xs font-mono ${
-            isDark ? "bg-white/5 border-white/10 text-white" : "bg-white border-slate-200 text-slate-800"
-          }`}>
-            <span className="text-[9px] text-[var(--db-text-muted)] block uppercase font-sans font-bold">Back</span>
-            <span className="font-bold text-emerald-600 dark:text-[#e5ff00]">{backAngle}°</span>
+          <div
+            className={`px-1.5 py-1 rounded-lg border text-xs font-mono ${
+              isDark
+                ? "bg-white/5 border-white/10 text-white"
+                : "bg-white border-slate-200 text-slate-800"
+            }`}
+          >
+            <span className="text-[9px] text-[var(--db-text-muted)] block uppercase font-sans font-bold">
+              Back
+            </span>
+            <span className="font-bold text-emerald-600 dark:text-[#ccf141]">
+              {backAngle}°
+            </span>
           </div>
         </div>
       </div>
@@ -237,12 +275,12 @@ const ExerciseStatsCard = ({
                     ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-300"
                     : "bg-emerald-50 border-emerald-200 text-emerald-800"
                   : fb.type === "warning"
-                  ? isDark
-                    ? "bg-amber-500/10 border-amber-500/25 text-amber-300"
-                    : "bg-amber-50 border-amber-200 text-amber-800"
-                  : isDark
-                  ? "bg-blue-500/10 border-blue-500/25 text-blue-300"
-                  : "bg-blue-50 border-blue-200 text-blue-800"
+                    ? isDark
+                      ? "bg-amber-500/10 border-amber-500/25 text-amber-300"
+                      : "bg-amber-50 border-amber-200 text-amber-800"
+                    : isDark
+                      ? "bg-blue-500/10 border-blue-500/25 text-blue-300"
+                      : "bg-blue-50 border-blue-200 text-blue-800"
               }`}
             >
               {fb.type === "positive" ? (

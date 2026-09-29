@@ -21,9 +21,9 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import { useAuth } from "../context/AuthContext";
-import { 
-  getBookings, 
-  getPayments, 
+import {
+  getBookings,
+  getPayments,
   getEventBookings,
   getHomec1,
   getHomec2,
@@ -78,9 +78,9 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         osc.stop(startTime + duration);
       };
       const now = ctx.currentTime;
-      playTone(523.25, now,        0.3,  0.10); // C5
-      playTone(659.25, now + 0.10, 0.3,  0.12); // E5
-      playTone(783.99, now + 0.20, 0.45, 0.14); // G5
+      playTone(523.25, now, 0.3, 0.1); // C5
+      playTone(659.25, now + 0.1, 0.3, 0.12); // E5
+      playTone(783.99, now + 0.2, 0.45, 0.14); // G5
     } catch (e) {
       console.warn("Audio playback context failed or blocked", e);
     }
@@ -114,8 +114,6 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       toast.error(res.message || "Failed to log out.");
     }
   };
-
-
 
   // Load read notification IDs from localStorage
   const [readIds, setReadIds] = useState(() => {
@@ -188,7 +186,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         getHomec2(),
         getHomec3(),
         getLeadsAdmin(),
-        getFounders()
+        getFounders(),
       ]);
 
       const [
@@ -199,11 +197,15 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         homec2Res,
         homec3Res,
         leadsRes,
-        foundersRes
+        foundersRes,
       ] = results;
 
       // 1. Fetch Enquiry Bookings
-      if (bookingsRes.status === "fulfilled" && bookingsRes.value.data?.success && Array.isArray(bookingsRes.value.data.data)) {
+      if (
+        bookingsRes.status === "fulfilled" &&
+        bookingsRes.value.data?.success &&
+        Array.isArray(bookingsRes.value.data.data)
+      ) {
         bookingsRes.value.data.data.forEach((item) => {
           aggregated.push({
             id: `booking-${item._id}`,
@@ -217,7 +219,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       }
 
       // 2. Fetch Membership Payments
-      if (paymentsRes.status === "fulfilled" && paymentsRes.value.data?.success && Array.isArray(paymentsRes.value.data.data)) {
+      if (
+        paymentsRes.status === "fulfilled" &&
+        paymentsRes.value.data?.success &&
+        Array.isArray(paymentsRes.value.data.data)
+      ) {
         paymentsRes.value.data.data.forEach((item) => {
           aggregated.push({
             id: `payment-${item._id}`,
@@ -231,7 +237,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       }
 
       // 3. Fetch Event Bookings
-      if (eventBookingsRes.status === "fulfilled" && eventBookingsRes.value.data?.success && Array.isArray(eventBookingsRes.value.data.data)) {
+      if (
+        eventBookingsRes.status === "fulfilled" &&
+        eventBookingsRes.value.data?.success &&
+        Array.isArray(eventBookingsRes.value.data.data)
+      ) {
         eventBookingsRes.value.data.data.forEach((item) => {
           aggregated.push({
             id: `event-${item._id}`,
@@ -245,7 +255,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       }
 
       // 4. Fetch Trial Bookings (Homec1)
-      if (homec1Res.status === "fulfilled" && homec1Res.value.data?.success && Array.isArray(homec1Res.value.data.data)) {
+      if (
+        homec1Res.status === "fulfilled" &&
+        homec1Res.value.data?.success &&
+        Array.isArray(homec1Res.value.data.data)
+      ) {
         homec1Res.value.data.data.forEach((item) => {
           aggregated.push({
             id: `homec1-${item._id}`,
@@ -259,7 +273,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       }
 
       // 5. Fetch Consultation Requests (Homec2)
-      if (homec2Res.status === "fulfilled" && homec2Res.value.data?.success && Array.isArray(homec2Res.value.data.data)) {
+      if (
+        homec2Res.status === "fulfilled" &&
+        homec2Res.value.data?.success &&
+        Array.isArray(homec2Res.value.data.data)
+      ) {
         homec2Res.value.data.data.forEach((item) => {
           aggregated.push({
             id: `homec2-${item._id}`,
@@ -273,7 +291,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       }
 
       // 6. Fetch Contact Form Enquiries (Homec3)
-      if (homec3Res.status === "fulfilled" && homec3Res.value.data?.success && Array.isArray(homec3Res.value.data.data)) {
+      if (
+        homec3Res.status === "fulfilled" &&
+        homec3Res.value.data?.success &&
+        Array.isArray(homec3Res.value.data.data)
+      ) {
         homec3Res.value.data.data.forEach((item) => {
           aggregated.push({
             id: `homec3-${item._id}`,
@@ -287,7 +309,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       }
 
       // 7. Fetch Popup Leads
-      if (leadsRes.status === "fulfilled" && leadsRes.value.data?.success && Array.isArray(leadsRes.value.data.data)) {
+      if (
+        leadsRes.status === "fulfilled" &&
+        leadsRes.value.data?.success &&
+        Array.isArray(leadsRes.value.data.data)
+      ) {
         leadsRes.value.data.data.forEach((item) => {
           aggregated.push({
             id: `lead-${item._id}`,
@@ -301,7 +327,11 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       }
 
       // 8. Fetch Founding Members
-      if (foundersRes.status === "fulfilled" && foundersRes.value.data?.success && Array.isArray(foundersRes.value.data.data)) {
+      if (
+        foundersRes.status === "fulfilled" &&
+        foundersRes.value.data?.success &&
+        Array.isArray(foundersRes.value.data.data)
+      ) {
         foundersRes.value.data.data.forEach((item) => {
           aggregated.push({
             id: `founder-${item._id}`,
@@ -473,8 +503,10 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       <div className="flex items-center gap-2.5">
         <button
           className="text-[var(--db-text-muted)] hover:text-[var(--db-text)] p-1.5 rounded-lg hover:bg-[var(--db-sidebar-link-hover)] cursor-pointer transition-colors"
-          onClick={() => setSidebarOpen(prev => !prev)}
-          title={sidebarOpen ? "Collapse sidebar (icons only)" : "Expand sidebar"}
+          onClick={() => setSidebarOpen((prev) => !prev)}
+          title={
+            sidebarOpen ? "Collapse sidebar (icons only)" : "Expand sidebar"
+          }
         >
           <Menu size={18} />
         </button>
@@ -482,7 +514,9 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
           <span className="text-[11px] font-semibold text-[var(--db-text-muted)]/70 uppercase tracking-wider hidden sm:inline">
             Dashboard
           </span>
-          <span className="text-[10px] text-[var(--db-text-muted)]/40 hidden sm:inline">/</span>
+          <span className="text-[10px] text-[var(--db-text-muted)]/40 hidden sm:inline">
+            /
+          </span>
           <h2 className="text-[12px] md:text-[13px] font-black uppercase tracking-wider text-[var(--db-text-title)]">
             {activeTitle}
           </h2>
@@ -491,8 +525,6 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
 
       {/* Action panel & User info */}
       <div className="flex items-center gap-2 sm:gap-3.5">
-
-
         {/* Live Website Quick Link */}
         <a
           href="/"
@@ -517,9 +549,10 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
               <span
                 className="absolute top-0.5 right-0.5 rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center"
                 style={{
-                  background: theme === "dark" ? "#e5ff00" : "#1e293b",
-                  color:      theme === "dark" ? "#000000" : "#ffffff",
-                  boxShadow:  theme === "dark" ? "0 0 10px rgba(229,255,0,0.5)" : "none",
+                  background: theme === "dark" ? "#ccf141" : "#1e293b",
+                  color: theme === "dark" ? "#000000" : "#ffffff",
+                  boxShadow:
+                    theme === "dark" ? "0 0 10px rgba(229,255,0,0.5)" : "none",
                 }}
               >
                 {unreadCount}
@@ -538,15 +571,25 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                 className="fixed sm:absolute top-16 sm:top-12 left-3 right-3 sm:left-auto sm:right-0 w-auto sm:w-[400px] bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] z-50 overflow-hidden"
               >
                 {/* Header */}
-                <div className={`flex items-center justify-between px-4 py-3.5 border-b border-[var(--db-card-border)] ${theme === "dark" ? "bg-[rgba(229,255,0,0.06)]" : "bg-slate-50"}`}>
+                <div
+                  className={`flex items-center justify-between px-4 py-3.5 border-b border-[var(--db-card-border)] ${theme === "dark" ? "bg-[rgba(229,255,0,0.06)]" : "bg-slate-50"}`}
+                >
                   <div className="flex items-center gap-2">
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${theme === "dark" ? "bg-[#e5ff00] shadow-[0_0_12px_rgba(229,255,0,0.35)]" : "bg-slate-800"}`}>
-                      <Bell size={13} className="text-black" style={{ color: theme === "dark" ? "#000" : "#fff" }} />
+                    <div
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center ${theme === "dark" ? "bg-[#ccf141] shadow-[0_0_12px_rgba(229,255,0,0.35)]" : "bg-slate-800"}`}
+                    >
+                      <Bell
+                        size={13}
+                        className="text-black"
+                        style={{ color: theme === "dark" ? "#000" : "#fff" }}
+                      />
                     </div>
                     <div>
                       <span
                         className="text-xs font-black uppercase tracking-wider"
-                        style={{ color: theme === "dark" ? "#ffffff" : "#0f172a" }}
+                        style={{
+                          color: theme === "dark" ? "#ffffff" : "#0f172a",
+                        }}
                       >
                         Notifications
                       </span>
@@ -554,7 +597,8 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                         <span
                           className="ml-2 px-1.5 py-0.5 text-[9px] font-black rounded-full"
                           style={{
-                            background: theme === "dark" ? "#e5ff00" : "#1e293b",
+                            background:
+                              theme === "dark" ? "#ccf141" : "#1e293b",
                             color: theme === "dark" ? "#000" : "#fff",
                           }}
                         >
@@ -579,31 +623,54 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                   {notifications.length === 0 ? (
                     <div className="py-12 flex flex-col items-center gap-3 text-center">
                       <div className="w-12 h-12 rounded-full bg-[var(--db-input-bg)] flex items-center justify-center">
-                        <Bell size={20} className="text-[var(--db-text-muted)]" />
+                        <Bell
+                          size={20}
+                          className="text-[var(--db-text-muted)]"
+                        />
                       </div>
-                      <p className="text-xs text-[var(--db-text-muted)] uppercase tracking-widest font-bold">All caught up!</p>
+                      <p className="text-xs text-[var(--db-text-muted)] uppercase tracking-widest font-bold">
+                        All caught up!
+                      </p>
                     </div>
                   ) : (
                     notifications.map((item) => {
                       const isUnread = !readIds.includes(item.id);
                       const typeStyles = {
                         booking: {
-                          bg:     theme === "dark" ? "rgba(59,130,246,0.12)" : "rgba(59,130,246,0.08)",
-                          border: theme === "dark" ? "rgba(59,130,246,0.25)" : "rgba(59,130,246,0.2)",
-                          text:   theme === "dark" ? "#60a5fa" : "#2563eb",
-                          label:  "Booking",
+                          bg:
+                            theme === "dark"
+                              ? "rgba(59,130,246,0.12)"
+                              : "rgba(59,130,246,0.08)",
+                          border:
+                            theme === "dark"
+                              ? "rgba(59,130,246,0.25)"
+                              : "rgba(59,130,246,0.2)",
+                          text: theme === "dark" ? "#60a5fa" : "#2563eb",
+                          label: "Booking",
                         },
                         payment: {
-                          bg:     theme === "dark" ? "rgba(16,185,129,0.12)" : "rgba(16,185,129,0.08)",
-                          border: theme === "dark" ? "rgba(16,185,129,0.25)" : "rgba(16,185,129,0.2)",
-                          text:   theme === "dark" ? "#34d399" : "#059669",
-                          label:  "Payment",
+                          bg:
+                            theme === "dark"
+                              ? "rgba(16,185,129,0.12)"
+                              : "rgba(16,185,129,0.08)",
+                          border:
+                            theme === "dark"
+                              ? "rgba(16,185,129,0.25)"
+                              : "rgba(16,185,129,0.2)",
+                          text: theme === "dark" ? "#34d399" : "#059669",
+                          label: "Payment",
                         },
                         event: {
-                          bg:     theme === "dark" ? "rgba(229,255,0,0.08)" : "rgba(202,138,4,0.1)",
-                          border: theme === "dark" ? "rgba(229,255,0,0.2)" : "rgba(202,138,4,0.2)",
-                          text:   theme === "dark" ? "#e5ff00" : "#b45309",
-                          label:  "Event",
+                          bg:
+                            theme === "dark"
+                              ? "rgba(229,255,0,0.08)"
+                              : "rgba(202,138,4,0.1)",
+                          border:
+                            theme === "dark"
+                              ? "rgba(229,255,0,0.2)"
+                              : "rgba(202,138,4,0.2)",
+                          text: theme === "dark" ? "#ccf141" : "#b45309",
+                          label: "Event",
                         },
                       };
                       const ts = typeStyles[item.type] || typeStyles.event;
@@ -612,12 +679,21 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                           key={item.id}
                           onClick={() => handleNotificationClick(item)}
                           className="group flex items-start gap-3 px-4 py-3.5 cursor-pointer transition-all hover:bg-[var(--db-sidebar-link-hover)]"
-                          style={{ background: isUnread ? (theme === "dark" ? "rgba(229,255,0,0.03)" : "rgba(15,23,42,0.02)") : "transparent" }}
+                          style={{
+                            background: isUnread
+                              ? theme === "dark"
+                                ? "rgba(229,255,0,0.03)"
+                                : "rgba(15,23,42,0.02)"
+                              : "transparent",
+                          }}
                         >
                           {/* Icon badge */}
                           <div
                             className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
-                            style={{ background: ts.bg, border: `1px solid ${ts.border}` }}
+                            style={{
+                              background: ts.bg,
+                              border: `1px solid ${ts.border}`,
+                            }}
                           >
                             {getNotificationIcon(item.type)}
                           </div>
@@ -628,16 +704,31 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                               <div className="flex items-center gap-1.5 flex-wrap">
                                 <span
                                   className="text-[10px] font-black uppercase tracking-wider leading-tight"
-                                  style={{ color: theme === "dark" ? "#ffffff" : "#0f172a" }}
-                                >{item.title}</span>
+                                  style={{
+                                    color:
+                                      theme === "dark" ? "#ffffff" : "#0f172a",
+                                  }}
+                                >
+                                  {item.title}
+                                </span>
                                 <span
                                   className="px-1.5 py-px text-[8px] font-bold uppercase tracking-wider rounded-full"
-                                  style={{ background: ts.bg, border: `1px solid ${ts.border}`, color: ts.text }}
-                                >{ts.label}</span>
+                                  style={{
+                                    background: ts.bg,
+                                    border: `1px solid ${ts.border}`,
+                                    color: ts.text,
+                                  }}
+                                >
+                                  {ts.label}
+                                </span>
                               </div>
-                              <span className="text-[9px] text-[var(--db-text-muted)] font-bold uppercase shrink-0 mt-0.5">{formatRelativeTime(item.time)}</span>
+                              <span className="text-[9px] text-[var(--db-text-muted)] font-bold uppercase shrink-0 mt-0.5">
+                                {formatRelativeTime(item.time)}
+                              </span>
                             </div>
-                            <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2 pr-2">{item.message}</p>
+                            <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2 pr-2">
+                              {item.message}
+                            </p>
                           </div>
 
                           {/* Right indicators */}
@@ -646,13 +737,19 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                               <span
                                 className="w-2 h-2 rounded-full group-hover:opacity-0 transition-opacity"
                                 style={{
-                                  background: theme === "dark" ? "#e5ff00" : "#1e293b",
-                                  boxShadow: theme === "dark" ? "0 0 8px rgba(229,255,0,0.7)" : "none",
+                                  background:
+                                    theme === "dark" ? "#ccf141" : "#1e293b",
+                                  boxShadow:
+                                    theme === "dark"
+                                      ? "0 0 8px rgba(229,255,0,0.7)"
+                                      : "none",
                                 }}
                               />
                             )}
                             <button
-                              onClick={(e) => handleDeleteNotification(e, item.id)}
+                              onClick={(e) =>
+                                handleDeleteNotification(e, item.id)
+                              }
                               className="p-1 rounded-lg text-[var(--db-text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
                               title="Delete"
                             >
@@ -790,8 +887,6 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                     />
                     Settings
                   </button>
-
-
                 </div>
 
                 {/* Logout Button */}
@@ -842,7 +937,10 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                     New Activity
                   </span>
                   <button
-                    onClick={(e) => { e.stopPropagation(); setLatestNotification(null); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLatestNotification(null);
+                    }}
                     className="p-1 rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer"
                   >
                     <X size={13} />
@@ -868,8 +966,6 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
           </motion.div>
         )}
       </AnimatePresence>
-
-
     </header>
   );
 };

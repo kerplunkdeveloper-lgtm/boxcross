@@ -20,13 +20,19 @@ import {
   ShieldCheck,
   ClipboardCheck,
   Activity,
+  ClipboardList,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 
-const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: propUser }) => {
+const DashboardSidebar = ({
+  sidebarOpen,
+  setSidebarOpen,
+  handleLogout,
+  user: propUser,
+}) => {
   const { user: authUser } = useAuth();
   const user = propUser || authUser;
   const isAdmin = (user?.role || "").toLowerCase() === "admin";
@@ -117,7 +123,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
   const getItemClass = (isActive) => {
     if (isActive) {
       return theme === "dark"
-        ? "bg-[#e5ff00]/12 text-[#e5ff00] border border-[#e5ff00]/30 shadow-[0_0_12px_rgba(229,255,0,0.1)] font-bold"
+        ? "bg-[#ccf141]/12 text-[#ccf141] border border-[#ccf141]/30 shadow-[0_0_12px_rgba(229,255,0,0.1)] font-bold"
         : "bg-slate-900 text-white font-bold shadow-sm";
     }
     return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
@@ -126,7 +132,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
   const getSubItemClass = (isActive) => {
     if (isActive) {
       return theme === "dark"
-        ? "bg-[#e5ff00]/15 text-[#e5ff00] border border-[#e5ff00]/35 font-bold shadow-sm"
+        ? "bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/35 font-bold shadow-sm"
         : "bg-slate-800 text-white font-bold shadow-sm";
     }
     return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
@@ -135,14 +141,20 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
   const getTriggerClass = (hasActive) => {
     if (hasActive) {
       return theme === "dark"
-        ? "text-[#e5ff00] bg-[#e5ff00]/8 border border-[#e5ff00]/20 font-bold"
+        ? "text-[#ccf141] bg-[#ccf141]/8 border border-[#ccf141]/20 font-bold"
         : "text-slate-900 bg-slate-100 border border-slate-200 font-bold";
     }
     return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
   };
 
   // Helper to render single nav item with tooltip for collapsed state
-  const renderSingleItem = ({ to, name, icon: Icon, end = false, badge = null }) => {
+  const renderSingleItem = ({
+    to,
+    name,
+    icon: Icon,
+    end = false,
+    badge = null,
+  }) => {
     return (
       <div key={to} className="relative group hover:z-50">
         <NavLink
@@ -152,10 +164,10 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
           className={({ isActive }) =>
             sidebarOpen
               ? `w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12px] font-bold tracking-wide transition-all duration-150 cursor-pointer ${getItemClass(
-                  isActive
+                  isActive,
                 )}`
               : `w-9 h-9 mx-auto flex items-center justify-center rounded-xl transition-all duration-150 cursor-pointer ${getItemClass(
-                  isActive
+                  isActive,
                 )}`
           }
         >
@@ -207,7 +219,9 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
     pathMatch,
     items,
   }) => {
-    const hasActiveChild = pathMatch.some((path) => location.pathname.includes(path));
+    const hasActiveChild = pathMatch.some((path) =>
+      location.pathname.includes(path),
+    );
 
     return (
       <div key={title} className="relative group hover:z-50">
@@ -216,7 +230,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12px] font-bold tracking-wide transition-all duration-150 cursor-pointer ${getTriggerClass(
-                hasActiveChild
+                hasActiveChild,
               )}`}
             >
               <div className="flex items-center gap-2.5 min-w-0">
@@ -242,7 +256,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                       onClick={closeSidebarOnMobile}
                       className={({ isActive }) =>
                         `w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] font-medium tracking-wide transition-all duration-150 cursor-pointer ${getSubItemClass(
-                          isActive
+                          isActive,
                         )}`
                       }
                     >
@@ -259,7 +273,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
           <div className="flex justify-center">
             <button
               className={`w-9 h-9 mx-auto flex items-center justify-center rounded-xl transition-all duration-150 cursor-pointer ${getTriggerClass(
-                hasActiveChild
+                hasActiveChild,
               )}`}
             >
               <Icon size={16} className="shrink-0" />
@@ -288,7 +302,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                       onClick={closeSidebarOnMobile}
                       className={({ isActive }) =>
                         `flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${getSubItemClass(
-                          isActive
+                          isActive,
                         )}`
                       }
                     >
@@ -318,7 +332,9 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
         </div>
       );
     }
-    return <div className="h-[1px] bg-[var(--db-card-border)]/60 my-2 mx-1.5" />;
+    return (
+      <div className="h-[1px] bg-[var(--db-card-border)]/60 my-2 mx-1.5" />
+    );
   };
 
   return (
@@ -345,7 +361,9 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
               />
               {isAdmin && (
                 <span className="text-[9px] text-blue-500 font-black px-2 py-0.5 rounded-md bg-[var(--db-accent)] tracking-wider shadow-[0_0_10px_rgba(229,255,0,0.25)] select-none shrink-0">
-                  <span style={{ fontFamily: '"Brutal Font", sans-serif' }}>ADMIN</span>
+                  <span style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                    ADMIN
+                  </span>
                 </span>
               )}
             </div>
@@ -412,6 +430,14 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                 to: "/dashboard/user-management",
                 name: "User Management",
                 icon: Users,
+              })}
+
+              {/* Entry Baseline (Assessment) */}
+              {renderSingleItem({
+                to: "/dashboard/entry-baseline",
+                name: "Entry Baseline",
+                icon: ClipboardList,
+               
               })}
 
               {/* Goals & Readiness */}
@@ -520,12 +546,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                 icon: FileText,
                 isOpen: enquiriesOpen,
                 setIsOpen: setEnquiriesOpen,
-                pathMatch: [
-                  "/homec1",
-                  "/homec2",
-                  "/homec3",
-                  "/bookings",
-                ],
+                pathMatch: ["/homec1", "/homec2", "/homec3", "/bookings"],
                 items: [
                   {
                     name: "Gym Tour Bookings",
@@ -584,7 +605,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                     className="w-full h-full object-cover rounded-xl"
                   />
                 ) : (
-                  <div className="w-full h-full bg-[#e5ff00] text-black font-black text-xs flex items-center justify-center rounded-xl">
+                  <div className="w-full h-full bg-[#ccf141] text-black font-black text-xs flex items-center justify-center rounded-xl">
                     {user?.name?.charAt(0)?.toUpperCase() || "A"}
                   </div>
                 )}
@@ -621,15 +642,19 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                     className="w-full h-full object-cover rounded-xl"
                   />
                 ) : (
-                  <div className="w-full h-full bg-[#e5ff00] text-black font-black text-xs flex items-center justify-center rounded-xl">
+                  <div className="w-full h-full bg-[#ccf141] text-black font-black text-xs flex items-center justify-center rounded-xl">
                     {user?.name?.charAt(0)?.toUpperCase() || "A"}
                   </div>
                 )}
               </div>
               <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
                 <div className="relative px-2.5 py-1.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-xl text-[11px] font-bold text-[var(--db-text)] whitespace-nowrap">
-                  <p className="font-bold text-[var(--db-text)]">{user?.name || "Admin"}</p>
-                  <p className="text-[9px] text-[var(--db-accent-highlight)] uppercase font-black">{user?.role || "ADMIN"}</p>
+                  <p className="font-bold text-[var(--db-text)]">
+                    {user?.name || "Admin"}
+                  </p>
+                  <p className="text-[9px] text-[var(--db-accent-highlight)] uppercase font-black">
+                    {user?.role || "ADMIN"}
+                  </p>
                   <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card-border)]" />
                   <div className="absolute right-full top-1/2 -translate-y-1/2 border-[3px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
                 </div>

@@ -209,7 +209,7 @@ const EventOverviewPanel = ({
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
             Scheduled Follow-ups
-            <span className="ml-2 px-1.5 py-0.5 rounded-full bg-[#e5ff00] text-black text-[9px] font-black">
+            <span className="ml-2 px-1.5 py-0.5 rounded-full bg-[#ccf141] text-black text-[9px] font-black">
               {scheduledFollowUps.length}
             </span>
           </h3>
@@ -355,7 +355,7 @@ const EventOverviewPanel = ({
                     totalSlots > 0
                       ? `${Math.min((bookedSlots / totalSlots) * 100, 100)}%`
                       : "0%",
-                  background: "linear-gradient(90deg,#e5ff00,#a3d900)",
+                  background: "linear-gradient(90deg,#ccf141,#a3d900)",
                 }}
               />
             </div>
@@ -394,8 +394,8 @@ const EventOverviewPanel = ({
           >
             <defs>
               <linearGradient id="trendGrad2" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#e5ff00" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#e5ff00" stopOpacity="0" />
+                <stop offset="0%" stopColor="#ccf141" stopOpacity="0.35" />
+                <stop offset="100%" stopColor="#ccf141" stopOpacity="0" />
               </linearGradient>
             </defs>
             {[0, 0.25, 0.5, 0.75, 1].map((frac, i) => {
@@ -426,7 +426,7 @@ const EventOverviewPanel = ({
             <polyline
               points={polyline}
               fill="none"
-              stroke="#e5ff00"
+              stroke="#ccf141"
               strokeWidth="2"
               strokeLinejoin="round"
               strokeLinecap="round"
@@ -449,7 +449,7 @@ const EventOverviewPanel = ({
                   cx={pt.x}
                   cy={pt.y}
                   r={hoveredIdx === i ? 5 : 3.5}
-                  fill="#e5ff00"
+                  fill="#ccf141"
                   stroke="#1a1a1a"
                   strokeWidth="2"
                   style={{ transition: "r 0.15s ease" }}
@@ -462,7 +462,7 @@ const EventOverviewPanel = ({
                       width={28}
                       height={14}
                       rx={4}
-                      fill="#e5ff00"
+                      fill="#ccf141"
                     />
                     <text
                       x={pt.x}
@@ -994,7 +994,7 @@ const DashboardEventParticipants = () => {
         <style>
           table { border-collapse: collapse; font-family: 'Segoe UI', Arial, sans-serif; }
           th { 
-            background-color: #e5ff00; 
+            background-color: #ccf141; 
             color: #111827; 
             font-weight: 800; 
             font-size: 13px;
@@ -1097,7 +1097,7 @@ const DashboardEventParticipants = () => {
               }}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                 eventFilter === "all"
-                  ? "bg-[#e5ff00] text-black shadow-md border border-[#e5ff00]"
+                  ? "bg-[#ccf141] text-black shadow-md border border-[#ccf141]"
                   : "bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
               }`}
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -1118,7 +1118,7 @@ const DashboardEventParticipants = () => {
                   }}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                     eventFilter === evt
-                      ? "bg-[#e5ff00] text-black shadow-md border border-[#e5ff00]"
+                      ? "bg-[#ccf141] text-black shadow-md border border-[#ccf141]"
                       : "bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
                   }`}
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -1207,7 +1207,10 @@ const DashboardEventParticipants = () => {
               <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
                 {awaitingCount}
               </h3>
-              <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate" title="Awaiting Confirmation">
+              <p
+                className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate"
+                title="Awaiting Confirmation"
+              >
                 Awaiting Conf.
               </p>
             </div>
@@ -1299,7 +1302,7 @@ const DashboardEventParticipants = () => {
                     }}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                       statusFilter === "all"
-                        ? "bg-[#e5ff00] text-black shadow-md"
+                        ? "bg-[#ccf141] text-black shadow-md"
                         : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
                     }`}
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -1313,7 +1316,7 @@ const DashboardEventParticipants = () => {
                     }}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                       statusFilter === "confirmed"
-                        ? "bg-[#e5ff00] text-black shadow-md"
+                        ? "bg-[#ccf141] text-black shadow-md"
                         : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
                     }`}
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -1327,7 +1330,7 @@ const DashboardEventParticipants = () => {
                     }}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                       statusFilter === "awaiting"
-                        ? "bg-[#e5ff00] text-black shadow-md"
+                        ? "bg-[#ccf141] text-black shadow-md"
                         : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
                     }`}
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -1341,7 +1344,7 @@ const DashboardEventParticipants = () => {
                     }}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                       statusFilter === "followup"
-                        ? "bg-[#e5ff00] text-black shadow-md"
+                        ? "bg-[#ccf141] text-black shadow-md"
                         : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
                     }`}
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -1355,7 +1358,7 @@ const DashboardEventParticipants = () => {
                     }}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                       statusFilter === "noresponse"
-                        ? "bg-[#e5ff00] text-black shadow-md"
+                        ? "bg-[#ccf141] text-black shadow-md"
                         : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
                     }`}
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -1369,7 +1372,7 @@ const DashboardEventParticipants = () => {
                     }}
                     className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                       statusFilter === "notcoming"
-                        ? "bg-[#e5ff00] text-black shadow-md"
+                        ? "bg-[#ccf141] text-black shadow-md"
                         : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
                     }`}
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -1382,7 +1385,7 @@ const DashboardEventParticipants = () => {
                 <div className="relative flex items-center gap-2">
                   <button
                     onClick={handleExportToExcel}
-                    className="flex items-center gap-1.5 h-8 px-3 bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] hover:bg-[#e5ff00]/20 text-[10px] font-black uppercase tracking-wider rounded-full transition-all cursor-pointer"
+                    className="flex items-center gap-1.5 h-8 px-3 bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] hover:bg-[#ccf141]/20 text-[10px] font-black uppercase tracking-wider rounded-full transition-all cursor-pointer"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     <Download size={11} /> Export to Excel
@@ -1972,7 +1975,7 @@ const DashboardEventParticipants = () => {
                           onClick={() => setCurrentPage(page)}
                           className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                             currentPage === page
-                              ? "bg-[#e5ff00] text-black shadow-md font-black"
+                              ? "bg-[#ccf141] text-black shadow-md font-black"
                               : "border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)]"
                           }`}
                         >
@@ -2022,7 +2025,7 @@ const DashboardEventParticipants = () => {
                   className="fixed inset-0 bg-black/60 z-40 xl:hidden backdrop-blur-sm"
                   onClick={() => setSelectedBooking(null)}
                 />
-                
+
                 <motion.div
                   initial={{ opacity: 0, y: 100, x: 0 }}
                   animate={{ opacity: 1, y: 0, x: 0 }}
@@ -2032,8 +2035,8 @@ const DashboardEventParticipants = () => {
                 >
                   {/* Close button for mobile */}
                   <div className="absolute top-4 right-4 xl:hidden z-10">
-                    <button 
-                      onClick={() => setSelectedBooking(null)} 
+                    <button
+                      onClick={() => setSelectedBooking(null)}
                       className="p-2 bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-full text-[var(--db-text-muted)] hover:text-white cursor-pointer transition-colors"
                     >
                       <X size={16} />
@@ -2076,9 +2079,10 @@ const DashboardEventParticipants = () => {
                       {/* Quick Attendance Checkbox */}
                       <button
                         onClick={() => {
-                          const isAttended = getNormalizedStatus(selectedBooking) === "Attended";
+                          const isAttended =
+                            getNormalizedStatus(selectedBooking) === "Attended";
                           handleUpdateBooking(selectedBooking._id, {
-                            status: isAttended ? "Confirmed" : "Attended"
+                            status: isAttended ? "Confirmed" : "Attended",
                           });
                         }}
                         className={`ml-3 mt-1 flex-shrink-0 w-6 h-6 md:w-7 md:h-7 rounded-md border-2 flex items-center justify-center transition-all cursor-pointer ${
@@ -2086,228 +2090,236 @@ const DashboardEventParticipants = () => {
                             ? "bg-cyan-500 border-cyan-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.5)]"
                             : "border-[var(--db-card-border)] bg-[var(--db-input-bg)] hover:border-cyan-500/50"
                         }`}
-                        title={getNormalizedStatus(selectedBooking) === "Attended" ? "Revert to Confirmed" : "Mark as Attended"}
+                        title={
+                          getNormalizedStatus(selectedBooking) === "Attended"
+                            ? "Revert to Confirmed"
+                            : "Mark as Attended"
+                        }
                       >
-                        {getNormalizedStatus(selectedBooking) === "Attended" && <Check size={16} strokeWidth={4} />}
+                        {getNormalizedStatus(selectedBooking) ===
+                          "Attended" && <Check size={16} strokeWidth={4} />}
                       </button>
                     </div>
                   </div>
-                {/* Direct Contacts */}
-                <div className="space-y-2 pb-3 border-b border-[var(--db-card-border)]">
-                  <div className="flex items-center gap-1.5 text-[12px] text-[var(--db-text-muted)] font-semibold">
-                    <Phone size={11} className="text-gray-500" />
-                    <span className="font-mono">{selectedBooking.phone}</span>
+                  {/* Direct Contacts */}
+                  <div className="space-y-2 pb-3 border-b border-[var(--db-card-border)]">
+                    <div className="flex items-center gap-1.5 text-[12px] text-[var(--db-text-muted)] font-semibold">
+                      <Phone size={11} className="text-gray-500" />
+                      <span className="font-mono">{selectedBooking.phone}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[12px] text-[var(--db-text-muted)] font-semibold truncate">
+                      <Mail size={11} className="text-gray-500 flex-shrink-0" />
+                      <span className="truncate">{selectedBooking.email}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 text-[12px] text-[var(--db-text-muted)] font-semibold truncate">
-                    <Mail size={11} className="text-gray-500 flex-shrink-0" />
-                    <span className="truncate">{selectedBooking.email}</span>
-                  </div>
-                </div>
 
-                {/* Grid stats */}
-                <div className="grid grid-cols-2 gap-3 pb-3 border-b border-[var(--db-card-border)]">
-                  <div>
-                    <div className="text-[12px] text-[var(--db-text-muted)] font-black uppercase tracking-wider">
-                      Seats
+                  {/* Grid stats */}
+                  <div className="grid grid-cols-2 gap-3 pb-3 border-b border-[var(--db-card-border)]">
+                    <div>
+                      <div className="text-[12px] text-[var(--db-text-muted)] font-black uppercase tracking-wider">
+                        Seats
+                      </div>
+                      <div className="text-sm font-extrabold mt-0.5">
+                        {selectedBooking.seats}
+                      </div>
                     </div>
-                    <div className="text-sm font-extrabold mt-0.5">
-                      {selectedBooking.seats}
+                    <div>
+                      <div className="text-[12px] text-[var(--db-text-muted)] font-black uppercase tracking-wider">
+                        Registered On
+                      </div>
+                      <div className="text-[12px] font-semibold mt-0.5">
+                        {selectedBooking.createdAt
+                          ? new Date(
+                              selectedBooking.createdAt,
+                            ).toLocaleDateString(undefined, {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            }) +
+                            `, ${new Date(selectedBooking.createdAt).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`
+                          : "N/A"}
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <div className="text-[12px] text-[var(--db-text-muted)] font-black uppercase tracking-wider">
-                      Registered On
-                    </div>
-                    <div className="text-[12px] font-semibold mt-0.5">
-                      {selectedBooking.createdAt
-                        ? new Date(
-                            selectedBooking.createdAt,
-                          ).toLocaleDateString(undefined, {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          }) +
-                          `, ${new Date(selectedBooking.createdAt).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
 
-                {/* Timeline */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                    Communication Timeline
-                  </h3>
+                  {/* Timeline */}
+                  <div className="space-y-4">
+                    <h3 className="text-sm font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                      Communication Timeline
+                    </h3>
 
-                  <div className="relative border-l border-gray-700 pl-4 space-y-4 ml-2">
-                    {getTimeline(selectedBooking).map((item, idx) => (
-                      <div key={idx} className="relative group">
-                        {/* Status timeline node marker */}
-                        <span className="absolute -left-[21px] top-0.5 w-2.5 h-2.5 rounded-full bg-[var(--db-accent-highlight)] border border-[var(--db-card)]" />
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <div className="text-[10px] text-gray-500 font-extrabold">
-                              {item.time}
+                    <div className="relative border-l border-gray-700 pl-4 space-y-4 ml-2">
+                      {getTimeline(selectedBooking).map((item, idx) => (
+                        <div key={idx} className="relative group">
+                          {/* Status timeline node marker */}
+                          <span className="absolute -left-[21px] top-0.5 w-2.5 h-2.5 rounded-full bg-[var(--db-accent-highlight)] border border-[var(--db-card)]" />
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="text-[10px] text-gray-500 font-extrabold">
+                                {item.time}
+                              </div>
+                              <div className="text-[11px] text-[var(--db-text)] font-semibold mt-0.5 leading-relaxed">
+                                {item.activity}
+                              </div>
                             </div>
-                            <div className="text-[11px] text-[var(--db-text)] font-semibold mt-0.5 leading-relaxed">
-                              {item.activity}
-                            </div>
+                            {selectedBooking.timeline &&
+                              selectedBooking.timeline.length > 0 && (
+                                <button
+                                  onClick={() => handleDeleteTimelineLog(idx)}
+                                  className="opacity-0 group-hover:opacity-100 p-1 text-red-500 hover:bg-red-500/10 rounded transition-all ml-2"
+                                  title="Delete Log"
+                                >
+                                  <Trash2 size={12} />
+                                </button>
+                              )}
                           </div>
-                          {selectedBooking.timeline &&
-                            selectedBooking.timeline.length > 0 && (
-                              <button
-                                onClick={() => handleDeleteTimelineLog(idx)}
-                                className="opacity-0 group-hover:opacity-100 p-1 text-red-500 hover:bg-red-500/10 rounded transition-all ml-2"
-                                title="Delete Log"
-                              >
-                                <Trash2 size={12} />
-                              </button>
-                            )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Add Log Form */}
+                    <div className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-xl p-3 space-y-2 mt-4">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[9px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                          Log Interaction
+                        </span>
+                        <select
+                          value={newLogType}
+                          onChange={(e) => setNewLogType(e.target.value)}
+                          className="bg-transparent border-none text-[10px] font-bold text-[var(--db-accent-highlight)] outline-none cursor-pointer"
+                        >
+                          <option value="Call" className="bg-[var(--db-card)]">
+                            Call
+                          </option>
+                          <option
+                            value="WhatsApp"
+                            className="bg-[var(--db-card)]"
+                          >
+                            WhatsApp
+                          </option>
+                          <option value="Email" className="bg-[var(--db-card)]">
+                            Email
+                          </option>
+                          <option
+                            value="Status"
+                            className="bg-[var(--db-card)]"
+                          >
+                            Status
+                          </option>
+                        </select>
+                      </div>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Log detail (e.g. Spoke to attendee)..."
+                          value={newLogActivity}
+                          onChange={(e) => setNewLogActivity(e.target.value)}
+                          className="w-full bg-transparent border-none text-xs text-[var(--db-text)] placeholder-gray-600 outline-none"
+                        />
+                        <button
+                          onClick={handleAddTimelineLog}
+                          className="p-1 text-[var(--db-accent-highlight)] hover:scale-110 transition-all cursor-pointer"
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Notes */}
+                  <div className="space-y-3 pt-4 border-t border-[var(--db-card-border)]">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xs font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                        Notes
+                      </h3>
+                      <button
+                        onClick={() => setEditingNotes(!editingNotes)}
+                        className="p-1 text-gray-500 hover:text-[var(--db-text)] transition-colors cursor-pointer"
+                      >
+                        <Edit2 size={12} />
+                      </button>
+                    </div>
+
+                    {editingNotes ? (
+                      <div className="space-y-2">
+                        <textarea
+                          value={noteText}
+                          onChange={(e) => setNoteText(e.target.value)}
+                          placeholder="Write custom notes for this participant..."
+                          className="w-full h-16 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-lg p-2 text-xs text-[var(--db-text)] outline-none resize-none focus:border-[var(--db-accent-highlight)]"
+                        />
+                        <div className="flex justify-end gap-1.5">
+                          <button
+                            onClick={() => setEditingNotes(false)}
+                            className="px-2.5 py-1 rounded text-[10px] font-bold border border-[var(--db-card-border)] text-[var(--db-text-muted)] cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleSaveNotes}
+                            className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#ccf141] text-black cursor-pointer"
+                          >
+                            Save
+                          </button>
                         </div>
                       </div>
-                    ))}
+                    ) : (
+                      <div className="text-[11px] text-[var(--db-text-muted)] leading-relaxed italic whitespace-pre-wrap">
+                        {selectedBooking.notes || "No custom notes recorded."}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Add Log Form */}
-                  <div className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-xl p-3 space-y-2 mt-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[9px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
-                        Log Interaction
-                      </span>
-                      <select
-                        value={newLogType}
-                        onChange={(e) => setNewLogType(e.target.value)}
-                        className="bg-transparent border-none text-[10px] font-bold text-[var(--db-accent-highlight)] outline-none cursor-pointer"
-                      >
-                        <option value="Call" className="bg-[var(--db-card)]">
-                          Call
-                        </option>
-                        <option
-                          value="WhatsApp"
-                          className="bg-[var(--db-card)]"
-                        >
-                          WhatsApp
-                        </option>
-                        <option value="Email" className="bg-[var(--db-card)]">
-                          Email
-                        </option>
-                        <option value="Status" className="bg-[var(--db-card)]">
-                          Status
-                        </option>
-                      </select>
-                    </div>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        placeholder="Log detail (e.g. Spoke to attendee)..."
-                        value={newLogActivity}
-                        onChange={(e) => setNewLogActivity(e.target.value)}
-                        className="w-full bg-transparent border-none text-xs text-[var(--db-text)] placeholder-gray-600 outline-none"
-                      />
-                      <button
-                        onClick={handleAddTimelineLog}
-                        className="p-1 text-[var(--db-accent-highlight)] hover:scale-110 transition-all cursor-pointer"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Notes */}
-                <div className="space-y-3 pt-4 border-t border-[var(--db-card-border)]">
-                  <div className="flex items-center justify-between">
+                  {/* Quick Actions */}
+                  <div className="space-y-2 pt-4 border-t border-[var(--db-card-border)]">
                     <h3 className="text-xs font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                      Notes
+                      Quick Actions
                     </h3>
-                    <button
-                      onClick={() => setEditingNotes(!editingNotes)}
-                      className="p-1 text-gray-500 hover:text-[var(--db-text)] transition-colors cursor-pointer"
+                    <a
+                      href={`https://wa.me/${selectedBooking.phone}?text=Hi ${selectedBooking.name}, this is Box %26 Cross regarding your registration...`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 transition-all font-bold text-xs cursor-pointer"
                     >
-                      <Edit2 size={12} />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="13"
+                        height="13"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                      </svg>
+                      Send WhatsApp
+                    </a>
+                    <a
+                      href={`tel:${selectedBooking.phone}`}
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-[#ccf141]/10 border border-[#ccf141]/20 text-[#ccf141] hover:bg-[#ccf141]/20 transition-all font-bold text-xs cursor-pointer"
+                    >
+                      <Phone size={13} /> Call Now
+                    </a>
+                    <button
+                      onClick={() =>
+                        handleUpdateBooking(selectedBooking._id, {
+                          status: "Awaiting",
+                        })
+                      }
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all font-bold text-xs cursor-pointer"
+                    >
+                      <Clock size={13} /> Mark Awaiting
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleUpdateBooking(selectedBooking._id, {
+                          status: "cancelled",
+                        })
+                      }
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all font-bold text-xs cursor-pointer"
+                    >
+                      <XCircle size={13} /> Not Coming
                     </button>
                   </div>
-
-                  {editingNotes ? (
-                    <div className="space-y-2">
-                      <textarea
-                        value={noteText}
-                        onChange={(e) => setNoteText(e.target.value)}
-                        placeholder="Write custom notes for this participant..."
-                        className="w-full h-16 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-lg p-2 text-xs text-[var(--db-text)] outline-none resize-none focus:border-[var(--db-accent-highlight)]"
-                      />
-                      <div className="flex justify-end gap-1.5">
-                        <button
-                          onClick={() => setEditingNotes(false)}
-                          className="px-2.5 py-1 rounded text-[10px] font-bold border border-[var(--db-card-border)] text-[var(--db-text-muted)] cursor-pointer"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={handleSaveNotes}
-                          className="px-2.5 py-1 rounded text-[10px] font-bold bg-[#e5ff00] text-black cursor-pointer"
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-[11px] text-[var(--db-text-muted)] leading-relaxed italic whitespace-pre-wrap">
-                      {selectedBooking.notes || "No custom notes recorded."}
-                    </div>
-                  )}
-                </div>
-
-                {/* Quick Actions */}
-                <div className="space-y-2 pt-4 border-t border-[var(--db-card-border)]">
-                  <h3 className="text-xs font-black uppercase tracking-widest text-[var(--db-text-muted)]">
-                    Quick Actions
-                  </h3>
-                  <a
-                    href={`https://wa.me/${selectedBooking.phone}?text=Hi ${selectedBooking.name}, this is Box %26 Cross regarding your registration...`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 transition-all font-bold text-xs cursor-pointer"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="13"
-                      height="13"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                    </svg>
-                    Send WhatsApp
-                  </a>
-                  <a
-                    href={`tel:${selectedBooking.phone}`}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] hover:bg-[#e5ff00]/20 transition-all font-bold text-xs cursor-pointer"
-                  >
-                    <Phone size={13} /> Call Now
-                  </a>
-                  <button
-                    onClick={() =>
-                      handleUpdateBooking(selectedBooking._id, {
-                        status: "Awaiting",
-                      })
-                    }
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all font-bold text-xs cursor-pointer"
-                  >
-                    <Clock size={13} /> Mark Awaiting
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleUpdateBooking(selectedBooking._id, {
-                        status: "cancelled",
-                      })
-                    }
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all font-bold text-xs cursor-pointer"
-                  >
-                    <XCircle size={13} /> Not Coming
-                  </button>
-                </div>
-              </motion.div>
+                </motion.div>
               </>
             )}
           </AnimatePresence>

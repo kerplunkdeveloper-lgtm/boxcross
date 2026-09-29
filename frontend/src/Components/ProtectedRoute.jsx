@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
       <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white">
         <div className="flex flex-col items-center gap-3">
           <svg
-            className="animate-spin h-8 w-8 text-[#e5ff00]"
+            className="animate-spin h-8 w-8 text-[#ccf141]"
             viewBox="0 0 24 24"
           >
             <circle

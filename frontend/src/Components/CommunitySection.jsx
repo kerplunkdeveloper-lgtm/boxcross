@@ -67,12 +67,11 @@ export default function CommunitySection() {
   return (
     <section className="bg-black text-white py-0 md:py-20 md:px-5 overflow-hidden">
       <div className="max-w-8xl mx-auto ">
-
         {/* Member Stories Section */}
         <div className="mb-20 lg:px-10">
-          <h2 
+          <h2
             data-aos="fade-up"
-            className="text-3xl text-white font-black mb-10 text-center  uppercase tracking-wide" 
+            className="text-3xl text-white font-black mb-10 text-center  uppercase tracking-wide"
             style={{ fontFamily: '"Bebas Neue", sans-serif' }}
           >
             MEMBER STORIES
@@ -99,7 +98,7 @@ export default function CommunitySection() {
 
                   {/* Content on the Right */}
                   <div className="w-full sm:w-[58%] p-6 flex flex-col justify-center">
-                    <h3 className="text-[#E5FF00] text-2xl font-black tracking-wide">
+                    <h3 className="text-[#ccf141] text-2xl font-black tracking-wide">
                       {item.name}
                     </h3>
 
@@ -121,24 +120,23 @@ export default function CommunitySection() {
         <div className="w-full bg-black py-6 md:py-10 border-y border-zinc-900/60 overflow-hidden select-none pointer-events-none mb-20">
           <div className="marquee-experience-wrapper">
             <div className="marquee-experience-track">
-              {Array(10).fill([
-                "EXPERIENCE",
-                "TEAM",
-                "MOVEMENT"
-              ]).flat().map((word, idx) => (
-                <span
-                  key={idx}
-                  className="text-[60px] sm:text-[65px] md:text-[85px] lg:text-[105px] font-black uppercase tracking-wider mx-6 sm:mx-10 inline-block"
-                  style={{
-                    fontFamily: '"Bebas Neue", sans-serif',
-                    color: "transparent",
-                    WebkitTextStroke: "1px rgba(255, 255, 255, 0.45)",
-                    whiteSpace: "nowrap"
-                  }}
-                >
-                  {word}
-                </span>
-              ))}
+              {Array(10)
+                .fill(["EXPERIENCE", "TEAM", "MOVEMENT"])
+                .flat()
+                .map((word, idx) => (
+                  <span
+                    key={idx}
+                    className="text-[60px] sm:text-[65px] md:text-[85px] lg:text-[105px] font-black uppercase tracking-wider mx-6 sm:mx-10 inline-block"
+                    style={{
+                      fontFamily: '"Bebas Neue", sans-serif',
+                      color: "transparent",
+                      WebkitTextStroke: "1px rgba(255, 255, 255, 0.45)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {word}
+                  </span>
+                ))}
             </div>
           </div>
           <style>{`
@@ -170,8 +168,8 @@ export default function CommunitySection() {
           className="card-border-spin-container rounded-[24px] md:rounded-[35px] p-[1.5px] mb-20"
         >
           <div className="card-border-spin-inner rounded-[22px] md:rounded-[33px] p-6 md:p-10 flex flex-col justify-between">
-            <h2 
-              className="text-3xl text-white font-black mb-10 text-center uppercase tracking-wide" 
+            <h2
+              className="text-3xl text-white font-black mb-10 text-center uppercase tracking-wide"
               style={{ fontFamily: '"Bebas Neue", sans-serif' }}
             >
               Instagram Wall
@@ -184,35 +182,38 @@ export default function CommunitySection() {
                   data-aos="fade-up"
                   data-aos-delay={i * 80}
                   whileHover={{ scale: 1.05 }}
-                  className="overflow-hidden rounded-2xl border border-zinc-800 hover:border-[#E5FF00]/40 transition duration-300"
+                  className="overflow-hidden rounded-2xl border border-zinc-800 hover:border-[#ccf141]/40 transition duration-300"
                 >
                   <img
                     src={img}
                     alt={`Instagram Post ${i + 1}`}
                     className="h-44 w-full object-cover hover:brightness-110 transition duration-300 cursor-pointer"
-                    onClick={() => window.open("https://www.instagram.com/boxandcross/", "_blank")}
+                    onClick={() =>
+                      window.open(
+                        "https://www.instagram.com/boxandcross/",
+                        "_blank",
+                      )
+                    }
                   />
                 </motion.div>
               ))}
             </div>
-            
+
             <div className="flex flex-col items-center justify-center mt-8">
-              <h1 className="text-sm sm:text-base md:text-xl font-bold uppercase tracking-wider text-[#E5FF00] text-center">
+              <h1 className="text-sm sm:text-base md:text-xl font-bold uppercase tracking-wider text-[#ccf141] text-center">
                 Every Sunday. Every Fight Night. Every PR. Every First Session.
               </h1>
-              <a 
-                href="https://www.instagram.com/boxandcross/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.instagram.com/boxandcross/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-6 hover:scale-110 transition duration-300"
               >
-                <FaInstagram className="text-4xl text-[#E5FF00] hover:text-white transition duration-300" />
+                <FaInstagram className="text-4xl text-[#ccf141] hover:text-white transition duration-300" />
               </a>
             </div>
           </div>
         </div>
-
-       
       </div>
     </section>
   );

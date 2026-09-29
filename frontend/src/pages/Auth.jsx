@@ -14,7 +14,8 @@ const Auth = () => {
 
   // Mode: "admin" or "athlete"
   const searchParams = new URLSearchParams(location.search);
-  const initialMode = searchParams.get("tab") === "athlete" ? "athlete" : "admin";
+  const initialMode =
+    searchParams.get("tab") === "athlete" ? "athlete" : "admin";
   const [authMode, setAuthMode] = useState(initialMode);
 
   // Admin form state
@@ -82,8 +83,13 @@ const Auth = () => {
 
         if (data && data.success) {
           localStorage.setItem("boxcross_athlete_token", data.token);
-          localStorage.setItem("boxcross_athlete", JSON.stringify(data.athlete));
-          toast.success(data.message || `Welcome, ${data.athlete.athleteName}!`);
+          localStorage.setItem(
+            "boxcross_athlete",
+            JSON.stringify(data.athlete),
+          );
+          toast.success(
+            data.message || `Welcome, ${data.athlete.athleteName}!`,
+          );
           navigate("/athlete-dashboard");
         } else {
           setError(data.message || "Failed to log in.");
@@ -113,7 +119,7 @@ const Auth = () => {
       <header className="relative w-full px-6 md:px-12 py-4 z-10 flex items-center justify-between border-b border-white/[0.08]">
         <Link
           to="/"
-          className="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-[#e5ff00] transition-colors cursor-pointer"
+          className="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-[#ccf141] transition-colors cursor-pointer"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           &larr; Box & Cross Arena
@@ -143,7 +149,7 @@ const Auth = () => {
 
           <div className="bg-black/30 text-white backdrop-blur-md border border-white/10 px-6 py-4 rounded-sm inline-block shadow-xl shadow-black/10">
             <h1
-              className="text-2xl text-[#e5ff00]"
+              className="text-2xl text-[#ccf141]"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               Performance Arena
@@ -160,7 +166,7 @@ const Auth = () => {
         {/* Right Side: Floating Glassmorphic Login Card */}
         <div className="w-full max-w-[460px] relative p-[1px] overflow-hidden rounded-[28px] bg-white/[0.05] shadow-2xl">
           {/* Spin border animation */}
-          <div className="absolute inset-[-100px] bg-[conic-gradient(from_0deg,transparent_40%,#e5ff00_50%,transparent_60%)] animate-[spin_5s_linear_infinite] z-0 pointer-events-none" />
+          <div className="absolute inset-[-100px] bg-[conic-gradient(from_0deg,transparent_40%,#ccf141_50%,transparent_60%)] animate-[spin_5s_linear_infinite] z-0 pointer-events-none" />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -178,7 +184,7 @@ const Auth = () => {
                 }}
                 className={`py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   authMode === "athlete"
-                    ? "bg-[#e5ff00] text-black shadow-md"
+                    ? "bg-[#ccf141] text-black shadow-md"
                     : "text-zinc-300 hover:text-white"
                 }`}
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -195,7 +201,7 @@ const Auth = () => {
                 }}
                 className={`py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   authMode === "admin"
-                    ? "bg-[#e5ff00] text-black shadow-md"
+                    ? "bg-[#ccf141] text-black shadow-md"
                     : "text-zinc-300 hover:text-white"
                 }`}
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -229,7 +235,7 @@ const Auth = () => {
               {/* Identifier Input */}
               {authMode === "athlete" ? (
                 <div className="space-y-1 text-left">
-                  <label className="text-[10px] uppercase font-black tracking-widest text-[#e5ff00]">
+                  <label className="text-[10px] uppercase font-black tracking-widest text-[#ccf141]">
                     Member ID
                   </label>
                   <input
@@ -237,7 +243,7 @@ const Auth = () => {
                     placeholder="e.g. BOXCROSS-001"
                     value={memberId}
                     onChange={(e) => setMemberId(e.target.value.toUpperCase())}
-                    className="w-full h-13 bg-[#c8cacb] border-none text-black font-mono font-bold placeholder-[#6e7173] rounded-md px-5 text-sm outline-none focus:ring-2 focus:ring-[#e5ff00]/40 transition-all shadow-inner tracking-wider"
+                    className="w-full h-13 bg-[#c8cacb] border-none text-black font-mono font-bold placeholder-[#6e7173] rounded-md px-5 text-sm outline-none focus:ring-2 focus:ring-[#ccf141]/40 transition-all shadow-inner tracking-wider"
                     required
                   />
                   <p className="text-[10px] text-zinc-400">
@@ -246,7 +252,7 @@ const Auth = () => {
                 </div>
               ) : (
                 <div className="space-y-1 text-left">
-                  <label className="text-[10px] uppercase font-black tracking-widest text-[#e5ff00]">
+                  <label className="text-[10px] uppercase font-black tracking-widest text-[#ccf141]">
                     Admin Email
                   </label>
                   <input
@@ -254,7 +260,7 @@ const Auth = () => {
                     placeholder="admin@boxcross.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full h-13 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md px-5 text-sm outline-none focus:ring-2 focus:ring-[#e5ff00]/40 transition-all shadow-inner"
+                    className="w-full h-13 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md px-5 text-sm outline-none focus:ring-2 focus:ring-[#ccf141]/40 transition-all shadow-inner"
                     required
                   />
                 </div>
@@ -271,7 +277,7 @@ const Auth = () => {
                     placeholder="Enter Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full h-13 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md pl-5 pr-12 text-sm outline-none focus:ring-2 focus:ring-[#e5ff00]/40 transition-all shadow-inner"
+                    className="w-full h-13 bg-[#c8cacb] border-none text-black font-bold placeholder-[#6e7173] rounded-md pl-5 pr-12 text-sm outline-none focus:ring-2 focus:ring-[#ccf141]/40 transition-all shadow-inner"
                     required
                   />
                   <button
@@ -297,7 +303,7 @@ const Auth = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group relative overflow-hidden w-full sm:w-auto px-10 py-3 bg-[#e5ff00] text-black font-extrabold uppercase tracking-widest text-xs rounded-md transition-all duration-300 cursor-pointer shadow-lg disabled:opacity-50 hover:bg-white"
+                  className="group relative overflow-hidden w-full sm:w-auto px-10 py-3 bg-[#ccf141] text-black font-extrabold uppercase tracking-widest text-xs rounded-md transition-all duration-300 cursor-pointer shadow-lg disabled:opacity-50 hover:bg-white"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <span className="relative z-10">

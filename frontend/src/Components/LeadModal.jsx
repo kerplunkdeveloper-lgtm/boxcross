@@ -125,7 +125,7 @@ const LeadModal = () => {
                     onChange={handleChange}
                     placeholder="Enter your full name"
                     required
-                    className="w-full bg-white/[0.03] border border-white/10 focus:border-[#e5ff00]/50 outline-none rounded-xl px-4 py-3 text-sm text-white transition-all"
+                    className="w-full bg-white/[0.03] border border-white/10 focus:border-[#ccf141]/50 outline-none rounded-xl px-4 py-3 text-sm text-white transition-all"
                   />
                 </div>
                 <div>
@@ -139,14 +139,14 @@ const LeadModal = () => {
                     onChange={handleChange}
                     placeholder="Enter your phone number"
                     required
-                    className="w-full bg-white/[0.03] border border-white/10 focus:border-[#e5ff00]/50 outline-none rounded-xl px-4 py-3 text-sm text-white transition-all"
+                    className="w-full bg-white/[0.03] border border-white/10 focus:border-[#ccf141]/50 outline-none rounded-xl px-4 py-3 text-sm text-white transition-all"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full relative overflow-hidden px-6 py-4 mt-2 bg-[#e5ff00] text-black rounded-xl text-xs tracking-wider uppercase group disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                  className="w-full relative overflow-hidden px-6 py-4 mt-2 bg-[#ccf141] text-black rounded-xl text-xs tracking-wider uppercase group disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                 >
                   <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
                   <span
@@ -164,7 +164,7 @@ const LeadModal = () => {
           {step === 2 && (
             <div className="animate-fade-in text-center">
               <div className="flex justify-center mb-4">
-                <ShieldCheck size={48} className="text-[#e5ff00]" />
+                <ShieldCheck size={48} className="text-[#ccf141]" />
               </div>
               <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-2">
                 Verify Number
@@ -188,14 +188,14 @@ const LeadModal = () => {
                     placeholder="----"
                     maxLength={4}
                     required
-                    className="w-full bg-white/[0.03] border border-white/10 focus:border-[#e5ff00]/50 outline-none rounded-xl px-4 py-4 text-2xl text-center tracking-[1em] text-white transition-all"
+                    className="w-full bg-white/[0.03] border border-white/10 focus:border-[#ccf141]/50 outline-none rounded-xl px-4 py-4 text-2xl text-center tracking-[1em] text-white transition-all"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full relative overflow-hidden px-6 py-4 mt-2 bg-[#e5ff00] text-black rounded-xl text-xs tracking-wider uppercase group disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                  className="w-full relative overflow-hidden px-6 py-4 mt-2 bg-[#ccf141] text-black rounded-xl text-xs tracking-wider uppercase group disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                 >
                   <span className="absolute inset-0 bg-white -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
                   <span

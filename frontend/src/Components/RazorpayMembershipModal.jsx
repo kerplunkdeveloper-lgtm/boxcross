@@ -14,7 +14,11 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
-import { updateMembership, createPayment, verifyMembershipPayment } from "../api/api";
+import {
+  updateMembership,
+  createPayment,
+  verifyMembershipPayment,
+} from "../api/api";
 import { toast } from "react-hot-toast";
 
 const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
@@ -109,7 +113,9 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
 
   const handleProceedToPay = async () => {
     if (!createdOrder) {
-      toast.error("Order details are missing. Please go back and submit details.");
+      toast.error(
+        "Order details are missing. Please go back and submit details.",
+      );
       return;
     }
 
@@ -119,10 +125,14 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
     try {
       // Sandbox/Mock simulation
       if (createdOrder.razorpayOrderId.startsWith("order_mock_")) {
-        toast.success("Running sandbox mock payment simulation...", { id: toastId });
+        toast.success("Running sandbox mock payment simulation...", {
+          id: toastId,
+        });
 
         setTimeout(async () => {
-          const verifyToastId = toast.loading("Verifying simulator transaction...");
+          const verifyToastId = toast.loading(
+            "Verifying simulator transaction...",
+          );
           try {
             const { data: verifyData } = await verifyMembershipPayment({
               paymentId: createdOrder.paymentId,
@@ -133,10 +143,11 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
             if (verifyData.success) {
               setPayState("success");
               toast.success("Payment Successful!", { id: verifyToastId });
-              
+
               // Update user state if authenticated
               if (authUser && planDetails) {
-                const priceNum = parseFloat(planDetails?.price.replace(/,/g, "")) || 0;
+                const priceNum =
+                  parseFloat(planDetails?.price.replace(/,/g, "")) || 0;
                 const monthsVal = planDetails?.monthsVal || 1;
                 const { data: updateData } = await updateMembership({
                   planName: planDetails.name,
@@ -167,7 +178,9 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
       // Real Razorpay Integration
       const res = await loadRazorpayScript();
       if (!res) {
-        toast.error("Razorpay SDK failed to load. Are you online?", { id: toastId });
+        toast.error("Razorpay SDK failed to load. Are you online?", {
+          id: toastId,
+        });
         setLoading(false);
         return;
       }
@@ -183,7 +196,9 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
         order_id: createdOrder.razorpayOrderId,
         handler: async function (response) {
           setPayState("processing");
-          const verifyToastId = toast.loading("Verifying payment transaction...");
+          const verifyToastId = toast.loading(
+            "Verifying payment transaction...",
+          );
           try {
             const { data: verifyData } = await verifyMembershipPayment({
               paymentId: createdOrder.paymentId,
@@ -195,11 +210,14 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
 
             if (verifyData.success) {
               setPayState("success");
-              toast.success("Payment Verified & Subscription Activated!", { id: verifyToastId });
+              toast.success("Payment Verified & Subscription Activated!", {
+                id: verifyToastId,
+              });
 
               // Update logged in user membership details if authenticated
               if (authUser && planDetails) {
-                const priceNum = parseFloat(planDetails?.price.replace(/,/g, "")) || 0;
+                const priceNum =
+                  parseFloat(planDetails?.price.replace(/,/g, "")) || 0;
                 const monthsVal = planDetails?.monthsVal || 1;
                 const { data: updateData } = await updateMembership({
                   planName: planDetails.name,
@@ -232,7 +250,7 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
           contact: user.phone,
         },
         theme: {
-          color: "#e5ff00",
+          color: "#ccf141",
         },
         modal: {
           ondismiss: function () {
@@ -301,26 +319,33 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
             className="relative w-full max-w-[1000px] max-h-[90vh] rounded-[24px] p-[2px] shadow-2xl overflow-hidden z-10"
           >
             {/* Spinning animated border */}
-            <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0%,transparent_75%,#e5ff00_100%)] animate-[spin_3s_linear_infinite]" />
+            <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0%,transparent_75%,#ccf141_100%)] animate-[spin_3s_linear_infinite]" />
 
             {/* Content Container (protecting card boundary) */}
-            <div className="relative w-full h-full bg-[#070708] rounded-[22px] flex flex-col md:flex-row overflow-hidden z-10" style={{ maxHeight: "calc(90vh - 4px)" }}>
-              
+            <div
+              className="relative w-full h-full bg-[#070708] rounded-[22px] flex flex-col md:flex-row overflow-hidden z-10"
+              style={{ maxHeight: "calc(90vh - 4px)" }}
+            >
               {/* ═══ LEFT DARK PANEL ═══ */}
               <div className="hidden md:flex flex-col justify-between w-[350px] shrink-0 bg-[#0f0f13] text-white p-8 relative overflow-hidden border-r border-white/5">
-                <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#e5ff00]/5 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-20 -right-10 w-56 h-56 bg-[#e5ff00]/5 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-20 -right-10 w-56 h-56 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="relative z-10">
                   {/* Logo / Badge */}
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="w-10 h-10 bg-[#e5ff00] rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-10 h-10 bg-[#ccf141] rounded-2xl flex items-center justify-center shadow-lg">
                       <span className="text-black font-black text-lg leading-none pt-0.5">
                         ⚡
                       </span>
                     </div>
                     <div>
-                      <p className="font-black text-sm tracking-wide text-white uppercase" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>BoxCross</p>
+                      <p
+                        className="font-black text-sm tracking-wide text-white uppercase"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        BoxCross
+                      </p>
                       <p className="text-gray-400 text-[10px] uppercase tracking-widest font-semibold">
                         Razorpay Checkout
                       </p>
@@ -330,16 +355,24 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                   {/* Step Indicator */}
                   <div className="space-y-4 mb-8">
                     {[
-                      { n: 1, label: "Your Details", sub: "Name, phone & email" },
-                      { n: 2, label: "Secure Payment", sub: "Verify details & pay" },
+                      {
+                        n: 1,
+                        label: "Your Details",
+                        sub: "Name, phone & email",
+                      },
+                      {
+                        n: 2,
+                        label: "Secure Payment",
+                        sub: "Verify details & pay",
+                      },
                     ].map((s) => (
                       <div key={s.n} className="flex items-center gap-4">
                         <div
                           className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-sm border-2 shrink-0 transition-all duration-300 ${
                             step > s.n
-                              ? "bg-[#e5ff00] border-[#e5ff00] text-black"
+                              ? "bg-[#ccf141] border-[#ccf141] text-black"
                               : step === s.n
-                                ? "bg-[#e5ff00]/10 border-[#e5ff00] text-[#e5ff00]"
+                                ? "bg-[#ccf141]/10 border-[#ccf141] text-[#ccf141]"
                                 : "bg-transparent border-white/20 text-white/30"
                           }`}
                         >
@@ -367,11 +400,17 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                       <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-1">
                         Selected Plan
                       </p>
-                      <p className="text-white font-bold text-sm line-clamp-2 mb-3 uppercase" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                      <p
+                        className="text-white font-bold text-sm line-clamp-2 mb-3 uppercase"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
                         {planDetails.name}
                       </p>
                       <div className="flex items-end gap-1">
-                        <span className="text-[#e5ff00] font-black text-3xl" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                        <span
+                          className="text-[#ccf141] font-black text-3xl"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
                           ₹{planDetails.price}
                         </span>
                         <span className="text-white/40 text-[11px] mb-1">
@@ -393,8 +432,8 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                         key={i}
                         className="flex items-center gap-2 text-[11px] text-white/60"
                       >
-                        <div className="w-4.5 h-4.5 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 flex items-center justify-center shrink-0">
-                          <Check size={10} className="text-[#e5ff00]" />
+                        <div className="w-4.5 h-4.5 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/30 flex items-center justify-center shrink-0">
+                          <Check size={10} className="text-[#ccf141]" />
                         </div>
                         {f}
                       </div>
@@ -412,7 +451,7 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                 {/* Mobile header */}
                 <div className="md:hidden bg-gradient-to-r from-[#111] to-[#222] px-5 py-4 flex items-center justify-between text-white shrink-0 border-b border-white/5">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-[#e5ff00] rounded-full flex items-center justify-center text-black font-black text-base">
+                    <div className="w-8 h-8 bg-[#ccf141] rounded-full flex items-center justify-center text-black font-black text-base">
                       ⚡
                     </div>
                     <div>
@@ -436,10 +475,16 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                 {!busy && (
                   <div className="hidden md:flex items-center justify-between px-8 pt-7 pb-2 shrink-0">
                     <div>
-                      <p className="text-[#e5ff00] text-[11px] font-bold uppercase tracking-widest mb-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                      <p
+                        className="text-[#ccf141] text-[11px] font-bold uppercase tracking-widest mb-0.5"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
                         Step {step} of 2
                       </p>
-                      <h2 className="text-white font-black text-xl uppercase" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                      <h2
+                        className="text-white font-black text-xl uppercase"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
                         {step === 1 ? "Your Details" : "Secure Checkout"}
                       </h2>
                     </div>
@@ -458,7 +503,7 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                     <p className="text-gray-300 text-[12px] font-semibold line-clamp-1 flex-1 mr-3 uppercase">
                       {planDetails?.name}
                     </p>
-                    <p className="text-[#e5ff00] font-black text-lg shrink-0">
+                    <p className="text-[#ccf141] font-black text-lg shrink-0">
                       ₹{planDetails?.price}
                     </p>
                   </div>
@@ -480,8 +525,14 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                       >
                         {/* Name */}
                         <div>
-                          <label className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
-                            <User size={11} className="text-[#e5ff00]" /> Full Name
+                          <label
+                            className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
+                            <User size={11} className="text-[#ccf141]" /> Full
+                            Name
                           </label>
                           <input
                             type="text"
@@ -491,7 +542,7 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                               setErrors((p) => ({ ...p, name: "" }));
                             }}
                             placeholder="Enter your full name"
-                            className={`w-full border-2 ${errors.name ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#e5ff00]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
+                            className={`w-full border-2 ${errors.name ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#ccf141]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
                             required
                           />
                           {errors.name && (
@@ -504,8 +555,14 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
 
                         {/* Phone */}
                         <div>
-                          <label className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
-                            <Phone size={11} className="text-[#e5ff00]" /> Phone Number
+                          <label
+                            className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
+                            <Phone size={11} className="text-[#ccf141]" /> Phone
+                            Number
                           </label>
                           <div className="relative">
                             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm border-r border-white/10 pr-3">
@@ -523,7 +580,7 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                                 setErrors((p) => ({ ...p, phone: "" }));
                               }}
                               placeholder="Enter your phone number"
-                              className={`w-full border-2 pl-16 ${errors.phone ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#e5ff00]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
+                              className={`w-full border-2 pl-16 ${errors.phone ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#ccf141]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
                               required
                             />
                           </div>
@@ -537,8 +594,14 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
 
                         {/* Email */}
                         <div>
-                          <label className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
-                            <Mail size={11} className="text-[#e5ff00]" /> Email Address
+                          <label
+                            className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
+                            <Mail size={11} className="text-[#ccf141]" /> Email
+                            Address
                           </label>
                           <input
                             type="email"
@@ -548,7 +611,7 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                               setErrors((p) => ({ ...p, email: "" }));
                             }}
                             placeholder="Enter your email address"
-                            className={`w-full border-2 ${errors.email ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#e5ff00]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
+                            className={`w-full border-2 ${errors.email ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#ccf141]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
                             required
                           />
                           {errors.email && (
@@ -562,12 +625,13 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                         <button
                           type="submit"
                           disabled={loading}
-                          className="w-full bg-[#e5ff00] hover:bg-[#d8f000] text-black font-black py-4 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm tracking-widest disabled:opacity-50 uppercase"
+                          className="w-full bg-[#ccf141] hover:bg-[#d8f000] text-black font-black py-4 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm tracking-widest disabled:opacity-50 uppercase"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           {loading ? (
                             <>
-                              <Loader2 className="animate-spin" size={16} /> Creating Order...
+                              <Loader2 className="animate-spin" size={16} />{" "}
+                              Creating Order...
                             </>
                           ) : (
                             <>
@@ -588,49 +652,62 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                         transition={{ duration: 0.3 }}
                         className="px-5 md:px-8 py-8 flex flex-col items-center justify-center text-center h-full"
                       >
-                        <div className="w-16 h-16 bg-[#e5ff00]/10 text-[#e5ff00] rounded-full flex items-center justify-center mb-6 shadow-lg shadow-[#e5ff00]/5">
+                        <div className="w-16 h-16 bg-[#ccf141]/10 text-[#ccf141] rounded-full flex items-center justify-center mb-6 shadow-lg shadow-[#ccf141]/5">
                           ⚡
                         </div>
-                        <h3 className="text-white text-xl font-bold mb-2 uppercase" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                        <h3
+                          className="text-white text-xl font-bold mb-2 uppercase"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
                           Secure Payment Checkout
                         </h3>
                         <p className="text-gray-400 text-sm mb-6 max-w-sm">
-                          Clicking below will launch the secure Razorpay Payment Gateway.
+                          Clicking below will launch the secure Razorpay Payment
+                          Gateway.
                         </p>
-                        
+
                         <div className="bg-white/[0.02] border border-white/5 w-full max-w-sm p-5 rounded-2xl text-left mb-8 space-y-3 text-xs">
                           <div className="flex justify-between items-center text-gray-400 font-bold uppercase tracking-wider">
                             <span>Name</span>
-                            <span className="text-white font-semibold truncate max-w-[200px]">{user.name}</span>
+                            <span className="text-white font-semibold truncate max-w-[200px]">
+                              {user.name}
+                            </span>
                           </div>
                           <div className="flex justify-between items-center text-gray-400 font-bold uppercase tracking-wider">
                             <span>Phone</span>
-                            <span className="text-white font-semibold">{user.phone}</span>
+                            <span className="text-white font-semibold">
+                              {user.phone}
+                            </span>
                           </div>
                           <div className="flex justify-between items-center text-gray-400 font-bold uppercase tracking-wider">
                             <span>Plan</span>
-                            <span className="text-white font-semibold truncate max-w-[200px]">{planDetails?.name}</span>
+                            <span className="text-white font-semibold truncate max-w-[200px]">
+                              {planDetails?.name}
+                            </span>
                           </div>
                           <div className="flex justify-between items-center pt-3 border-t border-dashed border-white/10 font-bold text-sm">
-                            <span className="text-white uppercase">Total Amount</span>
-                            <span className="text-[#e5ff00]">₹{planDetails?.price}</span>
+                            <span className="text-white uppercase">
+                              Total Amount
+                            </span>
+                            <span className="text-[#ccf141]">
+                              ₹{planDetails?.price}
+                            </span>
                           </div>
                         </div>
 
                         <button
                           onClick={handleProceedToPay}
                           disabled={loading}
-                          className="w-full max-w-sm bg-[#e5ff00] hover:bg-[#d8f000] text-black font-black py-4 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm tracking-widest disabled:opacity-50 uppercase"
+                          className="w-full max-w-sm bg-[#ccf141] hover:bg-[#d8f000] text-black font-black py-4 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm tracking-widest disabled:opacity-50 uppercase"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           {loading ? (
                             <>
-                              <Loader2 className="animate-spin" size={16} /> Initiating...
+                              <Loader2 className="animate-spin" size={16} />{" "}
+                              Initiating...
                             </>
                           ) : (
-                            <>
-                              Pay with Razorpay
-                            </>
+                            <>Pay with Razorpay</>
                           )}
                         </button>
 
@@ -655,19 +732,23 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                       >
                         <div className="relative mb-8">
                           <div className="w-24 h-24 border-4 border-white/5 rounded-full" />
-                          <div className="w-24 h-24 border-4 border-[#e5ff00] rounded-full border-t-transparent animate-spin absolute top-0 left-0" />
+                          <div className="w-24 h-24 border-4 border-[#ccf141] rounded-full border-t-transparent animate-spin absolute top-0 left-0" />
                           <div className="absolute inset-0 flex items-center justify-center">
                             <Smartphone
                               size={28}
-                              className="text-[#e5ff00] animate-pulse"
+                              className="text-[#ccf141] animate-pulse"
                             />
                           </div>
                         </div>
-                        <h3 className="text-white font-black text-2xl mb-2 uppercase" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                        <h3
+                          className="text-white font-black text-2xl mb-2 uppercase"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
                           Verifying Payment
                         </h3>
                         <p className="text-gray-400 text-sm mb-8 max-w-xs leading-relaxed">
-                          Checking transaction details and finalizing your subscription. Do not close this window.
+                          Checking transaction details and finalizing your
+                          subscription. Do not close this window.
                         </p>
                       </motion.div>
                     )}
@@ -683,7 +764,11 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          transition={{ type: "spring", damping: 12, delay: 0.1 }}
+                          transition={{
+                            type: "spring",
+                            damping: 12,
+                            delay: 0.1,
+                          }}
                           className="w-24 h-24 bg-green-500/10 rounded-full flex items-center justify-center mb-6 relative border border-green-500/20"
                         >
                           <div className="absolute inset-0 border-4 border-green-500 rounded-full opacity-20 animate-ping" />
@@ -692,11 +777,15 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                             className="text-green-400 z-10"
                           />
                         </motion.div>
-                        <h3 className="text-white font-black text-2xl md:text-3xl mb-1 uppercase" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                        <h3
+                          className="text-white font-black text-2xl md:text-3xl mb-1 uppercase"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
                           Subscription Active!
                         </h3>
                         <p className="text-gray-400 text-sm mb-7">
-                          ₹{planDetails?.price} paid successfully. Welcome to BoxCross.
+                          ₹{planDetails?.price} paid successfully. Welcome to
+                          BoxCross.
                         </p>
                         <div className="bg-white/[0.02] border border-white/5 w-full max-w-sm p-5 rounded-2xl text-left shadow-sm space-y-3 text-[12px]">
                           {[
@@ -721,7 +810,7 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                         <div className="mt-7 flex flex-col items-center">
                           <Loader2
                             size={20}
-                            className="text-[#e5ff00] animate-spin mb-2"
+                            className="text-[#ccf141] animate-spin mb-2"
                           />
                           <p className="text-[11px] text-gray-500 font-bold uppercase tracking-widest">
                             Redirecting...
@@ -735,11 +824,11 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                 {/* Footer */}
                 {!busy && (
                   <div className="border-t border-white/5 py-4 flex items-center justify-center gap-2 text-[10px] text-gray-500 font-bold tracking-widest uppercase shrink-0 bg-black/40">
-                    <ShieldCheck size={12} className="text-green-500" /> 100% Secure Payments Powered By Razorpay
+                    <ShieldCheck size={12} className="text-green-500" /> 100%
+                    Secure Payments Powered By Razorpay
                   </div>
                 )}
               </div>
-
             </div>
           </motion.div>
         </div>

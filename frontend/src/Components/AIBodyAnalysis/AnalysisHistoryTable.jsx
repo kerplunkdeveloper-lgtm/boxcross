@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  FileText,
-  Search,
-  Eye,
-  Trash2,
-} from "lucide-react";
+import { FileText, Search, Eye, Trash2 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
 
 const AnalysisHistoryTable = ({
@@ -42,7 +37,7 @@ const AnalysisHistoryTable = ({
 
   // Extract unique trainers & exercises for filters
   const uniqueTrainers = Array.from(
-    new Set(history.map((h) => h.trainerName).filter(Boolean))
+    new Set(history.map((h) => h.trainerName).filter(Boolean)),
   );
 
   // Filter records
@@ -83,7 +78,10 @@ const AnalysisHistoryTable = ({
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-[var(--db-card-border)]">
         <div>
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] flex items-center gap-1.5">
-            <FileText size={13} className="text-emerald-500 dark:text-[#e5ff00]" />
+            <FileText
+              size={13}
+              className="text-emerald-500 dark:text-[#ccf141]"
+            />
             Session Archives
           </span>
           <h3 className="text-sm font-black uppercase tracking-wide text-[var(--db-text-title)] mt-0.5">
@@ -92,7 +90,10 @@ const AnalysisHistoryTable = ({
         </div>
 
         <div className="text-xs font-semibold text-[var(--db-text-muted)]">
-          Total Logs: <span className="font-mono font-bold text-[var(--db-text-title)]">{filteredRecords.length}</span>
+          Total Logs:{" "}
+          <span className="font-mono font-bold text-[var(--db-text-title)]">
+            {filteredRecords.length}
+          </span>
         </div>
       </div>
 
@@ -100,13 +101,16 @@ const AnalysisHistoryTable = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 mb-4">
         {/* Search Input */}
         <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--db-text-muted)]" />
+          <Search
+            size={14}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--db-text-muted)]"
+          />
           <input
             type="text"
             placeholder="Search member, ID, type..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#e5ff00]/60 transition-all"
+            className="w-full pl-9 pr-3 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#ccf141]/60 transition-all"
           />
         </div>
 
@@ -114,42 +118,160 @@ const AnalysisHistoryTable = ({
         <select
           value={selectedExercise}
           onChange={(e) => setSelectedExercise(e.target.value)}
-          className="w-full px-3 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#e5ff00]/60 cursor-pointer"
+          className="w-full px-3 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#ccf141]/60 cursor-pointer"
         >
-          <option value="All" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>All Analysis Types</option>
-          <option value="Posture Analysis" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Posture Analysis</option>
-          <option value="Squat Analysis" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Squat Analysis</option>
-          <option value="Push-Up Analysis" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Push-Up Analysis</option>
-          <option value="Deadlift Analysis" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Deadlift Analysis</option>
-          <option value="Plank Analysis" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Plank Analysis</option>
-          <option value="Lunge Analysis" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Lunge Analysis</option>
-          <option value="Movement Tracking" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Movement Tracking</option>
-          <option value="Body Symmetry" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Body Symmetry</option>
-          <option value="Mobility Analysis" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Mobility Analysis</option>
-          <option value="Body Composition" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Body Composition</option>
+          <option
+            value="All"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            All Analysis Types
+          </option>
+          <option
+            value="Posture Analysis"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Posture Analysis
+          </option>
+          <option
+            value="Squat Analysis"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Squat Analysis
+          </option>
+          <option
+            value="Push-Up Analysis"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Push-Up Analysis
+          </option>
+          <option
+            value="Deadlift Analysis"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Deadlift Analysis
+          </option>
+          <option
+            value="Plank Analysis"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Plank Analysis
+          </option>
+          <option
+            value="Lunge Analysis"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Lunge Analysis
+          </option>
+          <option
+            value="Movement Tracking"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Movement Tracking
+          </option>
+          <option
+            value="Body Symmetry"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Body Symmetry
+          </option>
+          <option
+            value="Mobility Analysis"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Mobility Analysis
+          </option>
+          <option
+            value="Body Composition"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Body Composition
+          </option>
         </select>
 
         {/* Score Filter */}
         <select
           value={minScoreFilter}
           onChange={(e) => setMinScoreFilter(e.target.value)}
-          className="w-full px-3 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#e5ff00]/60 cursor-pointer"
+          className="w-full px-3 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#ccf141]/60 cursor-pointer"
         >
-          <option value="All" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>All Scores</option>
-          <option value="85" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Score &ge; 85 (Excellent)</option>
-          <option value="75" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Score &ge; 75 (Good)</option>
-          <option value="60" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>Score &ge; 60 (Moderate)</option>
+          <option
+            value="All"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            All Scores
+          </option>
+          <option
+            value="85"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Score &ge; 85 (Excellent)
+          </option>
+          <option
+            value="75"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Score &ge; 75 (Good)
+          </option>
+          <option
+            value="60"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            Score &ge; 60 (Moderate)
+          </option>
         </select>
 
         {/* Trainer Filter */}
         <select
           value={selectedTrainer}
           onChange={(e) => setSelectedTrainer(e.target.value)}
-          className="w-full px-3 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#e5ff00]/60 cursor-pointer"
+          className="w-full px-3 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] focus:outline-none focus:border-emerald-500/60 dark:focus:border-[#ccf141]/60 cursor-pointer"
         >
-          <option value="All" className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>All Trainers</option>
+          <option
+            value="All"
+            className={
+              isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+            }
+          >
+            All Trainers
+          </option>
           {uniqueTrainers.map((tr) => (
-            <option key={tr} value={tr} className={isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"}>
+            <option
+              key={tr}
+              value={tr}
+              className={
+                isDark ? "bg-[#111] text-white" : "bg-white text-slate-800"
+              }
+            >
               {tr}
             </option>
           ))}
@@ -177,7 +299,10 @@ const AnalysisHistoryTable = ({
           <tbody className="divide-y divide-[var(--db-card-border)]">
             {filteredRecords.length === 0 ? (
               <tr>
-                <td colSpan="11" className="py-8 text-center text-[var(--db-text-muted)] font-medium">
+                <td
+                  colSpan="11"
+                  className="py-8 text-center text-[var(--db-text-muted)] font-medium"
+                >
                   No analysis records match the selected filters.
                 </td>
               </tr>
@@ -197,14 +322,14 @@ const AnalysisHistoryTable = ({
                     {/* Member */}
                     <td className="py-3 px-3.5">
                       <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-emerald-500/20 dark:bg-[#e5ff00] text-emerald-700 dark:text-black font-black text-[10px] flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-full bg-emerald-500/20 dark:bg-[#ccf141] text-emerald-700 dark:text-black font-black text-[10px] flex items-center justify-center">
                           {item.memberName?.charAt(0) || "M"}
                         </div>
                         <div>
                           <p className="font-bold text-[var(--db-text-title)] leading-tight">
                             {item.memberName}
                           </p>
-                          <span className="text-[9px] font-mono text-emerald-600 dark:text-[#e5ff00]">
+                          <span className="text-[9px] font-mono text-emerald-600 dark:text-[#ccf141]">
                             #{item.memberId}
                           </span>
                         </div>
@@ -217,7 +342,7 @@ const AnalysisHistoryTable = ({
                     </td>
 
                     {/* Overall Score */}
-                    <td className="py-3 px-3.5 text-center font-mono font-black text-emerald-600 dark:text-[#e5ff00]">
+                    <td className="py-3 px-3.5 text-center font-mono font-black text-emerald-600 dark:text-[#ccf141]">
                       {item.overallScore}
                     </td>
 
@@ -240,11 +365,13 @@ const AnalysisHistoryTable = ({
                               ? "bg-amber-500/10 text-amber-300 border border-amber-500/25"
                               : "bg-amber-50 text-amber-800 border border-amber-200"
                             : isDark
-                            ? "bg-emerald-500/10 text-emerald-300 border border-emerald-500/25"
-                            : "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                              ? "bg-emerald-500/10 text-emerald-300 border border-emerald-500/25"
+                              : "bg-emerald-50 text-emerald-800 border border-emerald-200"
                         }`}
                       >
-                        {issuesCount > 0 ? `${issuesCount} Issues` : "Optimal Form"}
+                        {issuesCount > 0
+                          ? `${issuesCount} Issues`
+                          : "Optimal Form"}
                       </span>
                     </td>
 
@@ -272,7 +399,7 @@ const AnalysisHistoryTable = ({
                           onClick={() => onViewReport(item)}
                           className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold text-[10.5px] transition-all cursor-pointer shadow-sm ${
                             isDark
-                              ? "bg-[#e5ff00]/15 hover:bg-[#e5ff00] text-[#e5ff00] hover:text-black"
+                              ? "bg-[#ccf141]/15 hover:bg-[#ccf141] text-[#ccf141] hover:text-black"
                               : "bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-200"
                           }`}
                           title="View detailed report"

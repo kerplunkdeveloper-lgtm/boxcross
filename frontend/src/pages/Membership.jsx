@@ -12,8 +12,6 @@ import Founding from "../Components/Founding";
 
 const BASE_URL = "https://membership.boxandcross.com";
 
-
-
 const Membership = () => {
   useEffect(() => {
     const initAOS = () => {
@@ -33,14 +31,23 @@ const Membership = () => {
     <div className="w-full bg-[#050505]  flex flex-col  overflow-hidden ">
       <Helmet>
         <title>Membership Plans | Box &amp; Cross – Performance Arena</title>
-        <meta name="description" content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
-        
+        <meta
+          name="description"
+          content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline."
+        />
+
         {/* Open Graph / Facebook / WhatsApp */}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Box &amp; Cross" />
         <meta property="og:url" content={`${BASE_URL}/`} />
-        <meta property="og:title" content="Membership Plans | Box &amp; Cross – Performance Arena" />
-        <meta property="og:description" content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline." />
+        <meta
+          property="og:title"
+          content="Membership Plans | Box &amp; Cross – Performance Arena"
+        />
+        <meta
+          property="og:description"
+          content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals and timeline."
+        />
         <meta property="og:image" content={`${BASE_URL}/og-membership.png`} />
         <meta property="og:image:width" content="1080" />
         <meta property="og:image:height" content="1350" />
@@ -49,8 +56,14 @@ const Membership = () => {
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={`${BASE_URL}/`} />
-        <meta name="twitter:title" content="Membership Plans | Box &amp; Cross – Performance Arena" />
-        <meta name="twitter:description" content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community." />
+        <meta
+          name="twitter:title"
+          content="Membership Plans | Box &amp; Cross – Performance Arena"
+        />
+        <meta
+          name="twitter:description"
+          content="At Box &amp; Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community."
+        />
         <meta name="twitter:image" content={`${BASE_URL}/og-membership.png`} />
       </Helmet>
       {/* HERO SECTION */}
@@ -70,11 +83,11 @@ const Membership = () => {
 
         {/* HUGE BACKGROUND TEXT (Outline) */}
         <div className="absolute inset-x-0 top-10 md:top-30  flex justify-center pointer-events-none z-[5] overflow-hidden">
-          <span 
-            className="text-transparent font-black uppercase text-[50px] md:text-[150px] whitespace-nowrap select-none tracking-widest leading-none" 
-            style={{ 
+          <span
+            className="text-transparent font-black uppercase text-[50px] md:text-[150px] whitespace-nowrap select-none tracking-widest leading-none"
+            style={{
               WebkitTextStroke: "1px rgba(255, 255, 255, 0.25)",
-              fontFamily: '"BrutalTypeBold", Arial, sans-serif'
+              fontFamily: '"BrutalTypeBold", Arial, sans-serif',
             }}
           >
             MEMBERSHIP
@@ -83,7 +96,6 @@ const Membership = () => {
 
         {/* CONTENT */}
         <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between   md:gap-16 pt-20 md:pt-0">
-          
           {/* LEFT SIDE: HEADING */}
           <div
             data-aos="fade-right"
@@ -166,7 +178,7 @@ const Membership = () => {
                 className="
                   group relative overflow-hidden
                   px-4 py-3 md:px-8 md:py-3.5
-                  bg-[#e5ff00] text-black
+                  bg-[#ccf141] text-black
                   uppercase tracking-wider md:tracking-[0.05em]
                   rounded-lg
                   transition-all duration-500
@@ -205,7 +217,7 @@ const Membership = () => {
                   flex justify-center items-center
                 "
               >
-                <span className="absolute inset-0 bg-[#e5ff00] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
+                <span className="absolute inset-0 bg-[#ccf141] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
                 <span
                   className="relative z-10 text-[11px] sm:text-[13px] md:text-[15px] whitespace-nowrap"
                   style={{
@@ -226,25 +238,30 @@ const Membership = () => {
       <div className="w-full bg-black py-4 md:py-6 border-y border-zinc-900/60 overflow-hidden select-none pointer-events-none">
         <div className="marquee-experience-wrapper">
           <div className="marquee-experience-track">
-            {Array(8).fill([
-              { text: "BOXING.", outline: false },
-              { text: "STRENGTH.", outline: true },
-              { text: "HYROX.", outline: false },
-              { text: "FIGHT CLUB.", outline: true },
-            ]).flat().map((item, idx) => (
-              <span
-                key={idx}
-                className="text-[40px] sm:text-[55px] md:text-[75px] lg:text-[80px] font-black uppercase tracking-tight mx-4 sm:mx-6 md:mx-8 inline-block"
-                style={{
-                  fontFamily: '"Bebas Neue", sans-serif',
-                  color: item.outline ? "transparent" : "#ffffff",
-                  WebkitTextStroke: item.outline ? "1px rgba(255, 255, 255, 0.75)" : "none",
-                  whiteSpace: "nowrap"
-                }}
-              >
-                {item.text}
-              </span>
-            ))}
+            {Array(8)
+              .fill([
+                { text: "BOXING.", outline: false },
+                { text: "STRENGTH.", outline: true },
+                { text: "HYROX.", outline: false },
+                { text: "FIGHT CLUB.", outline: true },
+              ])
+              .flat()
+              .map((item, idx) => (
+                <span
+                  key={idx}
+                  className="text-[40px] sm:text-[55px] md:text-[75px] lg:text-[80px] font-black uppercase tracking-tight mx-4 sm:mx-6 md:mx-8 inline-block"
+                  style={{
+                    fontFamily: '"Bebas Neue", sans-serif',
+                    color: item.outline ? "transparent" : "#ffffff",
+                    WebkitTextStroke: item.outline
+                      ? "1px rgba(255, 255, 255, 0.75)"
+                      : "none",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {item.text}
+                </span>
+              ))}
           </div>
         </div>
         <style>{`
@@ -275,7 +292,7 @@ const Membership = () => {
         <div data-aos="fade-up">
           <Founding />
         </div>
-      
+
         {/* <BuildProgress /> */}
         <div data-aos="fade-up" data-aos-delay="100">
           <BookForm />
@@ -284,14 +301,13 @@ const Membership = () => {
           <MembershipPlans />
         </div>
 
-          <div data-aos="fade-up" data-aos-delay="100">
+        <div data-aos="fade-up" data-aos-delay="100">
           <WhatWeOffer />
         </div>
         <div data-aos="fade-up" data-aos-delay="100">
           <TrainingZones />
         </div>
       </div>
-      
     </div>
   );
 };

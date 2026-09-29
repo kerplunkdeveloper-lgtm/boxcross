@@ -46,11 +46,11 @@ const EventNavbar = () => {
       <div className="flex justify-end shrink-0">
         <a
           href="tel:+918925556800"
-          className="flex items-center gap-2.5 px-3 py-2.5 md:px-5 md:py-3 rounded-full bg-white/5 border border-white/10 hover:border-[#e5ff00]/40 hover:bg-[#e5ff00]/5 transition-all text-white hover:text-[#e5ff00] group shadow-lg"
+          className="flex items-center gap-2.5 px-3 py-2.5 md:px-5 md:py-3 rounded-full bg-white/5 border border-white/10 hover:border-[#ccf141]/40 hover:bg-[#ccf141]/5 transition-all text-white hover:text-[#ccf141] group shadow-lg"
         >
           <Phone
             size={16}
-            className="text-[#e5ff00] group-hover:scale-110 transition-transform duration-300 shrink-0"
+            className="text-[#ccf141] group-hover:scale-110 transition-transform duration-300 shrink-0"
           />
           <span
             className="hidden md:inline text-xs md:text-sm font-black tracking-wider uppercase"

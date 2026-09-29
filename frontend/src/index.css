@@ -103,10 +103,10 @@ html {
 
 
   /* Dynamic Accent Brand Tokens */
- --db-accent: #e5ff00;
+ --db-accent: #ccf141;
   --db-accent-text: #000000;
-  --db-accent-hover: #e5ff00;
-  --db-accent-highlight: #e5ff00;
+  --db-accent-hover: #ccf141;
+  --db-accent-highlight: #ccf141;
   --db-accent-glow: rgba(222, 251, 2, 0.15);
 }
 
@@ -244,7 +244,7 @@ html {
   background: conic-gradient(
     transparent,
     transparent,
-    var(--spin-glow-color, #e5ff00),
+    var(--spin-glow-color, #ccf141),
     transparent,
     transparent
   );
@@ -268,7 +268,7 @@ html {
 
 /* Book Now Button Glossy Sliding Sheen Animation */
 .book-now-btn {
-  background: #e5ff00;
+  background: #ccf141;
   position: relative;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -303,7 +303,7 @@ html {
 }
 
 .dashboard-dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e5ff00 !important;
+  background: #ccf141 !important;
   border-radius: 9999px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 6px rgba(229, 255, 0, 0.4);
@@ -318,7 +318,7 @@ html {
 /* Firefox — dark */
 .dashboard-dark .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #e5ff00 rgba(255, 255, 255, 0.03);
+  scrollbar-color: #ccf141 rgba(255, 255, 255, 0.03);
 }
 
 /* ── Premium Scrollbar — LIGHT MODE ── */

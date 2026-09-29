@@ -424,7 +424,7 @@ const Navbar = () => {
                 {/* CALL BUTTON */}
                 <a
                   href="tel:+918925556800"
-                  className="hidden lg:flex items-center justify-center w-[48px] h-[48px] rounded-full bg-[#e5ff00] text-black hover:bg-white transition-all duration-300 group shrink-0"
+                  className="hidden lg:flex items-center justify-center w-[48px] h-[48px] rounded-full bg-[#ccf141] text-black hover:bg-white transition-all duration-300 group shrink-0"
                   aria-label="Call Us"
                 >
                   <div className="relative flex items-center justify-center">
@@ -468,7 +468,7 @@ const Navbar = () => {
                   }}
                   className={`
                     hidden lg:flex relative overflow-hidden
-                    px-6 py-4 bg-[#e5ff00] text-black rounded-xl
+                    px-6 py-4 bg-[#ccf141] text-black rounded-xl
                    tracking-wider uppercase group
                     transition-all duration-500 shrink-0
                   `}
@@ -489,7 +489,7 @@ const Navbar = () => {
                 {/* DESKTOP OFFCANVAS BUTTON */}
                 <button
                   onClick={() => setDesktopOffcanvasOpen(true)}
-                  className="hidden lg:flex items-center justify-center w-[45px] h-[45px] text-white hover:text-[#e5ff00] group transition-all duration-300 cursor-pointer shrink-0"
+                  className="hidden lg:flex items-center justify-center w-[45px] h-[45px] text-white hover:text-[#ccf141] group transition-all duration-300 cursor-pointer shrink-0"
                   aria-label="Open desktop menu"
                 >
                   <LayoutGrid
@@ -542,7 +542,7 @@ const Navbar = () => {
           <button
             onClick={closeOffcanvas}
             className="w-10 h-10 bg-[#181818] relative top-[-28px] right-[-20px]
-            flex items-center justify-center text-white hover:text-[#e5ff00] transition-all duration-300 hover:rotate-90 hover:scale-110 cursor-pointer"
+            flex items-center justify-center text-white hover:text-[#ccf141] transition-all duration-300 hover:rotate-90 hover:scale-110 cursor-pointer"
             aria-label="Close menu"
           >
             <X size={32} />
@@ -622,8 +622,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `text-[14px] font-extrabold transition-colors ${
                     isActive
-                      ? "text-[#e5ff00]"
-                      : "text-white hover:text-[#e5ff00]"
+                      ? "text-[#ccf141]"
+                      : "text-white hover:text-[#ccf141]"
                   }`
                 }
               >
@@ -676,8 +676,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   `text-[14px] font-extrabold transition-colors ${
                     isActive || location.pathname === "/events"
-                      ? "text-[#e5ff00]"
-                      : "text-white hover:text-[#e5ff00]"
+                      ? "text-[#ccf141]"
+                      : "text-white hover:text-[#ccf141]"
                   }`
                 }
               >
@@ -705,7 +705,7 @@ const Navbar = () => {
                     className={({ isActive }) =>
                       `text-sm font-medium tracking-wider transition-colors ${
                         isActive
-                          ? "text-[#e5ff00]"
+                          ? "text-[#ccf141]"
                           : "text-gray-400 hover:text-white"
                       }`
                     }
@@ -735,19 +735,19 @@ const Navbar = () => {
             {/* SOCIAL */}
 
             <div className="flex mt-5  gap-6">
-              <a href="#" className="text-white hover:text-[#e5ff00]">
+              <a href="#" className="text-white hover:text-[#ccf141]">
                 <FaFacebookF size={20} />
               </a>
 
-              <a href="#" className="text-white hover:text-[#e5ff00]">
+              <a href="#" className="text-white hover:text-[#ccf141]">
                 <FaTwitter size={20} />
               </a>
 
-              <a href="#" className="text-white hover:text-[#e5ff00]">
+              <a href="#" className="text-white hover:text-[#ccf141]">
                 <FaLinkedinIn size={20} />
               </a>
 
-              <a href="#" className="text-white hover:text-[#e5ff00]">
+              <a href="#" className="text-white hover:text-[#ccf141]">
                 <FaInstagram size={20} />
               </a>
             </div>
@@ -775,7 +775,7 @@ const Navbar = () => {
           <img src={logo} alt="Box & Cross" className="w-52" />
           <button
             onClick={() => setDesktopOffcanvasOpen(false)}
-            className="text-white hover:text-[#e5ff00] transition-all duration-300 hover:rotate-90 hover:scale-110 cursor-pointer"
+            className="text-white hover:text-[#ccf141] transition-all duration-300 hover:rotate-90 hover:scale-110 cursor-pointer"
           >
             <XCircle size={32} strokeWidth={1.5} />
           </button>
@@ -789,7 +789,7 @@ const Navbar = () => {
           }}
         >
           Welcome to{" "}
-          <span className="text-[#e5ff00] font-bold">Box & Cross</span>, where
+          <span className="text-[#ccf141] font-bold">Box & Cross</span>, where
           passion meets performance and fitness <br /> becomes a lifestyle. Our
           mission is to empower individuals of all ages and <br /> fitness
         </p>
@@ -810,10 +810,10 @@ const Navbar = () => {
             <div className="space-y-6">
               {/* Phone item */}
               <div className="flex items-start gap-4">
-                <Phone className="text-[#e5ff00] shrink-0 mt-1" size={20} />
+                <Phone className="text-[#ccf141] shrink-0 mt-1" size={20} />
                 <div>
                   <h4
-                    className="text-[#e5ff00] uppercase mb-1"
+                    className="text-[#ccf141] uppercase mb-1"
                     style={{
                       fontFamily: '"Brutal Font Bold", sans-serif',
                       fontWeight: 600,
@@ -824,7 +824,7 @@ const Navbar = () => {
                   </h4>
                   <a
                     href="tel:+918925556800"
-                    className="text-white text-lg hover:text-[#e5ff00] transition-colors block"
+                    className="text-white text-lg hover:text-[#ccf141] transition-colors block"
                     style={{
                       fontFamily: '"Brutal Font Light", sans-serif',
                       fontWeight: 600,
@@ -837,10 +837,10 @@ const Navbar = () => {
 
               {/* Email item */}
               <div className="flex items-start gap-4">
-                <Mail className="text-[#e5ff00] shrink-0 mt-1" size={20} />
+                <Mail className="text-[#ccf141] shrink-0 mt-1" size={20} />
                 <div>
                   <h4
-                    className="text-[#e5ff00] uppercase mb-1"
+                    className="text-[#ccf141] uppercase mb-1"
                     style={{
                       fontFamily: '"Brutal Font Bold", sans-serif',
                       fontWeight: 600,
@@ -851,7 +851,7 @@ const Navbar = () => {
                   </h4>
                   <a
                     href="mailto:getfit@boxandcross.com"
-                    className="text-white text-lg hover:text-[#e5ff00] transition-colors block"
+                    className="text-white text-lg hover:text-[#ccf141] transition-colors block"
                     style={{
                       fontFamily: '"Brutal Font Light", sans-serif',
                       fontWeight: 600,
@@ -864,10 +864,10 @@ const Navbar = () => {
 
               {/* Location item */}
               <div className="flex items-start gap-4">
-                <MapPin className="text-[#e5ff00] shrink-0 mt-1" size={20} />
+                <MapPin className="text-[#ccf141] shrink-0 mt-1" size={20} />
                 <div>
                   <h4
-                    className="text-[#e5ff00] uppercase mb-1"
+                    className="text-[#ccf141] uppercase mb-1"
                     style={{
                       fontFamily: '"Brutal Font Bold", sans-serif',
                       fontWeight: 600,
@@ -897,7 +897,7 @@ const Navbar = () => {
                   href="/dashboard"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center w-[220px] h-[52px] bg-[#e5ff00] text-black rounded-xl text-xs font-black tracking-wider uppercase hover:bg-white transition-colors duration-300"
+                  className="inline-flex items-center justify-center w-[220px] h-[52px] bg-[#ccf141] text-black rounded-xl text-xs font-black tracking-wider uppercase hover:bg-white transition-colors duration-300"
                   style={{
                     fontFamily: '"BrutalTypeBold", sans-serif',
                     fontSize: "13px",
@@ -950,7 +950,7 @@ const Navbar = () => {
         <div className="fixed inset-0 z-[110] bg-black/95 flex items-center justify-center backdrop-blur-md">
           <button
             onClick={() => setGalleryModalOpen(false)}
-            className="absolute top-8 right-8 text-white hover:text-[#e5ff00] transition-all hover:scale-110 hover:rotate-90 cursor-pointer"
+            className="absolute top-8 right-8 text-white hover:text-[#ccf141] transition-all hover:scale-110 hover:rotate-90 cursor-pointer"
           >
             <X size={40} />
           </button>
@@ -961,7 +961,7 @@ const Navbar = () => {
                 prev === 0 ? galleryImages.length - 1 : prev - 1,
               )
             }
-            className="absolute left-8 text-white hover:text-[#e5ff00] transition-all hover:scale-110 cursor-pointer"
+            className="absolute left-8 text-white hover:text-[#ccf141] transition-all hover:scale-110 cursor-pointer"
           >
             <ChevronLeft size={48} />
           </button>
@@ -978,7 +978,7 @@ const Navbar = () => {
                 prev === galleryImages.length - 1 ? 0 : prev + 1,
               )
             }
-            className="absolute right-8 text-white hover:text-[#e5ff00] transition-all hover:scale-110 cursor-pointer"
+            className="absolute right-8 text-white hover:text-[#ccf141] transition-all hover:scale-110 cursor-pointer"
           >
             <ChevronRight size={48} />
           </button>

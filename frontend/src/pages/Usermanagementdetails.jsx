@@ -300,7 +300,7 @@ const Usermanagementdetails = () => {
         if (data && data.success) {
           toast.success(
             `Athlete registered as ${data.data.memberId} with password!`,
-            { duration: 5000 }
+            { duration: 5000 },
           );
           setIsModalOpen(false);
           fetchAthletesList(false);
@@ -310,7 +310,7 @@ const Usermanagementdetails = () => {
     } catch (err) {
       console.error("Save error:", err);
       toast.error(
-        err.response?.data?.message || "Failed to save athlete details."
+        err.response?.data?.message || "Failed to save athlete details.",
       );
     } finally {
       setSubmitting(false);
@@ -321,7 +321,7 @@ const Usermanagementdetails = () => {
   const handleDelete = async (id, memberId, name) => {
     if (
       !window.confirm(
-        `Are you sure you want to remove athlete ${name} (${memberId})?`
+        `Are you sure you want to remove athlete ${name} (${memberId})?`,
       )
     ) {
       return;
@@ -350,7 +350,9 @@ const Usermanagementdetails = () => {
   // Impersonate / Switch User to Athlete Portal
   const handleImpersonateAthlete = async (athlete) => {
     try {
-      toast.loading(`Switching to ${athlete.athleteName}...`, { id: "impersonate-toast" });
+      toast.loading(`Switching to ${athlete.athleteName}...`, {
+        id: "impersonate-toast",
+      });
       const { data } = await impersonateAthlete(athlete._id);
       if (data && data.success) {
         localStorage.setItem(
@@ -361,17 +363,23 @@ const Usermanagementdetails = () => {
             email: user?.email,
             role: user?.role || "admin",
             returnUrl: window.location.pathname,
-          })
+          }),
         );
         localStorage.setItem("boxcross_athlete_token", data.token);
         localStorage.setItem("boxcross_athlete", JSON.stringify(data.athlete));
-        toast.success(`Logged in as ${data.athlete.athleteName}!`, { id: "impersonate-toast" });
+        toast.success(`Logged in as ${data.athlete.athleteName}!`, {
+          id: "impersonate-toast",
+        });
         navigate("/athlete-dashboard");
       } else {
-        toast.error(data?.message || "Failed to switch user", { id: "impersonate-toast" });
+        toast.error(data?.message || "Failed to switch user", {
+          id: "impersonate-toast",
+        });
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Impersonation login failed", { id: "impersonate-toast" });
+      toast.error(err.response?.data?.message || "Impersonation login failed", {
+        id: "impersonate-toast",
+      });
     }
   };
 
@@ -425,7 +433,7 @@ const Usermanagementdetails = () => {
     link.setAttribute("href", encodedUri);
     link.setAttribute(
       "download",
-      `BoxCross_Athletes_${new Date().toISOString().split("T")[0]}.csv`
+      `BoxCross_Athletes_${new Date().toISOString().split("T")[0]}.csv`,
     );
     document.body.appendChild(link);
     link.click();
@@ -452,7 +460,6 @@ const Usermanagementdetails = () => {
                 USER MANAGEMENT
               </h1>
             </div>
-           
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -466,7 +473,11 @@ const Usermanagementdetails = () => {
             >
               <RefreshCw
                 size={16}
-                className={refreshing ? "animate-spin text-[var(--db-accent-highlight)]" : ""}
+                className={
+                  refreshing
+                    ? "animate-spin text-[var(--db-accent-highlight)]"
+                    : ""
+                }
               />
             </button>
 
@@ -524,7 +535,8 @@ const Usermanagementdetails = () => {
                 Active Status
               </p>
               <h3 className="text-2xl font-black mt-1 text-emerald-400">
-                {stats.active || athletes.filter((a) => a.status === "Active").length}
+                {stats.active ||
+                  athletes.filter((a) => a.status === "Active").length}
               </h3>
               <p className="text-[11px] text-[var(--db-text-muted)] mt-1">
                 Active in training programs
@@ -547,13 +559,19 @@ const Usermanagementdetails = () => {
               </p>
               <div className="flex items-center gap-2 mt-1.5">
                 <span className="text-xs font-bold text-sky-400 bg-sky-400/10 px-2 py-0.5 rounded-md">
-                  M: {stats.male || athletes.filter((a) => a.gender === "Male").length}
+                  M:{" "}
+                  {stats.male ||
+                    athletes.filter((a) => a.gender === "Male").length}
                 </span>
                 <span className="text-xs font-bold text-pink-400 bg-pink-400/10 px-2 py-0.5 rounded-md">
-                  F: {stats.female || athletes.filter((a) => a.gender === "Female").length}
+                  F:{" "}
+                  {stats.female ||
+                    athletes.filter((a) => a.gender === "Female").length}
                 </span>
                 <span className="text-xs font-bold text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-md">
-                  O: {stats.others || athletes.filter((a) => a.gender === "Others").length}
+                  O:{" "}
+                  {stats.others ||
+                    athletes.filter((a) => a.gender === "Others").length}
                 </span>
               </div>
               <p className="text-[11px] text-[var(--db-text-muted)] mt-1.5">
@@ -575,7 +593,7 @@ const Usermanagementdetails = () => {
               <p className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)]">
                 Portal Ready
               </p>
-              <h3 className="text-2xl font-black mt-1 text-[#e5ff00]">
+              <h3 className="text-2xl font-black mt-1 text-[#ccf141]">
                 {athletes.length}
               </h3>
               <p className="text-[11px] text-zinc-400 mt-1">
@@ -626,16 +644,28 @@ const Usermanagementdetails = () => {
                   onChange={(e) => setGenderFilter(e.target.value)}
                   className="bg-transparent text-xs font-semibold text-[var(--db-text)] focus:outline-none cursor-pointer"
                 >
-                  <option value="All" className="bg-[var(--db-card)] text-[var(--db-text)]">
+                  <option
+                    value="All"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
                     All
                   </option>
-                  <option value="Male" className="bg-[var(--db-card)] text-[var(--db-text)]">
+                  <option
+                    value="Male"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
                     Male
                   </option>
-                  <option value="Female" className="bg-[var(--db-card)] text-[var(--db-text)]">
+                  <option
+                    value="Female"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
                     Female
                   </option>
-                  <option value="Others" className="bg-[var(--db-card)] text-[var(--db-text)]">
+                  <option
+                    value="Others"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
                     Others
                   </option>
                 </select>
@@ -651,11 +681,18 @@ const Usermanagementdetails = () => {
                   onChange={(e) => setCoachFilter(e.target.value)}
                   className="bg-transparent text-xs font-semibold text-[var(--db-text)] focus:outline-none cursor-pointer max-w-[130px]"
                 >
-                  <option value="All" className="bg-[var(--db-card)] text-[var(--db-text)]">
+                  <option
+                    value="All"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
                     All Coaches
                   </option>
                   {PRESET_COACHES.map((c) => (
-                    <option key={c} value={c} className="bg-[var(--db-card)] text-[var(--db-text)]">
+                    <option
+                      key={c}
+                      value={c}
+                      className="bg-[var(--db-card)] text-[var(--db-text)]"
+                    >
                       {c}
                     </option>
                   ))}
@@ -672,20 +709,32 @@ const Usermanagementdetails = () => {
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="bg-transparent text-xs font-semibold text-[var(--db-text)] focus:outline-none cursor-pointer"
                 >
-                  <option value="All" className="bg-[var(--db-card)] text-[var(--db-text)]">
+                  <option
+                    value="All"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
                     All
                   </option>
-                  <option value="Active" className="bg-[var(--db-card)] text-[var(--db-text)]">
+                  <option
+                    value="Active"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
                     Active
                   </option>
-                  <option value="Inactive" className="bg-[var(--db-card)] text-[var(--db-text)]">
+                  <option
+                    value="Inactive"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
                     Inactive
                   </option>
                 </select>
               </div>
 
               {/* Clear Filters */}
-              {(genderFilter !== "All" || coachFilter !== "All" || statusFilter !== "All" || searchQuery) && (
+              {(genderFilter !== "All" ||
+                coachFilter !== "All" ||
+                statusFilter !== "All" ||
+                searchQuery) && (
                 <button
                   onClick={() => {
                     setGenderFilter("All");
@@ -704,11 +753,11 @@ const Usermanagementdetails = () => {
 
         {/* Enhanced Athletes Table */}
         <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-xl overflow-hidden">
-          <div className="p-4 sm:p-5 border-b border-[var(--db-card-border)] flex items-center justify-between">
+          <div className="px-4 py-3 sm:px-5 sm:py-3.5 border-b border-[var(--db-card-border)] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--db-accent-highlight)] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[var(--db-accent-highlight)] animate-pulse" />
               <h2
-                className="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[var(--db-text)]"
+                className="text-xs font-extrabold uppercase tracking-widest text-[var(--db-text)]"
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
                 Athletes Directory ({athletes.length})
@@ -722,7 +771,9 @@ const Usermanagementdetails = () => {
           {loading ? (
             <div className="py-20 flex flex-col items-center justify-center text-[var(--db-text-muted)] gap-3">
               <div className="w-9 h-9 border-2 border-[var(--db-accent-highlight)]/20 border-t-[var(--db-accent-highlight)] rounded-full animate-spin" />
-              <p className="text-xs font-semibold">Loading athletes database...</p>
+              <p className="text-xs font-semibold">
+                Loading athletes database...
+              </p>
             </div>
           ) : athletes.length === 0 ? (
             <div className="py-16 text-center px-4 space-y-3">
@@ -733,7 +784,8 @@ const Usermanagementdetails = () => {
                 No Athletes Found
               </h3>
               <p className="text-xs text-[var(--db-text-muted)] max-w-md mx-auto">
-                No athletes matched your query. Click below to add the first athlete with auto-generated ID (BOXCROSS-001) and password.
+                No athletes matched your query. Click below to add the first
+                athlete with auto-generated ID (BOXCROSS-001) and password.
               </p>
               <button
                 onClick={handleOpenAddModal}
@@ -744,21 +796,39 @@ const Usermanagementdetails = () => {
             </div>
           ) : (
             <div className="overflow-x-auto w-full custom-scrollbar">
-              <table className="w-full text-left border-collapse min-w-[1260px]">
+              <table className="w-full text-left border-collapse min-w-[1060px]">
                 <thead>
-                  <tr className="bg-[var(--db-input-bg)]/80 text-[var(--db-text-muted)] text-[11px] uppercase font-black tracking-widest border-b border-[var(--db-card-border)] select-none">
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[140px] text-left">Member ID</th>
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[260px] text-left">Athlete / User Name</th>
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[170px] text-left">Portal Password</th>
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[95px] text-center">Age</th>
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[110px] text-center">Gender</th>
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[150px] text-left">Date of Joining</th>
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[160px] text-left">Assigned Coach</th>
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[120px] text-center">Status</th>
-                    <th className="py-4 px-5 whitespace-nowrap min-w-[200px] text-right">Actions</th>
+                  <tr className="bg-[var(--db-input-bg)]/80 text-[var(--db-text-muted)] text-[10px] uppercase font-bold tracking-wider border-b border-[var(--db-card-border)] select-none">
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[120px] text-left">
+                      Member ID
+                    </th>
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[210px] text-left">
+                      Athlete / User Name
+                    </th>
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[145px] text-left">
+                      Portal Password
+                    </th>
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[65px] text-center">
+                      Age
+                    </th>
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[85px] text-center">
+                      Gender
+                    </th>
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[125px] text-left">
+                      Date of Joining
+                    </th>
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[135px] text-left">
+                      Assigned Coach
+                    </th>
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[95px] text-center">
+                      Status
+                    </th>
+                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[160px] text-right">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[var(--db-card-border)] text-xs">
+                <tbody className="divide-y divide-[var(--db-card-border)]">
                   {athletes.map((athlete) => {
                     const isRevealed = revealedPasswords[athlete._id];
                     return (
@@ -767,49 +837,60 @@ const Usermanagementdetails = () => {
                         className="hover:bg-[var(--db-sidebar-link-hover)]/70 transition-colors group/row"
                       >
                         {/* Member ID */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle">
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
                           <button
                             onClick={() => {
                               navigator.clipboard.writeText(athlete.memberId);
                               toast.success(`Copied ${athlete.memberId}`);
                             }}
-                            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/30 hover:bg-[var(--db-accent-highlight)]/20 hover:border-[var(--db-accent-highlight)] font-mono font-bold text-xs tracking-wider transition-all cursor-pointer group shadow-sm"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/25 hover:bg-[var(--db-accent-highlight)]/20 hover:border-[var(--db-accent-highlight)] font-mono font-bold text-[11px] tracking-wide transition-all cursor-pointer group shadow-sm"
                             title="Click to copy Member ID"
                           >
-                            <span className="whitespace-nowrap">{athlete.memberId}</span>
+                            <span className="whitespace-nowrap">
+                              {athlete.memberId}
+                            </span>
                             <Copy
-                              size={12}
+                              size={11}
                               className="opacity-60 group-hover:opacity-100 transition-opacity shrink-0"
                             />
                           </button>
                         </td>
 
                         {/* Athlete Name + Quick Contact */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle">
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
                           <div
                             onClick={() => setViewingAthlete(athlete)}
-                            className="flex items-center gap-3.5 cursor-pointer group/name"
+                            className="flex items-center gap-2.5 cursor-pointer group/name"
                           >
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-black text-sm text-[var(--db-accent-highlight)] shrink-0 group-hover/name:border-[var(--db-accent-highlight)] group-hover/name:scale-105 transition-all shadow-md">
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-bold text-xs text-[var(--db-accent-highlight)] shrink-0 group-hover/name:border-[var(--db-accent-highlight)] group-hover/name:scale-105 transition-all shadow-sm">
                               {athlete.athleteName
                                 ? athlete.athleteName.charAt(0).toUpperCase()
                                 : "A"}
                             </div>
                             <div className="min-w-0">
-                              <p className="font-bold text-[var(--db-text)] text-sm group-hover/name:text-[var(--db-accent-highlight)] transition-colors whitespace-nowrap">
+                              <p className="font-bold text-[var(--db-text)] text-xs group-hover/name:text-[var(--db-accent-highlight)] transition-colors whitespace-nowrap">
                                 {athlete.athleteName}
                               </p>
                               {(athlete.phone || athlete.email) && (
-                                <div className="flex items-center gap-3 text-[11px] text-[var(--db-text-muted)] mt-0.5 whitespace-nowrap">
+                                <div className="flex items-center gap-2.5 text-[10px] text-[var(--db-text-muted)] mt-0.5 whitespace-nowrap">
                                   {athlete.phone && (
                                     <span className="inline-flex items-center gap-1 font-medium">
-                                      <Phone size={11} className="text-[var(--db-accent-highlight)]/70 shrink-0" />
+                                      <Phone
+                                        size={10}
+                                        className="text-[var(--db-accent-highlight)]/70 shrink-0"
+                                      />
                                       <span>{athlete.phone}</span>
                                     </span>
                                   )}
                                   {athlete.email && (
-                                    <span className="inline-flex items-center gap-1 font-medium text-[var(--db-text-muted)] truncate max-w-[180px]" title={athlete.email}>
-                                      <Mail size={11} className="text-sky-400/70 shrink-0" />
+                                    <span
+                                      className="inline-flex items-center gap-1 font-medium text-[var(--db-text-muted)] truncate max-w-[150px]"
+                                      title={athlete.email}
+                                    >
+                                      <Mail
+                                        size={10}
+                                        className="text-sky-400/70 shrink-0"
+                                      />
                                       <span>{athlete.email}</span>
                                     </span>
                                   )}
@@ -820,50 +901,58 @@ const Usermanagementdetails = () => {
                         </td>
 
                         {/* Portal Password Column */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle">
-                          <div className="inline-flex items-center gap-2 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] px-3 py-1.5 rounded-xl shadow-inner">
-                            <span className="font-mono text-xs font-bold text-[var(--db-text)] tracking-wider">
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
+                          <div className="inline-flex items-center gap-1.5 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] px-2 py-0.5 rounded-lg shadow-inner">
+                            <span className="font-mono text-[11px] font-bold text-[var(--db-text)] tracking-wider">
                               {isRevealed
                                 ? athlete.initialPassword || "bxc12345"
                                 : "••••••••"}
                             </span>
-                            <div className="flex items-center gap-1 pl-1.5 border-l border-[var(--db-card-border)]">
+                            <div className="flex items-center gap-0.5 pl-1.5 border-l border-[var(--db-card-border)]">
                               <button
                                 type="button"
-                                onClick={() => toggleRevealPassword(athlete._id)}
-                                className="p-1 rounded-md text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-white/5 transition-colors cursor-pointer"
-                                title={isRevealed ? "Hide Password" : "Show Password"}
+                                onClick={() =>
+                                  toggleRevealPassword(athlete._id)
+                                }
+                                className="p-1 rounded text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-white/5 transition-colors cursor-pointer"
+                                title={
+                                  isRevealed ? "Hide Password" : "Show Password"
+                                }
                               >
-                                {isRevealed ? <EyeOff size={13} /> : <Eye size={13} />}
+                                {isRevealed ? (
+                                  <EyeOff size={12} />
+                                ) : (
+                                  <Eye size={12} />
+                                )}
                               </button>
                               <button
                                 type="button"
                                 onClick={() => handleCopyCredentials(athlete)}
-                                className="p-1 rounded-md text-[var(--db-accent-highlight)] hover:text-white hover:bg-[var(--db-accent-highlight)]/15 transition-colors cursor-pointer"
+                                className="p-1 rounded text-[var(--db-accent-highlight)] hover:text-white hover:bg-[var(--db-accent-highlight)]/15 transition-colors cursor-pointer"
                                 title="Copy Full Login Credentials (ID + Password)"
                               >
-                                <Copy size={13} />
+                                <Copy size={12} />
                               </button>
                             </div>
                           </div>
                         </td>
 
                         {/* Age */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle text-center font-semibold text-[var(--db-text)]">
-                          <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs font-mono font-bold whitespace-nowrap shadow-sm">
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[10px] font-mono font-semibold text-[var(--db-text)] whitespace-nowrap shadow-sm">
                             {athlete.age ? `${athlete.age} yrs` : "—"}
                           </span>
                         </td>
 
                         {/* Gender */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle text-center font-semibold">
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
                           <span
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow-sm ${
+                            className={`inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider whitespace-nowrap shadow-sm ${
                               athlete.gender === "Male"
                                 ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
                                 : athlete.gender === "Female"
-                                ? "bg-pink-500/15 text-pink-400 border border-pink-500/30"
-                                : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
+                                  ? "bg-pink-500/15 text-pink-400 border border-pink-500/30"
+                                  : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
                             }`}
                           >
                             {athlete.gender || "N/A"}
@@ -871,38 +960,45 @@ const Usermanagementdetails = () => {
                         </td>
 
                         {/* Date of Joining */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle text-[var(--db-text-muted)]">
-                          <div className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--db-text)] whitespace-nowrap">
-                            <Calendar size={13} className="text-[var(--db-accent-highlight)] shrink-0" />
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-[var(--db-text-muted)]">
+                          <div className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[var(--db-text)] whitespace-nowrap">
+                            <Calendar
+                              size={11}
+                              className="text-[var(--db-accent-highlight)] shrink-0"
+                            />
                             <span className="whitespace-nowrap">
                               {athlete.dateOfJoining
-                                ? new Date(athlete.dateOfJoining).toLocaleDateString(
-                                    "en-GB",
-                                    {
-                                      day: "2-digit",
-                                      month: "short",
-                                      year: "numeric",
-                                    }
-                                  )
+                                ? new Date(
+                                    athlete.dateOfJoining,
+                                  ).toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                  })
                                 : "N/A"}
                             </span>
                           </div>
                         </td>
 
                         {/* Coach */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle font-semibold">
-                          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] text-xs font-bold shadow-sm whitespace-nowrap">
-                            <Dumbbell size={13} className="text-amber-400 shrink-0" />
-                            <span className="whitespace-nowrap">{athlete.coach || "Unassigned"}</span>
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle font-semibold">
+                          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] text-[11px] font-semibold shadow-sm whitespace-nowrap">
+                            <Dumbbell
+                              size={11}
+                              className="text-amber-400 shrink-0"
+                            />
+                            <span className="whitespace-nowrap">
+                              {athlete.coach || "Unassigned"}
+                            </span>
                           </div>
                         </td>
 
                         {/* Status */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle text-center">
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap ${
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${
                               athlete.status === "Active"
-                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)]"
                                 : "bg-neutral-800 text-neutral-400 border border-neutral-700"
                             }`}
                           >
@@ -918,34 +1014,36 @@ const Usermanagementdetails = () => {
                         </td>
 
                         {/* Actions */}
-                        <td className="py-4 px-5 whitespace-nowrap align-middle text-right">
-                          <div className="inline-flex items-center justify-end gap-2">
+                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-right">
+                          <div className="inline-flex items-center justify-end gap-1.5">
                             {/* Impersonate / Switch User */}
                             <button
                               onClick={() => handleImpersonateAthlete(athlete)}
                               title={`Login as ${athlete.athleteName} (Impersonate)`}
-                              className="px-3 py-1.5 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 font-extrabold text-[11px] uppercase tracking-wider transition-all cursor-pointer inline-flex items-center gap-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+                              className="px-2 py-1 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer inline-flex items-center gap-1 shadow-sm hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
                             >
-                              <UserCheck size={13} className="shrink-0" />
-                              <span className="whitespace-nowrap">Login As</span>
+                              <UserCheck size={11} className="shrink-0" />
+                              <span className="whitespace-nowrap">
+                                Login As
+                              </span>
                             </button>
 
                             {/* View QR Pass */}
                             <button
                               onClick={() => setViewingAthlete(athlete)}
                               title="View Full Pass & Details"
-                              className="p-2 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/15 hover:border-[var(--db-accent-highlight)]/40 transition-all cursor-pointer shadow-sm hover:scale-105"
+                              className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/15 hover:border-[var(--db-accent-highlight)]/40 transition-all cursor-pointer shadow-sm hover:scale-105"
                             >
-                              <QrCode size={14} />
+                              <QrCode size={13} />
                             </button>
 
                             {/* Edit Athlete */}
                             <button
                               onClick={() => handleOpenEditModal(athlete)}
                               title="Edit Athlete"
-                              className="p-2 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-sm hover:scale-105"
+                              className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-sm hover:scale-105"
                             >
-                              <Edit2 size={14} />
+                              <Edit2 size={13} />
                             </button>
 
                             {/* Delete Athlete */}
@@ -954,13 +1052,13 @@ const Usermanagementdetails = () => {
                                 handleDelete(
                                   athlete._id,
                                   athlete.memberId,
-                                  athlete.athleteName
+                                  athlete.athleteName,
                                 )
                               }
                               title="Delete Athlete"
-                              className="p-2 rounded-xl border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all cursor-pointer shadow-sm hover:scale-105"
+                              className="p-1.5 rounded-lg border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all cursor-pointer shadow-sm hover:scale-105"
                             >
-                              <Trash2 size={14} />
+                              <Trash2 size={13} />
                             </button>
                           </div>
                         </td>
@@ -1002,7 +1100,9 @@ const Usermanagementdetails = () => {
                     className="text-lg font-black uppercase tracking-wider"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
-                    {isEditing ? "Edit Athlete Details" : "Register New Athlete / User"}
+                    {isEditing
+                      ? "Edit Athlete Details"
+                      : "Register New Athlete / User"}
                   </h3>
                   <p className="text-xs text-[var(--db-text-muted)]">
                     {isEditing
@@ -1051,7 +1151,10 @@ const Usermanagementdetails = () => {
                   <div className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-xl p-3 space-y-1 relative">
                     <div className="flex items-center justify-between">
                       <label className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)] flex items-center gap-1">
-                        <Key size={11} className="text-[var(--db-accent-highlight)]" />
+                        <Key
+                          size={11}
+                          className="text-[var(--db-accent-highlight)]"
+                        />
                         Portal Password <span className="text-red-400">*</span>
                       </label>
                       <button
@@ -1081,10 +1184,16 @@ const Usermanagementdetails = () => {
                       />
                       <button
                         type="button"
-                        onClick={() => setShowPasswordInModal(!showPasswordInModal)}
+                        onClick={() =>
+                          setShowPasswordInModal(!showPasswordInModal)
+                        }
                         className="text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
                       >
-                        {showPasswordInModal ? <EyeOff size={14} /> : <Eye size={14} />}
+                        {showPasswordInModal ? (
+                          <EyeOff size={14} />
+                        ) : (
+                          <Eye size={14} />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -1093,7 +1202,8 @@ const Usermanagementdetails = () => {
                 {/* Athlete Name */}
                 <div>
                   <label className="block text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] mb-1.5">
-                    Athlete Name / User Name <span className="text-red-400">*</span>
+                    Athlete Name / User Name{" "}
+                    <span className="text-red-400">*</span>
                   </label>
                   <input
                     type="text"
@@ -1136,7 +1246,9 @@ const Usermanagementdetails = () => {
                         <button
                           key={g}
                           type="button"
-                          onClick={() => setFormData({ ...formData, gender: g })}
+                          onClick={() =>
+                            setFormData({ ...formData, gender: g })
+                          }
                           className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
                             formData.gender === g
                               ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] border-[var(--db-accent)] shadow-md"
@@ -1159,7 +1271,10 @@ const Usermanagementdetails = () => {
                     type="date"
                     value={formData.dateOfJoining}
                     onChange={(e) =>
-                      setFormData({ ...formData, dateOfJoining: e.target.value })
+                      setFormData({
+                        ...formData,
+                        dateOfJoining: e.target.value,
+                      })
                     }
                     required
                     className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] focus:outline-none focus:border-[var(--db-accent-highlight)] text-xs"
@@ -1206,7 +1321,10 @@ const Usermanagementdetails = () => {
                       placeholder="Type custom coach name..."
                       value={formData.customCoach}
                       onChange={(e) =>
-                        setFormData({ ...formData, customCoach: e.target.value })
+                        setFormData({
+                          ...formData,
+                          customCoach: e.target.value,
+                        })
                       }
                       required={isCustomCoach}
                       className="w-full px-3.5 py-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-accent-highlight)]/40 text-[var(--db-text)] focus:outline-none text-xs"
@@ -1300,8 +1418,8 @@ const Usermanagementdetails = () => {
                     {submitting
                       ? "Saving..."
                       : isEditing
-                      ? "Update Athlete"
-                      : "Save Athlete & Credentials"}
+                        ? "Update Athlete"
+                        : "Save Athlete & Credentials"}
                   </button>
                 </div>
               </form>
@@ -1331,7 +1449,7 @@ const Usermanagementdetails = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between pb-4 border-b border-white/10">
                   <div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#e5ff00]">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#ccf141]">
                       BOX & CROSS ATHLETE PASS
                     </span>
                     <h2
@@ -1349,8 +1467,8 @@ const Usermanagementdetails = () => {
 
                 {/* ID & Password Display */}
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-black/60 border border-[#e5ff00]/40 p-3.5 rounded-2xl">
-                    <p className="text-[9px] uppercase font-bold text-[#e5ff00]">
+                  <div className="bg-black/60 border border-[#ccf141]/40 p-3.5 rounded-2xl">
+                    <p className="text-[9px] uppercase font-bold text-[#ccf141]">
                       Member ID
                     </p>
                     <p className="font-mono text-base font-black text-white mt-0.5">
@@ -1389,10 +1507,13 @@ const Usermanagementdetails = () => {
                     <span className="text-zinc-400">Date of Joining</span>
                     <span className="font-bold text-white">
                       {viewingAthlete.dateOfJoining
-                        ? new Date(viewingAthlete.dateOfJoining).toLocaleDateString(
-                            "en-GB",
-                            { day: "2-digit", month: "short", year: "numeric" }
-                          )
+                        ? new Date(
+                            viewingAthlete.dateOfJoining,
+                          ).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })
                         : "N/A"}
                     </span>
                   </div>
@@ -1400,14 +1521,18 @@ const Usermanagementdetails = () => {
                   {viewingAthlete.phone && (
                     <div className="flex justify-between py-1 border-b border-white/5">
                       <span className="text-zinc-400">Phone</span>
-                      <span className="font-bold text-white">{viewingAthlete.phone}</span>
+                      <span className="font-bold text-white">
+                        {viewingAthlete.phone}
+                      </span>
                     </div>
                   )}
 
                   {viewingAthlete.email && (
                     <div className="flex justify-between py-1">
                       <span className="text-zinc-400">Email</span>
-                      <span className="font-bold text-white">{viewingAthlete.email}</span>
+                      <span className="font-bold text-white">
+                        {viewingAthlete.email}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -1425,7 +1550,7 @@ const Usermanagementdetails = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleCopyCredentials(viewingAthlete)}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#e5ff00] text-black font-extrabold uppercase text-[11px] tracking-wider flex items-center justify-center gap-1.5 hover:bg-white transition-all cursor-pointer shadow-md"
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#ccf141] text-black font-extrabold uppercase text-[11px] tracking-wider flex items-center justify-center gap-1.5 hover:bg-white transition-all cursor-pointer shadow-md"
                     >
                       <Copy size={13} />
                       <span>Copy Credentials</span>
@@ -1434,7 +1559,7 @@ const Usermanagementdetails = () => {
                     {viewingAthlete.phone && (
                       <a
                         href={`https://wa.me/${viewingAthlete.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                          `Hi ${viewingAthlete.athleteName}, Welcome to Box & Cross! Here are your Athlete Portal credentials:\nMember ID: ${viewingAthlete.memberId}\nPassword: ${viewingAthlete.initialPassword || "bxc12345"}\nLogin: ${window.location.origin}/login?tab=athlete`
+                          `Hi ${viewingAthlete.athleteName}, Welcome to Box & Cross! Here are your Athlete Portal credentials:\nMember ID: ${viewingAthlete.memberId}\nPassword: ${viewingAthlete.initialPassword || "bxc12345"}\nLogin: ${window.location.origin}/login?tab=athlete`,
                         )}`}
                         target="_blank"
                         rel="noreferrer"

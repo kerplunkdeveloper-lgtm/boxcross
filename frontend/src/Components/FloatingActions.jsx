@@ -29,7 +29,10 @@ const FloatingActions = () => {
       setIsModalOpen(document.body.style.overflow === "hidden");
     });
 
-    observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["style"],
+    });
 
     return () => {
       window.removeEventListener("scroll", toggleVisibility);
@@ -45,14 +48,18 @@ const FloatingActions = () => {
   };
 
   if (typeof window === "undefined") return null;
-  if (location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/login')) return null;
+  if (
+    location.pathname.startsWith("/dashboard") ||
+    location.pathname.startsWith("/login")
+  )
+    return null;
 
   return createPortal(
     <>
       {/* BACK TO TOP BUTTON */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-[50px] left-10 md:bottom-8 md:left-8 w-14 h-14 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[9999] ${
+        className={`fixed bottom-[50px] left-10 md:bottom-8 md:left-8 w-14 h-14 md:w-14 md:h-14 bg-[#ccf141] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[9999] ${
           isVisible && !isModalOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 translate-y-10 pointer-events-none"
@@ -68,11 +75,13 @@ const FloatingActions = () => {
         target="_blank"
         rel="noopener noreferrer"
         className={`fixed bottom-[45px] right-10 md:bottom-8 md:right-8 z-[9999] flex flex-row-reverse items-center group cursor-pointer transition-all duration-300 ${
-          isModalOpen ? "opacity-0 translate-y-10 pointer-events-none" : "opacity-100 translate-y-0"
+          isModalOpen
+            ? "opacity-0 translate-y-10 pointer-events-none"
+            : "opacity-100 translate-y-0"
         }`}
         aria-label="Contact on WhatsApp"
       >
-        <div className="flex items-center justify-center w-14 h-14 md:w-14 md:h-14 bg-[#e5ff00] text-black rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 relative z-10">
+        <div className="flex items-center justify-center w-14 h-14 md:w-14 md:h-14 bg-[#ccf141] text-black rounded-full shadow-[0_0_20px_rgba(37,211,102,0.4)] group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(37,211,102,0.6)] transition-all duration-300 relative z-10">
           <FaWhatsapp size={32} />
         </div>
 
@@ -81,15 +90,13 @@ const FloatingActions = () => {
           className="mr-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[14px] md:text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300 opacity-0 translate-x-2 pointer-events-none group-hover:opacity-100 group-hover:-translate-x-1"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
-          <span className="block text-black">
-            WhatsApp
-          </span>
+          <span className="block text-black">WhatsApp</span>
           {/* Triangle pointing right */}
           <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-l-[10px] border-l-white border-b-[8px] border-b-transparent"></div>
         </div>
       </a>
     </>,
-    document.body
+    document.body,
   );
 };
 

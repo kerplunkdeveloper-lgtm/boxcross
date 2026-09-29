@@ -1,5 +1,11 @@
 import React, { useState, lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Preloader from "./Components/Preloader";
 import ScrollToTop from "./Components/ScrollToTop";
@@ -20,8 +26,12 @@ const DashboardHome = lazy(() => import("./pages/DashboardHome"));
 const DashboardBookings = lazy(() => import("./pages/DashboardBookings"));
 const DashboardSettings = lazy(() => import("./pages/DashboardSettings"));
 const DashboardMemberships = lazy(() => import("./pages/DashboardMemberships"));
-const DashboardFoundingMembers = lazy(() => import("./pages/DashboardFoundingMembers"));
-const DashboardFoundingOffer = lazy(() => import("./pages/DashboardFoundingOffer"));
+const DashboardFoundingMembers = lazy(
+  () => import("./pages/DashboardFoundingMembers"),
+);
+const DashboardFoundingOffer = lazy(
+  () => import("./pages/DashboardFoundingOffer"),
+);
 const DashboardPayments = lazy(() => import("./pages/DashboardPayments"));
 const DashboardEvents = lazy(() => import("./pages/DashboardEvents"));
 const DashboardEventsList = lazy(() => import("./pages/DashboardEventsList"));
@@ -42,13 +52,12 @@ const Usermanagementdetails = lazy(
   () => import("./pages/Usermanagementdetails"),
 );
 const GoalsReadiness = lazy(() => import("./pages/GoalsReadiness"));
+const Entrybaseline = lazy(() => import("./pages/Entrybaseline"));
 const AIBodyAnalysis = lazy(() => import("./pages/AIBodyAnalysis"));
 const AthleteDashboard = lazy(() => import("./pages/AthleteDashboard"));
 const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
 const Foot = lazy(() => import("./Components/Foot"));
 const GymMarquee = lazy(() => import("./Components/GymMarquee"));
-
-
 
 // import LeadModal from "./Components/LeadModal";
 
@@ -75,7 +84,7 @@ const Layout = () => {
 // Sleek fallback loading indicator for code-splitted chunks
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[60vh] bg-black">
-    <div className="w-8 h-8 border-2 border-[var(--db-accent-highlight, #e5ff00)]/20 border-t-[var(--db-accent-highlight, #e5ff00)] rounded-full animate-spin"></div>
+    <div className="w-8 h-8 border-2 border-[var(--db-accent-highlight, #ccf141)]/20 border-t-[var(--db-accent-highlight, #ccf141)] rounded-full animate-spin"></div>
   </div>
 );
 
@@ -124,7 +133,7 @@ const App = () => {
               },
               success: {
                 iconTheme: {
-                  primary: "#e5ff00",
+                  primary: "#ccf141",
                   secondary: "#000",
                 },
               },
@@ -149,8 +158,14 @@ const App = () => {
                 <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />
                 <Route path="/athlete-login" element={<Auth />} />
-                <Route path="/athlete-dashboard" element={<AthleteDashboard />} />
-                <Route path="/member-dashboard" element={<AthleteDashboard />} />
+                <Route
+                  path="/athlete-dashboard"
+                  element={<AthleteDashboard />}
+                />
+                <Route
+                  path="/member-dashboard"
+                  element={<AthleteDashboard />}
+                />
                 <Route
                   path="/dashboard"
                   element={
@@ -192,10 +207,21 @@ const App = () => {
                   <Route path="homec3" element={<DashboardHomec3 />} />
                   <Route path="settings" element={<DashboardSettings />} />
                   <Route path="calendar" element={<DashboardCalendar />} />
-                  <Route path="user-management" element={<Usermanagementdetails />} />
-                  <Route path="usermanagementdetails" element={<Usermanagementdetails />} />
+                  <Route
+                    path="user-management"
+                    element={<Usermanagementdetails />}
+                  />
+                  <Route
+                    path="usermanagementdetails"
+                    element={<Usermanagementdetails />}
+                  />
+                  <Route path="entry-baseline" element={<Entrybaseline />} />
+                  <Route path="entrybaseline" element={<Entrybaseline />} />
                   <Route path="goals-readiness" element={<GoalsReadiness />} />
-                  <Route path="goals-and-readiness" element={<GoalsReadiness />} />
+                  <Route
+                    path="goals-and-readiness"
+                    element={<GoalsReadiness />}
+                  />
                   <Route path="ai-body-analysis" element={<AIBodyAnalysis />} />
                 </Route>
               </Routes>

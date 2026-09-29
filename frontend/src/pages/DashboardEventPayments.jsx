@@ -25,7 +25,7 @@ import { toast } from "react-hot-toast";
 // Helper function to format date string (e.g. YYYY-MM-DD) into DD / MM / YYYY
 const formatDateToDMY = (dateVal) => {
   if (!dateVal) return "";
-  
+
   // Try matching YYYY-MM-DD
   const yyyymmddMatch = String(dateVal).match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (yyyymmddMatch) {
@@ -45,11 +45,11 @@ const formatDateToDMY = (dateVal) => {
   if (isNaN(date.getTime())) {
     return String(dateVal);
   }
-  
+
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
-  
+
   return `${day} / ${month} / ${year}`;
 };
 
@@ -219,7 +219,7 @@ const DashboardEventPayments = () => {
         <style>
           table { border-collapse: collapse; }
           th { 
-            background-color: #e5ff00; 
+            background-color: #ccf141; 
             color: #000000; 
             font-weight: bold; 
             font-family: Arial, sans-serif; 
@@ -514,7 +514,7 @@ const DashboardEventPayments = () => {
               {/* Export to Excel Button */}
               <button
                 onClick={handleExportToExcel}
-                className="flex items-center gap-1.5 px-4 h-9 bg-[#e5ff00] hover:bg-[#d4eb00] active:scale-95 text-black font-black uppercase tracking-wider text-[10px] rounded-full shadow-lg shadow-[#e5ff00]/10 transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-4 h-9 bg-[#ccf141] hover:bg-[#d4eb00] active:scale-95 text-black font-black uppercase tracking-wider text-[10px] rounded-full shadow-lg shadow-[#ccf141]/10 transition-all cursor-pointer"
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
                 <Download size={12} />
@@ -637,7 +637,7 @@ const DashboardEventPayments = () => {
                       {/* Amount Paid */}
                       <td className="py-4 px-4 text-sm text-[var(--db-accent-highlight)] font-extrabold font-mono border-r border-[var(--db-card-border)]/30">
                         {Number(booking.totalAmount) === 0 ? (
-                          <span className="text-xs font-black uppercase tracking-wider text-[#e5ff00]">
+                          <span className="text-xs font-black uppercase tracking-wider text-[#ccf141]">
                             Free Plan
                           </span>
                         ) : (
@@ -649,7 +649,7 @@ const DashboardEventPayments = () => {
                       <td className="py-4 px-4 text-xs font-bold border-r border-[var(--db-card-border)]/30">
                         {(booking.paymentMethod || "razorpay").toLowerCase() ===
                         "barcode" ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00] uppercase text-[10px] tracking-wide font-black">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#ccf141]/10 border border-[#ccf141]/20 text-[#ccf141] uppercase text-[10px] tracking-wide font-black">
                             🤳 Barcode
                           </span>
                         ) : (
@@ -692,7 +692,7 @@ const DashboardEventPayments = () => {
                         {Number(booking.totalAmount) === 0 &&
                         (booking.status === "payment successfully" ||
                           booking.status === "confirmed") ? (
-                          <span className="inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black bg-[#e5ff00]/10 border border-[#e5ff00]/20 text-[#e5ff00]">
+                          <span className="inline-block px-2.5 py-1 rounded text-[10px] uppercase tracking-widest font-black bg-[#ccf141]/10 border border-[#ccf141]/20 text-[#ccf141]">
                             Free Entry Successful
                           </span>
                         ) : (

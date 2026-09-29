@@ -40,8 +40,18 @@ const convertToYYYYMMDD = (dateStr) => {
     const yearStr = parts.length === 4 ? parts[3] : null;
 
     const months = {
-      jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
-      jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
+      jan: 0,
+      feb: 1,
+      mar: 2,
+      apr: 3,
+      may: 4,
+      jun: 5,
+      jul: 6,
+      aug: 7,
+      sep: 8,
+      oct: 9,
+      nov: 10,
+      dec: 11,
     };
     const cleanMonth = monthName.toLowerCase().substring(0, 3);
     if (months[cleanMonth] !== undefined && !isNaN(parseInt(day, 10))) {
@@ -80,7 +90,7 @@ const formatDateToCustom = (dateVal) => {
   if (!dateVal) return "";
   const date = new Date(dateVal);
   if (isNaN(date.getTime())) return String(dateVal);
-  
+
   // Format locally instead of relying on default toString which might shift
   const year = date.getFullYear();
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -276,7 +286,9 @@ const DashboardEventsList = () => {
     setBookingLink(event.bookingLink || "");
     setInclusions(event.inclusions ? event.inclusions.join("\n") : "");
     setExclusions(event.exclusions ? event.exclusions.join("\n") : "");
-    setTerms(event.termsAndConditions ? event.termsAndConditions.join("\n") : "");
+    setTerms(
+      event.termsAndConditions ? event.termsAndConditions.join("\n") : "",
+    );
     setCategory(event.category || "");
     setDuration(event.duration || "");
     setCalories(event.calories || "");
@@ -316,9 +328,18 @@ const DashboardEventsList = () => {
       formData.append("price", finalPrice);
       formData.append("schedules", JSON.stringify(schedules));
 
-      const incArray = inclusions.split("\n").map((s) => s.trim()).filter(Boolean);
-      const excArray = exclusions.split("\n").map((s) => s.trim()).filter(Boolean);
-      const termsArray = terms.split("\n").map((s) => s.trim()).filter(Boolean);
+      const incArray = inclusions
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const excArray = exclusions
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const termsArray = terms
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
       formData.append("inclusions", JSON.stringify(incArray));
       formData.append("exclusions", JSON.stringify(excArray));
       formData.append("termsAndConditions", JSON.stringify(termsArray));
@@ -327,7 +348,10 @@ const DashboardEventsList = () => {
       formData.append("duration", duration.trim());
       formData.append("calories", calories.trim());
 
-      const benefitsArray = benefits.split("\n").map((s) => s.trim()).filter(Boolean);
+      const benefitsArray = benefits
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean);
       formData.append("benefits", JSON.stringify(benefitsArray));
       formData.append("agenda", JSON.stringify(agenda));
 
@@ -507,8 +531,10 @@ const DashboardEventsList = () => {
                   </div>
 
                   {/* Price pill */}
-                  <div className="absolute bottom-3 left-3 bg-[#e5ff00] text-black text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-lg">
-                    {Number(event.price) === 0 ? "Free Entry" : `₹${event.price} onwards`}
+                  <div className="absolute bottom-3 left-3 bg-[#ccf141] text-black text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-lg">
+                    {Number(event.price) === 0
+                      ? "Free Entry"
+                      : `₹${event.price} onwards`}
                   </div>
                 </div>
 
@@ -557,7 +583,9 @@ const DashboardEventsList = () => {
                             className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-lg p-2 space-y-1"
                           >
                             <span className="font-extrabold text-[var(--db-accent-highlight)] uppercase">
-                              {/^\d{4}-\d{2}-\d{2}$/.test(sch.date) ? formatDateToCustom(sch.date) : sch.date}
+                              {/^\d{4}-\d{2}-\d{2}$/.test(sch.date)
+                                ? formatDateToCustom(sch.date)
+                                : sch.date}
                             </span>
                             <div className="flex flex-wrap gap-1 text-[9px] text-[var(--db-text-muted)]">
                               {sch.timeSlots.map((ts, idx) => (
@@ -595,7 +623,10 @@ const DashboardEventsList = () => {
                     )}
                     <div className="flex gap-1 mt-1.5">
                       {(event.paymentMethods || ["razorpay"]).map((m, idx) => (
-                        <span key={idx} className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[8px] font-black uppercase text-[var(--db-accent-highlight)] leading-none">
+                        <span
+                          key={idx}
+                          className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[8px] font-black uppercase text-[var(--db-accent-highlight)] leading-none"
+                        >
                           {m}
                         </span>
                       ))}
@@ -866,7 +897,7 @@ const DashboardEventsList = () => {
                               { title: "", duration: "", color: "green" },
                             ]);
                           }}
-                         className="flex items-center gap-1 bg-[var(--db-accent-glow)] hover:bg-[var(--db-accent)] text-[var(--db-accent-text)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all cursor-pointer"
+                          className="flex items-center gap-1 bg-[var(--db-accent-glow)] hover:bg-[var(--db-accent)] text-[var(--db-accent-text)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] text-[9px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all cursor-pointer"
                         >
                           <Plus size={12} />
                           Create First Step
@@ -942,7 +973,9 @@ const DashboardEventsList = () => {
                             <button
                               type="button"
                               onClick={() => {
-                                setAgenda(agenda.filter((_, sIdx) => sIdx !== idx));
+                                setAgenda(
+                                  agenda.filter((_, sIdx) => sIdx !== idx),
+                                );
                               }}
                               className="p-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl transition-all cursor-pointer h-[38px] flex items-center justify-center shrink-0 border border-red-500/5"
                             >
@@ -962,7 +995,10 @@ const DashboardEventsList = () => {
                           }}
                           className="w-full flex items-center justify-center gap-2 py-3.5 border border-dashed border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/50 rounded-2xl text-xs font-black tracking-wider uppercase text-[var(--db-text-muted)] hover:text-[var(--db-text)] bg-[var(--db-input-bg)] hover:bg-[var(--db-accent-glow)]/5 transition-all cursor-pointer"
                         >
-                          <Plus size={14} className="text-[var(--db-accent-highlight)]" />
+                          <Plus
+                            size={14}
+                            className="text-[var(--db-accent-highlight)]"
+                          />
                           Add Step
                         </button>
                       </div>
@@ -994,7 +1030,10 @@ const DashboardEventsList = () => {
                         }}
                         className="rounded border-[var(--db-input-border)] text-[var(--db-accent-highlight)] focus:ring-[var(--db-accent-highlight)]/30 w-4 h-4 bg-[var(--db-input-bg)] cursor-pointer"
                       />
-                      <label htmlFor="isFreeEntry" className="text-xs font-bold uppercase tracking-wider text-[var(--db-text)] cursor-pointer select-none">
+                      <label
+                        htmlFor="isFreeEntry"
+                        className="text-xs font-bold uppercase tracking-wider text-[var(--db-text)] cursor-pointer select-none"
+                      >
                         Free Entry Event (Zero Cost)
                       </label>
                     </div>
@@ -1004,7 +1043,9 @@ const DashboardEventsList = () => {
                       <div className="space-y-1">
                         <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
                           Active Booking Price (₹){" "}
-                          {!isFreeEntry && <span className="text-red-500">*</span>}
+                          {!isFreeEntry && (
+                            <span className="text-red-500">*</span>
+                          )}
                         </label>
                         {isFreeEntry ? (
                           <div className="w-full bg-[var(--db-input-bg)]/50 border border-[var(--db-input-border)] rounded-xl px-4 py-3 text-xs text-[var(--db-text-muted)] select-none">
@@ -1040,7 +1081,8 @@ const DashboardEventsList = () => {
                     {/* Allowed Payment Methods */}
                     <div className="space-y-1.5">
                       <label className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
-                        Allowed Payment Methods <span className="text-red-500">*</span>
+                        Allowed Payment Methods{" "}
+                        <span className="text-red-500">*</span>
                       </label>
                       <div className="flex flex-wrap gap-4 p-1">
                         <label className="flex items-center gap-2 text-xs text-[var(--db-text)] cursor-pointer select-none">
@@ -1049,12 +1091,21 @@ const DashboardEventsList = () => {
                             checked={paymentMethods.includes("razorpay")}
                             onChange={(e) => {
                               if (e.target.checked) {
-                                setPaymentMethods([...paymentMethods, "razorpay"]);
+                                setPaymentMethods([
+                                  ...paymentMethods,
+                                  "razorpay",
+                                ]);
                               } else {
                                 if (paymentMethods.length > 1) {
-                                  setPaymentMethods(paymentMethods.filter(m => m !== "razorpay"));
+                                  setPaymentMethods(
+                                    paymentMethods.filter(
+                                      (m) => m !== "razorpay",
+                                    ),
+                                  );
                                 } else {
-                                  toast.error("At least one payment method is required");
+                                  toast.error(
+                                    "At least one payment method is required",
+                                  );
                                 }
                               }
                             }}
@@ -1068,12 +1119,21 @@ const DashboardEventsList = () => {
                             checked={paymentMethods.includes("barcode")}
                             onChange={(e) => {
                               if (e.target.checked) {
-                                setPaymentMethods([...paymentMethods, "barcode"]);
+                                setPaymentMethods([
+                                  ...paymentMethods,
+                                  "barcode",
+                                ]);
                               } else {
                                 if (paymentMethods.length > 1) {
-                                  setPaymentMethods(paymentMethods.filter(m => m !== "barcode"));
+                                  setPaymentMethods(
+                                    paymentMethods.filter(
+                                      (m) => m !== "barcode",
+                                    ),
+                                  );
                                 } else {
-                                  toast.error("At least one payment method is required");
+                                  toast.error(
+                                    "At least one payment method is required",
+                                  );
                                 }
                               }
                             }}
@@ -1098,7 +1158,6 @@ const DashboardEventsList = () => {
                           type="text"
                           value={bookingLink}
                           onChange={(e) => setBookingLink(e.target.value)}
-
                           className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-10 pr-4 py-3 text-xs text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
                         />
                       </div>
@@ -1167,7 +1226,7 @@ const DashboardEventsList = () => {
                                   <input
                                     type="date"
                                     value={convertToYYYYMMDD(schedule.date)}
-                                    min={new Date().toISOString().split('T')[0]}
+                                    min={new Date().toISOString().split("T")[0]}
                                     onChange={(e) => {
                                       const updated = [...schedules];
                                       updated[sIndex].date = e.target.value;
@@ -1178,7 +1237,7 @@ const DashboardEventsList = () => {
                                       e.target.showPicker()
                                     }
                                     className="w-full bg-[var(--db-bg)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl pl-9 pr-3 py-2 text-xs text-[var(--db-text)] transition-all font-semibold cursor-pointer"
-                                    style={{ colorScheme: 'dark' }}
+                                    style={{ colorScheme: "dark" }}
                                     required
                                   />
                                 </div>

@@ -131,7 +131,7 @@ const Eventbanner = () => {
       <section className="w-full aspect-video sm:aspect-auto sm:h-[70vh] md:h-[70vh] bg-black flex flex-col items-center justify-center relative z-10 border-b border-white/5">
         <div className="flex flex-col items-center gap-3">
           <svg
-            className="animate-spin h-8 w-8 text-[#e5ff00]"
+            className="animate-spin h-8 w-8 text-[#ccf141]"
             viewBox="0 0 24 24"
           >
             <circle
@@ -238,7 +238,7 @@ const Eventbanner = () => {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.4 }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#e5ff00]/10 border border-[#e5ff00]/30 text-[#e5ff00] text-[11px] sm:text-[13px] font-black uppercase tracking-wider mb-2.5 sm:mb-4"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-[11px] sm:text-[13px] font-black uppercase tracking-wider mb-2.5 sm:mb-4"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     <Calendar size={12} className="animate-pulse" />
@@ -282,7 +282,7 @@ const Eventbanner = () => {
                         .getElementById("event-list")
                         ?.scrollIntoView({ behavior: "smooth" });
                     }}
-                    className="inline-flex items-center gap-2 bg-[#e5ff00] text-black font-black uppercase tracking-wider text-[14px] sm:text-[16px] px-6 py-2.5 sm:py-3 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn"
+                    className="inline-flex items-center gap-2 bg-[#ccf141] text-black font-black uppercase tracking-wider text-[14px] sm:text-[16px] px-6 py-2.5 sm:py-3 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     <span className="relative z-10 transition-transform duration-300 group-hover/btn:-translate-x-1">
@@ -306,7 +306,7 @@ const Eventbanner = () => {
         <>
           <button
             onClick={handlePrev}
-            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-[#e5ff00] text-white hover:text-black border border-white/10 hover:border-transparent flex items-center justify-center transition-all duration-300 group cursor-pointer"
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-[#ccf141] text-white hover:text-black border border-white/10 hover:border-transparent flex items-center justify-center transition-all duration-300 group cursor-pointer"
             aria-label="Previous Slide"
           >
             <ChevronLeft
@@ -316,7 +316,7 @@ const Eventbanner = () => {
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-[#e5ff00] text-white hover:text-black border border-white/10 hover:border-transparent flex items-center justify-center transition-all duration-300 group cursor-pointer"
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-black/40 hover:bg-[#ccf141] text-white hover:text-black border border-white/10 hover:border-transparent flex items-center justify-center transition-all duration-300 group cursor-pointer"
             aria-label="Next Slide"
           >
             <ChevronRight
@@ -336,7 +336,7 @@ const Eventbanner = () => {
               onClick={() => handleDotClick(index)}
               className={`h-1 sm:h-2 rounded-full transition-all duration-300 cursor-pointer ${
                 index === currentIndex
-                  ? "w-6 sm:w-8 bg-[#e5ff00]"
+                  ? "w-6 sm:w-8 bg-[#ccf141]"
                   : "w-1.5 sm:w-2 bg-white/30 hover:bg-white/50"
               }`}
               aria-label={`Go to slide ${index + 1}`}

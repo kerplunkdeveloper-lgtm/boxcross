@@ -1,5 +1,10 @@
 import React from "react";
-import { Activity, CheckCircle2, AlertTriangle, AlertCircle } from "lucide-react";
+import {
+  Activity,
+  CheckCircle2,
+  AlertTriangle,
+  AlertCircle,
+} from "lucide-react";
 
 const MobilityAnalysisCard = ({ mobility = {} }) => {
   const items = [
@@ -57,7 +62,7 @@ const MobilityAnalysisCard = ({ mobility = {} }) => {
       <div className="flex items-center justify-between mb-4 pb-2 border-b border-[var(--db-card-border)]">
         <div>
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] flex items-center gap-1.5">
-            <Activity size={12} className="text-[#e5ff00]" />
+            <Activity size={12} className="text-[#ccf141]" />
             Joint Range of Motion
           </span>
           <h3 className="text-sm font-black uppercase tracking-wide text-[var(--db-text-title)] mt-0.5">
@@ -89,7 +94,9 @@ const MobilityAnalysisCard = ({ mobility = {} }) => {
                 </p>
               </div>
 
-              <div className={`mt-3 flex items-center justify-center gap-1.5 py-1 px-2 rounded-lg border text-[10.5px] font-black tracking-wide ${cfg.badge}`}>
+              <div
+                className={`mt-3 flex items-center justify-center gap-1.5 py-1 px-2 rounded-lg border text-[10.5px] font-black tracking-wide ${cfg.badge}`}
+              >
                 <IconComponent size={12} />
                 <span>{item.status}</span>
               </div>
@@ -101,7 +108,7 @@ const MobilityAnalysisCard = ({ mobility = {} }) => {
       {/* Footer Info */}
       <div className="mt-4 pt-3 border-t border-[var(--db-card-border)] flex items-center justify-between text-[10px] text-[var(--db-text-muted)]">
         <span>Evaluated from multi-angle kinematic joint limits</span>
-        <span className="text-[#e5ff00] font-bold">Dynamic ROM Rating</span>
+        <span className="text-[#ccf141] font-bold">Dynamic ROM Rating</span>
       </div>
     </div>
   );

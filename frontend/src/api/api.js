@@ -166,4 +166,12 @@ export const getMemberAnalysisHistory = (memberId) => API.get(`/ai-analysis/memb
 export const createAIAnalysis = (data) => API.post("/ai-analysis", data);
 export const deleteAIAnalysis = (id) => API.delete(`/ai-analysis/${id}`);
 
+// ──────────────── ENTRY BASELINE API ────────────────
+export const getEntryBaselines = (params) => API.get("/entry-baseline", { params });
+export const getEntryBaselineById = (id) => API.get(`/entry-baseline/${id}`);
+export const createEntryBaseline = (data) => API.post("/entry-baseline", data);
+export const updateEntryBaseline = (id, data) => API.put(`/entry-baseline/${id}`, data);
+export const deleteEntryBaseline = (id) => API.delete(`/entry-baseline/${id}`);
+export const getEntryBaselineStats = () => API.get("/entry-baseline/stats");
+
 export default API;
