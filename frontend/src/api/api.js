@@ -159,4 +159,11 @@ export const updateGoalsReadiness = (id, data) => API.put(`/goals-readiness/${id
 export const deleteGoalsReadiness = (id) => API.delete(`/goals-readiness/${id}`);
 export const getGoalsReadinessStats = () => API.get("/goals-readiness/stats");
 
+// ──────────────── AI BODY & POSTURE ANALYSIS API ────────────────
+export const getAIAnalysisList = (params) => API.get("/ai-analysis", { params });
+export const getAIAnalysisById = (id) => API.get(`/ai-analysis/${id}`);
+export const getMemberAnalysisHistory = (memberId) => API.get(`/ai-analysis/member/${memberId}`);
+export const createAIAnalysis = (data) => API.post("/ai-analysis", data);
+export const deleteAIAnalysis = (id) => API.delete(`/ai-analysis/${id}`);
+
 export default API;

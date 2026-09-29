@@ -171,6 +171,8 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
     location.pathname.includes("/goals-and-readiness")
   ) {
     activeTitle = "Goals & Readiness";
+  } else if (location.pathname.includes("/ai-body-analysis")) {
+    activeTitle = "AI Body & Posture Analysis";
   }
 
   // Fetch real-time data and aggregate as notifications

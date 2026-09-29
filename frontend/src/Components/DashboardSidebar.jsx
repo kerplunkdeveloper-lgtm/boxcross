@@ -19,6 +19,7 @@ import {
   ChevronDown,
   ShieldCheck,
   ClipboardCheck,
+  Activity,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -418,6 +419,14 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen, handleLogout, user: pro
                 to: "/dashboard/goals-readiness",
                 name: "Goals & Readiness",
                 icon: ClipboardCheck,
+              })}
+
+              {/* AI Body Analysis */}
+              {renderSingleItem({
+                to: "/dashboard/ai-body-analysis",
+                name: "AI Body Analysis",
+                icon: Activity,
+                badge: "AI",
               })}
 
               {/* Memberships Accordion / Flyout */}
