@@ -183,18 +183,18 @@ const DashboardSettings = () => {
                   }`}
                 >
                   <div className="flex justify-between items-start w-full">
-                    <div className={`p-2.5 rounded-xl ${theme === "light" ? "bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)]" : "bg-[var(--db-input-bg)] text-[var(--db-text-muted)]"}`}>
+                    <div className={`p-2.5 rounded-xl ${theme === "light" ? "bg-[#e5ff00] text-black shadow-md border border-black/10" : "bg-[var(--db-input-bg)] text-[var(--db-text-muted)]"}`}>
                       <Sun size={20} />
                     </div>
                     {theme === "light" && (
-                      <div className="w-5 h-5 rounded-full bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)] flex items-center justify-center">
+                      <div className="w-5 h-5 rounded-full bg-[#e5ff00] text-black border border-black/10 flex items-center justify-center shadow-sm">
                         <Check size={12} className="stroke-[3px]" />
                       </div>
                     )}
                   </div>
                   <div>
                     <h4 className="text-xs font-black uppercase tracking-wider text-[var(--db-text)]">Light Mode</h4>
-                    <p className="text-[10px] text-[var(--db-text-muted)] mt-1">High visibility style, bright white backgrounds.</p>
+                    <p className="text-[10px] text-[var(--db-text-muted)] mt-1">High visibility style, bright porcelain backgrounds.</p>
                   </div>
                 </button>
 
@@ -208,11 +208,11 @@ const DashboardSettings = () => {
                   }`}
                 >
                   <div className="flex justify-between items-start w-full">
-                    <div className={`p-2.5 rounded-xl ${theme === "dark" ? "bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)]" : "bg-[var(--db-input-bg)] text-[var(--db-text-muted)]"}`}>
+                    <div className={`p-2.5 rounded-xl ${theme === "dark" ? "bg-[#e5ff00] text-black shadow-[0_0_14px_rgba(229,255,0,0.35)]" : "bg-[var(--db-input-bg)] text-[var(--db-text-muted)]"}`}>
                       <Moon size={20} />
                     </div>
                     {theme === "dark" && (
-                      <div className="w-5 h-5 rounded-full bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)] flex items-center justify-center">
+                      <div className="w-5 h-5 rounded-full bg-[#e5ff00] text-black flex items-center justify-center shadow-[0_0_10px_rgba(229,255,0,0.4)]">
                         <Check size={12} className="stroke-[3px]" />
                       </div>
                     )}
