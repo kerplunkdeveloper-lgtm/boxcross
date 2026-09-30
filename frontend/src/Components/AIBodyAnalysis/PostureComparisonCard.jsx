@@ -11,7 +11,7 @@ const PostureComparisonCard = ({
   const isDark = theme === "dark";
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
       {/* Header */}
       <div className="flex items-center justify-between mb-2 sm:mb-3">
         <h3 className="text-xs sm:text-sm font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-1.5">
@@ -24,7 +24,7 @@ const PostureComparisonCard = ({
       </div>
 
       {/* 3 Visual Cards Row */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 my-1">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-3 my-1">
         {/* Card 1: Current Posture */}
         <div className="flex flex-col items-center">
           <div

@@ -38,12 +38,12 @@ const ExerciseStatsCard = ({
   ];
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between relative overflow-hidden h-full transition-colors duration-200">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between relative overflow-hidden h-full transition-colors duration-200">
       {/* Glow behind counter */}
       <div className="pointer-events-none absolute top-4 right-4 w-32 h-32 bg-emerald-500/10 dark:bg-[#ccf141]/10 rounded-full blur-2xl" />
 
       {/* Header */}
-      <div className="flex items-center justify-between pb-2.5 sm:pb-3 border-b border-[var(--db-card-border)]">
+      <div className="flex items-center justify-between pb-2 sm:pb-3 border-b border-[var(--db-card-border)]">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-500/15 dark:bg-[#ccf141]/15 text-emerald-600 dark:text-[#ccf141] flex items-center justify-center shrink-0">
             <Dumbbell size={15} />
@@ -71,9 +71,9 @@ const ExerciseStatsCard = ({
       </div>
 
       {/* Primary Counter Banner - Balanced 2x2 Grid with Proper Alignment */}
-      <div className="grid grid-cols-2 gap-2.5 sm:gap-3 my-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 my-2.5 sm:my-3">
         {/* Card 1: Reps Counter */}
-        <div className="p-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col justify-between items-center text-center min-w-0">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col justify-between items-center text-center min-w-0">
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
             TOTAL REPS
           </span>
@@ -93,7 +93,7 @@ const ExerciseStatsCard = ({
         </div>
 
         {/* Card 2: Form Score */}
-        <div className="p-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col justify-between items-center text-center min-w-0">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col justify-between items-center text-center min-w-0">
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
             FORM SCORE
           </span>
@@ -120,7 +120,7 @@ const ExerciseStatsCard = ({
         </div>
 
         {/* Card 3: Rep Quality */}
-        <div className="p-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col justify-between min-w-0">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col justify-between min-w-0">
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] mb-1">
             REP QUALITY
           </span>
@@ -159,7 +159,7 @@ const ExerciseStatsCard = ({
         </div>
 
         {/* Card 4: Cadence & Control */}
-        <div className="p-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col justify-between min-w-0 space-y-1">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col justify-between min-w-0 space-y-1">
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] mb-1">
             CADENCE &amp; CONTROL
           </span>

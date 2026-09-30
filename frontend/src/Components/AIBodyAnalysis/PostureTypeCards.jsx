@@ -66,7 +66,7 @@ const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
   ];
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
       {/* Header */}
       <div className="flex items-center justify-between mb-2 sm:mb-3">
         <h3 className="text-xs sm:text-sm font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-1.5">
@@ -79,7 +79,7 @@ const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
       </div>
 
       {/* 3 Silhouette Cards Row */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-2.5 my-1">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 my-1">
         {cards.map((c) => {
           const isAct = c.active;
           const isEmerald = c.color === "emerald" || isAct;
@@ -102,7 +102,7 @@ const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
           return (
             <div
               key={c.id}
-              className={`relative rounded-xl p-2 sm:p-2.5 flex flex-col items-center justify-between transition-all duration-300 ${cardClasses}`}
+              className={`relative rounded-xl p-1.5 sm:p-2.5 flex flex-col items-center justify-between transition-all duration-300 ${cardClasses}`}
             >
               {/* Checkmark icon for active good posture */}
               {isAct && isEmerald && (
@@ -128,7 +128,7 @@ const PostureTypeCards = ({ detectedType = "Good Posture" }) => {
 
               {/* Title */}
               <span
-                className={`text-[9.5px] sm:text-[10.5px] text-center tracking-tight truncate w-full ${
+                className={`text-[9px] sm:text-[10.5px] text-center tracking-tight truncate w-full ${
                   isAct && isEmerald
                     ? "text-emerald-600 dark:text-emerald-400 font-extrabold"
                     : isAct && !isEmerald

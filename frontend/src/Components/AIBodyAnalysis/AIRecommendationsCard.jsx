@@ -38,7 +38,7 @@ const AIRecommendationsCard = ({ recommendations = [], insights = [] }) => {
   ];
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
       {/* Header */}
       <div className="flex items-center justify-between mb-2 sm:mb-3">
         <h3 className="text-xs sm:text-sm font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-2">
@@ -51,14 +51,14 @@ const AIRecommendationsCard = ({ recommendations = [], insights = [] }) => {
       </div>
 
       {/* 5 Recommendation Items */}
-      <div className="space-y-2 sm:space-y-2.5 my-1">
+      <div className="space-y-1.5 sm:space-y-2.5 my-1">
         {items.map((item, idx) => (
           <div
             key={idx}
-            className="flex items-center gap-2.5 text-xs text-[var(--db-text)] p-1 rounded-lg hover:bg-[var(--db-input-bg)] transition-colors"
+            className="flex items-start gap-2.5 text-xs text-[var(--db-text)] p-1.5 rounded-xl hover:bg-[var(--db-input-bg)] transition-colors"
           >
-            {item.icon}
-            <span className="font-medium tracking-normal text-[var(--db-text)]">
+            <div className="shrink-0 mt-0.5">{item.icon}</div>
+            <span className="font-medium tracking-normal text-[var(--db-text)] leading-snug">
               {item.text}
             </span>
           </div>

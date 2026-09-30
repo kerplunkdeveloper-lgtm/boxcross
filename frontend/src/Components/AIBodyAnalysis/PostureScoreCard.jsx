@@ -49,7 +49,7 @@ const PostureScoreCard = ({
   const config = getStatusConfig();
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between relative overflow-hidden h-full flex-1 transition-colors duration-200">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between relative overflow-hidden h-full flex-1 transition-colors duration-200">
       {/* Card Title */}
       <div className="flex items-center justify-between mb-2 sm:mb-3">
         <h3 className="text-xs sm:text-sm font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-1.5">
@@ -63,12 +63,12 @@ const PostureScoreCard = ({
       </div>
 
       {/* Main Content: Ring Gauge + Spine Profile Silhouette */}
-      <div className="flex items-center justify-between gap-2 sm:gap-4 py-1">
+      <div className="flex items-center justify-around sm:justify-between gap-2 sm:gap-4 py-1">
         {/* Left: Circular Animated Gauge */}
         <div className="relative flex items-center justify-center shrink-0">
           <svg
             viewBox={`0 0 ${size} ${size}`}
-            className="w-[102px] h-[102px] sm:w-[114px] sm:h-[114px] md:w-[120px] md:h-[120px] transform -rotate-90"
+            className="w-[96px] h-[96px] sm:w-[114px] sm:h-[114px] md:w-[120px] md:h-[120px] transform -rotate-90"
           >
             {/* Background Track */}
             <circle

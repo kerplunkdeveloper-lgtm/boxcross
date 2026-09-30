@@ -11,6 +11,7 @@ import {
   FileText,
   Save,
   CheckCircle2,
+  Camera,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
@@ -97,6 +98,7 @@ const AIBodyAnalysis = () => {
 
   // Mode & Member Selection
   const [currentMode, setCurrentMode] = useState("Posture Analysis");
+  const [mobileTab, setMobileTab] = useState("camera"); // "camera" | "analysis" | "insights"
   const [athletes, setAthletes] = useState(FALLBACK_ATHLETES);
   const [selectedMember, setSelectedMember] = useState(FALLBACK_ATHLETES[0]);
   const [showMemberDropdown, setShowMemberDropdown] = useState(false);
@@ -333,7 +335,7 @@ const AIBodyAnalysis = () => {
   };
 
   return (
-    <div className="p-3.5 sm:p-5 md:p-6 lg:p-7 space-y-4 sm:space-y-5 lg:space-y-6 max-w-[1580px] mx-auto select-none min-h-screen text-[var(--db-text)] bg-[var(--db-bg)] transition-colors duration-200">
+    <div className="p-3 sm:p-5 md:p-6 lg:p-7 space-y-3.5 sm:space-y-5 lg:space-y-6 max-w-[1580px] mx-auto min-h-screen text-[var(--db-text)] bg-[var(--db-bg)] transition-colors duration-200 pb-24 md:pb-6">
       <Helmet>
         <title>AI Body &amp; Posture Analysis | Box &amp; Cross</title>
         <meta
@@ -342,31 +344,40 @@ const AIBodyAnalysis = () => {
         />
       </Helmet>
 
-      {/* ── 1. HEADER ROW ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 pb-1">
-        {/* Left: Title & Subtitle */}
-        <div>
-          <h1 className="text-xl sm:text-xl  font-extrabold text-[var(--db-text-title)] tracking-tight">
-            AI Body &amp; Posture Analysis
-          </h1>
-          <p className="text-xs sm:text-sm text-[var(--db-text-muted)] font-normal mt-0.5">
-            Real-time AI analysis to detect posture, body alignment and exercise form.
-          </p>
+      {/* ── 1. HEADER ROW (Mobile Optimized) ── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2.5 sm:gap-4 pb-1">
+        {/* Left: Title */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[var(--db-accent-highlight)] md:hidden mb-0.5">
+              <Sparkles size={11} />
+              <span>AI Biomechanics</span>
+            </div>
+            <h1 className="text-base sm:text-xl md:text-2xl font-black text-[var(--db-text-title)] tracking-tight">
+              AI Body &amp; Posture Analysis
+            </h1>
+            <p className="hidden md:block text-[11px] text-[var(--db-text-muted)] font-normal mt-0.5">
+              Real-time 33-point AI kinematic neural evaluation of posture, alignment, and movement mechanics.
+            </p>
+          </div>
+
+          {/* Mobile Quick Date badge */}
+          <div className="sm:hidden flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--db-card)] border border-[var(--db-card-border)] text-[10px] font-bold text-[var(--db-text-muted)] font-mono">
+            <Calendar size={11} className="text-emerald-500 shrink-0" />
+            <span>Today</span>
+          </div>
         </div>
 
         {/* Right: Select Member + Date Card */}
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
-          {/* Select Member Box */}
-          <div className="relative flex-1 sm:flex-initial min-w-[160px]">
-            <span className="text-[10px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider block mb-1">
-              Select Member
-            </span>
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          {/* Select Member Box (full-width on mobile) */}
+          <div className="relative flex-1 sm:flex-initial min-w-0">
             <div
               onClick={() => setShowMemberDropdown(!showMemberDropdown)}
-              className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-[var(--db-accent-highlight)]/50 transition-all cursor-pointer shadow-sm w-full sm:min-w-[185px]"
+              className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-[var(--db-accent-highlight)]/50 transition-all cursor-pointer shadow-sm w-full sm:min-w-[190px]"
             >
               {/* Member Avatar */}
-              <div className="w-7 h-7 rounded-full bg-[var(--db-accent)]/15 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/30 flex items-center justify-center text-xs font-bold shrink-0">
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[var(--db-accent)]/15 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/30 flex items-center justify-center text-xs font-black shrink-0">
                 {selectedMember?.athleteName?.charAt(0) || "K"}
               </div>
 
@@ -375,63 +386,71 @@ const AIBodyAnalysis = () => {
                 <span className="text-xs font-bold text-[var(--db-text-title)] truncate">
                   {selectedMember?.athleteName || "Karthik S"}
                 </span>
-                <span className="text-[10px] text-[var(--db-text-muted)] font-mono">
+                <span className="text-[9.5px] sm:text-[10px] text-[var(--db-text-muted)] font-mono">
                   #{selectedMember?.memberId || "GYM0012"}
                 </span>
               </div>
 
-              <ChevronDown size={14} className="text-[var(--db-text-muted)] shrink-0" />
+              <ChevronDown size={13} className="text-[var(--db-text-muted)] shrink-0 ml-auto" />
             </div>
 
-            {/* Member Dropdown Menu */}
+            {/* Member Dropdown Backdrop & Menu */}
             {showMemberDropdown && (
-              <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-64 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-40 py-1.5 overflow-hidden backdrop-blur-md">
-                {athletes.map((a) => (
-                  <button
-                    key={a._id}
-                    onClick={() => {
-                      setSelectedMember(a);
-                      setShowMemberDropdown(false);
-                    }}
-                    className={`w-full flex items-center gap-2.5 px-3.5 py-2 text-left hover:bg-[var(--db-input-bg)] transition-all cursor-pointer ${
-                      selectedMember?._id === a._id ? "bg-[var(--db-input-bg)]" : ""
-                    }`}
-                  >
-                    <div className="w-6 h-6 rounded-full bg-[var(--db-accent)]/20 text-[var(--db-accent-highlight)] flex items-center justify-center text-[11px] font-bold">
-                      {a.athleteName?.charAt(0)}
-                    </div>
-                    <div className="flex flex-col leading-tight min-w-0">
-                      <span className="text-xs font-semibold text-[var(--db-text-title)] truncate">
-                        {a.athleteName}
-                      </span>
-                      <span className="text-[10px] text-[var(--db-text-muted)] font-mono">
-                        #{a.memberId}
-                      </span>
-                    </div>
-                  </button>
-                ))}
-              </div>
+              <>
+                <div
+                  className="fixed inset-0 z-40 bg-black/40 sm:bg-transparent"
+                  onClick={() => setShowMemberDropdown(false)}
+                />
+                <div className="fixed left-3 right-3 top-auto sm:absolute sm:left-auto sm:right-0 sm:top-full mt-2 sm:w-64 max-w-sm mx-auto bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-50 py-1.5 overflow-hidden backdrop-blur-md max-h-72 overflow-y-auto custom-scrollbar">
+                  <div className="px-3 py-1.5 border-b border-[var(--db-card-border)] text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">
+                    Choose Member
+                  </div>
+                  {athletes.map((a) => (
+                    <button
+                      key={a._id}
+                      onClick={() => {
+                        setSelectedMember(a);
+                        setShowMemberDropdown(false);
+                      }}
+                      className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left hover:bg-[var(--db-input-bg)] transition-all cursor-pointer ${
+                        selectedMember?._id === a._id ? "bg-[var(--db-input-bg)]" : ""
+                      }`}
+                    >
+                      <div className="w-6 h-6 rounded-full bg-[var(--db-accent)]/20 text-[var(--db-accent-highlight)] flex items-center justify-center text-[11px] font-bold shrink-0">
+                        {a.athleteName?.charAt(0)}
+                      </div>
+                      <div className="flex flex-col leading-tight min-w-0 flex-1">
+                        <span className="text-xs font-semibold text-[var(--db-text-title)] truncate">
+                          {a.athleteName}
+                        </span>
+                        <span className="text-[10px] text-[var(--db-text-muted)] font-mono">
+                          #{a.memberId}
+                        </span>
+                      </div>
+                      {selectedMember?._id === a._id && (
+                        <CheckCircle2 size={14} className="text-emerald-500 shrink-0 ml-auto" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
           </div>
 
-          {/* Date Card */}
-          <div className="flex-1 sm:flex-initial min-w-[140px]">
-            <span className="text-[10px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider block mb-1">
-              Date &amp; Time
-            </span>
-            <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-sm">
-              <div className="p-1.5 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-text-muted)] shrink-0">
-                <Calendar size={14} />
+          {/* Desktop Date Card */}
+          <div className="hidden sm:block flex-1 sm:flex-initial min-w-0">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-sm">
+              <div className="p-1 sm:p-1.5 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-text-muted)] shrink-0">
+                <Calendar size={13} />
               </div>
               <div className="flex flex-col leading-tight min-w-0">
-                <span className="text-[10px] font-semibold text-[var(--db-text-muted)]">
+                <span className="text-[9.5px] sm:text-[10px] font-semibold text-[var(--db-text-muted)]">
                   Session
                 </span>
                 <span className="text-xs font-bold text-[var(--db-text-title)] truncate">
                   {new Date().toLocaleDateString("en-GB", {
                     day: "numeric",
                     month: "short",
-                    year: "numeric",
                   })}
                   , 11:45 AM
                 </span>
@@ -441,8 +460,8 @@ const AIBodyAnalysis = () => {
         </div>
       </div>
 
-      {/* ── 2. MODE TABS ── */}
-      <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-1.5 select-none custom-scrollbar -mx-1 px-1">
+      {/* ── 2. MODE TABS (Smooth Horizontal Touch Scroll) ── */}
+      <div className="flex items-center gap-1.5 sm:gap-2.5 overflow-x-auto pb-0.5 select-none custom-scrollbar -mx-1 px-1 scroll-smooth">
         {ANALYSIS_MODES.map((m) => {
           const isActive = currentMode === m.label;
           const Icon = m.icon;
@@ -450,23 +469,60 @@ const AIBodyAnalysis = () => {
             <button
               key={m.label}
               onClick={() => handleSelectMode(m.label)}
-              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap shadow-sm ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer whitespace-nowrap shadow-sm shrink-0 active:scale-95 ${
                 isActive
                   ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold shadow-md shadow-[var(--db-accent-glow)] scale-[1.02]"
                   : "bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text-title)] hover:bg-[var(--db-input-bg)] hover:border-[var(--db-accent-highlight)]/40"
               }`}
             >
-              <Icon size={14} className={isActive ? "text-[var(--db-accent-text)]" : "text-[var(--db-text-muted)]"} />
+              <Icon size={13} className={isActive ? "text-[var(--db-accent-text)]" : "text-[var(--db-text-muted)]"} />
               <span>{m.label}</span>
             </button>
           );
         })}
       </div>
 
-      {/* ── 3. MIDDLE SECTION (Responsive Multi-Column) ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-4 lg:gap-5 items-stretch">
+      {/* ── MOBILE VIEW SEGMENTED CONTROLS (3 Focused Views: Camera, Scores, Insights) ── */}
+      <div className="md:hidden flex items-center p-1 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-sm gap-1">
+        <button
+          onClick={() => setMobileTab("camera")}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            mobileTab === "camera"
+              ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold shadow-sm"
+              : "text-[var(--db-text-muted)] hover:text-[var(--db-text-title)]"
+          }`}
+        >
+          <Camera size={13} />
+          <span>Camera</span>
+        </button>
+        <button
+          onClick={() => setMobileTab("analysis")}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            mobileTab === "analysis"
+              ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold shadow-sm"
+              : "text-[var(--db-text-muted)] hover:text-[var(--db-text-title)]"
+          }`}
+        >
+          <Activity size={13} />
+          <span>Scores</span>
+        </button>
+        <button
+          onClick={() => setMobileTab("insights")}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            mobileTab === "insights"
+              ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold shadow-sm"
+              : "text-[var(--db-text-muted)] hover:text-[var(--db-text-title)]"
+          }`}
+        >
+          <Sparkles size={13} />
+          <span>Insights &amp; Logs</span>
+        </button>
+      </div>
+
+      {/* ── 3. DESKTOP VIEW (Multi-Column Grid on Desktop) ── */}
+      <div className="hidden md:grid grid-cols-2 xl:grid-cols-12 gap-4 lg:gap-5 items-stretch">
         {/* Column 1: Live Video Camera Viewport */}
-        <div className="col-span-1 md:col-span-2 xl:col-span-5 flex flex-col">
+        <div className="col-span-2 xl:col-span-5 flex flex-col">
           <CameraAnalyzer
             onLandmarksDetected={handleLandmarksDetected}
             currentMode={currentMode}
@@ -526,8 +582,8 @@ const AIBodyAnalysis = () => {
         </div>
       </div>
 
-      {/* ── 4. BOTTOM SECTION (Responsive 3 Cards) ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5 items-stretch">
+      {/* ── 4. DESKTOP BOTTOM CARDS ROW ── */}
+      <div className="hidden md:grid grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5 items-stretch">
         {/* Card 1: Posture Comparison */}
         <div className="col-span-1 flex flex-col">
           <PostureComparisonCard
@@ -551,21 +607,119 @@ const AIBodyAnalysis = () => {
         </div>
       </div>
 
-      {/* ── 5. SECONDARY UTILITY BAR: SAVE, REPORT & ARCHIVES ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[var(--db-card-border)] text-xs text-[var(--db-text-muted)]">
+      {/* ── 5. MOBILE VIEW CONTENT (Rendered per selected mobileTab) ── */}
+      <div className="md:hidden flex flex-col gap-3">
+        {/* Tab 1: Camera Scanner (100% focused on viewport & active kinematic tracking) */}
+        {mobileTab === "camera" && (
+          <div className="flex flex-col gap-2.5">
+            <CameraAnalyzer
+              onLandmarksDetected={handleLandmarksDetected}
+              currentMode={currentMode}
+              jointAngles={postureMetrics.jointAngles}
+              visualState={getVisualState()}
+              isAnalyzing={isAnalyzing}
+              setIsAnalyzing={setIsAnalyzing}
+              analysisDuration={analysisDuration}
+              setAnalysisDuration={setAnalysisDuration}
+              exerciseStats={exerciseStats}
+              onSelectMode={handleSelectMode}
+            />
+
+            {/* Quick Live Context Bar */}
+            <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] text-[11px] shadow-sm">
+              <span className="flex items-center gap-1.5 text-[var(--db-text-muted)] font-medium">
+                <Sparkles size={12} className="text-emerald-500 shrink-0" />
+                <span>AI evaluates 33 landmarks live</span>
+              </span>
+              <button
+                onClick={() => setMobileTab("analysis")}
+                className="text-[var(--db-accent-highlight)] font-extrabold hover:underline shrink-0"
+              >
+                View Scores &rarr;
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 2: Scores & Biomechanics (Posture Score, Metrics, Alignment) */}
+        {mobileTab === "analysis" && (
+          <div className="flex flex-col gap-3">
+            <PostureScoreCard
+              score={
+                currentMode === "Posture Analysis"
+                  ? postureMetrics.overallScore
+                  : exerciseStats.formScore
+              }
+              status={postureMetrics.postureStatus}
+              improvement={`+${
+                (postureMetrics.overallScore || 86) -
+                (selectedMember?.previousScore || 72)
+              }`}
+            />
+
+            {currentMode === "Posture Analysis" ? (
+              <KeyInsightsCard
+                metrics={postureMetrics.alignmentMetrics}
+                insights={postureMetrics.insights}
+              />
+            ) : (
+              <ExerciseStatsCard
+                stats={exerciseStats}
+                currentMode={currentMode}
+                onResetReps={() => {
+                  exerciseAnalysisService.reset();
+                  setExerciseStats(exerciseAnalysisService.getState());
+                  toast.success("Rep counter reset.");
+                }}
+              />
+            )}
+
+            <AlignmentPanel metrics={postureMetrics.alignmentMetrics} />
+            <PostureTypeCards detectedType={postureMetrics.detectedPostureType} />
+            <PostureComparisonCard
+              currentScore={postureMetrics.overallScore}
+              detectedIssues={postureMetrics.detectedIssues}
+              alignmentMetrics={postureMetrics.alignmentMetrics}
+            />
+          </div>
+        )}
+
+        {/* Tab 3: Insights & Plan & History */}
+        {mobileTab === "insights" && (
+          <div className="flex flex-col gap-3">
+            <AIRecommendationsCard
+              recommendations={postureMetrics.recommendations}
+              insights={postureMetrics.insights}
+            />
+            <ProgressChart />
+            <AnalysisHistoryTable
+              history={historyList}
+              onViewReport={(record) => {
+                setSelectedReport(record);
+                setIsReportModalOpen(true);
+              }}
+              onDeleteRecord={handleDeleteRecord}
+              selectedMemberId={selectedMember?.memberId}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* ── 6. SECONDARY UTILITY BAR (Desktop Only - Mobile uses Sticky Bottom Bar) ── */}
+      <div className="hidden md:flex flex-row items-center justify-between gap-3 pt-3 border-t border-[var(--db-card-border)] text-xs text-[var(--db-text-muted)]">
         <div className="flex items-center gap-3">
           <button
             onClick={() => setShowHistoryTable(!showHistoryTable)}
-            className="text-[var(--db-text-muted)] hover:text-[var(--db-text-title)] font-semibold transition-all cursor-pointer underline decoration-dotted"
+            className="text-[var(--db-text-muted)] hover:text-[var(--db-text-title)] font-semibold transition-all cursor-pointer underline decoration-dotted text-xs"
           >
             {showHistoryTable ? "Hide Analysis Archives" : "View Member Analysis Archives"}
           </button>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={() => handleOpenReport()}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text)] hover:text-[var(--db-text-title)] hover:border-[var(--db-accent-highlight)]/50 hover:bg-[var(--db-input-bg)] transition-all cursor-pointer text-xs font-semibold shadow-sm"
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text)] hover:text-[var(--db-text-title)] hover:border-[var(--db-accent-highlight)]/50 hover:bg-[var(--db-input-bg)] transition-all cursor-pointer text-xs font-semibold shadow-sm active:scale-95"
           >
             <FileText size={13} />
             <span>Generate Full Report</span>
@@ -573,7 +727,7 @@ const AIBodyAnalysis = () => {
 
           <button
             onClick={handleSaveAnalysis}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold hover:scale-105 active:scale-95 transition-all cursor-pointer text-xs shadow-md shadow-[var(--db-accent-glow)]"
+            className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold hover:scale-105 active:scale-95 transition-all cursor-pointer text-xs shadow-md shadow-[var(--db-accent-glow)]"
           >
             <Save size={13} />
             <span>Save Analysis</span>
@@ -581,17 +735,37 @@ const AIBodyAnalysis = () => {
         </div>
       </div>
 
-      {/* ── 6. COLLAPSIBLE ANALYSIS HISTORY TABLE ── */}
+      {/* ── MOBILE STICKY BOTTOM ACTION BAR (Thumb-accessible, clean & single) ── */}
+      <div className="md:hidden fixed bottom-3 left-3 right-3 z-40 p-2 rounded-2xl bg-[var(--db-card)]/95 backdrop-blur-xl border border-[var(--db-card-border)] shadow-2xl flex items-center gap-2">
+        <button
+          onClick={() => handleOpenReport()}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text)] text-xs font-bold active:scale-95 transition-all shadow-sm cursor-pointer"
+        >
+          <FileText size={14} className="text-emerald-500" />
+          <span>Full Report</span>
+        </button>
+        <button
+          onClick={handleSaveAnalysis}
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] text-xs font-extrabold active:scale-95 transition-all shadow-md shadow-[var(--db-accent-glow)] cursor-pointer"
+        >
+          <Save size={14} />
+          <span>Save Analysis</span>
+        </button>
+      </div>
+
+      {/* ── 6. COLLAPSIBLE ANALYSIS HISTORY TABLE (Desktop View) ── */}
       {showHistoryTable && (
-        <AnalysisHistoryTable
-          history={historyList}
-          onViewReport={(record) => {
-            setSelectedReport(record);
-            setIsReportModalOpen(true);
-          }}
-          onDeleteRecord={handleDeleteRecord}
-          selectedMemberId={selectedMember?.memberId}
-        />
+        <div className="hidden md:block">
+          <AnalysisHistoryTable
+            history={historyList}
+            onViewReport={(record) => {
+              setSelectedReport(record);
+              setIsReportModalOpen(true);
+            }}
+            onDeleteRecord={handleDeleteRecord}
+            selectedMemberId={selectedMember?.memberId}
+          />
+        </div>
       )}
 
       {/* ── 7. DETAILED PRINTABLE / DOWNLOADABLE REPORT MODAL ── */}

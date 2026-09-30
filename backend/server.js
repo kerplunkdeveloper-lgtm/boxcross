@@ -94,18 +94,37 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
-// Copy barcode image to frontend public directory on startup
+// Copy barcode and admin portal assets to frontend
 const fs = require("fs");
 const path = require("path");
-const srcBarcode = "C:/Users/Admin/.gemini/antigravity-ide/brain/bb465527-de2b-4ae6-a542-45b6fbe0f108/media__1786000584749.png";
-const destBarcode = path.join(__dirname, "../frontend/public/barcode.png");
-try {
-  if (fs.existsSync(srcBarcode)) {
-    fs.copyFileSync(srcBarcode, destBarcode);
-    console.log("✅ UPI QR Barcode copied to frontend/public/barcode.png");
-  } else {
-    console.warn("⚠️ Reference barcode source image not found at expected path:", srcBarcode);
+
+const copyFileSafe = (src, dest) => {
+  try {
+    if (fs.existsSync(src)) {
+      const destDir = path.dirname(dest);
+      if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+      fs.copyFileSync(src, dest);
+      console.log(`✅ Asset copied: ${path.basename(dest)}`);
+    }
+  } catch (err) {
+    console.error(`❌ Failed to copy ${path.basename(dest)}:`, err.message);
   }
-} catch (err) {
-  console.error("❌ Failed to copy barcode image:", err.message);
+};
+
+const srcBarcode = "C:/Users/Admin/.gemini/antigravity-ide/brain/bb465527-de2b-4ae6-a542-45b6fbe0f108/media__1786000584749.png";
+copyFileSafe(srcBarcode, path.join(__dirname, "../frontend/public/barcode.png"));
+
+const srcAdminRef = "C:/Users/Admin/.gemini/antigravity-ide/brain/0ec507a5-b680-4b7b-bbec-50f7fdb089cd/.user_uploaded/media_1790746559259.png";
+if (fs.existsSync(srcAdminRef)) {
+  // Simple check or clean up dims
+  try {
+    fs.unlinkSync(path.join(__dirname, "dims.txt"));
+  } catch (e) {}
 }
+copyFileSafe(srcAdminRef, path.join(__dirname, "../frontend/public/admin_portal_ref.png"));
+
+const srcAdminMobileRef = "C:/Users/Admin/.gemini/antigravity-ide/brain/0ec507a5-b680-4b7b-bbec-50f7fdb089cd/.user_uploaded/media_1790747547849.jpg";
+copyFileSafe(srcAdminMobileRef, path.join(__dirname, "../frontend/public/admin_mobile_ref.jpg"));
+copyFileSafe(srcAdminMobileRef, path.join(__dirname, "../frontend/src/assets/admin_mobile_ref.jpg"));
+
+

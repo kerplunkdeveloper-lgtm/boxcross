@@ -421,54 +421,75 @@ const CameraAnalyzer = ({
       }`}
     >
       {/* ── CENTRAL VIDEO & CANVAS VIEWPORT ── */}
-      <div className="relative flex-grow flex items-center justify-center bg-[#070b0f] overflow-hidden min-h-[240px] sm:min-h-[300px] md:min-h-[360px]">
-        {/* Top Left: LIVE RED PILL BADGE (matching mockup) */}
-        <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-20 flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-red-600/90 text-white font-bold text-[10px] sm:text-xs shadow-md">
-          <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-white animate-pulse" />
-          <span className="tracking-wider text-[10px] sm:text-[11px]">LIVE</span>
+      <div className="relative flex-grow flex items-center justify-center bg-[#070b0f] overflow-hidden min-h-[250px] sm:min-h-[300px] md:min-h-[360px]">
+        {/* Top Left: LIVE RED PILL BADGE (only when analyzing) or READY BADGE */}
+        <div className="absolute top-2.5 left-2.5 sm:top-3.5 sm:left-3.5 z-20 flex items-center gap-1.5">
+          {isAnalyzing ? (
+            <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-red-600 text-white font-bold text-[10px] sm:text-xs shadow-md">
+              <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-white animate-pulse" />
+              <span className="tracking-wider text-[10px] sm:text-[11px]">LIVE</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-gray-300 font-bold text-[10px] sm:text-xs shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span className="tracking-wider text-[10px] sm:text-[11px]">Ready</span>
+            </div>
+          )}
+          <div className="hidden xs:flex items-center px-2 py-0.5 rounded-full bg-black/65 backdrop-blur-md border border-white/15 text-[10px] font-bold text-gray-200">
+            <span>{currentMode}</span>
+          </div>
         </div>
 
-        {/* Top Right: Quick Actions (Camera Turn/Flip + Fullscreen) */}
-        <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-20 flex items-center gap-1.5 sm:gap-2">
-          {/* Turn / Flip Camera Button - Specially designed for Mobile View */}
+        {/* Top Right: Quick Actions (Camera Turn/Flip + Mobile Settings + Fullscreen) */}
+        <div className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-20 flex items-center gap-1 sm:gap-2">
+          {/* Turn / Flip Camera Button - Compact & Sleek */}
           <button
             onClick={handleSwitchCamera}
-            className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg sm:rounded-xl border transition-all cursor-pointer shadow-md backdrop-blur-md active:scale-95 ${
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border transition-all cursor-pointer shadow-md backdrop-blur-md active:scale-95 ${
               facingMode === "environment"
-                ? "bg-neutral-900/95 text-[var(--db-accent-highlight)] border-[var(--db-accent-highlight)]/60 shadow-[0_0_12px_var(--db-accent-glow)]"
-                : "bg-black/65 border-white/15 text-gray-200 hover:text-white hover:border-white/30"
+                ? "bg-neutral-900/95 text-[var(--db-accent-highlight)] border-[var(--db-accent-highlight)]/60 shadow-[0_0_10px_var(--db-accent-glow)]"
+                : "bg-black/70 border-white/15 text-gray-200 hover:text-white hover:border-white/30"
             }`}
             title={
               facingMode === "user"
-                ? "Turn to Back (Rear) Camera"
-                : "Turn to Front (Selfie) Camera"
+                ? "Switch to Back Camera"
+                : "Switch to Front Camera"
             }
           >
             <MdFlipCameraAndroid
-              size={16}
+              size={15}
               className={`transition-transform duration-300 ${
                 facingMode === "environment"
                   ? "text-[var(--db-accent-highlight)] rotate-180"
                   : "text-gray-300"
               }`}
             />
-            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase tracking-wider hidden xs:inline">
               {facingMode === "user" ? "Front" : "Back"}
             </span>
+          </button>
+
+          {/* Settings Button */}
+          <button
+            onClick={() => setShowSettings(!showSettings)}
+            className="p-1.5 rounded-xl bg-black/70 border border-white/15 text-gray-300 hover:text-white transition-all cursor-pointer shadow-md backdrop-blur-md active:scale-95"
+            title="Camera & AI Overlay Settings"
+          >
+            <Settings size={15} />
           </button>
 
           {/* Fullscreen Toggle */}
           <button
             onClick={toggleFullscreen}
-            className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-black/65 border border-white/15 text-gray-300 hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-md backdrop-blur-md"
+            className="p-1.5 sm:p-2 rounded-xl bg-black/70 border border-white/15 text-gray-300 hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-md backdrop-blur-md active:scale-95"
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
           >
             {isFullscreen ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
           </button>
         </div>
 
-        {/* Right Floating Vertical Control Strip (matching mockup) */}
-        <div className="absolute right-2 sm:right-3 md:right-3.5 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-1.5 sm:gap-2 md:gap-2.5">
+        {/* Right Floating Vertical Control Strip (DESKTOP ONLY: hidden on mobile so it never blocks athlete body) */}
+        <div className="hidden md:flex absolute right-2 sm:right-3 md:right-3.5 top-1/2 -translate-y-1/2 z-20 flex-col gap-1.5 sm:gap-2 md:gap-2.5">
           {/* Camera Button */}
           <button
             onClick={isAnalyzing ? () => stopCameraStream(true) : handleStartCamera}
@@ -551,7 +572,7 @@ const CameraAnalyzer = ({
               <span className="text-[9px] sm:text-[10px] mt-0.5 sm:mt-1 font-semibold">Settings</span>
             </button>
 
-            {/* Settings Popover */}
+            {/* Desktop Settings Popover */}
             {showSettings && (
               <div className="absolute right-12 sm:right-16 top-0 w-48 sm:w-52 p-3 rounded-2xl bg-[#0f1722] border border-white/15 shadow-2xl z-30 space-y-2 text-xs">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 border-b border-white/10 pb-1">
@@ -622,6 +643,118 @@ const CameraAnalyzer = ({
           </div>
         </div>
 
+        {/* Mobile Settings Drawer Modal (clean popup on mobile screens) */}
+        {showSettings && (
+          <div
+            className="fixed inset-0 z-50 md:hidden bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 animate-fade-in"
+            onClick={() => setShowSettings(false)}
+          >
+            <div
+              className="w-full max-w-sm bg-[#0f1722] border border-white/20 rounded-2xl p-4 shadow-2xl space-y-3 text-xs"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="text-xs font-black uppercase tracking-wider text-white flex items-center gap-1.5">
+                  <Settings size={14} className="text-[var(--db-accent-highlight)]" />
+                  Camera &amp; AI Overlay Options
+                </span>
+                <button
+                  onClick={() => setShowSettings(false)}
+                  className="text-gray-400 hover:text-white p-1"
+                >
+                  <XCircle size={16} />
+                </button>
+              </div>
+
+              <div className="space-y-2.5">
+                <label className="flex items-center justify-between text-gray-200 py-1 cursor-pointer">
+                  <span className="font-semibold text-xs">Plumb Line Guides</span>
+                  <input
+                    type="checkbox"
+                    checked={showGuides}
+                    onChange={(e) => setShowGuides(e.target.checked)}
+                    className="w-4 h-4 accent-[var(--db-accent-highlight)] cursor-pointer"
+                  />
+                </label>
+                <label className="flex items-center justify-between text-gray-200 py-1 cursor-pointer">
+                  <span className="font-semibold text-xs">Joint Angle Arcs</span>
+                  <input
+                    type="checkbox"
+                    checked={showAngles}
+                    onChange={(e) => setShowAngles(e.target.checked)}
+                    className="w-4 h-4 accent-[var(--db-accent-highlight)] cursor-pointer"
+                  />
+                </label>
+                <label className="flex items-center justify-between text-gray-200 py-1 cursor-pointer">
+                  <span className="font-semibold text-xs">Skeleton Overlay</span>
+                  <input
+                    type="checkbox"
+                    checked={showSkeleton}
+                    onChange={(e) => setShowSkeleton(e.target.checked)}
+                    className="w-4 h-4 accent-[var(--db-accent-highlight)] cursor-pointer"
+                  />
+                </label>
+                <label className="flex items-center justify-between text-gray-200 py-1 cursor-pointer">
+                  <span className="font-semibold text-xs">Mirror Video Feed</span>
+                  <input
+                    type="checkbox"
+                    checked={mirrored}
+                    onChange={(e) => setMirrored(e.target.checked)}
+                    className="w-4 h-4 accent-[var(--db-accent-highlight)] cursor-pointer"
+                  />
+                </label>
+              </div>
+
+              {/* Mobile Lens Switcher */}
+              <div className="pt-2 border-t border-white/10 space-y-1.5">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                  Active Camera Lens
+                </span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      if (facingMode !== "user") handleSwitchCamera();
+                    }}
+                    className={`py-2 px-3 rounded-xl text-center font-bold text-xs transition-all cursor-pointer ${
+                      facingMode === "user"
+                        ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                        : "bg-white/10 text-gray-300"
+                    }`}
+                  >
+                    Front (Selfie)
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (facingMode !== "environment") handleSwitchCamera();
+                    }}
+                    className={`py-2 px-3 rounded-xl text-center font-bold text-xs transition-all cursor-pointer ${
+                      facingMode === "environment"
+                        ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md"
+                        : "bg-white/10 text-gray-300"
+                    }`}
+                  >
+                    Back (Rear)
+                  </button>
+                </div>
+              </div>
+
+              {/* Upload media file option */}
+              <div className="pt-2 border-t border-white/10">
+                <button
+                  onClick={() => {
+                    setShowSettings(false);
+                    fileInputRef.current?.click();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-white/10 hover:bg-white/15 text-gray-200 text-xs font-bold transition-all cursor-pointer"
+                >
+                  <Upload size={14} />
+                  <span>Upload Video or Image File</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Video feed */}
         <video
           ref={videoRef}
@@ -655,55 +788,64 @@ const CameraAnalyzer = ({
           />
         )}
 
-        {/* Standby / Initial State Overlay (No collision: safe area padding on right) */}
-        {!isAnalyzing && countdown === null && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 pr-16 sm:pr-20 md:pr-24 text-center bg-black/75 backdrop-blur-[2px] z-10 select-none">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-[var(--db-accent)]/15 border border-[var(--db-accent-highlight)]/30 flex items-center justify-center text-[var(--db-accent-highlight)] mb-3 sm:mb-4 shadow-[0_0_25px_var(--db-accent-glow)]">
-              <Camera size={26} />
+        {/* Mobile Live Kinematic & Form HUD (shown when active on mobile) */}
+        {isAnalyzing && (
+          <div className="md:hidden absolute bottom-2 left-2 right-2 z-20 flex items-center justify-between px-3 py-1.5 rounded-xl bg-black/85 backdrop-blur-md border border-white/15 shadow-xl text-white">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span className="text-[11px] font-black uppercase tracking-wide text-emerald-400 truncate">
+                {currentMode === "Posture Analysis" ? "Posture Form" : `${exerciseStats?.reps || 0} REPS`}
+              </span>
             </div>
-            <h3 className="text-sm sm:text-base font-black text-white tracking-wide mb-1 uppercase">
-              AI Body &amp; Posture Camera
+            <div className="flex items-center gap-2 text-xs font-mono font-bold shrink-0">
+              <span className="text-[10px] text-gray-400 font-sans font-semibold uppercase">Score</span>
+              <span className="text-emerald-400 font-black">{exerciseStats?.formScore || 86}%</span>
+              {currentMode !== "Posture Analysis" && (
+                <>
+                  <span className="text-white/30">|</span>
+                  <span className="text-[10px] text-gray-400 font-sans font-semibold uppercase">Acc</span>
+                  <span className="text-[#ccf141] font-black">{exerciseStats?.accuracy || 88}%</span>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Standby / Initial State Viewfinder Overlay */}
+        {!isAnalyzing && countdown === null && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-6 md:pr-24 text-center bg-black/80 backdrop-blur-[3px] z-10 select-none">
+            {/* Minimalist AI Optical Scanner Ring */}
+            <div className="relative mb-3 flex items-center justify-center">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[var(--db-accent)]/10 border border-dashed border-[var(--db-accent-highlight)]/40 flex items-center justify-center text-[var(--db-accent-highlight)] animate-[spin_20s_linear_infinite]" />
+              <div className="absolute w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-[var(--db-accent)]/20 border border-[var(--db-accent-highlight)]/60 flex items-center justify-center text-[var(--db-accent-highlight)] shadow-[0_0_20px_var(--db-accent-glow)]">
+                <Camera size={20} />
+              </div>
+            </div>
+
+            <h3 className="text-sm sm:text-base font-black text-white tracking-wide uppercase mb-0.5">
+              {currentMode}
             </h3>
-            <p className="text-[11px] sm:text-xs text-gray-300 max-w-xs sm:max-w-sm mb-3 sm:mb-4 leading-relaxed font-medium">
-              Open your camera or launch the simulator for real-time 33-landmark
-              AI posture and form analysis.
+            <p className="text-[11px] sm:text-xs text-gray-300 max-w-xs mb-3.5 leading-relaxed font-medium">
+              Position full body in frame for real-time 33-point AI motion tracking.
             </p>
 
-            {/* Quick Camera Flip Selector Badge before starting */}
-            <div className="flex items-center justify-center gap-2 mb-3 sm:mb-4">
-              <button
-                onClick={handleSwitchCamera}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-gray-200 text-[11px] font-medium transition-all cursor-pointer hover:border-[var(--db-accent-highlight)]/40 shadow-sm"
-                title="Turn / Flip camera before starting"
-              >
-                <MdFlipCameraAndroid
-                  size={14}
-                  className={`transition-transform duration-300 ${
-                    facingMode === "environment" ? "text-[var(--db-accent-highlight)] rotate-180" : "text-gray-300"
-                  }`}
-                />
-                <span>Camera: <strong className="text-white">{facingMode === "user" ? "Front (Selfie)" : "Back (Rear)"}</strong></span>
-                <span className="text-[10px] text-[var(--db-accent-highlight)] ml-1 font-bold uppercase">Turn</span>
-              </button>
-            </div>
+            {/* Single Prominent CTA */}
+            <button
+              onClick={() => triggerStartWithCountdown("camera")}
+              className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            >
+              <Camera size={14} className="fill-[var(--db-accent-text)]" />
+              <span>Start Camera</span>
+            </button>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 w-full max-w-sm">
-              <button
-                onClick={() => triggerStartWithCountdown("camera")}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold text-[11px] sm:text-xs uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
-              >
-                <Camera size={14} className="fill-[var(--db-accent-text)]" />
-                <span>Open Device Camera</span>
-              </button>
-
-              <button
-                onClick={() => triggerStartWithCountdown("demo")}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-[11px] sm:text-xs uppercase tracking-wider transition-all cursor-pointer hover:border-[var(--db-accent-highlight)]/40"
-              >
-                <Sparkles size={14} className="text-[var(--db-accent-highlight)]" />
-                <span>Test Live Simulation</span>
-              </button>
-            </div>
+            {/* Secondary Simulation Link (Unobtrusive & clean) */}
+            <button
+              onClick={() => triggerStartWithCountdown("demo")}
+              className="mt-2.5 flex items-center gap-1.5 text-[11px] text-[var(--db-accent-highlight)]/80 hover:text-[var(--db-accent-highlight)] font-semibold transition-all cursor-pointer underline decoration-dotted"
+            >
+              <Sparkles size={12} />
+              <span>or try live demo simulation</span>
+            </button>
           </div>
         )}
 
@@ -780,84 +922,91 @@ const CameraAnalyzer = ({
         />
       </div>
 
-      {/* ── BOTTOM CONTROL BAR (matching mockup) ── */}
-      <div className="p-2.5 sm:p-3.5 md:p-4 bg-[var(--db-card)] border-t border-[var(--db-card-border)] flex items-center justify-between gap-3 z-20">
-        {/* Left: Pulsing Audio/Pulse Button + Status + Timer */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          <button
-            onClick={handleTogglePause}
-            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[var(--db-accent)]/15 border border-[var(--db-accent-highlight)]/40 text-[var(--db-accent-highlight)] flex items-center justify-center shadow-[0_0_12px_var(--db-accent-glow)] hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
-            title={
-              countdown !== null
-                ? "Cancel Countdown"
-                : isAnalyzing
-                ? isPaused
-                  ? "Resume Analysis"
-                  : "Pause Analysis"
-                : "Start AI Analysis"
-            }
-          >
-            {isPaused || (!isAnalyzing && countdown === null) ? (
-              <Play size={13} className="fill-[var(--db-accent-highlight)] ml-0.5" />
-            ) : (
-              <Pause size={13} className="fill-[var(--db-accent-highlight)]" />
-            )}
-          </button>
-          <div className="flex flex-col leading-tight">
-            <span className="text-xs font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-1.5">
-              {countdown !== null ? (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-[var(--db-accent-highlight)] animate-ping" />
-                  <span className="text-[var(--db-accent-highlight)] font-extrabold">Starting in {countdown}...</span>
-                </>
-              ) : isAnalyzing ? (
-                isPaused ? (
-                  <span className="text-amber-500 font-bold">Paused</span>
-                ) : (
-                  <>
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>Analyzing...</span>
-                  </>
-                )
+      {/* ── BOTTOM CONTROL BAR ── */}
+      {/* Hidden on mobile when idle (standby CTA is used), visible during active scan or on desktop */}
+      <div
+        className={`p-2.5 sm:p-3.5 md:p-4 bg-[var(--db-card)] border-t border-[var(--db-card-border)] flex-col gap-2 z-20 ${
+          isAnalyzing || countdown !== null ? "flex" : "hidden md:flex"
+        }`}
+      >
+        <div className="flex items-center justify-between gap-3">
+          {/* Left: Pulsing Audio/Pulse Button + Status + Timer */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <button
+              onClick={handleTogglePause}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[var(--db-accent)]/15 border border-[var(--db-accent-highlight)]/40 text-[var(--db-accent-highlight)] flex items-center justify-center shadow-[0_0_12px_var(--db-accent-glow)] hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
+              title={
+                countdown !== null
+                  ? "Cancel Countdown"
+                  : isAnalyzing
+                  ? isPaused
+                    ? "Resume Analysis"
+                    : "Pause Analysis"
+                  : "Start AI Analysis"
+              }
+            >
+              {isPaused || (!isAnalyzing && countdown === null) ? (
+                <Play size={13} className="fill-[var(--db-accent-highlight)] ml-0.5" />
               ) : (
-                <span>Ready</span>
+                <Pause size={13} className="fill-[var(--db-accent-highlight)]" />
               )}
-            </span>
-            <span className="text-[10px] sm:text-[11px] font-mono text-[var(--db-text-muted)]">
-              {countdown !== null || !isAnalyzing
-                ? "00:00"
-                : formatTimer(analysisDuration)}
-            </span>
+            </button>
+            <div className="flex flex-col leading-tight">
+              <span className="text-xs font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-1.5">
+                {countdown !== null ? (
+                  <>
+                    <span className="w-2 h-2 rounded-full bg-[var(--db-accent-highlight)] animate-ping" />
+                    <span className="text-[var(--db-accent-highlight)] font-extrabold">Starting in {countdown}...</span>
+                  </>
+                ) : isAnalyzing ? (
+                  isPaused ? (
+                    <span className="text-amber-500 font-bold">Paused</span>
+                  ) : (
+                    <>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Analyzing...</span>
+                    </>
+                  )
+                ) : (
+                  <span>Ready</span>
+                )}
+              </span>
+              <span className="text-[10px] sm:text-[11px] font-mono text-[var(--db-text-muted)]">
+                {countdown !== null || !isAnalyzing
+                  ? "00:00"
+                  : formatTimer(analysisDuration)}
+              </span>
+            </div>
           </div>
-        </div>
 
-        {/* Right: Action Button (Start / Stop / Cancel) */}
-        <div>
-          {countdown !== null ? (
-            <button
-              onClick={clearCountdownTimers}
-              className="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-gray-200 font-semibold text-[11px] sm:text-xs transition-all cursor-pointer"
-            >
-              <XCircle size={13} className="text-gray-400" />
-              <span>Cancel</span>
-            </button>
-          ) : isAnalyzing ? (
-            <button
-              onClick={() => stopCameraStream(true)}
-              className="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-[11px] sm:text-xs shadow-md shadow-rose-600/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              <Square size={11} className="fill-white" />
-              <span>Stop Analysis</span>
-            </button>
-          ) : (
-            <button
-              onClick={() => triggerStartWithCountdown("camera")}
-              className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-1.5 sm:py-2 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold text-[11px] sm:text-xs uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
-            >
-              <Play size={12} className="fill-[var(--db-accent-text)]" />
-              <span>Start Analysis</span>
-            </button>
-          )}
+          {/* Right: Action Button (Start / Stop / Cancel) */}
+          <div>
+            {countdown !== null ? (
+              <button
+                onClick={clearCountdownTimers}
+                className="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-gray-200 font-semibold text-[11px] sm:text-xs transition-all cursor-pointer active:scale-95"
+              >
+                <XCircle size={13} className="text-gray-400" />
+                <span>Cancel</span>
+              </button>
+            ) : isAnalyzing ? (
+              <button
+                onClick={() => stopCameraStream(true)}
+                className="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-[11px] sm:text-xs shadow-md shadow-rose-600/30 hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              >
+                <Square size={11} className="fill-white" />
+                <span>Stop Analysis</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => triggerStartWithCountdown("camera")}
+                className="flex items-center gap-1.5 sm:gap-2 px-4 sm:px-5 py-1.5 sm:py-2 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold text-[11px] sm:text-xs uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-105 active:scale-95 transition-all cursor-pointer"
+              >
+                <Play size={12} className="fill-[var(--db-accent-text)]" />
+                <span>Start Analysis</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

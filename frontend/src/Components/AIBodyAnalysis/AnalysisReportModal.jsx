@@ -117,33 +117,33 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
       >
         {/* Header Bar */}
         <div
-          className={`p-4 md:p-6 border-b flex items-center justify-between flex-wrap gap-3 print:hidden ${
+          className={`p-3.5 sm:p-4 md:p-6 border-b flex items-center justify-between gap-2.5 print:hidden ${
             isDark
               ? "bg-gradient-to-r from-black via-[#0d0d0d] to-black border-[var(--db-card-border)]"
               : "bg-slate-50 border-slate-200"
           }`}
         >
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-emerald-500 dark:bg-[#ccf141] text-white dark:text-black flex items-center justify-center font-black">
+          <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500 dark:bg-[#ccf141] text-white dark:text-black flex items-center justify-center font-black shrink-0 text-xs sm:text-sm">
               BX
             </div>
-            <div>
+            <div className="min-w-0">
               <h3
-                className={`text-sm md:text-base font-black uppercase tracking-wider ${isDark ? "text-white" : "text-slate-900"}`}
+                className={`text-xs sm:text-sm md:text-base font-black uppercase tracking-wider truncate ${isDark ? "text-white" : "text-slate-900"}`}
               >
-                AI Diagnostic &amp; Fitness Performance Report
+                AI Performance Report
               </h3>
-              <p className="text-[11px] text-[var(--db-text-muted)] font-bold">
-                Box &amp; Cross Digital Physical Assessment Engine
+              <p className="text-[10px] sm:text-[11px] text-[var(--db-text-muted)] font-bold truncate">
+                Digital Assessment Engine
               </p>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <button
               onClick={handlePrint}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 isDark
                   ? "bg-white/10 hover:bg-white/15 text-white"
                   : "bg-slate-200 hover:bg-slate-300 text-slate-800"
@@ -156,7 +156,7 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
 
             <button
               onClick={handleDownloadPDF}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 isDark
                   ? "bg-white/10 hover:bg-white/15 text-white"
                   : "bg-slate-200 hover:bg-slate-300 text-slate-800"
@@ -164,12 +164,12 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
               title="Download PDF"
             >
               <Download size={13} />
-              <span className="hidden sm:inline">Download PDF</span>
+              <span className="hidden sm:inline">Download</span>
             </button>
 
             <button
               onClick={handleShare}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 isDark
                   ? "bg-white/10 hover:bg-white/15 text-white"
                   : "bg-slate-200 hover:bg-slate-300 text-slate-800"
@@ -182,7 +182,7 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
 
             <button
               onClick={onClose}
-              className={`p-1.5 rounded-xl transition-all cursor-pointer ml-1 ${
+              className={`p-1.5 rounded-xl transition-all cursor-pointer ml-0.5 sm:ml-1 ${
                 isDark
                   ? "bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white"
                   : "bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900"
@@ -195,19 +195,19 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
 
         {/* Printable Document Body */}
         <div
-          className={`p-6 md:p-8 space-y-6 ${isDark ? "text-gray-200" : "text-slate-700"}`}
+          className={`p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 ${isDark ? "text-gray-200" : "text-slate-700"}`}
         >
           {/* Member & Header Banner */}
-          <div className="p-5 rounded-2xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3.5">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/15 dark:bg-gradient-to-tr dark:from-[#ccf141]/30 dark:to-black border border-emerald-500/30 dark:border-[#ccf141]/40 flex items-center justify-center font-black text-xl text-emerald-600 dark:text-white">
+          <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-500/15 dark:bg-gradient-to-tr dark:from-[#ccf141]/30 dark:to-black border border-emerald-500/30 dark:border-[#ccf141]/40 flex items-center justify-center font-black text-lg sm:text-xl text-emerald-600 dark:text-white shrink-0">
                 {reportData.memberName?.charAt(0) || "K"}
               </div>
-              <div>
-                <h4 className="text-base font-black text-[var(--db-text-title)] uppercase tracking-wide">
+              <div className="min-w-0">
+                <h4 className="text-sm sm:text-base font-black text-[var(--db-text-title)] uppercase tracking-wide truncate">
                   {reportData.memberName || "Karthik S"}
                 </h4>
-                <div className="flex items-center gap-2 mt-0.5 text-xs text-[var(--db-text-muted)] font-bold">
+                <div className="flex items-center gap-1.5 sm:gap-2 mt-0.5 text-[11px] sm:text-xs text-[var(--db-text-muted)] font-bold flex-wrap">
                   <span className="text-emerald-600 dark:text-[#ccf141]">
                     #{reportData.memberId || "GYM0012"}
                   </span>
@@ -219,67 +219,69 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
               </div>
             </div>
 
-            <div className="text-right">
-              <span className="text-[10px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
-                Date Evaluated
-              </span>
-              <p className="text-xs font-bold text-[var(--db-text-title)] font-mono mt-0.5">
-                {formatDate(reportData.createdAt)}
-              </p>
-              <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-wider">
+            <div className="sm:text-right flex sm:flex-col items-center sm:items-end justify-between border-t sm:border-t-0 pt-2 sm:pt-0 border-[var(--db-card-border)]">
+              <div>
+                <span className="text-[9.5px] sm:text-[10px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
+                  Date Evaluated
+                </span>
+                <p className="text-xs font-bold text-[var(--db-text-title)] font-mono mt-0.5">
+                  {formatDate(reportData.createdAt)}
+                </p>
+              </div>
+              <span className="inline-block mt-0.5 sm:mt-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-[9.5px] sm:text-[10px] font-black uppercase tracking-wider">
                 Certified AI Analysis
               </span>
             </div>
           </div>
 
           {/* Core Score Banner */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
-              <span className="text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+            <div className="p-3 sm:p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
+              <span className="text-[9px] sm:text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
                 Overall Score
               </span>
-              <p className="text-3xl font-black font-mono text-emerald-600 dark:text-[#ccf141] my-1">
+              <p className="text-2xl sm:text-3xl font-black font-mono text-emerald-600 dark:text-[#ccf141] my-0.5 sm:my-1">
                 {reportData.overallScore || 86}
               </p>
-              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+              <span className="text-[9.5px] sm:text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
                 {reportData.detectedPostureType || "Good Posture"}
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
-              <span className="text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
+            <div className="p-3 sm:p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
+              <span className="text-[9px] sm:text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
                 Posture Score
               </span>
-              <p className="text-3xl font-black font-mono text-[var(--db-text-title)] my-1">
+              <p className="text-2xl sm:text-3xl font-black font-mono text-[var(--db-text-title)] my-0.5 sm:my-1">
                 {reportData.postureScore || 86}
               </p>
-              <span className="text-[10px] font-bold text-[var(--db-text-muted)]">
+              <span className="text-[9.5px] sm:text-[10px] font-bold text-[var(--db-text-muted)]">
                 Plumbline Balance
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
-              <span className="text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
+            <div className="p-3 sm:p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
+              <span className="text-[9px] sm:text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
                 Exercise Form
               </span>
-              <p className="text-3xl font-black font-mono text-emerald-600 dark:text-emerald-400 my-1">
+              <p className="text-2xl sm:text-3xl font-black font-mono text-emerald-600 dark:text-emerald-400 my-0.5 sm:my-1">
                 {reportData.formScore ? `${reportData.formScore}%` : "84%"}
               </p>
-              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+              <span className="text-[9.5px] sm:text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
                 Kinematic Rating
               </span>
             </div>
 
-            <div className="p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
-              <span className="text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
+            <div className="p-3 sm:p-4 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-center">
+              <span className="text-[9px] sm:text-[9.5px] font-black uppercase text-[var(--db-text-muted)] tracking-wider">
                 Symmetry
               </span>
-              <p className="text-3xl font-black font-mono text-blue-600 dark:text-blue-400 my-1">
+              <p className="text-2xl sm:text-3xl font-black font-mono text-blue-600 dark:text-blue-400 my-0.5 sm:my-1">
                 {reportData.symmetryScore
                   ? `${reportData.symmetryScore}%`
                   : "88%"}
               </p>
-              <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400">
+              <span className="text-[9.5px] sm:text-[10px] font-bold text-blue-600 dark:text-blue-400">
                 Bilateral Harmony
               </span>
             </div>
@@ -393,6 +395,16 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
               }`}
               placeholder="Add trainer instructions, prescribed sets/reps, or corrective drills..."
             />
+          </div>
+
+          {/* Mobile Bottom Close Button */}
+          <div className="flex sm:hidden items-center gap-2 pt-1 print:hidden">
+            <button
+              onClick={onClose}
+              className="w-full py-2.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-xs font-bold text-[var(--db-text-title)] text-center cursor-pointer hover:bg-[var(--db-input-bg)]/80 transition-all"
+            >
+              Close Assessment Report
+            </button>
           </div>
 
           {/* Legal / Medical Safety Disclaimer */}

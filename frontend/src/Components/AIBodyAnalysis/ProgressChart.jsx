@@ -77,7 +77,7 @@ const ProgressChart = () => {
   const lastPoint = points[points.length - 1];
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between relative h-full flex-1 transition-colors duration-200">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between relative h-full flex-1 transition-colors duration-200">
       {/* Header with Title & Dropdown */}
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-xs sm:text-sm font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-1.5">
@@ -96,22 +96,31 @@ const ProgressChart = () => {
           </button>
 
           {showDropdown && (
-            <div className="absolute right-0 mt-1 w-32 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-xl shadow-xl z-30 py-1 text-xs">
-              {Object.keys(DATA_RANGES).map((range) => (
-                <button
-                  key={range}
-                  onClick={() => {
-                    setActiveRange(range);
-                    setShowDropdown(false);
-                  }}
-                  className={`w-full text-left px-3 py-1.5 hover:bg-[var(--db-input-bg)] text-[11px] transition-colors ${
-                    activeRange === range ? "text-[var(--db-accent-highlight)] font-bold" : "text-[var(--db-text)]"
-                  }`}
-                >
-                  {range}
-                </button>
-              ))}
-            </div>
+            <>
+              {/* Tap anywhere backdrop */}
+              <div
+                className="fixed inset-0 z-20"
+                onClick={() => setShowDropdown(false)}
+              />
+              <div className="absolute right-0 mt-1 w-32 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-xl shadow-xl z-30 py-1 text-xs">
+                {Object.keys(DATA_RANGES).map((range) => (
+                  <button
+                    key={range}
+                    onClick={() => {
+                      setActiveRange(range);
+                      setShowDropdown(false);
+                    }}
+                    className={`w-full text-left px-3 py-1.5 hover:bg-[var(--db-input-bg)] text-[11px] transition-colors ${
+                      activeRange === range
+                        ? "text-[var(--db-accent-highlight)] font-bold"
+                        : "text-[var(--db-text)]"
+                    }`}
+                  >
+                    {range}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>

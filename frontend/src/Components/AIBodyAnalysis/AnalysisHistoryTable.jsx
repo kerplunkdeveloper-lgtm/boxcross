@@ -73,9 +73,9 @@ const AnalysisHistoryTable = ({
   });
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl transition-colors duration-200">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl transition-colors duration-200">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-[var(--db-card-border)]">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3.5 sm:mb-4 pb-3 border-b border-[var(--db-card-border)]">
         <div>
           <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] flex items-center gap-1.5">
             <FileText
@@ -84,7 +84,7 @@ const AnalysisHistoryTable = ({
             />
             Session Archives
           </span>
-          <h3 className="text-sm font-black uppercase tracking-wide text-[var(--db-text-title)] mt-0.5">
+          <h3 className="text-xs sm:text-sm font-black uppercase tracking-wide text-[var(--db-text-title)] mt-0.5">
             Member Analysis History
           </h3>
         </div>
@@ -97,10 +97,10 @@ const AnalysisHistoryTable = ({
         </div>
       </div>
 
-      {/* Filter Toolbar */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 mb-4">
-        {/* Search Input */}
-        <div className="relative">
+      {/* Filter Toolbar - 2-col on mobile, 4-col on desktop */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-2.5 mb-4">
+        {/* Search Input (spans 2 cols on mobile) */}
+        <div className="relative col-span-2 sm:col-span-1">
           <Search
             size={14}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--db-text-muted)]"
@@ -278,8 +278,8 @@ const AnalysisHistoryTable = ({
         </select>
       </div>
 
-      {/* Responsive Table */}
-      <div className="overflow-x-auto custom-scrollbar rounded-xl border border-[var(--db-card-border)]">
+      {/* Desktop Responsive Table (hidden on mobile) */}
+      <div className="hidden md:block overflow-x-auto custom-scrollbar rounded-xl border border-[var(--db-card-border)]">
         <table className="w-full text-left text-xs whitespace-nowrap">
           <thead className="bg-[var(--db-input-bg)] text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] border-b border-[var(--db-card-border)]">
             <tr>
@@ -425,6 +425,133 @@ const AnalysisHistoryTable = ({
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card Feed (md:hidden) */}
+      <div className="md:hidden flex flex-col gap-2.5">
+        {filteredRecords.length === 0 ? (
+          <div className="py-8 text-center text-[var(--db-text-muted)] font-medium text-xs rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40 p-4">
+            No analysis records match the selected filters.
+          </div>
+        ) : (
+          filteredRecords.map((item) => {
+            const issuesCount = item.detectedIssues?.length || 0;
+            return (
+              <div
+                key={item._id || item.id}
+                className="p-3 rounded-xl bg-[var(--db-input-bg)]/40 border border-[var(--db-card-border)] flex flex-col gap-2.5 shadow-sm"
+              >
+                {/* Header: Member + Type + Date */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-7 h-7 shrink-0 rounded-full bg-emerald-500/20 dark:bg-[#ccf141] text-emerald-700 dark:text-black font-black text-[11px] flex items-center justify-center">
+                      {item.memberName?.charAt(0) || "M"}
+                    </div>
+                    <div className="min-w-0 truncate">
+                      <p className="font-bold text-xs text-[var(--db-text-title)] truncate">
+                        {item.memberName}
+                      </p>
+                      <span className="text-[9.5px] font-mono text-emerald-600 dark:text-[#ccf141]">
+                        #{item.memberId}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="text-right shrink-0">
+                    <span className="inline-block px-2 py-0.5 rounded-md text-[9.5px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-[#ccf141] border border-emerald-500/20">
+                      {item.analysisType}
+                    </span>
+                    <p className="text-[9.5px] font-mono text-[var(--db-text-muted)] mt-0.5">
+                      {formatDate(item.createdAt)}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Score & Metrics Row */}
+                <div className="grid grid-cols-4 gap-1.5 p-2 rounded-lg bg-[var(--db-card)] border border-[var(--db-card-border)] text-center">
+                  <div>
+                    <span className="text-[8.5px] font-black uppercase text-[var(--db-text-muted)] block">
+                      Overall
+                    </span>
+                    <span className="text-sm font-black font-mono text-emerald-600 dark:text-[#ccf141]">
+                      {item.overallScore}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[8.5px] font-black uppercase text-[var(--db-text-muted)] block">
+                      Posture
+                    </span>
+                    <span className="text-xs font-bold font-mono text-[var(--db-text-title)]">
+                      {item.postureScore || "—"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[8.5px] font-black uppercase text-[var(--db-text-muted)] block">
+                      Form
+                    </span>
+                    <span className="text-xs font-bold font-mono text-[var(--db-text-title)]">
+                      {item.formScore ? `${item.formScore}%` : "—"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[8.5px] font-black uppercase text-[var(--db-text-muted)] block">
+                      Time
+                    </span>
+                    <span className="text-xs font-mono text-[var(--db-text-muted)]">
+                      {formatDuration(item.duration)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Footer: Issues tag + Trainer + Actions */}
+                <div className="flex items-center justify-between gap-2 pt-0.5">
+                  <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[9px] font-bold shrink-0 ${
+                        issuesCount > 0
+                          ? isDark
+                            ? "bg-amber-500/10 text-amber-300 border border-amber-500/25"
+                            : "bg-amber-50 text-amber-800 border border-amber-200"
+                          : isDark
+                            ? "bg-emerald-500/10 text-emerald-300 border border-emerald-500/25"
+                            : "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                      }`}
+                    >
+                      {issuesCount > 0 ? `${issuesCount} Issues` : "Optimal Form"}
+                    </span>
+                    <span className="text-[10px] text-[var(--db-text-muted)] font-medium truncate">
+                      Coach: {item.trainerName || "Trainer"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      onClick={() => onViewReport(item)}
+                      className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg font-bold text-[10.5px] transition-all cursor-pointer shadow-sm ${
+                        isDark
+                          ? "bg-[#ccf141] text-black hover:opacity-90"
+                          : "bg-emerald-600 text-white hover:bg-emerald-700"
+                      }`}
+                    >
+                      <Eye size={12} />
+                      <span>Report</span>
+                    </button>
+
+                    {onDeleteRecord && (
+                      <button
+                        onClick={() => onDeleteRecord(item._id || item.id)}
+                        className="p-1.5 rounded-lg text-[var(--db-text-muted)] hover:text-red-500 hover:bg-red-500/10 transition-all cursor-pointer"
+                        title="Delete log"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

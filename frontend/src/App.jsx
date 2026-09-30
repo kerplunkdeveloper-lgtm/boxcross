@@ -5,6 +5,7 @@ import {
   Route,
   Outlet,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Preloader from "./Components/Preloader";
@@ -165,6 +166,10 @@ const App = () => {
                 <Route
                   path="/member-dashboard"
                   element={<AthleteDashboard />}
+                />
+                <Route
+                  path="/ai-body-analysis"
+                  element={<Navigate to="/dashboard/ai-body-analysis" replace />}
                 />
                 <Route
                   path="/dashboard"

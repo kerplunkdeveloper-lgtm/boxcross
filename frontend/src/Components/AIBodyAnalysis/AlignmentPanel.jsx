@@ -18,7 +18,7 @@ const AlignmentPanel = ({ metrics = {} }) => {
   ];
 
   return (
-    <div className="p-4 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
+    <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-xl flex flex-col justify-between h-full flex-1 transition-colors duration-200">
       {/* Header */}
       <div className="flex items-center justify-between mb-2 sm:mb-3">
         <h3 className="text-xs sm:text-sm font-bold text-[var(--db-text-title)] tracking-wide flex items-center gap-1.5">
@@ -43,7 +43,7 @@ const AlignmentPanel = ({ metrics = {} }) => {
 
           return (
             <div key={item.key} className="flex items-center justify-between gap-2 sm:gap-3 text-xs">
-              <span className="text-[var(--db-text)] font-semibold text-[11px] sm:text-[11.5px] w-28 sm:w-32 md:w-36 truncate shrink-0">
+              <span className="text-[var(--db-text)] font-semibold text-[11px] sm:text-[11.5px] w-24 sm:w-32 md:w-36 truncate shrink-0">
                 {item.label}
               </span>
 
