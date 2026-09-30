@@ -20,6 +20,13 @@ const goalsReadinessRoutes = require("./routes/goalsReadinessRoutes");
 const aiAnalysisRoutes = require("./routes/aiAnalysisRoutes");
 const entryBaselineRoutes = require("./routes/entryBaselineRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
+const fightClubRoutes = require("./routes/fightClubRoutes");
+const performanceBoxingRoutes = require("./routes/performanceBoxingRoutes");
+const strengthLabRoutes = require("./routes/strengthLabRoutes");
+const hyroxLabRoutes = require("./routes/hyroxLabRoutes");
+const hybridPerformanceRoutes = require("./routes/hybridPerformanceRoutes");
+const athletePerformanceProfileRoutes = require("./routes/athletePerformanceProfileRoutes");
+const juniorAthleteProfileRoutes = require("./routes/juniorAthleteProfileRoutes");
 
 // Load env
 dotenv.config();
@@ -84,6 +91,13 @@ app.use("/api/ai-analysis", aiAnalysisRoutes);
 app.use("/api/entry-baseline", entryBaselineRoutes);
 app.use("/api/entrybaseline", entryBaselineRoutes);
 app.use("/api/attendance", attendanceRoutes);
+app.use("/api/fightclub", fightClubRoutes);
+app.use("/api/performanceboxing", performanceBoxingRoutes);
+app.use("/api/strengthlab", strengthLabRoutes);
+app.use("/api/hyroxlab", hyroxLabRoutes);
+app.use("/api/hybridperformance", hybridPerformanceRoutes);
+app.use("/api/athleteprofile", athletePerformanceProfileRoutes);
+app.use("/api/juniorprofile", juniorAthleteProfileRoutes);
 
 // Health check
 app.get("/", (req, res) => {

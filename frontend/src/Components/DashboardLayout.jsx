@@ -74,7 +74,7 @@ const DashboardLayout = () => {
               aria-hidden="true"
             />
           )}
-          <div className="relative z-10 min-h-full">
+          <div className="relative min-h-full">
             <Outlet />
           </div>
         </main>

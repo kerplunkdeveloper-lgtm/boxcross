@@ -356,7 +356,7 @@ const GoalsReadiness = () => {
   const hasAnyHealthIssue = formData.healthScreen && Object.values(formData.healthScreen).some((v) => v === true);
 
   return (
-    <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 max-w-8xl mx-auto text-[var(--db-text)]">
+    <div className="p-3.5 sm:p-5 md:p-3 space-y-4 sm:space-y-6 max-w-8xl mx-auto text-[var(--db-text)]">
       {/* Top Banner & Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
         {/* Yellow Box & Cross Brand accent strip */}
@@ -364,20 +364,20 @@ const GoalsReadiness = () => {
 
         <div className="space-y-1 z-10">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest bg-[var(--db-accent)] text-[var(--db-accent-text)] font-mono">
+            <span className="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-[var(--db-accent)] text-[var(--db-accent-text)] font-mono">
               01 READINESS
             </span>
-            <span className="text-[10px] sm:text-[11px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[10px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider">
               Measure • Train • Retest
             </span>
           </div>
           <h1
-            className="text-xl sm:text-2xl lg:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]"
+            className="text-xl sm:text-xl lg:text-2xl font-black uppercase tracking-wide text-[var(--db-text-title)]"
             style={{ fontFamily: '"BrutalType Bold", sans-serif' }}
           >
             Goals & Readiness
           </h1>
-          <p className="text-xs sm:text-sm text-[var(--db-text-muted)]">
+          <p className="text-xs sm:text-xs text-[var(--db-text-muted)]">
             Athlete intake assessment, verbatim goals, performance targets & 9-point health screen.
           </p>
         </div>

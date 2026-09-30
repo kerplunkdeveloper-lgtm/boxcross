@@ -192,4 +192,53 @@ export const getAthleteAttendanceHistory = (athleteId) => API.get(`/attendance/a
 export const resetAttendance = (params) => API.delete("/attendance/reset", { params });
 export const deleteAttendance = (id) => API.delete(`/attendance/${id}`);
 
+// ──────────────── FIGHT CLUB API ────────────────
+export const getFightClubs = (params) => API.get("/fightclub", { params });
+export const getFightClubById = (id) => API.get(`/fightclub/${id}`);
+export const createFightClub = (data) => API.post("/fightclub", data);
+export const updateFightClub = (id, data) => API.put(`/fightclub/${id}`, data);
+export const deleteFightClub = (id) => API.delete(`/fightclub/${id}`);
+
+// ──────────────── PERFORMANCE BOXING API ────────────────
+export const getPerformanceBoxings = (params) => API.get("/performanceboxing", { params });
+export const getPerformanceBoxingById = (id) => API.get(`/performanceboxing/${id}`);
+export const createPerformanceBoxing = (data) => API.post("/performanceboxing", data);
+export const updatePerformanceBoxing = (id, data) => API.put(`/performanceboxing/${id}`, data);
+export const deletePerformanceBoxing = (id) => API.delete(`/performanceboxing/${id}`);
+
+// ──────────────── STRENGTH LAB API ────────────────
+export const getStrengthLabs = (params) => API.get("/strengthlab", { params });
+export const getStrengthLabById = (id) => API.get(`/strengthlab/${id}`);
+export const createStrengthLab = (data) => API.post("/strengthlab", data);
+export const updateStrengthLab = (id, data) => API.put(`/strengthlab/${id}`, data);
+export const deleteStrengthLab = (id) => API.delete(`/strengthlab/${id}`);
+
+// ──────────────── HYROX LAB API ────────────────
+export const getHyroxLabs = (params) => API.get("/hyroxlab", { params });
+export const getHyroxLabById = (id) => API.get(`/hyroxlab/${id}`);
+export const createHyroxLab = (data) => API.post("/hyroxlab", data);
+export const updateHyroxLab = (id, data) => API.put(`/hyroxlab/${id}`, data);
+export const deleteHyroxLab = (id) => API.delete(`/hyroxlab/${id}`);
+
+// ──────────────── HYBRID PERFORMANCE API ────────────────
+export const getHybridPerformances = (params) => API.get("/hybridperformance", { params });
+export const getHybridPerformanceById = (id) => API.get(`/hybridperformance/${id}`);
+export const createHybridPerformance = (data) => API.post("/hybridperformance", data);
+export const updateHybridPerformance = (id, data) => API.put(`/hybridperformance/${id}`, data);
+export const deleteHybridPerformance = (id) => API.delete(`/hybridperformance/${id}`);
+
+// ──────────────── ATHLETE PERFORMANCE PROFILE API ────────────────
+export const getAthleteProfiles = (params) => API.get("/athleteprofile", { params });
+export const getAthleteProfileById = (id) => API.get(`/athleteprofile/${id}`);
+export const createAthleteProfile = (data) => API.post("/athleteprofile", data);
+export const updateAthleteProfile = (id, data) => API.put(`/athleteprofile/${id}`, data);
+export const deleteAthleteProfile = (id) => API.delete(`/athleteprofile/${id}`);
+
+// ──────────────── JUNIOR ATHLETE PROFILE API ────────────────
+export const getJuniorProfiles = (params) => API.get("/juniorprofile", { params });
+export const getJuniorProfileById = (id) => API.get(`/juniorprofile/${id}`);
+export const createJuniorProfile = (data) => API.post("/juniorprofile", data);
+export const updateJuniorProfile = (id, data) => API.put(`/juniorprofile/${id}`, data);
+export const deleteJuniorProfile = (id) => API.delete(`/juniorprofile/${id}`);
+
 export default API;

@@ -57,6 +57,13 @@ const Entrybaseline = lazy(() => import("./pages/Entrybaseline"));
 const AIBodyAnalysis = lazy(() => import("./pages/AIBodyAnalysis"));
 const DashboardAttendance = lazy(() => import("./pages/DashboardAttendance"));
 const AthleteDashboard = lazy(() => import("./pages/AthleteDashboard"));
+const FightClub = lazy(() => import("./pages/FightClub"));
+const PerformanceBoxing = lazy(() => import("./pages/PerformanceBoxing"));
+const StrengthLab = lazy(() => import("./pages/StrengthLab"));
+const HyroxLab = lazy(() => import("./pages/HyroxLab"));
+const HybridPerformance = lazy(() => import("./pages/HybridPerformance"));
+const AthletePerformanceProfile = lazy(() => import("./pages/AthletePerformanceProfile"));
+const JuniorAthleteProfile = lazy(() => import("./pages/JuniorAthleteProfile"));
 const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
 const Foot = lazy(() => import("./Components/Foot"));
 const GymMarquee = lazy(() => import("./Components/GymMarquee"));
@@ -230,6 +237,13 @@ const App = () => {
                   />
                   <Route path="ai-body-analysis" element={<AIBodyAnalysis />} />
                   <Route path="attendance" element={<DashboardAttendance />} />
+                  <Route path="fight-club" element={<FightClub />} />
+                  <Route path="performance-boxing" element={<PerformanceBoxing />} />
+                  <Route path="strength-lab" element={<StrengthLab />} />
+                  <Route path="hyrox-lab" element={<HyroxLab />} />
+                  <Route path="hybrid-performance" element={<HybridPerformance />} />
+                  <Route path="athlete-performance-profile" element={<AthletePerformanceProfile />} />
+                  <Route path="junior-athlete-profile" element={<JuniorAthleteProfile />} />
                 </Route>
               </Routes>
             </Suspense>

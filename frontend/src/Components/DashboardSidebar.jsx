@@ -22,6 +22,12 @@ import {
   Activity,
   ClipboardList,
   Fingerprint,
+  Swords,
+  Trophy,
+  Dumbbell,
+  Timer,
+  Zap,
+  Smile,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -447,6 +453,56 @@ const DashboardSidebar = ({
                 name: "Entry Baseline",
                 icon: ClipboardList,
                
+              })}
+
+              {/* Fight Club */}
+              {renderSingleItem({
+                to: "/dashboard/fight-club",
+                name: "Fight Club",
+                icon: Swords,
+              })}
+
+              {/* Performance Boxing */}
+              {renderSingleItem({
+                to: "/dashboard/performance-boxing",
+                name: "Performance Boxing",
+                icon: Trophy,
+                badge: "ELITE"
+              })}
+
+              {/* Strength Lab */}
+              {renderSingleItem({
+                to: "/dashboard/strength-lab",
+                name: "Strength Lab",
+                icon: Dumbbell,
+              })}
+
+              {/* Hyrox Lab */}
+              {renderSingleItem({
+                to: "/dashboard/hyrox-lab",
+                name: "Hyrox Lab",
+                icon: Timer,
+              })}
+
+              {/* Hybrid Performance */}
+              {renderSingleItem({
+                to: "/dashboard/hybrid-performance",
+                name: "Hybrid Performance",
+                icon: Zap,
+              })}
+
+              {/* Athlete Performance Profile */}
+              {renderSingleItem({
+                to: "/dashboard/athlete-performance-profile",
+                name: "Athlete Profile",
+                icon: ClipboardList,
+              })}
+
+              {/* Junior Athlete Profile */}
+              {renderSingleItem({
+                to: "/dashboard/junior-athlete-profile",
+                name: "Junior Profile",
+                icon: Smile,
               })}
 
               {/* Goals & Readiness */}
