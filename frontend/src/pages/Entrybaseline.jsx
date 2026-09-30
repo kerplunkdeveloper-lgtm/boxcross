@@ -547,7 +547,7 @@ const Entrybaseline = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] p-4 sm:p-6 lg:p-8 space-y-6">
+    <div className="min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
       {/* ── PRINT-SPECIFIC CSS INJECTION ── */}
       <style>{`
         @media print {
@@ -584,22 +584,22 @@ const Entrybaseline = () => {
       `}</style>
 
       {/* ── HEADER & TITLE BAR ── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[var(--db-card-border)] pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-[var(--db-card-border)] pb-4 sm:pb-5">
         <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/30 flex items-center justify-center font-black shadow-[0_0_15px_rgba(229,255,0,0.15)]">
-              <ClipboardList size={22} />
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/30 flex items-center justify-center font-black shadow-[0_0_15px_rgba(229,255,0,0.15)] shrink-0">
+              <ClipboardList size={20} className="sm:w-[22px] sm:h-[22px]" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[var(--db-text)] uppercase font-['Brutal_Font',sans-serif]">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-lg sm:text-2xl font-black tracking-tight text-[var(--db-text)] uppercase font-['Brutal_Font',sans-serif]">
                   Entry Baseline
                 </h1>
-                <span className="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded bg-[#ccf141] text-black">
+                <span className="px-2 py-0.5 text-[8px] sm:text-[9px] font-black uppercase tracking-wider rounded bg-[#ccf141] text-black">
                   DAY ONE • 20 MIN
                 </span>
               </div>
-              <p className="text-xs text-[var(--db-text-muted)] font-medium">
+              <p className="text-[11px] sm:text-xs text-[var(--db-text-muted)] font-medium">
                 Mandatory for every enquiry, walk-in and trial. Nobody trains at
                 Box & Cross without one.
               </p>
@@ -607,43 +607,46 @@ const Entrybaseline = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 sm:gap-2.5 w-full md:w-auto">
           <button
             onClick={() => {
               fetchBaselines(true);
               fetchStats();
             }}
             disabled={refreshing}
-            className="p-2.5 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:border-[#ccf141]/40 transition-all cursor-pointer"
+            className="p-2 sm:p-2.5 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:border-[#ccf141]/40 transition-all cursor-pointer"
             title="Refresh Assessments"
           >
             <RefreshCw
-              size={16}
+              size={15}
               className={refreshing ? "animate-spin text-[#ccf141]" : ""}
             />
           </button>
 
           <button
             onClick={handleOpenCreate}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#ccf141] text-black font-black text-xs uppercase tracking-wider hover:bg-[#d4ee00] transition-all shadow-[0_0_20px_rgba(229,255,0,0.25)] cursor-pointer"
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-[#ccf141] text-black font-black text-xs uppercase tracking-wider hover:bg-[#d4ee00] transition-all shadow-[0_0_20px_rgba(229,255,0,0.25)] cursor-pointer"
           >
-            <Plus size={16} strokeWidth={3} />
+            <Plus size={15} strokeWidth={3} />
             <span>New Entry Baseline</span>
           </button>
         </div>
       </div>
 
       {/* ── STATS CARDS BAR ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
         {/* Total Baselines */}
-        <div className="p-3.5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] flex flex-col justify-between">
-          <div className="flex items-baseline justify-between mt-2">
-            <span className="text-2xl font-black font-mono text-[var(--db-text)]">
+        <div className="p-3 sm:p-3.5 rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] flex flex-col justify-between">
+          <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] truncate">
+            Total Baselines
+          </span>
+          <div className="flex items-baseline justify-between mt-1 sm:mt-2">
+            <span className="text-xl sm:text-2xl font-black font-mono text-[var(--db-text)]">
               {stats.total || 0}
             </span>
             <Activity size={16} className="text-[#ccf141]" />
           </div>
-          <span className="text-[10px] text-neutral-400 mt-1">
+          <span className="text-[10px] text-neutral-400 mt-1 truncate">
             Enquiries & Trials
           </span>
         </div>
@@ -846,199 +849,359 @@ const Entrybaseline = () => {
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="border-b border-[var(--db-card-border)] bg-[var(--db-input-bg)] text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] select-none">
-                  <th className="py-3 px-4">Client / Athlete</th>
-                  <th className="py-3 px-3">Date & Coach</th>
-                  <th className="py-3 px-3">Primary Goal & Metric</th>
-                  <th className="py-3 px-3">Health Clearance</th>
-                  <th className="py-3 px-3">The Four Numbers</th>
-                  <th className="py-3 px-3">Level</th>
-                  <th className="py-3 px-3">Joined?</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--db-card-border)] text-[var(--db-text)]">
-                {baselines.map((rec) => {
-                  const isCleared = rec.clearedToTest === "YES";
-                  const passCount = Object.values(
-                    rec.movementScreen || {},
-                  ).filter((m) => m?.result === "PASS").length;
-                  const modifyCount = Object.values(
-                    rec.movementScreen || {},
-                  ).filter((m) => m?.result === "MODIFY").length;
+          <>
+            {/* Mobile Baseline Cards View (Visible on Mobile Only) */}
+            <div className="block md:hidden divide-y divide-[var(--db-card-border)]">
+              {baselines.map((rec) => {
+                const isCleared = rec.clearedToTest === "YES";
 
-                  return (
-                    <tr
-                      key={rec._id}
-                      className="hover:bg-[var(--db-table-hover)] transition-colors group"
-                    >
-                      {/* Athlete info */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-bold text-[13px] text-[var(--db-text)] flex items-center gap-1.5">
-                          <span>{rec.name}</span>
+                return (
+                  <div
+                    key={rec._id}
+                    className="p-3.5 space-y-2.5 hover:bg-[var(--db-table-hover)] transition-colors"
+                  >
+                    {/* Top: Name, Clearance pill */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="font-bold text-xs text-[var(--db-text)]">
+                            {rec.name}
+                          </span>
                           {rec.gender && (
-                            <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-neutral-800 text-neutral-300">
+                            <span className="text-[9px] font-mono px-1 rounded bg-neutral-800 text-neutral-300">
                               {rec.gender}
                             </span>
                           )}
-                        </div>
-                        <div className="text-[11px] text-[var(--db-text-muted)] flex items-center gap-2 mt-0.5">
-                          {rec.age && <span>{rec.age} yrs</span>}
-                          {rec.phone && (
-                            <span className="font-mono flex items-center gap-1">
-                              <Phone size={10} /> {rec.phone}
-                            </span>
-                          )}
                           {rec.memberId && (
-                            <span className="font-mono text-[#ccf141] font-bold">
+                            <span className="text-[10px] font-mono text-[#ccf141] font-bold">
                               #{rec.memberId}
                             </span>
                           )}
                         </div>
-                      </td>
-
-                      {/* Date & Coach */}
-                      <td className="py-3.5 px-3">
-                        <div className="font-mono text-[11px] text-neutral-300">
-                          {rec.date
-                            ? new Date(rec.date).toLocaleDateString()
-                            : "—"}
-                        </div>
-                        <div className="text-[10px] text-neutral-400 mt-0.5 flex items-center gap-1">
-                          <User size={10} /> {rec.coach || "Vivek"}
-                        </div>
-                      </td>
-
-                      {/* Goal & Metric */}
-                      <td className="py-3.5 px-3 max-w-[190px]">
-                        <div className="truncate font-semibold text-neutral-200">
-                          {rec.theNumberWeWillUse ||
-                            (rec.goals?.[0] ? rec.goals[0] : "—")}
-                        </div>
-                        {rec.nextBlockTarget && (
-                          <div className="text-[10px] text-[#ccf141] font-mono font-bold truncate mt-0.5">
-                            Target: {rec.nextBlockTarget}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Health clearance */}
-                      <td className="py-3.5 px-3">
-                        <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                            isCleared
-                              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                              : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
-                          }`}
-                        >
-                          {isCleared ? (
-                            <CheckCircle2 size={11} />
-                          ) : (
-                            <AlertTriangle size={11} />
+                        <div className="text-[10px] text-[var(--db-text-muted)] flex items-center gap-2 mt-0.5 flex-wrap">
+                          <span>
+                            {rec.date
+                              ? new Date(rec.date).toLocaleDateString()
+                              : "—"}
+                          </span>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <User size={10} /> {rec.coach || "Vivek"}
+                          </span>
+                          {rec.phone && (
+                            <>
+                              <span>•</span>
+                              <a
+                                href={`tel:${rec.phone}`}
+                                className="hover:text-[var(--db-accent-highlight)] flex items-center gap-1 font-mono"
+                              >
+                                <Phone size={10} /> {rec.phone}
+                              </a>
+                            </>
                           )}
-                          {isCleared ? "CLEARED" : "STOP & REFER"}
-                        </span>
-                        {rec.bloodPressure && (
-                          <div className="text-[10px] font-mono text-neutral-400 mt-1">
-                            BP: {rec.bloodPressure}{" "}
-                            {rec.restingHR ? `• ${rec.restingHR} bpm` : ""}
-                          </div>
+                        </div>
+                      </div>
+
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider shrink-0 ${
+                          isCleared
+                            ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                            : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
+                        }`}
+                      >
+                        {isCleared ? (
+                          <CheckCircle2 size={10} />
+                        ) : (
+                          <AlertTriangle size={10} />
                         )}
-                      </td>
+                        {isCleared ? "CLEARED" : "STOP & REFER"}
+                      </span>
+                    </div>
 
-                      {/* The Four Numbers */}
-                      <td className="py-3.5 px-3">
-                        <div className="flex items-center gap-2 font-mono text-[11px]">
-                          <span title="Grip (Stronger Hand)">
-                            ✊{" "}
-                            <strong className="text-amber-400">
-                              {rec.gripStrongerHand || "—"}
-                            </strong>{" "}
-                            kg
+                    {/* Goal & Metric info */}
+                    {(rec.theNumberWeWillUse || rec.goals?.[0]) && (
+                      <div className="bg-[var(--db-input-bg)]/60 border border-[var(--db-card-border)] rounded-xl p-2 text-[10px]">
+                        <span className="text-[var(--db-text-muted)] block text-[9px] uppercase font-bold">
+                          Primary Goal & Target
+                        </span>
+                        <span className="font-semibold text-[var(--db-text)] block">
+                          {rec.theNumberWeWillUse || rec.goals?.[0]}
+                        </span>
+                        {rec.nextBlockTarget && (
+                          <span className="text-[#ccf141] font-mono font-bold block mt-0.5">
+                            Target: {rec.nextBlockTarget}
                           </span>
-                          <span className="text-neutral-600">|</span>
-                          <span title="Push-ups max clean reps">
-                            💪{" "}
-                            <strong className="text-sky-400">
-                              {rec.pushUps || "—"}
-                            </strong>
-                          </span>
-                          <span className="text-neutral-600">|</span>
-                          <span title="Recovery HR drop">
-                            ❤️{" "}
-                            <strong className="text-rose-400">
-                              -{rec.stepTest?.recoveryHR || 0}
-                            </strong>
-                          </span>
-                        </div>
-                        <div className="text-[10px] text-neutral-400 mt-0.5 font-mono">
-                          VO2: {rec.stepTest?.estVo2Max || "—"} • Move:{" "}
-                          {passCount}P/{modifyCount}M
-                        </div>
-                      </td>
+                        )}
+                      </div>
+                    )}
 
-                      {/* Level */}
-                      <td className="py-3.5 px-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase tracking-wider bg-neutral-800 text-neutral-300 border border-neutral-700">
+                    {/* The 4 Numbers Grid */}
+                    <div className="grid grid-cols-3 gap-1.5 text-center bg-[var(--db-input-bg)]/40 border border-[var(--db-card-border)] rounded-xl p-2 font-mono text-[10px]">
+                      <div>
+                        <span className="text-[8px] text-[var(--db-text-muted)] block uppercase font-bold">
+                          Grip
+                        </span>
+                        <span className="font-bold text-amber-400">
+                          {rec.gripStrongerHand || "—"} kg
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[8px] text-[var(--db-text-muted)] block uppercase font-bold">
+                          Push-ups
+                        </span>
+                        <span className="font-bold text-sky-400">
+                          {rec.pushUps || "—"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[8px] text-[var(--db-text-muted)] block uppercase font-bold">
+                          Recov HR
+                        </span>
+                        <span className="font-bold text-rose-400">
+                          -{rec.stepTest?.recoveryHR || 0}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Bottom row: Level badge, Joined status, Actions */}
+                    <div className="flex items-center justify-between pt-1">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black uppercase bg-neutral-800 text-neutral-300 border border-neutral-700">
                           {rec.level || "FOUND"}
                         </span>
-                      </td>
-
-                      {/* Joined Today */}
-                      <td className="py-3.5 px-3">
-                        {rec.joinedToday ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-black text-[#ccf141]">
-                            <Sparkles size={12} /> YES
-                          </span>
-                        ) : (
-                          <span className="text-[11px] text-neutral-500">
-                            {rec.followUpDate
-                              ? `F/U: ${rec.followUpDate}`
-                              : "No"}
+                        {rec.joinedToday && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#ccf141]">
+                            <Sparkles size={11} /> Joined
                           </span>
                         )}
-                      </td>
+                      </div>
 
-                      {/* Actions */}
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <button
-                            onClick={() => {
-                              setViewingRecord(rec);
-                              setPdfSheetMode("both");
-                            }}
-                            className="p-1.5 rounded-lg bg-[var(--db-input-bg)] hover:bg-[#ccf141]/15 text-neutral-300 hover:text-[#ccf141] border border-[var(--db-card-border)] transition-colors cursor-pointer"
-                            title="View Official Sheet & Print PDF"
-                          >
-                            <Eye size={14} />
-                          </button>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => {
+                            setViewingRecord(rec);
+                            setPdfSheetMode("both");
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-[var(--db-input-bg)] text-[#ccf141] border border-[var(--db-card-border)] text-[10px] font-bold inline-flex items-center gap-1 hover:bg-[#ccf141]/20 cursor-pointer"
+                        >
+                          <Eye size={12} /> View Sheet
+                        </button>
+                        <button
+                          onClick={() => handleOpenEdit(rec)}
+                          className="p-1 rounded-lg bg-[var(--db-input-bg)] hover:bg-neutral-800 text-neutral-300 hover:text-white border border-[var(--db-card-border)] cursor-pointer"
+                          title="Edit Assessment"
+                        >
+                          <Edit2 size={12} />
+                        </button>
+                        <button
+                          onClick={() => setDeletingId(rec._id)}
+                          className="p-1 rounded-lg bg-[var(--db-input-bg)] hover:bg-rose-500/15 text-neutral-300 hover:text-rose-400 border border-[var(--db-card-border)] cursor-pointer"
+                          title="Delete"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
-                          <button
-                            onClick={() => handleOpenEdit(rec)}
-                            className="p-1.5 rounded-lg bg-[var(--db-input-bg)] hover:bg-neutral-800 text-neutral-300 hover:text-white border border-[var(--db-card-border)] transition-colors cursor-pointer"
-                            title="Edit Assessment"
-                          >
-                            <Edit2 size={14} />
-                          </button>
+            {/* Desktop Table View (Hidden on Mobile) */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-[var(--db-card-border)] bg-[var(--db-input-bg)] text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] select-none">
+                    <th className="py-3 px-4">Client / Athlete</th>
+                    <th className="py-3 px-3">Date & Coach</th>
+                    <th className="py-3 px-3">Primary Goal & Metric</th>
+                    <th className="py-3 px-3">Health Clearance</th>
+                    <th className="py-3 px-3">The Four Numbers</th>
+                    <th className="py-3 px-3">Level</th>
+                    <th className="py-3 px-3">Joined?</th>
+                    <th className="py-3 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--db-card-border)] text-[var(--db-text)]">
+                  {baselines.map((rec) => {
+                    const isCleared = rec.clearedToTest === "YES";
+                    const passCount = Object.values(
+                      rec.movementScreen || {},
+                    ).filter((m) => m?.result === "PASS").length;
+                    const modifyCount = Object.values(
+                      rec.movementScreen || {},
+                    ).filter((m) => m?.result === "MODIFY").length;
 
-                          <button
-                            onClick={() => setDeletingId(rec._id)}
-                            className="p-1.5 rounded-lg bg-[var(--db-input-bg)] hover:bg-rose-500/15 text-neutral-300 hover:text-rose-400 border border-[var(--db-card-border)] transition-colors cursor-pointer"
-                            title="Delete"
+                    return (
+                      <tr
+                        key={rec._id}
+                        className="hover:bg-[var(--db-table-hover)] transition-colors group"
+                      >
+                        {/* Athlete info */}
+                        <td className="py-3.5 px-4">
+                          <div className="font-bold text-[13px] text-[var(--db-text)] flex items-center gap-1.5">
+                            <span>{rec.name}</span>
+                            {rec.gender && (
+                              <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-neutral-800 text-neutral-300">
+                                {rec.gender}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-[11px] text-[var(--db-text-muted)] flex items-center gap-2 mt-0.5">
+                            {rec.age && <span>{rec.age} yrs</span>}
+                            {rec.phone && (
+                              <span className="font-mono flex items-center gap-1">
+                                <Phone size={10} /> {rec.phone}
+                              </span>
+                            )}
+                            {rec.memberId && (
+                              <span className="font-mono text-[#ccf141] font-bold">
+                                #{rec.memberId}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* Date & Coach */}
+                        <td className="py-3.5 px-3">
+                          <div className="font-mono text-[11px] text-neutral-300">
+                            {rec.date
+                              ? new Date(rec.date).toLocaleDateString()
+                              : "—"}
+                          </div>
+                          <div className="text-[10px] text-neutral-400 mt-0.5 flex items-center gap-1">
+                            <User size={10} /> {rec.coach || "Vivek"}
+                          </div>
+                        </td>
+
+                        {/* Goal & Metric */}
+                        <td className="py-3.5 px-3 max-w-[190px]">
+                          <div className="truncate font-semibold text-neutral-200">
+                            {rec.theNumberWeWillUse ||
+                              (rec.goals?.[0] ? rec.goals[0] : "—")}
+                          </div>
+                          {rec.nextBlockTarget && (
+                            <div className="text-[10px] text-[#ccf141] font-mono font-bold truncate mt-0.5">
+                              Target: {rec.nextBlockTarget}
+                            </div>
+                          )}
+                        </td>
+
+                        {/* Health clearance */}
+                        <td className="py-3.5 px-3">
+                          <span
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                              isCleared
+                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                                : "bg-rose-500/15 text-rose-400 border border-rose-500/30"
+                            }`}
                           >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                            {isCleared ? (
+                              <CheckCircle2 size={11} />
+                            ) : (
+                              <AlertTriangle size={11} />
+                            )}
+                            {isCleared ? "CLEARED" : "STOP & REFER"}
+                          </span>
+                          {rec.bloodPressure && (
+                            <div className="text-[10px] font-mono text-neutral-400 mt-1">
+                              BP: {rec.bloodPressure}{" "}
+                              {rec.restingHR ? `• ${rec.restingHR} bpm` : ""}
+                            </div>
+                          )}
+                        </td>
+
+                        {/* The Four Numbers */}
+                        <td className="py-3.5 px-3">
+                          <div className="flex items-center gap-2 font-mono text-[11px]">
+                            <span title="Grip (Stronger Hand)">
+                              ✊{" "}
+                              <strong className="text-amber-400">
+                                {rec.gripStrongerHand || "—"}
+                              </strong>{" "}
+                              kg
+                            </span>
+                            <span className="text-neutral-600">|</span>
+                            <span title="Push-ups max clean reps">
+                              💪{" "}
+                              <strong className="text-sky-400">
+                                {rec.pushUps || "—"}
+                              </strong>
+                            </span>
+                            <span className="text-neutral-600">|</span>
+                            <span title="Recovery HR drop">
+                              ❤️{" "}
+                              <strong className="text-rose-400">
+                                -{rec.stepTest?.recoveryHR || 0}
+                              </strong>
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-neutral-400 mt-0.5 font-mono">
+                            VO2: {rec.stepTest?.estVo2Max || "—"} • Move:{" "}
+                            {passCount}P/{modifyCount}M
+                          </div>
+                        </td>
+
+                        {/* Level */}
+                        <td className="py-3.5 px-3">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-black uppercase tracking-wider bg-neutral-800 text-neutral-300 border border-neutral-700">
+                            {rec.level || "FOUND"}
+                          </span>
+                        </td>
+
+                        {/* Joined Today */}
+                        <td className="py-3.5 px-3">
+                          {rec.joinedToday ? (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-black text-[#ccf141]">
+                              <Sparkles size={12} /> YES
+                            </span>
+                          ) : (
+                            <span className="text-[11px] text-neutral-500">
+                              {rec.followUpDate
+                                ? `F/U: ${rec.followUpDate}`
+                                : "No"}
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Actions */}
+                        <td className="py-3.5 px-4 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => {
+                                setViewingRecord(rec);
+                                setPdfSheetMode("both");
+                              }}
+                              className="p-1.5 rounded-lg bg-[var(--db-input-bg)] hover:bg-[#ccf141]/15 text-neutral-300 hover:text-[#ccf141] border border-[var(--db-card-border)] transition-colors cursor-pointer"
+                              title="View Official Sheet & Print PDF"
+                            >
+                              <Eye size={14} />
+                            </button>
+
+                            <button
+                              onClick={() => handleOpenEdit(rec)}
+                              className="p-1.5 rounded-lg bg-[var(--db-input-bg)] hover:bg-neutral-800 text-neutral-300 hover:text-white border border-[var(--db-card-border)] transition-colors cursor-pointer"
+                              title="Edit Assessment"
+                            >
+                              <Edit2 size={14} />
+                            </button>
+
+                            <button
+                              onClick={() => setDeletingId(rec._id)}
+                              className="p-1.5 rounded-lg bg-[var(--db-input-bg)] hover:bg-rose-500/15 text-neutral-300 hover:text-rose-400 border border-[var(--db-card-border)] transition-colors cursor-pointer"
+                              title="Delete"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 

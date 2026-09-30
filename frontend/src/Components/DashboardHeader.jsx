@@ -499,10 +499,10 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
   };
 
   return (
-    <header className="h-14 bg-[var(--db-header)] border-b border-[var(--db-header-border)] px-3.5 md:px-5 flex items-center justify-between flex-shrink-0 transition-colors relative">
-      <div className="flex items-center gap-2.5">
+    <header className="h-14 bg-[var(--db-header)] border-b border-[var(--db-header-border)] px-3 sm:px-5 flex items-center justify-between flex-shrink-0 transition-colors relative z-20">
+      <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
         <button
-          className="text-[var(--db-text-muted)] hover:text-[var(--db-text)] p-1.5 rounded-lg hover:bg-[var(--db-sidebar-link-hover)] cursor-pointer transition-colors"
+          className="text-[var(--db-text-muted)] hover:text-[var(--db-text)] p-2 rounded-xl hover:bg-[var(--db-sidebar-link-hover)] cursor-pointer transition-colors shrink-0"
           onClick={() => setSidebarOpen((prev) => !prev)}
           title={
             sidebarOpen ? "Collapse sidebar (icons only)" : "Expand sidebar"
@@ -510,14 +510,14 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         >
           <Menu size={18} />
         </button>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[11px] font-semibold text-[var(--db-text-muted)]/70 uppercase tracking-wider hidden sm:inline">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className="text-[11px] font-semibold text-[var(--db-text-muted)]/70 uppercase tracking-wider hidden sm:inline shrink-0">
             Dashboard
           </span>
-          <span className="text-[10px] text-[var(--db-text-muted)]/40 hidden sm:inline">
+          <span className="text-[10px] text-[var(--db-text-muted)]/40 hidden sm:inline shrink-0">
             /
           </span>
-          <h2 className="text-[12px] md:text-[13px] font-black uppercase tracking-wider text-[var(--db-text-title)]">
+          <h2 className="text-[12px] sm:text-[13px] font-black uppercase tracking-wider text-[var(--db-text-title)] truncate max-w-[130px] sm:max-w-[240px] md:max-w-none">
             {activeTitle}
           </h2>
         </div>
@@ -568,7 +568,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 8, scale: 0.97 }}
                 transition={{ duration: 0.18, ease: "easeOut" }}
-                className="fixed sm:absolute top-16 sm:top-12 left-3 right-3 sm:left-auto sm:right-0 w-auto sm:w-[400px] bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.25)] z-50 overflow-hidden"
+                className="fixed sm:absolute top-14 sm:top-12 left-2 right-2 sm:left-auto sm:right-0 w-auto sm:w-[380px] md:w-[400px] max-h-[85vh] flex flex-col bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.35)] z-50 overflow-hidden"
               >
                 {/* Header */}
                 <div

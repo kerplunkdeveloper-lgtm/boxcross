@@ -65,22 +65,22 @@ const DashboardBookings = () => {
   };
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-3.5 sm:p-5 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 md:p-8 shadow-2xl transition-colors"
+          className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[24px] p-4 sm:p-6 md:p-8 shadow-2xl transition-colors"
         >
-          <div className="flex items-center justify-between mb-6 pb-2 border-b border-[var(--db-card-border)]">
+          <div className="flex items-center justify-between mb-5 pb-3 border-b border-[var(--db-card-border)]">
             <div className="flex items-center gap-2">
               <Flame size={18} className="text-[var(--db-accent-highlight)]" />
-              <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
+              <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)]">
                 Visitors Members list
               </span>
             </div>
-            <span className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] px-2 py-0.5 rounded-sm font-bold">
+            <span className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] px-2.5 py-1 rounded-full font-bold">
               {bookings.length} Total
             </span>
           </div>
@@ -109,68 +109,137 @@ const DashboardBookings = () => {
               <span>Loading bookings from server...</span>
             </div>
           ) : bookings.length > 0 ? (
-            <div className="overflow-x-auto w-full">
-              <table className="w-full text-left border-collapse min-w-[700px]">
-                <thead>
-                  <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
-                    <th className="py-4 px-4 rounded-l-xl">Visitor</th>
-                    <th className="py-4 px-4">Phone</th>
-                    <th className="py-4 px-4">Goal</th>
-                    <th className="py-4 px-4">Date</th>
-                    <th className="py-4 px-4">Time</th>
-                    <th className="py-4 px-4">Status</th>
-                    <th className="py-4 px-4 text-right rounded-r-xl">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--db-card-border)]">
-                  {bookings.map((booking) => (
-                    <tr
-                      key={booking._id}
-                      className="hover:bg-[var(--db-table-hover)] transition-colors"
-                    >
-                      <td className="py-4 px-4 text-sm font-bold text-[var(--db-text)]">
-                        {booking.name}
-                      </td>
-                      <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
-                        {booking.phone}
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/20 flex items-center justify-center text-[var(--db-accent-highlight)]">
-                            <Dumbbell size={14} />
-                          </div>
-                          <span className="text-sm font-medium text-[var(--db-text)]">
-                            {booking.goal}
-                          </span>
+            <>
+              {/* Mobile Cards View (< md) */}
+              <div className="block md:hidden space-y-3">
+                {bookings.map((booking) => (
+                  <div
+                    key={booking._id}
+                    className="p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40 hover:bg-[var(--db-table-hover)] transition-all space-y-2.5 text-left"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-8 h-8 rounded-lg bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/25 flex items-center justify-center text-[var(--db-accent-highlight)] font-black text-xs shrink-0">
+                          {booking.name?.charAt(0)?.toUpperCase() || "V"}
                         </div>
-                      </td>
-                      <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
-                        {booking.day} {booking.month}
-                      </td>
-                      <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
-                        {booking.time}
-                      </td>
-                      <td className="py-4 px-4">
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-sm">
-                          <CheckCircle size={10} />
-                          {booking.status}
+                        <span className="text-sm font-black text-[var(--db-text)] truncate">
+                          {booking.name}
                         </span>
-                      </td>
-                      <td className="py-4 px-4 text-right">
-                        <button
-                          onClick={() => handleDelete(booking._id)}
-                          className="p-2 text-[var(--db-text-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer"
+                      </div>
+                      <button
+                        onClick={() => handleDelete(booking._id)}
+                        className="p-1.5 text-[var(--db-text-muted)] hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer shrink-0"
+                        title="Delete booking"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span className="text-[9.5px] uppercase font-bold text-[var(--db-text-muted)] block">
+                          Phone
+                        </span>
+                        <a
+                          href={`tel:${booking.phone}`}
+                          className="font-medium text-[var(--db-text)] hover:text-[var(--db-accent-highlight)] truncate block"
                         >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
+                          {booking.phone}
+                        </a>
+                      </div>
+                      <div>
+                        <span className="text-[9.5px] uppercase font-bold text-[var(--db-text-muted)] block">
+                          Schedule
+                        </span>
+                        <span className="font-medium text-[var(--db-text-muted)] truncate block">
+                          {booking.day} {booking.month} • {booking.time}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1 border-t border-[var(--db-card-border)]/50 gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <Dumbbell
+                          size={12}
+                          className="text-[var(--db-accent-highlight)] shrink-0"
+                        />
+                        <span className="text-xs font-semibold text-[var(--db-text)] truncate">
+                          {booking.goal}
+                        </span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-green-400 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-full shrink-0">
+                        <CheckCircle size={9} />
+                        {booking.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View (>= md) */}
+              <div className="hidden md:block overflow-x-auto w-full custom-scrollbar">
+                <table className="w-full text-left border-collapse min-w-[700px]">
+                  <thead>
+                    <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
+                      <th className="py-4 px-4 rounded-l-xl">Visitor</th>
+                      <th className="py-4 px-4">Phone</th>
+                      <th className="py-4 px-4">Goal</th>
+                      <th className="py-4 px-4">Date</th>
+                      <th className="py-4 px-4">Time</th>
+                      <th className="py-4 px-4">Status</th>
+                      <th className="py-4 px-4 text-right rounded-r-xl">
+                        Action
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--db-card-border)]">
+                    {bookings.map((booking) => (
+                      <tr
+                        key={booking._id}
+                        className="hover:bg-[var(--db-table-hover)] transition-colors"
+                      >
+                        <td className="py-4 px-4 text-sm font-bold text-[var(--db-text)]">
+                          {booking.name}
+                        </td>
+                        <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
+                          {booking.phone}
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/20 flex items-center justify-center text-[var(--db-accent-highlight)]">
+                              <Dumbbell size={14} />
+                            </div>
+                            <span className="text-sm font-medium text-[var(--db-text)]">
+                              {booking.goal}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
+                          {booking.day} {booking.month}
+                        </td>
+                        <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
+                          {booking.time}
+                        </td>
+                        <td className="py-4 px-4">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-green-400 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-sm">
+                            <CheckCircle size={10} />
+                            {booking.status}
+                          </span>
+                        </td>
+                        <td className="py-4 px-4 text-right">
+                          <button
+                            onClick={() => handleDelete(booking._id)}
+                            className="p-2 text-[var(--db-text-muted)] hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           ) : (
             <div className="py-12 text-center border border-dashed border-[var(--db-card-border)] rounded-xl">
               <p className="text-[var(--db-text-muted)] text-xs md:text-sm mb-4">
@@ -178,7 +247,7 @@ const DashboardBookings = () => {
               </p>
               <button
                 onClick={() => navigate("/")}
-                className="px-4 py-2 border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-[10px] rounded-lg transition-all"
+                className="px-4 py-2 border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-[10px] rounded-lg transition-all cursor-pointer"
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
                 Book a Visit Now

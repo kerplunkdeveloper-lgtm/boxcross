@@ -1065,7 +1065,7 @@ const DashboardEventParticipants = () => {
   };
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
       <style>{`
         .custom-datetime-picker::-webkit-calendar-picker-indicator {
           filter: invert(1);
@@ -1076,26 +1076,29 @@ const DashboardEventParticipants = () => {
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
 
-      <div className="max-w-8xl mx-auto space-y-6 relative z-10">
+      <div className="max-w-8xl mx-auto space-y-4 sm:space-y-6 relative z-10">
         {/* Header Title + Dynamic Event Tabs */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[var(--db-card-border)] pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-[var(--db-card-border)] pb-3.5 sm:pb-4">
           <div className="text-left">
             <h1
-              className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              className="text-lg sm:text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
               Event Participants
             </h1>
+            <p className="text-[11px] sm:text-xs text-[var(--db-text-muted)] mt-0.5">
+              Live attendance, communications timeline, and CRM logs.
+            </p>
           </div>
 
           {/* Dynamic Event Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 max-w-full">
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto custom-scrollbar pb-1 max-w-full">
             <button
               onClick={() => {
                 setEventFilter("all");
                 setCurrentPage(1);
               }}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer shrink-0 ${
                 eventFilter === "all"
                   ? "bg-[#ccf141] text-black shadow-md border border-[#ccf141]"
                   : "bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
@@ -1481,11 +1484,104 @@ const DashboardEventParticipants = () => {
                   <span>Loading event participants...</span>
                 </div>
               ) : currentItems.length > 0 ? (
-                <div className="overflow-x-auto w-full custom-scrollbar pb-2">
-                  <table
-                    className="w-full text-left border-collapse table-fixed"
-                    style={{ minWidth: "1050px" }}
-                  >
+                <>
+                  {/* Mobile Cards View */}
+                  <div className="block md:hidden space-y-3">
+                    {currentItems.map((booking) => {
+                      const isSelected = selectedBooking && selectedBooking._id === booking._id;
+                      const ns = getNormalizedStatus(booking);
+                      const statusColorMap = {
+                        Confirmed: "border-green-500/30 text-green-400 bg-green-500/10",
+                        Attended: "border-cyan-500/30 text-cyan-400 bg-cyan-500/10",
+                        Awaiting: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10",
+                        "Follow-up": "border-blue-500/30 text-blue-400 bg-blue-500/10",
+                        "No Response": "border-gray-500/30 text-gray-400 bg-gray-500/10",
+                        "Not Coming": "border-red-500/30 text-red-400 bg-red-500/10",
+                      };
+
+                      return (
+                        <div
+                          key={booking._id}
+                          onClick={() => setSelectedBooking(booking)}
+                          className={`bg-[var(--db-input-bg)]/40 border border-[var(--db-input-border)] rounded-2xl p-3.5 space-y-2.5 shadow-md cursor-pointer transition-all ${
+                            isSelected ? "border-[var(--db-accent-highlight)] shadow-[0_0_15px_rgba(204,241,65,0.15)]" : ""
+                          }`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <h4 className="font-bold text-sm text-[var(--db-text)] truncate">{booking.name}</h4>
+                              <div className="flex items-center gap-2 mt-1">
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)]">
+                                  {booking.seats} {booking.seats === 1 ? "seat" : "seats"}
+                                </span>
+                                <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded border ${statusColorMap[ns] || "border-gray-500/30 text-gray-400 bg-gray-500/10"}`}>
+                                  {ns}
+                                </span>
+                              </div>
+                            </div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteBooking(booking._id);
+                              }}
+                              className="p-2 text-[var(--db-text-muted)] hover:text-red-400 rounded-lg hover:bg-red-500/10 transition-colors"
+                              title="Delete Participant"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+
+                          {/* Contacts */}
+                          <div className="flex items-center justify-between gap-2 text-xs pt-1 border-t border-[var(--db-card-border)]/50" onClick={(e) => e.stopPropagation()}>
+                            <a
+                              href={`tel:${booking.phone}`}
+                              className="flex items-center gap-1.5 text-[var(--db-text-muted)] hover:text-[var(--db-accent-highlight)] font-mono text-[11px]"
+                            >
+                              <Phone size={12} className="text-gray-500" />
+                              <span>{booking.phone}</span>
+                            </a>
+                            <a
+                              href={`https://wa.me/${booking.phone}?text=Hi ${booking.name}, this is Box %26 Cross regarding your registration...`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="px-2.5 py-1 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-[10px] font-bold inline-flex items-center gap-1"
+                            >
+                              WhatsApp
+                            </a>
+                          </div>
+
+                          {/* Follow up & notes snippet */}
+                          {(booking.nextFollowUp || booking.notes) && (
+                            <div className="text-[10px] text-[var(--db-text-muted)] bg-[var(--db-card)]/60 rounded-xl p-2 space-y-1">
+                              {booking.nextFollowUp && (
+                                <div className="flex items-center gap-1 text-[#eab308]">
+                                  <Clock size={10} />
+                                  <span>Next Follow-up: {formatFollowUpDisplay(booking.nextFollowUp)}</span>
+                                </div>
+                              )}
+                              {booking.notes && (
+                                <p className="line-clamp-1 italic text-[10px] text-[var(--db-text-muted)]">
+                                  Note: {booking.notes}
+                                </p>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="flex items-center justify-between text-[10px] text-[var(--db-text-muted)] pt-1">
+                            <span>Tap to open CRM details</span>
+                            <span className="text-[var(--db-accent-highlight)] font-bold">Details →</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Desktop Table View */}
+                  <div className="hidden md:block overflow-x-auto w-full custom-scrollbar pb-2">
+                    <table
+                      className="w-full text-left border-collapse table-fixed"
+                      style={{ minWidth: "1050px" }}
+                    >
                     <colgroup>
                       <col style={{ width: "14%" }} /> {/* Name */}
                       <col style={{ width: "11%" }} /> {/* Phone */}
@@ -1946,6 +2042,7 @@ const DashboardEventParticipants = () => {
                     </tbody>
                   </table>
                 </div>
+              </>
               ) : (
                 <div className="py-12 text-center text-gray-500 text-xs">
                   No matching participant records found.

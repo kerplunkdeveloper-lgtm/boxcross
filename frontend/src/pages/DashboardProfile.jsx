@@ -117,15 +117,15 @@ const DashboardProfile = () => {
   };
 
   return (
-    <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#ccf141]/5 rounded-full blur-[120px] pointer-events-none z-0" />
 
-      <div className="max-w-5xl mx-auto space-y-6 relative z-10">
+      <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6 relative z-10">
         {/* Title Header */}
         <div className="text-left">
           <h1
-            className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+            className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
             style={{ fontFamily: '"Brutal Font", sans-serif' }}
           >
             Account Profile
@@ -137,13 +137,13 @@ const DashboardProfile = () => {
         </div>
 
         {/* Profile Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {/* Left Column: Avatar & Quick Info Card */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:col-span-1 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 flex flex-col items-center justify-between text-center relative overflow-hidden transition-colors"
+            className="md:col-span-1 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex flex-col items-center justify-between text-center relative overflow-hidden transition-colors shadow-lg"
           >
             {/* Design accents */}
             <div className="absolute -top-12 -left-12 w-24 h-24 bg-[var(--db-accent-glow)] rounded-full blur-xl pointer-events-none" />
@@ -228,13 +228,13 @@ const DashboardProfile = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="md:col-span-2 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 md:p-8 transition-colors"
+            className="md:col-span-2 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 transition-colors shadow-lg"
           >
-            <form onSubmit={handleSaveProfile} className="space-y-6">
-              <div className="flex items-center gap-2 pb-4 border-b border-[var(--db-card-border)]">
+            <form onSubmit={handleSaveProfile} className="space-y-4 sm:space-y-6">
+              <div className="flex items-center gap-2 pb-3 sm:pb-4 border-b border-[var(--db-card-border)]">
                 <Edit3
-                  size={18}
-                  className="text-[var(--db-accent-highlight)]"
+                  size={16}
+                  className="text-[var(--db-accent-highlight)] sm:w-[18px] sm:h-[18px]"
                 />
                 <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                   Edit Profile Fields
@@ -242,7 +242,7 @@ const DashboardProfile = () => {
               </div>
 
               {/* Form Input fields */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                 {/* Full Name */}
                 <div className="space-y-1.5 text-left">
                   <label className="text-[10px] font-extrabold text-[var(--db-text-muted)] uppercase tracking-wider">
@@ -259,7 +259,7 @@ const DashboardProfile = () => {
                       onChange={(e) => setName(e.target.value)}
                       required
                       placeholder="Your full name"
-                      className="w-full h-12 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                      className="w-full h-11 sm:h-12 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
                     />
                   </div>
                 </div>
@@ -279,7 +279,7 @@ const DashboardProfile = () => {
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="Choose a username"
-                      className="w-full h-12 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                      className="w-full h-11 sm:h-12 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
                     />
                   </div>
                 </div>
@@ -299,7 +299,7 @@ const DashboardProfile = () => {
                       value={user?.email || ""}
                       readOnly
                       placeholder="your.email@domain.com"
-                      className="w-full h-12 bg-[var(--db-bg)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none cursor-not-allowed"
+                      className="w-full h-11 sm:h-12 bg-[var(--db-bg)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none cursor-not-allowed"
                     />
                   </div>
                 </div>
@@ -319,7 +319,7 @@ const DashboardProfile = () => {
                       value={dob}
                       onChange={(e) => setDob(e.target.value)}
                       placeholder="e.g. YYYY-MM-DD or DD/MM/YYYY"
-                      className="w-full h-12 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                      className="w-full h-11 sm:h-12 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
                     />
                   </div>
                 </div>
@@ -339,18 +339,18 @@ const DashboardProfile = () => {
                       value={contactNumber}
                       onChange={(e) => setContactNumber(e.target.value)}
                       placeholder="Enter mobile or contact number"
-                      className="w-full h-12 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                      className="w-full h-11 sm:h-12 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] rounded-xl pl-11 pr-4 text-xs font-semibold outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Submit Buttons */}
-              <div className="pt-4 flex items-center justify-end border-t border-[var(--db-card-border)] gap-3">
+              <div className="pt-3 sm:pt-4 flex items-center justify-end border-t border-[var(--db-card-border)]">
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center justify-center gap-2 bg-[var(--db-accent)] hover:bg-[var(--db-accent-hover)] hover:scale-[1.02] active:scale-95 text-[var(--db-accent-text)] font-extrabold uppercase tracking-wider text-xs px-6 py-3.5 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[var(--db-accent)] hover:bg-[var(--db-accent-hover)] hover:scale-[1.02] active:scale-95 text-[var(--db-accent-text)] font-extrabold uppercase tracking-wider text-xs px-6 py-3.5 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Save size={14} />
                   {saving ? "Saving Changes..." : "Save Profile Details"}

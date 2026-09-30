@@ -83,112 +83,195 @@ const DashboardHomec3 = () => {
   }
 
   return (
-    <div className="space-y-8 animate-fade-in p-7">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors animate-fade-in">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-[var(--db-card-border)] pb-3.5 sm:pb-4">
         <div>
-          <h1 className="text-2xl font-black text-[var(--db-text)] uppercase tracking-wider mb-2">Contact Form — Details</h1>
-          <p className="text-[var(--db-text-muted)] text-sm">View and manage contact/enquiry submissions from the Contact Form.</p>
+          <h1 className="text-lg sm:text-xl md:text-2xl font-black text-[var(--db-text)] uppercase tracking-wider mb-1">
+            Contact Messages
+          </h1>
+          <p className="text-[11px] sm:text-xs text-[var(--db-text-muted)]">
+            View and manage contact/enquiry submissions from the Contact Form.
+          </p>
         </div>
-        <div className="flex items-center gap-2 bg-[var(--db-card)] border border-[var(--db-card-border)] px-4 py-2 rounded-xl">
-          <Users size={18} className="text-[var(--db-accent-highlight)]" />
-          <span className="text-[var(--db-text)] font-bold">{filteredData.length} Enquiries</span>
+        <div className="flex items-center gap-2 bg-[var(--db-card)] border border-[var(--db-card-border)] px-3.5 py-1.5 rounded-xl shrink-0">
+          <Users size={16} className="text-[var(--db-accent-highlight)]" />
+          <span className="text-[var(--db-text)] font-bold text-xs sm:text-sm">{filteredData.length} Enquiries</span>
         </div>
       </div>
 
       <div className="flex items-center relative max-w-md w-full">
-        <span className="absolute left-4 text-[var(--db-text-muted)]">
-          <Search size={18} />
+        <span className="absolute left-3.5 text-[var(--db-text-muted)]">
+          <Search size={16} />
         </span>
         <input
           type="text"
           placeholder="Search by name, email, phone, subject, message..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl pl-12 pr-4 text-sm text-[var(--db-text)] placeholder-[var(--db-text-muted)] focus:outline-none focus:border-[var(--db-accent-highlight)]/50 transition-colors"
+          className="w-full h-10 sm:h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl pl-10 pr-4 text-xs sm:text-sm text-[var(--db-text)] placeholder-[var(--db-text-muted)] focus:outline-none focus:border-[var(--db-accent-highlight)]/50 transition-colors"
         />
       </div>
 
-      <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl overflow-hidden shadow-2xl shadow-black/10">
-        <div className="overflow-x-auto w-full custom-scrollbar">
-          <table className="w-full text-left border-collapse min-w-[950px]">
-            <thead>
-              <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
-                <th className="p-4 rounded-l-xl whitespace-nowrap">User Name</th>
-                <th className="p-4 whitespace-nowrap">Contact Info</th>
-                <th className="p-4 whitespace-nowrap">Subject</th>
-                <th className="p-4 whitespace-nowrap">About Us</th>
-                <th className="p-4 whitespace-nowrap">Message</th>
-                <th className="p-4 whitespace-nowrap">Submitted On</th>
-                <th className="p-4 text-center rounded-r-xl whitespace-nowrap">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.length === 0 ? (
-                <tr>
-                  <td colSpan="7" className="p-8 text-center text-[var(--db-text-muted)]">
-                    No enquiries found.
-                  </td>
-                </tr>
-              ) : (
-                filteredData.map((item) => (
-                  <tr key={item._id} className="border-b border-[var(--db-card-border)]/50 hover:bg-[var(--db-table-hover)] transition-colors">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[var(--db-accent-highlight)]/10 flex items-center justify-center text-[var(--db-accent-highlight)] font-black uppercase">
-                          {item.fullName.charAt(0)}
-                        </div>
-                        <span className="text-sm font-bold text-[var(--db-text)] tracking-wider uppercase">{item.fullName}</span>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex flex-col gap-1 text-sm text-[var(--db-text)]/80">
-                        <div className="flex items-center gap-2">
-                          <Mail size={12} className="text-[var(--db-text-muted)]" />
-                          <span>{item.email}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Phone size={12} className="text-[var(--db-text-muted)]" />
-                          <span>{item.phoneNumber}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="text-sm text-[var(--db-text)] font-semibold">
-                        {item.subject}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <span className="inline-block text-xs bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full uppercase tracking-wider font-extrabold">
-                        {item.aboutus}
-                      </span>
-                    </td>
-                    <td className="p-4 max-w-xs">
-                      <p className="text-sm text-[var(--db-text-muted)] truncate hover:text-[var(--db-text)] transition-colors cursor-pointer" title={item.message}>
-                        {item.message || "-"}
-                      </p>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2 text-sm text-[var(--db-text-muted)]">
-                        <Calendar size={14} />
-                        <span>{formatDate(item.createdAt)}</span>
-                      </div>
-                    </td>
-                    <td className="p-4 text-center">
-                      <button
-                        onClick={() => handleDelete(item._id)}
-                        className="p-2 text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
-                        title="Delete Enquiry"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+      {/* Content Container (Dual View) */}
+      {filteredData.length === 0 ? (
+        <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-8 text-center text-[var(--db-text-muted)] text-xs sm:text-sm">
+          No enquiries found.
         </div>
-      </div>
+      ) : (
+        <>
+          {/* Mobile Cards View */}
+          <div className="block md:hidden space-y-3">
+            {filteredData.map((item) => (
+              <div
+                key={item._id}
+                className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-4 space-y-3 shadow-md"
+              >
+                {/* Header: Avatar, Name & Delete */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                    <div className="w-9 h-9 rounded-full bg-[var(--db-accent-highlight)]/10 border border-[var(--db-accent-highlight)]/20 flex items-center justify-center text-[var(--db-accent-highlight)] font-black uppercase text-sm shrink-0">
+                      {item.fullName.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-bold text-[var(--db-text)] uppercase tracking-wider truncate">
+                        {item.fullName}
+                      </h4>
+                      {item.aboutus && (
+                        <span className="inline-block mt-0.5 text-[9px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full uppercase tracking-wider font-extrabold border border-blue-500/20">
+                          {item.aboutus}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleDelete(item._id)}
+                    className="p-2 text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer shrink-0"
+                    title="Delete Enquiry"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                </div>
+
+                {/* Subject if present */}
+                {item.subject && (
+                  <div className="text-xs font-semibold text-[var(--db-text)]">
+                    <span className="text-[var(--db-text-muted)] font-normal">Subject: </span>
+                    {item.subject}
+                  </div>
+                )}
+
+                {/* Message */}
+                {item.message && (
+                  <div className="p-2.5 rounded-xl bg-[var(--db-input-bg)]/60 border border-[var(--db-input-border)] text-xs text-[var(--db-text-muted)] leading-relaxed italic">
+                    "{item.message}"
+                  </div>
+                )}
+
+                {/* Contacts */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-[var(--db-text-muted)] pt-1 border-t border-[var(--db-card-border)]/50">
+                  <a
+                    href={`tel:${item.phoneNumber}`}
+                    className="flex items-center gap-2 py-1 hover:text-[var(--db-accent-highlight)] transition-colors truncate"
+                  >
+                    <Phone size={13} className="text-[var(--db-accent-highlight)] shrink-0" />
+                    <span className="font-mono text-xs">{item.phoneNumber}</span>
+                  </a>
+                  <a
+                    href={`mailto:${item.email}`}
+                    className="flex items-center gap-2 py-1 hover:text-[var(--db-accent-highlight)] transition-colors truncate"
+                  >
+                    <Mail size={13} className="text-[var(--db-accent-highlight)] shrink-0" />
+                    <span className="text-xs truncate">{item.email}</span>
+                  </a>
+                </div>
+
+                {/* Footer: Date */}
+                <div className="flex items-center justify-between text-[10px] text-[var(--db-text-muted)] pt-1 border-t border-[var(--db-card-border)]/50">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar size={12} />
+                    <span>{formatDate(item.createdAt)}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden md:block bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl overflow-hidden shadow-2xl shadow-black/10">
+            <div className="overflow-x-auto w-full custom-scrollbar">
+              <table className="w-full text-left border-collapse min-w-[950px]">
+                <thead>
+                  <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
+                    <th className="p-4 rounded-l-xl whitespace-nowrap">User Name</th>
+                    <th className="p-4 whitespace-nowrap">Contact Info</th>
+                    <th className="p-4 whitespace-nowrap">Subject</th>
+                    <th className="p-4 whitespace-nowrap">About Us</th>
+                    <th className="p-4 whitespace-nowrap">Message</th>
+                    <th className="p-4 whitespace-nowrap">Submitted On</th>
+                    <th className="p-4 text-center rounded-r-xl whitespace-nowrap">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredData.map((item) => (
+                    <tr key={item._id} className="border-b border-[var(--db-card-border)]/50 hover:bg-[var(--db-table-hover)] transition-colors">
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-[var(--db-accent-highlight)]/10 flex items-center justify-center text-[var(--db-accent-highlight)] font-black uppercase">
+                            {item.fullName.charAt(0)}
+                          </div>
+                          <span className="text-sm font-bold text-[var(--db-text)] tracking-wider uppercase">{item.fullName}</span>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex flex-col gap-1 text-sm text-[var(--db-text)]/80">
+                          <div className="flex items-center gap-2">
+                            <Mail size={12} className="text-[var(--db-text-muted)]" />
+                            <span>{item.email}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Phone size={12} className="text-[var(--db-text-muted)]" />
+                            <span>{item.phoneNumber}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className="text-sm text-[var(--db-text)] font-semibold">
+                          {item.subject}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span className="inline-block text-xs bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full uppercase tracking-wider font-extrabold">
+                          {item.aboutus}
+                        </span>
+                      </td>
+                      <td className="p-4 max-w-xs">
+                        <p className="text-sm text-[var(--db-text-muted)] truncate hover:text-[var(--db-text)] transition-colors cursor-pointer" title={item.message}>
+                          {item.message || "-"}
+                        </p>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-2 text-sm text-[var(--db-text-muted)]">
+                          <Calendar size={14} />
+                          <span>{formatDate(item.createdAt)}</span>
+                        </div>
+                      </td>
+                      <td className="p-4 text-center">
+                        <button
+                          onClick={() => handleDelete(item._id)}
+                          className="p-2 text-red-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                          title="Delete Enquiry"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

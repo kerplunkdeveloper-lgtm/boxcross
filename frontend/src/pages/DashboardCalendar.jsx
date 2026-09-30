@@ -532,27 +532,26 @@ const DashboardCalendar = () => {
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
       {/* Glow effect */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
 
-      <div className="max-w-8xl mx-auto space-y-6 relative z-10">
+      <div className="max-w-8xl mx-auto space-y-4 sm:space-y-6 relative z-10">
         {/* Title Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div className="text-left">
             <h1
-              className="text-xl md:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              className="text-lg sm:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
-             SCHEDULE CALENDAR
+              SCHEDULE CALENDAR
             </h1>
-           
           </div>
 
           {user?.role === "admin" && (
             <button
               onClick={() => handleCellClick(new Date())}
-              className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-5 py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer w-fit self-end sm:self-auto"
+              className="flex items-center justify-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer w-full sm:w-auto"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               <Plus size={14} strokeWidth={2.5} />
@@ -562,38 +561,38 @@ const DashboardCalendar = () => {
         </div>
 
         {/* Calendar Card container */}
-        <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] overflow-hidden shadow-2xl p-6 md:p-8 transition-colors">
+        <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[24px] overflow-hidden shadow-2xl p-3.5 sm:p-6 md:p-8 transition-colors">
           {/* Calendar Controls */}
-          <div className="flex items-center justify-between mb-8 pb-4 border-b border-[var(--db-card-border)]">
+          <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 mb-4 sm:mb-8 pb-3 sm:pb-4 border-b border-[var(--db-card-border)]">
             <div className="flex items-center gap-2">
               <CalendarIcon
                 className="text-[var(--db-accent-highlight)]"
-                size={20}
+                size={18}
               />
               <h2
-                className="text-lg font-black uppercase tracking-widest text-[var(--db-text-title)]"
+                className="text-base sm:text-lg font-black uppercase tracking-widest text-[var(--db-text-title)]"
                 style={{ fontFamily: '"Brutal Font", sans-serif' }}
               >
                 {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
               </h2>
             </div>
 
-            <div className="flex items-center gap-2 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl p-1">
+            <div className="flex items-center gap-1.5 sm:gap-2 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl p-1">
               <button
                 onClick={handlePrevMonth}
-                className="p-2 hover:bg-[var(--db-sidebar-link-hover)] rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 hover:bg-[var(--db-sidebar-link-hover)] rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-colors cursor-pointer"
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={() => setCurrentDate(new Date())}
-                className="px-3 py-1 text-[10px] uppercase font-extrabold tracking-wider text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-md transition-colors cursor-pointer"
+                className="px-2.5 sm:px-3 py-1 text-[10px] uppercase font-extrabold tracking-wider text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-md transition-colors cursor-pointer"
               >
                 Today
               </button>
               <button
                 onClick={handleNextMonth}
-                className="p-2 hover:bg-[var(--db-sidebar-link-hover)] rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-colors cursor-pointer"
+                className="p-1.5 sm:p-2 hover:bg-[var(--db-sidebar-link-hover)] rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] transition-colors cursor-pointer"
               >
                 <ChevronRight size={16} />
               </button>
@@ -612,8 +611,14 @@ const DashboardCalendar = () => {
               </p>
             </div>
           ) : (
-            <div className="w-full overflow-x-auto">
-              <div className="min-w-[700px] border border-[var(--db-card-border)] rounded-2xl overflow-hidden">
+            <div className="w-full">
+              {/* Mobile swipe helper */}
+              <div className="flex items-center justify-between md:hidden mb-2 text-[10px] text-[var(--db-text-muted)] font-medium">
+                <span>← Swipe calendar horizontally →</span>
+                <span className="text-[var(--db-accent-highlight)]">Tap cell to add/edit</span>
+              </div>
+              <div className="overflow-x-auto custom-scrollbar pb-2">
+                <div className="min-w-[640px] border border-[var(--db-card-border)] rounded-2xl overflow-hidden">
                 {/* Weekday headers */}
                 <div className="grid grid-cols-7 bg-[var(--db-input-bg)] border-b border-[var(--db-card-border)]">
                   {weekDays.map((day, idx) => (
@@ -714,14 +719,15 @@ const DashboardCalendar = () => {
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
+    </div>
 
       {/* CREATE / EDIT EVENT FORM MODAL */}
       <AnimatePresence>
         {showFormModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm">
             <div
               className="absolute inset-0 z-0"
               onClick={() => setShowFormModal(false)}
@@ -731,16 +737,16 @@ const DashboardCalendar = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 max-h-[90vh] flex flex-col"
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl relative z-10 max-h-[90vh] flex flex-col"
             >
               {/* Modal header */}
-              <div className="p-6 border-b border-[var(--db-card-border)] flex items-center justify-between shrink-0">
+              <div className="p-4 sm:p-6 border-b border-[var(--db-card-border)] flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/30 flex items-center justify-center text-[var(--db-accent-highlight)]">
                     <CalendarIcon size={16} />
                   </div>
                   <div>
-                    <h3 className="text-sm font-black uppercase tracking-wider text-[var(--db-text-title)]">
+                    <h3 className="text-xs sm:text-sm font-black uppercase tracking-wider text-[var(--db-text-title)]">
                       {editMode
                         ? "Modify Scheduled Event"
                         : "Create New Event Schedule"}
@@ -752,7 +758,7 @@ const DashboardCalendar = () => {
                 </div>
                 <button
                   onClick={() => setShowFormModal(false)}
-                  className="p-2 text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-xl hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer"
+                  className="p-1.5 sm:p-2 text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-xl hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer"
                 >
                   <X size={18} />
                 </button>
@@ -761,7 +767,7 @@ const DashboardCalendar = () => {
               {/* Form container */}
               <form
                 onSubmit={handleSubmit}
-                className="flex-grow overflow-y-auto p-6 space-y-6 custom-scrollbar text-left"
+                className="flex-grow overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6 custom-scrollbar text-left"
               >
                 {/* Image picker banner section */}
                 <div className="space-y-2">
@@ -1157,7 +1163,7 @@ const DashboardCalendar = () => {
 
               {/* Action buttons footer */}
               {user?.role === "admin" ? (
-                <div className="p-6 border-t border-[var(--db-card-border)] bg-[var(--db-input-bg)] flex justify-between gap-4 shrink-0">
+                <div className="p-4 sm:p-6 border-t border-[var(--db-card-border)] bg-[var(--db-input-bg)] flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 shrink-0">
                   {editMode ? (
                     <button
                       type="button"
@@ -1165,20 +1171,20 @@ const DashboardCalendar = () => {
                         handleDeleteEvent(currentId, e);
                         setShowFormModal(false);
                       }}
-                      className="flex items-center gap-2 border border-red-500/30 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 border border-red-500/30 bg-red-500/10 hover:bg-red-500 hover:text-white text-red-400 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer w-full sm:w-auto"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={13} />
                       Delete Event
                     </button>
                   ) : (
                     <div />
                   )}
 
-                  <div className="flex gap-2">
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                     <button
                       type="button"
                       onClick={() => setShowFormModal(false)}
-                      className="px-4 py-2.5 border border-[var(--db-input-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer"
+                      className="flex-1 sm:flex-none px-3.5 py-2 sm:px-4 sm:py-2.5 border border-[var(--db-input-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] rounded-xl text-xs font-bold uppercase tracking-wider transition-all cursor-pointer text-center"
                     >
                       Cancel
                     </button>
@@ -1186,7 +1192,7 @@ const DashboardCalendar = () => {
                       type="button"
                       onClick={handleSubmit}
                       disabled={submitting}
-                      className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                      className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer disabled:opacity-50"
                     >
                       {submitting ? (
                         <Loader2 className="animate-spin" size={14} />
@@ -1198,11 +1204,11 @@ const DashboardCalendar = () => {
                   </div>
                 </div>
               ) : (
-                <div className="p-6 border-t border-[var(--db-card-border)] bg-[var(--db-input-bg)] flex justify-end shrink-0">
+                <div className="p-4 sm:p-6 border-t border-[var(--db-card-border)] bg-[var(--db-input-bg)] flex justify-end shrink-0">
                   <button
                     type="button"
                     onClick={() => setShowFormModal(false)}
-                    className="px-6 py-2.5 bg-[var(--db-accent)] text-[var(--db-accent-text)] rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+                    className="w-full sm:w-auto px-6 py-2.5 bg-[var(--db-accent)] text-[var(--db-accent-text)] rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
                   >
                     Close
                   </button>

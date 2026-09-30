@@ -107,9 +107,9 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6 bg-black/80 backdrop-blur-md overflow-y-auto custom-scrollbar">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md overflow-y-auto custom-scrollbar">
       <div
-        className={`relative w-full max-w-4xl rounded-3xl border shadow-2xl overflow-hidden my-auto print:border-none print:shadow-none print:w-full print:max-w-none transition-colors duration-200 ${
+        className={`relative w-full max-w-4xl max-h-[92vh] flex flex-col rounded-2xl sm:rounded-3xl border shadow-2xl overflow-hidden my-auto print:border-none print:shadow-none print:w-full print:max-w-none transition-colors duration-200 ${
           isDark
             ? "bg-[#0a0a0a] border-[var(--db-card-border)] text-white"
             : "bg-white border-slate-200 text-slate-900"
@@ -117,7 +117,7 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
       >
         {/* Header Bar */}
         <div
-          className={`p-3.5 sm:p-4 md:p-6 border-b flex items-center justify-between gap-2.5 print:hidden ${
+          className={`shrink-0 p-3.5 sm:p-4 md:p-6 border-b flex items-center justify-between gap-2.5 print:hidden ${
             isDark
               ? "bg-gradient-to-r from-black via-[#0d0d0d] to-black border-[var(--db-card-border)]"
               : "bg-slate-50 border-slate-200"
@@ -195,7 +195,7 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
 
         {/* Printable Document Body */}
         <div
-          className={`p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 ${isDark ? "text-gray-200" : "text-slate-700"}`}
+          className={`flex-1 overflow-y-auto custom-scrollbar p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 ${isDark ? "text-gray-200" : "text-slate-700"}`}
         >
           {/* Member & Header Banner */}
           <div className="p-3.5 sm:p-5 rounded-2xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">

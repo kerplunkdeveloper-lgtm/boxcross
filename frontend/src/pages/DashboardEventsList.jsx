@@ -425,30 +425,33 @@ const DashboardEventsList = () => {
   };
 
   return (
-    <div className="p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none z-0" />
 
       <div className="max-w-8xl mx-auto z-10 relative">
         {/* Header Block */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--db-card-border)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 sm:mb-8 pb-4 sm:pb-6 border-b border-[var(--db-card-border)]">
           <div>
             <h1
-              className="text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              className="text-base sm:text-lg md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
               Events Listings
             </h1>
+            <p className="text-[11px] sm:text-xs text-[var(--db-text-muted)] mt-0.5 sm:mt-1">
+              Manage live workouts, bootcamps, and fitness tournament schedules.
+            </p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <button
-              onClick={fetchEvents}
-              className="p-3 bg-[var(--db-input-bg)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-xl border border-[var(--db-input-border)] transition-all flex items-center justify-center cursor-pointer"
+              onClick={() => fetchEvents(true)}
+              className="p-2.5 sm:p-3 bg-[var(--db-input-bg)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-xl border border-[var(--db-input-border)] transition-all flex items-center justify-center cursor-pointer shrink-0"
               title="Reload event records"
             >
               <RefreshCw
-                size={18}
+                size={17}
                 className={
                   loading
                     ? "animate-spin text-[var(--db-accent-highlight)]"
@@ -459,7 +462,7 @@ const DashboardEventsList = () => {
 
             <button
               onClick={handleOpenCreate}
-              className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-5 py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               <Plus size={16} strokeWidth={2.5} />
@@ -497,7 +500,7 @@ const DashboardEventsList = () => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {events.map((event) => (
               <div
                 key={event._id}
@@ -513,7 +516,7 @@ const DashboardEventsList = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--db-card)] via-black/10 to-black/40 pointer-events-none" />
 
                   {/* Actions overlay panel */}
-                  <div className="absolute top-3 right-3 flex gap-1.5 z-10">
+                  <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 flex gap-1.5 z-10">
                     <button
                       onClick={() => handleOpenEdit(event)}
                       className="p-2 bg-black/60 hover:bg-black/90 text-white rounded-lg backdrop-blur-sm border border-white/10 transition-all cursor-pointer"
@@ -531,7 +534,7 @@ const DashboardEventsList = () => {
                   </div>
 
                   {/* Price pill */}
-                  <div className="absolute bottom-3 left-3 bg-[#ccf141] text-black text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-lg">
+                  <div className="absolute bottom-2.5 left-2.5 sm:bottom-3 sm:left-3 bg-[#ccf141] text-black text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md shadow-lg">
                     {Number(event.price) === 0
                       ? "Free Entry"
                       : `₹${event.price} onwards`}
@@ -539,9 +542,9 @@ const DashboardEventsList = () => {
                 </div>
 
                 {/* Event Details Content */}
-                <div className="p-5 flex-grow space-y-4 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <h3 className="text-base font-black uppercase tracking-wide text-[var(--db-text)] leading-snug line-clamp-1">
+                <div className="p-4 sm:p-5 flex-grow space-y-3.5 sm:space-y-4 flex flex-col justify-between">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <h3 className="text-sm sm:text-base font-black uppercase tracking-wide text-[var(--db-text)] leading-snug line-clamp-1">
                       {event.title}
                     </h3>
 
@@ -609,7 +612,7 @@ const DashboardEventsList = () => {
                 </div>
 
                 {/* Footer Link Panel */}
-                <div className="px-5 pb-5 pt-1 flex items-center justify-between shrink-0">
+                <div className="px-4 pb-4 pt-1 sm:px-5 sm:pb-5 flex items-center justify-between shrink-0">
                   <div className="text-[10px] text-[var(--db-text-muted)]">
                     {event.originalPrice ? (
                       <span>
@@ -656,15 +659,15 @@ const DashboardEventsList = () => {
         {/* Redesigned Add/Edit Event Modal */}
         <AnimatePresence>
           {showModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
               <motion.div
                 initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
-                className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl relative my-8"
+                className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl relative my-4 sm:my-8"
               >
                 {/* Modal Header */}
-                <div className="h-16 flex items-center justify-between px-6 border-b border-[var(--db-card-border)] bg-white/[0.01]">
+                <div className="h-14 sm:h-16 flex items-center justify-between px-4 sm:px-6 border-b border-[var(--db-card-border)] bg-white/[0.01]">
                   <h3
                     className="font-extrabold uppercase text-xs tracking-wider text-[var(--db-accent-highlight)]"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -682,7 +685,7 @@ const DashboardEventsList = () => {
                 {/* Scrollable form */}
                 <form
                   onSubmit={handleSubmit}
-                  className="p-6 space-y-6 max-h-[75vh] overflow-y-auto pr-4 custom-scrollbar"
+                  className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-h-[75vh] overflow-y-auto pr-2 sm:pr-4 custom-scrollbar"
                 >
                   {/* SECTION 1: EVENT INFORMATION */}
                   <div className="space-y-4">
@@ -1475,19 +1478,19 @@ const DashboardEventsList = () => {
                   </div>
 
                   {/* Submit Panel */}
-                  <div className="pt-6 border-t border-[var(--db-card-border)] flex justify-end gap-3 bg-white/[0.005]">
+                  <div className="pt-4 sm:pt-6 border-t border-[var(--db-card-border)] flex flex-col-reverse sm:flex-row justify-end gap-2.5 sm:gap-3 bg-white/[0.005]">
                     <button
                       type="button"
                       onClick={() => setShowModal(false)}
                       disabled={submitting}
-                      className="px-5 py-3 rounded-xl border border-[var(--db-input-border)] bg-transparent text-xs font-bold uppercase tracking-wider text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer"
+                      className="w-full sm:w-auto px-5 py-2.5 sm:py-3 rounded-xl border border-[var(--db-input-border)] bg-transparent text-xs font-bold uppercase tracking-wider text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-center"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-6 py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none transition-all cursor-pointer"
+                      className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none transition-all cursor-pointer"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       {submitting ? (

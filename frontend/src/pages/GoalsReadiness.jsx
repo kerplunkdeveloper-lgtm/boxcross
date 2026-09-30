@@ -356,9 +356,9 @@ const GoalsReadiness = () => {
   const hasAnyHealthIssue = formData.healthScreen && Object.values(formData.healthScreen).some((v) => v === true);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-8xl mx-auto text-[var(--db-text)]">
+    <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 max-w-8xl mx-auto text-[var(--db-text)]">
       {/* Top Banner & Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
         {/* Yellow Box & Cross Brand accent strip */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--db-accent)] via-yellow-300 to-[var(--db-accent)]" />
 
@@ -367,12 +367,12 @@ const GoalsReadiness = () => {
             <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest bg-[var(--db-accent)] text-black font-mono">
               01 READINESS
             </span>
-            <span className="text-[11px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[11px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider">
               Measure • Train • Retest
             </span>
           </div>
           <h1
-            className="text-2xl sm:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]"
+            className="text-xl sm:text-2xl lg:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]"
             style={{ fontFamily: '"BrutalType Bold", sans-serif' }}
           >
             Goals & Readiness
@@ -382,46 +382,46 @@ const GoalsReadiness = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 z-10">
+        <div className="flex items-center gap-2.5 z-10 w-full sm:w-auto">
           <button
             onClick={() => {
               fetchAssessments(true);
               fetchStats();
             }}
             disabled={refreshing}
-            className="p-2.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text)] hover:border-[var(--db-accent-highlight)] transition-all cursor-pointer shadow-sm"
+            className="p-2 sm:p-2.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text)] hover:border-[var(--db-accent-highlight)] transition-all cursor-pointer shadow-sm"
             title="Refresh database"
           >
-            <RefreshCw size={16} className={refreshing ? "animate-spin" : ""} />
+            <RefreshCw size={15} className={refreshing ? "animate-spin" : ""} />
           </button>
 
           <button
             onClick={handleOpenCreateModal}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] text-xs font-black uppercase tracking-wider hover:opacity-95 transition-all shadow-md cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] text-xs font-black uppercase tracking-wider hover:opacity-95 transition-all shadow-md cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
           >
-            <Plus size={16} />
+            <Plus size={15} />
             <span>New Assessment</span>
           </button>
         </div>
       </div>
 
       {/* KPI Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         {/* Total Assessments */}
-        <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-4 sm:p-5 shadow-lg relative overflow-hidden">
+        <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] uppercase font-black tracking-wider text-[var(--db-text-muted)]">
+            <span className="text-[10px] sm:text-[11px] uppercase font-black tracking-wider text-[var(--db-text-muted)] truncate">
               Total Screened
             </span>
-            <div className="w-8 h-8 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center">
-              <ClipboardCheck size={16} />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-400 flex items-center justify-center shrink-0">
+              <ClipboardCheck size={15} />
             </div>
           </div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-black text-[var(--db-text)] font-mono">
+          <div className="mt-1.5 sm:mt-2 flex items-baseline gap-2">
+            <span className="text-xl sm:text-3xl font-black text-[var(--db-text)] font-mono">
               {stats.total}
             </span>
-            <span className="text-[10px] text-[var(--db-text-muted)] font-semibold">Records</span>
+            <span className="text-[10px] text-[var(--db-text-muted)] font-semibold truncate">Records</span>
           </div>
         </div>
 
@@ -585,186 +585,380 @@ const GoalsReadiness = () => {
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto w-full custom-scrollbar">
-            <table className="w-full text-left border-collapse min-w-[1260px]">
-              <thead>
-                <tr className="bg-[var(--db-input-bg)]/80 text-[var(--db-text-muted)] text-[11px] uppercase font-black tracking-widest border-b border-[var(--db-card-border)] select-none">
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[130px] text-left">Date</th>
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[140px] text-left">Member ID</th>
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[240px] text-left">Athlete Name</th>
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[140px] text-left">Coach</th>
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[200px] text-left">Top Goals</th>
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[120px] text-center">90d Confidence</th>
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[130px] text-left">Vitals (BP/HR)</th>
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[130px] text-center">Cleared?</th>
-                  <th className="py-4 px-5 whitespace-nowrap min-w-[190px] text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--db-card-border)] text-xs">
-                {assessments.map((item) => {
-                  const isRetentionFlag = item.confidence !== undefined && item.confidence <= 5;
-                  const isReferred = item.clearedToTest === "Referred";
+          <>
+            {/* Mobile Assessment Cards View (Visible on Mobile Only) */}
+            <div className="block md:hidden divide-y divide-[var(--db-card-border)]">
+              {assessments.map((item) => {
+                const isRetentionFlag =
+                  item.confidence !== undefined && item.confidence <= 5;
+                const isReferred = item.clearedToTest === "Referred";
 
-                  return (
-                    <tr
-                      key={item._id}
-                      className="hover:bg-[var(--db-sidebar-link-hover)]/70 transition-colors group/row"
-                    >
-                      {/* Date */}
-                      <td className="py-4 px-5 whitespace-nowrap align-middle text-[var(--db-text-muted)] font-mono text-xs">
-                        <div className="inline-flex items-center gap-1.5">
-                          <Calendar size={13} className="text-[var(--db-accent-highlight)] shrink-0" />
-                          <span>
-                            {item.date
-                              ? new Date(item.date).toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                })
-                              : "—"}
-                          </span>
+                return (
+                  <div
+                    key={item._id}
+                    className="p-3.5 space-y-2.5 hover:bg-[var(--db-sidebar-link-hover)]/40 transition-colors"
+                  >
+                    {/* Top: Athlete Name & Clearance pill */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div
+                        onClick={() => setViewingRecord(item)}
+                        className="flex items-center gap-2.5 cursor-pointer min-w-0"
+                      >
+                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-black text-xs text-[var(--db-accent-highlight)] shrink-0 shadow-sm">
+                          {item.athleteName
+                            ? item.athleteName.charAt(0).toUpperCase()
+                            : "A"}
                         </div>
-                      </td>
-
-                      {/* Member ID */}
-                      <td className="py-4 px-5 whitespace-nowrap align-middle">
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/20 font-mono font-bold text-xs">
-                          {item.memberId || "NEW-MEMBER"}
-                        </span>
-                      </td>
-
-                      {/* Athlete Name */}
-                      <td className="py-4 px-5 whitespace-nowrap align-middle">
-                        <div
-                          onClick={() => setViewingRecord(item)}
-                          className="flex items-center gap-3 cursor-pointer group/name"
-                        >
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-black text-xs text-[var(--db-accent-highlight)] shrink-0 group-hover/name:border-[var(--db-accent-highlight)] transition-all shadow-md">
-                            {item.athleteName ? item.athleteName.charAt(0).toUpperCase() : "A"}
-                          </div>
-                          <div>
-                            <p className="font-bold text-[var(--db-text)] text-sm group-hover/name:text-[var(--db-accent-highlight)] transition-colors whitespace-nowrap">
-                              {item.athleteName}
-                            </p>
-                            <span className="text-[11px] text-[var(--db-text-muted)]">
-                              {item.age ? `${item.age} yrs` : "Age N/A"} • {item.gender || "Athlete"}
+                        <div className="min-w-0">
+                          <p className="font-bold text-[var(--db-text)] text-xs truncate hover:text-[var(--db-accent-highlight)] transition-colors">
+                            {item.athleteName}
+                          </p>
+                          <div className="text-[10px] text-[var(--db-text-muted)] flex items-center gap-1.5 mt-0.5 flex-wrap">
+                            <span>
+                              {item.date
+                                ? new Date(item.date).toLocaleDateString(
+                                    "en-GB",
+                                    {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    },
+                                  )
+                                : "—"}
+                            </span>
+                            <span>•</span>
+                            <span className="font-mono text-[var(--db-accent-highlight)] font-bold">
+                              #{item.memberId || "NEW"}
                             </span>
                           </div>
                         </div>
-                      </td>
+                      </div>
 
-                      {/* Coach */}
-                      <td className="py-4 px-5 whitespace-nowrap align-middle font-semibold">
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)]">
-                          <Dumbbell size={12} className="text-amber-400 shrink-0" />
-                          <span>{item.coach || "Unassigned"}</span>
-                        </div>
-                      </td>
-
-                      {/* Top Goals */}
-                      <td className="py-4 px-5 align-middle">
-                        <div className="flex flex-wrap gap-1 max-w-[220px]">
-                          {item.reasons && item.reasons.length > 0 ? (
-                            <>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[var(--db-input-bg)] text-[var(--db-text)] border border-[var(--db-card-border)] whitespace-nowrap truncate max-w-[150px]">
-                                {item.reasons[0]}
-                              </span>
-                              {item.reasons.length > 1 && (
-                                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-[var(--db-accent-highlight)]/15 text-[var(--db-accent-highlight)]">
-                                  +{item.reasons.length - 1}
-                                </span>
-                              )}
-                            </>
-                          ) : (
-                            <span className="text-[11px] text-[var(--db-text-muted)]">No reasons ticked</span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* 90d Confidence */}
-                      <td className="py-4 px-5 whitespace-nowrap align-middle text-center">
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider shrink-0 ${
+                          isReferred
+                            ? "bg-rose-500/15 text-rose-400 border border-rose-500/30"
+                            : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                        }`}
+                      >
                         <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black font-mono shadow-sm ${
-                            isRetentionFlag
-                              ? "bg-rose-500/20 text-rose-400 border border-rose-500/40 animate-pulse"
-                              : item.confidence >= 8
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            isReferred
+                              ? "bg-rose-400"
+                              : "bg-emerald-400 animate-pulse"
+                          }`}
+                        />
+                        <span>{item.clearedToTest || "Cleared"}</span>
+                      </span>
+                    </div>
+
+                    {/* Badges: Coach, 90d Confidence, Vitals */}
+                    <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] font-semibold">
+                        <Dumbbell size={10} className="text-amber-400" />
+                        <span>{item.coach || "Unassigned"}</span>
+                      </span>
+
+                      <span
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md font-mono font-black ${
+                          isRetentionFlag
+                            ? "bg-rose-500/20 text-rose-400 border border-rose-500/40"
+                            : item.confidence >= 8
                               ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
                               : "bg-amber-500/15 text-amber-400 border border-amber-500/30"
-                          }`}
-                          title={isRetentionFlag ? "Retention Alert: Score is 5 or below!" : "Confidence in 90 days"}
-                        >
-                          {isRetentionFlag && "⚠️ "}
-                          {item.confidence}/10
-                        </span>
-                      </td>
+                        }`}
+                      >
+                        {isRetentionFlag && "⚠️ "}
+                        Conf: {item.confidence}/10
+                      </span>
 
-                      {/* Vitals */}
-                      <td className="py-4 px-5 whitespace-nowrap align-middle">
-                        <div className="text-[11px] space-y-0.5 font-mono">
-                          <p className="font-bold text-[var(--db-text)]">
-                            BP: <span className="text-[var(--db-accent-highlight)]">{item.bloodPressure || "—"}</span>
-                          </p>
-                          <p className="text-[var(--db-text-muted)]">
-                            HR: <span>{item.restingHeartRate ? `${item.restingHeartRate} bpm` : "—"}</span>
-                          </p>
-                        </div>
-                      </td>
+                      <span className="px-2 py-0.5 rounded-md bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] font-mono">
+                        BP: {item.bloodPressure || "—"}{" "}
+                        {item.restingHeartRate
+                          ? `• ${item.restingHeartRate}bpm`
+                          : ""}
+                      </span>
+                    </div>
 
-                      {/* Cleared to Test? */}
-                      <td className="py-4 px-5 whitespace-nowrap align-middle text-center">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow-sm ${
-                            isReferred
-                              ? "bg-rose-500/15 text-rose-400 border border-rose-500/30"
-                              : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
-                          }`}
-                        >
+                    {/* Reasons & Goals tags */}
+                    {item.reasons && item.reasons.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {item.reasons.slice(0, 2).map((r, i) => (
                           <span
-                            className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                              isReferred ? "bg-rose-400" : "bg-emerald-400 animate-pulse"
-                            }`}
-                          />
-                          <span>{item.clearedToTest || "Cleared"}</span>
-                        </span>
-                      </td>
+                            key={i}
+                            className="px-2 py-0.5 rounded text-[9px] font-bold bg-[var(--db-input-bg)] text-[var(--db-text-muted)] border border-[var(--db-card-border)] truncate max-w-[140px]"
+                          >
+                            {r}
+                          </span>
+                        ))}
+                        {item.reasons.length > 2 && (
+                          <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[var(--db-accent-highlight)]/15 text-[var(--db-accent-highlight)]">
+                            +{item.reasons.length - 2} more
+                          </span>
+                        )}
+                      </div>
+                    )}
 
-                      {/* Actions */}
-                      <td className="py-4 px-5 whitespace-nowrap align-middle text-right">
-                        <div className="inline-flex items-center justify-end gap-1.5">
-                          {/* View Sheet */}
-                          <button
+                    {/* Actions row */}
+                    <div className="flex items-center justify-between pt-1 border-t border-[var(--db-card-border)]/60">
+                      <button
+                        onClick={() => setViewingRecord(item)}
+                        className="px-2.5 py-1 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] border border-[var(--db-card-border)] text-[10px] font-bold inline-flex items-center gap-1 hover:bg-[var(--db-accent-highlight)]/20 cursor-pointer"
+                      >
+                        <Eye size={12} /> View Sheet
+                      </button>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => handleOpenEditModal(item)}
+                          className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white transition-all cursor-pointer"
+                          title="Edit Assessment"
+                        >
+                          <Edit2 size={13} />
+                        </button>
+                        <button
+                          onClick={() => setDeletingId(item._id)}
+                          className="p-1.5 rounded-lg border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all cursor-pointer"
+                          title="Delete Record"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop Table View (Hidden on Mobile) */}
+            <div className="hidden md:block overflow-x-auto w-full custom-scrollbar">
+              <table className="w-full text-left border-collapse min-w-[1260px]">
+                <thead>
+                  <tr className="bg-[var(--db-input-bg)]/80 text-[var(--db-text-muted)] text-[11px] uppercase font-black tracking-widest border-b border-[var(--db-card-border)] select-none">
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[130px] text-left">
+                      Date
+                    </th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[140px] text-left">
+                      Member ID
+                    </th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[240px] text-left">
+                      Athlete Name
+                    </th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[140px] text-left">
+                      Coach
+                    </th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[200px] text-left">
+                      Top Goals
+                    </th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[120px] text-center">
+                      90d Confidence
+                    </th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[130px] text-left">
+                      Vitals (BP/HR)
+                    </th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[130px] text-center">
+                      Cleared?
+                    </th>
+                    <th className="py-4 px-5 whitespace-nowrap min-w-[190px] text-right">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--db-card-border)] text-xs">
+                  {assessments.map((item) => {
+                    const isRetentionFlag =
+                      item.confidence !== undefined && item.confidence <= 5;
+                    const isReferred = item.clearedToTest === "Referred";
+
+                    return (
+                      <tr
+                        key={item._id}
+                        className="hover:bg-[var(--db-sidebar-link-hover)]/70 transition-colors group/row"
+                      >
+                        {/* Date */}
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-[var(--db-text-muted)] font-mono text-xs">
+                          <div className="inline-flex items-center gap-1.5">
+                            <Calendar
+                              size={13}
+                              className="text-[var(--db-accent-highlight)] shrink-0"
+                            />
+                            <span>
+                              {item.date
+                                ? new Date(item.date).toLocaleDateString(
+                                    "en-GB",
+                                    {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    },
+                                  )
+                                : "—"}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Member ID */}
+                        <td className="py-4 px-5 whitespace-nowrap align-middle">
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/20 font-mono font-bold text-xs">
+                            {item.memberId || "NEW-MEMBER"}
+                          </span>
+                        </td>
+
+                        {/* Athlete Name */}
+                        <td className="py-4 px-5 whitespace-nowrap align-middle">
+                          <div
                             onClick={() => setViewingRecord(item)}
-                            title="View Full Goals & Readiness Sheet"
-                            className="p-2 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/15 hover:border-[var(--db-accent-highlight)]/40 transition-all cursor-pointer shadow-sm hover:scale-105"
+                            className="flex items-center gap-3 cursor-pointer group/name"
                           >
-                            <Eye size={14} />
-                          </button>
+                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-black text-xs text-[var(--db-accent-highlight)] shrink-0 group-hover/name:border-[var(--db-accent-highlight)] transition-all shadow-md">
+                              {item.athleteName
+                                ? item.athleteName.charAt(0).toUpperCase()
+                                : "A"}
+                            </div>
+                            <div>
+                              <p className="font-bold text-[var(--db-text)] text-sm group-hover/name:text-[var(--db-accent-highlight)] transition-colors whitespace-nowrap">
+                                {item.athleteName}
+                              </p>
+                              <span className="text-[11px] text-[var(--db-text-muted)]">
+                                {item.age ? `${item.age} yrs` : "Age N/A"} •{" "}
+                                {item.gender || "Athlete"}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
 
-                          {/* Edit Assessment */}
-                          <button
-                            onClick={() => handleOpenEditModal(item)}
-                            title="Edit Assessment"
-                            className="p-2 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-sm hover:scale-105"
-                          >
-                            <Edit2 size={14} />
-                          </button>
+                        {/* Coach */}
+                        <td className="py-4 px-5 whitespace-nowrap align-middle font-semibold">
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)]">
+                            <Dumbbell
+                              size={12}
+                              className="text-amber-400 shrink-0"
+                            />
+                            <span>{item.coach || "Unassigned"}</span>
+                          </div>
+                        </td>
 
-                          {/* Delete Assessment */}
-                          <button
-                            onClick={() => setDeletingId(item._id)}
-                            title="Delete Record"
-                            className="p-2 rounded-xl border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all cursor-pointer shadow-sm hover:scale-105"
+                        {/* Top Goals */}
+                        <td className="py-4 px-5 align-middle">
+                          <div className="flex flex-wrap gap-1 max-w-[220px]">
+                            {item.reasons && item.reasons.length > 0 ? (
+                              <>
+                                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[var(--db-input-bg)] text-[var(--db-text)] border border-[var(--db-card-border)] whitespace-nowrap truncate max-w-[150px]">
+                                  {item.reasons[0]}
+                                </span>
+                                {item.reasons.length > 1 && (
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-[var(--db-accent-highlight)]/15 text-[var(--db-accent-highlight)]">
+                                    +{item.reasons.length - 1}
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              <span className="text-[11px] text-[var(--db-text-muted)]">
+                                No reasons ticked
+                              </span>
+                            )}
+                          </div>
+                        </td>
+
+                        {/* 90d Confidence */}
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-center">
+                          <span
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black font-mono shadow-sm ${
+                              isRetentionFlag
+                                ? "bg-rose-500/20 text-rose-400 border border-rose-500/40 animate-pulse"
+                                : item.confidence >= 8
+                                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                                  : "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+                            }`}
+                            title={
+                              isRetentionFlag
+                                ? "Retention Alert: Score is 5 or below!"
+                                : "Confidence in 90 days"
+                            }
                           >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                            {isRetentionFlag && "⚠️ "}
+                            {item.confidence}/10
+                          </span>
+                        </td>
+
+                        {/* Vitals */}
+                        <td className="py-4 px-5 whitespace-nowrap align-middle">
+                          <div className="text-[11px] space-y-0.5 font-mono">
+                            <p className="font-bold text-[var(--db-text)]">
+                              BP:{" "}
+                              <span className="text-[var(--db-accent-highlight)]">
+                                {item.bloodPressure || "—"}
+                              </span>
+                            </p>
+                            <p className="text-[var(--db-text-muted)]">
+                              HR:{" "}
+                              <span>
+                                {item.restingHeartRate
+                                  ? `${item.restingHeartRate} bpm`
+                                  : "—"}
+                              </span>
+                            </p>
+                          </div>
+                        </td>
+
+                        {/* Cleared to Test? */}
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-center">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow-sm ${
+                              isReferred
+                                ? "bg-rose-500/15 text-rose-400 border border-rose-500/30"
+                                : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                            }`}
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                                isReferred
+                                  ? "bg-rose-400"
+                                  : "bg-emerald-400 animate-pulse"
+                              }`}
+                            />
+                            <span>{item.clearedToTest || "Cleared"}</span>
+                          </span>
+                        </td>
+
+                        {/* Actions */}
+                        <td className="py-4 px-5 whitespace-nowrap align-middle text-right">
+                          <div className="inline-flex items-center justify-end gap-1.5">
+                            {/* View Sheet */}
+                            <button
+                              onClick={() => setViewingRecord(item)}
+                              title="View Full Goals & Readiness Sheet"
+                              className="p-2 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/15 hover:border-[var(--db-accent-highlight)]/40 transition-all cursor-pointer shadow-sm hover:scale-105"
+                            >
+                              <Eye size={14} />
+                            </button>
+
+                            {/* Edit Assessment */}
+                            <button
+                              onClick={() => handleOpenEditModal(item)}
+                              title="Edit Assessment"
+                              className="p-2 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-sm hover:scale-105"
+                            >
+                              <Edit2 size={14} />
+                            </button>
+
+                            {/* Delete Assessment */}
+                            <button
+                              onClick={() => setDeletingId(item._id)}
+                              title="Delete Record"
+                              className="p-2 rounded-xl border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all cursor-pointer shadow-sm hover:scale-105"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 

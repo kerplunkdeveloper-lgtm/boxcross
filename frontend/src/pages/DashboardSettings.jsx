@@ -32,15 +32,15 @@ const DashboardSettings = () => {
   if (!user) return null;
 
   return (
-    <div className="p-6 md:p-8 space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
 
-      <div className="max-w-6xl mx-auto space-y-6 relative z-10">
+      <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6 relative z-10">
         {/* Title Header */}
         <div className="text-left">
           <h1 
-            className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+            className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
             style={{ fontFamily: '"Brutal Font", sans-serif' }}
           >
             Dashboard Settings
@@ -51,19 +51,19 @@ const DashboardSettings = () => {
         </div>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           
           {/* Column 1 & 2: Main Settings */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             
             {/* Card 1: Profile Details List Card */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 md:p-8 shadow-2xl transition-colors"
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-xl transition-colors"
             >
-              <div className="flex items-center gap-2 mb-6 pb-3 border-b border-[var(--db-card-border)]">
+              <div className="flex items-center gap-2 mb-4 sm:mb-6 pb-3 border-b border-[var(--db-card-border)]">
                 <User size={18} className="text-[var(--db-accent-highlight)]" />
                 <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                   Profile Details Summary
@@ -71,10 +71,10 @@ const DashboardSettings = () => {
               </div>
 
               {/* Profile Details List */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 {/* Profile Header Block inside card */}
-                <div className="md:col-span-2 flex items-center gap-4 p-4 rounded-2xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] mb-2">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+                <div className="sm:col-span-2 flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] mb-1 sm:mb-2">
+                  <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
                     {user.profileImage ? (
                       <img 
                         src={user.profileImage} 
@@ -82,25 +82,25 @@ const DashboardSettings = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <User size={28} className="text-[var(--db-accent-highlight)]" />
+                      <User size={24} className="text-[var(--db-accent-highlight)] sm:w-7 sm:h-7" />
                     )}
                   </div>
-                  <div>
-                    <h3 className="text-base font-black text-[var(--db-text)] uppercase tracking-wide">
+                  <div className="min-w-0">
+                    <h3 className="text-sm sm:text-base font-black text-[var(--db-text)] uppercase tracking-wide truncate">
                       {user.name}
                     </h3>
-                    <p className="text-xs text-[var(--db-text-muted)]">
+                    <p className="text-xs text-[var(--db-text-muted)] truncate">
                       @{user.username || "username"}
                     </p>
-                    <span className="inline-block px-2.5 py-0.5 mt-1.5 text-[8px] font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)] rounded-full border border-[var(--db-accent-highlight)]/25">
+                    <span className="inline-block px-2.5 py-0.5 mt-1 text-[8px] font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)] rounded-full border border-[var(--db-accent-highlight)]/25">
                       {user.role}
                     </span>
                   </div>
                 </div>
 
                 {/* Detail Items */}
-                <div className="p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/50 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] shrink-0">
+                <div className="p-3 sm:p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/50 flex items-center gap-2.5 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] shrink-0">
                     <User size={14} />
                   </div>
                   <div className="min-w-0">
@@ -109,8 +109,8 @@ const DashboardSettings = () => {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/50 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] shrink-0">
+                <div className="p-3 sm:p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/50 flex items-center gap-2.5 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] shrink-0">
                     <Mail size={14} />
                   </div>
                   <div className="min-w-0">
@@ -119,8 +119,8 @@ const DashboardSettings = () => {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/50 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] shrink-0">
+                <div className="p-3 sm:p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/50 flex items-center gap-2.5 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] shrink-0">
                     <Phone size={14} />
                   </div>
                   <div className="min-w-0">
@@ -129,8 +129,8 @@ const DashboardSettings = () => {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/50 flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] shrink-0">
+                <div className="p-3 sm:p-3.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/50 flex items-center gap-2.5 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-[var(--db-input-bg)] text-[var(--db-accent-highlight)] shrink-0">
                     <Calendar size={14} />
                   </div>
                   <div className="min-w-0">
@@ -141,10 +141,10 @@ const DashboardSettings = () => {
               </div>
 
               {/* View Profile Action Link */}
-              <div className="mt-6 pt-4 border-t border-[var(--db-card-border)] flex justify-end">
+              <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[var(--db-card-border)] flex justify-end">
                 <button
                   onClick={() => navigate("/dashboard/profile")}
-                  className="group inline-flex items-center gap-2 px-5 py-3 bg-[var(--db-accent)] hover:bg-[var(--db-accent-hover)] text-[var(--db-accent-text)] font-extrabold uppercase tracking-wider text-xs rounded-xl shadow-lg shadow-[var(--db-accent-glow)] transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
+                  className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 px-5 py-3 bg-[var(--db-accent)] hover:bg-[var(--db-accent-hover)] text-[var(--db-accent-text)] font-extrabold uppercase tracking-wider text-xs rounded-xl shadow-lg shadow-[var(--db-accent-glow)] transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
                 >
                   View Profile details
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -157,69 +157,69 @@ const DashboardSettings = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 md:p-8 shadow-2xl transition-colors"
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-xl transition-colors"
             >
-              <div className="flex items-center gap-2 mb-6 pb-3 border-b border-[var(--db-card-border)]">
+              <div className="flex items-center gap-2 mb-4 sm:mb-6 pb-3 border-b border-[var(--db-card-border)]">
                 <Sun size={18} className="text-[var(--db-accent-highlight)]" />
                 <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                   Theme Customization Control
                 </span>
               </div>
 
-              <p className="text-xs text-[var(--db-text-muted)] leading-relaxed mb-6">
+              <p className="text-xs text-[var(--db-text-muted)] leading-relaxed mb-4 sm:mb-6">
                 Toggle between light and dark interface styles depending on your environmental lighting.
               </p>
 
-              {/* Theme Choices Options */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Theme Choices Options (2 cols on mobile and desktop) */}
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 
                 {/* Light Mode choice */}
                 <button
                   onClick={() => theme === "dark" && toggleTheme()}
-                  className={`relative p-5 rounded-2xl border text-left flex flex-col justify-between h-36 transition-all cursor-pointer ${
+                  className={`relative p-3.5 sm:p-5 rounded-2xl border text-left flex flex-col justify-between min-h-[110px] sm:h-36 transition-all cursor-pointer ${
                     theme === "light"
                       ? "border-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/10 shadow-lg"
                       : "border-[var(--db-card-border)] bg-[var(--db-input-bg)]/30 hover:bg-[var(--db-input-bg)]/60"
                   }`}
                 >
                   <div className="flex justify-between items-start w-full">
-                    <div className={`p-2.5 rounded-xl ${theme === "light" ? "bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)]" : "bg-[var(--db-input-bg)] text-[var(--db-text-muted)]"}`}>
-                      <Sun size={20} />
+                    <div className={`p-2 sm:p-2.5 rounded-xl ${theme === "light" ? "bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)]" : "bg-[var(--db-input-bg)] text-[var(--db-text-muted)]"}`}>
+                      <Sun size={18} className="sm:w-5 sm:h-5" />
                     </div>
                     {theme === "light" && (
-                      <div className="w-5 h-5 rounded-full bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)] flex items-center justify-center">
-                        <Check size={12} className="stroke-[3px]" />
+                      <div className="w-4.5 h-4.5 sm:w-5 sm:h-5 rounded-full bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)] flex items-center justify-center">
+                        <Check size={11} className="stroke-[3px]" />
                       </div>
                     )}
                   </div>
-                  <div>
+                  <div className="mt-2">
                     <h4 className="text-xs font-black uppercase tracking-wider text-[var(--db-text)]">Light Mode</h4>
-                    <p className="text-[10px] text-[var(--db-text-muted)] mt-1">High visibility style, bright white backgrounds.</p>
+                    <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] mt-0.5 line-clamp-2">High visibility, bright style.</p>
                   </div>
                 </button>
 
                 {/* Dark Mode choice */}
                 <button
                   onClick={() => theme === "light" && toggleTheme()}
-                  className={`relative p-5 rounded-2xl border text-left flex flex-col justify-between h-36 transition-all cursor-pointer ${
+                  className={`relative p-3.5 sm:p-5 rounded-2xl border text-left flex flex-col justify-between min-h-[110px] sm:h-36 transition-all cursor-pointer ${
                     theme === "dark"
                       ? "border-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)]/10 shadow-lg"
                       : "border-[var(--db-card-border)] bg-[var(--db-input-bg)]/30 hover:bg-[var(--db-input-bg)]/60"
                   }`}
                 >
                   <div className="flex justify-between items-start w-full">
-                    <div className={`p-2.5 rounded-xl ${theme === "dark" ? "bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)]" : "bg-[var(--db-input-bg)] text-[var(--db-text-muted)]"}`}>
-                      <Moon size={20} />
+                    <div className={`p-2 sm:p-2.5 rounded-xl ${theme === "dark" ? "bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)]" : "bg-[var(--db-input-bg)] text-[var(--db-text-muted)]"}`}>
+                      <Moon size={18} className="sm:w-5 sm:h-5" />
                     </div>
                     {theme === "dark" && (
-                      <div className="w-5 h-5 rounded-full bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)] flex items-center justify-center">
-                        <Check size={12} className="stroke-[3px]" />
+                      <div className="w-4.5 h-4.5 sm:w-5 sm:h-5 rounded-full bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)] flex items-center justify-center">
+                        <Check size={11} className="stroke-[3px]" />
                       </div>
                     )}
                   </div>
-                  <div>
+                  <div className="mt-2">
                     <h4 className="text-xs font-black uppercase tracking-wider text-[var(--db-text)]">Dark Mode</h4>
-                    <p className="text-[10px] text-[var(--db-text-muted)] mt-1">Midnight premium style, battery saving & easy on the eyes.</p>
+                    <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] mt-0.5 line-clamp-2">Midnight style, easy on eyes.</p>
                   </div>
                 </button>
 
@@ -229,23 +229,23 @@ const DashboardSettings = () => {
           </div>
 
           {/* Column 3: Sidebar Controls */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             
             {/* Preferences / Toggles */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.2 }}
-              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 shadow-2xl transition-colors"
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl transition-colors"
             >
-              <div className="flex items-center gap-2 mb-6 pb-3 border-b border-[var(--db-card-border)]">
+              <div className="flex items-center gap-2 mb-4 sm:mb-6 pb-3 border-b border-[var(--db-card-border)]">
                 <Bell size={16} className="text-[var(--db-accent-highlight)]" />
                 <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                   Preferences
                 </span>
               </div>
 
-              <div className="space-y-5">
+              <div className="space-y-4 sm:space-y-5">
                 {/* Email Toggles */}
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
@@ -298,16 +298,16 @@ const DashboardSettings = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.25 }}
-              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 shadow-2xl transition-colors"
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl transition-colors"
             >
-              <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[var(--db-card-border)]">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4 pb-2.5 sm:pb-3 border-b border-[var(--db-card-border)]">
                 <Shield size={16} className="text-[var(--db-accent-highlight)]" />
                 <span className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                   Account Integrity
                 </span>
               </div>
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl border border-emerald-500/10 bg-emerald-500/5 flex items-start gap-2.5">
+                <div className="p-3 sm:p-3.5 rounded-xl border border-emerald-500/10 bg-emerald-500/5 flex items-start gap-2.5">
                   <ShieldCheck size={16} className="text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-[10px] text-emerald-400 font-extrabold uppercase tracking-wider block">Fully Verified Account</span>
@@ -324,17 +324,17 @@ const DashboardSettings = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
-              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 shadow-2xl transition-colors flex flex-col justify-between min-h-[220px]"
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl transition-colors flex flex-col justify-between min-h-[200px] sm:min-h-[220px]"
             >
               <div>
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-3 sm:mb-4">
                   <HelpCircle size={18} className="text-[var(--db-accent-highlight)]" />
                   <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
                     Support & FAQs
                   </span>
                 </div>
 
-                <div className="space-y-3.5 text-[11px]">
+                <div className="space-y-3 text-[11px]">
                   <div>
                     <h4 className="font-bold text-[var(--db-text)] mb-0.5">How do I access the gym?</h4>
                     <p className="text-[var(--db-text-muted)] leading-relaxed">Present your active membership details at the front desk when arriving.</p>
@@ -346,7 +346,7 @@ const DashboardSettings = () => {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[var(--db-card-border)] text-[9px] text-[var(--db-text-muted)] leading-relaxed mt-4">
+              <div className="pt-3 sm:pt-4 border-t border-[var(--db-card-border)] text-[9px] text-[var(--db-text-muted)] leading-relaxed mt-3 sm:mt-4">
                 Need assistance? Email us at <a href="mailto:support@boxandcross.com" className="text-[var(--db-accent-highlight)] font-semibold hover:underline">support@boxandcross.com</a>
               </div>
             </motion.div>

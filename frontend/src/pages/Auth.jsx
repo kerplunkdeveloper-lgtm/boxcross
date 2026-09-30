@@ -164,7 +164,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-black text-white font-sans overflow-x-hidden selection:bg-[#c8ff00] selection:text-black">
+    <div className="relative w-full min-h-screen bg-black text-white font-sans overflow-x-hidden selection:bg-[#ccf141] selection:text-black">
       {/* ─────────────────────────────────────────────────────────────
           DESKTOP 100% EXACT REPLICA SPLIT VIEW (lg and above)
       ───────────────────────────────────────────────────────────── */}
@@ -324,7 +324,7 @@ const Auth = () => {
               >
                 <ShieldCheck
                   size={15}
-                  className={authMode === "admin" ? "text-[#c8ff00]" : "text-black"}
+                  className={authMode === "admin" ? "text-[#ccf141]" : "text-black"}
                 />
                 <span>ADMIN</span>
               </button>
@@ -364,7 +364,7 @@ const Auth = () => {
                 >
                   {authMode === "athlete" ? "MEMBER ID" : "ADMIN EMAIL"}
                 </label>
-                <div className="relative bg-[#ddf575] hover:bg-[#d6f06a] focus-within:bg-[#e4fc80] focus-within:ring-2 focus-within:ring-black/25 rounded-xl h-12 flex items-center px-4 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]">
+                <div className="relative bg-[#ccf141] hover:bg-[#ccf141] focus-within:bg-[#ccf141] focus-within:ring-2 focus-within:ring-black/25 rounded-xl h-12 flex items-center px-4 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]">
                   {authMode === "athlete" ? (
                     <UserCheck size={18} className="text-black/70 mr-3 flex-shrink-0" />
                   ) : (
@@ -397,7 +397,7 @@ const Auth = () => {
                 >
                   PASSWORD
                 </label>
-                <div className="relative bg-[#ddf575] hover:bg-[#d6f06a] focus-within:bg-[#e4fc80] focus-within:ring-2 focus-within:ring-black/25 rounded-xl h-12 flex items-center px-4 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]">
+                <div className="relative bg-[#ccf141] hover:bg-[#d6f06a] focus-within:bg-[#e4fc80] focus-within:ring-2 focus-within:ring-black/25 rounded-xl h-12 flex items-center px-4 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]">
                   <Lock size={18} className="text-black/70 mr-3 flex-shrink-0" />
                   <input
                     type={showPassword ? "text" : "password"}
@@ -424,7 +424,7 @@ const Auth = () => {
                     type="button"
                     onClick={() => setRememberMe(!rememberMe)}
                     className={`w-4 h-4 rounded border-2 border-black flex items-center justify-center transition-all cursor-pointer ${
-                      rememberMe ? "bg-black text-[#c8ff00]" : "bg-transparent"
+                      rememberMe ? "bg-black text-[#ccf141]" : "bg-transparent"
                     }`}
                   >
                     {rememberMe && <Check size={11} strokeWidth={3.5} />}
@@ -463,7 +463,7 @@ const Auth = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-black hover:bg-neutral-900 active:scale-[0.98] text-[#c8ff00] font-black tracking-widest text-xs xl:text-sm px-8 py-3.5 rounded-xl shadow-xl shadow-black/25 flex items-center gap-2 cursor-pointer transition-all group disabled:opacity-50"
+                  className="bg-black hover:bg-neutral-900 active:scale-[0.98] text-[#ccf141] font-black tracking-widest text-xs xl:text-sm px-8 py-3.5 rounded-xl shadow-xl shadow-black/25 flex items-center gap-2 cursor-pointer transition-all group disabled:opacity-50"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   <span>{loading ? "AUTHENTICATING..." : "ENTER PORTAL"}</span>

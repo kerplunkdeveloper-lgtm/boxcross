@@ -104,29 +104,29 @@ const DashboardFoundingOffer = () => {
   }
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       <div className="max-w-8xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="relative bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.2)] overflow-hidden"
+          className="relative bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.2)] overflow-hidden"
         >
 
           {/* Header */}
-          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between mb-10 pb-6 border-b border-[var(--db-card-border)]/50 gap-4">
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 pb-5 sm:pb-6 border-b border-[var(--db-card-border)]/50 gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[var(--db-accent-highlight)]/10 flex items-center justify-center border border-[var(--db-accent-highlight)]/20 shadow-[0_0_15px_rgba(229,255,0,0.1)]">
-                <Tag size={20} className="text-[var(--db-accent-highlight)]" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[var(--db-accent-highlight)]/10 flex items-center justify-center border border-[var(--db-accent-highlight)]/20 shadow-[0_0_15px_rgba(229,255,0,0.1)] shrink-0">
+                <Tag size={18} className="text-[var(--db-accent-highlight)]" />
               </div>
               <div>
                 <h1
-                  className="text-xl md:text-2xl font-black uppercase tracking-wider text-[var(--db-text)]"
+                  className="text-lg sm:text-xl md:text-2xl font-black uppercase tracking-wider text-[var(--db-text)]"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   Dynamic Offer Setup
                 </h1>
-                <p className="text-[11px] md:text-xs text-[var(--db-text-muted)] mt-1 tracking-wide font-medium">
+                <p className="text-[10px] sm:text-xs text-[var(--db-text-muted)] mt-0.5 sm:mt-1 tracking-wide font-medium">
                   Configure the Founding Members landing page details in
                   real-time.
                 </p>
@@ -134,12 +134,12 @@ const DashboardFoundingOffer = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSave} className="relative z-10 space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <form onSubmit={handleSave} className="relative z-10 space-y-6 sm:space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8">
               {/* Column 1 settings */}
               <motion.div
                 whileHover={{ y: -2 }}
-                className="bg-[var(--db-input-bg)]/50 backdrop-blur-sm p-6 sm:p-7 rounded-2xl border border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/30 transition-all duration-300 shadow-lg"
+                className="bg-[var(--db-input-bg)]/50 backdrop-blur-sm p-4 sm:p-6 md:p-7 rounded-2xl border border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/30 transition-all duration-300 shadow-lg"
               >
                 <div className="flex items-center gap-2.5 mb-6 pb-3 border-b border-[var(--db-card-border)]/50">
                   <Crown
@@ -205,13 +205,13 @@ const DashboardFoundingOffer = () => {
                 </div>
               </motion.div>
 
-              <div className="space-y-8">
+              <div className="space-y-5 sm:space-y-8">
                 {/* Column 2 settings */}
                 <motion.div
                   whileHover={{ y: -2 }}
-                  className="bg-[var(--db-input-bg)]/50 backdrop-blur-sm p-6 sm:p-7 rounded-2xl border border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/30 transition-all duration-300 shadow-lg"
+                  className="bg-[var(--db-input-bg)]/50 backdrop-blur-sm p-4 sm:p-6 md:p-7 rounded-2xl border border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/30 transition-all duration-300 shadow-lg"
                 >
-                  <div className="flex items-center gap-2.5 mb-6 pb-3 border-b border-[var(--db-card-border)]/50">
+                  <div className="flex items-center gap-2.5 mb-5 pb-3 border-b border-[var(--db-card-border)]/50">
                     <DollarSign
                       size={16}
                       className="text-[var(--db-accent-highlight)]"
@@ -220,7 +220,7 @@ const DashboardFoundingOffer = () => {
                       Pricing Details
                     </h3>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <div className="space-y-2">
                       <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest ml-1">
                         Price Value{" "}
@@ -278,9 +278,9 @@ const DashboardFoundingOffer = () => {
                 {/* Column 3 settings */}
                 <motion.div
                   whileHover={{ y: -2 }}
-                  className="bg-[var(--db-input-bg)]/50 backdrop-blur-sm p-6 sm:p-7 rounded-2xl border border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/30 transition-all duration-300 shadow-lg"
+                  className="bg-[var(--db-input-bg)]/50 backdrop-blur-sm p-4 sm:p-6 md:p-7 rounded-2xl border border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/30 transition-all duration-300 shadow-lg"
                 >
-                  <div className="flex items-center gap-2.5 mb-6 pb-3 border-b border-[var(--db-card-border)]/50">
+                  <div className="flex items-center gap-2.5 mb-5 pb-3 border-b border-[var(--db-card-border)]/50">
                     <Clock
                       size={16}
                       className="text-[var(--db-accent-highlight)]"
@@ -311,11 +311,11 @@ const DashboardFoundingOffer = () => {
             </div>
 
             {/* Submit */}
-            <div className="flex items-center justify-end pt-6 border-t border-[var(--db-card-border)]/50 mt-10">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end pt-5 sm:pt-6 border-t border-[var(--db-card-border)]/50 mt-6 sm:mt-10">
               <button
                 type="submit"
                 disabled={saving}
-                className="group relative overflow-hidden px-10 py-3.5 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold uppercase tracking-widest text-xs rounded-full transition-all duration-500 cursor-pointer shadow-[0_0_20px_rgba(229,255,0,0.2)] hover:shadow-[0_0_30px_rgba(229,255,0,0.4)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none inline-flex items-center gap-3"
+                className="group relative overflow-hidden w-full sm:w-auto px-8 sm:px-10 py-3.5 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold uppercase tracking-widest text-xs rounded-xl sm:rounded-full transition-all duration-500 cursor-pointer shadow-[0_0_20px_rgba(229,255,0,0.2)] hover:shadow-[0_0_30px_rgba(229,255,0,0.4)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none inline-flex items-center justify-center gap-3"
               >
                 <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
                 <Save

@@ -442,19 +442,19 @@ const Usermanagementdetails = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
-      <div className="max-w-8xl mx-auto space-y-6">
+    <div className="p-3.5 sm:p-5 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+      <div className="max-w-8xl mx-auto space-y-4 sm:space-y-6">
         {/* Top Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-6 shadow-xl relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-32 bg-[var(--db-accent-highlight)]/5 rounded-full blur-3xl pointer-events-none" />
 
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="p-1.5 rounded-lg bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)]">
-                <Users size={20} />
+                <Users size={18} />
               </span>
               <h1
-                className="text-xl sm:text-xl font-black uppercase tracking-wider text-[var(--db-text)]"
+                className="text-lg sm:text-xl font-black uppercase tracking-wider text-[var(--db-text)]"
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
                 USER MANAGEMENT
@@ -462,17 +462,17 @@ const Usermanagementdetails = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
             <button
               onClick={() => {
                 fetchAthletesList(true);
                 fetchStatsData();
               }}
               title="Refresh Records"
-              className="p-2.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text)] hover:text-[var(--db-accent-highlight)] hover:border-[var(--db-accent-highlight)]/30 transition-all cursor-pointer"
+              className="p-2 sm:p-2.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text)] hover:text-[var(--db-accent-highlight)] hover:border-[var(--db-accent-highlight)]/30 transition-all cursor-pointer"
             >
               <RefreshCw
-                size={16}
+                size={15}
                 className={
                   refreshing
                     ? "animate-spin text-[var(--db-accent-highlight)]"
@@ -483,7 +483,7 @@ const Usermanagementdetails = () => {
 
             <button
               onClick={handleExportCSV}
-              className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-xs font-bold text-[var(--db-text)] hover:text-[var(--db-accent-highlight)] hover:border-[var(--db-accent-highlight)]/30 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-xs font-bold text-[var(--db-text)] hover:text-[var(--db-accent-highlight)] hover:border-[var(--db-accent-highlight)]/30 transition-all cursor-pointer"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               <Download size={14} />
@@ -492,35 +492,35 @@ const Usermanagementdetails = () => {
 
             <button
               onClick={handleOpenAddModal}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] text-xs font-extrabold uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] text-xs font-extrabold uppercase tracking-wider shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
-              <Plus size={16} />
-              <span>Add Athlete / User</span>
+              <Plus size={15} />
+              <span>Add Athlete <span className="hidden sm:inline">/ User</span></span>
             </button>
           </div>
         </div>
 
-        {/* Metric KPI Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Metric KPI Cards (2-cols on mobile, 4-cols on lg) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-5 shadow-lg flex items-center justify-between"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 shadow-lg flex items-center justify-between gap-2"
           >
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)]">
+            <div className="min-w-0">
+              <p className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)] truncate">
                 Total Athletes
               </p>
-              <h3 className="text-2xl font-black mt-1 text-[var(--db-text)]">
+              <h3 className="text-xl sm:text-2xl font-black mt-0.5 sm:mt-1 text-[var(--db-text)]">
                 {stats.total || athletes.length}
               </h3>
-              <p className="text-[11px] text-[var(--db-accent-highlight)] mt-1 font-semibold">
+              <p className="text-[10px] sm:text-[11px] text-[var(--db-accent-highlight)] mt-0.5 sm:mt-1 font-semibold truncate">
                 Starting BOXCROSS-001
               </p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-[var(--db-accent-highlight)]/10 border border-[var(--db-accent-highlight)]/20 flex items-center justify-center text-[var(--db-accent-highlight)]">
-              <Users size={22} />
+            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-[var(--db-accent-highlight)]/10 border border-[var(--db-accent-highlight)]/20 flex items-center justify-center text-[var(--db-accent-highlight)] shrink-0">
+              <Users size={18} className="sm:w-[22px] sm:h-[22px]" />
             </div>
           </motion.div>
 
@@ -528,22 +528,22 @@ const Usermanagementdetails = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-5 shadow-lg flex items-center justify-between"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 shadow-lg flex items-center justify-between gap-2"
           >
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)]">
+            <div className="min-w-0">
+              <p className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)] truncate">
                 Active Status
               </p>
-              <h3 className="text-2xl font-black mt-1 text-emerald-400">
+              <h3 className="text-xl sm:text-2xl font-black mt-0.5 sm:mt-1 text-emerald-400">
                 {stats.active ||
                   athletes.filter((a) => a.status === "Active").length}
               </h3>
-              <p className="text-[11px] text-[var(--db-text-muted)] mt-1">
-                Active in training programs
+              <p className="text-[10px] sm:text-[11px] text-[var(--db-text-muted)] mt-0.5 sm:mt-1 truncate">
+                Active in training
               </p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-              <CheckCircle2 size={22} />
+            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+              <CheckCircle2 size={18} className="sm:w-[22px] sm:h-[22px]" />
             </div>
           </motion.div>
 
@@ -551,35 +551,26 @@ const Usermanagementdetails = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-5 shadow-lg flex items-center justify-between"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 shadow-lg flex items-center justify-between gap-2"
           >
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)]">
+            <div className="min-w-0">
+              <p className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)] truncate">
                 Gender Ratio
               </p>
-              <div className="flex items-center gap-2 mt-1.5">
-                <span className="text-xs font-bold text-sky-400 bg-sky-400/10 px-2 py-0.5 rounded-md">
-                  M:{" "}
-                  {stats.male ||
-                    athletes.filter((a) => a.gender === "Male").length}
+              <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 mt-1">
+                <span className="text-[10px] sm:text-xs font-bold text-sky-400 bg-sky-400/10 px-1.5 py-0.5 rounded">
+                  M:{stats.male || athletes.filter((a) => a.gender === "Male").length}
                 </span>
-                <span className="text-xs font-bold text-pink-400 bg-pink-400/10 px-2 py-0.5 rounded-md">
-                  F:{" "}
-                  {stats.female ||
-                    athletes.filter((a) => a.gender === "Female").length}
-                </span>
-                <span className="text-xs font-bold text-purple-400 bg-purple-400/10 px-2 py-0.5 rounded-md">
-                  O:{" "}
-                  {stats.others ||
-                    athletes.filter((a) => a.gender === "Others").length}
+                <span className="text-[10px] sm:text-xs font-bold text-pink-400 bg-pink-400/10 px-1.5 py-0.5 rounded">
+                  F:{stats.female || athletes.filter((a) => a.gender === "Female").length}
                 </span>
               </div>
-              <p className="text-[11px] text-[var(--db-text-muted)] mt-1.5">
-                Male / Female / Others
+              <p className="text-[10px] sm:text-[11px] text-[var(--db-text-muted)] mt-1 truncate">
+                Male / Female
               </p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
-              <UserCheck size={22} />
+            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
+              <UserCheck size={18} className="sm:w-[22px] sm:h-[22px]" />
             </div>
           </motion.div>
 
@@ -587,21 +578,21 @@ const Usermanagementdetails = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-5 shadow-lg flex items-center justify-between"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 shadow-lg flex items-center justify-between gap-2"
           >
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)]">
+            <div className="min-w-0">
+              <p className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)] truncate">
                 Portal Ready
               </p>
-              <h3 className="text-2xl font-black mt-1 text-[#ccf141]">
+              <h3 className="text-xl sm:text-2xl font-black mt-0.5 sm:mt-1 text-[#ccf141]">
                 {athletes.length}
               </h3>
-              <p className="text-[11px] text-zinc-400 mt-1">
+              <p className="text-[10px] sm:text-[11px] text-zinc-400 mt-0.5 sm:mt-1 truncate">
                 ID + Password Enabled
               </p>
             </div>
-            <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
-              <Key size={22} />
+            <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
+              <Key size={18} className="sm:w-[22px] sm:h-[22px]" />
             </div>
           </motion.div>
         </div>
@@ -795,279 +786,475 @@ const Usermanagementdetails = () => {
               </button>
             </div>
           ) : (
-            <div className="overflow-x-auto w-full custom-scrollbar">
-              <table className="w-full text-left border-collapse min-w-[1060px]">
-                <thead>
-                  <tr className="bg-[var(--db-input-bg)]/80 text-[var(--db-text-muted)] text-[10px] uppercase font-bold tracking-wider border-b border-[var(--db-card-border)] select-none">
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[120px] text-left">
-                      Member ID
-                    </th>
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[210px] text-left">
-                      Athlete / User Name
-                    </th>
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[145px] text-left">
-                      Portal Password
-                    </th>
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[65px] text-center">
-                      Age
-                    </th>
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[85px] text-center">
-                      Gender
-                    </th>
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[125px] text-left">
-                      Date of Joining
-                    </th>
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[135px] text-left">
-                      Assigned Coach
-                    </th>
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[95px] text-center">
-                      Status
-                    </th>
-                    <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[160px] text-right">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--db-card-border)]">
-                  {athletes.map((athlete) => {
-                    const isRevealed = revealedPasswords[athlete._id];
-                    return (
-                      <tr
-                        key={athlete._id}
-                        className="hover:bg-[var(--db-sidebar-link-hover)]/70 transition-colors group/row"
-                      >
-                        {/* Member ID */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
+            <>
+              {/* Mobile Athlete Cards View (Visible on Mobile Only) */}
+              <div className="block md:hidden divide-y divide-[var(--db-card-border)]">
+                {athletes.map((athlete) => {
+                  const isRevealed = revealedPasswords[athlete._id];
+                  return (
+                    <div
+                      key={athlete._id}
+                      className="p-3.5 space-y-2.5 hover:bg-[var(--db-sidebar-link-hover)]/40 transition-colors"
+                    >
+                      {/* Top Row: Avatar, Athlete Name, Date, Status */}
+                      <div className="flex items-start justify-between gap-2.5">
+                        <div
+                          onClick={() => setViewingAthlete(athlete)}
+                          className="flex items-center gap-2.5 cursor-pointer min-w-0"
+                        >
+                          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-bold text-xs text-[var(--db-accent-highlight)] shrink-0 shadow-sm">
+                            {athlete.athleteName
+                              ? athlete.athleteName.charAt(0).toUpperCase()
+                              : "A"}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="font-bold text-[var(--db-text)] text-xs truncate hover:text-[var(--db-accent-highlight)] transition-colors">
+                              {athlete.athleteName}
+                            </p>
+                            <span className="text-[10px] text-[var(--db-text-muted)] flex items-center gap-1 mt-0.5">
+                              <Calendar
+                                size={10}
+                                className="text-[var(--db-accent-highlight)] shrink-0"
+                              />
+                              <span className="truncate">
+                                {athlete.dateOfJoining
+                                  ? new Date(
+                                      athlete.dateOfJoining,
+                                    ).toLocaleDateString("en-GB", {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    })
+                                  : "N/A"}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+
+                        <span
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider shrink-0 ${
+                            athlete.status === "Active"
+                              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                              : "bg-neutral-800 text-neutral-400 border border-neutral-700"
+                          }`}
+                        >
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              athlete.status === "Active"
+                                ? "bg-emerald-400 animate-pulse"
+                                : "bg-neutral-400"
+                            }`}
+                          />
+                          <span>{athlete.status || "Active"}</span>
+                        </span>
+                      </div>
+
+                      {/* Credentials Row: Member ID + Password */}
+                      <div className="grid grid-cols-2 gap-2 bg-[var(--db-input-bg)]/80 border border-[var(--db-card-border)] rounded-xl p-2.5">
+                        <div>
+                          <p className="text-[9px] uppercase font-bold text-[var(--db-text-muted)] mb-0.5">
+                            Member ID
+                          </p>
                           <button
                             onClick={() => {
                               navigator.clipboard.writeText(athlete.memberId);
                               toast.success(`Copied ${athlete.memberId}`);
                             }}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/25 hover:bg-[var(--db-accent-highlight)]/20 hover:border-[var(--db-accent-highlight)] font-mono font-bold text-[11px] tracking-wide transition-all cursor-pointer group shadow-sm"
-                            title="Click to copy Member ID"
+                            className="inline-flex items-center gap-1 font-mono font-bold text-[11px] text-[var(--db-accent-highlight)] hover:underline cursor-pointer"
                           >
-                            <span className="whitespace-nowrap">
-                              {athlete.memberId}
-                            </span>
-                            <Copy
-                              size={11}
-                              className="opacity-60 group-hover:opacity-100 transition-opacity shrink-0"
-                            />
+                            <span>{athlete.memberId}</span>
+                            <Copy size={10} />
                           </button>
-                        </td>
-
-                        {/* Athlete Name + Quick Contact */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
-                          <div
-                            onClick={() => setViewingAthlete(athlete)}
-                            className="flex items-center gap-2.5 cursor-pointer group/name"
-                          >
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-bold text-xs text-[var(--db-accent-highlight)] shrink-0 group-hover/name:border-[var(--db-accent-highlight)] group-hover/name:scale-105 transition-all shadow-sm">
-                              {athlete.athleteName
-                                ? athlete.athleteName.charAt(0).toUpperCase()
-                                : "A"}
-                            </div>
-                            <div className="min-w-0">
-                              <p className="font-bold text-[var(--db-text)] text-xs group-hover/name:text-[var(--db-accent-highlight)] transition-colors whitespace-nowrap">
-                                {athlete.athleteName}
-                              </p>
-                              {(athlete.phone || athlete.email) && (
-                                <div className="flex items-center gap-2.5 text-[10px] text-[var(--db-text-muted)] mt-0.5 whitespace-nowrap">
-                                  {athlete.phone && (
-                                    <span className="inline-flex items-center gap-1 font-medium">
-                                      <Phone
-                                        size={10}
-                                        className="text-[var(--db-accent-highlight)]/70 shrink-0"
-                                      />
-                                      <span>{athlete.phone}</span>
-                                    </span>
-                                  )}
-                                  {athlete.email && (
-                                    <span
-                                      className="inline-flex items-center gap-1 font-medium text-[var(--db-text-muted)] truncate max-w-[150px]"
-                                      title={athlete.email}
-                                    >
-                                      <Mail
-                                        size={10}
-                                        className="text-sky-400/70 shrink-0"
-                                      />
-                                      <span>{athlete.email}</span>
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Portal Password Column */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
-                          <div className="inline-flex items-center gap-1.5 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] px-2 py-0.5 rounded-lg shadow-inner">
-                            <span className="font-mono text-[11px] font-bold text-[var(--db-text)] tracking-wider">
+                        </div>
+                        <div>
+                          <p className="text-[9px] uppercase font-bold text-[var(--db-text-muted)] mb-0.5">
+                            Password
+                          </p>
+                          <div className="flex items-center gap-1 font-mono text-[11px] font-bold text-[var(--db-text)]">
+                            <span>
                               {isRevealed
                                 ? athlete.initialPassword || "bxc12345"
                                 : "••••••••"}
                             </span>
-                            <div className="flex items-center gap-0.5 pl-1.5 border-l border-[var(--db-card-border)]">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  toggleRevealPassword(athlete._id)
-                                }
-                                className="p-1 rounded text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-white/5 transition-colors cursor-pointer"
-                                title={
-                                  isRevealed ? "Hide Password" : "Show Password"
-                                }
-                              >
-                                {isRevealed ? (
-                                  <EyeOff size={12} />
-                                ) : (
-                                  <Eye size={12} />
+                            <button
+                              type="button"
+                              onClick={() => toggleRevealPassword(athlete._id)}
+                              className="p-0.5 text-[var(--db-text-muted)] hover:text-[var(--db-text)]"
+                            >
+                              {isRevealed ? (
+                                <EyeOff size={11} />
+                              ) : (
+                                <Eye size={11} />
+                              )}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleCopyCredentials(athlete)}
+                              className="p-0.5 text-[var(--db-accent-highlight)]"
+                              title="Copy Credentials"
+                            >
+                              <Copy size={11} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Badges: Coach, Gender & Age, Phone */}
+                      <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] font-semibold">
+                          <Dumbbell size={10} className="text-amber-400" />
+                          <span>{athlete.coach || "Unassigned"}</span>
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded-md font-bold uppercase ${
+                            athlete.gender === "Male"
+                              ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
+                              : athlete.gender === "Female"
+                                ? "bg-pink-500/15 text-pink-400 border border-pink-500/30"
+                                : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
+                          }`}
+                        >
+                          {athlete.gender || "N/A"}{" "}
+                          {athlete.age ? `• ${athlete.age}y` : ""}
+                        </span>
+                        {athlete.phone && (
+                          <a
+                            href={`tel:${athlete.phone}`}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] font-medium hover:text-[var(--db-accent-highlight)]"
+                          >
+                            <Phone
+                              size={10}
+                              className="text-[var(--db-accent-highlight)]"
+                            />
+                            <span>{athlete.phone}</span>
+                          </a>
+                        )}
+                      </div>
+
+                      {/* Actions: Impersonate, Digital Pass, Edit, Delete */}
+                      <div className="flex items-center gap-2 pt-2 border-t border-[var(--db-card-border)]/60">
+                        <button
+                          onClick={() => handleImpersonateAthlete(athlete)}
+                          className="flex-1 py-1.5 px-2.5 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 font-bold text-[10px] uppercase tracking-wider flex items-center justify-center gap-1 transition-all cursor-pointer shadow-sm active:scale-95"
+                        >
+                          <UserCheck size={12} />
+                          <span>Login As</span>
+                        </button>
+
+                        <button
+                          onClick={() => setViewingAthlete(athlete)}
+                          title="View Digital Pass"
+                          className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/15 transition-all cursor-pointer shadow-sm active:scale-95"
+                        >
+                          <QrCode size={13} />
+                        </button>
+
+                        <button
+                          onClick={() => handleOpenEditModal(athlete)}
+                          title="Edit Athlete"
+                          className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
+                        >
+                          <Edit2 size={13} />
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleDelete(
+                              athlete._id,
+                              athlete.memberId,
+                              athlete.athleteName,
+                            )
+                          }
+                          title="Delete Athlete"
+                          className="p-1.5 rounded-lg border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all cursor-pointer shadow-sm active:scale-95"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop Table View (Hidden on Mobile) */}
+              <div className="hidden md:block overflow-x-auto w-full custom-scrollbar">
+                <table className="w-full text-left border-collapse min-w-[1060px]">
+                  <thead>
+                    <tr className="bg-[var(--db-input-bg)]/80 text-[var(--db-text-muted)] text-[10px] uppercase font-bold tracking-wider border-b border-[var(--db-card-border)] select-none">
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[120px] text-left">
+                        Member ID
+                      </th>
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[210px] text-left">
+                        Athlete / User Name
+                      </th>
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[145px] text-left">
+                        Portal Password
+                      </th>
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[65px] text-center">
+                        Age
+                      </th>
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[85px] text-center">
+                        Gender
+                      </th>
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[125px] text-left">
+                        Date of Joining
+                      </th>
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[135px] text-left">
+                        Assigned Coach
+                      </th>
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[95px] text-center">
+                        Status
+                      </th>
+                      <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[160px] text-right">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--db-card-border)]">
+                    {athletes.map((athlete) => {
+                      const isRevealed = revealedPasswords[athlete._id];
+                      return (
+                        <tr
+                          key={athlete._id}
+                          className="hover:bg-[var(--db-sidebar-link-hover)]/70 transition-colors group/row"
+                        >
+                          {/* Member ID */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
+                            <button
+                              onClick={() => {
+                                navigator.clipboard.writeText(athlete.memberId);
+                                toast.success(`Copied ${athlete.memberId}`);
+                              }}
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[var(--db-accent-highlight)]/10 text-[var(--db-accent-highlight)] border border-[var(--db-accent-highlight)]/25 hover:bg-[var(--db-accent-highlight)]/20 hover:border-[var(--db-accent-highlight)] font-mono font-bold text-[11px] tracking-wide transition-all cursor-pointer group shadow-sm"
+                              title="Click to copy Member ID"
+                            >
+                              <span className="whitespace-nowrap">
+                                {athlete.memberId}
+                              </span>
+                              <Copy
+                                size={11}
+                                className="opacity-60 group-hover:opacity-100 transition-opacity shrink-0"
+                              />
+                            </button>
+                          </td>
+
+                          {/* Athlete Name + Quick Contact */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
+                            <div
+                              onClick={() => setViewingAthlete(athlete)}
+                              className="flex items-center gap-2.5 cursor-pointer group/name"
+                            >
+                              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-neutral-800 to-neutral-900 border border-[var(--db-card-border)] flex items-center justify-center font-bold text-xs text-[var(--db-accent-highlight)] shrink-0 group-hover/name:border-[var(--db-accent-highlight)] group-hover/name:scale-105 transition-all shadow-sm">
+                                {athlete.athleteName
+                                  ? athlete.athleteName.charAt(0).toUpperCase()
+                                  : "A"}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="font-bold text-[var(--db-text)] text-xs group-hover/name:text-[var(--db-accent-highlight)] transition-colors whitespace-nowrap">
+                                  {athlete.athleteName}
+                                </p>
+                                {(athlete.phone || athlete.email) && (
+                                  <div className="flex items-center gap-2.5 text-[10px] text-[var(--db-text-muted)] mt-0.5 whitespace-nowrap">
+                                    {athlete.phone && (
+                                      <span className="inline-flex items-center gap-1 font-medium">
+                                        <Phone
+                                          size={10}
+                                          className="text-[var(--db-accent-highlight)]/70 shrink-0"
+                                        />
+                                        <span>{athlete.phone}</span>
+                                      </span>
+                                    )}
+                                    {athlete.email && (
+                                      <span
+                                        className="inline-flex items-center gap-1 font-medium text-[var(--db-text-muted)] truncate max-w-[150px]"
+                                        title={athlete.email}
+                                      >
+                                        <Mail
+                                          size={10}
+                                          className="text-sky-400/70 shrink-0"
+                                        />
+                                        <span>{athlete.email}</span>
+                                      </span>
+                                    )}
+                                  </div>
                                 )}
-                              </button>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Portal Password Column */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle">
+                            <div className="inline-flex items-center gap-1.5 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] px-2 py-0.5 rounded-lg shadow-inner">
+                              <span className="font-mono text-[11px] font-bold text-[var(--db-text)] tracking-wider">
+                                {isRevealed
+                                  ? athlete.initialPassword || "bxc12345"
+                                  : "••••••••"}
+                              </span>
+                              <div className="flex items-center gap-0.5 pl-1.5 border-l border-[var(--db-card-border)]">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    toggleRevealPassword(athlete._id)
+                                  }
+                                  className="p-1 rounded text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-white/5 transition-colors cursor-pointer"
+                                  title={
+                                    isRevealed
+                                      ? "Hide Password"
+                                      : "Show Password"
+                                  }
+                                >
+                                  {isRevealed ? (
+                                    <EyeOff size={12} />
+                                  ) : (
+                                    <Eye size={12} />
+                                  )}
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopyCredentials(athlete)}
+                                  className="p-1 rounded text-[var(--db-accent-highlight)] hover:text-white hover:bg-[var(--db-accent-highlight)]/15 transition-colors cursor-pointer"
+                                  title="Copy Full Login Credentials (ID + Password)"
+                                >
+                                  <Copy size={12} />
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Age */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[10px] font-mono font-semibold text-[var(--db-text)] whitespace-nowrap shadow-sm">
+                              {athlete.age ? `${athlete.age} yrs` : "—"}
+                            </span>
+                          </td>
+
+                          {/* Gender */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
+                            <span
+                              className={`inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider whitespace-nowrap shadow-sm ${
+                                athlete.gender === "Male"
+                                  ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
+                                  : athlete.gender === "Female"
+                                    ? "bg-pink-500/15 text-pink-400 border border-pink-500/30"
+                                    : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
+                              }`}
+                            >
+                              {athlete.gender || "N/A"}
+                            </span>
+                          </td>
+
+                          {/* Date of Joining */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-[var(--db-text-muted)]">
+                            <div className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[var(--db-text)] whitespace-nowrap">
+                              <Calendar
+                                size={11}
+                                className="text-[var(--db-accent-highlight)] shrink-0"
+                              />
+                              <span className="whitespace-nowrap">
+                                {athlete.dateOfJoining
+                                  ? new Date(
+                                      athlete.dateOfJoining,
+                                    ).toLocaleDateString("en-GB", {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    })
+                                  : "N/A"}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* Coach */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle font-semibold">
+                            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] text-[11px] font-semibold shadow-sm whitespace-nowrap">
+                              <Dumbbell
+                                size={11}
+                                className="text-amber-400 shrink-0"
+                              />
+                              <span className="whitespace-nowrap">
+                                {athlete.coach || "Unassigned"}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* Status */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
+                            <span
+                              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${
+                                athlete.status === "Active"
+                                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)]"
+                                  : "bg-neutral-800 text-neutral-400 border border-neutral-700"
+                              }`}
+                            >
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                                  athlete.status === "Active"
+                                    ? "bg-emerald-400 animate-pulse"
+                                    : "bg-neutral-400"
+                                }`}
+                              />
+                              <span>{athlete.status || "Active"}</span>
+                            </span>
+                          </td>
+
+                          {/* Actions */}
+                          <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-right">
+                            <div className="inline-flex items-center justify-end gap-1.5">
+                              {/* Impersonate / Switch User */}
                               <button
-                                type="button"
-                                onClick={() => handleCopyCredentials(athlete)}
-                                className="p-1 rounded text-[var(--db-accent-highlight)] hover:text-white hover:bg-[var(--db-accent-highlight)]/15 transition-colors cursor-pointer"
-                                title="Copy Full Login Credentials (ID + Password)"
+                                onClick={() =>
+                                  handleImpersonateAthlete(athlete)
+                                }
+                                title={`Login as ${athlete.athleteName} (Impersonate)`}
+                                className="px-2 py-1 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer inline-flex items-center gap-1 shadow-sm hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
                               >
-                                <Copy size={12} />
+                                <UserCheck size={11} className="shrink-0" />
+                                <span className="whitespace-nowrap">
+                                  Login As
+                                </span>
+                              </button>
+
+                              {/* View QR Pass */}
+                              <button
+                                onClick={() => setViewingAthlete(athlete)}
+                                title="View Full Pass & Details"
+                                className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/15 hover:border-[var(--db-accent-highlight)]/40 transition-all cursor-pointer shadow-sm hover:scale-105"
+                              >
+                                <QrCode size={13} />
+                              </button>
+
+                              {/* Edit Athlete */}
+                              <button
+                                onClick={() => handleOpenEditModal(athlete)}
+                                title="Edit Athlete"
+                                className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-sm hover:scale-105"
+                              >
+                                <Edit2 size={13} />
+                              </button>
+
+                              {/* Delete Athlete */}
+                              <button
+                                onClick={() =>
+                                  handleDelete(
+                                    athlete._id,
+                                    athlete.memberId,
+                                    athlete.athleteName,
+                                  )
+                                }
+                                title="Delete Athlete"
+                                className="p-1.5 rounded-lg border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all cursor-pointer shadow-sm hover:scale-105"
+                              >
+                                <Trash2 size={13} />
                               </button>
                             </div>
-                          </div>
-                        </td>
-
-                        {/* Age */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[10px] font-mono font-semibold text-[var(--db-text)] whitespace-nowrap shadow-sm">
-                            {athlete.age ? `${athlete.age} yrs` : "—"}
-                          </span>
-                        </td>
-
-                        {/* Gender */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
-                          <span
-                            className={`inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider whitespace-nowrap shadow-sm ${
-                              athlete.gender === "Male"
-                                ? "bg-sky-500/15 text-sky-400 border border-sky-500/30"
-                                : athlete.gender === "Female"
-                                  ? "bg-pink-500/15 text-pink-400 border border-pink-500/30"
-                                  : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
-                            }`}
-                          >
-                            {athlete.gender || "N/A"}
-                          </span>
-                        </td>
-
-                        {/* Date of Joining */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-[var(--db-text-muted)]">
-                          <div className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[var(--db-text)] whitespace-nowrap">
-                            <Calendar
-                              size={11}
-                              className="text-[var(--db-accent-highlight)] shrink-0"
-                            />
-                            <span className="whitespace-nowrap">
-                              {athlete.dateOfJoining
-                                ? new Date(
-                                    athlete.dateOfJoining,
-                                  ).toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                  })
-                                : "N/A"}
-                            </span>
-                          </div>
-                        </td>
-
-                        {/* Coach */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle font-semibold">
-                          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] text-[11px] font-semibold shadow-sm whitespace-nowrap">
-                            <Dumbbell
-                              size={11}
-                              className="text-amber-400 shrink-0"
-                            />
-                            <span className="whitespace-nowrap">
-                              {athlete.coach || "Unassigned"}
-                            </span>
-                          </div>
-                        </td>
-
-                        {/* Status */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-center">
-                          <span
-                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${
-                              athlete.status === "Active"
-                                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-[0_0_8px_rgba(16,185,129,0.15)]"
-                                : "bg-neutral-800 text-neutral-400 border border-neutral-700"
-                            }`}
-                          >
-                            <span
-                              className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                                athlete.status === "Active"
-                                  ? "bg-emerald-400 animate-pulse"
-                                  : "bg-neutral-400"
-                              }`}
-                            />
-                            <span>{athlete.status || "Active"}</span>
-                          </span>
-                        </td>
-
-                        {/* Actions */}
-                        <td className="py-2.5 px-3.5 whitespace-nowrap align-middle text-right">
-                          <div className="inline-flex items-center justify-end gap-1.5">
-                            {/* Impersonate / Switch User */}
-                            <button
-                              onClick={() => handleImpersonateAthlete(athlete)}
-                              title={`Login as ${athlete.athleteName} (Impersonate)`}
-                              className="px-2 py-1 rounded-lg border border-amber-500/40 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 hover:text-amber-300 font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer inline-flex items-center gap-1 shadow-sm hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
-                            >
-                              <UserCheck size={11} className="shrink-0" />
-                              <span className="whitespace-nowrap">
-                                Login As
-                              </span>
-                            </button>
-
-                            {/* View QR Pass */}
-                            <button
-                              onClick={() => setViewingAthlete(athlete)}
-                              title="View Full Pass & Details"
-                              className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/15 hover:border-[var(--db-accent-highlight)]/40 transition-all cursor-pointer shadow-sm hover:scale-105"
-                            >
-                              <QrCode size={13} />
-                            </button>
-
-                            {/* Edit Athlete */}
-                            <button
-                              onClick={() => handleOpenEditModal(athlete)}
-                              title="Edit Athlete"
-                              className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-sm hover:scale-105"
-                            >
-                              <Edit2 size={13} />
-                            </button>
-
-                            {/* Delete Athlete */}
-                            <button
-                              onClick={() =>
-                                handleDelete(
-                                  athlete._id,
-                                  athlete.memberId,
-                                  athlete.athleteName,
-                                )
-                              }
-                              title="Delete Athlete"
-                              className="p-1.5 rounded-lg border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all cursor-pointer shadow-sm hover:scale-105"
-                            >
-                              <Trash2 size={13} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -1075,12 +1262,12 @@ const Usermanagementdetails = () => {
       {/* Modal for Add / Edit Athlete */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl w-full max-w-xl max-h-[92vh] overflow-y-auto custom-scrollbar shadow-2xl p-6 sm:p-7 relative text-[var(--db-text)]"
+              className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto custom-scrollbar shadow-2xl p-4 sm:p-7 relative text-[var(--db-text)]"
             >
               {/* Close Button */}
               <button
@@ -1431,12 +1618,12 @@ const Usermanagementdetails = () => {
       {/* Member Full Details / Digital Pass Modal */}
       <AnimatePresence>
         {viewingAthlete && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-gradient-to-br from-zinc-900 via-black to-zinc-950 border border-white/20 rounded-3xl w-full max-w-lg p-6 sm:p-8 space-y-6 text-white shadow-2xl relative"
+              className="bg-gradient-to-br from-zinc-900 via-black to-zinc-950 border border-white/20 rounded-2xl sm:rounded-3xl w-full max-w-lg p-4 sm:p-8 space-y-4 sm:space-y-6 text-white shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar"
             >
               <button
                 onClick={() => setViewingAthlete(null)}

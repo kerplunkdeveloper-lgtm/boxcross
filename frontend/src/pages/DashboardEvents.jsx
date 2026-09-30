@@ -190,34 +190,33 @@ const DashboardEvents = () => {
   };
 
   return (
-    <div className="p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[#ccf141]/5 rounded-full blur-[140px] pointer-events-none z-0" />
 
       <div className="max-w-8xl mx-auto z-10 relative">
         {/* Header Block */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-[var(--db-card-border)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 sm:mb-8 pb-4 sm:pb-6 border-b border-[var(--db-card-border)]">
           <div>
             <h1
-              className="text-md md:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              className="text-base sm:text-lg md:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
               Event Banner Manager
             </h1>
-            <p className="text-[var(--db-text-muted)] text-xs md:text-sm mt-1">
-              Upload and manage event banners (only Media, Title, and
-              Description) displayed dynamically on the events page.
+            <p className="text-[var(--db-text-muted)] text-[11px] sm:text-xs md:text-sm mt-0.5 sm:mt-1">
+              Upload and manage event banners displayed dynamically on the events page.
             </p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <button
-              onClick={fetchBanners}
-              className="p-3 bg-[var(--db-input-bg)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-xl border border-[var(--db-input-border)] transition-all flex items-center justify-center cursor-pointer"
+              onClick={() => fetchBanners(true)}
+              className="p-2.5 sm:p-3 bg-[var(--db-input-bg)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-xl border border-[var(--db-input-border)] transition-all flex items-center justify-center cursor-pointer shrink-0"
               title="Reload data"
             >
               <RefreshCw
-                size={18}
+                size={17}
                 className={
                   loading
                     ? "animate-spin text-[var(--db-accent-highlight)]"
@@ -228,7 +227,7 @@ const DashboardEvents = () => {
 
             <button
               onClick={handleOpenCreate}
-              className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-5 py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               <Plus size={16} strokeWidth={2.5} />
@@ -237,7 +236,7 @@ const DashboardEvents = () => {
           </div>
         </div>
 
-        {/* Content list (TABLE instead of CARDS) */}
+        {/* Content list */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <Loader2
@@ -249,133 +248,206 @@ const DashboardEvents = () => {
             </p>
           </div>
         ) : banners.length === 0 ? (
-          <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl p-12 text-center flex flex-col items-center justify-center">
-            <ImageIcon size={48} className="text-[var(--db-text-muted)] mb-4" />
-            <h3 className="text-lg font-bold uppercase mb-1">
+          <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl p-8 sm:p-12 text-center flex flex-col items-center justify-center">
+            <ImageIcon size={44} className="text-[var(--db-text-muted)] mb-3" />
+            <h3 className="text-base sm:text-lg font-bold uppercase mb-1">
               No Banners Found
             </h3>
-            <p className="text-sm text-[var(--db-text-muted)] max-w-sm mb-6">
+            <p className="text-xs sm:text-sm text-[var(--db-text-muted)] max-w-sm mb-5">
               Create your first promotional image or video banner to engage
               members on the upcoming events carousel.
             </p>
             <button
               onClick={handleOpenCreate}
-              className="bg-white/10 hover:bg-white/15 border border-white/10 text-white font-semibold uppercase tracking-wider text-xs px-5 py-3 rounded-xl transition-all cursor-pointer"
+              className="bg-white/10 hover:bg-white/15 border border-white/10 text-white font-semibold uppercase tracking-wider text-xs px-5 py-2.5 sm:py-3 rounded-xl transition-all cursor-pointer"
             >
               Upload First Banner
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl shadow-2xl">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr
-                  className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+          <>
+            {/* Mobile Cards View (Visible on small screens) */}
+            <div className="block md:hidden space-y-3.5">
+              {banners.map((banner) => (
+                <div
+                  key={banner._id}
+                  className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl overflow-hidden shadow-lg"
                 >
-                  <th className="py-4 px-6 rounded-l-xl whitespace-nowrap">
-                    Media
-                  </th>
-                  <th className="py-4 px-6 whitespace-nowrap">Title</th>
-                  <th className="py-4 px-6 whitespace-nowrap">Description</th>
-                  <th className="py-4 px-6 text-right rounded-r-xl whitespace-nowrap">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[var(--db-card-border)]">
-                {banners.map((banner) => (
-                  <tr
-                    key={banner._id}
-                    className="hover:bg-[var(--db-table-hover)] transition-all group"
-                  >
-                    {/* Media Preview Column */}
-                    <td className="py-4 px-6 whitespace-nowrap">
-                      <div className="w-24 h-14 md:w-28 md:h-16 bg-black rounded-xl overflow-hidden relative border border-[var(--db-card-border)] flex items-center justify-center group-hover:border-white/20 transition-all">
-                        {banner.mediaType === "video" ? (
-                          <video
-                            src={banner.mediaUrl}
-                            className="w-full h-full object-cover"
-                            muted
-                            playsInline
-                            onMouseOver={(e) => e.target.play()}
-                            onMouseOut={(e) => {
-                              e.target.pause();
-                              e.target.currentTime = 0;
-                            }}
-                          />
-                        ) : (
-                          <img
-                            src={banner.mediaUrl}
-                            alt={banner.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        )}
-
-                        <span className="absolute bottom-1 right-1 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider rounded bg-black/80 text-[var(--db-accent-highlight)] border border-white/10 flex items-center gap-1">
-                          {banner.mediaType === "video" ? (
-                            <Video size={8} />
-                          ) : (
-                            <ImageIcon size={8} />
-                          )}
-                          {banner.mediaType}
-                        </span>
-                      </div>
-                    </td>
-
-                    {/* Title Column */}
-                    <td className="py-4 px-6 font-bold text-sm text-[var(--db-text)] group-hover:text-[var(--db-accent-highlight)] transition-colors max-w-[200px] truncate">
-                      {banner.title}
-                    </td>
-
-                    {/* Description Column */}
-                    <td className="py-4 px-6 text-xs text-[var(--db-text-muted)] max-w-[300px] truncate leading-relaxed">
-                      {banner.description || (
-                        <span className="text-[var(--db-text-muted)] italic">
-                          No description
-                        </span>
+                  {/* Media Thumbnail */}
+                  <div className="aspect-[16/9] w-full bg-black relative flex items-center justify-center overflow-hidden">
+                    {banner.mediaType === "video" ? (
+                      <video
+                        src={banner.mediaUrl}
+                        className="w-full h-full object-cover"
+                        muted
+                        playsInline
+                        controls
+                      />
+                    ) : (
+                      <img
+                        src={banner.mediaUrl}
+                        alt={banner.title}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <span className="absolute bottom-2 left-2 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-md bg-black/80 text-[var(--db-accent-highlight)] border border-white/10 flex items-center gap-1 backdrop-blur-sm pointer-events-none">
+                      {banner.mediaType === "video" ? (
+                        <Video size={10} />
+                      ) : (
+                        <ImageIcon size={10} />
                       )}
-                    </td>
+                      {banner.mediaType}
+                    </span>
+                  </div>
 
-                    {/* Actions Column */}
-                    <td className="py-4 px-6 text-right whitespace-nowrap">
-                      <div className="flex gap-2 justify-end">
-                        <button
-                          onClick={() => handleOpenEdit(banner)}
-                          className="p-2.5 bg-[var(--db-input-bg)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] text-[var(--db-text-muted)] rounded-lg border border-[var(--db-input-border)] transition-all duration-200 cursor-pointer"
-                          title="Edit Banner"
-                        >
-                          <Edit size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(banner._id)}
-                          className="p-2.5 bg-[var(--db-input-bg)] hover:bg-red-500/20 text-[var(--db-text-muted)] hover:text-red-400 rounded-lg border border-[var(--db-input-border)] transition-all duration-200 cursor-pointer"
-                          title="Delete Banner"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </td>
+                  {/* Details & Actions */}
+                  <div className="p-3.5 sm:p-4 space-y-2">
+                    <h3 className="font-bold text-sm sm:text-base text-[var(--db-text)] leading-snug">
+                      {banner.title}
+                    </h3>
+                    {banner.description ? (
+                      <p className="text-xs text-[var(--db-text-muted)] line-clamp-2 leading-relaxed">
+                        {banner.description}
+                      </p>
+                    ) : (
+                      <p className="text-[11px] text-[var(--db-text-muted)] italic">
+                        No description provided
+                      </p>
+                    )}
+
+                    <div className="pt-2 border-t border-[var(--db-card-border)]/60 flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleOpenEdit(banner)}
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 bg-[var(--db-input-bg)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] text-[var(--db-text)] rounded-xl border border-[var(--db-input-border)] text-xs font-semibold transition-all cursor-pointer"
+                      >
+                        <Edit size={13} />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(banner._id)}
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl border border-red-500/20 text-xs font-semibold transition-all cursor-pointer"
+                      >
+                        <Trash2 size={13} />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table View (Hidden on mobile) */}
+            <div className="hidden md:block overflow-x-auto bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl shadow-2xl">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr
+                    className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    <th className="py-4 px-6 rounded-l-xl whitespace-nowrap">
+                      Media
+                    </th>
+                    <th className="py-4 px-6 whitespace-nowrap">Title</th>
+                    <th className="py-4 px-6 whitespace-nowrap">Description</th>
+                    <th className="py-4 px-6 text-right rounded-r-xl whitespace-nowrap">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-[var(--db-card-border)]">
+                  {banners.map((banner) => (
+                    <tr
+                      key={banner._id}
+                      className="hover:bg-[var(--db-table-hover)] transition-all group"
+                    >
+                      {/* Media Preview Column */}
+                      <td className="py-4 px-6 whitespace-nowrap">
+                        <div className="w-24 h-14 md:w-28 md:h-16 bg-black rounded-xl overflow-hidden relative border border-[var(--db-card-border)] flex items-center justify-center group-hover:border-white/20 transition-all">
+                          {banner.mediaType === "video" ? (
+                            <video
+                              src={banner.mediaUrl}
+                              className="w-full h-full object-cover"
+                              muted
+                              playsInline
+                              onMouseOver={(e) => e.target.play()}
+                              onMouseOut={(e) => {
+                                e.target.pause();
+                                e.target.currentTime = 0;
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={banner.mediaUrl}
+                              alt={banner.title}
+                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                          )}
+
+                          <span className="absolute bottom-1 right-1 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider rounded bg-black/80 text-[var(--db-accent-highlight)] border border-white/10 flex items-center gap-1">
+                            {banner.mediaType === "video" ? (
+                              <Video size={8} />
+                            ) : (
+                              <ImageIcon size={8} />
+                            )}
+                            {banner.mediaType}
+                          </span>
+                        </div>
+                      </td>
+
+                      {/* Title Column */}
+                      <td className="py-4 px-6 font-bold text-sm text-[var(--db-text)] group-hover:text-[var(--db-accent-highlight)] transition-colors max-w-[200px] truncate">
+                        {banner.title}
+                      </td>
+
+                      {/* Description Column */}
+                      <td className="py-4 px-6 text-xs text-[var(--db-text-muted)] max-w-[300px] truncate leading-relaxed">
+                        {banner.description || (
+                          <span className="text-[var(--db-text-muted)] italic">
+                            No description
+                          </span>
+                        )}
+                      </td>
+
+                      {/* Actions Column */}
+                      <td className="py-4 px-6 text-right whitespace-nowrap">
+                        <div className="flex gap-2 justify-end">
+                          <button
+                            onClick={() => handleOpenEdit(banner)}
+                            className="p-2.5 bg-[var(--db-input-bg)] hover:bg-[var(--db-accent)] hover:text-[var(--db-accent-text)] text-[var(--db-text-muted)] rounded-lg border border-[var(--db-input-border)] transition-all duration-200 cursor-pointer"
+                            title="Edit Banner"
+                          >
+                            <Edit size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(banner._id)}
+                            className="p-2.5 bg-[var(--db-input-bg)] hover:bg-red-500/20 text-[var(--db-text-muted)] hover:text-red-400 rounded-lg border border-[var(--db-input-border)] transition-all duration-200 cursor-pointer"
+                            title="Delete Banner"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
 
         {/* Create/Edit Banner Modal */}
         <AnimatePresence>
           {showModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3.5 sm:p-4 bg-black/80 backdrop-blur-sm">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl relative"
+                className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl relative"
               >
                 {/* Modal Header */}
-                <div className="h-16 flex items-center justify-between px-6 border-b border-[var(--db-card-border)]">
-                  <h3 className="font-bold uppercase text-sm tracking-wider text-[var(--db-accent-highlight)]">
+                <div className="h-14 sm:h-16 flex items-center justify-between px-4 sm:px-6 border-b border-[var(--db-card-border)]">
+                  <h3 className="font-bold uppercase text-xs sm:text-sm tracking-wider text-[var(--db-accent-highlight)]">
                     {editMode ? "Edit Event Banner" : "Add Event Banner"}
                   </h3>
                   <button
@@ -389,7 +461,7 @@ const DashboardEvents = () => {
                 {/* Modal Form */}
                 <form
                   onSubmit={handleSubmit}
-                  className="p-6 space-y-4 max-h-[75vh] overflow-y-auto"
+                  className="p-4 sm:p-6 space-y-3.5 sm:space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar"
                 >
                   {/* Title */}
                   <div>
@@ -401,7 +473,7 @@ const DashboardEvents = () => {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="e.g. Annual Powerlifting Tournament"
-                      className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-sm text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
+                      className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all"
                       required
                     />
                   </div>
@@ -414,9 +486,9 @@ const DashboardEvents = () => {
                     <textarea
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Give a brief brief description of the event..."
+                      placeholder="Give a brief description of the event..."
                       rows={3}
-                      className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-4 py-3 text-sm text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
+                      className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] focus:border-[var(--db-accent-highlight)]/50 outline-none rounded-xl px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-[var(--db-text)] placeholder-[var(--db-text-muted)] transition-all resize-none"
                     />
                   </div>
 
@@ -461,11 +533,11 @@ const DashboardEvents = () => {
                     ) : (
                       <div
                         onClick={() => fileInputRef.current?.click()}
-                        className="border-2 border-dashed border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/50 bg-[var(--db-input-bg)] hover:bg-white/[0.01] rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 group"
+                        className="border-2 border-dashed border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/50 bg-[var(--db-input-bg)] hover:bg-white/[0.01] rounded-2xl p-5 sm:p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 group"
                       >
-                        <div className="w-12 h-12 rounded-xl bg-white/5 group-hover:bg-[var(--db-accent-glow)] group-hover:text-[var(--db-accent-highlight)] flex items-center justify-center transition-all">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 group-hover:bg-[var(--db-accent-glow)] group-hover:text-[var(--db-accent-highlight)] flex items-center justify-center transition-all">
                           <Upload
-                            size={20}
+                            size={18}
                             className="text-[var(--db-text-muted)] group-hover:text-[var(--db-accent-highlight)]"
                           />
                         </div>
@@ -473,7 +545,7 @@ const DashboardEvents = () => {
                           <p className="text-xs font-bold uppercase text-[var(--db-text)]">
                             Click to upload files
                           </p>
-                          <p className="text-[10px] text-[var(--db-text-muted)] mt-1">
+                          <p className="text-[10px] text-[var(--db-text-muted)] mt-0.5">
                             Supports PNG, JPG, JPEG, or MP4 video (Max 100MB)
                           </p>
                         </div>
@@ -490,19 +562,19 @@ const DashboardEvents = () => {
                   </div>
 
                   {/* Submit Panel */}
-                  <div className="pt-4 border-t border-[var(--db-card-border)] flex justify-end gap-3">
+                  <div className="pt-3.5 sm:pt-4 border-t border-[var(--db-card-border)] flex flex-col-reverse sm:flex-row justify-end gap-2.5 sm:gap-3">
                     <button
                       type="button"
                       onClick={() => setShowModal(false)}
                       disabled={submitting}
-                      className="px-5 py-3 rounded-xl border border-[var(--db-input-border)] bg-transparent text-xs font-bold uppercase tracking-wider text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer"
+                      className="w-full sm:w-auto px-5 py-2.5 sm:py-3 rounded-xl border border-[var(--db-input-border)] bg-transparent text-xs font-bold uppercase tracking-wider text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all cursor-pointer text-center"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="flex items-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-6 py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none transition-all cursor-pointer"
+                      className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-bold uppercase tracking-wider text-xs px-6 py-2.5 sm:py-3 rounded-xl shadow-lg shadow-[var(--db-accent-glow)] hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:pointer-events-none transition-all cursor-pointer"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       {submitting ? (

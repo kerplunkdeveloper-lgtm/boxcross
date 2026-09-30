@@ -154,14 +154,14 @@ const DashboardHome = () => {
   if (!user) return null;
 
   return (
-    <div className="px-2 py-6 md:p-8 relative overflow-hidden min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 relative overflow-hidden min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none z-0" />
 
-      <div className="max-w-9xl mx-auto z-10 relative space-y-10">
+      <div className="max-w-9xl mx-auto z-10 relative space-y-4 sm:space-y-6 md:space-y-8">
         {/* Welcome Section with Boxer Background Image and Real-Time Clock */}
         <div
-          className="relative overflow-hidden py-7 px-6 md:py-9 md:px-10 min-h-[175px] sm:min-h-[195px] md:min-h-[220px] rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 group"
+          className="relative overflow-hidden py-5 px-4 sm:py-7 sm:px-6 md:py-9 md:px-10 min-h-[155px] sm:min-h-[195px] md:min-h-[220px] rounded-2xl sm:rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 group"
           style={{
             background: "var(--db-glass-bg)",
             borderColor: "var(--db-glass-border)",
@@ -192,14 +192,14 @@ const DashboardHome = () => {
           <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40 z-[1]" />
           <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20 z-[1]" />
 
-          <div className="flex items-center gap-4 sm:gap-6 md:gap-7 z-10">
-            {/* Profile Image with Increased Size & Enhanced UI/UX */}
+          <div className="flex items-center gap-3 sm:gap-6 md:gap-7 z-10 min-w-0">
+            {/* Profile Image with Responsive Size & Enhanced UI/UX */}
             <div
               onClick={() => navigate("/dashboard/profile")}
               className="relative group cursor-pointer shrink-0"
               title="Click to view profile"
             >
-              <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full p-1.5 bg-gradient-to-tr from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent border-2 sm:border-[3px] border-[var(--db-accent-highlight)]/40 shadow-2xl shadow-[var(--db-accent-glow)] ring-2 sm:ring-[3px] ring-[var(--db-accent-highlight)]/25 ring-offset-2 sm:ring-offset-4 ring-offset-[var(--db-card)] transition-all duration-300 group-hover:scale-105 group-hover:border-[var(--db-accent-highlight)]">
+              <div className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full p-1 sm:p-1.5 bg-gradient-to-tr from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent border-2 sm:border-[3px] border-[var(--db-accent-highlight)]/40 shadow-xl shadow-[var(--db-accent-glow)] ring-2 ring-[var(--db-accent-highlight)]/25 ring-offset-2 ring-offset-[var(--db-card)] transition-all duration-300 group-hover:scale-105 group-hover:border-[var(--db-accent-highlight)]">
                 <div className="w-full h-full rounded-full overflow-hidden bg-neutral-900 flex items-center justify-center">
                   {user.profileImage ? (
                     <img
@@ -209,8 +209,7 @@ const DashboardHome = () => {
                     />
                   ) : (
                     <User
-                      size={54}
-                      className="text-[var(--db-accent-highlight)]"
+                      className="text-[var(--db-accent-highlight)] w-7 h-7 sm:w-10 sm:h-10 md:w-12 md:h-12"
                     />
                   )}
                 </div>
@@ -218,17 +217,17 @@ const DashboardHome = () => {
 
               {/* Active Online Status Indicator */}
               <div
-                className="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-emerald-500 border-2 sm:border-[3px] border-[var(--db-card)] flex items-center justify-center shadow-lg"
+                className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-emerald-500 border-2 border-[var(--db-card)] flex items-center justify-center shadow-lg"
                 title="Status: Online & Active"
               >
-                <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-white animate-pulse" />
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white animate-pulse" />
               </div>
             </div>
 
-            <div className="text-left">
-              <div className="flex items-center gap-2">
+            <div className="text-left min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                 <h1
-                  className="text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)]"
+                  className="text-base sm:text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)] leading-tight"
                   style={{ fontFamily: '"Brutal Font", sans-serif' }}
                 >
                   {getGreeting()},{" "}
@@ -236,20 +235,19 @@ const DashboardHome = () => {
                     className="text-[var(--db-accent-highlight)]"
                     style={{ fontFamily: "'BrutalType Bold', sans-serif" }}
                   >
-                    {" "}
                     {user.name}
                   </span>
                 </h1>
                 <Sparkles
-                  size={16}
-                  className="text-[var(--db-accent-highlight)] animate-pulse"
+                  size={15}
+                  className="text-[var(--db-accent-highlight)] animate-pulse shrink-0"
                 />
               </div>
             </div>
           </div>
 
           {/* Right Side - Dynamic Date & Time Display with High-Tech Premium Glass Layout */}
-          <div className="z-10 flex items-center gap-4 self-stretch sm:self-auto justify-between sm:justify-end border-t sm:border-t-0 sm:border-l border-[var(--db-glass-border)] pt-4 sm:pt-0 sm:pl-8">
+          <div className="z-10 flex items-center gap-3 sm:gap-4 self-stretch sm:self-auto justify-between sm:justify-end border-t sm:border-t-0 sm:border-l border-[var(--db-glass-border)] pt-3 sm:pt-0 sm:pl-8">
             <div className="flex flex-col text-left">
               <div className="flex items-center gap-1.5 text-[var(--db-text-muted)] text-[10px] font-black uppercase tracking-widest">
                 <Calendar
@@ -410,7 +408,7 @@ const DashboardHome = () => {
           ];
 
           return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-3.5 2xl:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5 2xl:gap-4">
               {statCards.map((card, idx) => {
                 const Icon = card.icon;
                 return (
@@ -421,7 +419,9 @@ const DashboardHome = () => {
                     transition={{ duration: 0.35, delay: 0.04 * idx }}
                     whileHover={{ y: -3, transition: { duration: 0.18 } }}
                     onClick={() => card.link && navigate(card.link)}
-                    className={`group relative overflow-hidden rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] ${card.borderHover} p-3.5 sm:p-4 flex flex-col justify-between min-h-[114px] sm:min-h-[120px] shadow-lg hover:shadow-2xl transition-all duration-300 text-left cursor-pointer select-none`}
+                    className={`group relative overflow-hidden rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] ${card.borderHover} ${
+                      idx === 4 ? "col-span-2 sm:col-span-1" : ""
+                    } p-3 sm:p-4 flex flex-col justify-between min-h-[105px] sm:min-h-[120px] shadow-lg hover:shadow-2xl transition-all duration-300 text-left cursor-pointer select-none`}
                     title={`${card.title}: ${card.displayValue}`}
                   >
                     {/* Ambient Glow in Top-Right Corner */}
@@ -430,21 +430,21 @@ const DashboardHome = () => {
                     />
 
                     {/* Top Row: Themed Icon Badge + Status Tag with Micro-Arrow */}
-                    <div className="flex items-center justify-between z-10 mb-2.5">
+                    <div className="flex items-center justify-between z-10 mb-2">
                       <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border transition-transform duration-300 group-hover:scale-105 ${card.iconBg}`}
+                        className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shrink-0 border transition-transform duration-300 group-hover:scale-105 ${card.iconBg}`}
                       >
-                        <Icon size={18} />
+                        <Icon size={16} className="sm:w-[18px] sm:h-[18px]" />
                       </div>
-                      <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+                      <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
                         <span
                           className={`w-1.5 h-1.5 rounded-full animate-pulse ${card.dotBg}`}
                         />
-                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors">
+                        <span className="text-[8.5px] sm:text-[9px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors">
                           {card.badgeText}
                         </span>
                         <ArrowUpRight
-                          size={11}
+                          size={10}
                           className="text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200"
                         />
                       </div>
@@ -453,22 +453,22 @@ const DashboardHome = () => {
                     {/* Bottom Row: Large Numeric Value + Uppercase Label */}
                     <div className="z-10 mt-auto">
                       {loading ? (
-                        <div className="h-7 sm:h-8 flex items-center">
+                        <div className="h-6 sm:h-8 flex items-center">
                           <Loader2
-                            size={20}
+                            size={18}
                             className={`animate-spin ${card.loaderColor}`}
                           />
                         </div>
                       ) : (
                         <div
-                          className="text-xl sm:text-2xl lg:text-[21px] xl:text-2xl 2xl:text-3xl font-black text-[var(--db-text-title)] tracking-tight leading-tight truncate"
+                          className="text-lg sm:text-2xl lg:text-[21px] xl:text-2xl 2xl:text-3xl font-black text-[var(--db-text-title)] tracking-tight leading-tight truncate"
                           style={{ fontFamily: '"Brutal Font", sans-serif' }}
                         >
                           {card.displayValue}
                         </div>
                       )}
                       <p
-                        className="text-[10px] 2xl:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] mt-1 truncate group-hover:text-[var(--db-text)] transition-colors"
+                        className="text-[9.5px] sm:text-[10px] 2xl:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] mt-0.5 sm:mt-1 truncate group-hover:text-[var(--db-text)] transition-colors"
                         title={card.title}
                       >
                         {card.title}
@@ -481,10 +481,10 @@ const DashboardHome = () => {
           );
         })()}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Left: Premium Promo Banner Card */}
           <div className="lg:col-span-5 w-full">
-            <div className="relative overflow-hidden rounded-[32px] border border-[var(--db-card-border)] bg-[var(--db-card)] shadow-2xl h-[320px] sm:h-[400px] lg:h-[480px] flex flex-col justify-end group transition-all duration-300 lg:sticky lg:top-6">
+            <div className="relative overflow-hidden rounded-2xl sm:rounded-[32px] border border-[var(--db-card-border)] bg-[var(--db-card)] shadow-2xl h-[230px] sm:h-[360px] lg:h-[480px] flex flex-col justify-end group transition-all duration-300 lg:sticky lg:top-6">
               <img
                 src={gymhm}
                 alt="Box & Cross Gym"
@@ -494,7 +494,7 @@ const DashboardHome = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent z-10" />
 
               {/* Content Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 text-left flex flex-col items-start">
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 z-20 text-left flex flex-col items-start">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[var(--db-accent-highlight)] text-black shadow-lg mb-3">
                   Box & Cross Club
                 </span>

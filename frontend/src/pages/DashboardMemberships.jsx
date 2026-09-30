@@ -106,26 +106,26 @@ const DashboardMemberships = () => {
   };
 
   return (
-    <div className="p-6 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+    <div className="p-3.5 sm:p-5 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       <div className="max-w-8xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] p-6 md:p-8 shadow-2xl transition-colors"
+          className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[24px] p-4 sm:p-6 md:p-8 shadow-2xl transition-colors"
         >
           {/* Header */}
-          <div className="flex items-center justify-between mb-6 pb-2 border-b border-[var(--db-card-border)]">
+          <div className="flex items-center justify-between mb-5 pb-3 border-b border-[var(--db-card-border)]">
             <div className="flex items-center gap-2">
               <CreditCard
                 size={18}
                 className="text-[var(--db-accent-highlight)]"
               />
-              <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
+              <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)]">
                 Membership Plans & Pricing
               </span>
             </div>
-            <span className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] px-2 py-0.5 rounded-sm font-bold">
+            <span className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] px-2.5 py-1 rounded-full font-bold">
               {plans.length} Categories
             </span>
           </div>
@@ -154,59 +154,115 @@ const DashboardMemberships = () => {
               <span>Loading membership details...</span>
             </div>
           ) : plans.length > 0 ? (
-            <div className="overflow-x-auto w-full">
-              <table className="w-full text-left border-collapse min-w-[750px]">
-                <thead>
-                  <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
-                    <th className="py-4 px-4 rounded-l-xl">Program Key</th>
-                    <th className="py-4 px-4">Program Title</th>
-                    <th className="py-4 px-4">Starter Price</th>
-                    <th className="py-4 px-4">Available Durations</th>
-                    <th className="py-4 px-4">Total Features</th>
-                    <th className="py-4 px-4 text-right rounded-r-xl">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--db-card-border)]">
-                  {plans.map((plan) => (
-                    <tr
-                      key={plan._id}
-                      className="hover:bg-[var(--db-table-hover)] transition-colors"
+            <>
+              {/* Mobile Card View (< md) */}
+              <div className="block md:hidden space-y-3">
+                {plans.map((plan) => (
+                  <div
+                    key={plan._id}
+                    className="p-4 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40 hover:bg-[var(--db-table-hover)] transition-all space-y-3 text-left"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <span className="inline-block px-2 py-0.5 mb-1 text-[9px] font-mono font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-highlight)]/10 rounded-md border border-[var(--db-accent-highlight)]/25">
+                          {plan.key}
+                        </span>
+                        <h3 className="text-sm font-black text-[var(--db-text)] uppercase tracking-wide">
+                          {plan.title}
+                        </h3>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold block">
+                          Starter
+                        </span>
+                        <span className="text-base font-black text-[var(--db-accent-highlight)] font-mono">
+                          ₹{plan.starterPrice}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="text-xs space-y-1 pt-1 border-t border-[var(--db-card-border)]/50">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-[var(--db-text-muted)] font-medium">Durations:</span>
+                        <span className="font-semibold text-[var(--db-text)]">
+                          {plan.plans.map((p) => p.months).join(" / ")}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-[var(--db-text-muted)] font-medium">Features:</span>
+                        <span className="text-[var(--db-text-muted)] font-semibold">
+                          {plan.features.length} listed features
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleEditClick(plan)}
+                      className="w-full py-2.5 px-3 bg-[var(--db-accent)] text-[var(--db-accent-text)] rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      <td className="py-4 px-4 text-sm font-mono text-[var(--db-accent-highlight)] font-semibold">
-                        {plan.key}
-                      </td>
-                      <td className="py-4 px-4 text-sm font-bold text-[var(--db-text)]">
-                        {plan.title}
-                      </td>
-                      <td className="py-4 px-4 text-sm text-[var(--db-text)] font-semibold">
-                        ₹{plan.starterPrice}
-                      </td>
-                      <td className="py-4 px-4 text-xs text-[var(--db-text-muted)]">
-                        {plan.plans.map((p) => p.months).join(" / ")}
-                      </td>
-                      <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
-                        {plan.features.length} features
-                      </td>
-                      <td className="py-4 px-4 text-right">
-                        <button
-                          onClick={() => handleEditClick(plan)}
-                          className="p-2 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          <Edit
-                            size={14}
-                            className="text-[var(--db-accent-highlight)]"
-                          />
-                          Edit
-                        </button>
-                      </td>
+                      <Edit size={13} />
+                      <span>Edit Plan Pricing & Data</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View (>= md) */}
+              <div className="hidden md:block overflow-x-auto w-full custom-scrollbar">
+                <table className="w-full text-left border-collapse min-w-[750px]">
+                  <thead>
+                    <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
+                      <th className="py-4 px-4 rounded-l-xl">Program Key</th>
+                      <th className="py-4 px-4">Program Title</th>
+                      <th className="py-4 px-4">Starter Price</th>
+                      <th className="py-4 px-4">Available Durations</th>
+                      <th className="py-4 px-4">Total Features</th>
+                      <th className="py-4 px-4 text-right rounded-r-xl">
+                        Action
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--db-card-border)]">
+                    {plans.map((plan) => (
+                      <tr
+                        key={plan._id}
+                        className="hover:bg-[var(--db-table-hover)] transition-colors"
+                      >
+                        <td className="py-4 px-4 text-sm font-mono text-[var(--db-accent-highlight)] font-semibold">
+                          {plan.key}
+                        </td>
+                        <td className="py-4 px-4 text-sm font-bold text-[var(--db-text)]">
+                          {plan.title}
+                        </td>
+                        <td className="py-4 px-4 text-sm text-[var(--db-text)] font-semibold">
+                          ₹{plan.starterPrice}
+                        </td>
+                        <td className="py-4 px-4 text-xs text-[var(--db-text-muted)]">
+                          {plan.plans.map((p) => p.months).join(" / ")}
+                        </td>
+                        <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
+                          {plan.features.length} features
+                        </td>
+                        <td className="py-4 px-4 text-right">
+                          <button
+                            onClick={() => handleEditClick(plan)}
+                            className="p-2 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            <Edit
+                              size={14}
+                              className="text-[var(--db-accent-highlight)]"
+                            />
+                            Edit
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           ) : (
             <div className="py-12 text-center text-[var(--db-text-muted)] text-xs">
               No membership plans seeded in the database. Run `node seeder.js`
@@ -219,13 +275,13 @@ const DashboardMemberships = () => {
       {/* Edit Modal Popup */}
       <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-3xl max-h-[85vh] overflow-y-auto bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[28px] p-6 md:p-8 shadow-2xl text-left"
+              className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[28px] p-4 sm:p-6 md:p-8 shadow-2xl text-left custom-scrollbar"
             >
               {/* Top Accent Line */}
               <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-[var(--db-card-border)] to-transparent" />

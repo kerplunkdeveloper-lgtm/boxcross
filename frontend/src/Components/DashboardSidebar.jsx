@@ -339,9 +339,9 @@ const DashboardSidebar = ({
 
   return (
     <aside
-      className={`fixed lg:static inset-y-0 left-0 z-30 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform transition-all duration-300 select-none ${
+      className={`fixed lg:static inset-y-0 left-0 z-50 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform transition-all duration-300 select-none shadow-2xl lg:shadow-none ${
         sidebarOpen
-          ? "translate-x-0 w-[232px] lg:w-[232px]"
+          ? "translate-x-0 w-[264px] sm:w-[270px] lg:w-[232px]"
           : "-translate-x-full lg:w-[68px] lg:translate-x-0"
       }`}
     >
@@ -368,11 +368,11 @@ const DashboardSidebar = ({
               )}
             </div>
             <button
-              className="lg:hidden p-1 rounded-lg text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors cursor-pointer"
+              className="lg:hidden p-2 rounded-xl text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors cursor-pointer"
               onClick={() => setSidebarOpen(false)}
               title="Close sidebar"
             >
-              <X size={17} />
+              <X size={18} />
             </button>
           </>
         ) : (
