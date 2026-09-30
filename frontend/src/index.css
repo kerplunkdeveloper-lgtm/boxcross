@@ -658,3 +658,51 @@ html {
   scrollbar-width: thin;
   scrollbar-color: #1e293b rgba(15, 23, 42, 0.06);
 }
+
+/* ==========================================================================
+   GLOBAL RESPONSIVENESS OVERRIDES FOR BIG SCREENS (1536px+)
+   ========================================================================== */
+@media (min-width: 1536px) {
+  /* Expand large max-w container constraints to fill big screens better */
+  .dashboard-dark [class*="max-w-6xl"],
+  .dashboard-dark [class*="max-w-7xl"],
+  .dashboard-dark [class*="max-w-8xl"],
+  .dashboard-dark [class*="max-w-9xl"],
+  .dashboard-light [class*="max-w-6xl"],
+  .dashboard-light [class*="max-w-7xl"],
+  .dashboard-light [class*="max-w-8xl"],
+  .dashboard-light [class*="max-w-9xl"] {
+    max-width: 96% !important;
+  }
+  
+  /* Increase typography scale slightly on very large screens for readability */
+  .dashboard-dark,
+  .dashboard-light {
+    font-size: 15px;
+  }
+  
+  /* Allow tables to breathe more on large screens */
+  .dashboard-dark td,
+  .dashboard-light td,
+  .dashboard-dark th,
+  .dashboard-light th {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+}
+
+@media (min-width: 1920px) {
+  /* For 4k and ultrawide, lock the max width to avoid stretching infinitely */
+  .dashboard-dark [class*="max-w-6xl"],
+  .dashboard-dark [class*="max-w-7xl"],
+  .dashboard-dark [class*="max-w-8xl"],
+  .dashboard-dark [class*="max-w-9xl"],
+  .dashboard-light [class*="max-w-6xl"],
+  .dashboard-light [class*="max-w-7xl"],
+  .dashboard-light [class*="max-w-8xl"],
+  .dashboard-light [class*="max-w-9xl"] {
+    max-width: 1800px !important;
+  }
+}

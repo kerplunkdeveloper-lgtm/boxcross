@@ -177,7 +177,7 @@ const Auth = () => {
       {/* ─────────────────────────────────────────────────────────────
           DESKTOP 100% EXACT REPLICA SPLIT VIEW (lg and above)
       ───────────────────────────────────────────────────────────── */}
-      <div className="hidden lg:block relative w-full h-screen min-h-[660px] max-h-[1080px] overflow-hidden select-none bg-black">
+      <div className="hidden lg:block relative w-full h-screen min-h-[660px] 2xl:min-h-[800px] overflow-hidden select-none bg-black">
         {/* Full-width Canvas Background Image (Clipped precisely along the polygon divider) */}
         <div
           className="absolute inset-0 w-full h-full bg-no-repeat bg-left bg-cover pointer-events-none z-0"
@@ -285,36 +285,36 @@ const Auth = () => {
         {/* ─────────────────────────────────────────────────────────────
             RIGHT INTERACTIVE FORM CONTAINER (DESKTOP)
         ───────────────────────────────────────────────────────────── */}
-        <div className="absolute right-0 top-0 bottom-0 w-[48%] xl:w-[46%] z-20 flex flex-col justify-between py-8 px-10 xl:px-16 text-black">
+        <div className="absolute right-0 top-0 bottom-0 w-[48%] xl:w-[46%] 2xl:w-[40%] 3xl:w-[35%] z-20 flex flex-col justify-between py-8 px-10 xl:px-16 2xl:px-24 text-black">
           {/* Top Right Header: ADMIN / ATHLETE PORTAL with black underline */}
           <div className="flex flex-col items-end pt-2">
             <h2
-              className="text-base xl:text-lg font-bold tracking-wider text-black uppercase"
+              className="text-base xl:text-lg 2xl:text-xl font-bold tracking-wider text-black uppercase"
               style={{ fontFamily: portalFont }}
             >
               {authMode === "athlete" ? "ATHLETE PORTAL" : "ADMIN PORTAL"}
             </h2>
-            <div className="w-8 h-[2.5px] bg-black mt-1" />
+            <div className="w-8 2xl:w-10 h-[2.5px] 2xl:h-[3px] bg-black mt-1" />
           </div>
 
           {/* Main Form Center Box */}
-          <div className="w-full max-w-[420px] mx-auto my-auto space-y-5">
+          <div className="w-full max-w-[420px] 2xl:max-w-[480px] mx-auto my-auto space-y-5 2xl:space-y-7">
             {/* Pill Role Switcher */}
-            <div className="w-full p-1 bg-black/10 rounded-full flex items-center border border-black/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.08)]">
+            <div className="w-full p-1 2xl:p-1.5 bg-black/10 rounded-full flex items-center border border-black/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.08)]">
               <button
                 type="button"
                 onClick={() => {
                   setAuthMode("athlete");
                   setError("");
                 }}
-                className={`flex-1 py-2.5 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`flex-1 py-2.5 2xl:py-3.5 px-4 rounded-full text-xs 2xl:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   authMode === "athlete"
                     ? "bg-black text-white shadow-md"
                     : "text-black/80 hover:text-black"
                 }`}
                 style={{ fontFamily: portalFont }}
               >
-                <User size={15} />
+                <User size={15} className="2xl:w-5 2xl:h-5" />
                 <span>ATHLETE</span>
               </button>
 
@@ -324,7 +324,7 @@ const Auth = () => {
                   setAuthMode("admin");
                   setError("");
                 }}
-                className={`flex-1 py-2.5 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`flex-1 py-2.5 2xl:py-3.5 px-4 rounded-full text-xs 2xl:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   authMode === "admin"
                     ? "bg-black text-white shadow-md"
                     : "text-black/80 hover:text-black"
@@ -333,7 +333,7 @@ const Auth = () => {
               >
                 <ShieldCheck
                   size={15}
-                  className={authMode === "admin" ? "text-[#ccf141]" : "text-black"}
+                  className={`2xl:w-5 2xl:h-5 ${authMode === "admin" ? "text-[#ccf141]" : "text-black"}`}
                 />
                 <span>ADMIN</span>
               </button>
@@ -428,47 +428,17 @@ const Auth = () => {
                 </div>
               </div>
 
-              {/* Options Row: Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between text-xs pt-0.5">
-                <label className="flex items-center gap-2 cursor-pointer select-none group">
-                  <button
-                    type="button"
-                    onClick={() => setRememberMe(!rememberMe)}
-                    className={`w-4 h-4 rounded border-2 border-black flex items-center justify-center transition-all cursor-pointer ${
-                      rememberMe ? "bg-black text-[#ccf141]" : "bg-transparent"
-                    }`}
-                  >
-                    {rememberMe && <Check size={11} strokeWidth={3.5} />}
-                  </button>
-                  <span
-                    className="text-black/85 font-medium group-hover:text-black transition-colors"
-                    onClick={() => setRememberMe(!rememberMe)}
-                    style={{ fontFamily: portalFont }}
-                  >
-                    Remember me
-                  </span>
-                </label>
 
-                <button
-                  type="button"
-                  onClick={() => setForgotModalOpen(true)}
-                  className="text-black/90 font-medium underline underline-offset-2 hover:opacity-75 cursor-pointer transition-opacity"
-                  style={{ fontFamily: portalFont }}
-                >
-                  Forgot password?
-                </button>
-              </div>
-
-              {/* Action Buttons Row */}
-              <div className="flex items-center justify-between pt-4">
+            {/* Action Buttons Row */}
+              <div className="flex items-center justify-between pt-4 2xl:pt-6">
                 <Link
                   to="/"
-                  className="text-xs xl:text-sm font-semibold tracking-wider text-black hover:opacity-75 flex items-center gap-1.5 cursor-pointer transition-all group"
+                  className="text-xs xl:text-sm 2xl:text-base font-semibold tracking-wider text-black hover:opacity-75 flex items-center gap-1.5 cursor-pointer transition-all group"
                   style={{ fontFamily: portalFont }}
                 >
                   <ArrowLeft
                     size={16}
-                    className="group-hover:-translate-x-1 transition-transform"
+                    className="group-hover:-translate-x-1 transition-transform 2xl:w-5 2xl:h-5"
                   />
                   <span>HOME</span>
                 </Link>
@@ -476,13 +446,13 @@ const Auth = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-black hover:bg-neutral-900 active:scale-[0.98] text-[#ccf141] font-bold tracking-wider text-xs xl:text-sm px-7 py-3 rounded-xl shadow-lg shadow-black/20 flex items-center gap-2 cursor-pointer transition-all group disabled:opacity-50"
+                  className="bg-black hover:bg-neutral-900 active:scale-[0.98] text-[#ccf141] font-bold tracking-wider text-xs xl:text-sm 2xl:text-base px-7 2xl:px-9 py-3 2xl:py-4 rounded-xl 2xl:rounded-2xl shadow-lg shadow-black/20 flex items-center gap-2 cursor-pointer transition-all group disabled:opacity-50"
                   style={{ fontFamily: portalFont }}
                 >
                   <span>{loading ? "AUTHENTICATING..." : "ENTER PORTAL"}</span>
                   <ArrowRight
                     size={16}
-                    className="group-hover:translate-x-1 transition-transform"
+                    className="group-hover:translate-x-1 transition-transform 2xl:w-5 2xl:h-5"
                   />
                 </button>
               </div>
@@ -707,36 +677,6 @@ const Auth = () => {
                 </div>
               </div>
 
-              {/* Options Row: Remember Me & Forgot Password */}
-              <div className="flex items-center justify-between text-xs pt-1">
-                <label className="flex items-center gap-2 cursor-pointer select-none">
-                  <button
-                    type="button"
-                    onClick={() => setRememberMe(!rememberMe)}
-                    className={`w-4 h-4 rounded border-2 border-black flex items-center justify-center transition-all ${
-                      rememberMe ? "bg-black text-[#c8ff00]" : "bg-transparent"
-                    }`}
-                  >
-                    {rememberMe && <Check size={11} strokeWidth={3.5} />}
-                  </button>
-                  <span
-                    className="text-black font-medium select-none"
-                    onClick={() => setRememberMe(!rememberMe)}
-                    style={{ fontFamily: portalFont }}
-                  >
-                    Remember me
-                  </span>
-                </label>
-
-                <button
-                  type="button"
-                  onClick={() => setForgotModalOpen(true)}
-                  className="text-black/90 font-medium underline underline-offset-2 hover:opacity-75 cursor-pointer transition-opacity"
-                  style={{ fontFamily: portalFont }}
-                >
-                  Forgot password?
-                </button>
-              </div>
 
               {/* Full-Width Enter Portal Button */}
               <div className="pt-2">
