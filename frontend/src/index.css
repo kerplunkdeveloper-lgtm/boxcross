@@ -111,33 +111,32 @@ html {
 }
 
 .dashboard-light {
-  --db-bg: #f8fafc;
+  --db-bg: #f1f5f9;
   --db-card: #ffffff;
-  --db-card-border: rgba(15, 23, 42, 0.08);
-  --db-text: #1e293b;
-  --db-text-muted: #64748b;
+  --db-card-border: #e2e8f0;
+  --db-text: #0f172a;
+  --db-text-muted: #334155;
   --db-sidebar: #ffffff;
-  --db-sidebar-border: rgba(15, 23, 42, 0.06);
+  --db-sidebar-border: #e2e8f0;
   --db-header: #ffffff;
-  --db-header-border: rgba(15, 23, 42, 0.06);
-  --db-input-bg: #f1f5f9;
-  --db-input-border: rgba(15, 23, 42, 0.12);
-  --db-text-title: #0f172a;
-  --db-sidebar-link-hover: rgba(15, 23, 42, 0.04);
-  --db-sidebar-link-text: #475569;
-  --db-table-hover: rgba(15, 23, 42, 0.01);
-  --db-accent-dim: rgba(15, 23, 42, 0.08);
-  --db-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
-  --db-glass-bg: rgba(255, 255, 255, 0.45);
-  --db-glass-border: rgba(15, 23, 42, 0.08);
-
+  --db-header-border: #e2e8f0;
+  --db-input-bg: #f8fafc;
+  --db-input-border: #cbd5e1;
+  --db-text-title: #020617;
+  --db-sidebar-link-hover: #f1f5f9;
+  --db-sidebar-link-text: #1e293b;
+  --db-table-hover: #f1f5f9;
+  --db-accent-dim: rgba(15, 23, 42, 0.06);
+  --db-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+  --db-glass-bg: rgba(255, 255, 255, 0.92);
+  --db-glass-border: #e2e8f0;
 
   /* Dynamic Accent Brand Tokens */
-  --db-accent:#000000;
-  --db-accent-text: white;
-  --db-accent-hover: #111111;
-  --db-accent-highlight: #111111;
-  --db-accent-glow: rgba(119, 119, 119, 0.12);
+  --db-accent: #0f172a;
+  --db-accent-text: #ffffff;
+  --db-accent-hover: #1e293b;
+  --db-accent-highlight: #0f172a;
+  --db-accent-glow: rgba(15, 23, 42, 0.08);
 }
 
 /* ==========================================================================
@@ -251,19 +250,170 @@ html {
   font-variant-numeric: tabular-nums;
 }
 
-.dashboard-dark th,
-.dashboard-light th {
+.dashboard-dark th {
   font-weight: 600;
   font-size: 0.72rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
-.dashboard-dark td,
-.dashboard-light td {
+.dashboard-dark td {
   font-weight: 450;
   font-size: 0.8125rem;
   letter-spacing: -0.005em;
+}
+
+/* ==========================================================================
+   DASHBOARD LIGHT MODE - HIGH CONTRAST & PREMIUM TABLE SYSTEM
+   Addresses: Crisp dark text, distinct headers, clean row borders & zebra contrast
+   ========================================================================== */
+
+.dashboard-light table {
+  background-color: #ffffff;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+/* Light mode table headers: high contrast, clear separation */
+.dashboard-light thead tr:not([class*="bg-[var(--db-accent)]"]) {
+  background-color: #f1f5f9 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+.dashboard-light thead tr:not([class*="bg-[var(--db-accent)]"]) th {
+  color: #0f172a !important;
+  background-color: #f1f5f9 !important;
+  font-weight: 700 !important;
+  font-size: 0.725rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+/* Accent-header tables (e.g. Memberships, Payments, Bookings, Events) */
+.dashboard-light thead tr.bg-\[var\(--db-accent\)\],
+.dashboard-light thead tr[class*="bg-[var(--db-accent)]"] {
+  background-color: #0f172a !important;
+  border-bottom: 2px solid #020617 !important;
+}
+
+.dashboard-light thead tr.bg-\[var\(--db-accent\)\] th,
+.dashboard-light thead tr[class*="bg-[var(--db-accent)]"] th {
+  color: #ffffff !important;
+  background-color: transparent !important;
+  border-bottom: none !important;
+}
+
+/* Table body rows in light mode: subtle zebra striping for scannability */
+.dashboard-light tbody tr {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  transition: background-color 120ms ease;
+}
+
+.dashboard-light tbody tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+/* Table row hover in light mode */
+.dashboard-light tbody tr:hover,
+.dashboard-light tbody tr[class*="hover:bg-"]:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* Table cells in light mode: high-contrast dark text */
+.dashboard-light tbody td {
+  color: #0f172a !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  font-size: 0.8125rem;
+}
+
+/* Secondary/muted text inside table cells: dark slate-700 instead of faint gray */
+.dashboard-light tbody td .text-\[var\(--db-text-muted\)\],
+.dashboard-light tbody td [class*="text-[var(--db-text-muted)]"],
+.dashboard-light tbody td span.text-\[var\(--db-text-muted\)\],
+.dashboard-light tbody td div.text-\[var\(--db-text-muted\)\] {
+  color: #334155 !important;
+  font-weight: 500;
+}
+
+/* Sub-info text with opacity in table cells */
+.dashboard-light tbody td [class*="text-[var(--db-text)]/"],
+.dashboard-light tbody td [class*="text-white/"],
+.dashboard-light tbody td [class*="text-gray-"] {
+  color: #334155 !important;
+}
+
+/* Bold titles or names in table cells */
+.dashboard-light tbody td .font-bold,
+.dashboard-light tbody td .font-semibold,
+.dashboard-light tbody td .font-black {
+  color: #0f172a !important;
+}
+
+/* Monospace data (IDs, dates, prices, transactions) */
+.dashboard-light tbody td .font-mono {
+  color: #0f172a !important;
+}
+
+/* Fix any hardcoded text-black on accent buttons or badges */
+.dashboard-light [class*="bg-[var(--db-accent)]"].text-black,
+.dashboard-light [class*="bg-[var(--db-accent)]"] .text-black,
+.dashboard-light button[class*="bg-[var(--db-accent)]"] {
+  color: #ffffff !important;
+}
+
+/* Status pills and badges in light mode: rich, saturated, legible tones */
+.dashboard-light .text-emerald-400,
+.dashboard-light .text-green-400 {
+  color: #047857 !important;
+}
+.dashboard-light .text-amber-400 {
+  color: #b45309 !important;
+}
+.dashboard-light .text-red-400 {
+  color: #b91c1c !important;
+}
+.dashboard-light .text-sky-400 {
+  color: #0369a1 !important;
+}
+.dashboard-light .text-purple-400 {
+  color: #7e22ce !important;
+}
+
+/* Badges with light backgrounds */
+.dashboard-light [class*="bg-emerald-500/10"],
+.dashboard-light [class*="bg-green-500/10"] {
+  background-color: #dcfce7 !important;
+  border-color: #bbf7d0 !important;
+  color: #166534 !important;
+}
+.dashboard-light [class*="bg-amber-500/10"] {
+  background-color: #fef3c7 !important;
+  border-color: #fde68a !important;
+  color: #92400e !important;
+}
+.dashboard-light [class*="bg-red-500/10"] {
+  background-color: #fee2e2 !important;
+  border-color: #fecaca !important;
+  color: #991b1b !important;
+}
+.dashboard-light [class*="bg-sky-500/10"] {
+  background-color: #e0f2fe !important;
+  border-color: #bae6fd !important;
+  color: #075985 !important;
+}
+.dashboard-light [class*="bg-purple-500/10"] {
+  background-color: #f3e8ff !important;
+  border-color: #e9d5ff !important;
+  color: #6b21a8 !important;
+}
+
+/* Light mode table container styling */
+.dashboard-light .overflow-hidden.border {
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03) !important;
 }
 
 /* Form Inputs & Controls */

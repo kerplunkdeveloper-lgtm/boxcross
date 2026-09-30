@@ -361,7 +361,7 @@ const DashboardSidebar = ({
                 className="w-[105px] h-7 object-contain"
               />
               {isAdmin && (
-                <span className="text-[9px] text-blue-500 font-black px-2 py-0.5 rounded-md bg-[var(--db-accent)] tracking-wider shadow-[0_0_10px_rgba(229,255,0,0.25)] select-none shrink-0">
+                <span className="text-[9px] text-[var(--db-accent-text)] font-black px-2 py-0.5 rounded-md bg-[var(--db-accent)] tracking-wider shadow-sm select-none shrink-0">
                   <span style={{ fontFamily: '"Brutal Font", sans-serif' }}>
                     ADMIN
                   </span>
@@ -380,7 +380,7 @@ const DashboardSidebar = ({
           <div className="relative group">
             <div
               onClick={() => setSidebarOpen(true)}
-              className="w-8 h-8 rounded-xl bg-[var(--db-accent)] text-black flex items-center justify-center font-black text-xs shadow-[0_0_12px_rgba(229,255,0,0.3)] cursor-pointer"
+              className="w-8 h-8 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] flex items-center justify-center font-black text-xs shadow-sm cursor-pointer"
             >
               BX
             </div>

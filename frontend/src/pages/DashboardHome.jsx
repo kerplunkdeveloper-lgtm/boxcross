@@ -16,9 +16,11 @@ import {
   MapPin,
   DollarSign,
   ArrowUpRight,
-  Plus,
   Loader2,
   CreditCard,
+  UserCheck,
+  XCircle,
+  Plus,
 } from "lucide-react";
 import boxerBanner from "../assets/boxer-banner.png";
 import gymhm from "../assets/gymhm.png";
@@ -28,6 +30,8 @@ import {
   getEventsListAdmin,
   getEventBookings,
   getFounders,
+  getAttendance,
+  getAthletes,
 } from "../api/api";
 
 const DashboardHome = () => {
@@ -42,6 +46,11 @@ const DashboardHome = () => {
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
+  const [totalAthletes, setTotalAthletes] = useState(0);
+  const [presentAthletes, setPresentAthletes] = useState(0);
+  const [absentAthletes, setAbsentAthletes] = useState(0);
+  const [recentUsers, setRecentUsers] = useState([]);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -53,18 +62,27 @@ const DashboardHome = () => {
     const shouldShow = showLoader === true;
     if (shouldShow) setLoading(true);
     try {
+      const dateStr = (() => {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      })();
+
       const [
         bookingsRes,
         paymentsRes,
         eventsRes,
         eventBookingsRes,
         foundersRes,
+        attendanceRes,
+        athletesRes,
       ] = await Promise.all([
         getBookings(),
         getPayments(),
         getEventsListAdmin(),
         getEventBookings(),
         getFounders(),
+        getAttendance({ date: dateStr }),
+        getAthletes({ limit: 5 }),
       ]);
 
       if (bookingsRes.data?.success) {
@@ -126,6 +144,16 @@ const DashboardHome = () => {
         ).length;
         setPaidFounders(paidCount);
       }
+
+      if (attendanceRes.data?.success && attendanceRes.data.stats) {
+        setTotalAthletes(attendanceRes.data.stats.totalAthletes || 0);
+        setPresentAthletes(attendanceRes.data.stats.presentCount || 0);
+        setAbsentAthletes(attendanceRes.data.stats.absentCount || 0);
+      }
+
+      if (athletesRes.data?.success && Array.isArray(athletesRes.data.data)) {
+        setRecentUsers(athletesRes.data.data.slice(0, 5));
+      }
     } catch (error) {
       console.error("Error loading dashboard home stats", error);
     } finally {
@@ -159,22 +187,18 @@ const DashboardHome = () => {
       <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-[var(--db-accent-glow)] rounded-full blur-[140px] pointer-events-none z-0" />
 
       <div className="max-w-9xl mx-auto z-10 relative space-y-4 sm:space-y-6 md:space-y-8">
-        {/* Welcome Section with Boxer Background Image and Real-Time Clock */}
+        {/* Welcome Section with Balanced Executive Layout & Real-Time Clock */}
         <div
-          className="relative overflow-hidden py-5 px-4 sm:py-7 sm:px-6 md:py-9 md:px-10 min-h-[155px] sm:min-h-[195px] md:min-h-[220px] rounded-2xl sm:rounded-3xl border shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 group"
-          style={{
-            background: "var(--db-glass-bg)",
-            borderColor: "var(--db-glass-border)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-          }}
+          className="relative overflow-hidden p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-[28px] border border-[var(--db-card-border)] bg-[var(--db-card)] shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-5 group transition-all duration-300"
         >
-          {/* Boxer Background Image Layer */}
+          {/* Boxer Background Image Layer with Adaptive Theme Opacity */}
           <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
             <img
               src={boxerBanner}
               alt="Dashboard Banner Background"
-              className="w-full h-full object-cover object-center transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out"
+              className={`w-full h-full object-cover object-center transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out ${
+                theme === "light" ? "opacity-[0.07]" : "opacity-30"
+              }`}
             />
             {/* Cinematic Gradient Overlays to preserve legibility and aesthetic contrast */}
             <div
@@ -182,34 +206,39 @@ const DashboardHome = () => {
               style={{
                 background:
                   theme === "light"
-                    ? "linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.72) 45%, rgba(255,255,255,0.90) 100%)"
-                    : "linear-gradient(90deg, rgba(7,7,7,0.88) 0%, rgba(7,7,7,0.52) 45%, rgba(7,7,7,0.82) 100%)",
+                    ? "linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(248,250,252,0.90) 50%, rgba(241,245,249,0.94) 100%)"
+                    : "linear-gradient(135deg, rgba(10,10,10,0.94) 0%, rgba(15,15,15,0.78) 50%, rgba(10,10,10,0.92) 100%)",
               }}
             />
           </div>
 
           {/* Subtle accent light reflection inside the card */}
-          <div className="absolute -top-24 -left-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-40 z-[1]" />
-          <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20 z-[1]" />
+          <div className="absolute -top-20 -left-20 w-44 h-44 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-30 z-[1]" />
+          <div className="absolute -bottom-20 -right-20 w-44 h-44 bg-[var(--db-accent-glow)] rounded-full blur-3xl pointer-events-none opacity-20 z-[1]" />
 
-          <div className="flex items-center gap-3 sm:gap-6 md:gap-7 z-10 min-w-0">
-            {/* Profile Image with Responsive Size & Enhanced UI/UX */}
+          {/* Left Side: Avatar & 3-Tier Typography Hierarchy */}
+          <div className="flex items-center gap-3.5 sm:gap-5 md:gap-6 z-10 min-w-0">
+            {/* Profile Avatar with Refined Proportions */}
             <div
               onClick={() => navigate("/dashboard/profile")}
               className="relative group cursor-pointer shrink-0"
               title="Click to view profile"
             >
-              <div className="w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full p-1 sm:p-1.5 bg-gradient-to-tr from-[var(--db-accent-highlight)] via-[var(--db-accent-highlight)]/40 to-transparent border-2 sm:border-[3px] border-[var(--db-accent-highlight)]/40 shadow-xl shadow-[var(--db-accent-glow)] ring-2 ring-[var(--db-accent-highlight)]/25 ring-offset-2 ring-offset-[var(--db-card)] transition-all duration-300 group-hover:scale-105 group-hover:border-[var(--db-accent-highlight)]">
-                <div className="w-full h-full rounded-full overflow-hidden bg-neutral-900 flex items-center justify-center">
+              <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px] rounded-2xl sm:rounded-full p-1 border shadow-md transition-all duration-300 group-hover:scale-105 ${
+                theme === "light"
+                  ? "bg-gradient-to-tr from-slate-200 via-slate-100 to-white border-slate-300 ring-2 ring-slate-200/50 ring-offset-2 ring-offset-white"
+                  : "bg-gradient-to-tr from-[var(--db-accent-highlight)]/40 via-[var(--db-accent-highlight)]/15 to-transparent border-[var(--db-accent-highlight)]/30 ring-2 ring-[var(--db-accent-highlight)]/20 ring-offset-2 ring-offset-black"
+              }`}>
+                <div className="w-full h-full rounded-xl sm:rounded-full overflow-hidden bg-neutral-900 flex items-center justify-center">
                   {user.profileImage ? (
                     <img
                       src={user.profileImage}
                       alt={user.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 rounded-full"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 rounded-xl sm:rounded-full"
                     />
                   ) : (
                     <User
-                      className="text-[var(--db-accent-highlight)] w-7 h-7 sm:w-10 sm:h-10 md:w-12 md:h-12"
+                      className="text-[var(--db-accent-highlight)] w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9"
                     />
                   )}
                 </div>
@@ -217,37 +246,44 @@ const DashboardHome = () => {
 
               {/* Active Online Status Indicator */}
               <div
-                className="absolute bottom-0 right-0 sm:bottom-1 sm:right-1 w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-emerald-500 border-2 border-[var(--db-card)] flex items-center justify-center shadow-lg"
+                className="absolute -bottom-0.5 -right-0.5 w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full bg-emerald-500 border-2 border-[var(--db-card)] flex items-center justify-center shadow-md"
                 title="Status: Online & Active"
               >
-                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-white animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               </div>
             </div>
 
+            {/* Greeting & Subtitle Information */}
             <div className="text-left min-w-0 flex-1">
-              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                <h1
-                  className="text-base sm:text-2xl md:text-3xl font-black uppercase tracking-wide text-[var(--db-text-title)] leading-tight"
-                  style={{ fontFamily: '"Brutal Font", sans-serif' }}
+          
+            
+              {/* Main Greeting Headline */}
+              <h1
+                className="text-base sm:text-2xl md:text-[26px] font-black uppercase tracking-tight text-[var(--db-text-title)] leading-tight flex items-center gap-2 flex-wrap"
+                style={{ fontFamily: '"Brutal Font", sans-serif' }}
+              >
+                <span>{getGreeting()},</span>
+                <span
+                  className="text-[var(--db-accent-highlight)]"
+                  style={{ fontFamily: "'BrutalType Bold', sans-serif" }}
                 >
-                  {getGreeting()},{" "}
-                  <span
-                    className="text-[var(--db-accent-highlight)]"
-                    style={{ fontFamily: "'BrutalType Bold', sans-serif" }}
-                  >
-                    {user.name}
-                  </span>
-                </h1>
+                  {user.name}
+                </span>
                 <Sparkles
-                  size={15}
-                  className="text-[var(--db-accent-highlight)] animate-pulse shrink-0"
+                  size={16}
+                  className="text-[var(--db-accent-highlight)] animate-pulse shrink-0 inline-block"
                 />
-              </div>
+              </h1>
+
+              {/* Contextual Subtitle */}
+              <p className="text-xs sm:text-[13px] text-[var(--db-text-muted)] font-medium mt-1 leading-snug">
+                Live athlete activity, class schedules, and club operations overview.
+              </p>
             </div>
           </div>
 
-          {/* Right Side - Dynamic Date & Time Display with High-Tech Premium Glass Layout */}
-          <div className="z-10 flex items-center gap-3 sm:gap-4 self-stretch sm:self-auto justify-between sm:justify-end border-t sm:border-t-0 sm:border-l border-[var(--db-glass-border)] pt-3 sm:pt-0 sm:pl-8">
+          {/* Right Side - Dynamic Date & Time Display in Dedicated Self-Contained Card */}
+          <div className="z-10 flex items-center gap-3 sm:gap-4 px-4 py-3 rounded-2xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] shadow-sm shrink-0 self-stretch sm:self-auto justify-between sm:justify-end">
             <div className="flex flex-col text-left">
               <div className="flex items-center gap-1.5 text-[var(--db-text-muted)] text-[10px] font-black uppercase tracking-widest">
                 <Calendar
@@ -260,14 +296,13 @@ const DashboardHome = () => {
                     .toUpperCase()}
                   ,{" "}
                   {currentTime
-                    .toLocaleDateString([], { month: "short", day: "numeric" })
+                    .toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })
                     .toUpperCase()}
                 </span>
               </div>
-              <div className="flex items-baseline gap-1 mt-1">
+              <div className="flex items-baseline gap-1 mt-0.5">
                 <span
-                  className="text-2xl md:text-3xl font-black tracking-tighter text-[var(--db-text-title)]"
-                  style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                  className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--db-text-title)] font-mono"
                 >
                   {
                     currentTime
@@ -279,10 +314,10 @@ const DashboardHome = () => {
                       .split(" ")[0]
                   }
                 </span>
-                <span className="text-[10px] md:text-xs font-bold text-[var(--db-accent-highlight)] ml-0.5">
+                <span className="text-xs font-mono font-bold text-[var(--db-accent-highlight)]">
                   :{currentTime.toLocaleTimeString([], { second: "2-digit" })}
                 </span>
-                <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-[var(--db-text-muted)] ml-2">
+                <span className="text-[9.5px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] ml-1">
                   {
                     currentTime
                       .toLocaleTimeString([], {
@@ -296,95 +331,135 @@ const DashboardHome = () => {
               </div>
             </div>
 
-            {/* Premium circular glass clock ornament */}
+            {/* Circular Clock Ornament */}
             <div
-              className="w-12 h-12 rounded-2xl border flex items-center justify-center text-[var(--db-accent-highlight)] shadow-inner relative group overflow-hidden"
-              style={{
-                background: "var(--db-glass-bg)",
-                borderColor: "var(--db-glass-border)",
-                backdropFilter: "blur(10px)",
-                WebkitBackdropFilter: "blur(10px)",
-              }}
+              className="w-11 h-11 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-card)] flex items-center justify-center text-[var(--db-accent-highlight)] shadow-sm shrink-0"
+              title="Real-Time System Clock"
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent opacity-50 group-hover:scale-110 transition-transform duration-500" />
-              <Clock size={20} className="relative z-10 animate-spin-slow" />
+              <Clock size={19} className="animate-spin-slow" />
             </div>
           </div>
         </div>
 
-        {/* Dashboard Executive KPI Stats - 5 Cards Aligned in 1 Row on Desktop */}
+        {/* Dashboard Executive KPI Stats */}
         {(() => {
           const statCards = [
             {
+              id: "total-athletes",
+              title: "Total Athletes",
+              shortTitle: "Athletes",
+              value: totalAthletes,
+              displayValue: totalAthletes.toLocaleString("en-IN"),
+              icon: Users,
+              accentText: theme === "dark" ? "text-blue-400" : "text-blue-600",
+              iconBg: theme === "dark" ? "bg-blue-500/10 text-blue-400 border-blue-500/25 shadow-[0_0_14px_rgba(59,130,246,0.15)]" : "bg-blue-50 text-blue-600 border-blue-200 shadow-sm",
+              glowBg: theme === "dark" ? "bg-blue-500" : "bg-blue-500",
+              borderHover: theme === "dark" ? "hover:border-blue-500/40 hover:shadow-[0_8px_24px_rgba(59,130,246,0.12)]" : "hover:border-blue-500/40 hover:shadow-[0_8px_24px_rgba(59,130,246,0.12)]",
+              dotBg: theme === "dark" ? "bg-blue-400" : "bg-blue-500",
+              loaderColor: theme === "dark" ? "text-blue-400" : "text-blue-600",
+              badgeText: "Athletes",
+              link: "/dashboard/user-management",
+            },
+            {
+              id: "present-athletes",
+              title: "Athletes Present",
+              shortTitle: "Present",
+              value: presentAthletes,
+              displayValue: presentAthletes.toLocaleString("en-IN"),
+              icon: UserCheck,
+              accentText: theme === "dark" ? "text-emerald-400" : "text-emerald-600",
+              iconBg: theme === "dark" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/25 shadow-[0_0_14px_rgba(16,185,129,0.15)]" : "bg-emerald-50 text-emerald-600 border-emerald-200 shadow-sm",
+              glowBg: theme === "dark" ? "bg-emerald-500" : "bg-emerald-500",
+              borderHover: theme === "dark" ? "hover:border-emerald-500/40 hover:shadow-[0_8px_24px_rgba(16,185,129,0.12)]" : "hover:border-emerald-500/40 hover:shadow-[0_8px_24px_rgba(16,185,129,0.12)]",
+              dotBg: theme === "dark" ? "bg-emerald-400" : "bg-emerald-500",
+              loaderColor: theme === "dark" ? "text-emerald-400" : "text-emerald-600",
+              badgeText: "Present",
+              link: "/dashboard/attendance",
+            },
+            {
+              id: "absent-athletes",
+              title: "Athletes Absent",
+              shortTitle: "Absent",
+              value: absentAthletes,
+              displayValue: absentAthletes.toLocaleString("en-IN"),
+              icon: XCircle,
+              accentText: theme === "dark" ? "text-rose-400" : "text-rose-600",
+              iconBg: theme === "dark" ? "bg-rose-500/10 text-rose-400 border-rose-500/25 shadow-[0_0_14px_rgba(244,63,94,0.15)]" : "bg-rose-50 text-rose-600 border-rose-200 shadow-sm",
+              glowBg: theme === "dark" ? "bg-rose-500" : "bg-rose-500",
+              borderHover: theme === "dark" ? "hover:border-rose-500/40 hover:shadow-[0_8px_24px_rgba(244,63,94,0.12)]" : "hover:border-rose-500/40 hover:shadow-[0_8px_24px_rgba(244,63,94,0.12)]",
+              dotBg: theme === "dark" ? "bg-rose-400" : "bg-rose-500",
+              loaderColor: theme === "dark" ? "text-rose-400" : "text-rose-600",
+              badgeText: "Absent",
+              link: "/dashboard/attendance",
+            },
+            {
               id: "visitors",
-              title: "Total Free Gym Visitors",
+              title: "Free Gym Visitors",
               shortTitle: "Free Visitors",
               value: visitorCount,
               displayValue: visitorCount.toLocaleString("en-IN"),
               icon: Users,
-              accentText: "text-[#ccf141]",
+              accentText: theme === "dark" ? "text-[#ccf141]" : "text-lime-700",
               iconBg:
-                "bg-[#ccf141]/10 text-[#ccf141] border-[#ccf141]/25 shadow-[0_0_14px_rgba(229,255,0,0.15)]",
-              glowBg: "bg-[#ccf141]",
+                theme === "dark"
+                  ? "bg-[#ccf141]/10 text-[#ccf141] border-[#ccf141]/25 shadow-[0_0_14px_rgba(229,255,0,0.15)]"
+                  : "bg-lime-50 text-lime-700 border-lime-200 shadow-sm",
+              glowBg: theme === "dark" ? "bg-[#ccf141]" : "bg-lime-500",
               borderHover:
-                "hover:border-[#ccf141]/40 hover:shadow-[0_8px_24px_rgba(229,255,0,0.12)]",
-              dotBg: "bg-[#ccf141]",
-              loaderColor: "text-[#ccf141]",
+                theme === "dark"
+                  ? "hover:border-[#ccf141]/40 hover:shadow-[0_8px_24px_rgba(229,255,0,0.12)]"
+                  : "hover:border-lime-500/40 hover:shadow-[0_8px_24px_rgba(132,204,22,0.12)]",
+              dotBg: theme === "dark" ? "bg-[#ccf141]" : "bg-lime-600",
+              loaderColor: theme === "dark" ? "text-[#ccf141]" : "text-lime-600",
               badgeText: "Visitors",
               link: "/dashboard/bookings",
             },
             {
               id: "event-payments",
-              title: "No. of Event Payment",
+              title: "Event Payments",
               shortTitle: "Event Payments",
               value: totalPayments,
               displayValue: `₹${totalPayments.toLocaleString("en-IN")}`,
               icon: CreditCard,
-              accentText: "text-sky-400",
-              iconBg:
-                "bg-sky-500/10 text-sky-400 border-sky-500/25 shadow-[0_0_14px_rgba(56,189,248,0.15)]",
-              glowBg: "bg-sky-500",
-              borderHover:
-                "hover:border-sky-500/40 hover:shadow-[0_8px_24px_rgba(56,189,248,0.12)]",
-              dotBg: "bg-sky-400",
-              loaderColor: "text-sky-400",
+              accentText: theme === "dark" ? "text-sky-400" : "text-sky-600",
+              iconBg: theme === "dark" ? "bg-sky-500/10 text-sky-400 border-sky-500/25 shadow-[0_0_14px_rgba(56,189,248,0.15)]" : "bg-sky-50 text-sky-600 border-sky-200 shadow-sm",
+              glowBg: theme === "dark" ? "bg-sky-500" : "bg-sky-500",
+              borderHover: theme === "dark" ? "hover:border-sky-500/40 hover:shadow-[0_8px_24px_rgba(56,189,248,0.12)]" : "hover:border-sky-500/40 hover:shadow-[0_8px_24px_rgba(56,189,248,0.12)]",
+              dotBg: theme === "dark" ? "bg-sky-400" : "bg-sky-500",
+              loaderColor: theme === "dark" ? "text-sky-400" : "text-sky-600",
               badgeText: "Payments",
               link: "/dashboard/event-payments",
             },
             {
               id: "events",
-              title: "No. of Events",
+              title: "Total Events",
               shortTitle: "Events",
               value: events.length,
               displayValue: events.length.toLocaleString("en-IN"),
               icon: Calendar,
-              accentText: "text-amber-400",
-              iconBg:
-                "bg-amber-500/10 text-amber-400 border-amber-500/25 shadow-[0_0_14px_rgba(245,158,11,0.15)]",
-              glowBg: "bg-amber-500",
-              borderHover:
-                "hover:border-amber-500/40 hover:shadow-[0_8px_24px_rgba(245,158,11,0.12)]",
-              dotBg: "bg-amber-400",
-              loaderColor: "text-amber-400",
+              accentText: theme === "dark" ? "text-amber-400" : "text-amber-600",
+              iconBg: theme === "dark" ? "bg-amber-500/10 text-amber-400 border-amber-500/25 shadow-[0_0_14px_rgba(245,158,11,0.15)]" : "bg-amber-50 text-amber-600 border-amber-200 shadow-sm",
+              glowBg: theme === "dark" ? "bg-amber-500" : "bg-amber-500",
+              borderHover: theme === "dark" ? "hover:border-amber-500/40 hover:shadow-[0_8px_24px_rgba(245,158,11,0.12)]" : "hover:border-amber-500/40 hover:shadow-[0_8px_24px_rgba(245,158,11,0.12)]",
+              dotBg: theme === "dark" ? "bg-amber-400" : "bg-amber-500",
+              loaderColor: theme === "dark" ? "text-amber-400" : "text-amber-600",
               badgeText: "Events",
               link: "/dashboard/events-list",
             },
             {
               id: "collection",
-              title: "Event Collection",
-              shortTitle: "Collection",
+              title: "Event Revenue",
+              shortTitle: "Revenue",
               value: eventRevenue,
               displayValue: `₹${eventRevenue.toLocaleString("en-IN")}`,
               icon: DollarSign,
-              accentText: "text-emerald-400",
-              iconBg:
-                "bg-emerald-500/10 text-emerald-400 border-emerald-500/25 shadow-[0_0_14px_rgba(16,185,129,0.15)]",
-              glowBg: "bg-emerald-500",
-              borderHover:
-                "hover:border-emerald-500/40 hover:shadow-[0_8px_24px_rgba(16,185,129,0.12)]",
-              dotBg: "bg-emerald-400",
-              loaderColor: "text-emerald-400",
-              badgeText: "Revenue",
+              accentText: theme === "dark" ? "text-teal-400" : "text-teal-600",
+              iconBg: theme === "dark" ? "bg-teal-500/10 text-teal-400 border-teal-500/25 shadow-[0_0_14px_rgba(20,184,166,0.15)]" : "bg-teal-50 text-teal-600 border-teal-200 shadow-sm",
+              glowBg: theme === "dark" ? "bg-teal-500" : "bg-teal-500",
+              borderHover: theme === "dark" ? "hover:border-teal-500/40 hover:shadow-[0_8px_24px_rgba(20,184,166,0.12)]" : "hover:border-teal-500/40 hover:shadow-[0_8px_24px_rgba(20,184,166,0.12)]",
+              dotBg: theme === "dark" ? "bg-teal-400" : "bg-teal-500",
+              loaderColor: theme === "dark" ? "text-teal-400" : "text-teal-600",
+              badgeText: "Collection",
               link: "/dashboard/event-payments",
             },
             {
@@ -394,21 +469,19 @@ const DashboardHome = () => {
               value: paidFounders,
               displayValue: paidFounders.toLocaleString("en-IN"),
               icon: ShieldCheck,
-              accentText: "text-purple-400",
-              iconBg:
-                "bg-purple-500/10 text-purple-400 border-purple-500/25 shadow-[0_0_14px_rgba(168,85,247,0.15)]",
-              glowBg: "bg-purple-500",
-              borderHover:
-                "hover:border-purple-500/40 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]",
-              dotBg: "bg-purple-400",
-              loaderColor: "text-purple-400",
+              accentText: theme === "dark" ? "text-purple-400" : "text-purple-600",
+              iconBg: theme === "dark" ? "bg-purple-500/10 text-purple-400 border-purple-500/25 shadow-[0_0_14px_rgba(168,85,247,0.15)]" : "bg-purple-50 text-purple-600 border-purple-200 shadow-sm",
+              glowBg: theme === "dark" ? "bg-purple-500" : "bg-purple-500",
+              borderHover: theme === "dark" ? "hover:border-purple-500/40 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]" : "hover:border-purple-500/40 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]",
+              dotBg: theme === "dark" ? "bg-purple-400" : "bg-purple-500",
+              loaderColor: theme === "dark" ? "text-purple-400" : "text-purple-600",
               badgeText: "Founders",
               link: "/dashboard/founding-members",
             },
           ];
 
           return (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3.5 2xl:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2.5 sm:gap-3.5 2xl:gap-4">
               {statCards.map((card, idx) => {
                 const Icon = card.icon;
                 return (
@@ -419,9 +492,7 @@ const DashboardHome = () => {
                     transition={{ duration: 0.35, delay: 0.04 * idx }}
                     whileHover={{ y: -3, transition: { duration: 0.18 } }}
                     onClick={() => card.link && navigate(card.link)}
-                    className={`group relative overflow-hidden rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] ${card.borderHover} ${
-                      idx === 4 ? "col-span-2 sm:col-span-1" : ""
-                    } p-3 sm:p-4 flex flex-col justify-between min-h-[105px] sm:min-h-[120px] shadow-lg hover:shadow-2xl transition-all duration-300 text-left cursor-pointer select-none`}
+                    className={`group relative overflow-hidden rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] ${card.borderHover} p-3 sm:p-4 flex flex-col justify-between min-h-[105px] sm:min-h-[120px] shadow-lg hover:shadow-2xl transition-all duration-300 text-left cursor-pointer select-none`}
                     title={`${card.title}: ${card.displayValue}`}
                   >
                     {/* Ambient Glow in Top-Right Corner */}
@@ -436,7 +507,7 @@ const DashboardHome = () => {
                       >
                         <Icon size={16} className="sm:w-[18px] sm:h-[18px]" />
                       </div>
-                      <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-sm">
+                      <div className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 rounded-full bg-[var(--db-input-bg)] border border-[var(--db-card-border)]">
                         <span
                           className={`w-1.5 h-1.5 rounded-full animate-pulse ${card.dotBg}`}
                         />
@@ -480,6 +551,91 @@ const DashboardHome = () => {
           );
         })()}
 
+        {/* Recent Users Section */}
+        <div className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[24px] shadow-xl p-4 sm:p-5 md:p-6 text-left overflow-hidden">
+          <div className="flex items-center justify-between mb-4 sm:mb-5">
+            <div>
+              <h2 className="text-md sm:text-lg md:text-xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                Recent Athletes
+              </h2>
+              <p className="text-[var(--db-text-muted)] text-[10px] sm:text-xs mt-0.5">
+                Latest user registrations and profiles.
+              </p>
+            </div>
+            <button onClick={() => navigate("/dashboard/user-management")} className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)] hover:opacity-80 transition-opacity">
+              View All <ArrowUpRight size={14} className="sm:w-[16px] sm:h-[16px]" />
+            </button>
+          </div>
+          
+          <div className="overflow-x-auto custom-scrollbar -mx-4 sm:mx-0">
+            <div className="min-w-[600px] px-4 sm:px-0">
+              <table className="w-full text-sm text-left border-separate border-spacing-y-2">
+                <thead>
+                  <tr className="text-[9px] sm:text-[10px] font-black text-[var(--db-text-muted)] uppercase tracking-wider">
+                    <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)] rounded-l-xl">Athlete Profile</th>
+                    <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)]">Member ID</th>
+                    <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)]">Contact</th>
+                    <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)]">Batch</th>
+                    <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)] text-right rounded-r-xl">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentUsers.length === 0 && !loading ? (
+                    <tr>
+                      <td colSpan="5" className="text-center py-8 text-[var(--db-text-muted)] text-sm font-semibold bg-[var(--db-input-bg)]/30 rounded-xl">
+                        No recent athletes found
+                      </td>
+                    </tr>
+                  ) : (
+                    recentUsers.map((u) => (
+                      <tr key={u._id} className="group hover:bg-[var(--db-input-bg)]/50 transition-colors">
+                        <td className="px-3 sm:px-4 py-2.5 sm:py-3 rounded-l-xl border-y border-l border-transparent group-hover:border-[var(--db-card-border)]/50 bg-[var(--db-card)] group-hover:bg-transparent">
+                          <div className="flex items-center gap-3 sm:gap-4">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[var(--db-accent-glow)] flex items-center justify-center shrink-0 border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] overflow-hidden">
+                              {u.profileImage ? (
+                                <img src={u.profileImage} alt={u.athleteName} className="w-full h-full object-cover" />
+                              ) : (
+                                <User size={16} />
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-extrabold text-[var(--db-text)] text-xs sm:text-sm">{u.athleteName}</p>
+                              <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-bold mt-0.5">{u.email}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-3 sm:px-4 py-2.5 sm:py-3 border-y border-transparent group-hover:border-[var(--db-card-border)]/50 bg-[var(--db-card)] group-hover:bg-transparent">
+                          <span className="font-mono font-bold text-[10px] sm:text-xs text-[var(--db-text-muted)] bg-[var(--db-input-bg)] px-2 py-1 rounded-md border border-[var(--db-card-border)]">
+                            {u.memberId || "N/A"}
+                          </span>
+                        </td>
+                        <td className="px-3 sm:px-4 py-2.5 sm:py-3 border-y border-transparent group-hover:border-[var(--db-card-border)]/50 bg-[var(--db-card)] group-hover:bg-transparent">
+                          <span className="text-[10px] sm:text-xs font-semibold text-[var(--db-text)]">
+                            {u.phoneNumber || "N/A"}
+                          </span>
+                        </td>
+                        <td className="px-3 sm:px-4 py-2.5 sm:py-3 border-y border-transparent group-hover:border-[var(--db-card-border)]/50 bg-[var(--db-card)] group-hover:bg-transparent">
+                          <span className="px-2 sm:px-2.5 py-1 bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                            {u.preferredBatch || "Unassigned"}
+                          </span>
+                        </td>
+                        <td className="px-3 sm:px-4 py-2.5 sm:py-3 rounded-r-xl border-y border-r border-transparent group-hover:border-[var(--db-card-border)]/50 text-right bg-[var(--db-card)] group-hover:bg-transparent">
+                          <span className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[8.5px] sm:text-[9px] font-black uppercase tracking-wider ${
+                            u.isActive !== false ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'
+                          }`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${u.isActive !== false ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></span>
+                            {u.isActive !== false ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Left: Premium Promo Banner Card */}
           <div className="lg:col-span-5 w-full">
@@ -494,7 +650,7 @@ const DashboardHome = () => {
 
               {/* Content Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 z-20 text-left flex flex-col items-start">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[var(--db-accent-highlight)] text-black shadow-lg mb-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-[var(--db-accent-highlight)] text-[var(--db-accent-text)] shadow-lg mb-3">
                   Box & Cross Club
                 </span>
                 <h3
@@ -529,7 +685,7 @@ const DashboardHome = () => {
 
               <button
                 onClick={() => navigate("/dashboard/calendar")}
-                className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)] hover:text-white transition-colors duration-300 cursor-pointer group"
+                className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)] hover:opacity-80 transition-opacity duration-300 cursor-pointer group"
               >
                 Go to Calendar View
                 <ArrowUpRight
@@ -594,7 +750,11 @@ const DashboardHome = () => {
                             <h3 className="text-sm font-black uppercase text-[var(--db-text-title)] truncate">
                               {evt.title}
                             </h3>
-                            <span className="text-[10px] font-black text-[#e0e0e0] bg-[#ff9e00]/10 px-2 py-0.5 rounded-full">
+                            <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
+                              theme === "dark"
+                                ? "text-[#ff9e00] bg-[#ff9e00]/10"
+                                : "text-amber-800 bg-amber-100 border border-amber-200"
+                            }`}>
                               ₹{evt.price}
                             </span>
                           </div>

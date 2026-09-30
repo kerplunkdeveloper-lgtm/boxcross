@@ -806,7 +806,7 @@ const DashboardAttendance = () => {
               });
               setIsCreateModalOpen(true);
             }}
-            className="px-3 py-1.5 rounded-xl bg-[var(--db-accent)] text-black font-black text-xs hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
+            className="px-3 py-1.5 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-black text-xs hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
           >
             <Plus size={15} />
             <span>Add Record</span>

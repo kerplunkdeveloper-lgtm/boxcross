@@ -63,9 +63,14 @@ const DashboardLayout = () => {
 
         {/* Dynamic Nested Route content - independent scroll with ambient depth */}
         <main className="flex-grow overflow-y-auto bg-[var(--db-bg)] relative custom-scrollbar">
-          {theme === "dark" && (
+          {theme === "dark" ? (
             <div 
               className="pointer-events-none absolute top-0 left-0 right-0 h-80 opacity-40 bg-[radial-gradient(ellipse_60%_35%_at_50%_0%,rgba(229,255,0,0.06),transparent_75%)]" 
+              aria-hidden="true"
+            />
+          ) : (
+            <div 
+              className="pointer-events-none absolute top-0 left-0 right-0 h-96 opacity-70 bg-[radial-gradient(ellipse_75%_45%_at_50%_0%,rgba(255,255,255,0.9),transparent_80%)]" 
               aria-hidden="true"
             />
           )}

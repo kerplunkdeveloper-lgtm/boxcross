@@ -364,7 +364,7 @@ const GoalsReadiness = () => {
 
         <div className="space-y-1 z-10">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest bg-[var(--db-accent)] text-black font-mono">
+            <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest bg-[var(--db-accent)] text-[var(--db-accent-text)] font-mono">
               01 READINESS
             </span>
             <span className="text-[10px] sm:text-[11px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider">
@@ -975,7 +975,7 @@ const GoalsReadiness = () => {
               {/* Modal Top Accent Header */}
               <div className="p-4 sm:p-5 border-b border-[var(--db-card-border)] bg-[var(--db-input-bg)]/60 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[var(--db-accent)] text-black font-black flex items-center justify-center text-sm shadow-md">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] font-black flex items-center justify-center text-sm shadow-md">
                     01
                   </div>
                   <div>
@@ -1215,7 +1215,7 @@ const GoalsReadiness = () => {
                               <div
                                 className={`w-4 h-4 rounded flex items-center justify-center text-[10px] border ${
                                   isSelected
-                                    ? "bg-[var(--db-accent)] text-black border-[var(--db-accent)] font-black"
+                                    ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] border-[var(--db-accent)] font-black"
                                     : "border-neutral-600 bg-black/40"
                                 }`}
                               >
@@ -1324,7 +1324,7 @@ const GoalsReadiness = () => {
                                 formData.confidence === num
                                   ? num <= 5
                                     ? "bg-rose-500 text-white shadow-md scale-105"
-                                    : "bg-[var(--db-accent)] text-black shadow-md scale-105"
+                                    : "bg-[var(--db-accent)] text-[var(--db-accent-text)] shadow-md scale-105"
                                   : "bg-[var(--db-card)] text-[var(--db-text-muted)] hover:text-white border border-[var(--db-card-border)]"
                               }`}
                             >
