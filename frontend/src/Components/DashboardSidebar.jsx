@@ -28,6 +28,7 @@ import {
   Timer,
   Zap,
   Smile,
+  Target,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -447,13 +448,6 @@ const DashboardSidebar = ({
                 badge: "LIVE",
               })}
 
-              {/* Entry Baseline (Assessment) */}
-              {renderSingleItem({
-                to: "/dashboard/entry-baseline",
-                name: "Entry Baseline",
-                icon: ClipboardList,
-               
-              })}
 
               {/* Fight Club */}
               {renderSingleItem({
@@ -510,6 +504,13 @@ const DashboardSidebar = ({
                 to: "/dashboard/goals-readiness",
                 name: "Goals & Readiness",
                 icon: ClipboardCheck,
+              })}
+
+              {/* Entry Baseline */}
+              {renderSingleItem({
+                to: "/dashboard/entry-baseline",
+                name: "Entry Baseline",
+                icon: Target,
               })}
 
               {/* AI Body Analysis */}
