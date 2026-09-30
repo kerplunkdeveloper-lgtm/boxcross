@@ -13,7 +13,16 @@ const API = axios.create({
 // Request interceptor to attach Bearer token if it exists in localStorage
 API.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("boxcross_token");
+    const isAthleteRoute =
+      typeof window !== "undefined" &&
+      (window.location.pathname.startsWith("/athlete") ||
+        window.location.pathname.startsWith("/member"));
+    const token = isAthleteRoute
+      ? localStorage.getItem("boxcross_athlete_token") ||
+        localStorage.getItem("boxcross_token")
+      : localStorage.getItem("boxcross_token") ||
+        localStorage.getItem("boxcross_athlete_token");
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -173,5 +182,14 @@ export const createEntryBaseline = (data) => API.post("/entry-baseline", data);
 export const updateEntryBaseline = (id, data) => API.put(`/entry-baseline/${id}`, data);
 export const deleteEntryBaseline = (id) => API.delete(`/entry-baseline/${id}`);
 export const getEntryBaselineStats = () => API.get("/entry-baseline/stats");
+
+// ──────────────── ATTENDANCE & BIOMETRICS API ────────────────
+export const getAttendance = (params) => API.get("/attendance", { params });
+export const markManualAttendance = (data) => API.post("/attendance/manual", data);
+export const updateAttendance = (id, data) => API.put(`/attendance/${id}`, data);
+export const punchBiometric = (data) => API.post("/attendance/biometric-punch", data);
+export const getAthleteAttendanceHistory = (athleteId) => API.get(`/attendance/athlete/${athleteId}`);
+export const resetAttendance = (params) => API.delete("/attendance/reset", { params });
+export const deleteAttendance = (id) => API.delete(`/attendance/${id}`);
 
 export default API;

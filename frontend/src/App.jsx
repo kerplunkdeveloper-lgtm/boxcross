@@ -55,6 +55,7 @@ const Usermanagementdetails = lazy(
 const GoalsReadiness = lazy(() => import("./pages/GoalsReadiness"));
 const Entrybaseline = lazy(() => import("./pages/Entrybaseline"));
 const AIBodyAnalysis = lazy(() => import("./pages/AIBodyAnalysis"));
+const DashboardAttendance = lazy(() => import("./pages/DashboardAttendance"));
 const AthleteDashboard = lazy(() => import("./pages/AthleteDashboard"));
 const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
 const Foot = lazy(() => import("./Components/Foot"));
@@ -228,6 +229,7 @@ const App = () => {
                     element={<GoalsReadiness />}
                   />
                   <Route path="ai-body-analysis" element={<AIBodyAnalysis />} />
+                  <Route path="attendance" element={<DashboardAttendance />} />
                 </Route>
               </Routes>
             </Suspense>

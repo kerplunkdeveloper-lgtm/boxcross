@@ -21,6 +21,7 @@ import {
   ClipboardCheck,
   Activity,
   ClipboardList,
+  Fingerprint,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import logo2 from "../assets/images/lightmode.png";
@@ -123,8 +124,8 @@ const DashboardSidebar = ({
   const getItemClass = (isActive) => {
     if (isActive) {
       return theme === "dark"
-        ? "bg-[#ccf141]/12 text-[#ccf141] border border-[#ccf141]/30 shadow-[0_0_12px_rgba(229,255,0,0.1)] font-bold"
-        : "bg-slate-900 text-white font-bold shadow-sm";
+        ? "bg-[#ccf141]/12 text-[#ccf141] border border-[#ccf141]/30 shadow-[0_0_12px_rgba(229,255,0,0.1)] font-semibold"
+        : "bg-slate-900 text-white font-semibold shadow-sm";
     }
     return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
   };
@@ -132,8 +133,8 @@ const DashboardSidebar = ({
   const getSubItemClass = (isActive) => {
     if (isActive) {
       return theme === "dark"
-        ? "bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/35 font-bold shadow-sm"
-        : "bg-slate-800 text-white font-bold shadow-sm";
+        ? "bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/35 font-semibold shadow-sm"
+        : "bg-slate-800 text-white font-semibold shadow-sm";
     }
     return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
   };
@@ -141,8 +142,8 @@ const DashboardSidebar = ({
   const getTriggerClass = (hasActive) => {
     if (hasActive) {
       return theme === "dark"
-        ? "text-[#ccf141] bg-[#ccf141]/8 border border-[#ccf141]/20 font-bold"
-        : "text-slate-900 bg-slate-100 border border-slate-200 font-bold";
+        ? "text-[#ccf141] bg-[#ccf141]/8 border border-[#ccf141]/20 font-semibold"
+        : "text-slate-900 bg-slate-100 border border-slate-200 font-semibold";
     }
     return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
   };
@@ -163,7 +164,7 @@ const DashboardSidebar = ({
           onClick={closeSidebarOnMobile}
           className={({ isActive }) =>
             sidebarOpen
-              ? `w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12px] font-bold tracking-wide transition-all duration-150 cursor-pointer ${getItemClass(
+              ? `w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12.5px] font-medium tracking-normal transition-all duration-150 cursor-pointer ${getItemClass(
                   isActive,
                 )}`
               : `w-9 h-9 mx-auto flex items-center justify-center rounded-xl transition-all duration-150 cursor-pointer ${getItemClass(
@@ -178,7 +179,7 @@ const DashboardSidebar = ({
                 <span className="truncate">{name}</span>
               </div>
               {badge && (
-                <span className="text-[8px] font-black uppercase px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <span className="text-[8px] font-semibold uppercase px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                   {badge}
                 </span>
               )}
@@ -229,7 +230,7 @@ const DashboardSidebar = ({
           <div>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12px] font-bold tracking-wide transition-all duration-150 cursor-pointer ${getTriggerClass(
+              className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[12.5px] font-medium tracking-normal transition-all duration-150 cursor-pointer ${getTriggerClass(
                 hasActiveChild,
               )}`}
             >
@@ -284,10 +285,10 @@ const DashboardSidebar = ({
               <div className="w-52 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.45)] p-2 space-y-1 backdrop-blur-md">
                 {/* Popover Header */}
                 <div className="px-2 py-1 border-b border-[var(--db-card-border)] mb-1 flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--db-text-muted)]">
                     {title}
                   </span>
-                  <span className="text-[9px] font-bold text-[var(--db-accent-highlight)]">
+                  <span className="text-[9px] font-semibold text-[var(--db-accent-highlight)]">
                     {items.length} links
                   </span>
                 </div>
@@ -327,7 +328,7 @@ const DashboardSidebar = ({
   const renderSectionHeader = (title) => {
     if (sidebarOpen) {
       return (
-        <div className="px-2 pb-1 text-[9.5px] font-black uppercase tracking-[0.14em] text-[var(--db-text-muted)]/60 flex items-center justify-between select-none">
+        <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--db-text-muted)]/70 flex items-center justify-between select-none">
           <span>{title}</span>
         </div>
       );
@@ -430,6 +431,14 @@ const DashboardSidebar = ({
                 to: "/dashboard/user-management",
                 name: "User Management",
                 icon: Users,
+              })}
+
+              {/* Attendance & Biometrics */}
+              {renderSingleItem({
+                to: "/dashboard/attendance",
+                name: "Athlete Attendance",
+                icon: Fingerprint,
+                badge: "LIVE",
               })}
 
               {/* Entry Baseline (Assessment) */}
@@ -649,10 +658,10 @@ const DashboardSidebar = ({
               </div>
               <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
                 <div className="relative px-2.5 py-1.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-xl text-[11px] font-bold text-[var(--db-text)] whitespace-nowrap">
-                  <p className="font-bold text-[var(--db-text)]">
+                  <p className="font-semibold text-[var(--db-text)]">
                     {user?.name || "Admin"}
                   </p>
-                  <p className="text-[9px] text-[var(--db-accent-highlight)] uppercase font-black">
+                  <p className="text-[9px] text-[var(--db-accent-highlight)] uppercase font-semibold tracking-wider">
                     {user?.role || "ADMIN"}
                   </p>
                   <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card-border)]" />

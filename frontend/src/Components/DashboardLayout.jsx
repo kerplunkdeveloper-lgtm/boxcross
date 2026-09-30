@@ -26,7 +26,10 @@ const DashboardLayout = () => {
   if (!user) return null;
 
   return (
-    <div className={`h-screen font-['Poppins'] flex overflow-hidden ${theme === 'dark' ? 'dashboard-dark' : 'dashboard-light'} bg-[var(--db-bg)] text-[var(--db-text)]`}>
+    <div 
+      style={{ fontFamily: "var(--admin-font, 'Plus Jakarta Sans', 'Inter', sans-serif)" }}
+      className={`h-screen flex overflow-hidden ${theme === 'dark' ? 'dashboard-dark' : 'dashboard-light'} bg-[var(--db-bg)] text-[var(--db-text)]`}
+    >
       {/* Sidebar */}
       <Helmet>
       <title>Dashboard | Box &amp; Cross</title>

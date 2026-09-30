@@ -517,7 +517,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
           <span className="text-[10px] text-[var(--db-text-muted)]/40 hidden sm:inline shrink-0">
             /
           </span>
-          <h2 className="text-[12px] sm:text-[13px] font-black uppercase tracking-wider text-[var(--db-text-title)] truncate max-w-[130px] sm:max-w-[240px] md:max-w-none">
+          <h2 className="text-xs sm:text-sm font-semibold tracking-wide text-[var(--db-text-title)] truncate max-w-[130px] sm:max-w-[240px] md:max-w-none">
             {activeTitle}
           </h2>
         </div>
@@ -547,7 +547,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
             <Bell size={18} />
             {unreadCount > 0 && (
               <span
-                className="absolute top-0.5 right-0.5 rounded-full text-[9px] font-black min-w-[18px] h-[18px] px-1 flex items-center justify-center"
+                className="absolute top-0.5 right-0.5 rounded-full text-[9px] font-bold min-w-[18px] h-[18px] px-1 flex items-center justify-center"
                 style={{
                   background: theme === "dark" ? "#ccf141" : "#1e293b",
                   color: theme === "dark" ? "#000000" : "#ffffff",
@@ -586,7 +586,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                     </div>
                     <div>
                       <span
-                        className="text-xs font-black uppercase tracking-wider"
+                        className="text-xs font-semibold uppercase tracking-wider"
                         style={{
                           color: theme === "dark" ? "#ffffff" : "#0f172a",
                         }}
@@ -595,7 +595,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                       </span>
                       {unreadCount > 0 && (
                         <span
-                          className="ml-2 px-1.5 py-0.5 text-[9px] font-black rounded-full"
+                          className="ml-2 px-1.5 py-0.5 text-[9px] font-semibold rounded-full"
                           style={{
                             background:
                               theme === "dark" ? "#ccf141" : "#1e293b",
@@ -628,7 +628,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                           className="text-[var(--db-text-muted)]"
                         />
                       </div>
-                      <p className="text-xs text-[var(--db-text-muted)] uppercase tracking-widest font-bold">
+                      <p className="text-xs text-[var(--db-text-muted)] uppercase tracking-wider font-semibold">
                         All caught up!
                       </p>
                     </div>
@@ -703,7 +703,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                             <div className="flex items-start justify-between gap-1 mb-0.5">
                               <div className="flex items-center gap-1.5 flex-wrap">
                                 <span
-                                  className="text-[10px] font-black uppercase tracking-wider leading-tight"
+                                  className="text-[11px] font-semibold uppercase tracking-wider leading-tight"
                                   style={{
                                     color:
                                       theme === "dark" ? "#ffffff" : "#0f172a",
@@ -765,7 +765,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                 {/* Footer */}
                 {notifications.length > 0 && (
                   <div className="px-4 py-2.5 border-t border-[var(--db-card-border)] bg-[var(--db-input-bg)] flex items-center justify-center">
-                    <span className="text-[9px] uppercase tracking-widest font-bold text-[var(--db-text-muted)]">
+                    <span className="text-[9.5px] uppercase tracking-wider font-semibold text-[var(--db-text-muted)]">
                       {notifications.length} recent notifications
                     </span>
                   </div>
@@ -933,7 +933,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
               {/* Text */}
               <div className="flex-grow min-w-0">
                 <div className="flex items-center justify-between mb-0.5">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--db-accent-highlight)]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--db-accent-highlight)]">
                     New Activity
                   </span>
                   <button
@@ -946,7 +946,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                     <X size={13} />
                   </button>
                 </div>
-                <h5 className="text-xs font-black text-[var(--db-text)] uppercase tracking-tight mb-0.5">
+                <h5 className="text-xs font-semibold text-[var(--db-text)] uppercase tracking-normal mb-0.5">
                   {latestNotification.title}
                 </h5>
                 <p className="text-[11px] text-[var(--db-text-muted)] leading-relaxed line-clamp-2">

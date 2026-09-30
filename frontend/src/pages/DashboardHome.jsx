@@ -461,14 +461,13 @@ const DashboardHome = () => {
                         </div>
                       ) : (
                         <div
-                          className="text-lg sm:text-2xl lg:text-[21px] xl:text-2xl 2xl:text-3xl font-black text-[var(--db-text-title)] tracking-tight leading-tight truncate"
-                          style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                          className="text-lg sm:text-2xl lg:text-[21px] xl:text-2xl 2xl:text-3xl font-bold text-[var(--db-text-title)] tracking-tight leading-tight truncate"
                         >
                           {card.displayValue}
                         </div>
                       )}
                       <p
-                        className="text-[9.5px] sm:text-[10px] 2xl:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] mt-0.5 sm:mt-1 truncate group-hover:text-[var(--db-text)] transition-colors"
+                        className="text-[9.5px] sm:text-[10px] 2xl:text-[11px] font-semibold uppercase tracking-wider text-[var(--db-text-muted)] mt-0.5 sm:mt-1 truncate group-hover:text-[var(--db-text)] transition-colors"
                         title={card.title}
                       >
                         {card.title}

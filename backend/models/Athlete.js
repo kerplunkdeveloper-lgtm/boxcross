@@ -66,6 +66,18 @@ const athleteSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    biometricEnrolled: {
+      type: Boolean,
+      default: true,
+    },
+    biometricId: {
+      type: String,
+      default: "",
+    },
+    rfidCard: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

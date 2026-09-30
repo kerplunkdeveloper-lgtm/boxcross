@@ -163,8 +163,17 @@ const Auth = () => {
     }
   };
 
+  const isAdminMode = authMode === "admin";
+  const portalFont = isAdminMode
+    ? "'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    : '"BrutalTypeBold", sans-serif';
+
   return (
-    <div className="relative w-full min-h-screen bg-black text-white font-sans overflow-x-hidden selection:bg-[#ccf141] selection:text-black">
+    <div
+      className={`relative w-full min-h-screen bg-black text-white ${
+        isAdminMode ? "admin-login-view font-['Plus_Jakarta_Sans',sans-serif]" : "font-sans"
+      } overflow-x-hidden selection:bg-[#ccf141] selection:text-black`}
+    >
       {/* ─────────────────────────────────────────────────────────────
           DESKTOP 100% EXACT REPLICA SPLIT VIEW (lg and above)
       ───────────────────────────────────────────────────────────── */}
@@ -280,12 +289,12 @@ const Auth = () => {
           {/* Top Right Header: ADMIN / ATHLETE PORTAL with black underline */}
           <div className="flex flex-col items-end pt-2">
             <h2
-              className="text-lg xl:text-xl font-black tracking-widest text-black uppercase"
-              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              className="text-base xl:text-lg font-bold tracking-wider text-black uppercase"
+              style={{ fontFamily: portalFont }}
             >
               {authMode === "athlete" ? "ATHLETE PORTAL" : "ADMIN PORTAL"}
             </h2>
-            <div className="w-8 h-[3px] bg-black mt-1" />
+            <div className="w-8 h-[2.5px] bg-black mt-1" />
           </div>
 
           {/* Main Form Center Box */}
@@ -298,12 +307,12 @@ const Auth = () => {
                   setAuthMode("athlete");
                   setError("");
                 }}
-                className={`flex-1 py-2.5 px-4 rounded-full text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`flex-1 py-2.5 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   authMode === "athlete"
                     ? "bg-black text-white shadow-md"
                     : "text-black/80 hover:text-black"
                 }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                style={{ fontFamily: portalFont }}
               >
                 <User size={15} />
                 <span>ATHLETE</span>
@@ -315,12 +324,12 @@ const Auth = () => {
                   setAuthMode("admin");
                   setError("");
                 }}
-                className={`flex-1 py-2.5 px-4 rounded-full text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`flex-1 py-2.5 px-4 rounded-full text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   authMode === "admin"
                     ? "bg-black text-white shadow-md"
                     : "text-black/80 hover:text-black"
                 }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                style={{ fontFamily: portalFont }}
               >
                 <ShieldCheck
                   size={15}
@@ -333,8 +342,8 @@ const Auth = () => {
             {/* Subheader: ADMINISTRATOR LOGIN / ATHLETE MEMBER LOGIN with divider line */}
             <div className="flex items-center gap-3 pt-1">
               <span
-                className="text-[11px] xl:text-xs font-black italic tracking-[0.16em] uppercase text-black select-none whitespace-nowrap"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                className="text-[11px] xl:text-xs font-semibold tracking-wider uppercase text-black/80 select-none whitespace-nowrap"
+                style={{ fontFamily: portalFont }}
               >
                 {authMode === "athlete"
                   ? "ATHLETE MEMBER LOGIN"
@@ -359,8 +368,8 @@ const Auth = () => {
               {/* Field 1: Email or Member ID */}
               <div className="space-y-1 text-left">
                 <label
-                  className="text-[11px] font-black tracking-wider uppercase text-black block"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  className="text-[11px] font-semibold tracking-wider uppercase text-black/85 block"
+                  style={{ fontFamily: portalFont }}
                 >
                   {authMode === "athlete" ? "MEMBER ID" : "ADMIN EMAIL"}
                 </label>
@@ -383,7 +392,8 @@ const Auth = () => {
                         ? setMemberId(e.target.value.toUpperCase())
                         : setEmail(e.target.value)
                     }
-                    className="w-full bg-transparent text-black font-bold text-sm placeholder:text-black/45 focus:outline-none tracking-normal"
+                    className="w-full bg-transparent text-black font-normal text-sm placeholder:text-black/50 focus:outline-none tracking-normal"
+                    style={{ fontFamily: portalFont }}
                     required
                   />
                 </div>
@@ -392,8 +402,8 @@ const Auth = () => {
               {/* Field 2: Password */}
               <div className="space-y-1 text-left">
                 <label
-                  className="text-[11px] font-black tracking-wider uppercase text-black block"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  className="text-[11px] font-semibold tracking-wider uppercase text-black/85 block"
+                  style={{ fontFamily: portalFont }}
                 >
                   PASSWORD
                 </label>
@@ -404,7 +414,8 @@ const Auth = () => {
                     placeholder="Enter Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-transparent text-black font-bold text-sm placeholder:text-black/45 focus:outline-none"
+                    className="w-full bg-transparent text-black font-normal text-sm placeholder:text-black/50 focus:outline-none"
+                    style={{ fontFamily: portalFont }}
                     required
                   />
                   <button
@@ -430,8 +441,9 @@ const Auth = () => {
                     {rememberMe && <Check size={11} strokeWidth={3.5} />}
                   </button>
                   <span
-                    className="text-black/90 font-bold group-hover:text-black transition-colors"
+                    className="text-black/85 font-medium group-hover:text-black transition-colors"
                     onClick={() => setRememberMe(!rememberMe)}
+                    style={{ fontFamily: portalFont }}
                   >
                     Remember me
                   </span>
@@ -440,7 +452,8 @@ const Auth = () => {
                 <button
                   type="button"
                   onClick={() => setForgotModalOpen(true)}
-                  className="text-black font-bold underline underline-offset-2 hover:opacity-75 cursor-pointer transition-opacity"
+                  className="text-black/90 font-medium underline underline-offset-2 hover:opacity-75 cursor-pointer transition-opacity"
+                  style={{ fontFamily: portalFont }}
                 >
                   Forgot password?
                 </button>
@@ -450,8 +463,8 @@ const Auth = () => {
               <div className="flex items-center justify-between pt-4">
                 <Link
                   to="/"
-                  className="text-xs xl:text-sm font-black tracking-wider text-black hover:opacity-75 flex items-center gap-1.5 cursor-pointer transition-all group"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  className="text-xs xl:text-sm font-semibold tracking-wider text-black hover:opacity-75 flex items-center gap-1.5 cursor-pointer transition-all group"
+                  style={{ fontFamily: portalFont }}
                 >
                   <ArrowLeft
                     size={16}
@@ -463,8 +476,8 @@ const Auth = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-black hover:bg-neutral-900 active:scale-[0.98] text-[#ccf141] font-black tracking-widest text-xs xl:text-sm px-8 py-3.5 rounded-xl shadow-xl shadow-black/25 flex items-center gap-2 cursor-pointer transition-all group disabled:opacity-50"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  className="bg-black hover:bg-neutral-900 active:scale-[0.98] text-[#ccf141] font-bold tracking-wider text-xs xl:text-sm px-7 py-3 rounded-xl shadow-lg shadow-black/20 flex items-center gap-2 cursor-pointer transition-all group disabled:opacity-50"
+                  style={{ fontFamily: portalFont }}
                 >
                   <span>{loading ? "AUTHENTICATING..." : "ENTER PORTAL"}</span>
                   <ArrowRight
@@ -479,8 +492,8 @@ const Auth = () => {
           {/* Footer Copyright */}
           <div className="text-center select-none pt-2">
             <span
-              className="text-[10px] xl:text-[11px] font-black tracking-[0.2em] text-black/60 uppercase"
-              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              className="text-[10px] xl:text-[11px] font-medium tracking-wider text-black/60 uppercase"
+              style={{ fontFamily: portalFont }}
             >
               &copy; 2026 BOX &amp; CROSS. SECURED ACCESS PORTAL.
             </span>
@@ -540,12 +553,12 @@ const Auth = () => {
             {/* Content inside the raised left tab: ADMIN PORTAL */}
             <div className="absolute top-2 left-6 sm:left-8 z-10 flex flex-col">
               <h2
-                className="text-xl sm:text-2xl font-black tracking-wider text-black uppercase"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                className="text-lg sm:text-xl font-bold tracking-wide text-black uppercase"
+                style={{ fontFamily: portalFont }}
               >
                 {authMode === "athlete" ? "ATHLETE PORTAL" : "ADMIN PORTAL"}
               </h2>
-              <div className="w-12 h-[3.5px] bg-black mt-1" />
+              <div className="w-10 h-[3px] bg-black mt-1" />
             </div>
           </div>
 
@@ -559,12 +572,12 @@ const Auth = () => {
                   setAuthMode("athlete");
                   setError("");
                 }}
-                className={`py-3 px-4 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   authMode === "athlete"
                     ? "bg-black text-white shadow-md"
                     : "bg-[#ddf575] text-black hover:bg-[#d4ec67]"
                 }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                style={{ fontFamily: portalFont }}
               >
                 <User size={16} />
                 <span>ATHLETE</span>
@@ -576,12 +589,12 @@ const Auth = () => {
                   setAuthMode("admin");
                   setError("");
                 }}
-                className={`py-3 px-4 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`py-2.5 px-3 rounded-xl text-xs sm:text-sm font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   authMode === "admin"
                     ? "bg-black text-white shadow-md"
                     : "bg-[#ddf575] text-black hover:bg-[#d4ec67]"
                 }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                style={{ fontFamily: portalFont }}
               >
                 <ShieldCheck
                   size={16}
@@ -594,8 +607,8 @@ const Auth = () => {
             {/* Subheader: ADMINISTRATOR LOGIN / ATHLETE MEMBER LOGIN */}
             <div className="flex items-center gap-3 pt-1">
               <span
-                className="text-xs sm:text-sm font-black italic tracking-[0.16em] uppercase text-black select-none whitespace-nowrap"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                className="text-xs font-semibold tracking-wider uppercase text-black/80 select-none whitespace-nowrap"
+                style={{ fontFamily: portalFont }}
               >
                 {authMode === "athlete"
                   ? "ATHLETE MEMBER LOGIN"
@@ -621,12 +634,12 @@ const Auth = () => {
               <div className="space-y-1 text-left">
                 <label
                   htmlFor="mobile-identifier-input"
-                  className="text-[11px] sm:text-xs font-black tracking-wider uppercase text-black block"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  className="text-xs font-semibold tracking-wider uppercase text-black/85 block"
+                  style={{ fontFamily: portalFont }}
                 >
                   {authMode === "athlete" ? "MEMBER ID" : "ADMIN EMAIL"}
                 </label>
-                <div className="relative bg-[#e2f980] hover:bg-[#daf272] focus-within:bg-[#ebfd8c] focus-within:ring-2 focus-within:ring-black/25 rounded-xl h-13 flex items-center px-4 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]">
+                <div className="relative bg-[#e2f980] hover:bg-[#daf272] focus-within:bg-[#ebfd8c] focus-within:ring-2 focus-within:ring-black/25 rounded-xl h-12 flex items-center px-4 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]">
                   {authMode === "athlete" ? (
                     <UserCheck size={19} className="text-black/75 mr-3 flex-shrink-0" />
                   ) : (
@@ -651,7 +664,8 @@ const Auth = () => {
                         ? setMemberId(e.target.value.toUpperCase())
                         : setEmail(e.target.value)
                     }
-                    className="w-full bg-transparent text-black font-bold text-base placeholder:text-black/45 focus:outline-none"
+                    className="w-full bg-transparent text-black font-normal text-base placeholder:text-black/50 focus:outline-none"
+                    style={{ fontFamily: portalFont }}
                     required
                   />
                 </div>
@@ -661,12 +675,12 @@ const Auth = () => {
               <div className="space-y-1 text-left">
                 <label
                   htmlFor="mobile-password-input"
-                  className="text-[11px] sm:text-xs font-black tracking-wider uppercase text-black block"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  className="text-xs font-semibold tracking-wider uppercase text-black/85 block"
+                  style={{ fontFamily: portalFont }}
                 >
                   PASSWORD
                 </label>
-                <div className="relative bg-[#e2f980] hover:bg-[#daf272] focus-within:bg-[#ebfd8c] focus-within:ring-2 focus-within:ring-black/25 rounded-xl h-13 flex items-center px-4 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]">
+                <div className="relative bg-[#e2f980] hover:bg-[#daf272] focus-within:bg-[#ebfd8c] focus-within:ring-2 focus-within:ring-black/25 rounded-xl h-12 flex items-center px-4 transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]">
                   <Lock size={19} className="text-black/75 mr-3 flex-shrink-0" />
                   <input
                     id="mobile-password-input"
@@ -678,7 +692,8 @@ const Auth = () => {
                     placeholder="Enter Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-transparent text-black font-bold text-base placeholder:text-black/45 focus:outline-none"
+                    className="w-full bg-transparent text-black font-normal text-base placeholder:text-black/50 focus:outline-none"
+                    style={{ fontFamily: portalFont }}
                     required
                   />
                   <button
@@ -705,8 +720,9 @@ const Auth = () => {
                     {rememberMe && <Check size={11} strokeWidth={3.5} />}
                   </button>
                   <span
-                    className="text-black font-bold select-none"
+                    className="text-black font-medium select-none"
                     onClick={() => setRememberMe(!rememberMe)}
+                    style={{ fontFamily: portalFont }}
                   >
                     Remember me
                   </span>
@@ -715,7 +731,8 @@ const Auth = () => {
                 <button
                   type="button"
                   onClick={() => setForgotModalOpen(true)}
-                  className="text-black font-bold underline underline-offset-2 hover:opacity-75 cursor-pointer transition-opacity"
+                  className="text-black/90 font-medium underline underline-offset-2 hover:opacity-75 cursor-pointer transition-opacity"
+                  style={{ fontFamily: portalFont }}
                 >
                   Forgot password?
                 </button>
@@ -726,8 +743,8 @@ const Auth = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-13 bg-black hover:bg-neutral-900 active:scale-[0.98] text-[#c8ff00] font-black tracking-widest text-xs sm:text-sm rounded-xl shadow-xl shadow-black/25 flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  className="w-full h-12 bg-black hover:bg-neutral-900 active:scale-[0.98] text-[#c8ff00] font-bold tracking-wider text-xs sm:text-sm rounded-xl shadow-lg shadow-black/20 flex items-center justify-center gap-2 cursor-pointer transition-all disabled:opacity-50"
+                  style={{ fontFamily: portalFont }}
                 >
                   <span>{loading ? "AUTHENTICATING..." : "ENTER PORTAL"}</span>
                   <ArrowRight size={16} />
@@ -738,8 +755,8 @@ const Auth = () => {
               <div className="pt-2 text-left">
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-black tracking-wider text-black hover:opacity-75 cursor-pointer transition-opacity"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold tracking-wider text-black hover:opacity-75 cursor-pointer transition-opacity"
+                  style={{ fontFamily: portalFont }}
                 >
                   <ArrowLeft size={16} />
                   <span>HOME</span>
@@ -750,8 +767,8 @@ const Auth = () => {
             {/* Footer Copyright */}
             <div className="text-center pt-4 select-none">
               <span
-                className="text-[9px] sm:text-[10px] font-black tracking-[0.18em] text-black/55 uppercase"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                className="text-[9px] sm:text-[10px] font-medium tracking-wider text-black/60 uppercase"
+                style={{ fontFamily: portalFont }}
               >
                 &copy; 2026 BOX &amp; CROSS. SECURED ACCESS PORTAL.
               </span>
@@ -786,8 +803,8 @@ const Auth = () => {
                 </div>
                 <div>
                   <h3
-                    className="text-base font-black tracking-wide text-white uppercase"
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    className="text-base font-bold tracking-wide text-white uppercase"
+                    style={{ fontFamily: portalFont }}
                   >
                     Credential Recovery
                   </h3>
@@ -840,8 +857,8 @@ const Auth = () => {
               <button
                 type="button"
                 onClick={() => setForgotModalOpen(false)}
-                className="w-full py-3 bg-[#c8ff00] text-black font-black uppercase text-xs tracking-wider rounded-xl hover:bg-white transition-colors cursor-pointer"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                className="w-full py-3 bg-[#c8ff00] text-black font-bold uppercase text-xs tracking-wider rounded-xl hover:bg-white transition-colors cursor-pointer"
+                style={{ fontFamily: portalFont }}
               >
                 Understood
               </button>

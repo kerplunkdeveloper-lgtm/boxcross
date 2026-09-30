@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap');
 @import "tailwindcss";
 
 html {
@@ -81,7 +81,7 @@ html {
 
 /* Dashboard Theme System */
 .dashboard-dark {
-  --db-bg: #050505;
+  --db-bg: #000000;
   --db-card: #0a0a0a;
   --db-card-border: rgba(255, 255, 255, 0.08);
   --db-text: #ffffff;
@@ -140,12 +140,172 @@ html {
   --db-accent-glow: rgba(119, 119, 119, 0.12);
 }
 
-/* Force Brutal Font on all dashboard views */
-.dashboard-dark, 
-.dashboard-light, 
-.dashboard-dark *, 
-.dashboard-light * {
-  font-family: 'Brutal Font', sans-serif !important;
+/* ==========================================================================
+   ADMIN LOGIN & ADMIN DASHBOARD - MODERN EXECUTIVE TYPOGRAPHY SYSTEM
+   Using 'Plus Jakarta Sans' & 'Inter' for crisp readability, clean hierarchy,
+   and optical balance across all devices (Mobile, Tablet, Desktop)
+   ========================================================================== */
+
+:root {
+  --admin-font: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --admin-number-font: 'Inter', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Base typography for Admin Login & Dashboard */
+.admin-login-view,
+.dashboard-dark,
+.dashboard-light {
+  font-family: var(--admin-font) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ensure proper font inheritance across all interactive & structural elements without clobbering icon fonts */
+.admin-login-view input,
+.admin-login-view button,
+.admin-login-view label,
+.admin-login-view select,
+.admin-login-view textarea,
+.admin-login-view h1,
+.admin-login-view h2,
+.admin-login-view h3,
+.admin-login-view h4,
+.admin-login-view p,
+.admin-login-view span:not([class*="lucide"]):not([class*="icon"]),
+.admin-login-view a,
+.dashboard-dark input,
+.dashboard-light input,
+.dashboard-dark button,
+.dashboard-light button,
+.dashboard-dark select,
+.dashboard-light select,
+.dashboard-dark textarea,
+.dashboard-light textarea,
+.dashboard-dark table,
+.dashboard-light table,
+.dashboard-dark th,
+.dashboard-light th,
+.dashboard-dark td,
+.dashboard-light td,
+.dashboard-dark h1,
+.dashboard-light h1,
+.dashboard-dark h2,
+.dashboard-light h2,
+.dashboard-dark h3,
+.dashboard-light h3,
+.dashboard-dark h4,
+.dashboard-light h4,
+.dashboard-dark p,
+.dashboard-light p,
+.dashboard-dark a,
+.dashboard-light a,
+.dashboard-dark label,
+.dashboard-light label,
+.dashboard-dark ul,
+.dashboard-light ul,
+.dashboard-dark li,
+.dashboard-light li {
+  font-family: var(--admin-font);
+}
+
+/* Moderate aggressive 900-weight (font-black) and 800-weight (font-extrabold) so it never glares or strikes harshly */
+.admin-login-view .font-black,
+.dashboard-dark .font-black,
+.dashboard-light .font-black {
+  font-weight: 700 !important;
+}
+
+.admin-login-view .font-extrabold,
+.dashboard-dark .font-extrabold,
+.dashboard-light .font-extrabold {
+  font-weight: 650 !important;
+}
+
+/* Refined Heading Hierarchy */
+.dashboard-dark h1,
+.dashboard-light h1 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.dashboard-dark h2,
+.dashboard-light h2,
+.dashboard-dark h3,
+.dashboard-light h3 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.dashboard-dark h4,
+.dashboard-light h4,
+.dashboard-dark h5,
+.dashboard-light h5 {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* High-clarity Tabular Data Styling */
+.dashboard-dark table,
+.dashboard-light table {
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-dark th,
+.dashboard-light th {
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dashboard-dark td,
+.dashboard-light td {
+  font-weight: 450;
+  font-size: 0.8125rem;
+  letter-spacing: -0.005em;
+}
+
+/* Form Inputs & Controls */
+.admin-login-view input {
+  font-weight: 450 !important;
+  letter-spacing: normal;
+}
+
+.dashboard-dark input,
+.dashboard-light input,
+.dashboard-dark select,
+.dashboard-light select,
+.dashboard-dark textarea,
+.dashboard-light textarea {
+  font-weight: 450;
+  font-size: 0.8125rem;
+}
+
+/* Responsive typography scaling for all device viewports */
+@media (max-width: 640px) {
+  .admin-login-view input {
+    font-size: 15px !important;
+  }
+  
+  .dashboard-dark,
+  .dashboard-light {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .dashboard-dark,
+  .dashboard-light {
+    font-size: 13.5px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .dashboard-dark,
+  .dashboard-light {
+    font-size: 14px;
+  }
 }
 
 /* Hardware-accelerated, high-performance smooth theme transitions (150ms duration) */
