@@ -806,6 +806,60 @@ const getEventBookings = async (req, res) => {
   }
 };
 
+// @desc    Mark attendance via QR code scan (Public)
+// @route   POST /api/events/attendance
+// @access  Public
+const markEventAttendance = async (req, res) => {
+  try {
+    const { phone, eventName } = req.body;
+    if (!phone) {
+      return res.status(400).json({ success: false, message: "Please provide a registered mobile number." });
+    }
+
+    // Find all bookings for this phone number
+    const userBookings = await EventBooking.find({ phone }).populate("event", "title");
+    
+    if (!userBookings || userBookings.length === 0) {
+      return res.status(404).json({ success: false, message: "No registration found for this mobile number." });
+    }
+
+    // If eventName is provided, find the specific booking for that event
+    let targetBooking = null;
+    if (eventName) {
+      targetBooking = userBookings.find(b => b.event && b.event.title === eventName);
+    } else {
+      // If no specific event is targeted or we just take the first one (depends on logic)
+      // Usually, it's better to match the exact event to prevent marking attendance for a different event.
+      targetBooking = userBookings[0];
+    }
+
+    if (!targetBooking) {
+      return res.status(404).json({ success: false, message: "You are not registered for this specific event." });
+    }
+
+    // Update the booking status to "Attended"
+    targetBooking.status = "Attended";
+    
+    // Also push a timeline event
+    targetBooking.timeline.push({
+      time: new Date().toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }),
+      activity: "Checked in via QR Code",
+      type: "status"
+    });
+
+    await targetBooking.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Good morning Guys - Attendance present",
+      data: targetBooking
+    });
+  } catch (error) {
+    console.error("Mark Event Attendance Error:", error.message);
+    res.status(500).json({ success: false, message: "Server error. Could not mark attendance." });
+  }
+};
+
 // @desc    Delete an event booking
 // @route   DELETE /api/events/bookings/:id
 // @access  Private/Admin
@@ -1118,4 +1172,5 @@ module.exports = {
   getEventOGMeta,
   bookEventBarcode,
   verifyEventPaymentBarcode,
+  markEventAttendance,
 };

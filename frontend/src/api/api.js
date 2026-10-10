@@ -114,6 +114,7 @@ export const verifyEventPaymentBarcode = (formData) => API.post("/events/verify-
     "Content-Type": "multipart/form-data",
   },
 });
+export const markEventAttendance = (data) => API.post("/events/attendance", data);
 export const getEventBookings = () => API.get("/events/bookings");
 export const updateEventBooking = (id, data) => API.put(`/events/bookings/${id}`, data);
 export const deleteEventBooking = (id) => API.delete(`/events/bookings/${id}`);

@@ -29,6 +29,7 @@ import {
   Ticket,
   TrendingUp,
   BarChart2,
+  QrCode,
 } from "lucide-react";
 import {
   getEventBookings,
@@ -546,6 +547,8 @@ const DashboardEventParticipants = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showBulkMenu, setShowBulkMenu] = useState(false);
+  const [showRepeatedModal, setShowRepeatedModal] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const [editingNotes, setEditingNotes] = useState(false);
   const [isSelectMode, setIsSelectMode] = useState(false);
   const [showManageMenu, setShowManageMenu] = useState(false);
@@ -814,13 +817,25 @@ const DashboardEventParticipants = () => {
 
   const { availableSlots, totalSlots } = getCapacityStats();
 
+  const phoneCounts = {};
+  bookings.forEach(b => {
+    if (b.phone) {
+      phoneCounts[b.phone] = (phoneCounts[b.phone] || 0) + 1;
+    }
+  });
+  const repeatedPhones = new Set(
+    Object.keys(phoneCounts).filter(phone => phoneCounts[phone] > 1)
+  );
+
+  const repeatedCount = activeBookings.filter(b => repeatedPhones.has(b.phone)).length;
+
   // Filter based on search & tab status filter
   const filteredBookings = activeBookings.filter((booking) => {
-    const query = searchQuery.toLowerCase();
+    const query = searchQuery?.toLowerCase() || "";
     const matchesSearch =
-      booking.name.toLowerCase().includes(query) ||
-      booking.email.toLowerCase().includes(query) ||
-      booking.phone.toLowerCase().includes(query);
+      booking.name?.toLowerCase().includes(query) ||
+      booking.email?.toLowerCase().includes(query) ||
+      booking.phone?.toLowerCase().includes(query);
 
     let matchesStatus = true;
     const normalized = getNormalizedStatus(booking);
@@ -834,6 +849,8 @@ const DashboardEventParticipants = () => {
       matchesStatus = normalized === "No Response";
     } else if (statusFilter === "notcoming") {
       matchesStatus = normalized === "Not Coming";
+    } else if (statusFilter === "repeated") {
+      matchesStatus = repeatedPhones.has(booking.phone);
     }
 
     return matchesSearch && matchesStatus;
@@ -1072,6 +1089,13 @@ const DashboardEventParticipants = () => {
           transform: scale(1.1);
           cursor: pointer;
         }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
       `}</style>
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
@@ -1079,20 +1103,25 @@ const DashboardEventParticipants = () => {
       <div className="max-w-8xl mx-auto space-y-4 sm:space-y-6 relative z-10">
         {/* Header Title + Dynamic Event Tabs */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 border-b border-[var(--db-card-border)] pb-3.5 sm:pb-4">
-          <div className="text-left">
+          <div className="text-left flex items-center justify-between w-full md:w-auto">
             <h1
-              className="text-lg sm:text-xl md:text-2xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
+              className="text-lg sm:text-xl font-black uppercase tracking-wide text-[var(--db-accent-highlight)]"
               style={{ fontFamily: '"Brutal Font", sans-serif' }}
             >
               Event Participants
             </h1>
-            <p className="text-[11px] sm:text-xs text-[var(--db-text-muted)] mt-0.5">
-              Live attendance, communications timeline, and CRM logs.
-            </p>
+            {eventFilter !== "all" && (
+              <button 
+                onClick={() => setShowQRModal(true)}
+                className="ml-4 px-3 py-1.5 bg-[#ccf141] text-black text-[10px] font-black uppercase rounded-lg flex items-center gap-1.5 cursor-pointer hover:scale-105 transition-transform"
+              >
+                <QrCode size={12} /> QR Check-in
+              </button>
+            )}
           </div>
 
           {/* Dynamic Event Tabs */}
-          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto custom-scrollbar pb-1 max-w-full">
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto hide-scrollbar pb-1 max-w-full">
             <button
               onClick={() => {
                 setEventFilter("all");
@@ -1135,7 +1164,7 @@ const DashboardEventParticipants = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3.5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-3.5">
           {/* Card 1: Total Registrations */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -1283,6 +1312,27 @@ const DashboardEventParticipants = () => {
               </div>
             </div>
           </motion.div>
+
+          {/* Card 7: Repeated Participants */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.30 }}
+            onClick={() => setShowRepeatedModal(true)}
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-[16px] xl:rounded-[20px] p-3 xl:p-4 flex flex-col xl:flex-row items-start xl:items-center gap-2 xl:gap-3 shadow-lg transition-colors overflow-hidden cursor-pointer hover:bg-[var(--db-table-hover)]"
+          >
+            <div className="w-8 h-8 xl:w-11 xl:h-11 rounded-full bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.15)] flex-shrink-0">
+              <Users className="w-4 h-4 xl:w-[18px] xl:h-[18px]" />
+            </div>
+            <div className="text-left min-w-0 w-full">
+              <h3 className="text-lg xl:text-2xl font-black text-[var(--db-text)] leading-none">
+                {repeatedCount}
+              </h3>
+              <p className="text-[9px] xl:text-[11px] text-[var(--db-text-muted)] font-semibold mt-1 truncate">
+                Repeated
+              </p>
+            </div>
+          </motion.div>
         </div>
 
         {/* Main layout: Left content + Right sidebar */}
@@ -1381,6 +1431,20 @@ const DashboardEventParticipants = () => {
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     Not Coming ({notComingCount})
+                  </button>
+                  <button
+                    onClick={() => {
+                      setStatusFilter("repeated");
+                      setCurrentPage(1);
+                    }}
+                    className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+                      statusFilter === "repeated"
+                        ? "bg-[#ccf141] text-black shadow-md"
+                        : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                    }`}
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    Repeated ({repeatedCount})
                   </button>
                 </div>
 
@@ -1509,7 +1573,12 @@ const DashboardEventParticipants = () => {
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0 flex-1">
-                              <h4 className="font-bold text-sm text-[var(--db-text)] truncate">{booking.name}</h4>
+                              <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#ccf141]/20 to-[#ccf141]/5 border border-[#ccf141]/20 flex items-center justify-center text-[#ccf141] font-black text-[10px] flex-shrink-0">
+                                  {booking.name.charAt(0).toUpperCase()}
+                                </div>
+                                <h4 className="font-bold text-sm text-[var(--db-text)] truncate">{booking.name}</h4>
+                              </div>
                               <div className="flex items-center gap-2 mt-1">
                                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)]">
                                   {booking.seats} {booking.seats === 1 ? "seat" : "seats"}
@@ -1638,9 +1707,9 @@ const DashboardEventParticipants = () => {
                           <tr
                             key={booking._id}
                             onClick={() => setSelectedBooking(booking)}
-                            className={`hover:bg-[var(--db-table-hover)] transition-colors cursor-pointer ${
+                            className={`group hover:bg-[#1a1a1a] transition-all cursor-pointer border-l-[3px] border-transparent hover:border-[#ccf141] ${
                               isSelected
-                                ? "bg-[var(--db-table-hover)] border-l-4 border-[var(--db-accent-highlight)]"
+                                ? "bg-[#1a1a1a] !border-l-[3px] !border-[#ccf141] shadow-[inset_0_0_20px_rgba(204,241,65,0.03)]"
                                 : ""
                             }`}
                           >
@@ -1660,8 +1729,15 @@ const DashboardEventParticipants = () => {
                             )}
 
                             {/* Name */}
-                            <td className="py-2 px-3 font-bold text-[var(--db-text)] text-[14px] whitespace-nowrap">
-                              {booking.name}
+                            <td className="py-2 px-4 whitespace-nowrap">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#ccf141]/20 to-[#ccf141]/5 border border-[#ccf141]/20 flex items-center justify-center text-[#ccf141] font-black text-[10px] flex-shrink-0 group-hover:scale-110 transition-transform">
+                                  {booking.name.charAt(0).toUpperCase()}
+                                </div>
+                                <span className="font-bold text-[var(--db-text)] text-[12px] truncate max-w-[110px]" title={booking.name}>
+                                  {booking.name}
+                                </span>
+                              </div>
                             </td>
 
                             {/* Phone */}
@@ -2376,7 +2452,7 @@ const DashboardEventParticipants = () => {
                       href={`https://wa.me/${selectedBooking.phone}?text=Hi ${selectedBooking.name}, this is Box %26 Cross regarding your registration...`}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20 transition-all font-bold text-xs cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-green-500/20 to-green-500/10 border border-green-500/30 text-green-400 hover:from-green-500/30 hover:to-green-500/20 hover:scale-[1.02] shadow-[0_4px_15px_rgba(34,197,94,0.15)] transition-all font-black text-[10px] uppercase tracking-wider cursor-pointer"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -2391,7 +2467,7 @@ const DashboardEventParticipants = () => {
                     </a>
                     <a
                       href={`tel:${selectedBooking.phone}`}
-                      className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-[#ccf141]/10 border border-[#ccf141]/20 text-[#ccf141] hover:bg-[#ccf141]/20 transition-all font-bold text-xs cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-[#ccf141]/20 to-[#ccf141]/5 border border-[#ccf141]/30 text-[#ccf141] hover:from-[#ccf141]/30 hover:to-[#ccf141]/15 hover:scale-[1.02] shadow-[0_4px_15px_rgba(204,241,65,0.15)] transition-all font-black text-[10px] uppercase tracking-wider cursor-pointer"
                     >
                       <Phone size={13} /> Call Now
                     </a>
@@ -2401,7 +2477,7 @@ const DashboardEventParticipants = () => {
                           status: "Awaiting",
                         })
                       }
-                      className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-all font-bold text-xs cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:scale-[1.02] transition-all font-black text-[10px] uppercase tracking-wider cursor-pointer"
                     >
                       <Clock size={13} /> Mark Awaiting
                     </button>
@@ -2411,7 +2487,7 @@ const DashboardEventParticipants = () => {
                           status: "cancelled",
                         })
                       }
-                      className="flex items-center gap-2.5 w-full px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-all font-bold text-xs cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-red-500/20 to-red-500/5 border border-red-500/30 text-red-400 hover:from-red-500/30 hover:to-red-500/15 hover:scale-[1.02] shadow-[0_4px_15px_rgba(239,68,68,0.1)] transition-all font-black text-[10px] uppercase tracking-wider cursor-pointer"
                     >
                       <XCircle size={13} /> Not Coming
                     </button>
@@ -2422,6 +2498,143 @@ const DashboardEventParticipants = () => {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Repeated Participants Modal */}
+      <AnimatePresence>
+        {showRepeatedModal && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+              onClick={() => setShowRepeatedModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-[101] overflow-hidden flex flex-col max-h-[80vh]"
+            >
+              <div className="flex items-center justify-between p-4 border-b border-[var(--db-card-border)] bg-[#ccf141] text-black">
+                <h2 className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                  <Users size={18} /> Repeated Participants
+                </h2>
+                <button onClick={() => setShowRepeatedModal(false)} className="hover:text-black/70 cursor-pointer">
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="p-4 overflow-y-auto custom-scrollbar flex-1 space-y-3">
+                {(() => {
+                  const repeatedParticipantsList = Array.from(repeatedPhones).map(phone => {
+                    const userBookings = bookings.filter(b => b.phone === phone);
+                    
+                    const eventSeats = {};
+                    userBookings.forEach(b => {
+                      const evtName = b.event?.title || "Unknown Event";
+                      eventSeats[evtName] = (eventSeats[evtName] || 0) + (Number(b.seats) || 1);
+                    });
+                    
+                    const eventsWithSeats = Object.entries(eventSeats).map(([evtName, seats]) => {
+                      return `${evtName} (${seats} ${seats === 1 ? 'seat' : 'seats'})`;
+                    });
+
+                    return {
+                      phone,
+                      name: userBookings[0]?.name || "Unknown",
+                      count: userBookings.length,
+                      events: eventsWithSeats
+                    };
+                  }).sort((a, b) => b.count - a.count);
+
+                  if (repeatedParticipantsList.length === 0) {
+                    return <p className="text-sm text-[var(--db-text-muted)] text-center py-6">No repeated participants found.</p>;
+                  }
+
+                  return repeatedParticipantsList.map((rp, i) => (
+                    <div key={i} className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-xl p-3 hover:border-[var(--db-accent-highlight)] transition-colors">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 className="font-bold text-[var(--db-text)] text-sm">{rp.name}</h4>
+                          <a href={`tel:${rp.phone}`} className="font-mono text-xs text-[var(--db-text-muted)] flex items-center gap-1 hover:text-[var(--db-accent-highlight)] mt-0.5">
+                            <Phone size={10} /> {rp.phone}
+                          </a>
+                        </div>
+                        <span className="bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
+                          <Award size={10} /> {rp.count} Bookings
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-[var(--db-text-muted)] bg-[var(--db-card)] p-2 rounded-lg mt-2">
+                        <span className="font-bold text-[var(--db-text)]">Registered Events:</span> 
+                        <div className="flex flex-wrap gap-1 mt-1.5">
+                          {rp.events.map((e, idx) => (
+                            <span key={idx} className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] px-1.5 py-0.5 rounded text-[10px]">{e}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ));
+                })()}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* QR Check-in Modal */}
+      <AnimatePresence>
+        {showQRModal && eventFilter !== "all" && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+              onClick={() => setShowQRModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-[101] overflow-hidden flex flex-col"
+            >
+              <div className="flex items-center justify-between p-4 border-b border-[var(--db-card-border)] bg-[#ccf141] text-black">
+                <h2 className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
+                  <QrCode size={18} /> Event Check-In QR
+                </h2>
+                <button onClick={() => setShowQRModal(false)} className="hover:text-black/70 cursor-pointer">
+                  <X size={20} />
+                </button>
+              </div>
+              <div className="p-8 flex flex-col items-center justify-center space-y-4">
+                <p className="text-xs text-center text-[var(--db-text-muted)] font-bold mb-2 uppercase tracking-wide">
+                  {eventFilter}
+                </p>
+                <div className="bg-white p-4 rounded-xl shadow-lg border-4 border-[#ccf141]">
+                  <img 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(window.location.origin + "/event-checkin?event=" + eventFilter)}`} 
+                    alt="Check-in QR Code" 
+                    className="w-48 h-48 object-contain"
+                  />
+                </div>
+                <p className="text-[10px] text-center text-gray-400 mt-4">
+                  Scan this code with a mobile device to mark attendance.
+                  <br /><br />
+                  <span className="text-[#ccf141] font-bold">Note for Local Testing:</span> If you scan this on your phone while running on `localhost`, it won't work. Click the button below to test it directly on this PC instead.
+                </p>
+                <a 
+                  href={`/event-checkin?event=${encodeURIComponent(eventFilter)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-2 w-full py-2.5 bg-[var(--db-input-bg)] text-white text-xs font-bold rounded-xl border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors text-center"
+                >
+                  Test Check-in Page Here
+                </a>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

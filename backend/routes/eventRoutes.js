@@ -16,6 +16,7 @@ const {
   getEventOGMeta,
   bookEventBarcode,
   verifyEventPaymentBarcode,
+  markEventAttendance,
 } = require("../controllers/eventController");
 
 // Public routes
@@ -24,6 +25,7 @@ router.post("/book", bookEvent);
 router.post("/book-barcode", upload.single("screenshot"), bookEventBarcode);
 router.post("/verify", verifyEventPayment);
 router.post("/verify-barcode", upload.single("screenshot"), verifyEventPaymentBarcode);
+router.post("/attendance", markEventAttendance);
 router.get("/:id/og", getEventOGMeta);
 
 // Admin protected routes

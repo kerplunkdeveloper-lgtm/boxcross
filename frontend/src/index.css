@@ -695,11 +695,11 @@ html {
 
 @media (min-width: 1920px) {
   /* For 4k and ultrawide, lock the max width to avoid stretching infinitely */
-  .dashboard-dark [class*="max-w-6xl"],
+  .dashboard-dark [class*="max-w-7xl"],
   .dashboard-dark [class*="max-w-7xl"],
   .dashboard-dark [class*="max-w-8xl"],
-  .dashboard-dark [class*="max-w-9xl"],
-  .dashboard-light [class*="max-w-6xl"],
+  .dashboard-dark [class*="max-w-8xl"],
+  .dashboard-light [class*="max-w-7xl"],
   .dashboard-light [class*="max-w-7xl"],
   .dashboard-light [class*="max-w-8xl"],
   .dashboard-light [class*="max-w-9xl"] {

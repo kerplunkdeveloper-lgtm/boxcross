@@ -64,6 +64,7 @@ const HyroxLab = lazy(() => import("./pages/HyroxLab"));
 const HybridPerformance = lazy(() => import("./pages/HybridPerformance"));
 const AthletePerformanceProfile = lazy(() => import("./pages/AthletePerformanceProfile"));
 const JuniorAthleteProfile = lazy(() => import("./pages/JuniorAthleteProfile"));
+const EventCheckIn = lazy(() => import("./pages/EventCheckIn"));
 const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
 const Foot = lazy(() => import("./Components/Foot"));
 const GymMarquee = lazy(() => import("./Components/GymMarquee"));
@@ -164,6 +165,7 @@ const App = () => {
 
                 {/* Routes WITHOUT Navbar and Footer */}
                 {/* <Route path="/" element={<Commingsoon />} /> */}
+                <Route path="/event-checkin" element={<EventCheckIn />} />
                 <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />
                 <Route path="/athlete-login" element={<Auth />} />
