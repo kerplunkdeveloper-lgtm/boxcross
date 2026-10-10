@@ -1,15 +1,35 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import h1 from '../../assets/h1.jpeg'
-import h2 from '../../assets/h2.jpeg'
-import h3 from '../../assets/h3.jpeg'
-import h4 from '../../assets/h4.jpeg'
+import h1 from '../../assets/images/e1.jpg'
+import h2 from '../../assets/images/e2.jpg'
+import h3 from '../../assets/images/e3.jpg'
+import h4 from '../../assets/images/e4.jpg'
+import h5 from '../../assets/images/e5.jpg'
+import h6 from '../../assets/images/e6.jpg'
+import h7 from '../../assets/images/e7.jpg'
+import h8 from '../../assets/images/e8.jpg'
+import h9 from '../../assets/images/e9.jpg'
+import h10 from '../../assets/images/e10.jpg'
+import h11 from '../../assets/images/e11.jpg'
+import h12 from '../../assets/images/e12.jpg'
+import h13 from '../../assets/images/e13.jpg'
+import h14 from '../../assets/images/e14.jpg'
+import h15 from '../../assets/images/e15.jpg'
+import h16 from '../../assets/images/e16.jpg'
+import h17 from '../../assets/images/e17.jpg'
+import h18 from '../../assets/images/e18.jpg'
+import h19 from '../../assets/images/e19.jpg'
+import h20 from '../../assets/images/e20.jpg'
+
+
+
+
 
 
 
 
 const highlightImages = [
-  h1, h2, h3, h4
+  h1, h2, h3, h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16,h17,h18,h19,h20
 ];
 
 const Eventhighlight = () => {
@@ -51,7 +71,7 @@ const Eventhighlight = () => {
 
   return (
     <div className="w-full py-3 px-4 md:px-8">
-      <div className="max-w-[1300px] mx-auto">
+      <div className="max-w-8xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-10">
           Event Highlights
         </h2>
@@ -66,12 +86,12 @@ const Eventhighlight = () => {
             {highlightImages.map((img, index) => (
               <div
                 key={index}
-                className="snap-center shrink-0 w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] h-[250px] md:h-[300px] rounded-xl overflow-hidden shadow-lg relative group/item cursor-pointer"
+                className="snap-center shrink-0 w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] h-[400px] md:h-[500px] rounded-md overflow-hidden shadow-lg relative group/item cursor-pointer"
               >
                 <img
                   src={img}
                   alt={`Highlight ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110"
+                  className="w-full h-full object-cover object-center transition-transform duration-700 group-hover/item:scale-110"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover/item:bg-black/0 transition-colors duration-300" />
               </div>
