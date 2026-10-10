@@ -2612,7 +2612,7 @@ const DashboardEventParticipants = () => {
                 </p>
                 <div className="bg-white p-4 rounded-xl shadow-lg border-4 border-[#ccf141]">
                   <img 
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(window.location.origin + "/event-checkin?event=" + eventFilter)}`} 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(window.location.origin + "/event-checkin?event=" + encodeURIComponent(eventFilter))}`} 
                     alt="Check-in QR Code" 
                     className="w-48 h-48 object-contain"
                   />

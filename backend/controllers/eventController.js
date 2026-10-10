@@ -816,8 +816,12 @@ const markEventAttendance = async (req, res) => {
       return res.status(400).json({ success: false, message: "Please provide a registered mobile number." });
     }
 
-    // Find all bookings for this phone number
-    const userBookings = await EventBooking.find({ phone }).populate("event", "title");
+    // Normalize phone number for flexible matching
+    const cleanPhone = phone.replace(/[\s\-\+]/g, '').replace(/^91/, '');
+    
+    // Find all bookings and filter by normalized phone
+    const allBookings = await EventBooking.find({}).populate("event", "title");
+    const userBookings = allBookings.filter(b => b.phone && b.phone.replace(/[\s\-\+]/g, '').replace(/^91/, '') === cleanPhone);
     
     if (!userBookings || userBookings.length === 0) {
       return res.status(404).json({ success: false, message: "No registration found for this mobile number." });
@@ -828,13 +832,11 @@ const markEventAttendance = async (req, res) => {
     if (eventName) {
       targetBooking = userBookings.find(b => b.event && b.event.title === eventName);
     } else {
-      // If no specific event is targeted or we just take the first one (depends on logic)
-      // Usually, it's better to match the exact event to prevent marking attendance for a different event.
       targetBooking = userBookings[0];
     }
 
     if (!targetBooking) {
-      return res.status(404).json({ success: false, message: "You are not registered for this specific event." });
+      return res.status(404).json({ success: false, message: "No registration found for this specific event." });
     }
 
     // Update the booking status to "Attended"
@@ -1157,6 +1159,7 @@ const bookEventBarcode = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   getEvents,
