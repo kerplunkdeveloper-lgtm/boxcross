@@ -242,4 +242,11 @@ export const createJuniorProfile = (data) => API.post("/juniorprofile", data);
 export const updateJuniorProfile = (id, data) => API.put(`/juniorprofile/${id}`, data);
 export const deleteJuniorProfile = (id) => API.delete(`/juniorprofile/${id}`);
 
+// ──────────────── MEMFOUND API ────────────────
+export const createMemfound = (data) => API.post("/memfound", data);
+export const getMemfounds = (params) => API.get("/memfound", { params });
+export const getMemfoundById = (id) => API.get(`/memfound/${id}`);
+export const updateMemfound = (id, data) => API.put(`/memfound/${id}`, data);
+export const deleteMemfound = (id) => API.delete(`/memfound/${id}`);
+
 export default API;

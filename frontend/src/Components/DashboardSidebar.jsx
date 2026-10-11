@@ -68,7 +68,8 @@ const DashboardSidebar = ({
       location.pathname.includes("/homec1") ||
       location.pathname.includes("/homec2") ||
       location.pathname.includes("/homec3") ||
-      location.pathname.includes("/bookings")
+      location.pathname.includes("/bookings") ||
+      location.pathname.includes("/memfound")
     );
   });
 
@@ -82,7 +83,8 @@ const DashboardSidebar = ({
   const [offerFoundersOpen, setOfferFoundersOpen] = useState(() => {
     return (
       location.pathname.includes("/founding-members") ||
-      location.pathname.includes("/founding-offer")
+      location.pathname.includes("/founding-offer") ||
+      location.pathname.includes("/memfound")
     );
   });
 
@@ -103,7 +105,8 @@ const DashboardSidebar = ({
       location.pathname.includes("/homec1") ||
       location.pathname.includes("/homec2") ||
       location.pathname.includes("/homec3") ||
-      location.pathname.includes("/bookings")
+      location.pathname.includes("/bookings") ||
+      location.pathname.includes("/memfound")
     ) {
       setEnquiriesOpen(true);
     }
@@ -121,7 +124,8 @@ const DashboardSidebar = ({
   useEffect(() => {
     if (
       location.pathname.includes("/founding-members") ||
-      location.pathname.includes("/founding-offer")
+      location.pathname.includes("/founding-offer") ||
+      location.pathname.includes("/memfound")
     ) {
       setOfferFoundersOpen(true);
     }
@@ -429,7 +433,7 @@ const DashboardSidebar = ({
         </div>
 
         {/* SECTION 2: MANAGEMENT */}
-        {user && user.role === "admin" && (
+        {isAdmin && (
           <div>
             {renderSectionHeader("Management")}
             <div className="space-y-0.5">
@@ -548,8 +552,13 @@ const DashboardSidebar = ({
                 icon: Crown,
                 isOpen: offerFoundersOpen,
                 setIsOpen: setOfferFoundersOpen,
-                pathMatch: ["/founding-members", "/founding-offer"],
+                pathMatch: ["/founding-members", "/founding-offer", "/memfound"],
                 items: [
+                  {
+                    name: "Memfound Registrations",
+                    path: "/dashboard/memfound",
+                    icon: Sparkles,
+                  },
                   {
                     name: "Offer Details Edit",
                     path: "/dashboard/founding-offer",
@@ -603,7 +612,7 @@ const DashboardSidebar = ({
         )}
 
         {/* SECTION 3: CLIENT INQUIRIES */}
-        {user && user.role === "admin" && (
+        {isAdmin && (
           <div>
             {renderSectionHeader("Client Inquiries")}
             <div className="space-y-0.5">
@@ -612,12 +621,17 @@ const DashboardSidebar = ({
                 icon: FileText,
                 isOpen: enquiriesOpen,
                 setIsOpen: setEnquiriesOpen,
-                pathMatch: ["/homec1", "/homec2", "/homec3", "/bookings"],
+                pathMatch: ["/homec1", "/homec2", "/homec3", "/bookings", "/memfound"],
                 items: [
                   {
                     name: "Gym Tour Bookings",
                     path: "/dashboard/bookings",
                     icon: BookOpen,
+                  },
+                  {
+                    name: "Memfound Interests",
+                    path: "/dashboard/memfound",
+                    icon: Sparkles,
                   },
                   {
                     name: "Free Trial Form",

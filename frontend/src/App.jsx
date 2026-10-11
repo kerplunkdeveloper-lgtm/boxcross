@@ -68,6 +68,8 @@ const EventCheckIn = lazy(() => import("./pages/EventCheckIn"));
 const VistingCard = lazy(() => import("./pages/vistingcard/VistingCard"));
 const Foot = lazy(() => import("./Components/Foot"));
 const GymMarquee = lazy(() => import("./Components/GymMarquee"));
+const Memfound = lazy(() => import("./pages/Memfound"));
+const DashboardMemfound = lazy(() => import("./pages/DashboardMemfound"));
 
 // import LeadModal from "./Components/LeadModal";
 
@@ -151,6 +153,7 @@ const App = () => {
           />
           {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
           <BrowserRouter>
+            <ScrollToTop />
             <RoutePreloader setIsLoading={setIsLoading} />
             {!isLoading && <FloatingActions />}
             <Suspense fallback={<PageLoader />}>
@@ -165,6 +168,8 @@ const App = () => {
 
                 {/* Routes WITHOUT Navbar and Footer */}
                 {/* <Route path="/" element={<Commingsoon />} /> */}
+                <Route path="/memfound" element={<Memfound />} />
+                <Route path="/Memfound" element={<Memfound />} />
                 <Route path="/event-checkin" element={<EventCheckIn />} />
                 <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />
@@ -220,6 +225,7 @@ const App = () => {
                   <Route path="homec1" element={<DashboardHomec1 />} />
                   <Route path="homec2" element={<DashboardHomec2 />} />
                   <Route path="homec3" element={<DashboardHomec3 />} />
+                  <Route path="memfound" element={<DashboardMemfound />} />
                   <Route path="settings" element={<DashboardSettings />} />
                   <Route path="calendar" element={<DashboardCalendar />} />
                   <Route

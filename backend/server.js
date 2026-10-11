@@ -27,6 +27,7 @@ const hyroxLabRoutes = require("./routes/hyroxLabRoutes");
 const hybridPerformanceRoutes = require("./routes/hybridPerformanceRoutes");
 const athletePerformanceProfileRoutes = require("./routes/athletePerformanceProfileRoutes");
 const juniorAthleteProfileRoutes = require("./routes/juniorAthleteProfileRoutes");
+const memfoundRoutes = require("./routes/memfoundRoutes");
 
 // Load env
 dotenv.config();
@@ -98,6 +99,7 @@ app.use("/api/hyroxlab", hyroxLabRoutes);
 app.use("/api/hybridperformance", hybridPerformanceRoutes);
 app.use("/api/athleteprofile", athletePerformanceProfileRoutes);
 app.use("/api/juniorprofile", juniorAthleteProfileRoutes);
+app.use("/api/memfound", memfoundRoutes);
 
 // Health check
 app.get("/", (req, res) => {
