@@ -100,6 +100,7 @@ app.use("/api/hybridperformance", hybridPerformanceRoutes);
 app.use("/api/athleteprofile", athletePerformanceProfileRoutes);
 app.use("/api/juniorprofile", juniorAthleteProfileRoutes);
 app.use("/api/memfound", memfoundRoutes);
+app.use("/api/founding100access", memfoundRoutes);
 
 // Health check
 app.get("/", (req, res) => {

@@ -331,6 +331,31 @@ const checkPhoneExists = async (req, res) => {
   }
 };
 
+// @desc    Get Memfound total registrations & remaining spots out of 100
+// @route   GET /api/memfound/stats
+// @access  Public
+const getMemfoundStats = async (req, res) => {
+  try {
+    const totalSpots = 100;
+    const registeredCount = await Memfound.countDocuments();
+    const remainingSpots = Math.max(0, totalSpots - registeredCount);
+    res.status(200).json({
+      success: true,
+      totalSpots,
+      registeredCount,
+      remainingSpots,
+    });
+  } catch (error) {
+    console.error("Get Memfound Stats Error:", error);
+    res.status(500).json({
+      success: false,
+      totalSpots: 100,
+      registeredCount: 0,
+      remainingSpots: 100,
+    });
+  }
+};
+
 module.exports = {
   createMemfound,
   getMemfounds,
@@ -338,4 +363,5 @@ module.exports = {
   updateMemfound,
   deleteMemfound,
   checkPhoneExists,
+  getMemfoundStats,
 };

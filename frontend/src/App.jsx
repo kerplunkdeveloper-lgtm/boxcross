@@ -126,21 +126,23 @@ const RoutePreloader = ({ setIsLoading }) => {
   return null;
 };
 
-// URL Restriction Guard: When user enters /memfound, they cannot leave to other public pages
+// URL Restriction Guard: When user enters /Founding100access, they cannot leave to other public pages
 const MemfoundGuard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isMemfound = location.pathname.toLowerCase().startsWith("/memfound");
-    if (isMemfound) {
+    const isFoundingAccess =
+      location.pathname.toLowerCase().startsWith("/founding100access") ||
+      location.pathname.toLowerCase().startsWith("/memfound");
+    if (isFoundingAccess) {
       sessionStorage.setItem("lock_to_memfound", "true");
     } else if (sessionStorage.getItem("lock_to_memfound") === "true") {
       const isAdminRoute =
         location.pathname.startsWith("/dashboard") ||
         location.pathname.startsWith("/login");
       if (!isAdminRoute) {
-        navigate("/memfound", { replace: true });
+        navigate("/Founding100access", { replace: true });
       }
     }
   }, [location.pathname, navigate]);
@@ -192,8 +194,10 @@ const App = () => {
 
                 {/* Routes WITHOUT Navbar and Footer */}
                 {/* <Route path="/" element={<Commingsoon />} /> */}
-                <Route path="/memfound" element={<Memfound />} />
-                <Route path="/Memfound" element={<Memfound />} />
+                <Route path="/Founding100access" element={<Memfound />} />
+                <Route path="/founding100access" element={<Memfound />} />
+                <Route path="/memfound" element={<Navigate to="/Founding100access" replace />} />
+                <Route path="/Memfound" element={<Navigate to="/Founding100access" replace />} />
                 <Route path="/event-checkin" element={<EventCheckIn />} />
                 <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />

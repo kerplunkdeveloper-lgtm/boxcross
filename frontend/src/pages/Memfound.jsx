@@ -12,10 +12,78 @@ import {
   Flame,
   Zap,
   AlertTriangle,
+  Clock,
+  Calendar,
+  Timer,
 } from "lucide-react";
-import { createMemfound, checkMemfoundPhone } from "../api/api";
+import { createMemfound, checkMemfoundPhone, getMemfoundStats } from "../api/api";
+
+// Target Offer Deadline: 8 Days from campaign
+// Closes on 19 October 2026 at 23:59:59 IST (or dynamic 8 days from visitor's session)
+const getOfferTargetDate = () => {
+  const target = new Date("2026-10-19T23:59:59+05:30");
+  const now = new Date();
+  if (now.getTime() >= target.getTime()) {
+    const stored = localStorage.getItem("bxc_founding_offer_end");
+    if (stored && Number(stored) > now.getTime()) {
+      return new Date(Number(stored));
+    }
+    const future = new Date(now.getTime() + 8 * 24 * 60 * 60 * 1000);
+    future.setHours(23, 59, 59, 999);
+    localStorage.setItem("bxc_founding_offer_end", String(future.getTime()));
+    return future;
+  }
+  return target;
+};
 
 const Memfound = () => {
+  // 8-Day Offer Countdown Timer State
+  const [offerTarget] = useState(getOfferTargetDate);
+
+  // Dynamic 100 Spots remaining state (decreases by 1 on each registration)
+  const [remainingSpots, setRemainingSpots] = useState(100);
+  const [registeredCount, setRegisteredCount] = useState(0);
+
+  useEffect(() => {
+    getMemfoundStats()
+      .then((res) => {
+        if (res.data?.success) {
+          setRemainingSpots(res.data.remainingSpots);
+          setRegisteredCount(res.data.registeredCount);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load memfound stats:", err);
+      });
+  }, []);
+
+  const calculateTimeLeft = (target) => {
+    const diff = Math.max(0, target.getTime() - Date.now());
+    return {
+      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((diff / 1000 / 60) % 60),
+      seconds: Math.floor((diff / 1000) % 60),
+      total: diff,
+    };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(() => calculateTimeLeft(offerTarget));
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft(offerTarget));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [offerTarget]);
+
+  const formattedFullOfferDate = offerTarget.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
   // Form State
   const [formData, setFormData] = useState({
     name: "",
@@ -195,6 +263,8 @@ const Memfound = () => {
 
       if (res.data?.success) {
         toast.success("Interest registered successfully!");
+        setRemainingSpots((prev) => Math.max(0, prev - 1));
+        setRegisteredCount((prev) => prev + 1);
         setSubmittedData({
           ...payload,
           id: res.data?.data?._id,
@@ -354,15 +424,15 @@ const Memfound = () => {
                 <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
                   <div className="flex items-center gap-4 sm:gap-6">
                     <span
-                      className="text-5xl sm:text-6xl md:text-7xl font-black text-[#ccf141] tracking-tighter leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.5)]"
+                      className="text-5xl sm:text-6xl md:text-7xl font-black text-[#ccf141] tracking-tighter leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.5)] transition-all duration-300"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      100
+                      {remainingSpots}
                     </span>
                     <div>
                       <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#ccf141]/15 text-[#ccf141] text-[10px] font-mono font-bold tracking-wider uppercase mb-1">
                         <Flame size={11} />
-                        LIMITED RELEASE
+                        LIMITED RELEASE • ONLY {remainingSpots} LEFT
                       </div>
                       <div
                         className="text-white font-black text-xs sm:text-sm uppercase tracking-wider leading-tight"
@@ -370,8 +440,9 @@ const Memfound = () => {
                       >
                         FOUNDING MEMBERSHIPS
                       </div>
-                      <div className="text-zinc-400 text-[10px] sm:text-xs uppercase tracking-wider font-semibold mt-0.5">
-                        REGISTRATION CLOSES 31 OCTOBER
+                      <div className="text-[#ccf141] text-[10px] sm:text-xs uppercase tracking-wider font-bold mt-0.5 flex items-center gap-1.5">
+                        <Clock size={12} className="animate-pulse shrink-0" />
+                        <span>ONLY 8 DAYS THIS OFFER • CLOSES {formattedFullOfferDate.toUpperCase()}</span>
                       </div>
                     </div>
                   </div>
@@ -650,7 +721,7 @@ const Memfound = () => {
                 <div className="mt-6 p-4 rounded-xl bg-[#ccf141]/10 border border-[#ccf141]/30 flex items-center gap-3">
                   <ShieldCheck size={18} className="text-[#ccf141] shrink-0" />
                   <p className="text-zinc-300 text-[11px] sm:text-xs leading-relaxed font-medium">
-                    One hundred founding memberships, numbered in the order they are claimed. We will not run this offer again.
+                    Only {remainingSpots} of 100 founding memberships remaining, numbered in the order they are claimed. We will not run this offer again.
                   </p>
                 </div>
               </div>
@@ -669,6 +740,175 @@ const Memfound = () => {
             </div>
 
             {/* ============================================================ */}
+            {/* SECTION 3.5: OFFER ENDS IN COUNTDOWN CARD (Image 1 Pixel-Match) */}
+            {/* ============================================================ */}
+            <div className="max-w-4xl mx-auto scroll-mt-8 relative overflow-hidden rounded-3xl border border-zinc-800/90 bg-[#070707] p-7 sm:p-11 md:p-14 shadow-[0_25px_60px_rgba(0,0,0,0.95)]">
+              {/* Image 1 Diamond Mesh Lattice Pattern */}
+              <div
+                className="pointer-events-none absolute inset-0 opacity-[0.18]"
+                style={{
+                  backgroundImage: `
+                    linear-gradient(45deg, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+                    linear-gradient(-45deg, rgba(255, 255, 255, 0.4) 1px, transparent 1px)
+                  `,
+                  backgroundSize: "32px 32px",
+                  backgroundPosition: "0 0, 16px 16px",
+                }}
+                aria-hidden="true"
+              />
+
+              {/* Ambient Center Glow */}
+              <div
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(204,241,65,0.08)_0%,transparent_70%)]"
+                aria-hidden="true"
+              />
+
+              <div className="relative z-10 flex flex-col items-center text-center">
+                {/* Image 1 Eyebrow: — OFFER ENDS IN — */}
+                <div className="flex items-center justify-center gap-3 sm:gap-5 mb-4 sm:mb-6">
+                  <span className="w-10 sm:w-16 h-[1px] bg-zinc-600/80" />
+                  <span
+                    className="text-white text-xs sm:text-sm font-black uppercase tracking-[0.22em] select-none"
+                    style={{ fontFamily: '"BrutalTypeBold", monospace' }}
+                  >
+                    OFFER ENDS IN
+                  </span>
+                  <span className="w-10 sm:w-16 h-[1px] bg-zinc-600/80" />
+                </div>
+
+                {/* Image 1 Giant Rounded Neon Digits: 00 : 00 : 00 : 00 */}
+                <div className="flex items-baseline justify-center gap-2 sm:gap-4 md:gap-5 select-none my-1 sm:my-3">
+                  {/* DAYS */}
+                  <div className="flex flex-col items-center min-w-[64px] sm:min-w-[95px] md:min-w-[120px]">
+                    <span
+                      className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none drop-shadow-[0_0_25px_rgba(204,241,65,0.45)]"
+                      style={{ fontFamily: '"BrutalTypeBold", "Brutal Font Bold", monospace' }}
+                    >
+                      {String(timeLeft.days).padStart(2, "0")}
+                    </span>
+                    <span className="mt-3 sm:mt-4 text-[10px] sm:text-xs md:text-sm font-mono font-bold tracking-[0.2em] text-zinc-400 uppercase">
+                      DAYS
+                    </span>
+                  </div>
+
+                  {/* COLON */}
+                  <span
+                    className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#ccf141] leading-none drop-shadow-[0_0_20px_rgba(204,241,65,0.45)] select-none"
+                    style={{ fontFamily: '"BrutalTypeBold", monospace' }}
+                  >
+                    :
+                  </span>
+
+                  {/* HRS */}
+                  <div className="flex flex-col items-center min-w-[64px] sm:min-w-[95px] md:min-w-[120px]">
+                    <span
+                      className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none drop-shadow-[0_0_25px_rgba(204,241,65,0.45)]"
+                      style={{ fontFamily: '"BrutalTypeBold", "Brutal Font Bold", monospace' }}
+                    >
+                      {String(timeLeft.hours).padStart(2, "0")}
+                    </span>
+                    <span className="mt-3 sm:mt-4 text-[10px] sm:text-xs md:text-sm font-mono font-bold tracking-[0.2em] text-zinc-400 uppercase">
+                      HRS
+                    </span>
+                  </div>
+
+                  {/* COLON */}
+                  <span
+                    className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#ccf141] leading-none drop-shadow-[0_0_20px_rgba(204,241,65,0.45)] select-none"
+                    style={{ fontFamily: '"BrutalTypeBold", monospace' }}
+                  >
+                    :
+                  </span>
+
+                  {/* MINS */}
+                  <div className="flex flex-col items-center min-w-[64px] sm:min-w-[95px] md:min-w-[120px]">
+                    <span
+                      className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none drop-shadow-[0_0_25px_rgba(204,241,65,0.45)]"
+                      style={{ fontFamily: '"BrutalTypeBold", "Brutal Font Bold", monospace' }}
+                    >
+                      {String(timeLeft.minutes).padStart(2, "0")}
+                    </span>
+                    <span className="mt-3 sm:mt-4 text-[10px] sm:text-xs md:text-sm font-mono font-bold tracking-[0.2em] text-zinc-400 uppercase">
+                      MINS
+                    </span>
+                  </div>
+
+                  {/* COLON */}
+                  <span
+                    className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#ccf141] leading-none drop-shadow-[0_0_20px_rgba(204,241,65,0.45)] select-none"
+                    style={{ fontFamily: '"BrutalTypeBold", monospace' }}
+                  >
+                    :
+                  </span>
+
+                  {/* SECS */}
+                  <div className="flex flex-col items-center min-w-[64px] sm:min-w-[95px] md:min-w-[120px]">
+                    <span
+                      className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none drop-shadow-[0_0_25px_rgba(204,241,65,0.45)] animate-pulse"
+                      style={{ fontFamily: '"BrutalTypeBold", "Brutal Font Bold", monospace' }}
+                    >
+                      {String(timeLeft.seconds).padStart(2, "0")}
+                    </span>
+                    <span className="mt-3 sm:mt-4 text-[10px] sm:text-xs md:text-sm font-mono font-bold tracking-[0.2em] text-[#ccf141] uppercase">
+                      SECS
+                    </span>
+                  </div>
+                </div>
+
+                {/* Image 1 Outlined Pill: (🕒) LIMITED TIME ONLY */}
+                <div className="mt-6 sm:mt-8 mb-3 flex justify-center">
+                  <div className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-2.5 sm:py-3 rounded-full border border-[#ccf141] bg-black/60 shadow-[0_0_20px_rgba(204,241,65,0.2)]">
+                    <Clock size={18} strokeWidth={2.5} className="text-[#ccf141]" />
+                    <span
+                      className="text-[#ccf141] text-xs sm:text-sm font-black uppercase tracking-[0.16em] select-none"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      LIMITED TIME ONLY
+                    </span>
+                  </div>
+                </div>
+
+                {/* Image 1 Subtitle: Once it's gone, it's gone. */}
+                <p className="text-zinc-200 text-sm sm:text-base font-semibold tracking-wide select-none">
+                  Once it&apos;s gone, it&apos;s gone.
+                </p>
+
+                {/* Dynamic 100 Scarcity Bar & Date Details */}
+                <div className="w-full max-w-lg mt-7 pt-6 border-t border-zinc-800/80 space-y-3.5">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs font-mono">
+                    <span className="text-zinc-400">
+                      OFFER CLOSES: <strong className="text-white font-bold">{formattedFullOfferDate.toUpperCase()}</strong>
+                    </span>
+                    <span className="text-[#ccf141] font-bold tracking-wider">
+                      ONLY {remainingSpots} OF 100 SPOTS LEFT
+                    </span>
+                  </div>
+
+                  <div className="w-full h-2.5 bg-zinc-900 rounded-full overflow-hidden p-0.5 border border-zinc-800">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#ccf141]/70 via-[#ccf141] to-[#ebff7a] rounded-full shadow-[0_0_12px_rgba(204,241,65,0.7)] transition-all duration-700"
+                      style={{
+                        width: `${Math.min(100, Math.max(0, ((100 - remainingSpots) / 100) * 100))}%`,
+                      }}
+                    />
+                  </div>
+
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={scrollToForm}
+                      className="inline-flex items-center justify-center gap-2 px-7 py-3 bg-[#ccf141] hover:bg-[#d8fa4f] active:scale-[0.98] text-black text-xs font-black uppercase tracking-wider rounded-xl transition-all duration-200 cursor-pointer shadow-[0_0_20px_rgba(204,241,65,0.35)]"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      <span>CLAIM SPOT — ONLY {remainingSpots} LEFT</span>
+                      <ArrowDown size={14} strokeWidth={3} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ============================================================ */}
             {/* SECTION 4: FORM VIEW */}
             {/* ============================================================ */}
             <div
@@ -677,15 +917,21 @@ const Memfound = () => {
             >
 
               <div className="mb-8">
-                <h2
-                  className="text-2xl sm:text-3xl font-black uppercase text-white tracking-[0.06em] select-none"
-                  style={{
-                    fontFamily:
-                      '"BrutalTypeBold", "Brutal Font Bold", Inter, sans-serif',
-                  }}
-                >
-                  REGISTER YOUR INTEREST
-                </h2>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2">
+                  <h2
+                    className="text-2xl sm:text-3xl font-black uppercase text-white tracking-[0.06em] select-none"
+                    style={{
+                      fontFamily:
+                        '"BrutalTypeBold", "Brutal Font Bold", Inter, sans-serif',
+                    }}
+                  >
+                    REGISTER YOUR INTEREST
+                  </h2>
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-xs font-mono font-bold w-fit">
+                    <Clock size={14} className="animate-pulse shrink-0" />
+                    <span>ONLY 8 DAYS THIS OFFER • ONLY {remainingSpots} OF 100 SPOTS LEFT</span>
+                  </div>
+                </div>
                 <div className="w-full h-[1px] bg-zinc-800/80 mt-3 mb-3.5" />
                 <p className="text-zinc-400 text-sm sm:text-[14.5px] leading-relaxed font-normal">
                   Seven questions. We call you back within 24 hours with your number and your rate — nothing is charged here.
@@ -1230,11 +1476,12 @@ const Memfound = () => {
         <div className="fixed bottom-5 left-4 right-4 z-50 sm:hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
           <div className="bg-[#0a0a0a]/95 backdrop-blur-xl border border-[#ccf141]/50 p-3.5 rounded-2xl flex items-center justify-between gap-3 shadow-[0_15px_35px_rgba(0,0,0,0.9)]">
             <div className="leading-tight">
-              <span className="text-[10px] uppercase font-bold text-zinc-400 block tracking-wider">
-                100 FOUNDING SPOTS
+              <span className="text-[10px] uppercase font-bold text-[#ccf141] flex items-center gap-1 tracking-wider">
+                <Clock size={11} className="animate-pulse shrink-0" />
+                ONLY {remainingSpots} SPOTS LEFT
               </span>
-              <span className="text-xs font-black text-[#ccf141] font-mono">
-                #001 - #100 ALLOCATION
+              <span className="text-xs font-black text-white font-mono tracking-tight">
+                {String(timeLeft.days).padStart(2, "0")}d : {String(timeLeft.hours).padStart(2, "0")}h : {String(timeLeft.minutes).padStart(2, "0")}m : {String(timeLeft.seconds).padStart(2, "0")}s
               </span>
             </div>
             <button

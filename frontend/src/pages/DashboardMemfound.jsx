@@ -223,12 +223,12 @@ const DashboardMemfound = () => {
           <p className="text-sm text-[var(--db-text-muted)] mt-1">
             Incoming interest registrations from the{" "}
             <a
-              href="/memfound"
+              href="/Founding100access"
               target="_blank"
               rel="noreferrer"
               className="text-[#ccf141] hover:underline inline-flex items-center gap-1 font-semibold"
             >
-              /memfound page <ExternalLink size={12} />
+              /Founding100access page <ExternalLink size={12} />
             </a>
           </p>
         </div>
@@ -332,7 +332,7 @@ const DashboardMemfound = () => {
           <Users size={44} className="mx-auto mb-3 opacity-30" />
           <p className="text-base font-semibold">No registrations found</p>
           <p className="text-xs text-[var(--db-text-muted)] mt-1">
-            Registrations from the /memfound page will show up here.
+            Registrations from the /Founding100access page will show up here.
           </p>
         </div>
       ) : (
