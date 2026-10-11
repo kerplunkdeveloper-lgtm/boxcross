@@ -245,6 +245,7 @@ export const deleteJuniorProfile = (id) => API.delete(`/juniorprofile/${id}`);
 // ──────────────── MEMFOUND API ────────────────
 export const createMemfound = (data) => API.post("/memfound", data);
 export const getMemfounds = (params) => API.get("/memfound", { params });
+export const checkMemfoundPhone = (phone) => API.get(`/memfound/check/${phone}`);
 export const getMemfoundById = (id) => API.get(`/memfound/${id}`);
 export const updateMemfound = (id, data) => API.put(`/memfound/${id}`, data);
 export const deleteMemfound = (id) => API.delete(`/memfound/${id}`);

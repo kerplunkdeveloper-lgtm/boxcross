@@ -5,6 +5,7 @@ import {
   Route,
   Outlet,
   useLocation,
+  useNavigate,
   Navigate,
 } from "react-router-dom";
 import Navbar from "./Components/Navbar";
@@ -125,6 +126,28 @@ const RoutePreloader = ({ setIsLoading }) => {
   return null;
 };
 
+// URL Restriction Guard: When user enters /memfound, they cannot leave to other public pages
+const MemfoundGuard = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isMemfound = location.pathname.toLowerCase().startsWith("/memfound");
+    if (isMemfound) {
+      sessionStorage.setItem("lock_to_memfound", "true");
+    } else if (sessionStorage.getItem("lock_to_memfound") === "true") {
+      const isAdminRoute =
+        location.pathname.startsWith("/dashboard") ||
+        location.pathname.startsWith("/login");
+      if (!isAdminRoute) {
+        navigate("/memfound", { replace: true });
+      }
+    }
+  }, [location.pathname, navigate]);
+
+  return null;
+};
+
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -154,6 +177,7 @@ const App = () => {
           {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
           <BrowserRouter>
             <ScrollToTop />
+            <MemfoundGuard />
             <RoutePreloader setIsLoading={setIsLoading} />
             {!isLoading && <FloatingActions />}
             <Suspense fallback={<PageLoader />}>

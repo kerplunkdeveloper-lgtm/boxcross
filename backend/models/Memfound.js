@@ -12,15 +12,37 @@ const memfoundSchema = new mongoose.Schema(
       required: [true, "WhatsApp number is required"],
       trim: true,
     },
+    boxcrossConnection: {
+      type: String,
+      enum: [
+        "I'm a current member",
+        "I've trained here before",
+        "I'm new to Box & Cross",
+        "",
+      ],
+      default: "",
+    },
     trainedBefore: {
       type: String,
-      enum: ["YES", "NO"],
+      enum: ["YES", "NO", ""],
       default: "NO",
     },
     whoIsThisFor: {
       type: String,
       enum: ["MYSELF", "MY CHILD", "BOTH"],
       default: "MYSELF",
+    },
+    mainGoal: {
+      type: String,
+      enum: [
+        "Boxing skills",
+        "Strength and conditioning",
+        "General fitness",
+        "Competition preparation",
+        "Not sure yet",
+        "",
+      ],
+      default: "",
     },
     plan: {
       type: String,

@@ -50,7 +50,8 @@ const FloatingActions = () => {
   if (typeof window === "undefined") return null;
   if (
     location.pathname.startsWith("/dashboard") ||
-    location.pathname.startsWith("/login")
+    location.pathname.startsWith("/login") ||
+    location.pathname.toLowerCase().startsWith("/memfound")
   )
     return null;
 

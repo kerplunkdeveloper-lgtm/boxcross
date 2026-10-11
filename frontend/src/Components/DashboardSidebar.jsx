@@ -621,17 +621,12 @@ const DashboardSidebar = ({
                 icon: FileText,
                 isOpen: enquiriesOpen,
                 setIsOpen: setEnquiriesOpen,
-                pathMatch: ["/homec1", "/homec2", "/homec3", "/bookings", "/memfound"],
+                pathMatch: ["/homec1", "/homec2", "/homec3", "/bookings"],
                 items: [
                   {
                     name: "Gym Tour Bookings",
                     path: "/dashboard/bookings",
                     icon: BookOpen,
-                  },
-                  {
-                    name: "Memfound Interests",
-                    path: "/dashboard/memfound",
-                    icon: Sparkles,
                   },
                   {
                     name: "Free Trial Form",

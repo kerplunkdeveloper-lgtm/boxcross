@@ -7,26 +7,23 @@ import {
   ArrowRight,
   ArrowDown,
   ShieldCheck,
-  Sparkles,
   MessageCircle,
-  Trophy,
-  Dumbbell,
-  Maximize2,
-  Users,
   Check,
   Flame,
   Zap,
+  AlertTriangle,
 } from "lucide-react";
-import { createMemfound } from "../api/api";
-import { Link } from "react-router-dom";
+import { createMemfound, checkMemfoundPhone } from "../api/api";
 
 const Memfound = () => {
   // Form State
   const [formData, setFormData] = useState({
     name: "",
     whatsappNumber: "",
-    trainedBefore: "", // "YES" | "NO"
+    boxcrossConnection: "", // "I'm a current member" | "I've trained here before" | "I'm new to Box & Cross"
+    trainedBefore: "",
     whoIsThisFor: "", // "MYSELF" | "MY CHILD" | "BOTH"
+    mainGoal: "", // "Boxing skills" | "Strength and conditioning" | "General fitness" | "Competition preparation" | "Not sure yet"
     plan: "", // "3 MONTHS" | "6 MONTHS" | "12 MONTHS" | "NOT SURE YET"
     bestTimeToCall: "", // "MORNING" | "AFTERNOON" | "EVENING"
   });
@@ -35,6 +32,22 @@ const Memfound = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [isFormInView, setIsFormInView] = useState(false);
+  const [phoneExistsWarning, setPhoneExistsWarning] = useState(null);
+  const [isCheckingPhone, setIsCheckingPhone] = useState(false);
+
+  // URL & Navigation Restriction: once inside /memfound, user cannot navigate away to other paths
+  useEffect(() => {
+    sessionStorage.setItem("lock_to_memfound", "true");
+
+    // Push state and trap browser back/forward buttons on /memfound
+    window.history.pushState(null, "", window.location.href);
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   // Monitor when the form is visible to show/hide the floating mobile CTA
   useEffect(() => {
@@ -53,6 +66,38 @@ const Memfound = () => {
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Real-time WhatsApp number uniqueness check when 10 digits are filled
+  useEffect(() => {
+    const cleanPhone = formData.whatsappNumber.replace(/\D/g, "");
+    if (cleanPhone.length === 10) {
+      let isMounted = true;
+      setIsCheckingPhone(true);
+      checkMemfoundPhone(cleanPhone)
+        .then((res) => {
+          if (!isMounted) return;
+          if (res.data?.exists) {
+            setPhoneExistsWarning(res.data);
+            toast.error(
+              `This WhatsApp number is already registered (${res.data.memberId || "#001"})!`
+            );
+          } else {
+            setPhoneExistsWarning(null);
+          }
+        })
+        .catch(() => {
+          if (isMounted) setPhoneExistsWarning(null);
+        })
+        .finally(() => {
+          if (isMounted) setIsCheckingPhone(false);
+        });
+      return () => {
+        isMounted = false;
+      };
+    } else {
+      setPhoneExistsWarning(null);
+    }
+  }, [formData.whatsappNumber]);
 
   // Smooth scroll to form on mobile or desktop
   const scrollToForm = () => {
@@ -98,8 +143,17 @@ const Memfound = () => {
       return;
     }
 
-    if (!formData.trainedBefore) {
-      toast.error("Please select if you have trained at Box & Cross before");
+    if (phoneExistsWarning) {
+      toast.error(
+        `This WhatsApp number is already registered under Member ID ${
+          phoneExistsWarning.memberId || "#001"
+        }! We already have your interest on file.`
+      );
+      return;
+    }
+
+    if (!formData.boxcrossConnection) {
+      toast.error("Please select your connection with Box & Cross");
       return;
     }
 
@@ -121,11 +175,17 @@ const Memfound = () => {
     setIsSubmitting(true);
 
     try {
+      const isPriorMember =
+        formData.boxcrossConnection === "I'm a current member" ||
+        formData.boxcrossConnection === "I've trained here before";
+
       const payload = {
         name: formData.name.trim(),
         whatsappNumber: cleanPhone.slice(-10),
-        trainedBefore: formData.trainedBefore,
+        boxcrossConnection: formData.boxcrossConnection,
+        trainedBefore: isPriorMember ? "YES" : "NO",
         whoIsThisFor: formData.whoIsThisFor,
+        mainGoal: formData.mainGoal,
         plan: formData.plan,
         bestTimeToCall: formData.bestTimeToCall,
         agreedToContact: agreed,
@@ -148,6 +208,13 @@ const Memfound = () => {
       }
     } catch (error) {
       console.error("Submission Error:", error);
+      if (error.response?.data?.alreadyRegistered) {
+        setPhoneExistsWarning({
+          exists: true,
+          message: error.response?.data?.message,
+          memberId: error.response?.data?.memberId,
+        });
+      }
       const msg =
         error.response?.data?.message ||
         "Something went wrong. Please try again.";
@@ -157,23 +224,26 @@ const Memfound = () => {
     }
   };
 
-  // Reset form to submit another request
+  // Reset form to submit another request (stays on /memfound)
   const handleReset = () => {
     setFormData({
       name: "",
       whatsappNumber: "",
+      boxcrossConnection: "",
       trainedBefore: "",
       whoIsThisFor: "",
+      mainGoal: "",
       plan: "",
       bestTimeToCall: "",
     });
     setAgreed(false);
+    setPhoneExistsWarning(null);
     setSubmittedData(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <div className="min-h-screen bg-[#030303] text-white flex flex-col items-center justify-start py-10 sm:py-16 md:py-20 px-4 sm:px-6 relative overflow-hidden selection:bg-[#ccf141] selection:text-black">
+    <div className="min-h-screen bg-[#030303] text-white flex flex-col items-center justify-start py-8 sm:py-14 md:py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden selection:bg-[#ccf141] selection:text-black">
       <Helmet>
         <title>Founding Member | Box &amp; Cross Performance Arena</title>
         <meta
@@ -191,49 +261,36 @@ const Memfound = () => {
       </Helmet>
 
       {/* ============================================================ */}
-      {/* ATMOSPHERIC BACKGROUND LAYERS & PATTERNS */}
+      {/* ATMOSPHERIC BACKGROUND SPOTLIGHTS & TEXTURES */}
       {/* ============================================================ */}
-      {/* Top Center Ambient Spotlight Glow */}
       <div
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-[radial-gradient(ellipse_70%_60%_at_50%_0%,rgba(204,241,65,0.18),transparent)] blur-2xl"
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[950px] h-[550px] bg-[radial-gradient(ellipse_75%_60%_at_50%_0%,rgba(204,241,65,0.16),transparent)] blur-2xl"
         aria-hidden="true"
       />
-
-      {/* Secondary Ambient Mid Glow */}
       <div
-        className="pointer-events-none absolute top-1/3 -left-32 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(204,241,65,0.04)_0%,transparent_70%)] blur-3xl"
+        className="pointer-events-none absolute top-1/3 -left-40 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(204,241,65,0.035)_0%,transparent_70%)] blur-3xl"
         aria-hidden="true"
       />
-
-      {/* Tertiary Ambient Bottom Right Glow */}
       <div
-        className="pointer-events-none absolute bottom-1/4 -right-32 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(204,241,65,0.04)_0%,transparent_70%)] blur-3xl"
+        className="pointer-events-none absolute bottom-1/4 -right-40 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(204,241,65,0.04)_0%,transparent_70%)] blur-3xl"
         aria-hidden="true"
       />
-
-      {/* Modern High-Tech Global Dot-Grid Background Pattern */}
       <div
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:44px_44px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_30%,#000_60%,transparent_100%)] opacity-80"
         aria-hidden="true"
       />
 
-      {/* Tactical Diagonal Scanlines Overlay */}
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:24px_24px] opacity-60"
-        aria-hidden="true"
-      />
-
-      {/* Main Column Container */}
-      <div className="w-full max-w-6xl mx-auto  relative z-10">
+      {/* Main Container */}
+      <div className="w-full max-w-7xl mx-auto relative z-10">
         {!submittedData ? (
-          <div className="space-y-12 sm:space-y-16">
+          <div className="space-y-14 sm:space-y-20">
             {/* ============================================================ */}
-            {/* SECTION 1: HERO & FOUNDING MEMBER INTRO (Reference Image 1) */}
+            {/* SECTION 1: HERO & FOUNDING MEMBER INTRO */}
             {/* ============================================================ */}
-            <div className="space-y-7 sm:space-y-8">
+            <div className="max-w-3xl mx-auto space-y-7 sm:space-y-8">
               {/* Tactical Status Pill */}
               <div className="flex items-center justify-between">
-                <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-zinc-950/90 border border-zinc-800/90 backdrop-blur-md shadow-lg">
+                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-zinc-950/90 border border-zinc-800/90 backdrop-blur-md shadow-lg">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ccf141] opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ccf141]"></span>
@@ -246,8 +303,8 @@ const Memfound = () => {
                   </span>
                 </div>
 
-                <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono font-bold tracking-widest text-zinc-500 uppercase">
-                  REGISTRY OPEN
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#ccf141]/10 border border-[#ccf141]/30 text-[10px] font-mono font-bold tracking-widest text-[#ccf141] uppercase">
+                  EXCLUSIVE RELEASE
                 </span>
               </div>
 
@@ -268,14 +325,12 @@ const Memfound = () => {
                 </h1>
               </div>
 
-              {/* Intro Narrative Card with Accent Bar & Subtle Carbon Mesh Pattern */}
+              {/* Intro Narrative Card */}
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-zinc-950/90 via-zinc-900/40 to-zinc-950/90 border border-zinc-800/80 border-l-4 border-l-[#ccf141] p-5 sm:p-6 backdrop-blur-md shadow-2xl">
-                {/* Subtle Inner Micro-Grid Pattern */}
                 <div
                   className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(204,241,65,0.04)_1px,transparent_1px)] [background-size:16px_16px]"
                   aria-hidden="true"
                 />
-
                 <div className="relative z-10 space-y-2.5 text-sm sm:text-[15px] leading-relaxed">
                   <p className="text-zinc-200">
                     The gym you trained in closed on 10 October.{" "}
@@ -290,32 +345,20 @@ const Memfound = () => {
                 </div>
               </div>
 
-              {/* 100 Memberships Neon Highlight Box with Tactical Crosshairs & Shimmer */}
+              {/* 100 Memberships Neon Highlight Box */}
               <div className="relative overflow-hidden rounded-2xl border-2 border-[#ccf141] bg-gradient-to-br from-[#0c0c0c] via-[#070707] to-[#020202] p-5 sm:p-7 shadow-[0_0_40px_rgba(204,241,65,0.18)] transition-all hover:shadow-[0_0_55px_rgba(204,241,65,0.3)] group">
-                {/* Tactical Diagonal Carbon Stripes Pattern */}
                 <div
                   className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(45deg,rgba(204,241,65,0.03),rgba(204,241,65,0.03)_1px,transparent_1px,transparent_14px)]"
                   aria-hidden="true"
                 />
-
-                {/* Subtle Neon Radial Glow within box */}
-                <div
-                  className="pointer-events-none absolute -right-20 -top-20 w-48 h-48 bg-[#ccf141]/10 rounded-full blur-2xl group-hover:bg-[#ccf141]/20 transition-all duration-500"
-                  aria-hidden="true"
-                />
-
                 <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6">
                   <div className="flex items-center gap-4 sm:gap-6">
-                    {/* Big Bold 100 Display */}
-                    <div className="relative">
-                      <span
-                        className="text-5xl sm:text-6xl md:text-7xl font-black text-[#ccf141] tracking-tighter leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.5)]"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                      >
-                        100
-                      </span>
-                    </div>
-
+                    <span
+                      className="text-5xl sm:text-6xl md:text-7xl font-black text-[#ccf141] tracking-tighter leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.5)]"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      100
+                    </span>
                     <div>
                       <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#ccf141]/15 text-[#ccf141] text-[10px] font-mono font-bold tracking-wider uppercase mb-1">
                         <Flame size={11} />
@@ -333,7 +376,6 @@ const Memfound = () => {
                     </div>
                   </div>
 
-                  {/* Desktop Instant Jump CTA */}
                   <button
                     type="button"
                     onClick={scrollToForm}
@@ -348,151 +390,194 @@ const Memfound = () => {
             </div>
 
             {/* ============================================================ */}
-            {/* SECTION 2: WHAT YOU ARE WALKING INTO (Unique Card Patterns) */}
+            {/* SECTION 2: WHAT YOU ARE WALKING INTO (Pixel-Perfect Match Image 2) */}
             {/* ============================================================ */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
-                <div className="space-y-0.5">
-                  <span className="text-[10px] font-mono text-[#ccf141] tracking-widest uppercase font-bold block">
-                    // 01 ARCHITECTURE &amp; SPECS
-                  </span>
-                  <h2
-                    className="text-sm sm:text-base font-black uppercase tracking-[0.16em] text-white"
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    WHAT YOU ARE WALKING INTO
-                  </h2>
-                </div>
-                <Sparkles size={16} className="text-[#ccf141] opacity-70" />
+            <div className="space-y-6 sm:space-y-8">
+              {/* Eyebrow: — BUILT FOR REAL WORK — */}
+              <div className="flex items-center justify-center gap-3 sm:gap-5">
+                <span className="w-10 sm:w-16 h-[1.5px] bg-[#ccf141]/60" />
+                <span
+                  className="text-[#ccf141] text-[11px] sm:text-xs md:text-sm font-black tracking-[0.25em] uppercase select-none"
+                  style={{ fontFamily: '"BrutalTypeBold", monospace' }}
+                >
+                  BUILT FOR REAL WORK
+                </span>
+                <span className="w-10 sm:w-16 h-[1.5px] bg-[#ccf141]/60" />
               </div>
 
-              {/* 2x2 Grid with Differentiated Background Patterns */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                {/* 01: PRO RING (Isometric Canvas Weave Pattern) */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#101010] to-[#070707] border border-zinc-800/90 hover:border-[#ccf141]/60 p-5 sm:p-6 transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(204,241,65,0.08)]">
-                  {/* Pattern: Canvas Grid */}
-                  <div
-                    className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(204,241,65,0.06)_1px,transparent_1px)] [background-size:14px_14px]"
-                    aria-hidden="true"
+              {/* Big Centered Headline: WHAT YOU ARE WALKING INTO */}
+              <h2
+                className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight text-center select-none text-white leading-tight"
+                style={{
+                  fontFamily:
+                    '"BrutalTypeBold", "Brutal Font Bold", Inter, sans-serif',
+                }}
+              >
+                WHAT YOU ARE <span className="text-[#ccf141]">WALKING INTO</span>
+              </h2>
+
+              {/* 2x2 Responsive Image Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 pt-2">
+                {/* 01: PRO RING */}
+                <div className="relative overflow-hidden rounded-md sm:rounded-lg border border-zinc-800/90 hover:border-[#ccf141]/70 bg-black min-h-[220px] sm:min-h-[260px] md:min-h-[290px] flex items-center p-6 sm:p-8 md:p-10 transition-all duration-300 group">
+                  <img
+                    src="/bxc_pro_ring.jpg"
+                    alt="Pro Ring"
+                    className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 select-none"
+                    loading="lazy"
                   />
-                  <div className="relative z-10 flex flex-col h-full justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#ccf141]/10 text-[#ccf141] border border-[#ccf141]/30 font-mono font-bold text-xs tracking-wider">
-                          01
-                        </span>
-                        <Trophy size={16} className="text-zinc-600 group-hover:text-[#ccf141] transition-colors" />
-                      </div>
-                      <h3
-                        className="text-white font-black text-sm sm:text-base uppercase tracking-wider mb-2"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  {/* Dark Left Gradient for Text Contrast */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 md:via-black/80 to-black/35" />
+
+                  {/* Left Content */}
+                  <div className="relative z-10 max-w-sm">
+                    {/* Outlined Number 01 — */}
+                    <div className="flex items-center">
+                      <span
+                        className="text-4xl sm:text-5xl md:text-6xl font-black font-mono leading-none select-none text-transparent"
+                        style={{
+                          WebkitTextStroke: "1.5px #ccf141",
+                          fontFamily: '"BrutalTypeBold", monospace',
+                        }}
                       >
-                        PRO RING
-                      </h3>
-                      <p className="text-zinc-400 text-xs sm:text-[13px] leading-relaxed">
-                        A full international competition ring, not a mat with ropes around it.
-                      </p>
+                        01
+                      </span>
+                      <span className="inline-block w-8 sm:w-12 h-[2px] bg-[#ccf141] ml-3" />
                     </div>
+
+                    <h3
+                      className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white mt-3.5 mb-2 leading-tight"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      PRO <span className="text-[#ccf141]">RING</span>
+                    </h3>
+                    <p className="text-zinc-300 text-xs sm:text-[13.5px] leading-relaxed">
+                      A full international competition ring, not a mat with ropes around it.
+                    </p>
                   </div>
                 </div>
 
-                {/* 02: THE BAG FLOOR (Tactical Diagonal Scan Pattern) */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#101010] to-[#070707] border border-zinc-800/90 hover:border-[#ccf141]/60 p-5 sm:p-6 transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(204,241,65,0.08)]">
-                  {/* Pattern: Angled Micro Stripes */}
-                  <div
-                    className="pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(-45deg,rgba(255,255,255,0.015),rgba(255,255,255,0.015)_1px,transparent_1px,transparent_10px)]"
-                    aria-hidden="true"
+                {/* 02: THE BAG FLOOR */}
+                <div className="relative overflow-hidden rounded-md sm:rounded-lg border border-zinc-800/90 hover:border-[#ccf141]/70 bg-black min-h-[220px] sm:min-h-[260px] md:min-h-[290px] flex items-center p-6 sm:p-8 md:p-10 transition-all duration-300 group">
+                  <img
+                    src="/bxc_bag_floor.jpg"
+                    alt="The Bag Floor"
+                    className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 select-none"
+                    loading="lazy"
                   />
-                  <div className="relative z-10 flex flex-col h-full justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#ccf141]/10 text-[#ccf141] border border-[#ccf141]/30 font-mono font-bold text-xs tracking-wider">
-                          02
-                        </span>
-                        <Dumbbell size={16} className="text-zinc-600 group-hover:text-[#ccf141] transition-colors" />
-                      </div>
-                      <h3
-                        className="text-white font-black text-sm sm:text-base uppercase tracking-wider mb-2"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 md:via-black/80 to-black/35" />
+
+                  <div className="relative z-10 max-w-sm">
+                    <div className="flex items-center">
+                      <span
+                        className="text-4xl sm:text-5xl md:text-6xl font-black font-mono leading-none select-none text-transparent"
+                        style={{
+                          WebkitTextStroke: "1.5px #ccf141",
+                          fontFamily: '"BrutalTypeBold", monospace',
+                        }}
                       >
-                        THE BAG FLOOR
-                      </h3>
-                      <p className="text-zinc-400 text-xs sm:text-[13px] leading-relaxed">
-                        Heavy, speed, uppercut and giant bags. Every bag a boxer needs.
-                      </p>
+                        02
+                      </span>
+                      <span className="inline-block w-8 sm:w-12 h-[2px] bg-[#ccf141] ml-3" />
                     </div>
+
+                    <h3
+                      className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white mt-3.5 mb-2 leading-tight"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      THE <span className="text-[#ccf141]">BAG FLOOR</span>
+                    </h3>
+                    <p className="text-zinc-300 text-xs sm:text-[13.5px] leading-relaxed">
+                      Heavy, speed, uppercut and giant bags. Every bag a boxer needs.
+                    </p>
                   </div>
                 </div>
 
-                {/* 03: 10,000 SQ FT (Blueprint Square Matrix Pattern) */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#101010] to-[#070707] border border-zinc-800/90 hover:border-[#ccf141]/60 p-5 sm:p-6 transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(204,241,65,0.08)]">
-                  {/* Pattern: Blueprint Matrix */}
-                  <div
-                    className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:16px_16px]"
-                    aria-hidden="true"
+                {/* 03: 10,000 SQ FT */}
+                <div className="relative overflow-hidden rounded-md sm:rounded-lg border border-zinc-800/90 hover:border-[#ccf141]/70 bg-black min-h-[220px] sm:min-h-[260px] md:min-h-[290px] flex items-center p-6 sm:p-8 md:p-10 transition-all duration-300 group">
+                  <img
+                    src="/bxc_10000_sqft.jpg"
+                    alt="10,000 Sq Ft"
+                    className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 select-none"
+                    loading="lazy"
                   />
-                  <div className="relative z-10 flex flex-col h-full justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#ccf141]/10 text-[#ccf141] border border-[#ccf141]/30 font-mono font-bold text-xs tracking-wider">
-                          03
-                        </span>
-                        <Maximize2 size={16} className="text-zinc-600 group-hover:text-[#ccf141] transition-colors" />
-                      </div>
-                      <h3
-                        className="text-white font-black text-sm sm:text-base uppercase tracking-wider mb-2"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 md:via-black/80 to-black/35" />
+
+                  <div className="relative z-10 max-w-sm">
+                    <div className="flex items-center">
+                      <span
+                        className="text-4xl sm:text-5xl md:text-6xl font-black font-mono leading-none select-none text-transparent"
+                        style={{
+                          WebkitTextStroke: "1.5px #ccf141",
+                          fontFamily: '"BrutalTypeBold", monospace',
+                        }}
                       >
-                        10,000 SQ FT
-                      </h3>
-                      <p className="text-zinc-400 text-xs sm:text-[13px] leading-relaxed">
-                        Boxing floor, strength floor and conditioning space, under one roof.
-                      </p>
+                        03
+                      </span>
+                      <span className="inline-block w-8 sm:w-12 h-[2px] bg-[#ccf141] ml-3" />
                     </div>
+
+                    <h3
+                      className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-[#ccf141] mt-3.5 mb-2 leading-tight"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      10,000 SQ FT
+                    </h3>
+                    <p className="text-zinc-300 text-xs sm:text-[13.5px] leading-relaxed">
+                      Boxing floor, strength floor and conditioning space, under one roof.
+                    </p>
                   </div>
                 </div>
 
-                {/* 04: REAL COACHES (Tactical Pulse Radial Pattern) */}
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#101010] to-[#070707] border border-zinc-800/90 hover:border-[#ccf141]/60 p-5 sm:p-6 transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(204,241,65,0.08)]">
-                  {/* Pattern: Radial Glow Corner */}
-                  <div
-                    className="pointer-events-none absolute -right-10 -bottom-10 w-36 h-36 bg-[#ccf141]/5 rounded-full blur-xl"
-                    aria-hidden="true"
+                {/* 04: REAL COACHES */}
+                <div className="relative overflow-hidden rounded-md sm:rounded-lg border border-zinc-800/90 hover:border-[#ccf141]/70 bg-black min-h-[220px] sm:min-h-[260px] md:min-h-[290px] flex items-center p-6 sm:p-8 md:p-10 transition-all duration-300 group">
+                  <img
+                    src="/bxc_real_coaches.jpg"
+                    alt="Real Coaches"
+                    className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 select-none"
+                    loading="lazy"
                   />
-                  <div className="relative z-10 flex flex-col h-full justify-between">
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#ccf141]/10 text-[#ccf141] border border-[#ccf141]/30 font-mono font-bold text-xs tracking-wider">
-                          04
-                        </span>
-                        <Users size={16} className="text-zinc-600 group-hover:text-[#ccf141] transition-colors" />
-                      </div>
-                      <h3
-                        className="text-white font-black text-sm sm:text-base uppercase tracking-wider mb-2"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 md:via-black/80 to-black/35" />
+
+                  <div className="relative z-10 max-w-sm">
+                    <div className="flex items-center">
+                      <span
+                        className="text-4xl sm:text-5xl md:text-6xl font-black font-mono leading-none select-none text-transparent"
+                        style={{
+                          WebkitTextStroke: "1.5px #ccf141",
+                          fontFamily: '"BrutalTypeBold", monospace',
+                        }}
                       >
-                        REAL COACHES
-                      </h3>
-                      <p className="text-zinc-400 text-xs sm:text-[13px] leading-relaxed">
-                        Coached sessions under Prabagaran. Not a room you let yourself into.
-                      </p>
+                        04
+                      </span>
+                      <span className="inline-block w-8 sm:w-12 h-[2px] bg-[#ccf141] ml-3" />
                     </div>
+
+                    <h3
+                      className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white mt-3.5 mb-2 leading-tight"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      REAL <span className="text-[#ccf141]">COACHES</span>
+                    </h3>
+                    <p className="text-zinc-300 text-xs sm:text-[13.5px] leading-relaxed">
+                      Coached sessions under Coach Prabagaran. Not a room you let yourself into.
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* ============================================================ */}
-            {/* SECTION 3: WHAT A FOUNDING MEMBER GETS (VIP Privilege Deck) */}
+            {/* SECTION 3: WHAT A FOUNDING MEMBER GETS */}
             {/* ============================================================ */}
-            <div className="space-y-6">
+            <div className="max-w-3xl mx-auto space-y-6">
               <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
                 <div className="space-y-0.5">
                   <span className="text-[10px] font-mono text-[#ccf141] tracking-widest uppercase font-bold block">
-                    // 02 UNRESTRICTED FOUNDER PRIVILEGES
+                    // UNRESTRICTED FOUNDER PRIVILEGES
                   </span>
                   <h2
-                    className="text-sm sm:text-base font-black uppercase tracking-[0.16em] text-white"
+                    className="text-base sm:text-lg font-black uppercase tracking-[0.16em] text-white"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     WHAT A FOUNDING MEMBER GETS
@@ -501,16 +586,14 @@ const Memfound = () => {
                 <Zap size={16} className="text-[#ccf141] opacity-70" />
               </div>
 
-              {/* VIP Card Container with Diamond Micro-Mesh Pattern */}
+              {/* VIP Card Container */}
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#0e0e0e] to-[#050505] border border-zinc-800/90 p-5 sm:p-8 shadow-2xl">
-                {/* Micro-Mesh Background Pattern */}
                 <div
                   className="pointer-events-none absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:18px_18px]"
                   aria-hidden="true"
                 />
 
                 <div className="relative z-10 space-y-3">
-                  {/* Benefit 1 */}
                   <div className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-900/60 transition-colors border border-transparent hover:border-zinc-800/80">
                     <div className="w-5 h-5 rounded-md bg-[#ccf141]/10 border border-[#ccf141]/40 flex items-center justify-center shrink-0 mt-0.5 text-[#ccf141] shadow-[0_0_10px_rgba(204,241,65,0.2)]">
                       <Check size={12} strokeWidth={3} />
@@ -523,7 +606,6 @@ const Memfound = () => {
                     </span>
                   </div>
 
-                  {/* Benefit 2 */}
                   <div className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-900/60 transition-colors border border-transparent hover:border-zinc-800/80">
                     <div className="w-5 h-5 rounded-md bg-[#ccf141]/10 border border-[#ccf141]/40 flex items-center justify-center shrink-0 mt-0.5 text-[#ccf141] shadow-[0_0_10px_rgba(204,241,65,0.2)]">
                       <Check size={12} strokeWidth={3} />
@@ -534,29 +616,16 @@ const Memfound = () => {
                     </span>
                   </div>
 
-                  {/* Benefit 3 */}
                   <div className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-900/60 transition-colors border border-transparent hover:border-zinc-800/80">
                     <div className="w-5 h-5 rounded-md bg-[#ccf141]/10 border border-[#ccf141]/40 flex items-center justify-center shrink-0 mt-0.5 text-[#ccf141] shadow-[0_0_10px_rgba(204,241,65,0.2)]">
                       <Check size={12} strokeWidth={3} />
                     </div>
                     <span className="text-zinc-300 text-xs sm:text-[13.5px] leading-relaxed">
-                      <strong className="text-white font-extrabold">BXC gloves, wraps and tee</strong>{" "}
-                      on the day you join.
-                    </span>
-                  </div>
-
-                  {/* Benefit 4 */}
-                  <div className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-900/60 transition-colors border border-transparent hover:border-zinc-800/80">
-                    <div className="w-5 h-5 rounded-md bg-[#ccf141]/10 border border-[#ccf141]/40 flex items-center justify-center shrink-0 mt-0.5 text-[#ccf141] shadow-[0_0_10px_rgba(204,241,65,0.2)]">
-                      <Check size={12} strokeWidth={3} />
-                    </div>
-                    <span className="text-zinc-300 text-xs sm:text-[13.5px] leading-relaxed">
-                      <strong className="text-white font-extrabold">Two sessions with Prabagaran</strong>,
+                      <strong className="text-white font-extrabold">Two sessions with Coach Prabagaran</strong>,
                       one to one.
                     </span>
                   </div>
 
-                  {/* Benefit 5 */}
                   <div className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-900/60 transition-colors border border-transparent hover:border-zinc-800/80">
                     <div className="w-5 h-5 rounded-md bg-[#ccf141]/10 border border-[#ccf141]/40 flex items-center justify-center shrink-0 mt-0.5 text-[#ccf141] shadow-[0_0_10px_rgba(204,241,65,0.2)]">
                       <Check size={12} strokeWidth={3} />
@@ -567,7 +636,6 @@ const Memfound = () => {
                     </span>
                   </div>
 
-                  {/* Benefit 6 */}
                   <div className="flex items-start gap-3.5 p-3 rounded-xl hover:bg-zinc-900/60 transition-colors border border-transparent hover:border-zinc-800/80">
                     <div className="w-5 h-5 rounded-md bg-[#ccf141]/10 border border-[#ccf141]/40 flex items-center justify-center shrink-0 mt-0.5 text-[#ccf141] shadow-[0_0_10px_rgba(204,241,65,0.2)]">
                       <Check size={12} strokeWidth={3} />
@@ -579,7 +647,6 @@ const Memfound = () => {
                   </div>
                 </div>
 
-                {/* Final Caution Notice Ribbon */}
                 <div className="mt-6 p-4 rounded-xl bg-[#ccf141]/10 border border-[#ccf141]/30 flex items-center gap-3">
                   <ShieldCheck size={18} className="text-[#ccf141] shrink-0" />
                   <p className="text-zinc-300 text-[11px] sm:text-xs leading-relaxed font-medium">
@@ -588,7 +655,6 @@ const Memfound = () => {
                 </div>
               </div>
 
-              {/* Jump Button */}
               <div className="pt-1">
                 <button
                   type="button"
@@ -603,29 +669,13 @@ const Memfound = () => {
             </div>
 
             {/* ============================================================ */}
-            {/* SECTION 4: FORM VIEW (Official Arena Registration Terminal) */}
+            {/* SECTION 4: FORM VIEW */}
             {/* ============================================================ */}
             <div
               id="register-form"
-              className="scroll-mt-8 relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#0c0c0c] via-[#070707] to-[#020202] border border-zinc-800/90 p-6 sm:p-10 md:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.95)]"
+              className="max-w-6xl mx-auto scroll-mt-8 relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#0c0c0c] via-[#070707] to-[#020202] border border-zinc-800/90 p-6 sm:p-10 md:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.95)]"
             >
-              {/* High-Tech Terminal Header Bar */}
-              <div className="flex items-center justify-between pb-4 mb-6 border-b border-zinc-800/80">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
-                  <span className="text-[10px] font-mono text-zinc-500 uppercase ml-2 tracking-widest hidden sm:inline-block">
-                    TERMINAL // BXC-REG-01
-                  </span>
-                </div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-[10px] font-mono font-bold tracking-wider uppercase">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] animate-pulse"></span>
-                  LIVE QUEUE
-                </div>
-              </div>
 
-              {/* Form Title & Subtitle */}
               <div className="mb-8">
                 <h2
                   className="text-2xl sm:text-3xl font-black uppercase text-white tracking-[0.06em] select-none"
@@ -638,12 +688,12 @@ const Memfound = () => {
                 </h2>
                 <div className="w-full h-[1px] bg-zinc-800/80 mt-3 mb-3.5" />
                 <p className="text-zinc-400 text-sm sm:text-[14.5px] leading-relaxed font-normal">
-                  Six questions. We call you back within 24 hours with your number and your rate — nothing is charged here.
+                  Seven questions. We call you back within 24 hours with your number and your rate — nothing is charged here.
                 </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Question 1: YOUR NAME */}
+                {/* Q1: YOUR NAME */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label
@@ -651,7 +701,7 @@ const Memfound = () => {
                       className="block text-xs font-bold uppercase tracking-wider text-zinc-300"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      YOUR NAME
+                      1. YOUR NAME
                     </label>
                     <span className="text-[10px] font-mono text-[#ccf141]">Q1</span>
                   </div>
@@ -666,7 +716,7 @@ const Memfound = () => {
                   />
                 </div>
 
-                {/* Question 2: WHATSAPP NUMBER */}
+                {/* Q2: WHATSAPP NUMBER */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label
@@ -674,70 +724,147 @@ const Memfound = () => {
                       className="block text-xs font-bold uppercase tracking-wider text-zinc-300"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      WHATSAPP NUMBER
+                      2. WHATSAPP NUMBER
                     </label>
                     <span className="text-[10px] font-mono text-[#ccf141]">Q2</span>
                   </div>
-                  <input
-                    id="memfound-whatsapp"
-                    type="tel"
-                    placeholder="10 digits phone number"
-                    value={formData.whatsappNumber}
-                    onChange={(e) => {
-                      const onlyNums = e.target.value
-                        .replace(/\D/g, "")
-                        .slice(0, 10);
-                      handleInputChange("whatsappNumber", onlyNums);
-                    }}
-                    className="w-full bg-[#121212] border border-zinc-800/90 hover:border-zinc-700 focus:border-[#ccf141] focus:ring-1 focus:ring-[#ccf141]/30 text-white placeholder-zinc-600 px-4 py-3.5 text-sm rounded-xl outline-none transition-all shadow-inner font-mono"
-                    autoComplete="tel"
-                  />
+                  <div
+                    className={`flex items-center w-full bg-[#121212] border rounded-xl overflow-hidden transition-all shadow-inner group ${
+                      phoneExistsWarning
+                        ? "border-amber-500/80 ring-1 ring-amber-500/30"
+                        : "border-zinc-800/90 hover:border-zinc-700 focus-within:border-[#ccf141] focus-within:ring-1 focus-within:ring-[#ccf141]/30"
+                    }`}
+                  >
+                    {/* Country Code Prefix */}
+                    <div className="flex items-center gap-1.5 px-3.5 py-3.5 bg-zinc-900/90 border-r border-zinc-800 text-zinc-300 font-mono text-xs sm:text-sm font-bold select-none shrink-0 group-focus-within:border-[#ccf141]/40">
+                      <span className="text-sm leading-none" role="img" aria-label="India flag">🇮🇳</span>
+                      <span className="text-white font-bold tracking-wider font-mono">+91</span>
+                    </div>
+
+                    {/* Phone Number Input */}
+                    <input
+                      id="memfound-whatsapp"
+                      type="tel"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={10}
+                      placeholder="Enter 10-digit number"
+                      value={formData.whatsappNumber}
+                      onChange={(e) => {
+                        const raw = e.target.value.replace(/\D/g, "");
+                        // If pasted with country code 91 (e.g. 919876543210), strip the leading 91
+                        const finalDigits =
+                          raw.length > 10 && raw.startsWith("91")
+                            ? raw.slice(2, 12)
+                            : raw.slice(0, 10);
+                        handleInputChange("whatsappNumber", finalDigits);
+                      }}
+                      className="w-full bg-transparent text-white placeholder-zinc-600 px-3.5 py-3.5 text-sm sm:text-base outline-none font-mono tracking-wider"
+                      autoComplete="tel"
+                    />
+
+                    {/* Live Digit Counter / Indicator */}
+                    <div className="pr-3.5 flex items-center shrink-0">
+                      {isCheckingPhone ? (
+                        <Loader2 size={14} className="animate-spin text-zinc-400" />
+                      ) : phoneExistsWarning ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px] font-mono font-bold tracking-wider border border-amber-500/40">
+                          ⚠ ALREADY REGISTERED
+                        </span>
+                      ) : formData.whatsappNumber.length === 10 ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#ccf141]/15 text-[#ccf141] text-[10px] font-mono font-bold tracking-wider border border-[#ccf141]/30">
+                          ✓ 10 DIGITS
+                        </span>
+                      ) : formData.whatsappNumber.length > 0 ? (
+                        <span className="text-[10px] font-mono text-zinc-500 font-bold">
+                          {formData.whatsappNumber.length}/10
+                        </span>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  {/* Warning Message Box if Already Registered */}
+                  {phoneExistsWarning && (
+                    <div className="mt-2.5 p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-amber-500/10 to-transparent border border-amber-500/40 flex items-start gap-3 text-xs animate-in fade-in slide-in-from-top-1 duration-200 shadow-lg">
+                      <AlertTriangle size={18} className="text-amber-400 shrink-0 mt-0.5" />
+                      <div className="space-y-1">
+                        <div
+                          className="text-amber-300 font-black uppercase tracking-wider flex items-center gap-2"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          <span>ALREADY REGISTERED NUMBER</span>
+                          {phoneExistsWarning.memberId && (
+                            <span className="px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-mono text-[10px] border border-amber-400/30 font-bold">
+                              {phoneExistsWarning.memberId}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-zinc-300 text-[11.5px] leading-relaxed">
+                          This WhatsApp number is already registered in our Founding Member queue. We already have your interest on file and our team will contact you within 24 hours.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Question 3: DID YOU TRAIN AT BOX & CROSS BEFORE? */}
+                {/* Q3: YOUR CONNECTION WITH BOX & CROSS* */}
                 <div>
                   <div className="flex items-center justify-between mb-2.5">
                     <span
                       className="block text-xs font-bold uppercase tracking-wider text-zinc-300"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      DID YOU TRAIN AT BOX &amp; CROSS BEFORE?
+                      3. YOUR CONNECTION WITH BOX &amp; CROSS<span className="text-[#ccf141] ml-0.5">*</span>
                     </span>
                     <span className="text-[10px] font-mono text-[#ccf141]">Q3</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    {["YES", "NO"].map((option) => {
-                      const isSelected = formData.trainedBefore === option;
+                  <div className="space-y-2.5">
+                    {[
+                      "I'm a current member",
+                      "I've trained here before",
+                      "I'm new to Box & Cross",
+                    ].map((option) => {
+                      const isSelected = formData.boxcrossConnection === option;
                       return (
                         <button
                           key={option}
                           type="button"
                           onClick={() =>
-                            handleChoiceSelect("trainedBefore", option)
+                            handleChoiceSelect("boxcrossConnection", option)
                           }
-                          className={`py-3 px-4 text-xs font-bold uppercase tracking-wider rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
+                          className={`w-full py-3.5 px-4 text-xs font-bold uppercase tracking-wider rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-start gap-3.5 text-left ${
                             isSelected
-                              ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-[1.02]"
+                              ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-[1.01]"
                               : "bg-[#121212] text-zinc-300 border-zinc-800/90 hover:border-zinc-600 hover:bg-[#181818]"
                           }`}
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
-                          {isSelected && <Check size={14} strokeWidth={3} />}
-                          <span>{option}</span>
+                          <span
+                            className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-all ${
+                              isSelected
+                                ? "border-black bg-black"
+                                : "border-zinc-500 bg-transparent"
+                            }`}
+                          >
+                            {isSelected && (
+                              <span className="w-2 h-2 rounded-full bg-white block" />
+                            )}
+                          </span>
+                          <span className="flex-1">{option}</span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* Question 4: WHO IS THIS FOR? */}
+                {/* Q4: WHO IS THIS FOR? */}
                 <div>
                   <div className="flex items-center justify-between mb-2.5">
                     <span
                       className="block text-xs font-bold uppercase tracking-wider text-zinc-300"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      WHO IS THIS FOR?
+                      4. WHO IS THIS FOR?
                     </span>
                     <span className="text-[10px] font-mono text-[#ccf141]">Q4</span>
                   </div>
@@ -766,16 +893,69 @@ const Memfound = () => {
                   </div>
                 </div>
 
-                {/* Question 5: WHICH PLAN ARE YOU INTERESTED IN? */}
+                {/* Q5: YOUR MAIN TRAINING GOAL */}
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span
+                      className="block text-xs font-bold uppercase tracking-wider text-zinc-300"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      5. YOUR MAIN TRAINING GOAL
+                    </span>
+                    <span className="text-[10px] font-mono text-[#ccf141]">Q5</span>
+                  </div>
+                  <p className="text-zinc-500 text-xs mb-2.5">
+                    Optional
+                  </p>
+                  <div className="space-y-2.5">
+                    {[
+                      "Boxing skills",
+                      "Strength and conditioning",
+                      "General fitness",
+                      "Competition preparation",
+                      "Not sure yet",
+                    ].map((option) => {
+                      const isSelected = formData.mainGoal === option;
+                      return (
+                        <button
+                          key={option}
+                          type="button"
+                          onClick={() => handleChoiceSelect("mainGoal", option)}
+                          className={`w-full py-3.5 px-4 text-xs font-bold uppercase tracking-wider rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-start gap-3.5 text-left ${
+                            isSelected
+                              ? "bg-white text-black border-white shadow-[0_0_20px_rgba(255,255,255,0.3)] scale-[1.01]"
+                              : "bg-[#121212] text-zinc-300 border-zinc-800/90 hover:border-zinc-600 hover:bg-[#181818]"
+                          }`}
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          <span
+                            className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-all ${
+                              isSelected
+                                ? "border-black bg-black"
+                                : "border-zinc-500 bg-transparent"
+                            }`}
+                          >
+                            {isSelected && (
+                              <span className="w-2 h-2 rounded-full bg-white block" />
+                            )}
+                          </span>
+                          <span className="flex-1">{option}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Q6: WHICH PLAN ARE YOU INTERESTED IN? */}
                 <div>
                   <div className="flex items-center justify-between mb-2.5">
                     <span
                       className="block text-xs font-bold uppercase tracking-wider text-zinc-300"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      WHICH PLAN ARE YOU INTERESTED IN?
+                      6. WHICH PLAN ARE YOU INTERESTED IN?
                     </span>
-                    <span className="text-[10px] font-mono text-[#ccf141]">Q5</span>
+                    <span className="text-[10px] font-mono text-[#ccf141]">Q6</span>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {[
@@ -805,19 +985,19 @@ const Memfound = () => {
                   </div>
                 </div>
 
-                {/* Question 6: BEST TIME TO CALL (OPTIONAL) */}
+                {/* Q7: BEST TIME TO CALL (OPTIONAL) */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <span
                       className="block text-xs font-bold uppercase tracking-wider text-zinc-300"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
-                      BEST TIME TO CALL{" "}
+                      7. BEST TIME TO CALL{" "}
                       <span className="text-zinc-500 font-normal text-[11px]">
                         (OPTIONAL)
                       </span>
                     </span>
-                    <span className="text-[10px] font-mono text-[#ccf141]">Q6</span>
+                    <span className="text-[10px] font-mono text-[#ccf141]">Q7</span>
                   </div>
                   <p className="text-zinc-500 text-xs mb-3">
                     We will call once to confirm your number and rate.
@@ -847,7 +1027,6 @@ const Memfound = () => {
                   </div>
                 </div>
 
-                {/* Consent Checkbox */}
                 <div className="pt-2">
                   <label
                     htmlFor="memfound-agree"
@@ -867,7 +1046,6 @@ const Memfound = () => {
                   </label>
                 </div>
 
-                {/* Submit Button */}
                 <div className="pt-3">
                   <button
                     type="submit"
@@ -895,22 +1073,18 @@ const Memfound = () => {
           </div>
         ) : (
           /* ============================================================ */
-          /* SUCCESS CONFIRMATION VIEW (Reference Image 2 - Elevated Pass) */
+          /* SUCCESS CONFIRMATION VIEW (No External Navigation Routes) */
           /* ============================================================ */
-          <div className="relative overflow-hidden rounded-3xl border-2 border-[#ccf141] bg-gradient-to-b from-[#0c0c0c] via-[#050505] to-[#000000] p-8 sm:p-12 md:p-14 shadow-[0_0_70px_rgba(204,241,65,0.25)] text-left animate-in fade-in duration-300">
-            {/* Background Pass Pattern */}
+          <div className="max-w-2xl mx-auto relative overflow-hidden rounded-3xl border-2 border-[#ccf141] bg-gradient-to-b from-[#0c0c0c] via-[#050505] to-[#000000] p-8 sm:p-12 md:p-14 shadow-[0_0_70px_rgba(204,241,65,0.25)] text-left animate-in fade-in duration-300">
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(#ccf14112_1px,transparent_1px)] [background-size:18px_18px]"
               aria-hidden="true"
             />
-
-            {/* Glowing Corner Halo */}
             <div
               className="pointer-events-none absolute -top-24 -right-24 w-60 h-60 bg-[#ccf141]/20 rounded-full blur-3xl"
               aria-hidden="true"
             />
 
-            {/* YOU ARE IN (Eyebrow in neon green) */}
             <div className="relative z-10">
               <span
                 className="text-[#ccf141] text-xs sm:text-sm font-black uppercase tracking-[0.3em] block select-none"
@@ -919,7 +1093,7 @@ const Memfound = () => {
                 YOU ARE IN
               </span>
 
-              {/* GIANT MEMBER NUMBER: #001 (Matching Reference Image 2) */}
+              {/* GIANT MEMBER NUMBER: #001 */}
               <div
                 className="text-7xl sm:text-8xl md:text-9xl font-black text-[#ccf141] tracking-tight leading-none my-6 sm:my-8 select-all drop-shadow-[0_0_40px_rgba(204,241,65,0.5)]"
                 style={{
@@ -932,7 +1106,6 @@ const Memfound = () => {
                     : submittedData.assignedNumber || "#001")}
               </div>
 
-              {/* THANK YOU, {NAME}. (Matching Reference Image 2) */}
               <h2
                 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase text-white tracking-tight mb-4"
                 style={{
@@ -942,7 +1115,6 @@ const Memfound = () => {
                 THANK YOU, {submittedData.name}.
               </h2>
 
-              {/* Detailed Body Paragraph */}
               <p className="text-zinc-300 text-sm sm:text-base md:text-[17px] leading-relaxed mb-6 font-normal">
                 Your enquiry is logged. Someone from the arena calls you on{" "}
                 <strong className="text-white font-bold font-mono">
@@ -951,7 +1123,6 @@ const Memfound = () => {
                 within 24 hours with your founding number and your rate.
               </p>
 
-              {/* Subtext Paragraph */}
               <p className="text-zinc-500 text-xs sm:text-[13px] leading-relaxed mb-8 pt-4 border-t border-zinc-800/80">
                 If you trained with us before, bring nothing — we already have your
                 remaining months on file.
@@ -989,12 +1160,29 @@ const Memfound = () => {
                     +91 {submittedData.whatsappNumber}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-1">
-                  <span className="text-zinc-500 uppercase">Trained Before</span>
-                  <span className="text-white font-bold">
-                    {submittedData.trainedBefore}
-                  </span>
-                </div>
+                {submittedData.boxcrossConnection ? (
+                  <div className="flex justify-between items-center py-1">
+                    <span className="text-zinc-500 uppercase">Connection</span>
+                    <span className="text-white font-bold">
+                      {submittedData.boxcrossConnection}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex justify-between items-center py-1">
+                    <span className="text-zinc-500 uppercase">Trained Before</span>
+                    <span className="text-white font-bold">
+                      {submittedData.trainedBefore}
+                    </span>
+                  </div>
+                )}
+                {submittedData.mainGoal && (
+                  <div className="flex justify-between items-center py-1">
+                    <span className="text-zinc-500 uppercase">Main Goal</span>
+                    <span className="text-[#ccf141] font-bold">
+                      {submittedData.mainGoal}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center py-1">
                   <span className="text-zinc-500 uppercase">Plan Interest</span>
                   <span className="text-[#ccf141] font-bold">
@@ -1011,7 +1199,7 @@ const Memfound = () => {
                 )}
               </div>
 
-              {/* Bottom Actions */}
+              {/* Bottom Actions - Kept exclusively inside /memfound */}
               <div className="flex flex-col sm:flex-row items-center gap-3">
                 <button
                   onClick={handleReset}
@@ -1031,21 +1219,13 @@ const Memfound = () => {
                   <MessageCircle size={15} />
                   <span>Chat on WhatsApp</span>
                 </a>
-                <Link
-                  to="/"
-                  className="w-full sm:w-auto px-6 py-3.5 bg-zinc-950 hover:bg-zinc-900 text-zinc-400 hover:text-white text-xs font-bold uppercase tracking-wider rounded-xl border border-zinc-800 transition-colors inline-flex items-center justify-center text-center"
-                >
-                  Back to Home
-                </Link>
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* ============================================================ */}
-      {/* FLOATING ACTION PILL FOR MOBILE VIEW (Quick 1-Tap Form Jump) */}
-      {/* ============================================================ */}
+      {/* Floating Action Pill for Mobile */}
       {!submittedData && !isFormInView && (
         <div className="fixed bottom-5 left-4 right-4 z-50 sm:hidden animate-in fade-in slide-in-from-bottom-5 duration-300">
           <div className="bg-[#0a0a0a]/95 backdrop-blur-xl border border-[#ccf141]/50 p-3.5 rounded-2xl flex items-center justify-between gap-3 shadow-[0_15px_35px_rgba(0,0,0,0.9)]">

@@ -102,6 +102,8 @@ const DashboardMemfound = () => {
         assignedNumber: editItem.assignedNumber,
         memberId: editItem.memberId || editItem.assignedNumber,
         quotedRate: editItem.quotedRate,
+        boxcrossConnection: editItem.boxcrossConnection,
+        mainGoal: editItem.mainGoal,
       });
 
       if (res.data?.success) {
@@ -137,6 +139,8 @@ const DashboardMemfound = () => {
       (item.name || "").toLowerCase().includes(search) ||
       (item.whatsappNumber || "").includes(search) ||
       itemMemberId.includes(search) ||
+      (item.boxcrossConnection || "").toLowerCase().includes(search) ||
+      (item.mainGoal || "").toLowerCase().includes(search) ||
       (item.plan || "").toLowerCase().includes(search);
 
     const matchesStatus =
@@ -161,7 +165,8 @@ const DashboardMemfound = () => {
       "Member ID",
       "Name",
       "WhatsApp Number",
-      "Trained Before",
+      "Connection",
+      "Main Goal",
       "Who Is This For",
       "Plan",
       "Best Time",
@@ -175,7 +180,8 @@ const DashboardMemfound = () => {
       `"${d.memberId || (d.memberNumber ? `#${String(d.memberNumber).padStart(3, "0")}` : d.assignedNumber || "")}"`,
       `"${d.name || ""}"`,
       `"${d.whatsappNumber || ""}"`,
-      `"${d.trainedBefore || ""}"`,
+      `"${d.boxcrossConnection || d.trainedBefore || ""}"`,
+      `"${d.mainGoal || ""}"`,
       `"${d.whoIsThisFor || ""}"`,
       `"${d.plan || ""}"`,
       `"${d.bestTimeToCall || ""}"`,
@@ -338,7 +344,8 @@ const DashboardMemfound = () => {
                   <th className="py-3.5 px-4 font-mono">Member ID</th>
                   <th className="py-3.5 px-4">Registrant</th>
                   <th className="py-3.5 px-4">WhatsApp</th>
-                  <th className="py-3.5 px-4">Trained Before</th>
+                  <th className="py-3.5 px-4">Connection</th>
+                  <th className="py-3.5 px-4">Main Goal</th>
                   <th className="py-3.5 px-4">Who Is This For</th>
                   <th className="py-3.5 px-4">Plan Interested</th>
                   <th className="py-3.5 px-4">Call Time</th>
@@ -402,14 +409,33 @@ const DashboardMemfound = () => {
 
                     <td className="py-3.5 px-4">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                          item.trainedBefore === "YES"
+                        className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${
+                          item.boxcrossConnection === "I'm a current member"
+                            ? "bg-[#ccf141]/20 text-[#ccf141] border border-[#ccf141]/40"
+                            : item.boxcrossConnection === "I've trained here before"
+                            ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                            : item.boxcrossConnection === "I'm new to Box & Cross"
+                            ? "bg-zinc-800 text-zinc-300 border border-zinc-700"
+                            : item.trainedBefore === "YES"
                             ? "bg-[#ccf141]/20 text-[#ccf141]"
                             : "bg-zinc-800 text-zinc-400"
                         }`}
                       >
-                        {item.trainedBefore || "NO"}
+                        {item.boxcrossConnection ||
+                          (item.trainedBefore === "YES"
+                            ? "Trained Before"
+                            : "New Member")}
                       </span>
+                    </td>
+
+                    <td className="py-3.5 px-4 font-medium">
+                      {item.mainGoal ? (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-200 text-[11px] border border-zinc-700/60 font-medium whitespace-nowrap">
+                          {item.mainGoal}
+                        </span>
+                      ) : (
+                        <span className="text-zinc-500 text-[11px]">-</span>
+                      )}
                     </td>
 
                     <td className="py-3.5 px-4 font-medium text-zinc-300">
@@ -550,6 +576,58 @@ const DashboardMemfound = () => {
                     }
                     className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-white p-2.5 rounded-xl outline-none focus:border-[#ccf141]"
                   />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-zinc-400 mb-1 font-semibold uppercase">
+                    Connection
+                  </label>
+                  <select
+                    value={editItem.boxcrossConnection || ""}
+                    onChange={(e) =>
+                      setEditItem({
+                        ...editItem,
+                        boxcrossConnection: e.target.value,
+                      })
+                    }
+                    className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-white p-2.5 rounded-xl outline-none focus:border-[#ccf141]"
+                  >
+                    <option value="">Select Connection</option>
+                    <option value="I'm a current member">
+                      I'm a current member
+                    </option>
+                    <option value="I've trained here before">
+                      I've trained here before
+                    </option>
+                    <option value="I'm new to Box & Cross">
+                      I'm new to Box & Cross
+                    </option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-zinc-400 mb-1 font-semibold uppercase">
+                    Main Goal
+                  </label>
+                  <select
+                    value={editItem.mainGoal || ""}
+                    onChange={(e) =>
+                      setEditItem({ ...editItem, mainGoal: e.target.value })
+                    }
+                    className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-white p-2.5 rounded-xl outline-none focus:border-[#ccf141]"
+                  >
+                    <option value="">Select Goal (Optional)</option>
+                    <option value="Boxing skills">Boxing skills</option>
+                    <option value="Strength and conditioning">
+                      Strength and conditioning
+                    </option>
+                    <option value="General fitness">General fitness</option>
+                    <option value="Competition preparation">
+                      Competition preparation
+                    </option>
+                    <option value="Not sure yet">Not sure yet</option>
+                  </select>
                 </div>
               </div>
 

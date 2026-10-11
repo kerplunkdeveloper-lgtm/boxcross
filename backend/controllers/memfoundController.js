@@ -8,8 +8,10 @@ const createMemfound = async (req, res) => {
     const {
       name,
       whatsappNumber,
+      boxcrossConnection,
       trainedBefore,
       whoIsThisFor,
+      mainGoal,
       plan,
       bestTimeToCall,
       agreedToContact,
@@ -39,6 +41,30 @@ const createMemfound = async (req, res) => {
       });
     }
 
+    const standardPhone = cleanedPhone.slice(-10);
+
+    // Check if WhatsApp number is already registered in database
+    const existingRecord = await Memfound.findOne({
+      whatsappNumber: standardPhone,
+    });
+    if (existingRecord) {
+      return res.status(400).json({
+        success: false,
+        alreadyRegistered: true,
+        message: `This WhatsApp number (+91 ${standardPhone}) is already registered under Member ID ${
+          existingRecord.memberId || existingRecord.assignedNumber || "#001"
+        }. We already have your interest on file!`,
+        memberId: existingRecord.memberId || existingRecord.assignedNumber,
+      });
+    }
+
+    if (!boxcrossConnection && !trainedBefore) {
+      return res.status(400).json({
+        success: false,
+        message: "Your connection with Box & Cross is required",
+      });
+    }
+
     // Determine sequential member number (#001, #002, etc.)
     const lastRecord = await Memfound.findOne({
       memberNumber: { $exists: true, $ne: null },
@@ -54,11 +80,24 @@ const createMemfound = async (req, res) => {
 
     const formattedMemberId = `#${String(nextNumber).padStart(3, "0")}`;
 
+    // Derive backward-compatible trainedBefore
+    let computedTrainedBefore = trainedBefore || "NO";
+    if (
+      boxcrossConnection === "I'm a current member" ||
+      boxcrossConnection === "I've trained here before"
+    ) {
+      computedTrainedBefore = "YES";
+    } else if (boxcrossConnection === "I'm new to Box & Cross") {
+      computedTrainedBefore = "NO";
+    }
+
     const memfound = await Memfound.create({
       name: name.trim(),
       whatsappNumber: cleanedPhone.slice(-10), // Store standard 10 digits
-      trainedBefore: trainedBefore || "NO",
+      boxcrossConnection: boxcrossConnection || "",
+      trainedBefore: computedTrainedBefore,
       whoIsThisFor: whoIsThisFor || "MYSELF",
+      mainGoal: mainGoal || "",
       plan: plan || "NOT SURE YET",
       bestTimeToCall: bestTimeToCall || "",
       agreedToContact: agreedToContact !== undefined ? Boolean(agreedToContact) : true,
@@ -124,6 +163,8 @@ const getMemfounds = async (req, res) => {
         { whatsappNumber: { $regex: search, $options: "i" } },
         { memberId: { $regex: search, $options: "i" } },
         { assignedNumber: { $regex: search, $options: "i" } },
+        { boxcrossConnection: { $regex: search, $options: "i" } },
+        { mainGoal: { $regex: search, $options: "i" } },
       ];
     }
 
@@ -169,7 +210,7 @@ const getMemfoundById = async (req, res) => {
   }
 };
 
-// @desc    Update Memfound record (status, rate, assigned number, notes)
+// @desc    Update Memfound record (status, rate, assigned number, notes, etc.)
 // @route   PUT /api/memfound/:id
 // @access  Admin
 const updateMemfound = async (req, res) => {
@@ -182,12 +223,43 @@ const updateMemfound = async (req, res) => {
       });
     }
 
-    const { status, notes, assignedNumber, memberId, quotedRate } = req.body;
+    const {
+      status,
+      notes,
+      assignedNumber,
+      memberId,
+      quotedRate,
+      boxcrossConnection,
+      trainedBefore,
+      whoIsThisFor,
+      mainGoal,
+      plan,
+      bestTimeToCall,
+    } = req.body;
+
     if (status) item.status = status;
     if (notes !== undefined) item.notes = notes;
     if (assignedNumber !== undefined) item.assignedNumber = assignedNumber;
     if (memberId !== undefined) item.memberId = memberId;
     if (quotedRate !== undefined) item.quotedRate = quotedRate;
+    if (boxcrossConnection !== undefined) {
+      item.boxcrossConnection = boxcrossConnection;
+      if (
+        boxcrossConnection === "I'm a current member" ||
+        boxcrossConnection === "I've trained here before"
+      ) {
+        item.trainedBefore = "YES";
+      } else if (boxcrossConnection === "I'm new to Box & Cross") {
+        item.trainedBefore = "NO";
+      }
+    }
+    if (trainedBefore !== undefined && boxcrossConnection === undefined) {
+      item.trainedBefore = trainedBefore;
+    }
+    if (whoIsThisFor !== undefined) item.whoIsThisFor = whoIsThisFor;
+    if (mainGoal !== undefined) item.mainGoal = mainGoal;
+    if (plan !== undefined) item.plan = plan;
+    if (bestTimeToCall !== undefined) item.bestTimeToCall = bestTimeToCall;
 
     const updated = await item.save();
 
@@ -233,10 +305,37 @@ const deleteMemfound = async (req, res) => {
   }
 };
 
+// @desc    Check if WhatsApp number is already registered
+// @route   GET /api/memfound/check/:phone
+// @access  Public
+const checkPhoneExists = async (req, res) => {
+  try {
+    const rawPhone = req.params.phone || "";
+    const clean = rawPhone.replace(/\D/g, "").slice(-10);
+    if (clean.length < 10) {
+      return res.status(200).json({ exists: false });
+    }
+    const existing = await Memfound.findOne({ whatsappNumber: clean });
+    if (existing) {
+      return res.status(200).json({
+        exists: true,
+        message: `Already registered with Member ID ${
+          existing.memberId || existing.assignedNumber || "#001"
+        }`,
+        memberId: existing.memberId || existing.assignedNumber || "#001",
+      });
+    }
+    return res.status(200).json({ exists: false });
+  } catch (error) {
+    return res.status(500).json({ exists: false });
+  }
+};
+
 module.exports = {
   createMemfound,
   getMemfounds,
   getMemfoundById,
   updateMemfound,
   deleteMemfound,
+  checkPhoneExists,
 };
