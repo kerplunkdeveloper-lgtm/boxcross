@@ -913,8 +913,25 @@ const Memfound = () => {
             {/* ============================================================ */}
             <div
               id="register-form"
-              className="max-w-6xl mx-auto scroll-mt-8 relative overflow-hidden rounded-3xl bg-gradient-to-b from-[#0c0c0c] via-[#070707] to-[#020202] border border-zinc-800/90 p-6 sm:p-10 md:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.95)]"
+              className="max-w-6xl mx-auto scroll-mt-8 relative rounded-[28px] p-[2.5px] overflow-hidden shadow-[0_0_60px_rgba(204,241,65,0.22)]"
             >
+              {/* Spinning animated gradient border for high visibility */}
+              <div
+                className="absolute inset-[-150%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0%,transparent_50%,rgba(204,241,65,0.35)_70%,#ccf141_90%,#ffffff_96%,#ccf141_100%)] animate-[spin_4s_linear_infinite]"
+                aria-hidden="true"
+              />
+
+              {/* Inner card container */}
+              <div className="relative z-10 w-full h-full rounded-[25px] overflow-hidden bg-gradient-to-b from-[#0e0e0e] via-[#080808] to-[#020202] p-6 sm:p-10 md:p-12 shadow-[0_25px_60px_rgba(0,0,0,0.95)]">
+                {/* Ambient glow spotlights for enhanced visibility and depth */}
+                <div
+                  className="pointer-events-none absolute -top-24 -right-24 w-80 h-80 bg-[#ccf141]/12 rounded-full blur-[110px]"
+                  aria-hidden="true"
+                />
+                <div
+                  className="pointer-events-none absolute -bottom-24 -left-24 w-80 h-80 bg-[#ccf141]/8 rounded-full blur-[110px]"
+                  aria-hidden="true"
+                />
 
               <div className="mb-8">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-2">
@@ -1315,6 +1332,7 @@ const Memfound = () => {
                   </button>
                 </div>
               </form>
+              </div>
             </div>
           </div>
         ) : (
