@@ -71,6 +71,9 @@ const Foot = lazy(() => import("./Components/Foot"));
 const GymMarquee = lazy(() => import("./Components/GymMarquee"));
 const Memfound = lazy(() => import("./pages/Memfound"));
 const DashboardMemfound = lazy(() => import("./pages/DashboardMemfound"));
+const FounderMembersOffers = lazy(
+  () => import("./pages/FounderMembersOffers"),
+);
 
 // import LeadModal from "./Components/LeadModal";
 
@@ -140,7 +143,9 @@ const MemfoundGuard = () => {
     } else if (sessionStorage.getItem("lock_to_memfound") === "true") {
       const isAdminRoute =
         location.pathname.startsWith("/dashboard") ||
-        location.pathname.startsWith("/login");
+        location.pathname.startsWith("/login") ||
+        location.pathname.toLowerCase().startsWith("/foundersoffers") ||
+        location.pathname.toLowerCase().startsWith("/founder-members-offers");
       if (!isAdminRoute) {
         navigate("/Founding100access", { replace: true });
       }
@@ -190,6 +195,18 @@ const App = () => {
                   <Route path="/events" element={<Eventpage />} />
                   <Route path="/events/:id" element={<Eventpage />} />
                   <Route path="/community" element={<Community />} />
+                  <Route
+                    path="/foundersoffers"
+                    element={<FounderMembersOffers />}
+                  />
+                  <Route
+                    path="/founder-members-offers"
+                    element={<Navigate to="/foundersoffers" replace />}
+                  />
+                  <Route
+                    path="/Founder-members-offers"
+                    element={<Navigate to="/foundersoffers" replace />}
+                  />
                 </Route>
 
                 {/* Routes WITHOUT Navbar and Footer */}

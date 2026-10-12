@@ -68,8 +68,8 @@ const Navbar = () => {
 
   const membershipDropdown = [
     {
-      name: "First 100 offer",
-      scrollToId: "founders",
+      name: "Founders First 100 offer",
+      path: "/foundersoffers",
     },
     {
       name: "BOOK FREE TRIAL",
@@ -309,39 +309,62 @@ const Navbar = () => {
 
                   {openDropdown === "membership" && (
                     <div className="absolute left-0 top-full mt-3 w-60 bg-white shadow-2xl overflow-hidden z-[100]">
-                      {membershipDropdown.map((item, idx) => (
-                        <a
-                          key={item.name}
-                          href={item.path || `/#${item.scrollToId}`}
-                          onClick={(e) => {
-                            if (item.scrollToId) {
-                              const el = document.getElementById(
-                                item.scrollToId,
-                              );
-                              if (el) {
-                                e.preventDefault();
-                                el.scrollIntoView({ behavior: "smooth" });
-                                setOpenDropdown(null);
-                              }
-                            }
-                          }}
-                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
-                            idx !== membershipDropdown.length - 1
-                              ? "border-b border-gray-200"
-                              : ""
-                          }`}
-                        >
-                          {/* Hover Line */}
-                          <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
-                            <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
-                          </span>
+                      {membershipDropdown.map((item, idx) => {
+                        const content = (
+                          <>
+                            {/* Hover Line */}
+                            <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
+                              <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
+                            </span>
 
-                          {/* Text */}
-                          <span className="transition-all duration-300 group-hover:translate-x-1">
-                            {item.name}
-                          </span>
-                        </a>
-                      ))}
+                            {/* Text */}
+                            <span className="transition-all duration-300 group-hover:translate-x-1">
+                              {item.name}
+                            </span>
+                          </>
+                        );
+
+                        const itemClass = `group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
+                          idx !== membershipDropdown.length - 1
+                            ? "border-b border-gray-200"
+                            : ""
+                        }`;
+
+                        if (item.path) {
+                          return (
+                            <Link
+                              key={item.name}
+                              to={item.path}
+                              onClick={() => setOpenDropdown(null)}
+                              className={itemClass}
+                            >
+                              {content}
+                            </Link>
+                          );
+                        }
+
+                        return (
+                          <a
+                            key={item.name}
+                            href={`/#${item.scrollToId}`}
+                            onClick={(e) => {
+                              if (item.scrollToId) {
+                                const el = document.getElementById(
+                                  item.scrollToId,
+                                );
+                                if (el) {
+                                  e.preventDefault();
+                                  el.scrollIntoView({ behavior: "smooth" });
+                                  setOpenDropdown(null);
+                                }
+                              }
+                            }}
+                            className={itemClass}
+                          >
+                            {content}
+                          </a>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -643,25 +666,36 @@ const Navbar = () => {
               }`}
             >
               <div className="flex flex-col gap-3 pl-2">
-                {membershipDropdown.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.path || `/#${item.scrollToId}`}
-                    onClick={(e) => {
-                      if (item.scrollToId) {
-                        const el = document.getElementById(item.scrollToId);
-                        if (el) {
-                          e.preventDefault();
-                          el.scrollIntoView({ behavior: "smooth" });
+                {membershipDropdown.map((item) =>
+                  item.path ? (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      onClick={closeOffcanvas}
+                      className="text-sm text-gray-400 hover:text-white font-medium tracking-wider"
+                    >
+                      {item.name}
+                    </Link>
+                  ) : (
+                    <a
+                      key={item.name}
+                      href={`/#${item.scrollToId}`}
+                      onClick={(e) => {
+                        if (item.scrollToId) {
+                          const el = document.getElementById(item.scrollToId);
+                          if (el) {
+                            e.preventDefault();
+                            el.scrollIntoView({ behavior: "smooth" });
+                          }
                         }
-                      }
-                      closeOffcanvas();
-                    }}
-                    className="text-sm text-gray-400 hover:text-white font-medium tracking-wider"
-                  >
-                    {item.name}
-                  </a>
-                ))}
+                        closeOffcanvas();
+                      }}
+                      className="text-sm text-gray-400 hover:text-white font-medium tracking-wider"
+                    >
+                      {item.name}
+                    </a>
+                  )
+                )}
               </div>
             </div>
           </div>
