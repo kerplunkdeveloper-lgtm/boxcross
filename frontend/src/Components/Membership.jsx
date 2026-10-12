@@ -21,13 +21,14 @@ import { motion } from "framer-motion";
 import box1 from "../assets/box1.png";
 import box2 from "../assets/box2.png";
 import box3 from "../assets/box3.png";
+import juniorBoxer from "../assets/junior_boxer.jpg";
 
 import ChoosePlan from "./ChoosePlan";
 import { getMembershipPlans } from "../api/api";
 
 const programs = [
   {
-    id: "start",
+    id: "core",
     icon: (
       <svg
         width="45"
@@ -48,40 +49,24 @@ const programs = [
         <path d="M6 5.5l1.5 1.5" />
       </svg>
     ),
-    title: "START",
-    subtitle: "FIGHT CLUB / STRENGTH LAB",
-    desc: "Perfect for beginners. Build fitness, strength and confidence.",
-    price: "2,200",
-    tabs: [
-      {
-        id: "start_fight",
-        name: "FIGHT CLUB",
-        subtitle: "FIGHT CLUB",
-        desc: "Perfect for beginners. Build fitness, strength and confidence through boxing.",
-        price: "2,200",
-      },
-      {
-        id: "start_strength",
-        name: "STRENGTH LAB",
-        subtitle: "STRENGTH LAB",
-        desc: "Focus on core strength, lifting techniques, and building raw power.",
-        price: "2,500",
-      },
-    ],
+    title: "CORE",
+    subtitle: "ONE PATHWAY",
+    desc: "Three coached sessions a week — Fight, HYROX or Strength.",
+    price: "2,292",
     image: box1,
   },
   {
-    id: "transform",
+    id: "athlete",
     icon: <Dumbbell size={45} strokeWidth={1.5} className="text-[#ccf141]" />,
-    title: "TRANSFORM",
-    subtitle: "HYBRID PERFORMANCE",
-    desc: "Boxing + Strength + Conditioning. The complete transformation for body and mind.",
-    price: "3,500",
+    title: "ATHLETE",
+    subtitle: "TWO PATHWAYS",
+    desc: "Four coached sessions a week across two disciplines.",
+    price: "3,275",
     popular: true,
     image: box2,
   },
   {
-    id: "perform",
+    id: "arena",
     icon: (
       <svg
         width="45"
@@ -94,361 +79,440 @@ const programs = [
         <path d="M21 16v-2c-2.24 0-4.16-.96-5.6-2.68l-1.34-1.6A1.98 1.98 0 0 0 12.53 9h-1.05c-.59 0-1.15.26-1.53.72l-1.34 1.6C7.16 13.04 5.24 14 3 14v2c2.77 0 5.19-1.17 7-3.25V15l-3.88 1.55c-.67.27-1.12.93-1.12 1.66C5 19.2 5.8 20 6.79 20H9v-.5a2.5 2.5 0 0 1 2.5-2.5h3c.28 0 .5.22.5.5s-.22.5-.5.5h-3c-.83 0-1.5.67-1.5 1.5v.5h7.21c.99 0 1.79-.8 1.79-1.79c0-.73-.45-1.39-1.12-1.66L14 15v-2.25c1.81 2.08 4.23 3.25 7 3.25" />
       </svg>
     ),
-    title: "PERFORM",
-    subtitle: "HYROX LAB / PERFORMANCE BOXING",
-    desc: "For athletes and competitors. Build endurance, power and peak performance.",
-    price: "4,500",
-    tabs: [
-      {
-        id: "perform_hyrox",
-        name: "HYROX LAB",
-        subtitle: "HYROX LAB",
-        desc: "For athletes and competitors. Build endurance, power and peak performance.",
-        price: "4,500",
-      },
-      {
-        id: "perform_boxing",
-        name: "PERFORMANCE BOXING",
-        subtitle: "PERFORMANCE BOXING",
-        desc: "Advanced boxing techniques, sparring prep, and high-intensity conditioning.",
-        price: "5,000",
-      },
-    ],
+    title: "ARENA",
+    subtitle: "EVERYTHING",
+    desc: "Five coached sessions a week, every pathway, every class.",
+    price: "4,583",
     image: box3,
+  },
+  {
+    id: "junior",
+    icon: (
+      <svg
+        width="45"
+        height="45"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#ccf141"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-[#ccf141]"
+      >
+        <circle cx="12" cy="7" r="3.5" />
+        <path d="M6 21v-1.5a5.5 5.5 0 0 1 12 0V21" />
+        <path d="M4 11l-2.5 2.5 2.5 2.5" />
+        <path d="M20 11l2.5 2.5-2.5 2.5" />
+      </svg>
+    ),
+    title: "JUNIOR",
+    subtitle: "UNDER 13",
+    desc: "Three coached sessions a week",
+    price: "1,958",
+    image: juniorBoxer,
   },
 ];
 
 const pricingData = {
-  start_fight: {
-    title: "START (FIGHT CLUB)",
+  core: {
+    title: "CORE",
+    subtitle: "ONE PATHWAY",
+    sessionInfo: "Three coached sessions a week — Fight, HYROX or Strength",
+    dailyRate: "₹75",
+    dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
+    dailyComparison: "A dosa and a filter coffee.",
     features: [
-      "Boxing Basics",
-      "Cardio Conditioning",
-      "Footwork",
+      "Three coached sessions a week",
+      "One pathway (Fight, HYROX or Strength)",
+      "Open gym access",
       "Community Access",
     ],
+    benefits: [
+      {
+        boldText: "You can defend yourself.",
+        normalText: "Quietly knowing that changes how you walk down a street at night.",
+      },
+      {
+        boldText: "The bad day goes into the bag.",
+        normalText: "Not into your family, not into your sleep.",
+      },
+      {
+        boldText: "Sharper at work.",
+        normalText: "Boxing is a thinking sport — you read, decide and move in the same second.",
+      },
+      {
+        boldText: "A coach who knows your name and your weakness.",
+        normalText: "Nobody improves alone on a gym floor.",
+      },
+    ],
     plans: [
       {
-        months: "3 MONTHS",
-        subtitle: "START YOUR JOURNEY",
-        price: "5,999",
-        perMonth: "2,000",
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "3,500",
+        perMonth: "3,500",
+        originalPrice: "",
+        totalPrice: "3,500",
         highlights: [
-          "Basic boxing classes",
-          "Cardio conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
+          "Three coached sessions a week",
+          "One pathway focus",
+          "Open gym & community access",
         ],
-        buttonText: "GET STARTED",
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "FOUNDING RATE",
+        price: "9,900",
+        perMonth: "3,300",
+        originalPrice: "10,000",
+        totalPrice: "9,900",
+        highlights: [
+          "Three coached sessions a week",
+          "Held founding rate for full term",
+          "Coach assessment",
+        ],
+        tag: "SAVE ₹100",
+        buttonText: "SAVE ₹100",
       },
       {
         months: "6 MONTHS",
         subtitle: "BEST PROGRESS",
-        price: "10,999",
-        perMonth: "1,833",
+        price: "18,000",
+        perMonth: "3,000",
+        originalPrice: "18,900",
+        totalPrice: "18,000",
         highlights: [
-          "Basic boxing classes",
-          "Cardio conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
+          "Three coached sessions a week",
+          "Founding rate locked",
+          "Coach 1-on-1 check-ins",
         ],
-        tag: "RECOMMENDED",
-        buttonText: "CHOOSE PLAN",
+        tag: "SAVE ₹900",
+        buttonText: "SAVE ₹900",
         isPopular: true,
       },
       {
         months: "12 MONTHS",
         subtitle: "BEST VALUE",
-        price: "19,999",
-        perMonth: "1,666",
+        price: "27,500",
+        perMonth: "2,292",
+        originalPrice: "33,600",
+        totalPrice: "27,500",
         highlights: [
-          "Basic boxing classes",
-          "Cardio conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-          "Priority batch booking",
+          "Three coached sessions a week",
+          "Maximum founding discount",
+          "Founding Wall recognition",
         ],
-        buttonText: "CHOOSE PLAN",
-      },
-    ],
-    starterPrice: "2,200",
-  },
-  start_strength: {
-    title: "START (STRENGTH LAB)",
-    features: [
-      "Strength Training",
-      "Core Focus",
-      "Lifting Technique",
-      "Community Access",
-    ],
-    plans: [
-      {
-        months: "3 MONTHS",
-        subtitle: "START YOUR JOURNEY",
-        price: "6,999",
-        perMonth: "2,333",
-        highlights: [
-          "Strength group classes",
-          "Core conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-        ],
-        buttonText: "GET STARTED",
-      },
-      {
-        months: "6 MONTHS",
-        subtitle: "BEST PROGRESS",
-        price: "12,999",
-        perMonth: "2,166",
-        highlights: [
-          "Strength group classes",
-          "Core conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-        ],
-        tag: "RECOMMENDED",
-        buttonText: "CHOOSE PLAN",
-        isPopular: true,
-      },
-      {
-        months: "12 MONTHS",
-        subtitle: "BEST VALUE",
-        price: "22,999",
-        perMonth: "1,916",
-        highlights: [
-          "Strength group classes",
-          "Core conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-          "Priority batch booking",
-        ],
-        buttonText: "CHOOSE PLAN",
-      },
-    ],
-    starterPrice: "2,500",
-  },
-  transform: {
-    title: "TRANSFORM (HYBRID PERFORMANCE)",
-    features: [
-      "Boxing",
-      "Strength Training",
-      "Conditioning",
-      "Recovery",
-      "Nutrition Guidance",
-    ],
-    plans: [
-      {
-        months: "3 MONTHS",
-        subtitle: "START YOUR JOURNEY",
-        price: "11,999",
-        perMonth: "4,000",
-        highlights: [
-          "All group classes",
-          "Strength & conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-        ],
-        buttonText: "GET STARTED",
-      },
-      {
-        months: "6 MONTHS",
-        subtitle: "BEST PROGRESS",
-        price: "19,999",
-        perMonth: "3,333",
-        highlights: [
-          "All group classes",
-          "Strength & conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-          "1 Body composition test",
-          "Nutrition guidance",
-        ],
-        tag: "RECOMMENDED",
-        buttonText: "CHOOSE PLAN",
-        isPopular: true,
-      },
-      {
-        months: "12 MONTHS",
-        subtitle: "BEST VALUE",
-        price: "34,999",
-        perMonth: "2,917",
-        highlights: [
-          "All group classes",
-          "Strength & conditioning",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-          "2 Body composition tests",
-          "Nutrition guidance",
-          "Priority batch booking",
-          "Flexible membership support",
-        ],
-        buttonText: "CHOOSE PLAN",
+        tag: "SAVE ₹6,100",
+        buttonText: "SAVE ₹6,100",
       },
     ],
     starterPrice: "3,500",
   },
-  perform_hyrox: {
-    title: "PERFORM (HYROX LAB)",
+  athlete: {
+    title: "ATHLETE",
+    subtitle: "TWO PATHWAYS",
+    sessionInfo: "Four coached sessions a week across two disciplines",
+    dailyRate: "₹108",
+    dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
+    dailyComparison: "One burger.",
     features: [
-      "HYROX Training",
-      "Endurance",
-      "Peak Performance",
-      "Recovery",
-      "Nutrition",
+      "Four coached sessions a week",
+      "Two disciplines / pathways",
+      "All arena facilities",
+      "Progress tracking",
+    ],
+    benefits: [
+      {
+        boldText: "Strong and not out of breath.",
+        normalText: "Most people get one. Two pathways gets you both.",
+      },
+      {
+        boldText: "You stop plateauing.",
+        normalText: "Four sessions, two disciplines, nothing goes stale.",
+      },
+      {
+        boldText: "Visible change by week twelve.",
+        normalText: "Measured on your card, not guessed in the mirror.",
+      },
+      {
+        boldText: "The body you had at twenty-five,",
+        normalText: "built the way an athlete builds it.",
+      },
     ],
     plans: [
       {
-        months: "3 MONTHS",
-        subtitle: "START YOUR JOURNEY",
-        price: "12,999",
-        perMonth: "4,333",
-        highlights: [
-          "HYROX specific classes",
-          "Endurance training",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-        ],
-        buttonText: "GET STARTED",
-      },
-      {
-        months: "6 MONTHS",
-        subtitle: "BEST PROGRESS",
-        price: "23,999",
-        perMonth: "4,000",
-        highlights: [
-          "HYROX specific classes",
-          "Endurance training",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-          "2 Body composition tests",
-        ],
-        tag: "RECOMMENDED",
-        buttonText: "CHOOSE PLAN",
-        isPopular: true,
-      },
-      {
-        months: "12 MONTHS",
-        subtitle: "BEST VALUE",
-        price: "42,999",
-        perMonth: "3,583",
-        highlights: [
-          "HYROX specific classes",
-          "Endurance training",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-          "Monthly body composition",
-          "Nutrition planning",
-          "Priority batch booking",
-        ],
-        buttonText: "CHOOSE PLAN",
-      },
-    ],
-    starterPrice: "4,500",
-  },
-  perform_boxing: {
-    title: "PERFORM (PERFORMANCE BOXING)",
-    features: [
-      "Advanced Boxing",
-      "Sparring Prep",
-      "High-Intensity",
-      "Recovery",
-      "Nutrition",
-    ],
-    plans: [
-      {
-        months: "3 MONTHS",
-        subtitle: "START YOUR JOURNEY",
-        price: "14,999",
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "5,000",
         perMonth: "5,000",
+        originalPrice: "",
+        totalPrice: "5,000",
         highlights: [
-          "All advanced classes",
-          "Sparring prep training",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
+          "Four coached sessions a week",
+          "Two disciplines access",
+          "Full arena access",
         ],
-        buttonText: "GET STARTED",
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "FOUNDING RATE",
+        price: "14,100",
+        perMonth: "4,700",
+        originalPrice: "14,200",
+        totalPrice: "14,100",
+        highlights: [
+          "Four coached sessions a week",
+          "Two disciplines access",
+          "Coach assessment",
+        ],
+        tag: "SAVE ₹100",
+        buttonText: "SAVE ₹100",
       },
       {
         months: "6 MONTHS",
         subtitle: "BEST PROGRESS",
-        price: "26,999",
-        perMonth: "4,500",
+        price: "25,700",
+        perMonth: "4,283",
+        originalPrice: "27,000",
+        totalPrice: "25,700",
         highlights: [
-          "All advanced classes",
-          "Sparring prep training",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-          "2 Body composition tests",
+          "Four coached sessions a week",
+          "Two disciplines access",
+          "Guest passes included",
         ],
-        tag: "RECOMMENDED",
-        buttonText: "CHOOSE PLAN",
+        tag: "SAVE ₹1,300",
+        buttonText: "SAVE ₹1,300",
         isPopular: true,
       },
       {
         months: "12 MONTHS",
         subtitle: "BEST VALUE",
-        price: "48,999",
-        perMonth: "4,083",
+        price: "39,300",
+        perMonth: "3,275",
+        originalPrice: "48,000",
+        totalPrice: "39,300",
         highlights: [
-          "All advanced classes",
-          "Sparring prep training",
-          "Open gym access",
-          "BXC community access",
-          "Progress tracking",
-          "Monthly body composition",
-          "Nutrition planning",
-          "Priority batch booking",
+          "Four coached sessions a week",
+          "Two disciplines access",
+          "Priority booking & perks",
         ],
-        buttonText: "CHOOSE PLAN",
+        tag: "SAVE ₹8,700",
+        buttonText: "SAVE ₹8,700",
       },
     ],
     starterPrice: "5,000",
   },
+  arena: {
+    title: "ARENA",
+    subtitle: "EVERYTHING",
+    sessionInfo: "Five coached sessions a week, every pathway, every class",
+    dailyRate: "₹151",
+    dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
+    dailyComparison: "One cinema ticket.",
+    features: [
+      "Five coached sessions a week",
+      "Every pathway, every class",
+      "Priority ring & arena floor",
+      "VIP founding member perks",
+    ],
+    benefits: [
+      {
+        boldText: "Train the way fighters train.",
+        normalText: "Five days, every discipline, nothing held back.",
+      },
+      {
+        boldText: "This becomes your second place.",
+        normalText: "After home, before everywhere else.",
+      },
+      {
+        boldText: "Priority on everything.",
+        normalText: "Classes, the ring, the open floor.",
+      },
+      {
+        boldText: "You stop thinking about fitness.",
+        normalText: "It is simply what you do now.",
+      },
+    ],
+    plans: [
+      {
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "7,000",
+        perMonth: "7,000",
+        originalPrice: "",
+        totalPrice: "7,000",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "Unrestricted arena access",
+        ],
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "FOUNDING RATE",
+        price: "19,700",
+        perMonth: "6,567",
+        originalPrice: "20,000",
+        totalPrice: "19,700",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "Coach assessment",
+        ],
+        tag: "SAVE ₹300",
+        buttonText: "SAVE ₹300",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "BEST PROGRESS",
+        price: "35,900",
+        perMonth: "5,983",
+        originalPrice: "37,800",
+        totalPrice: "35,900",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "Guest passes included",
+        ],
+        tag: "SAVE ₹1,900",
+        buttonText: "SAVE ₹1,900",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "BEST VALUE",
+        price: "55,000",
+        perMonth: "4,583",
+        originalPrice: "67,200",
+        totalPrice: "55,000",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "VIP Founding Wall & passes",
+        ],
+        tag: "SAVE ₹12,200",
+        buttonText: "SAVE ₹12,200",
+      },
+    ],
+    starterPrice: "7,000",
+  },
+  junior: {
+    title: "JUNIOR",
+    subtitle: "UNDER 13",
+    sessionInfo: "Three coached sessions a week",
+    dailyRate: "₹64",
+    dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
+    dailyComparison: "One masala dosa.",
+    features: [
+      "Three coached sessions a week",
+      "Youth boxing & athletic discipline",
+      "Confidence building",
+      "Screen-free fitness",
+    ],
+    benefits: [
+      {
+        boldText: "Confidence that shows up at school.",
+        normalText:
+          "A child who can hold a stance stops shrinking in a crowd.",
+      },
+      {
+        boldText: "They learn to handle themselves — and when not to.",
+        normalText: "Discipline is taught before the punch is.",
+      },
+      {
+        boldText: "Focus that carries into homework.",
+        normalText: "Three rounds of concentration, three evenings a week.",
+      },
+      {
+        boldText: "Off the screen, on their feet.",
+        normalText: "Tired in the right way by 7pm.",
+      },
+    ],
+    plans: [
+      {
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "3,000",
+        perMonth: "3,000",
+        originalPrice: "",
+        totalPrice: "3,000",
+        highlights: [
+          "Three coached sessions a week",
+          "Youth boxing fundamentals",
+          "Arena training space",
+        ],
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "FOUNDING RATE",
+        price: "7,500",
+        perMonth: "2,500",
+        originalPrice: "8,600",
+        totalPrice: "7,500",
+        highlights: [
+          "Three coached sessions a week",
+          "Youth boxing fundamentals",
+          "Skill milestone card",
+        ],
+        tag: "SAVE ₹1,100",
+        buttonText: "SAVE ₹1,100",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "BEST PROGRESS",
+        price: "13,500",
+        perMonth: "2,250",
+        originalPrice: "16,200",
+        totalPrice: "13,500",
+        highlights: [
+          "Three coached sessions a week",
+          "Technique & fitness growth",
+          "Coach assessment",
+        ],
+        tag: "SAVE ₹2,700",
+        buttonText: "SAVE ₹2,700",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "BEST VALUE",
+        price: "23,500",
+        perMonth: "1,958",
+        originalPrice: "28,800",
+        totalPrice: "23,500",
+        highlights: [
+          "Three coached sessions a week",
+          "Maximum founding discount",
+          "Founding Wall youth recognition",
+        ],
+        tag: "SAVE ₹5,300",
+        buttonText: "SAVE ₹5,300",
+      },
+    ],
+    starterPrice: "3,000",
+  },
 };
 
 const Membership = () => {
-  const [activeTab, setActiveTab] = useState("transform");
+  const [activeTab, setActiveTab] = useState("core");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const plan = params.get("plan");
 
-    if (plan) {
-      setActiveTab(plan);
-
-      // Start tab default
-      if (plan === "start") {
-        setSubTabs((prev) => ({
-          ...prev,
-          start: "start_fight",
-        }));
-      }
-
-      // Perform tab default
-      if (plan === "perform") {
-        setSubTabs((prev) => ({
-          ...prev,
-          perform: "perform_hyrox",
-        }));
-      }
+    if (plan && ["core", "athlete", "arena", "junior"].includes(plan.toLowerCase())) {
+      setActiveTab(plan.toLowerCase());
 
       setTimeout(() => {
         const pricingSection = document.getElementById("pricing");
-
         if (pricingSection) {
           pricingSection.scrollIntoView({
             behavior: "smooth",
@@ -458,10 +522,7 @@ const Membership = () => {
       }, 800);
     }
   }, []);
-  const [subTabs, setSubTabs] = useState({
-    start: "start_fight",
-    perform: "perform_hyrox",
-  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const pricingRef = useRef(null);
@@ -477,73 +538,41 @@ const Membership = () => {
           const plans = response.data.data;
 
           // Rebuild pricingData dynamically
-          const newPricingData = {};
+          const newPricingData = { ...pricingData };
           plans.forEach((plan) => {
-            newPricingData[plan.key] = {
-              _id: plan._id,
-              key: plan.key,
-              title: plan.title,
-              features: plan.features,
-              plans: plan.plans,
-              starterPrice: plan.starterPrice,
-            };
+            if (["core", "athlete", "arena", "junior"].includes(plan.key)) {
+              newPricingData[plan.key] = {
+                ...newPricingData[plan.key],
+                _id: plan._id,
+                key: plan.key,
+                title: plan.title || newPricingData[plan.key]?.title,
+                subtitle: plan.subtitle || newPricingData[plan.key]?.subtitle,
+                sessionInfo: plan.sessionInfo || newPricingData[plan.key]?.sessionInfo,
+                dailyRate: plan.dailyRate || newPricingData[plan.key]?.dailyRate,
+                dailyRateLabel: plan.dailyRateLabel || newPricingData[plan.key]?.dailyRateLabel,
+                dailyComparison: plan.dailyComparison || newPricingData[plan.key]?.dailyComparison,
+                features: plan.features?.length ? plan.features : newPricingData[plan.key]?.features,
+                benefits: plan.benefits?.length ? plan.benefits : newPricingData[plan.key]?.benefits,
+                plans: plan.plans?.length ? plan.plans : newPricingData[plan.key]?.plans,
+                starterPrice: plan.starterPrice || newPricingData[plan.key]?.starterPrice,
+              };
+            }
           });
           setDynamicPricingData(newPricingData);
 
-          // Update programs prices and sub-tabs from DB plans
+          // Update programs prices from DB plans
           const updatedPrograms = programs.map((prog) => {
-            const copy = { ...prog };
-            if (copy.id === "transform") {
-              const dbPlan = plans.find((p) => p.key === "transform");
-              if (dbPlan) {
-                copy.price = dbPlan.starterPrice;
-                // If there's highlights in the plans, join them or keep default
-                if (dbPlan.plans?.[0]?.highlights) {
-                  copy.desc = dbPlan.plans[0].highlights.slice(0, 3).join(". ");
-                }
-              }
-            } else if (copy.id === "start") {
-              const dbFight = plans.find((p) => p.key === "start_fight");
-              if (dbFight) {
-                copy.price = dbFight.starterPrice;
-              }
-              if (copy.tabs) {
-                copy.tabs = copy.tabs.map((tab) => {
-                  const dbTab = plans.find((p) => p.key === tab.id);
-                  if (dbTab) {
-                    return {
-                      ...tab,
-                      price: dbTab.starterPrice,
-                      desc:
-                        dbTab.plans?.[0]?.highlights?.slice(0, 3).join(". ") ||
-                        tab.desc,
-                    };
-                  }
-                  return tab;
-                });
-              }
-            } else if (copy.id === "perform") {
-              const dbHyrox = plans.find((p) => p.key === "perform_hyrox");
-              if (dbHyrox) {
-                copy.price = dbHyrox.starterPrice;
-              }
-              if (copy.tabs) {
-                copy.tabs = copy.tabs.map((tab) => {
-                  const dbTab = plans.find((p) => p.key === tab.id);
-                  if (dbTab) {
-                    return {
-                      ...tab,
-                      price: dbTab.starterPrice,
-                      desc:
-                        dbTab.plans?.[0]?.highlights?.slice(0, 3).join(". ") ||
-                        tab.desc,
-                    };
-                  }
-                  return tab;
-                });
-              }
+            const dbPlan = plans.find((p) => p.key === prog.id);
+            if (dbPlan) {
+              return {
+                ...prog,
+                title: dbPlan.title || prog.title,
+                subtitle: dbPlan.subtitle || prog.subtitle,
+                desc: dbPlan.sessionInfo || prog.desc,
+                price: dbPlan.starterPrice || prog.price,
+              };
             }
-            return copy;
+            return prog;
           });
           setDynamicPrograms(updatedPrograms);
         }
@@ -554,10 +583,7 @@ const Membership = () => {
     fetchPlans();
   }, []);
 
-  const activeDataKey =
-    activeTab === "transform" ? "transform" : subTabs[activeTab];
-  const activeData =
-    dynamicPricingData[activeDataKey] || pricingData[activeDataKey];
+  const activeData = dynamicPricingData[activeTab] || pricingData[activeTab];
 
   const handlePlanSelect = (planName, price, durationStr) => {
     const monthsVal = durationStr ? parseInt(durationStr) : 1;
@@ -581,7 +607,7 @@ const Membership = () => {
         className="w-full bg-[#0a0a0a] py-8 md:py-12 px-2 md:px-6 flex flex-col items-center justify-center font-sans text-white"
       >
         {/* STEP 1: CHOOSE PROGRAM */}
-        <div className="w-full max-w-7xl  mx-auto mb-12">
+        <div className="w-full max-w-8xl px-0 md:px-10 mx-auto mb-12">
           {/*................................................................. Membership Plans heading start.............................. */}
 
           <motion.div
@@ -617,7 +643,7 @@ const Membership = () => {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8  mt-8 md:mt-15 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7 mt-8 md:mt-15">
             {dynamicPrograms.map((prog, index) => (
               <motion.div
                 key={prog.id}
@@ -752,8 +778,7 @@ const Membership = () => {
           ref={pricingRef}
           activeData={activeData}
           activeTab={activeTab}
-          subTabs={subTabs}
-          setSubTabs={setSubTabs}
+          setActiveTab={setActiveTab}
           handlePlanSelect={handlePlanSelect}
           programs={dynamicPrograms}
         />

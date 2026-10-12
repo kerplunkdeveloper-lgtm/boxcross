@@ -61,6 +61,8 @@ export const getMembershipPlans = () => API.get("/memberships");
 
 export const updateMembershipPlan = (id, data) => API.put(`/memberships/${id}`, data);
 
+export const deleteMembershipPlan = (id) => API.delete(`/memberships/${id}`);
+
 // ──────────────── PAYMENT API ────────────────
 
 export const createPayment = (data) => API.post("/payments", data);

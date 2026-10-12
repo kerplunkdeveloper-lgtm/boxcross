@@ -10,8 +10,13 @@ import {
   Plus,
   Trash,
   HelpCircle,
+  RefreshCw,
 } from "lucide-react";
-import { getMembershipPlans, updateMembershipPlan } from "../api/api";
+import {
+  getMembershipPlans,
+  updateMembershipPlan,
+  deleteMembershipPlan,
+} from "../api/api";
 import { toast } from "react-hot-toast";
 
 const DashboardMemberships = () => {
@@ -53,10 +58,10 @@ const DashboardMemberships = () => {
     setEditingPlan(plan);
     setFormId(plan._id);
     setFormKey(plan.key);
-    setFormTitle(plan.title);
-    setFormStarterPrice(plan.starterPrice);
-    setFormFeatures(plan.features.join(", "));
-    setFormPlans(JSON.parse(JSON.stringify(plan.plans))); // Deep copy
+    setFormTitle(plan.title || "");
+    setFormStarterPrice(plan.starterPrice || "");
+    setFormFeatures(plan.features ? plan.features.join(", ") : "");
+    setFormPlans(plan.plans ? JSON.parse(JSON.stringify(plan.plans)) : []); // Deep copy
     setIsModalOpen(true);
   };
 
@@ -105,6 +110,21 @@ const DashboardMemberships = () => {
     }
   };
 
+  const handleDeleteClick = async (planId, planTitle) => {
+    if (window.confirm(`Are you sure you want to delete ${planTitle}?`)) {
+      try {
+        const { data } = await deleteMembershipPlan(planId);
+        if (data.success) {
+          toast.success("Membership plan deleted successfully!");
+          fetchPlans();
+        }
+      } catch (error) {
+        console.error("Error deleting membership plan", error);
+        toast.error("Failed to delete membership plan");
+      }
+    }
+  };
+
   return (
     <div className="p-3.5 sm:p-5 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
       <div className="max-w-8xl mx-auto">
@@ -122,12 +142,25 @@ const DashboardMemberships = () => {
                 className="text-[var(--db-accent-highlight)]"
               />
               <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)]">
-                Membership Plans & Pricing
+                Membership Plans &amp; Pricing
               </span>
             </div>
-            <span className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] px-2.5 py-1 rounded-full font-bold">
-              {plans.length} Categories
-            </span>
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  fetchPlans();
+                  toast.success("Plans refreshed from server!");
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] hover:border-[var(--db-accent-highlight)] font-bold transition-all cursor-pointer"
+              >
+                <RefreshCw size={12} />
+                <span>Sync / Refresh</span>
+              </button>
+              <span className="text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] px-2.5 py-1 rounded-full font-bold">
+                {plans.length} Categories
+              </span>
+            </div>
           </div>
 
           {loading ? (
@@ -185,25 +218,34 @@ const DashboardMemberships = () => {
                       <div className="flex items-center justify-between text-[11px]">
                         <span className="text-[var(--db-text-muted)] font-medium">Durations:</span>
                         <span className="font-semibold text-[var(--db-text)]">
-                          {plan.plans.map((p) => p.months).join(" / ")}
+                          {plan.plans?.map((p) => p.months).join(" / ") || "—"}
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-[11px]">
                         <span className="text-[var(--db-text-muted)] font-medium">Features:</span>
                         <span className="text-[var(--db-text-muted)] font-semibold">
-                          {plan.features.length} listed features
+                          {plan.features?.length || 0} listed features
                         </span>
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => handleEditClick(plan)}
-                      className="w-full py-2.5 px-3 bg-[var(--db-accent)] text-[var(--db-accent-text)] rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer"
-                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                    >
-                      <Edit size={13} />
-                      <span>Edit Plan Pricing & Data</span>
-                    </button>
+                    <div className="flex items-center gap-2 pt-1">
+                      <button
+                        onClick={() => handleEditClick(plan)}
+                        className="flex-1 py-2.5 px-3 bg-[var(--db-accent)] text-[var(--db-accent-text)] rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        <Edit size={13} />
+                        <span>Edit</span>
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(plan._id, plan.title)}
+                        className="p-2.5 bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 rounded-xl transition-all cursor-pointer flex items-center justify-center"
+                        title="Delete Plan"
+                      >
+                        <Trash size={14} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -239,23 +281,32 @@ const DashboardMemberships = () => {
                           ₹{plan.starterPrice}
                         </td>
                         <td className="py-4 px-4 text-xs text-[var(--db-text-muted)]">
-                          {plan.plans.map((p) => p.months).join(" / ")}
+                          {plan.plans?.map((p) => p.months).join(" / ") || "—"}
                         </td>
                         <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
-                          {plan.features.length} features
+                          {plan.features?.length || 0} features
                         </td>
                         <td className="py-4 px-4 text-right">
-                          <button
-                            onClick={() => handleEditClick(plan)}
-                            className="p-2 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                          >
-                            <Edit
-                              size={14}
-                              className="text-[var(--db-accent-highlight)]"
-                            />
-                            Edit
-                          </button>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => handleEditClick(plan)}
+                              className="p-2 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
+                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            >
+                              <Edit
+                                size={14}
+                                className="text-[var(--db-accent-highlight)]"
+                              />
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(plan._id, plan.title)}
+                              className="p-2 hover:bg-red-500/10 text-zinc-500 hover:text-red-400 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-xs font-bold"
+                              title="Delete Plan"
+                            >
+                              <Trash size={14} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

@@ -297,10 +297,10 @@ const Membership = () => {
         <div data-aos="fade-up" data-aos-delay="100">
           <BookForm />
         </div>
-        {/* Temporarily hidden reference image section (Step 1 & Step 2) */}
-        {/* <div data-aos="fade-up" data-aos-delay="100">
+        {/* Membership Plans section (Step 1 & Step 2) */}
+        <div data-aos="fade-up" data-aos-delay="100">
           <MembershipPlans />
-        </div> */}
+        </div>
 
         <div data-aos="fade-up" data-aos-delay="100">
           <WhatWeOffer />

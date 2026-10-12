@@ -3,7 +3,8 @@ const router = express.Router();
 const {
   getMembershipPlans,
   getMembershipPlanByKey,
-  updateMembershipPlan
+  updateMembershipPlan,
+  deleteMembershipPlan
 } = require("../controllers/membershipController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 
@@ -11,7 +12,9 @@ const { protect, authorize } = require("../middleware/authMiddleware");
 router.get("/", getMembershipPlans);
 router.get("/:key", getMembershipPlanByKey);
 
-// Admin-only update endpoint
+// Admin-only update and delete endpoints
 router.put("/:id", protect, authorize("admin"), updateMembershipPlan);
+router.delete("/:id", protect, authorize("admin"), deleteMembershipPlan);
 
 module.exports = router;
+
