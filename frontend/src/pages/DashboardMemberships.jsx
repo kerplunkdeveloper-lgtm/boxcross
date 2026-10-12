@@ -11,6 +11,13 @@ import {
   Trash,
   HelpCircle,
   RefreshCw,
+  Check,
+  Tag,
+  Sparkles,
+  SlidersHorizontal,
+  DollarSign,
+  Calendar,
+  Layers,
 } from "lucide-react";
 import {
   getMembershipPlans,
@@ -23,6 +30,7 @@ const DashboardMemberships = () => {
   const { user } = useAuth();
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [editingPlan, setEditingPlan] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -30,9 +38,19 @@ const DashboardMemberships = () => {
   const [formId, setFormId] = useState("");
   const [formKey, setFormKey] = useState("");
   const [formTitle, setFormTitle] = useState("");
+  const [formSubtitle, setFormSubtitle] = useState("");
   const [formStarterPrice, setFormStarterPrice] = useState("");
+  const [formDailyRate, setFormDailyRate] = useState("");
+  const [formDailyRateLabel, setFormDailyRateLabel] = useState("");
+  const [formDailyComparison, setFormDailyComparison] = useState("");
+  const [formSessionInfo, setFormSessionInfo] = useState("");
   const [formFeatures, setFormFeatures] = useState("");
   const [formPlans, setFormPlans] = useState([]);
+
+  // Inline table edit states
+  const [inlineEditId, setInlineEditId] = useState(null);
+  const [inlineData, setInlineData] = useState({});
+  const [inlineSaving, setInlineSaving] = useState(false);
 
   const fetchPlans = async () => {
     try {
@@ -54,14 +72,35 @@ const DashboardMemberships = () => {
     }
   }, [user]);
 
+  // Open Full Edit Modal
   const handleEditClick = (plan) => {
     setEditingPlan(plan);
     setFormId(plan._id);
     setFormKey(plan.key);
     setFormTitle(plan.title || "");
+    setFormSubtitle(plan.subtitle || "");
     setFormStarterPrice(plan.starterPrice || "");
+    setFormDailyRate(plan.dailyRate || "");
+    setFormDailyRateLabel(plan.dailyRateLabel || "A DAY ON THE 12-MONTH PLAN");
+    setFormDailyComparison(plan.dailyComparison || "");
+    setFormSessionInfo(plan.sessionInfo || plan.desc || "");
     setFormFeatures(plan.features ? plan.features.join(", ") : "");
-    setFormPlans(plan.plans ? JSON.parse(JSON.stringify(plan.plans)) : []); // Deep copy
+    setFormPlans(
+      plan.plans && plan.plans.length > 0
+        ? plan.plans.map((p) => ({
+            months: p.months || "",
+            subtitle: p.subtitle || "",
+            price: p.price || "",
+            perMonth: p.perMonth || "",
+            originalPrice: p.originalPrice || "",
+            totalPrice: p.totalPrice || p.price || "",
+            highlights: p.highlights || [],
+            tag: p.tag || "",
+            buttonText: p.buttonText || "CHOOSE PLAN",
+            isPopular: !!p.isPopular,
+          }))
+        : []
+    );
     setIsModalOpen(true);
   };
 
@@ -83,11 +122,47 @@ const DashboardMemberships = () => {
     setFormPlans(updated);
   };
 
+  const handleAddSubPlan = () => {
+    const count = formPlans.length + 1;
+    setFormPlans([
+      ...formPlans,
+      {
+        months: `${count * 3} MONTHS`,
+        subtitle: "STANDARD",
+        price: "",
+        perMonth: "",
+        originalPrice: "",
+        totalPrice: "",
+        highlights: ["Coached sessions", "Gym access"],
+        tag: "STANDARD",
+        buttonText: "CHOOSE PLAN",
+        isPopular: false,
+      },
+    ]);
+  };
+
+  const handleRemoveSubPlan = (index) => {
+    if (formPlans.length <= 1) {
+      toast.error("At least one duration option is required");
+      return;
+    }
+    const updated = formPlans.filter((_, i) => i !== index);
+    setFormPlans(updated);
+  };
+
+  // Save from Modal
   const handleSave = async (e) => {
     e.preventDefault();
+    setSaving(true);
     const updatedData = {
       title: formTitle,
+      subtitle: formSubtitle,
       starterPrice: formStarterPrice,
+      dailyRate: formDailyRate,
+      dailyRateLabel: formDailyRateLabel,
+      dailyComparison: formDailyComparison,
+      sessionInfo: formSessionInfo,
+      desc: formSessionInfo,
       features: formFeatures
         .split(",")
         .map((item) => item.trim())
@@ -101,12 +176,74 @@ const DashboardMemberships = () => {
         toast.success("Membership plan updated successfully!");
         setIsModalOpen(false);
         fetchPlans(); // Reload list
+        try {
+          const channel = new BroadcastChannel("membership_plan_updates");
+          channel.postMessage("PLAN_UPDATED");
+          channel.close();
+        } catch (err) {}
       }
     } catch (error) {
       console.error("Error updating membership plan", error);
       toast.error(
-        error.response?.data?.message || "Failed to update membership plan.",
+        error.response?.data?.message || "Failed to update membership plan."
       );
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Inline Row Edit Handlers
+  const startInlineEdit = (plan) => {
+    setInlineEditId(plan._id);
+    setInlineData({
+      title: plan.title || "",
+      subtitle: plan.subtitle || "",
+      starterPrice: plan.starterPrice || "",
+      dailyRate: plan.dailyRate || "",
+      dailyComparison: plan.dailyComparison || "",
+      sessionInfo: plan.sessionInfo || plan.desc || "",
+    });
+  };
+
+  const cancelInlineEdit = () => {
+    setInlineEditId(null);
+    setInlineData({});
+  };
+
+  const handleInlineChange = (field, value) => {
+    setInlineData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const saveInlineEdit = async (plan) => {
+    setInlineSaving(true);
+    try {
+      const updatedData = {
+        title: inlineData.title,
+        subtitle: inlineData.subtitle,
+        starterPrice: inlineData.starterPrice,
+        dailyRate: inlineData.dailyRate,
+        dailyComparison: inlineData.dailyComparison,
+        sessionInfo: inlineData.sessionInfo,
+        desc: inlineData.sessionInfo,
+      };
+      const { data } = await updateMembershipPlan(plan._id, updatedData);
+      if (data.success) {
+        toast.success(
+          `${inlineData.title || plan.title} updated successfully!`
+        );
+        setInlineEditId(null);
+        fetchPlans();
+        try {
+          const channel = new BroadcastChannel("membership_plan_updates");
+          channel.postMessage("PLAN_UPDATED");
+          channel.close();
+        } catch (err) {}
+      }
+    } catch (error) {
+      console.error("Error inline updating plan", error);
+      toast.error("Failed to update plan");
+    } finally {
+      setInlineSaving(false);
     }
   };
 
@@ -135,15 +272,20 @@ const DashboardMemberships = () => {
           className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[24px] p-4 sm:p-6 md:p-8 shadow-2xl transition-colors"
         >
           {/* Header */}
-          <div className="flex items-center justify-between mb-5 pb-3 border-b border-[var(--db-card-border)]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-3 border-b border-[var(--db-card-border)]">
             <div className="flex items-center gap-2">
               <CreditCard
                 size={18}
                 className="text-[var(--db-accent-highlight)]"
               />
-              <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)]">
-                Membership Plans &amp; Pricing
-              </span>
+              <div>
+                <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[var(--db-accent-highlight)] block">
+                  Membership Plans &amp; Pricing Management
+                </span>
+                <span className="text-[10px] text-[var(--db-text-muted)] font-medium">
+                  Directly edit starter prices, durations, daily rates, and features
+                </span>
+              </div>
             </div>
             <div className="flex items-center gap-2.5">
               <button
@@ -189,127 +331,475 @@ const DashboardMemberships = () => {
           ) : plans.length > 0 ? (
             <>
               {/* Mobile Card View (< md) */}
-              <div className="block md:hidden space-y-3">
-                {plans.map((plan) => (
-                  <div
-                    key={plan._id}
-                    className="p-4 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40 hover:bg-[var(--db-table-hover)] transition-all space-y-3 text-left"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <span className="inline-block px-2 py-0.5 mb-1 text-[9px] font-mono font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-highlight)]/10 rounded-md border border-[var(--db-accent-highlight)]/25">
-                          {plan.key}
-                        </span>
-                        <h3 className="text-sm font-black text-[var(--db-text)] uppercase tracking-wide">
-                          {plan.title}
-                        </h3>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold block">
-                          Starter
-                        </span>
-                        <span className="text-base font-black text-[var(--db-accent-highlight)] font-mono">
-                          ₹{plan.starterPrice}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="text-xs space-y-1 pt-1 border-t border-[var(--db-card-border)]/50">
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-[var(--db-text-muted)] font-medium">Durations:</span>
-                        <span className="font-semibold text-[var(--db-text)]">
-                          {plan.plans?.map((p) => p.months).join(" / ") || "—"}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-[var(--db-text-muted)] font-medium">Features:</span>
-                        <span className="text-[var(--db-text-muted)] font-semibold">
-                          {plan.features?.length || 0} listed features
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 pt-1">
-                      <button
-                        onClick={() => handleEditClick(plan)}
-                        className="flex-1 py-2.5 px-3 bg-[var(--db-accent)] text-[var(--db-accent-text)] rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                      >
-                        <Edit size={13} />
-                        <span>Edit</span>
-                      </button>
-                      <button
-                        onClick={() => handleDeleteClick(plan._id, plan.title)}
-                        className="p-2.5 bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 rounded-xl transition-all cursor-pointer flex items-center justify-center"
-                        title="Delete Plan"
-                      >
-                        <Trash size={14} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Desktop Table View (>= md) */}
-              <div className="hidden md:block overflow-x-auto w-full custom-scrollbar">
-                <table className="w-full text-left border-collapse min-w-[750px]">
-                  <thead>
-                    <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
-                      <th className="py-4 px-4 rounded-l-xl">Program Key</th>
-                      <th className="py-4 px-4">Program Title</th>
-                      <th className="py-4 px-4">Starter Price</th>
-                      <th className="py-4 px-4">Available Durations</th>
-                      <th className="py-4 px-4">Total Features</th>
-                      <th className="py-4 px-4 text-right rounded-r-xl">
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[var(--db-card-border)]">
-                    {plans.map((plan) => (
-                      <tr
-                        key={plan._id}
-                        className="hover:bg-[var(--db-table-hover)] transition-colors"
-                      >
-                        <td className="py-4 px-4 text-sm font-mono text-[var(--db-accent-highlight)] font-semibold">
-                          {plan.key}
-                        </td>
-                        <td className="py-4 px-4 text-sm font-bold text-[var(--db-text)]">
-                          {plan.title}
-                        </td>
-                        <td className="py-4 px-4 text-sm text-[var(--db-text)] font-semibold">
-                          ₹{plan.starterPrice}
-                        </td>
-                        <td className="py-4 px-4 text-xs text-[var(--db-text-muted)]">
-                          {plan.plans?.map((p) => p.months).join(" / ") || "—"}
-                        </td>
-                        <td className="py-4 px-4 text-sm text-[var(--db-text-muted)]">
-                          {plan.features?.length || 0} features
-                        </td>
-                        <td className="py-4 px-4 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <button
-                              onClick={() => handleEditClick(plan)}
-                              className="p-2 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
-                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                            >
-                              <Edit
-                                size={14}
-                                className="text-[var(--db-accent-highlight)]"
+              <div className="block md:hidden space-y-3.5">
+                {plans.map((plan) => {
+                  const isInline = inlineEditId === plan._id;
+                  return (
+                    <div
+                      key={plan._id}
+                      className="p-4 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40 hover:bg-[var(--db-table-hover)] transition-all space-y-3 text-left"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1">
+                          <span className="inline-block px-2 py-0.5 mb-1 text-[9px] font-mono font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-highlight)]/10 rounded-md border border-[var(--db-accent-highlight)]/25">
+                            {plan.key}
+                          </span>
+                          {isInline ? (
+                            <div className="space-y-1.5 mt-1">
+                              <input
+                                type="text"
+                                value={inlineData.title}
+                                onChange={(e) =>
+                                  handleInlineChange("title", e.target.value)
+                                }
+                                placeholder="Program Title"
+                                className="w-full h-8 px-2.5 bg-[var(--db-card)] border border-[var(--db-accent-highlight)] text-xs font-bold text-[var(--db-text)] rounded-lg outline-none"
                               />
-                              Edit
+                              <input
+                                type="text"
+                                value={inlineData.subtitle}
+                                onChange={(e) =>
+                                  handleInlineChange("subtitle", e.target.value)
+                                }
+                                placeholder="Subtitle (e.g. ONE PATHWAY)"
+                                className="w-full h-7 px-2.5 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[10px] text-[var(--db-text-muted)] rounded-lg outline-none"
+                              />
+                            </div>
+                          ) : (
+                            <div>
+                              <h3 className="text-sm font-black text-[var(--db-text)] uppercase tracking-wide">
+                                {plan.title}
+                              </h3>
+                              {plan.subtitle && (
+                                <span className="text-[10px] text-[var(--db-text-muted)] font-semibold tracking-wider uppercase block">
+                                  {plan.subtitle}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold block">
+                            Starter Price
+                          </span>
+                          {isInline ? (
+                            <div className="flex items-center gap-1 mt-1 justify-end">
+                              <span className="text-xs text-[var(--db-accent-highlight)] font-mono">
+                                ₹
+                              </span>
+                              <input
+                                type="text"
+                                value={inlineData.starterPrice}
+                                onChange={(e) =>
+                                  handleInlineChange(
+                                    "starterPrice",
+                                    e.target.value
+                                  )
+                                }
+                                placeholder="Price"
+                                className="w-20 h-8 px-2 bg-[var(--db-card)] border border-[var(--db-accent-highlight)] text-xs font-mono font-bold text-[var(--db-accent-highlight)] rounded-lg text-right outline-none"
+                              />
+                            </div>
+                          ) : (
+                            <span className="text-base font-black text-[var(--db-accent-highlight)] font-mono">
+                              ₹{plan.starterPrice}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Daily Rate & Comparison */}
+                      {isInline ? (
+                        <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[var(--db-card-border)]/50">
+                          <div>
+                            <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold block">
+                              Daily Rate (₹)
+                            </span>
+                            <input
+                              type="text"
+                              value={inlineData.dailyRate}
+                              onChange={(e) =>
+                                handleInlineChange("dailyRate", e.target.value)
+                              }
+                              placeholder="e.g. ₹92"
+                              className="w-full h-7 px-2 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[10px] text-[var(--db-text)] rounded-lg outline-none"
+                            />
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold block">
+                              Comparison
+                            </span>
+                            <input
+                              type="text"
+                              value={inlineData.dailyComparison}
+                              onChange={(e) =>
+                                handleInlineChange(
+                                  "dailyComparison",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="e.g. Two coffees"
+                              className="w-full h-7 px-2 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[10px] text-[var(--db-text)] rounded-lg outline-none"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        (plan.dailyRate || plan.dailyComparison) && (
+                          <div className="text-[11px] flex items-center justify-between pt-1 border-t border-[var(--db-card-border)]/50">
+                            <span className="text-[var(--db-text-muted)] font-medium">
+                              Daily Rate:
+                            </span>
+                            <span className="font-semibold text-[var(--db-text)]">
+                              {plan.dailyRate}{" "}
+                              {plan.dailyComparison && (
+                                <span className="text-[10px] text-[var(--db-text-muted)]">
+                                  ({plan.dailyComparison})
+                                </span>
+                              )}
+                            </span>
+                          </div>
+                        )
+                      )}
+
+                      {/* Durations */}
+                      <div className="text-xs space-y-1.5 pt-1 border-t border-[var(--db-card-border)]/50">
+                        <div className="text-[11px]">
+                          <span className="text-[var(--db-text-muted)] font-medium block mb-1">
+                            Durations &amp; Pricing:
+                          </span>
+                          <div className="flex flex-wrap gap-1">
+                            {plan.plans?.map((p, idx) => (
+                              <span
+                                key={idx}
+                                className="inline-flex items-center gap-1 text-[10px] bg-[var(--db-card)] border border-[var(--db-card-border)] px-2 py-0.5 rounded font-mono"
+                              >
+                                <span className="text-[var(--db-text-muted)]">
+                                  {p.months}:
+                                </span>
+                                <span className="text-[var(--db-accent-highlight)] font-bold">
+                                  ₹{p.price}
+                                </span>
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-[var(--db-text-muted)] font-medium">
+                            Features:
+                          </span>
+                          <span className="text-[var(--db-text-muted)] font-semibold">
+                            {plan.features?.length || 0} listed features
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex items-center gap-2 pt-1 border-t border-[var(--db-card-border)]/50">
+                        {isInline ? (
+                          <>
+                            <button
+                              disabled={inlineSaving}
+                              onClick={() => saveInlineEdit(plan)}
+                              className="flex-1 py-2 px-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer"
+                            >
+                              <Check size={14} />
+                              <span>{inlineSaving ? "Saving..." : "Save"}</span>
                             </button>
                             <button
-                              onClick={() => handleDeleteClick(plan._id, plan.title)}
-                              className="p-2 hover:bg-red-500/10 text-zinc-500 hover:text-red-400 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-xs font-bold"
+                              onClick={cancelInlineEdit}
+                              className="py-2 px-3 bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-xl font-bold text-xs uppercase transition-all cursor-pointer"
+                            >
+                              <X size={14} />
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => startInlineEdit(plan)}
+                              className="py-2 px-3 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] hover:border-[var(--db-accent-highlight)] rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1 transition-all cursor-pointer"
+                              title="Quick Edit Row"
+                            >
+                              <Edit size={12} />
+                              <span>Quick</span>
+                            </button>
+                            <button
+                              onClick={() => handleEditClick(plan)}
+                              className="flex-1 py-2 px-3 bg-[var(--db-accent)] text-[var(--db-accent-text)] rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md hover:opacity-90 active:scale-[0.99] transition-all cursor-pointer"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
+                              <SlidersHorizontal size={13} />
+                              <span>Full Edit</span>
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleDeleteClick(plan._id, plan.title)
+                              }
+                              className="p-2 bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 rounded-xl transition-all cursor-pointer flex items-center justify-center"
                               title="Delete Plan"
                             >
                               <Trash size={14} />
                             </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop Table View (>= md) */}
+              <div className="hidden md:block overflow-x-auto w-full custom-scrollbar">
+                <table className="w-full text-left border-collapse min-w-[950px]">
+                  <thead>
+                    <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
+                      <th className="py-4 px-4 rounded-l-xl">Program</th>
+                      <th className="py-4 px-4">Starter Price</th>
+                      <th className="py-4 px-4">Daily Rate &amp; Comparison</th>
+                      <th className="py-4 px-4">Session Info</th>
+                      <th className="py-4 px-4">Durations &amp; Rates</th>
+                      <th className="py-4 px-4">Features</th>
+                      <th className="py-4 px-4 text-right rounded-r-xl">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--db-card-border)]">
+                    {plans.map((plan) => {
+                      const isInline = inlineEditId === plan._id;
+                      return (
+                        <tr
+                          key={plan._id}
+                          className="hover:bg-[var(--db-table-hover)] transition-colors align-middle"
+                        >
+                          {/* Program Key & Title */}
+                          <td className="py-4 px-4">
+                            <span className="inline-block px-2 py-0.5 mb-1 text-[9px] font-mono font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-highlight)]/10 rounded-md border border-[var(--db-accent-highlight)]/25">
+                              {plan.key}
+                            </span>
+                            {isInline ? (
+                              <div className="space-y-1 mt-1">
+                                <input
+                                  type="text"
+                                  value={inlineData.title}
+                                  onChange={(e) =>
+                                    handleInlineChange("title", e.target.value)
+                                  }
+                                  placeholder="Title"
+                                  className="w-full h-8 px-2.5 bg-[var(--db-card)] border border-[var(--db-accent-highlight)] text-xs font-bold text-[var(--db-text)] rounded-lg outline-none"
+                                />
+                                <input
+                                  type="text"
+                                  value={inlineData.subtitle}
+                                  onChange={(e) =>
+                                    handleInlineChange(
+                                      "subtitle",
+                                      e.target.value
+                                    )
+                                  }
+                                  placeholder="Subtitle"
+                                  className="w-full h-7 px-2.5 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[10px] text-[var(--db-text-muted)] rounded-lg outline-none"
+                                />
+                              </div>
+                            ) : (
+                              <div>
+                                <div className="text-sm font-bold text-[var(--db-text)]">
+                                  {plan.title}
+                                </div>
+                                {plan.subtitle && (
+                                  <div className="text-[10px] text-[var(--db-text-muted)] font-semibold uppercase tracking-wider">
+                                    {plan.subtitle}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </td>
+
+                          {/* Starter Price */}
+                          <td className="py-4 px-4">
+                            {isInline ? (
+                              <div className="flex items-center gap-1">
+                                <span className="text-xs text-[var(--db-accent-highlight)] font-mono font-bold">
+                                  ₹
+                                </span>
+                                <input
+                                  type="text"
+                                  value={inlineData.starterPrice}
+                                  onChange={(e) =>
+                                    handleInlineChange(
+                                      "starterPrice",
+                                      e.target.value
+                                    )
+                                  }
+                                  className="w-24 h-8 px-2 bg-[var(--db-card)] border border-[var(--db-accent-highlight)] text-xs font-mono font-bold text-[var(--db-accent-highlight)] rounded-lg outline-none"
+                                  placeholder="e.g. 2,800"
+                                />
+                              </div>
+                            ) : (
+                              <span className="text-sm font-black text-[var(--db-accent-highlight)] font-mono">
+                                ₹{plan.starterPrice}
+                              </span>
+                            )}
+                          </td>
+
+                          {/* Daily Rate & Comparison */}
+                          <td className="py-4 px-4">
+                            {isInline ? (
+                              <div className="space-y-1">
+                                <input
+                                  type="text"
+                                  value={inlineData.dailyRate}
+                                  onChange={(e) =>
+                                    handleInlineChange(
+                                      "dailyRate",
+                                      e.target.value
+                                    )
+                                  }
+                                  placeholder="Rate (e.g. ₹92)"
+                                  className="w-24 h-7 px-2 bg-[var(--db-card)] border border-[var(--db-input-border)] text-xs text-[var(--db-text)] rounded-lg outline-none"
+                                />
+                                <input
+                                  type="text"
+                                  value={inlineData.dailyComparison}
+                                  onChange={(e) =>
+                                    handleInlineChange(
+                                      "dailyComparison",
+                                      e.target.value
+                                    )
+                                  }
+                                  placeholder="Comparison (e.g. Two coffees)"
+                                  className="w-36 h-7 px-2 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[10px] text-[var(--db-text-muted)] rounded-lg outline-none"
+                                />
+                              </div>
+                            ) : (
+                              <div>
+                                <span className="text-xs font-bold text-[var(--db-text)] font-mono">
+                                  {plan.dailyRate || "—"}
+                                </span>
+                                {plan.dailyComparison && (
+                                  <div className="text-[10px] text-[var(--db-text-muted)] truncate max-w-[140px]">
+                                    {plan.dailyComparison}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </td>
+
+                          {/* Session Info */}
+                          <td className="py-4 px-4 max-w-[200px]">
+                            {isInline ? (
+                              <textarea
+                                value={inlineData.sessionInfo}
+                                onChange={(e) =>
+                                  handleInlineChange(
+                                    "sessionInfo",
+                                    e.target.value
+                                  )
+                                }
+                                rows={2}
+                                placeholder="Session info..."
+                                className="w-full bg-[var(--db-card)] border border-[var(--db-input-border)] text-[11px] text-[var(--db-text)] rounded-lg p-1.5 outline-none resize-none"
+                              />
+                            ) : (
+                              <div
+                                className="text-xs text-[var(--db-text-muted)] line-clamp-2"
+                                title={plan.sessionInfo || plan.desc}
+                              >
+                                {plan.sessionInfo || plan.desc || "—"}
+                              </div>
+                            )}
+                          </td>
+
+                          {/* Durations */}
+                          <td className="py-4 px-4">
+                            <div className="flex flex-wrap gap-1 max-w-[260px]">
+                              {plan.plans?.map((p, idx) => (
+                                <span
+                                  key={idx}
+                                  className="inline-flex items-center gap-1 text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-card-border)] px-2 py-0.5 rounded font-mono"
+                                  title={`${p.months}: ₹${p.price} (₹${p.perMonth}/mo) ${p.tag ? `[${p.tag}]` : ""}`}
+                                >
+                                  <span className="text-[var(--db-text-muted)]">
+                                    {p.months}:
+                                  </span>
+                                  <span className="text-[var(--db-accent-highlight)] font-bold">
+                                    ₹{p.price}
+                                  </span>
+                                </span>
+                              ))}
+                            </div>
+                          </td>
+
+                          {/* Features */}
+                          <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] whitespace-nowrap">
+                            <span className="inline-block px-2 py-1 rounded bg-[var(--db-input-bg)] border border-[var(--db-card-border)] font-semibold text-[11px]">
+                              {plan.features?.length || 0} features
+                            </span>
+                          </td>
+
+                          {/* Actions */}
+                          <td className="py-4 px-4 text-right">
+                            <div className="flex items-center justify-end gap-1.5">
+                              {isInline ? (
+                                <>
+                                  <button
+                                    disabled={inlineSaving}
+                                    onClick={() => saveInlineEdit(plan)}
+                                    className="p-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-xs font-bold"
+                                    title="Save changes"
+                                  >
+                                    <Check size={14} />
+                                    <span>
+                                      {inlineSaving ? "Saving" : "Save"}
+                                    </span>
+                                  </button>
+                                  <button
+                                    onClick={cancelInlineEdit}
+                                    className="p-1.5 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg transition-colors cursor-pointer"
+                                    title="Cancel"
+                                  >
+                                    <X size={14} />
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={() => startInlineEdit(plan)}
+                                    className="p-2 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-xs font-bold"
+                                    title="Quick inline edit"
+                                  >
+                                    <Edit size={13} />
+                                  </button>
+                                  <button
+                                    onClick={() => handleEditClick(plan)}
+                                    className="p-2 hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-accent-highlight)] hover:opacity-80 rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider"
+                                    style={{
+                                      fontFamily:
+                                        '"BrutalTypeBold", sans-serif',
+                                    }}
+                                    title="Edit all fields & durations"
+                                  >
+                                    <SlidersHorizontal size={13} />
+                                    <span>Full Edit</span>
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      handleDeleteClick(plan._id, plan.title)
+                                    }
+                                    className="p-2 hover:bg-red-500/10 text-zinc-500 hover:text-red-400 rounded-lg transition-colors cursor-pointer inline-flex items-center"
+                                    title="Delete Plan"
+                                  >
+                                    <Trash size={14} />
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -323,7 +813,7 @@ const DashboardMemberships = () => {
         </motion.div>
       </div>
 
-      {/* Edit Modal Popup */}
+      {/* Comprehensive Edit Modal Popup */}
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm">
@@ -332,7 +822,7 @@ const DashboardMemberships = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[28px] p-4 sm:p-6 md:p-8 shadow-2xl text-left custom-scrollbar"
+              className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[28px] p-4 sm:p-6 md:p-8 shadow-2xl text-left custom-scrollbar"
             >
               {/* Top Accent Line */}
               <div className="absolute top-0 left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-[var(--db-card-border)] to-transparent" />
@@ -340,12 +830,16 @@ const DashboardMemberships = () => {
               {/* Modal Header */}
               <div className="flex items-center justify-between pb-4 border-b border-[var(--db-card-border)] mb-6">
                 <div>
-                  <h3 className="text-[var(--db-text)] text-lg font-black uppercase tracking-wider">
-                    Modify Plan Data
+                  <h3 className="text-[var(--db-text)] text-lg font-black uppercase tracking-wider flex items-center gap-2">
+                    <SlidersHorizontal
+                      size={18}
+                      className="text-[var(--db-accent-highlight)]"
+                    />
+                    Modify Plan Data &amp; Pricing
                   </h3>
                   <p className="text-[var(--db-text-muted)] text-xs mt-0.5">
-                    Editing program configuration for{" "}
-                    <span className="font-mono text-[var(--db-accent-highlight)]">
+                    Editing complete configuration for{" "}
+                    <span className="font-mono text-[var(--db-accent-highlight)] font-bold uppercase">
                       {formKey}
                     </span>
                   </p>
@@ -360,148 +854,362 @@ const DashboardMemberships = () => {
 
               {/* Form */}
               <form onSubmit={handleSave} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Title */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
-                      Program Title
-                    </label>
-                    <input
-                      type="text"
-                      value={formTitle}
-                      onChange={(e) => setFormTitle(e.target.value)}
-                      className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-full px-5 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
-                      required
+                {/* 1. Basic Plan Information */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 border-b border-[var(--db-card-border)] pb-1.5">
+                    <Sparkles
+                      size={14}
+                      className="text-[var(--db-accent-highlight)]"
                     />
+                    <span className="text-[11px] font-black uppercase tracking-wider text-[var(--db-text)]">
+                      1. General Details &amp; Display Rates
+                    </span>
                   </div>
 
-                  {/* Starter Price */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {/* Title */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
+                        Program Title
+                      </label>
+                      <input
+                        type="text"
+                        value={formTitle}
+                        onChange={(e) => setFormTitle(e.target.value)}
+                        className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl px-4 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors font-semibold"
+                        required
+                      />
+                    </div>
+
+                    {/* Subtitle */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
+                        Program Subtitle
+                      </label>
+                      <input
+                        type="text"
+                        value={formSubtitle}
+                        onChange={(e) => setFormSubtitle(e.target.value)}
+                        placeholder="e.g. ONE PATHWAY, TWO PATHWAYS"
+                        className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl px-4 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors font-semibold"
+                      />
+                    </div>
+
+                    {/* Starter Price */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-[var(--db-accent-highlight)] font-extrabold uppercase tracking-widest flex items-center justify-between">
+                        <span>Starter Price (₹)</span>
+                        <span className="text-[9px] text-[var(--db-text-muted)] normal-case">
+                          (Shown on cards)
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formStarterPrice}
+                        onChange={(e) => setFormStarterPrice(e.target.value)}
+                        className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-accent-highlight)] rounded-xl px-4 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors font-mono font-bold"
+                        placeholder="e.g. 2,800"
+                        required
+                      />
+                    </div>
+
+                    {/* Daily Rate */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
+                        Daily Rate
+                      </label>
+                      <input
+                        type="text"
+                        value={formDailyRate}
+                        onChange={(e) => setFormDailyRate(e.target.value)}
+                        placeholder="e.g. ₹92"
+                        className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl px-4 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors font-mono"
+                      />
+                    </div>
+
+                    {/* Daily Rate Label */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
+                        Daily Rate Label
+                      </label>
+                      <input
+                        type="text"
+                        value={formDailyRateLabel}
+                        onChange={(e) => setFormDailyRateLabel(e.target.value)}
+                        placeholder="A DAY ON THE 12-MONTH PLAN"
+                        className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl px-4 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                      />
+                    </div>
+
+                    {/* Daily Comparison */}
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
+                        Daily Comparison
+                      </label>
+                      <input
+                        type="text"
+                        value={formDailyComparison}
+                        onChange={(e) => setFormDailyComparison(e.target.value)}
+                        placeholder="e.g. Two coffees and a vada."
+                        className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl px-4 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Session Info / Description */}
                   <div className="space-y-1.5">
                     <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
-                      Starter Access Price (₹)
+                      Session Info / Description
                     </label>
-                    <input
-                      type="text"
-                      value={formStarterPrice}
-                      onChange={(e) => setFormStarterPrice(e.target.value)}
-                      className="w-full h-11 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-full px-5 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
-                      required
+                    <textarea
+                      value={formSessionInfo}
+                      onChange={(e) => setFormSessionInfo(e.target.value)}
+                      rows={2}
+                      className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl p-3.5 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors resize-none"
+                      placeholder="Three coached sessions a week — Fight, HYROX or Strength"
                     />
                   </div>
                 </div>
 
-                {/* Features list */}
-                <div className="space-y-1.5">
-                  <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
-                    Program Features (comma separated)
-                  </label>
+                {/* 2. Features list */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 border-b border-[var(--db-card-border)] pb-1.5">
+                    <CheckCircle
+                      size={14}
+                      className="text-[var(--db-accent-highlight)]"
+                    />
+                    <span className="text-[11px] font-black uppercase tracking-wider text-[var(--db-text)]">
+                      2. Program Features (comma separated)
+                    </span>
+                  </div>
                   <textarea
                     value={formFeatures}
                     onChange={(e) => setFormFeatures(e.target.value)}
                     rows={2}
-                    className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl p-4 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors resize-none"
-                    placeholder="Feature 1, Feature 2, Feature 3..."
+                    className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl p-3.5 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors resize-none"
+                    placeholder="Three coached sessions a week, One pathway (Fight, HYROX or Strength), Open gym access, Community Access"
                     required
                   />
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {formFeatures
+                      .split(",")
+                      .map((f) => f.trim())
+                      .filter(Boolean)
+                      .map((feat, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center gap-1 text-[10px] bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] px-2 py-0.5 rounded-full"
+                        >
+                          <Check size={10} className="text-emerald-400" />
+                          {feat}
+                        </span>
+                      ))}
+                  </div>
                 </div>
 
-                {/* Sub plans pricing cards */}
-                <div className="space-y-3">
-                  <label className="text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest block border-b border-[var(--db-card-border)] pb-1">
-                    Membership Duration Rates
-                  </label>
+                {/* 3. Duration Plans & Rates (Full editor) */}
+                <div className="space-y-3.5">
+                  <div className="flex items-center justify-between border-b border-[var(--db-card-border)] pb-1.5">
+                    <div className="flex items-center gap-2">
+                      <Calendar
+                        size={14}
+                        className="text-[var(--db-accent-highlight)]"
+                      />
+                      <span className="text-[11px] font-black uppercase tracking-wider text-[var(--db-text)]">
+                        3. Membership Duration Rates &amp; Pricing Options
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAddSubPlan}
+                      className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[var(--db-accent-highlight)]/10 border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/20 text-xs font-bold transition-all cursor-pointer"
+                    >
+                      <Plus size={13} />
+                      <span>Add Duration Option</span>
+                    </button>
+                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {formPlans.map((subPlan, index) => (
                       <div
                         key={index}
-                        className="bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-2xl p-4 space-y-3.5"
+                        className="bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-2xl p-4 space-y-3 relative group"
                       >
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-[var(--db-accent-highlight)] font-black tracking-wider uppercase font-mono">
-                            {subPlan.months}
-                          </span>
-                          <span className="text-[9px] bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] px-1.5 py-0.5 rounded-sm font-bold">
-                            Plan {index + 1}
-                          </span>
+                        {/* Header of Duration Card */}
+                        <div className="flex items-center justify-between gap-2 border-b border-[var(--db-card-border)] pb-2">
+                          <div className="flex items-center gap-2 flex-1">
+                            <span className="text-[10px] bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-accent-highlight)] font-mono font-bold px-1.5 py-0.5 rounded">
+                              #{index + 1}
+                            </span>
+                            <input
+                              type="text"
+                              value={subPlan.months}
+                              onChange={(e) =>
+                                handleSubPlanChange(
+                                  index,
+                                  "months",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="e.g. 1 MONTH, 3 MONTHS"
+                              className="h-8 px-2.5 bg-[var(--db-card)] border border-[var(--db-input-border)] text-xs font-black uppercase text-[var(--db-text)] rounded-lg outline-none focus:border-[var(--db-accent-highlight)] font-mono w-32"
+                              required
+                            />
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <label className="flex items-center gap-1 text-[10px] text-[var(--db-text-muted)] cursor-pointer select-none">
+                              <input
+                                type="checkbox"
+                                checked={!!subPlan.isPopular}
+                                onChange={(e) =>
+                                  handleSubPlanChange(
+                                    index,
+                                    "isPopular",
+                                    e.target.checked
+                                  )
+                                }
+                                className="accent-[var(--db-accent-highlight)] cursor-pointer"
+                              />
+                              <span className="font-bold">Popular</span>
+                            </label>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveSubPlan(index)}
+                              className="p-1 hover:bg-red-500/10 text-[var(--db-text-muted)] hover:text-red-400 rounded transition-colors cursor-pointer"
+                              title="Delete this duration"
+                            >
+                              <Trash size={13} />
+                            </button>
+                          </div>
                         </div>
 
-                        {/* Price */}
-                        <div className="space-y-1">
-                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">
-                            Plan Total Price (₹)
-                          </span>
-                          <input
-                            type="text"
-                            value={subPlan.price}
-                            onChange={(e) =>
-                              handleSubPlanChange(
-                                index,
-                                "price",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full h-9 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-full px-4 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
-                            required
-                          />
+                        {/* Pricing Inputs Grid */}
+                        <div className="grid grid-cols-3 gap-2">
+                          {/* Price */}
+                          <div className="space-y-1">
+                            <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider block">
+                              Total Price (₹)
+                            </span>
+                            <input
+                              type="text"
+                              value={subPlan.price}
+                              onChange={(e) =>
+                                handleSubPlanChange(
+                                  index,
+                                  "price",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="3,500"
+                              className="w-full h-8 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-accent-highlight)] font-mono font-bold rounded-lg px-2.5 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                              required
+                            />
+                          </div>
+
+                          {/* perMonth Price */}
+                          <div className="space-y-1">
+                            <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider block">
+                              Per Month (₹)
+                            </span>
+                            <input
+                              type="text"
+                              value={subPlan.perMonth}
+                              onChange={(e) =>
+                                handleSubPlanChange(
+                                  index,
+                                  "perMonth",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="3,500"
+                              className="w-full h-8 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] font-mono font-bold rounded-lg px-2.5 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                              required
+                            />
+                          </div>
+
+                          {/* originalPrice */}
+                          <div className="space-y-1">
+                            <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider block truncate">
+                              Original (₹)
+                            </span>
+                            <input
+                              type="text"
+                              value={subPlan.originalPrice}
+                              onChange={(e) =>
+                                handleSubPlanChange(
+                                  index,
+                                  "originalPrice",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="Strikethrough"
+                              className="w-full h-8 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text-muted)] font-mono rounded-lg px-2.5 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                            />
+                          </div>
                         </div>
 
-                        {/* perMonth Price */}
-                        <div className="space-y-1">
-                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">
-                            Per Month Equal (₹)
-                          </span>
-                          <input
-                            type="text"
-                            value={subPlan.perMonth}
-                            onChange={(e) =>
-                              handleSubPlanChange(
-                                index,
-                                "perMonth",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full h-9 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-full px-4 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
-                            required
-                          />
-                        </div>
+                        {/* Tag & Subtitle */}
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="space-y-1">
+                            <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider block">
+                              Badge / Tag
+                            </span>
+                            <input
+                              type="text"
+                              value={subPlan.tag}
+                              onChange={(e) =>
+                                handleSubPlanChange(
+                                  index,
+                                  "tag",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="e.g. SAVE ₹500, POPULAR"
+                              className="w-full h-8 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-lg px-2.5 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors font-semibold"
+                            />
+                          </div>
 
-                        {/* Subtitle */}
-                        <div className="space-y-1">
-                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">
-                            Plan Label Subtitle
-                          </span>
-                          <input
-                            type="text"
-                            value={subPlan.subtitle}
-                            onChange={(e) =>
-                              handleSubPlanChange(
-                                index,
-                                "subtitle",
-                                e.target.value,
-                              )
-                            }
-                            className="w-full h-9 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-full px-4 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
-                            required
-                          />
+                          <div className="space-y-1">
+                            <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider block">
+                              Plan Subtitle
+                            </span>
+                            <input
+                              type="text"
+                              value={subPlan.subtitle}
+                              onChange={(e) =>
+                                handleSubPlanChange(
+                                  index,
+                                  "subtitle",
+                                  e.target.value
+                                )
+                              }
+                              placeholder="e.g. STANDARD, SAVE ₹2,100"
+                              className="w-full h-8 bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-lg px-2.5 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                            />
+                          </div>
                         </div>
 
                         {/* Highlights */}
                         <div className="space-y-1">
-                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider">
-                            Plan Highlights (comma separated)
+                          <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold tracking-wider block">
+                            Highlights (comma separated)
                           </span>
                           <textarea
-                            value={subPlan.highlights.join(", ")}
+                            value={
+                              subPlan.highlights
+                                ? subPlan.highlights.join(", ")
+                                : ""
+                            }
                             onChange={(e) =>
                               handleSubPlanHighlightsChange(
                                 index,
-                                e.target.value,
+                                e.target.value
                               )
                             }
-                            rows={3}
-                            className="w-full bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl p-3 text-[11px] outline-none focus:border-[var(--db-accent-highlight)] transition-colors resize-none leading-snug"
-                            required
+                            rows={2}
+                            placeholder="3 coached sessions a week, One pathway focus, Arena access"
+                            className="w-full bg-[var(--db-card)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl p-2.5 text-[11px] outline-none focus:border-[var(--db-accent-highlight)] transition-colors resize-none leading-snug"
                           />
                         </div>
                       </div>
@@ -521,12 +1229,15 @@ const DashboardMemberships = () => {
                   </button>
                   <button
                     type="submit"
-                    className="group relative overflow-hidden px-8 py-2.5 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold uppercase tracking-wider text-xs rounded-full transition-all duration-500 cursor-pointer shadow-lg inline-flex items-center gap-1.5"
+                    disabled={saving}
+                    className="group relative overflow-hidden px-8 py-2.5 bg-[var(--db-accent)] text-[var(--db-accent-text)] font-extrabold uppercase tracking-wider text-xs rounded-full transition-all duration-500 cursor-pointer shadow-lg inline-flex items-center gap-1.5 disabled:opacity-50"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-full"></span>
                     <Save size={14} className="relative z-10" />
-                    <span className="relative z-10">Save Changes</span>
+                    <span className="relative z-10">
+                      {saving ? "Saving Changes..." : "Save Changes"}
+                    </span>
                   </button>
                 </div>
               </form>

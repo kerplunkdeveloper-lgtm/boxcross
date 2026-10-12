@@ -24,22 +24,28 @@ const ChoosePlan = React.forwardRef(
     const dailyRate =
       activeData.dailyRate ||
       (currentTitle === "CORE"
-        ? "₹75"
+        ? "₹92"
         : currentTitle === "ATHLETE"
-        ? "₹108"
+        ? "₹132"
         : currentTitle === "JUNIOR"
         ? "₹64"
-        : "₹151");
+        : "₹184");
+
+    const dailyRateLabel =
+      activeData.dailyRateLabel ||
+      (currentTitle === "JUNIOR"
+        ? "A DAY AS A FOUNDING MEMBER"
+        : "A DAY ON THE 12-MONTH PLAN");
 
     const dailyComparison =
       activeData.dailyComparison ||
       (currentTitle === "CORE"
-        ? "A dosa and a filter coffee."
+        ? "Two coffees and a vada."
         : currentTitle === "ATHLETE"
         ? "One burger."
         : currentTitle === "JUNIOR"
         ? "One masala dosa."
-        : "One cinema ticket.");
+        : "One pizza.");
 
     const benefits =
       activeData.benefits && activeData.benefits.length > 0
@@ -168,96 +174,54 @@ const ChoosePlan = React.forwardRef(
             CHOOSE YOUR <span className="text-[#ccf141]">PLAN</span>
           </h2>
 
-          <p
-            className="text-zinc-400 text-xs sm:text-sm max-w-2xl text-center font-medium"
-            style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
-          >
-            Select a program below to review its rates, coached sessions, and founding member benefits.
-          </p>
-
-          {/* PROGRAM SWITCHER TABS */}
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-4 mb-3">
-            {programs.map((prog) => {
-              const isActive = activeTab === prog.id;
-              return (
-                <button
-                  key={prog.id}
-                  type="button"
-                  onClick={() => setActiveTab && setActiveTab(prog.id)}
-                  className={`px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 cursor-pointer flex items-center gap-2 ${
-                    isActive
-                      ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.35)] scale-105"
-                      : "bg-zinc-900/90 text-zinc-400 hover:text-white border border-zinc-800 hover:border-zinc-700"
-                  }`}
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  <span>{prog.title}</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
-                      isActive
-                        ? "bg-black/20 text-black font-extrabold"
-                        : "bg-black/60 text-zinc-500"
-                    }`}
+          {/* PREMIUM PROGRAM SWITCHER TABS WITH SPIN BORDER ANIMATION */}
+          <div className="w-full flex justify-center mt-5 mb-3 px-1 sm:px-4">
+            <div className="relative inline-flex items-center p-1.5 sm:p-2 bg-[#101012]/95 backdrop-blur-xl border border-zinc-800/90 rounded-2xl sm:rounded-full shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.06)] max-w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden gap-1.5 sm:gap-2">
+              {programs.map((prog) => {
+                const isActive = activeTab === prog.id;
+                return (
+                  <button
+                    key={prog.id}
+                    type="button"
+                    onClick={() => setActiveTab && setActiveTab(prog.id)}
+                    className="relative shrink-0 cursor-pointer select-none rounded-xl sm:rounded-full p-0 transition-transform active:scale-95 group focus:outline-none"
                   >
-                    {prog.subtitle}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </motion.div>
-
-        {/* FOUNDING MEMBER RATES TOP BANNER (As seen in Reference Image 2) */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="w-full bg-black border-t-2 border-x-2 border-zinc-800 rounded-t-xl overflow-hidden shadow-2xl"
-        >
-          <div className="flex flex-col md:flex-row items-stretch justify-between divide-y md:divide-y-0 md:divide-x divide-zinc-800">
-            {/* Logo / Arena Tag */}
-            <div className="px-5 py-4 flex flex-col justify-center min-w-[220px]">
-              <span
-                className="text-white text-base sm:text-lg font-black tracking-wider uppercase leading-none"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                BOX &amp; CROSS
-              </span>
-              <span
-                className="text-[#ccf141] text-[9.5px] sm:text-[10.5px] font-mono font-bold tracking-[0.25em] uppercase mt-1"
-              >
-                PERFORMANCE ARENA
-              </span>
-            </div>
-
-            {/* Middle Title */}
-            <div className="px-6 py-4 flex-1 flex flex-col justify-center">
-              <h3
-                className="text-white text-lg sm:text-2xl font-black uppercase tracking-wider leading-none"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                FOUNDING MEMBER RATES
-              </h3>
-              <p className="text-zinc-400 text-xs mt-1 font-mono">
-                {currentTitle} · {currentSubtitle} · Guaranteed Rate For Your Full Term
-              </p>
-            </div>
-
-            {/* Right Badge */}
-            <div className="bg-[#ccf141] px-6 py-4 flex flex-col justify-center items-center md:items-end text-black min-w-[190px]">
-              <span
-                className="text-[11px] font-black uppercase tracking-widest leading-tight text-center md:text-right"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                FOUNDING MEMBER
-              </span>
-              <span
-                className="text-sm font-black uppercase tracking-wider text-center md:text-right"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                100 ONLY
-              </span>
+                    {isActive ? (
+                      /* ACTIVE TAB: CONTINUOUS 360° SPIN BORDER BEAM ANIMATION */
+                      <div className="relative p-[2px] rounded-xl sm:rounded-full overflow-hidden shadow-[0_0_30px_rgba(204,241,65,0.4)]">
+                        {/* Spinning Conic Gradient Border */}
+                        <div className="absolute inset-[-250%] bg-[conic-gradient(from_0deg,#ccf141_0deg,transparent_70deg,transparent_180deg,#ccf141_250deg,transparent_360deg)] animate-spin-border" />
+                        {/* Active Tab Core Body */}
+                        <div className="relative z-10 bg-black px-4 sm:px-6 py-2.5 sm:py-3 rounded-[10px] sm:rounded-full flex items-center justify-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-[#ccf141] shadow-[0_0_10px_#ccf141] animate-pulse shrink-0" />
+                          <span
+                            className="font-black text-xs sm:text-[14px] text-white tracking-wider"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            {prog.title}
+                          </span>
+                          <span className="text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-md sm:rounded-full tracking-wider font-extrabold bg-[#ccf141] text-black">
+                            {prog.subtitle}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      /* INACTIVE TAB */
+                      <div className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-full font-black text-xs sm:text-sm uppercase tracking-wider text-zinc-400 hover:text-white hover:bg-zinc-800/60 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-200 flex items-center justify-center gap-2">
+                        <span
+                          className="font-black text-xs sm:text-[14px] tracking-wider"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          {prog.title}
+                        </span>
+                        <span className="text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-md sm:rounded-full tracking-wider font-extrabold bg-zinc-900/90 text-zinc-400 border border-zinc-700/50">
+                          {prog.subtitle}
+                        </span>
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </motion.div>
@@ -268,7 +232,7 @@ const ChoosePlan = React.forwardRef(
           initial={{ opacity: 0, scale: 0.99 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.35 }}
-          className="w-full bg-[#0a0a0a] text-white border-2 border-zinc-800 rounded-b-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+          className="w-full bg-[#0a0a0a] text-white border-2 border-zinc-800 rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
         >
           {/* CARD TOP HEADER STRIP: PROGRAM + SUBTITLE + SESSION INFO */}
           <div className="bg-black text-white px-5 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800">
@@ -435,7 +399,7 @@ const ChoosePlan = React.forwardRef(
               <span
                 className="mt-2 text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.18em] text-zinc-300 uppercase select-none"
               >
-                A DAY AS A FOUNDING MEMBER
+                {dailyRateLabel}
               </span>
 
               {/* Daily Comparison Punchline (e.g. "A dosa and a filter coffee.") */}

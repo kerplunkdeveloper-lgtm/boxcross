@@ -52,7 +52,7 @@ const programs = [
     title: "CORE",
     subtitle: "ONE PATHWAY",
     desc: "Three coached sessions a week — Fight, HYROX or Strength.",
-    price: "2,292",
+    price: "2,800",
     image: box1,
   },
   {
@@ -61,7 +61,7 @@ const programs = [
     title: "ATHLETE",
     subtitle: "TWO PATHWAYS",
     desc: "Four coached sessions a week across two disciplines.",
-    price: "3,275",
+    price: "4,000",
     popular: true,
     image: box2,
   },
@@ -82,7 +82,7 @@ const programs = [
     title: "ARENA",
     subtitle: "EVERYTHING",
     desc: "Five coached sessions a week, every pathway, every class.",
-    price: "4,583",
+    price: "5,600",
     image: box3,
   },
   {
@@ -118,9 +118,9 @@ const pricingData = {
     title: "CORE",
     subtitle: "ONE PATHWAY",
     sessionInfo: "Three coached sessions a week — Fight, HYROX or Strength",
-    dailyRate: "₹75",
-    dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
-    dailyComparison: "A dosa and a filter coffee.",
+    dailyRate: "₹92",
+    dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
+    dailyComparison: "Two coffees and a vada.",
     features: [
       "Three coached sessions a week",
       "One pathway (Fight, HYROX or Strength)",
@@ -163,59 +163,59 @@ const pricingData = {
       },
       {
         months: "3 MONTHS",
-        subtitle: "FOUNDING RATE",
-        price: "9,900",
-        perMonth: "3,300",
-        originalPrice: "10,000",
-        totalPrice: "9,900",
+        subtitle: "SAVE ₹500",
+        price: "10,000",
+        perMonth: "3,333",
+        originalPrice: "10,500",
+        totalPrice: "10,000",
         highlights: [
           "Three coached sessions a week",
-          "Held founding rate for full term",
+          "Held rate for full term",
           "Coach assessment",
         ],
-        tag: "SAVE ₹100",
-        buttonText: "SAVE ₹100",
+        tag: "SAVE ₹500",
+        buttonText: "SAVE ₹500",
       },
       {
         months: "6 MONTHS",
-        subtitle: "BEST PROGRESS",
-        price: "18,000",
-        perMonth: "3,000",
-        originalPrice: "18,900",
-        totalPrice: "18,000",
+        subtitle: "SAVE ₹2,100",
+        price: "18,900",
+        perMonth: "3,150",
+        originalPrice: "21,000",
+        totalPrice: "18,900",
         highlights: [
           "Three coached sessions a week",
-          "Founding rate locked",
+          "Locked rate for full term",
           "Coach 1-on-1 check-ins",
         ],
-        tag: "SAVE ₹900",
-        buttonText: "SAVE ₹900",
+        tag: "SAVE ₹2,100",
+        buttonText: "SAVE ₹2,100",
         isPopular: true,
       },
       {
         months: "12 MONTHS",
-        subtitle: "BEST VALUE",
-        price: "27,500",
-        perMonth: "2,292",
-        originalPrice: "33,600",
-        totalPrice: "27,500",
+        subtitle: "SAVE ₹8,400",
+        price: "33,600",
+        perMonth: "2,800",
+        originalPrice: "42,000",
+        totalPrice: "33,600",
         highlights: [
           "Three coached sessions a week",
-          "Maximum founding discount",
+          "Maximum discount",
           "Founding Wall recognition",
         ],
-        tag: "SAVE ₹6,100",
-        buttonText: "SAVE ₹6,100",
+        tag: "SAVE ₹8,400",
+        buttonText: "SAVE ₹8,400",
       },
     ],
-    starterPrice: "3,500",
+    starterPrice: "2,800",
   },
   athlete: {
     title: "ATHLETE",
     subtitle: "TWO PATHWAYS",
     sessionInfo: "Four coached sessions a week across two disciplines",
-    dailyRate: "₹108",
-    dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
+    dailyRate: "₹132",
+    dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
     dailyComparison: "One burger.",
     features: [
       "Four coached sessions a week",
@@ -259,65 +259,65 @@ const pricingData = {
       },
       {
         months: "3 MONTHS",
-        subtitle: "FOUNDING RATE",
-        price: "14,100",
-        perMonth: "4,700",
-        originalPrice: "14,200",
-        totalPrice: "14,100",
+        subtitle: "SAVE ₹800",
+        price: "14,200",
+        perMonth: "4,733",
+        originalPrice: "15,000",
+        totalPrice: "14,200",
         highlights: [
           "Four coached sessions a week",
           "Two disciplines access",
           "Coach assessment",
         ],
-        tag: "SAVE ₹100",
-        buttonText: "SAVE ₹100",
+        tag: "SAVE ₹800",
+        buttonText: "SAVE ₹800",
       },
       {
         months: "6 MONTHS",
-        subtitle: "BEST PROGRESS",
-        price: "25,700",
-        perMonth: "4,283",
-        originalPrice: "27,000",
-        totalPrice: "25,700",
+        subtitle: "SAVE ₹3,000",
+        price: "27,000",
+        perMonth: "4,500",
+        originalPrice: "30,000",
+        totalPrice: "27,000",
         highlights: [
           "Four coached sessions a week",
           "Two disciplines access",
           "Guest passes included",
         ],
-        tag: "SAVE ₹1,300",
-        buttonText: "SAVE ₹1,300",
+        tag: "SAVE ₹3,000",
+        buttonText: "SAVE ₹3,000",
         isPopular: true,
       },
       {
         months: "12 MONTHS",
-        subtitle: "BEST VALUE",
-        price: "39,300",
-        perMonth: "3,275",
-        originalPrice: "48,000",
-        totalPrice: "39,300",
+        subtitle: "SAVE ₹12,000",
+        price: "48,000",
+        perMonth: "4,000",
+        originalPrice: "60,000",
+        totalPrice: "48,000",
         highlights: [
           "Four coached sessions a week",
           "Two disciplines access",
           "Priority booking & perks",
         ],
-        tag: "SAVE ₹8,700",
-        buttonText: "SAVE ₹8,700",
+        tag: "SAVE ₹12,000",
+        buttonText: "SAVE ₹12,000",
       },
     ],
-    starterPrice: "5,000",
+    starterPrice: "4,000",
   },
   arena: {
     title: "ARENA",
     subtitle: "EVERYTHING",
     sessionInfo: "Five coached sessions a week, every pathway, every class",
-    dailyRate: "₹151",
-    dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
-    dailyComparison: "One cinema ticket.",
+    dailyRate: "₹184",
+    dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
+    dailyComparison: "One pizza.",
     features: [
       "Five coached sessions a week",
       "Every pathway, every class",
       "Priority ring & arena floor",
-      "VIP founding member perks",
+      "VIP member perks",
     ],
     benefits: [
       {
@@ -355,52 +355,52 @@ const pricingData = {
       },
       {
         months: "3 MONTHS",
-        subtitle: "FOUNDING RATE",
-        price: "19,700",
-        perMonth: "6,567",
-        originalPrice: "20,000",
-        totalPrice: "19,700",
+        subtitle: "SAVE ₹1,000",
+        price: "20,000",
+        perMonth: "6,667",
+        originalPrice: "21,000",
+        totalPrice: "20,000",
         highlights: [
           "Five coached sessions a week",
           "All pathways & disciplines",
           "Coach assessment",
         ],
-        tag: "SAVE ₹300",
-        buttonText: "SAVE ₹300",
+        tag: "SAVE ₹1,000",
+        buttonText: "SAVE ₹1,000",
       },
       {
         months: "6 MONTHS",
-        subtitle: "BEST PROGRESS",
-        price: "35,900",
-        perMonth: "5,983",
-        originalPrice: "37,800",
-        totalPrice: "35,900",
+        subtitle: "SAVE ₹4,200",
+        price: "37,800",
+        perMonth: "6,300",
+        originalPrice: "42,000",
+        totalPrice: "37,800",
         highlights: [
           "Five coached sessions a week",
           "All pathways & disciplines",
           "Guest passes included",
         ],
-        tag: "SAVE ₹1,900",
-        buttonText: "SAVE ₹1,900",
+        tag: "SAVE ₹4,200",
+        buttonText: "SAVE ₹4,200",
         isPopular: true,
       },
       {
         months: "12 MONTHS",
-        subtitle: "BEST VALUE",
-        price: "55,000",
-        perMonth: "4,583",
-        originalPrice: "67,200",
-        totalPrice: "55,000",
+        subtitle: "SAVE ₹16,800",
+        price: "67,200",
+        perMonth: "5,600",
+        originalPrice: "84,000",
+        totalPrice: "67,200",
         highlights: [
           "Five coached sessions a week",
           "All pathways & disciplines",
-          "VIP Founding Wall & passes",
+          "VIP Wall & passes",
         ],
-        tag: "SAVE ₹12,200",
-        buttonText: "SAVE ₹12,200",
+        tag: "SAVE ₹16,800",
+        buttonText: "SAVE ₹16,800",
       },
     ],
-    starterPrice: "7,000",
+    starterPrice: "5,600",
   },
   junior: {
     title: "JUNIOR",
@@ -581,9 +581,24 @@ const Membership = () => {
       }
     };
     fetchPlans();
+
+    try {
+      const channel = new BroadcastChannel("membership_plan_updates");
+      channel.onmessage = (event) => {
+        if (event.data === "PLAN_UPDATED") {
+          fetchPlans();
+        }
+      };
+      return () => {
+        channel.close();
+      };
+    } catch (e) {}
   }, []);
 
   const activeData = dynamicPricingData[activeTab] || pricingData[activeTab];
+
+  const adultPrograms = dynamicPrograms.filter((p) => p.id !== "junior");
+  const juniorProgram = dynamicPrograms.find((p) => p.id === "junior");
 
   const handlePlanSelect = (planName, price, durationStr) => {
     const monthsVal = durationStr ? parseInt(durationStr) : 1;
@@ -600,6 +615,133 @@ const Membership = () => {
     }
   };
 
+  const renderProgramCard = (prog, index = 0) => (
+    <motion.div
+      key={prog.id}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      animate={{ scale: activeTab === prog.id ? 1.02 : 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay: index * 0.15 }}
+      onClick={() => setActiveTab(prog.id)}
+      className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
+        activeTab === prog.id
+          ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
+          : "border-gray-800 hover:border-gray-600"
+      }`}
+    >
+      {/* Background Image Container */}
+      <div className="absolute inset-0 z-0 bg-black overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-70 group-hover:opacity-90 scale-100 group-hover:scale-110 transition-all duration-700 ease-out"
+          style={{
+            backgroundImage: `url(${prog.image})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-[#0a0a0a]/10"></div>
+      </div>
+
+      {prog.popular && (
+        <div className="absolute top-0 right-0 bg-[#ccf141] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
+          MOST POPULAR
+        </div>
+      )}
+
+      <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
+        <div>
+          <div className="w-16 h-14 flex items-center justify-center mb-5">
+            {prog.icon}
+          </div>
+
+          <h3
+            className="font-black mb-1 tracking-wide uppercase"
+            style={{
+              fontFamily: '"BrutalTypeBold", sans-serif',
+              fontWeight: "900",
+              fontSize: "35px",
+            }}
+          >
+            {prog.title}
+          </h3>
+          <p
+            className="text-[#ccf141] tracking-widest uppercase mb-3"
+            style={{
+              fontFamily: '"BrutalTypeBold", sans-serif',
+              fontWeight: "400",
+              fontSize: "19px",
+            }}
+          >
+            {prog.subtitle}
+          </p>
+          <p
+            className="text-gray-200 mb-4 leading-relaxed max-w-[90%]"
+            style={{
+              fontFamily: '"Brutal Font Light", sans-serif',
+              fontWeight: "400",
+              fontSize: "17px",
+            }}
+          >
+            {prog.desc}
+          </p>
+        </div>
+
+        <div className="mt-auto pt-4 w-full">
+          <p
+            className="text-[14px] text-gray-300 uppercase tracking-widest font-bold flex items-center"
+            style={{
+              fontFamily: '"BrutalTypeBold", sans-serif',
+              fontWeight: "600",
+            }}
+          >
+            FROM
+          </p>
+
+          <div>
+            <span
+              className="text-lg text-[#ccf141] text-[30px] md:text-[48px] mx-1.5"
+              style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+                fontWeight: "700",
+              }}
+            >
+              ₹{prog.price}
+            </span>
+            / MONTH
+          </div>
+
+          <button
+            onClick={(e) => handleScrollToPlans(e, prog.id)}
+            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
+              activeTab === prog.id
+                ? "bg-[#ccf141] border-[#ccf141] text-black"
+                : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
+            }`}
+            style={{
+              fontFamily: '"BrutalTypeBold", sans-serif',
+              fontWeight: "700",
+            }}
+          >
+            <span
+              className="flex items-center gap-2"
+              style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+                fontWeight: "700",
+              }}
+            >
+              VIEW PLANS{" "}
+              <ArrowRight
+                size={14}
+                className="group-hover/btn:translate-x-1 transition-transform"
+              />
+            </span>
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+
   return (
     <>
       <section
@@ -607,7 +749,7 @@ const Membership = () => {
         className="w-full bg-[#0a0a0a] py-8 md:py-12 px-2 md:px-6 flex flex-col items-center justify-center font-sans text-white"
       >
         {/* STEP 1: CHOOSE PROGRAM */}
-        <div className="w-full max-w-8xl px-0 md:px-10 mx-auto mb-12">
+        <div className="w-full max-w-7xl mx-auto mb-12">
           {/*................................................................. Membership Plans heading start.............................. */}
 
           <motion.div
@@ -643,134 +785,147 @@ const Membership = () => {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7 mt-8 md:mt-15">
-            {dynamicPrograms.map((prog, index) => (
+          {/* STEP 1: 3 ADULT PATHWAYS GRID (CORE, ATHLETE, ARENA) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7 mt-8 md:mt-15">
+            {adultPrograms.map((prog, index) => renderProgramCard(prog, index))}
+          </div>
+
+          {/* HORIZONTAL FULL-WIDTH JUNIOR PROGRAM BANNER (UNDER 13) */}
+          {juniorProgram && (
+            <div className="mt-12 md:mt-16 w-full">
+              {/* Section Header & Divider */}
+              <div className="flex items-center gap-3 sm:gap-4 w-full mb-6 px-1">
+                <div className="h-[1px] bg-gradient-to-r from-transparent via-zinc-800 to-zinc-700 flex-1" />
+                <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-800 bg-[#121214] text-zinc-300 text-xs font-bold uppercase tracking-widest shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-pulse" />
+                  <span>JUNIOR PROGRAM · UNDER 13</span>
+                </div>
+                <div className="h-[1px] bg-gradient-to-l from-transparent via-zinc-800 to-zinc-700 flex-1" />
+              </div>
+
+              {/* Full Width Horizontal Card */}
               <motion.div
-                key={prog.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                animate={{ scale: activeTab === prog.id ? 1.02 : 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
-                onClick={() => setActiveTab(prog.id)}
-                className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
-                  activeTab === prog.id
-                    ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
-                    : "border-gray-800 hover:border-gray-600"
-                }`}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                onClick={() => setActiveTab(juniorProgram.id)}
+                className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${
+                  activeTab === juniorProgram.id
+                    ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
+                    : "border-zinc-800 hover:border-zinc-700"
+                } bg-[#0b0b0d]`}
               >
-                {/* Background Image Container */}
-                <div className="absolute inset-0 z-0 bg-black overflow-hidden">
-                  <div
-                    className="absolute inset-0 opacity-70 group-hover:opacity-90 scale-100 group-hover:scale-110 transition-all duration-700 ease-out"
-                    style={{
-                      backgroundImage: `url(${prog.image})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-[#0a0a0a]/10"></div>
-                </div>
+                {/* Background Glow Overlay */}
+                <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none -z-0" />
 
-                {prog.popular && (
-                  <div className="absolute top-0 right-0 bg-[#ccf141] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
-                    MOST POPULAR
-                  </div>
-                )}
-
-                <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
-                  <div>
-                    <div className="w-16 h-14 flex items-center   justify-center mb-5 ">
-                      {prog.icon}
-                    </div>
-
-                    <h3
-                      className=" font-black mb-1 tracking-wide uppercase"
-                      style={{
-                        fontFamily: '"BrutalTypeBold", sans-serif',
-                        fontWeight: "900",
-                        fontSize: "35px",
-                      }}
-                    >
-                      {prog.title}
-                    </h3>
-                    <p
-                      className="text-[#ccf141]  tracking-widest uppercase mb-3"
-                      style={{
-                        fontFamily: '"BrutalTypeBold", sans-serif',
-                        fontWeight: "400",
-                        fontSize: "19px",
-                      }}
-                    >
-                      {prog.subtitle}
-                    </p>
-                    <p
-                      className="text-gray-200 mb-4 leading-relaxed max-w-[90%]"
-                      style={{
-                        fontFamily: '"Brutal Font Light", sans-serif',
-                        fontWeight: "400",
-                        fontSize: "17px",
-                      }}
-                    >
-                      {prog.desc}
-                    </p>
-                  </div>
-
-                  <div className="mt-auto pt-4 w-full">
-                    <p
-                      className="text-[14px] text-gray-300 uppercase tracking-widest font-bold  flex items-center"
-                      style={{
-                        fontFamily: '"BrutalTypeBold", sans-serif',
-                        fontWeight: "600",
-                      }}
-                    >
-                      FROM
-                    </p>
-
+                <div className="relative z-10 flex flex-col lg:flex-row items-stretch justify-between">
+                  {/* Left & Center: Rich Program Content */}
+                  <div className="flex-1 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-between">
                     <div>
-                      <span
-                        className="text-lg text-[#ccf141] text-[30px] md:text-[48px] mx-1.5"
-                        style={{
-                          fontFamily: '"BrutalTypeBold", sans-serif',
-                          fontWeight: "700",
-                        }}
-                      >
-                        ₹{prog.price}
-                      </span>
-                      / MONTH
+                      {/* Top Row: Icon + Subtitle Badge */}
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-14 h-14 rounded-2xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-center text-[#ccf141] shadow-inner shrink-0">
+                          {juniorProgram.icon}
+                        </div>
+                        <div>
+                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-[11px] font-mono font-bold tracking-widest uppercase">
+                            YOUTH &amp; ATHLETIC DEVELOPMENT
+                          </div>
+                          <p className="text-zinc-400 text-xs mt-1 font-mono">
+                            Ages 7 to 13 · All Experience Levels
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Main Title & Tagline */}
+                      <div className="mt-2">
+                        <div className="flex items-baseline gap-3 flex-wrap">
+                          <h3
+                            className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-none"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            {juniorProgram.title}
+                          </h3>
+                          <span
+                            className="text-lg sm:text-2xl font-bold text-[#ccf141] tracking-widest uppercase"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            {juniorProgram.subtitle}
+                          </span>
+                        </div>
+
+                        <p
+                          className="text-zinc-300 text-sm sm:text-base md:text-lg mt-3 leading-relaxed max-w-2xl font-normal"
+                          style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                        >
+                          {juniorProgram.desc}. Built specifically to develop boxing fundamentals, agile footwork, screen-free focus, and lifelong discipline.
+                        </p>
+                      </div>
+
                     </div>
 
-                    <button
-                      onClick={(e) => handleScrollToPlans(e, prog.id)}
-                      className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
-                        activeTab === prog.id
-                          ? "bg-[#ccf141] border-[#ccf141] text-black"
-                          : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
-                      }`}
-                      style={{
-                        fontFamily: '"BrutalTypeBold", sans-serif',
-                        fontWeight: "700",
-                      }}
-                    >
-                      <span
-                        className="flex items-center gap-2"
-                        style={{
-                          fontFamily: '"BrutalTypeBold", sans-serif',
-                          fontWeight: "700",
-                        }}
+                    {/* Bottom Pricing & CTA Row */}
+                    <div className="mt-8 pt-6 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <span className="block text-zinc-400 text-xs uppercase font-bold tracking-widest">
+                          MEMBERSHIP STARTS FROM
+                        </span>
+                        <div className="flex items-baseline gap-2 mt-0.5">
+                          <span
+                            className="text-3xl sm:text-4xl md:text-5xl font-black text-[#ccf141] leading-none"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            ₹{juniorProgram.price}
+                          </span>
+                          <span className="text-zinc-400 text-xs sm:text-sm font-bold uppercase tracking-wider">
+                            / MONTH
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
+                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${
+                          activeTab === juniorProgram.id
+                            ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
+                            : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
+                        }`}
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
-                        VIEW PLANS{" "}
+                        <span>VIEW JUNIOR PLANS</span>
                         <ArrowRight
-                          size={14}
+                          size={16}
                           className="group-hover/btn:translate-x-1 transition-transform"
                         />
-                      </span>
-                    </button>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Right Side: The Boxer Photo (Hero Visual with Cinematic Fade) */}
+                  <div className="w-full lg:w-[420px] xl:w-[480px] min-h-[300px] sm:min-h-[360px] lg:min-h-[460px] relative overflow-hidden bg-black shrink-0">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      style={{
+                        backgroundImage: `url(${juniorProgram.image})`,
+                      }}
+                    />
+                    {/* Left overlay gradient to blend seamlessly into card */}
+                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#0b0b0d] via-transparent to-transparent z-10" />
+                    {/* Subtle top/bottom vignette */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-10" />
+
+                    {/* Badge on Photo */}
+                    <div className="absolute top-4 right-4 z-20 bg-black/70 backdrop-blur-md border border-zinc-800 text-[#ccf141] text-[10px] font-mono font-bold px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] animate-ping" />
+                      BOX &amp; CROSS YOUTH
+                    </div>
                   </div>
                 </div>
               </motion.div>
-            ))}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* STEP 2: CHOOSE PLAN */}

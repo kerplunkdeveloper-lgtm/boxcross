@@ -79,6 +79,23 @@ html {
   background: radial-gradient(circle, transparent 30%, rgba(0, 0, 0, 0.6) 90%);
 }
 
+@keyframes spin-border {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-border {
+  animation: spin-border 3s linear infinite;
+}
+
+.animate-spin-border-slow {
+  animation: spin-border 8s linear infinite;
+}
+
 /* Dashboard Theme System */
 .dashboard-dark {
   --db-bg: #000000;

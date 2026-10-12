@@ -41,11 +41,11 @@ const seedDB = async () => {
         title: "CORE",
         subtitle: "ONE PATHWAY",
         sessionInfo: "Three coached sessions a week — Fight, HYROX or Strength",
-        desc: "Three coached sessions a week. Choose Fight, HYROX or Strength.",
-        starterPrice: "2,292",
-        dailyRate: "₹75",
-        dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
-        dailyComparison: "A dosa and a filter coffee.",
+        desc: "Three coached sessions a week — Fight, HYROX or Strength.",
+        starterPrice: "2,800",
+        dailyRate: "₹92",
+        dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
+        dailyComparison: "Two coffees and a vada.",
         features: [
           "Three coached sessions a week",
           "One pathway (Fight, HYROX or Strength)",
@@ -89,50 +89,50 @@ const seedDB = async () => {
           },
           {
             months: "3 MONTHS",
-            subtitle: "FOUNDING RATE",
-            price: "9,900",
-            perMonth: "3,300",
-            originalPrice: "10,000",
-            totalPrice: "9,900",
+            subtitle: "SAVE ₹500",
+            price: "10,000",
+            perMonth: "3,333",
+            originalPrice: "10,500",
+            totalPrice: "10,000",
             highlights: [
               "3 coached sessions a week",
-              "Held founding rate",
+              "Held rate for full term",
               "Coach assessment"
             ],
-            tag: "SAVE ₹100",
-            buttonText: "SAVE ₹100",
+            tag: "SAVE ₹500",
+            buttonText: "SAVE ₹500",
             isPopular: false
           },
           {
             months: "6 MONTHS",
-            subtitle: "BEST PROGRESS",
-            price: "18,000",
-            perMonth: "3,000",
-            originalPrice: "18,900",
-            totalPrice: "18,000",
+            subtitle: "SAVE ₹2,100",
+            price: "18,900",
+            perMonth: "3,150",
+            originalPrice: "21,000",
+            totalPrice: "18,900",
             highlights: [
               "3 coached sessions a week",
-              "Founding rate locked",
+              "Locked rate for full term",
               "Guest passes included"
             ],
-            tag: "SAVE ₹900",
-            buttonText: "SAVE ₹900",
+            tag: "SAVE ₹2,100",
+            buttonText: "SAVE ₹2,100",
             isPopular: true
           },
           {
             months: "12 MONTHS",
-            subtitle: "BEST VALUE",
-            price: "27,500",
-            perMonth: "2,292",
-            originalPrice: "33,600",
-            totalPrice: "27,500",
+            subtitle: "SAVE ₹8,400",
+            price: "33,600",
+            perMonth: "2,800",
+            originalPrice: "42,000",
+            totalPrice: "33,600",
             highlights: [
               "3 coached sessions a week",
-              "Maximum savings",
+              "Maximum discount",
               "Priority booking & perks"
             ],
-            tag: "SAVE ₹6,100",
-            buttonText: "SAVE ₹6,100",
+            tag: "SAVE ₹8,400",
+            buttonText: "SAVE ₹8,400",
             isPopular: false
           }
         ]
@@ -143,9 +143,9 @@ const seedDB = async () => {
         subtitle: "TWO PATHWAYS",
         sessionInfo: "Four coached sessions a week across two disciplines",
         desc: "Four coached sessions a week across two disciplines.",
-        starterPrice: "3,275",
-        dailyRate: "₹108",
-        dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
+        starterPrice: "4,000",
+        dailyRate: "₹132",
+        dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
         dailyComparison: "One burger.",
         features: [
           "Four coached sessions a week",
@@ -190,50 +190,50 @@ const seedDB = async () => {
           },
           {
             months: "3 MONTHS",
-            subtitle: "FOUNDING RATE",
-            price: "14,100",
-            perMonth: "4,700",
-            originalPrice: "14,200",
-            totalPrice: "14,100",
+            subtitle: "SAVE ₹800",
+            price: "14,200",
+            perMonth: "4,733",
+            originalPrice: "15,000",
+            totalPrice: "14,200",
             highlights: [
               "4 coached sessions a week",
               "Two disciplines access",
               "Coach assessment"
             ],
-            tag: "SAVE ₹100",
-            buttonText: "SAVE ₹100",
+            tag: "SAVE ₹800",
+            buttonText: "SAVE ₹800",
             isPopular: false
           },
           {
             months: "6 MONTHS",
-            subtitle: "BEST PROGRESS",
-            price: "25,700",
-            perMonth: "4,283",
-            originalPrice: "27,000",
-            totalPrice: "25,700",
+            subtitle: "SAVE ₹3,000",
+            price: "27,000",
+            perMonth: "4,500",
+            originalPrice: "30,000",
+            totalPrice: "27,000",
             highlights: [
               "4 coached sessions a week",
               "Two disciplines access",
               "Guest passes included"
             ],
-            tag: "SAVE ₹1,300",
-            buttonText: "SAVE ₹1,300",
+            tag: "SAVE ₹3,000",
+            buttonText: "SAVE ₹3,000",
             isPopular: true
           },
           {
             months: "12 MONTHS",
-            subtitle: "BEST VALUE",
-            price: "39,300",
-            perMonth: "3,275",
-            originalPrice: "48,000",
-            totalPrice: "39,300",
+            subtitle: "SAVE ₹12,000",
+            price: "48,000",
+            perMonth: "4,000",
+            originalPrice: "60,000",
+            totalPrice: "48,000",
             highlights: [
               "4 coached sessions a week",
               "Two disciplines access",
               "Priority booking & perks"
             ],
-            tag: "SAVE ₹8,700",
-            buttonText: "SAVE ₹8,700",
+            tag: "SAVE ₹12,000",
+            buttonText: "SAVE ₹12,000",
             isPopular: false
           }
         ]
@@ -244,15 +244,15 @@ const seedDB = async () => {
         subtitle: "EVERYTHING",
         sessionInfo: "Five coached sessions a week, every pathway, every class",
         desc: "Five coached sessions a week, every pathway, every class.",
-        starterPrice: "4,583",
-        dailyRate: "₹151",
-        dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
-        dailyComparison: "One cinema ticket.",
+        starterPrice: "5,600",
+        dailyRate: "₹184",
+        dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
+        dailyComparison: "One pizza.",
         features: [
           "Five coached sessions a week",
           "Every pathway, every class",
           "Priority ring & arena floor",
-          "VIP founding member perks"
+          "VIP member perks"
         ],
         benefits: [
           {
@@ -291,50 +291,50 @@ const seedDB = async () => {
           },
           {
             months: "3 MONTHS",
-            subtitle: "FOUNDING RATE",
-            price: "19,700",
-            perMonth: "6,567",
-            originalPrice: "20,000",
-            totalPrice: "19,700",
+            subtitle: "SAVE ₹1,000",
+            price: "20,000",
+            perMonth: "6,667",
+            originalPrice: "21,000",
+            totalPrice: "20,000",
             highlights: [
               "5 coached sessions a week",
               "All pathways & disciplines",
               "Coach assessment"
             ],
-            tag: "SAVE ₹300",
-            buttonText: "SAVE ₹300",
+            tag: "SAVE ₹1,000",
+            buttonText: "SAVE ₹1,000",
             isPopular: false
           },
           {
             months: "6 MONTHS",
-            subtitle: "BEST PROGRESS",
-            price: "35,900",
-            perMonth: "5,983",
-            originalPrice: "37,800",
-            totalPrice: "35,900",
+            subtitle: "SAVE ₹4,200",
+            price: "37,800",
+            perMonth: "6,300",
+            originalPrice: "42,000",
+            totalPrice: "37,800",
             highlights: [
               "5 coached sessions a week",
               "All pathways & disciplines",
               "Guest passes included"
             ],
-            tag: "SAVE ₹1,900",
-            buttonText: "SAVE ₹1,900",
+            tag: "SAVE ₹4,200",
+            buttonText: "SAVE ₹4,200",
             isPopular: true
           },
           {
             months: "12 MONTHS",
-            subtitle: "BEST VALUE",
-            price: "55,000",
-            perMonth: "4,583",
-            originalPrice: "67,200",
-            totalPrice: "55,000",
+            subtitle: "SAVE ₹16,800",
+            price: "67,200",
+            perMonth: "5,600",
+            originalPrice: "84,000",
+            totalPrice: "67,200",
             highlights: [
               "5 coached sessions a week",
               "All pathways & disciplines",
-              "VIP Founding Wall & passes"
+              "VIP Wall & passes"
             ],
-            tag: "SAVE ₹12,200",
-            buttonText: "SAVE ₹12,200",
+            tag: "SAVE ₹16,800",
+            buttonText: "SAVE ₹16,800",
             isPopular: false
           }
         ]
