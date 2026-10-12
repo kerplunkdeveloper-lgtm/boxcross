@@ -14,22 +14,22 @@ const ChoosePlan = React.forwardRef(
     const currentSessionInfo =
       activeData.sessionInfo ||
       (currentTitle === "CORE"
-        ? "Three coached sessions a week — Fight, HYROX or Strength"
+        ? "Five Coached sessions a week — Boxing, HYROX or Strength Training"
         : currentTitle === "ATHLETE"
-        ? "Four coached sessions a week across two disciplines"
-        : currentTitle === "JUNIOR"
-        ? "Three coached sessions a week"
-        : "Five coached sessions a week, every pathway, every class");
+          ? "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)"
+          : currentTitle === "JUNIOR"
+            ? "Five Coached sessions a week"
+            : "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)");
 
     const dailyRate =
       activeData.dailyRate ||
       (currentTitle === "CORE"
         ? "₹92"
         : currentTitle === "ATHLETE"
-        ? "₹132"
-        : currentTitle === "JUNIOR"
-        ? "₹64"
-        : "₹184");
+          ? "₹132"
+          : currentTitle === "JUNIOR"
+            ? "₹64"
+            : "₹184");
 
     const dailyRateLabel =
       activeData.dailyRateLabel ||
@@ -42,16 +42,16 @@ const ChoosePlan = React.forwardRef(
       (currentTitle === "CORE"
         ? "Two coffees and a vada."
         : currentTitle === "ATHLETE"
-        ? "One burger."
-        : currentTitle === "JUNIOR"
-        ? "One masala dosa."
-        : "One pizza.");
+          ? "One burger."
+          : currentTitle === "JUNIOR"
+            ? "One masala dosa."
+            : "One pizza.");
 
     const benefits =
       activeData.benefits && activeData.benefits.length > 0
         ? activeData.benefits
         : currentTitle === "CORE"
-        ? [
+          ? [
             {
               boldText: "You can defend yourself.",
               normalText:
@@ -71,70 +71,70 @@ const ChoosePlan = React.forwardRef(
               normalText: "Nobody improves alone on a gym floor.",
             },
           ]
-        : currentTitle === "ATHLETE"
-        ? [
-            {
-              boldText: "Strong and not out of breath.",
-              normalText:
-                "Most people get one. Two pathways gets you both.",
-            },
-            {
-              boldText: "You stop plateauing.",
-              normalText:
-                "Four sessions, two disciplines, nothing goes stale.",
-            },
-            {
-              boldText: "Visible change by week twelve.",
-              normalText:
-                "Measured on your card, not guessed in the mirror.",
-            },
-            {
-              boldText: "The body you had at twenty-five,",
-              normalText: "built the way an athlete builds it.",
-            },
-          ]
-        : currentTitle === "JUNIOR"
-        ? [
-            {
-              boldText: "Confidence that shows up at school.",
-              normalText:
-                "A child who can hold a stance stops shrinking in a crowd.",
-            },
-            {
-              boldText: "They learn to handle themselves — and when not to.",
-              normalText:
-                "Discipline is taught before the punch is.",
-            },
-            {
-              boldText: "Focus that carries into homework.",
-              normalText:
-                "Three rounds of concentration, three evenings a week.",
-            },
-            {
-              boldText: "Off the screen, on their feet.",
-              normalText:
-                "Tired in the right way by 7pm.",
-            },
-          ]
-        : [
-            {
-              boldText: "Train the way fighters train.",
-              normalText:
-                "Five days, every discipline, nothing held back.",
-            },
-            {
-              boldText: "This becomes your second place.",
-              normalText: "After home, before everywhere else.",
-            },
-            {
-              boldText: "Priority on everything.",
-              normalText: "Classes, the ring, the open floor.",
-            },
-            {
-              boldText: "You stop thinking about fitness.",
-              normalText: "It is simply what you do now.",
-            },
-          ];
+          : currentTitle === "ATHLETE"
+            ? [
+              {
+                boldText: "Strong and not out of breath.",
+                normalText:
+                  "Most people get one. Two pathways gets you both.",
+              },
+              {
+                boldText: "You stop plateauing.",
+                normalText:
+                  "Four sessions, two disciplines, nothing goes stale.",
+              },
+              {
+                boldText: "Visible change by week twelve.",
+                normalText:
+                  "Measured on your card, not guessed in the mirror.",
+              },
+              {
+                boldText: "The body you had at twenty-five,",
+                normalText: "built the way an athlete builds it.",
+              },
+            ]
+            : currentTitle === "JUNIOR"
+              ? [
+                {
+                  boldText: "Confidence that shows up at school.",
+                  normalText:
+                    "A child who can hold a stance stops shrinking in a crowd.",
+                },
+                {
+                  boldText: "They learn to handle themselves — and when not to.",
+                  normalText:
+                    "Discipline is taught before the punch is.",
+                },
+                {
+                  boldText: "Focus that carries into homework.",
+                  normalText:
+                    "Three rounds of concentration, three evenings a week.",
+                },
+                {
+                  boldText: "Off the screen, on their feet.",
+                  normalText:
+                    "Tired in the right way by 7pm.",
+                },
+              ]
+              : [
+                {
+                  boldText: "Train the way fighters train.",
+                  normalText:
+                    "Five days, every discipline, nothing held back.",
+                },
+                {
+                  boldText: "This becomes your second place.",
+                  normalText: "After home, before everywhere else.",
+                },
+                {
+                  boldText: "Priority on everything.",
+                  normalText: "Classes, the ring, the open floor.",
+                },
+                {
+                  boldText: "You stop thinking about fitness.",
+                  normalText: "It is simply what you do now.",
+                },
+              ];
 
     const plans =
       activeData.plans && activeData.plans.length > 0

@@ -5,15 +5,15 @@ const defaultMembershipPlans = [
     key: "core",
     title: "CORE",
     subtitle: "ONE PATHWAY",
-    sessionInfo: "Three coached sessions a week — Fight, HYROX or Strength",
-    desc: "Three coached sessions a week — Fight, HYROX or Strength.",
+    sessionInfo: "Five Coached sessions a week — Boxing, HYROX or Strength Training",
+    desc: "Five Coached sessions a week — Boxing, HYROX or Strength Training.",
     starterPrice: "2,800",
     dailyRate: "₹92",
     dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
     dailyComparison: "Two coffees and a vada.",
     features: [
-      "Three coached sessions a week",
-      "One pathway (Fight, HYROX or Strength)",
+      "Five Coached sessions a week",
+      "One pathway (Boxing, HYROX or Strength Training)",
       "Open gym access",
       "Community Access"
     ],
@@ -106,15 +106,15 @@ const defaultMembershipPlans = [
     key: "athlete",
     title: "ATHLETE",
     subtitle: "TWO PATHWAYS",
-    sessionInfo: "Four coached sessions a week across two disciplines",
-    desc: "Four coached sessions a week across two disciplines.",
+    sessionInfo: "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)",
+    desc: "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training).",
     starterPrice: "4,000",
     dailyRate: "₹132",
     dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
     dailyComparison: "One burger.",
     features: [
-      "Four coached sessions a week",
-      "Two disciplines / pathways",
+      "Five coached sessions a week",
+      "Two disciplines / pathways (Boxing + HYROX or Boxing + Strength Training)",
       "All arena facilities",
       "Progress tracking"
     ],
@@ -207,15 +207,15 @@ const defaultMembershipPlans = [
     key: "arena",
     title: "ARENA",
     subtitle: "EVERYTHING",
-    sessionInfo: "Five coached sessions a week, every pathway, every class",
-    desc: "Five coached sessions a week, every pathway, every class.",
+    sessionInfo: "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)",
+    desc: "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training).",
     starterPrice: "5,600",
     dailyRate: "₹184",
     dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
     dailyComparison: "One pizza.",
     features: [
       "Five coached sessions a week",
-      "Every pathway, every class",
+      "Every pathway, every class (Boxing + HYROX + Strength Training)",
       "Priority ring & arena floor",
       "VIP member perks"
     ],
@@ -308,14 +308,14 @@ const defaultMembershipPlans = [
     key: "junior",
     title: "JUNIOR",
     subtitle: "UNDER 13",
-    sessionInfo: "Three coached sessions a week",
-    desc: "Three coached sessions a week. Youth boxing, discipline and athletic development.",
+    sessionInfo: "Five Coached sessions a week",
+    desc: "Five Coached sessions a week. Youth boxing, discipline and athletic development.",
     starterPrice: "1,958",
     dailyRate: "₹64",
     dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
     dailyComparison: "One masala dosa.",
     features: [
-      "Three coached sessions a week",
+      "Five Coached sessions a week",
       "Youth boxing & athletic discipline",
       "Confidence building",
       "Screen-free fitness"
@@ -429,6 +429,35 @@ exports.getMembershipPlans = async (req, res) => {
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
     }
+
+    // Auto-update MongoDB records if they still have old strings (e.g. Fight instead of Boxing)
+    await MembershipPlan.updateOne(
+      { key: "core", sessionInfo: /Fight/i },
+      {
+        $set: {
+          sessionInfo: "Five Coached sessions a week — Boxing, HYROX or Strength Training",
+          desc: "Five Coached sessions a week — Boxing, HYROX or Strength Training."
+        }
+      }
+    );
+    await MembershipPlan.updateOne(
+      { key: "athlete", sessionInfo: { $not: /Boxing/i } },
+      {
+        $set: {
+          sessionInfo: "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)",
+          desc: "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)."
+        }
+      }
+    );
+    await MembershipPlan.updateOne(
+      { key: "arena", sessionInfo: { $not: /Boxing/i } },
+      {
+        $set: {
+          sessionInfo: "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)",
+          desc: "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)."
+        }
+      }
+    );
 
     plans = await MembershipPlan.find({
       key: { $in: ["core", "athlete", "arena", "junior"] }

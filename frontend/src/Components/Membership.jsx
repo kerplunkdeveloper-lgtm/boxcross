@@ -51,7 +51,7 @@ const programs = [
     ),
     title: "CORE",
     subtitle: "ONE PATHWAY",
-    desc: "Three coached sessions a week — Fight, HYROX or Strength.",
+    desc: "Five Coached sessions a week — Boxing Or Hyrox or Strength Training.",
     price: "2,800",
     image: box1,
   },
@@ -60,7 +60,7 @@ const programs = [
     icon: <Dumbbell size={45} strokeWidth={1.5} className="text-[#ccf141]" />,
     title: "ATHLETE",
     subtitle: "TWO PATHWAYS",
-    desc: "Four coached sessions a week across two disciplines.",
+    desc: "Five coached sessions a week across two disciplines. (Boxing + Hyrox or Boxing +Strength Training)",
     price: "4,000",
     popular: true,
     image: box2,
@@ -81,7 +81,7 @@ const programs = [
     ),
     title: "ARENA",
     subtitle: "EVERYTHING",
-    desc: "Five coached sessions a week, every pathway, every class.",
+    desc: "Five coached sessions a week- (Boxing + Hyrox + Strength Training)",
     price: "5,600",
     image: box3,
   },
@@ -107,7 +107,7 @@ const programs = [
     ),
     title: "JUNIOR",
     subtitle: "UNDER 13",
-    desc: "Three coached sessions a week",
+    desc: "Five Coached sessions a week",
     price: "1,958",
     image: juniorBoxer,
   },
@@ -117,13 +117,13 @@ const pricingData = {
   core: {
     title: "CORE",
     subtitle: "ONE PATHWAY",
-    sessionInfo: "Three coached sessions a week — Fight, HYROX or Strength",
+    sessionInfo: "Five Coached sessions a week — Boxing, HYROX or Strength Training",
     dailyRate: "₹92",
     dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
     dailyComparison: "Two coffees and a vada.",
     features: [
-      "Three coached sessions a week",
-      "One pathway (Fight, HYROX or Strength)",
+      "Five Coached sessions a week",
+      "One pathway (Boxing, HYROX or Strength Training)",
       "Open gym access",
       "Community Access",
     ],
@@ -154,7 +154,7 @@ const pricingData = {
         originalPrice: "",
         totalPrice: "3,500",
         highlights: [
-          "Three coached sessions a week",
+          "Five Coached sessions a week",
           "One pathway focus",
           "Open gym & community access",
         ],
@@ -169,7 +169,7 @@ const pricingData = {
         originalPrice: "10,500",
         totalPrice: "10,000",
         highlights: [
-          "Three coached sessions a week",
+          "Five Coached sessions a week",
           "Held rate for full term",
           "Coach assessment",
         ],
@@ -184,7 +184,7 @@ const pricingData = {
         originalPrice: "21,000",
         totalPrice: "18,900",
         highlights: [
-          "Three coached sessions a week",
+          "Five Coached sessions a week",
           "Locked rate for full term",
           "Coach 1-on-1 check-ins",
         ],
@@ -200,7 +200,7 @@ const pricingData = {
         originalPrice: "42,000",
         totalPrice: "33,600",
         highlights: [
-          "Three coached sessions a week",
+          "Five Coached sessions a week",
           "Maximum discount",
           "Founding Wall recognition",
         ],
@@ -213,13 +213,13 @@ const pricingData = {
   athlete: {
     title: "ATHLETE",
     subtitle: "TWO PATHWAYS",
-    sessionInfo: "Four coached sessions a week across two disciplines",
+    sessionInfo: "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)",
     dailyRate: "₹132",
     dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
     dailyComparison: "One burger.",
     features: [
-      "Four coached sessions a week",
-      "Two disciplines / pathways",
+      "Five coached sessions a week",
+      "Two disciplines / pathways (Boxing + HYROX or Boxing + Strength Training)",
       "All arena facilities",
       "Progress tracking",
     ],
@@ -250,7 +250,7 @@ const pricingData = {
         originalPrice: "",
         totalPrice: "5,000",
         highlights: [
-          "Four coached sessions a week",
+          "Five coached sessions a week",
           "Two disciplines access",
           "Full arena access",
         ],
@@ -296,7 +296,7 @@ const pricingData = {
         originalPrice: "60,000",
         totalPrice: "48,000",
         highlights: [
-          "Four coached sessions a week",
+          "Five coached sessions a week",
           "Two disciplines access",
           "Priority booking & perks",
         ],
@@ -309,13 +309,13 @@ const pricingData = {
   arena: {
     title: "ARENA",
     subtitle: "EVERYTHING",
-    sessionInfo: "Five coached sessions a week, every pathway, every class",
+    sessionInfo: "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)",
     dailyRate: "₹184",
     dailyRateLabel: "A DAY ON THE 12-MONTH PLAN",
     dailyComparison: "One pizza.",
     features: [
       "Five coached sessions a week",
-      "Every pathway, every class",
+      "Every pathway, every class (Boxing + HYROX + Strength Training)",
       "Priority ring & arena floor",
       "VIP member perks",
     ],
@@ -405,12 +405,12 @@ const pricingData = {
   junior: {
     title: "JUNIOR",
     subtitle: "UNDER 13",
-    sessionInfo: "Three coached sessions a week",
+    sessionInfo: "Five Coached sessions a week",
     dailyRate: "₹64",
     dailyRateLabel: "A DAY AS A FOUNDING MEMBER",
     dailyComparison: "One masala dosa.",
     features: [
-      "Three coached sessions a week",
+      "Five Coached sessions a week",
       "Youth boxing & athletic discipline",
       "Confidence building",
       "Screen-free fitness",
@@ -443,7 +443,7 @@ const pricingData = {
         originalPrice: "",
         totalPrice: "3,000",
         highlights: [
-          "Three coached sessions a week",
+          "Five Coached sessions a week",
           "Youth boxing fundamentals",
           "Arena training space",
         ],
@@ -458,7 +458,7 @@ const pricingData = {
         originalPrice: "8,600",
         totalPrice: "7,500",
         highlights: [
-          "Three coached sessions a week",
+          "Five Coached sessions a week",
           "Youth boxing fundamentals",
           "Skill milestone card",
         ],
@@ -473,7 +473,7 @@ const pricingData = {
         originalPrice: "16,200",
         totalPrice: "13,500",
         highlights: [
-          "Three coached sessions a week",
+          "Five Coached sessions a week",
           "Technique & fitness growth",
           "Coach assessment",
         ],
@@ -489,7 +489,7 @@ const pricingData = {
         originalPrice: "28,800",
         totalPrice: "23,500",
         highlights: [
-          "Three coached sessions a week",
+          "Five Coached sessions a week",
           "Maximum founding discount",
           "Founding Wall youth recognition",
         ],
@@ -592,7 +592,7 @@ const Membership = () => {
       return () => {
         channel.close();
       };
-    } catch (e) {}
+    } catch (e) { }
   }, []);
 
   const activeData = dynamicPricingData[activeTab] || pricingData[activeTab];
@@ -624,11 +624,10 @@ const Membership = () => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.15 }}
       onClick={() => setActiveTab(prog.id)}
-      className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
-        activeTab === prog.id
+      className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
           ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
           : "border-gray-800 hover:border-gray-600"
-      }`}
+        }`}
     >
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0 bg-black overflow-hidden">
@@ -713,11 +712,10 @@ const Membership = () => {
 
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
-            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
-              activeTab === prog.id
+            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${activeTab === prog.id
                 ? "bg-[#ccf141] border-[#ccf141] text-black"
                 : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
-            }`}
+              }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",
@@ -810,11 +808,10 @@ const Membership = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
                 onClick={() => setActiveTab(juniorProgram.id)}
-                className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${
-                  activeTab === juniorProgram.id
+                className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${activeTab === juniorProgram.id
                     ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
                     : "border-zinc-800 hover:border-zinc-700"
-                } bg-[#0b0b0d]`}
+                  } bg-[#0b0b0d]`}
               >
                 {/* Background Glow Overlay */}
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none -z-0" />
@@ -887,11 +884,10 @@ const Membership = () => {
                       <button
                         type="button"
                         onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
-                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${
-                          activeTab === juniorProgram.id
+                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${activeTab === juniorProgram.id
                             ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
                             : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
-                        }`}
+                          }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         <span>VIEW JUNIOR PLANS</span>

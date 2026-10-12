@@ -88,17 +88,17 @@ const DashboardMemberships = () => {
     setFormPlans(
       plan.plans && plan.plans.length > 0
         ? plan.plans.map((p) => ({
-            months: p.months || "",
-            subtitle: p.subtitle || "",
-            price: p.price || "",
-            perMonth: p.perMonth || "",
-            originalPrice: p.originalPrice || "",
-            totalPrice: p.totalPrice || p.price || "",
-            highlights: p.highlights || [],
-            tag: p.tag || "",
-            buttonText: p.buttonText || "CHOOSE PLAN",
-            isPopular: !!p.isPopular,
-          }))
+          months: p.months || "",
+          subtitle: p.subtitle || "",
+          price: p.price || "",
+          perMonth: p.perMonth || "",
+          originalPrice: p.originalPrice || "",
+          totalPrice: p.totalPrice || p.price || "",
+          highlights: p.highlights || [],
+          tag: p.tag || "",
+          buttonText: p.buttonText || "CHOOSE PLAN",
+          isPopular: !!p.isPopular,
+        }))
         : []
     );
     setIsModalOpen(true);
@@ -180,7 +180,7 @@ const DashboardMemberships = () => {
           const channel = new BroadcastChannel("membership_plan_updates");
           channel.postMessage("PLAN_UPDATED");
           channel.close();
-        } catch (err) {}
+        } catch (err) { }
       }
     } catch (error) {
       console.error("Error updating membership plan", error);
@@ -237,7 +237,7 @@ const DashboardMemberships = () => {
           const channel = new BroadcastChannel("membership_plan_updates");
           channel.postMessage("PLAN_UPDATED");
           channel.close();
-        } catch (err) {}
+        } catch (err) { }
       }
     } catch (error) {
       console.error("Error inline updating plan", error);
@@ -966,7 +966,7 @@ const DashboardMemberships = () => {
                       onChange={(e) => setFormSessionInfo(e.target.value)}
                       rows={2}
                       className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl p-3.5 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors resize-none"
-                      placeholder="Three coached sessions a week — Fight, HYROX or Strength"
+                      placeholder="Five Coached sessions a week — Fight, HYROX or Strength"
                     />
                   </div>
                 </div>
@@ -987,7 +987,7 @@ const DashboardMemberships = () => {
                     onChange={(e) => setFormFeatures(e.target.value)}
                     rows={2}
                     className="w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-xl p-3.5 text-sm outline-none focus:border-[var(--db-accent-highlight)] transition-colors resize-none"
-                    placeholder="Three coached sessions a week, One pathway (Fight, HYROX or Strength), Open gym access, Community Access"
+                    placeholder="Five Coached sessions a week, One pathway (Fight, HYROX or Strength), Open gym access, Community Access"
                     required
                   />
                   <div className="flex flex-wrap gap-1.5 pt-1">
