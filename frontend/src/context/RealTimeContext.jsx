@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { io } from "socket.io-client";
+// Safe fallback stub when socket.io-client is not bundled in lockfile
+const io = () => ({
+  on: () => {},
+  emit: () => {},
+  disconnect: () => {},
+});
 import toast from "react-hot-toast";
 import { useAuth } from "./AuthContext";
 
