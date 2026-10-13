@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Check, ArrowRight, ShieldCheck, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -143,11 +143,86 @@ const ChoosePlan = React.forwardRef(
         ? activeData.plans
         : [];
 
+    // Track which plan duration is selected to dynamically show EMI / Affordability
+    const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
+
+    // Keep index in bounds if activeData changes
+    useEffect(() => {
+      if (selectedPlanIdx >= plans.length && plans.length > 0) {
+        setSelectedPlanIdx(0);
+      }
+    }, [plans, selectedPlanIdx]);
+
+    const activePlan = plans[selectedPlanIdx] || plans[0] || {};
+    const cleanTotalCurrent =
+      activePlan.price || activePlan.totalPrice || "3500";
+    const numericPrice =
+      Number(String(cleanTotalCurrent).replace(/[^0-9]/g, "")) || 3500;
+    const amountInPaise = numericPrice * 100;
+    const razorpayKey =
+      import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TS0kzk3tqsYO7Z";
+
+    // Initialize and dynamically update Razorpay Affordability Suite
+    useEffect(() => {
+      let isMounted = true;
+
+      const renderWidget = () => {
+        if (!isMounted) return;
+        const container = document.getElementById(
+          "razorpay-affordability-widget",
+        );
+        if (!container) return;
+
+        if (window.RazorpayAffordabilitySuite) {
+          container.innerHTML = "";
+          try {
+            const widgetConfig = {
+              key: razorpayKey,
+              amount: amountInPaise,
+              currency: "INR",
+              theme: {
+                color: "#ccf141",
+              },
+            };
+            const rzpAffordabilitySuite =
+              new window.RazorpayAffordabilitySuite(widgetConfig);
+            rzpAffordabilitySuite.render();
+          } catch (e) {
+            console.warn("Razorpay Affordability Widget render error:", e);
+          }
+        }
+      };
+
+      if (window.RazorpayAffordabilitySuite) {
+        renderWidget();
+      } else {
+        const interval = setInterval(() => {
+          if (window.RazorpayAffordabilitySuite) {
+            clearInterval(interval);
+            renderWidget();
+          }
+        }, 250);
+
+        const timer = setTimeout(() => {
+          clearInterval(interval);
+        }, 6000);
+
+        return () => {
+          clearInterval(interval);
+          clearTimeout(timer);
+        };
+      }
+
+      return () => {
+        isMounted = false;
+      };
+    }, [amountInPaise, currentTitle, razorpayKey]);
+
     return (
       <div
         ref={ref}
         id="pricing"
-        className="w-full max-w-7xl mx-auto border-t border-zinc-800/80 pt-12 pb-12 scroll-mt-10 px-2 sm:px-4"
+        className="w-full max-w-8xl mx-auto border-t border-zinc-800/80 pt-12 pb-12 scroll-mt-10 px-2 sm:px-4"
       >
         {/* STEP 2 HEADER */}
         <motion.div
@@ -270,17 +345,25 @@ const ChoosePlan = React.forwardRef(
               const isSaveTag =
                 plan.tag && plan.tag.toUpperCase().startsWith("SAVE");
 
+              const isSelected = selectedPlanIdx === idx;
+
               return (
                 <div
                   key={idx}
-                  className="p-6 sm:p-7 md:p-8 flex flex-col items-center text-center justify-between transition-colors duration-200 hover:bg-zinc-900/60 group cursor-pointer"
-                  onClick={() =>
-                    handlePlanSelect(
-                      `${currentTitle} - ${plan.months}`,
-                      cleanTotal,
-                      plan.months,
-                    )
-                  }
+                  className={`p-6 sm:p-7 md:p-8 flex flex-col items-center text-center justify-between transition-all duration-200 hover:bg-zinc-900/60 group cursor-pointer relative ${
+                    isSelected ? "bg-zinc-900/50 ring-2 ring-[#ccf141]/80 shadow-[0_0_20px_rgba(204,241,65,0.15)]" : ""
+                  }`}
+                  onClick={() => {
+                    if (isSelected) {
+                      handlePlanSelect(
+                        `${currentTitle} - ${plan.months}`,
+                        cleanTotal,
+                        plan.months,
+                      );
+                    } else {
+                      setSelectedPlanIdx(idx);
+                    }
+                  }}
                 >
                   <div className="w-full flex flex-col items-center">
                     {/* Duration Label */}
@@ -291,36 +374,26 @@ const ChoosePlan = React.forwardRef(
                       {plan.months}
                     </span>
 
-                    {/* Massive Bold Monthly Rate */}
-                   
-
                     {/* Total Price Line with Strikethrough if discounted */}
-                    <div className="text-xs sm:text-[30px] font-medium text-zinc-400  flex items-center justify-center gap-1.5 flex-wrap">
-                     
+                    <div className="text-xs sm:text-[30px] font-medium text-zinc-400 flex items-center justify-center gap-1.5 flex-wrap">
                       <span className="font-bold text-white">
                         ₹{cleanTotal}/-
                       </span>
-                      
                     </div>
-                    <div className="">
-                       {hasDiscount && (
+                    <div>
+                      {hasDiscount && (
                         <span className="line-through text-zinc-200 font-light text-sm">
                           ₹{plan.originalPrice}/-
                         </span>
                       )}
                     </div>
 
-
- <div
+                    <div
                       className="text-sm font-black text-yellow-400 tracking-tight leading-none my-1 flex items-baseline justify-center"
                       style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                     >
                       <span>₹{cleanPerMonth} / Month</span>
                     </div>
-
-                   
-
-
                   </div>
 
                   {/* Bottom Action Badge / Button */}
@@ -330,6 +403,7 @@ const ChoosePlan = React.forwardRef(
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
+                          setSelectedPlanIdx(idx);
                           handlePlanSelect(
                             `${currentTitle} - ${plan.months}`,
                             cleanTotal,
@@ -346,6 +420,7 @@ const ChoosePlan = React.forwardRef(
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
+                          setSelectedPlanIdx(idx);
                           handlePlanSelect(
                             `${currentTitle} - ${plan.months}`,
                             cleanTotal,
@@ -362,6 +437,41 @@ const ChoosePlan = React.forwardRef(
                 </div>
               );
             })}
+          </div>
+
+          {/* RAZORPAY AFFORDABILITY WIDGET (EMI / PAY LATER / OFFERS) */}
+          <div className="border-t border-zinc-800 bg-[#0d0d0f] px-5 sm:px-8 py-4 sm:py-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3 shrink-0 self-start md:self-center">
+              <div className="w-8 h-8 rounded-lg bg-[#ccf141]/10 border border-[#ccf141]/30 flex items-center justify-center text-[#ccf141] shrink-0">
+                <Zap size={16} />
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-wider text-[#ccf141]">
+                    Flexible EMI &amp; Pay Later Options
+                  </span>
+                  <span className="text-[10px] bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono border border-zinc-700/60">
+                    Razorpay
+                  </span>
+                </div>
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  Showing available plans for{" "}
+                  <span className="text-white font-semibold">
+                    {currentTitle} ({activePlan?.months || "Selected Plan"}) – ₹{cleanTotalCurrent}/-
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full md:w-auto flex-1 flex justify-start md:justify-end items-center min-h-[38px]">
+              <div
+                id="razorpay-affordability-widget"
+                data-key={razorpayKey}
+                data-amount={amountInPaise}
+                data-currency="INR"
+                className="w-full flex justify-start md:justify-end text-zinc-200"
+              > </div>
+            </div>
           </div>
 
           {/* CARD BOTTOM SECTION: WHAT IT ACTUALLY GIVES YOU + RIGHT BLACK BOX */}

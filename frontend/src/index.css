@@ -723,3 +723,11 @@ html {
     max-width: 1800px !important;
   }
 }
+
+/* Razorpay Affordability Widget Theme Integration */
+#razorpay-affordability-widget {
+  filter: invert(1) hue-rotate(180deg) brightness(1.25) contrast(1.1);
+  display: inline-block;
+  max-width: 100%;
+  transition: filter 0.2s ease;
+}
