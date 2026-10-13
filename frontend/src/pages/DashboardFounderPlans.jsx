@@ -47,11 +47,48 @@ const DashboardFounderPlans = () => {
   const [formFeatures, setFormFeatures] = useState("");
   const [formBenefits, setFormBenefits] = useState([]);
   const [formPlans, setFormPlans] = useState([]);
+  const [formIsComingSoon, setFormIsComingSoon] = useState(false);
+  const [togglingId, setTogglingId] = useState(null);
 
   // Inline table edit states
   const [inlineEditId, setInlineEditId] = useState(null);
   const [inlineData, setInlineData] = useState({});
   const [inlineSaving, setInlineSaving] = useState(false);
+
+  const handleToggleComingSoon = async (plan) => {
+    const newStatus = !plan.isComingSoon;
+    const targetId = plan._id || plan.id || plan.key;
+    setTogglingId(targetId);
+
+    // Optimistic UI update for instant 0ms response
+    const updatedPlans = plans.map((p) =>
+      (p._id && p._id === targetId) || (p.key && p.key === targetId)
+        ? { ...p, isComingSoon: newStatus }
+        : p
+    );
+    setPlans(updatedPlans);
+    broadcastPlansUpdate(updatedPlans);
+
+    try {
+      const { data } = await updateFounderPlan(targetId, {
+        isComingSoon: newStatus,
+      });
+      if (data.success) {
+        toast.success(
+          `${plan.title} is now ${newStatus ? "marked as COMING SOON" : "ACTIVE"}!`
+        );
+        fetchPlans();
+      } else {
+        fetchPlans();
+      }
+    } catch (err) {
+      console.error("Error toggling coming soon status:", err);
+      toast.error("Failed to update status");
+      fetchPlans();
+    } finally {
+      setTogglingId(null);
+    }
+  };
 
   const broadcastPlansUpdate = (updatedPlans) => {
     try {
@@ -135,6 +172,7 @@ const DashboardFounderPlans = () => {
           }))
         : []
     );
+    setFormIsComingSoon(!!plan.isComingSoon);
     setIsModalOpen(true);
   };
 
@@ -239,6 +277,7 @@ const DashboardFounderPlans = () => {
         isPopular: false,
       },
     ]);
+    setFormIsComingSoon(false);
     setIsModalOpen(true);
   };
 
@@ -261,6 +300,7 @@ const DashboardFounderPlans = () => {
       dailyComparison: formDailyComparison,
       sessionInfo: formSessionInfo,
       desc: formSessionInfo,
+      isComingSoon: !!formIsComingSoon,
       features: formFeatures
         .split(",")
         .map((item) => item.trim())
@@ -443,12 +483,174 @@ const DashboardFounderPlans = () => {
             <div>
               <h2 className="text-base font-bold text-[var(--db-text)]">All Founder Plans</h2>
               <p className="text-xs text-[var(--db-text-muted)]">
-                Inline editing enabled for instant updates. Click edit to modify duration options.
+                Inline editing enabled for instant updates. Toggle Coming Soon status or click edit to modify durations.
               </p>
             </div>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Mobile Card View (< md) */}
+          <div className="block md:hidden p-3.5 space-y-3.5">
+            {loading ? (
+              <div className="py-12 text-center text-neutral-400 text-xs">
+                Loading founder plans...
+              </div>
+            ) : plans.length === 0 ? (
+              <div className="py-12 text-center text-neutral-400 text-xs">
+                No founder plans found.
+              </div>
+            ) : (
+              plans.map((plan) => {
+                const isInline = inlineEditId === plan._id;
+                return (
+                  <div
+                    key={plan._id}
+                    className="p-4 rounded-xl border border-[var(--db-card-border)] bg-[var(--db-input-bg)]/40 hover:bg-[var(--db-table-hover)] transition-all space-y-3 text-left"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="inline-block px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-[#ccf141] bg-[#ccf141]/10 rounded-md border border-[#ccf141]/25">
+                            {plan.key}
+                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={plan.isComingSoon}
+                              disabled={togglingId === (plan._id || plan.id || plan.key)}
+                              onClick={() => handleToggleComingSoon(plan)}
+                              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                                plan.isComingSoon
+                                  ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]"
+                                  : "bg-zinc-700"
+                              }`}
+                              title={plan.isComingSoon ? "Turn Off Coming Soon" : "Turn On Coming Soon"}
+                            >
+                              <span
+                                className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                                  plan.isComingSoon ? "translate-x-4" : "translate-x-0"
+                                }`}
+                              />
+                            </button>
+                            <span
+                              className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                                plan.isComingSoon
+                                  ? "bg-amber-500/15 text-amber-400 border border-amber-500/40"
+                                  : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/40"
+                              }`}
+                            >
+                              {plan.isComingSoon ? "Soon" : "Active"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {isInline ? (
+                          <div className="space-y-1.5 mt-1">
+                            <input
+                              type="text"
+                              value={inlineData.title}
+                              onChange={(e) => handleInlineChange("title", e.target.value)}
+                              placeholder="Title"
+                              className="w-full px-2 py-1 bg-[var(--db-card)] border border-[var(--db-card-border)] text-xs font-bold text-[var(--db-text)] rounded-lg outline-none"
+                            />
+                            <input
+                              type="text"
+                              value={inlineData.subtitle}
+                              onChange={(e) => handleInlineChange("subtitle", e.target.value)}
+                              placeholder="Subtitle"
+                              className="w-full px-2 py-1 bg-[var(--db-card)] border border-[var(--db-card-border)] text-[10px] text-[var(--db-text-muted)] rounded-lg outline-none"
+                            />
+                          </div>
+                        ) : (
+                          <div>
+                            <h3 className="text-sm font-black text-[var(--db-text)] uppercase tracking-wide">
+                              {plan.title}
+                            </h3>
+                            {plan.subtitle && (
+                              <span className="text-[10px] text-[var(--db-text-muted)] font-semibold tracking-wider uppercase block">
+                                {plan.subtitle}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="text-right">
+                        <span className="text-[9px] text-[var(--db-text-muted)] uppercase font-bold block">
+                          Starter Rate
+                        </span>
+                        {isInline ? (
+                          <div className="flex items-center gap-1 mt-1 justify-end">
+                            <span className="text-xs text-[#ccf141] font-mono">₹</span>
+                            <input
+                              type="text"
+                              value={inlineData.starterPrice}
+                              onChange={(e) => handleInlineChange("starterPrice", e.target.value)}
+                              className="w-20 px-2 py-0.5 bg-[var(--db-card)] border border-[var(--db-card-border)] text-xs font-mono font-bold text-[#ccf141] rounded-lg text-right outline-none"
+                            />
+                          </div>
+                        ) : (
+                          <span className="text-sm font-black font-mono text-[#ccf141]">
+                            ₹{plan.starterPrice}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-[var(--db-card-border)]/60 text-[11px]">
+                      <span className="text-neutral-400">
+                        Daily: <strong className="text-neutral-200 font-mono">{plan.dailyRate || "—"}</strong>
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {isInline ? (
+                          <>
+                            <button
+                              onClick={() => saveInlineEdit(plan)}
+                              disabled={inlineSaving}
+                              className="px-2.5 py-1 rounded bg-emerald-500 text-black font-bold text-xs"
+                            >
+                              {inlineSaving ? "Saving..." : "Save"}
+                            </button>
+                            <button
+                              onClick={cancelInlineEdit}
+                              className="px-2.5 py-1 rounded bg-neutral-800 text-neutral-300 text-xs"
+                            >
+                              Cancel
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={() => startInlineEdit(plan)}
+                              className="p-1.5 rounded-lg border border-[var(--db-card-border)] text-neutral-400 hover:text-white"
+                            >
+                              <SlidersHorizontal size={13} />
+                            </button>
+                            <button
+                              onClick={() => handleEditClick(plan)}
+                              className="px-2.5 py-1 rounded-lg bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-xs font-bold flex items-center gap-1"
+                            >
+                              <Edit size={12} />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(plan._id || plan.id || plan.key, plan.title)}
+                              className="p-1.5 rounded-lg border border-red-500/20 text-red-400"
+                            >
+                              <Trash size={13} />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          {/* Desktop Table View (>= md) */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-[var(--db-input-bg)] text-[var(--db-text-muted)] font-mono uppercase text-[10px] border-b border-[var(--db-card-border)]">
                 <tr>
@@ -457,19 +659,20 @@ const DashboardFounderPlans = () => {
                   <th className="py-3 px-4">Monthly Rate</th>
                   <th className="py-3 px-4">Daily Rate</th>
                   <th className="py-3 px-4">Durations</th>
+                  <th className="py-3 px-4">Status / Coming Soon</th>
                   <th className="py-3 px-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--db-card-border)] text-[var(--db-text)]">
                 {loading ? (
                   <tr>
-                    <td colSpan="6" className="py-12 text-center text-neutral-400">
+                    <td colSpan="7" className="py-12 text-center text-neutral-400">
                       Loading founder plans...
                     </td>
                   </tr>
                 ) : plans.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="py-12 text-center text-neutral-400">
+                    <td colSpan="7" className="py-12 text-center text-neutral-400">
                       No founder plans found.
                     </td>
                   </tr>
@@ -537,6 +740,48 @@ const DashboardFounderPlans = () => {
                           <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-neutral-300">
                             {plan.plans?.length || 0} options
                           </span>
+                        </td>
+
+                        {/* Status / Coming Soon Toggle */}
+                        <td className="py-3.5 px-4">
+                          <div className="flex items-center gap-2.5">
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={plan.isComingSoon}
+                              disabled={togglingId === (plan._id || plan.id || plan.key)}
+                              onClick={() => handleToggleComingSoon(plan)}
+                              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                                plan.isComingSoon
+                                  ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]"
+                                  : "bg-zinc-700 hover:bg-zinc-600"
+                              }`}
+                              title={
+                                plan.isComingSoon
+                                  ? "Currently Coming Soon (click to activate)"
+                                  : "Currently Active (click to set Coming Soon)"
+                              }
+                            >
+                              <span
+                                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                                  plan.isComingSoon ? "translate-x-5" : "translate-x-0"
+                                }`}
+                              />
+                            </button>
+                            <div>
+                              {plan.isComingSoon ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider bg-amber-500/15 border border-amber-500/40 text-amber-400 shadow-sm whitespace-nowrap">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                                  Coming Soon
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 whitespace-nowrap">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                  Active
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </td>
 
                         <td className="py-3.5 px-4 text-right">
@@ -636,6 +881,47 @@ const DashboardFounderPlans = () => {
                   <h4 className="text-xs font-mono uppercase tracking-wider text-[#ccf141] font-bold">
                     1. Main Plan Information
                   </h4>
+
+                  {/* Coming Soon Switch Banner */}
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)]">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black uppercase tracking-wider text-[var(--db-text)]">
+                          Coming Soon Status:
+                        </span>
+                        <span
+                          className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${
+                            formIsComingSoon
+                              ? "bg-amber-500/20 text-amber-400 border border-amber-500/40"
+                              : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
+                          }`}
+                        >
+                          {formIsComingSoon ? "Coming Soon (Inactive)" : "Active (Available Live)"}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[var(--db-text-muted)]">
+                        Turn this ON to mark this founder program as &quot;Coming Soon&quot; on the website. Users will see a Coming Soon badge, blur overlay, and cannot purchase it.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={formIsComingSoon}
+                      onClick={() => setFormIsComingSoon(!formIsComingSoon)}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        formIsComingSoon
+                          ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]"
+                          : "bg-zinc-700 hover:bg-zinc-600"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                          formIsComingSoon ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
 
                   {!editingPlan && (
                     <div>

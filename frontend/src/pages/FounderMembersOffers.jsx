@@ -432,7 +432,7 @@ const FounderMembersOffers = () => {
           return { ...initialFounderPlansMap, ...parsed };
         }
       }
-    } catch (e) {}
+    } catch (e) { }
     return initialFounderPlansMap;
   };
 
@@ -458,7 +458,7 @@ const FounderMembersOffers = () => {
           });
         }
       }
-    } catch (e) {}
+    } catch (e) { }
     return defaultPrograms;
   };
 
@@ -474,7 +474,13 @@ const FounderMembersOffers = () => {
     // Map plans keyed by plan.key
     const mapped = { ...initialFounderPlansMap };
     plans.forEach((p) => {
-      if (p.key) mapped[p.key] = p;
+      if (p.key) {
+        mapped[p.key] = {
+          ...(initialFounderPlansMap[p.key] || {}),
+          ...p,
+          isComingSoon: !!p.isComingSoon,
+        };
+      }
     });
     setFounderPlansData(mapped);
 
@@ -500,7 +506,7 @@ const FounderMembersOffers = () => {
       localStorage.setItem("boxcross_founder_plans_cache", JSON.stringify(mapped));
       localStorage.setItem("boxcross_founder_plans_raw", JSON.stringify(plans));
       localStorage.setItem("boxcross_founder_plans_timestamp", Date.now().toString());
-    } catch (e) {}
+    } catch (e) { }
   };
 
   useEffect(() => {
@@ -555,7 +561,7 @@ const FounderMembersOffers = () => {
           }
         };
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // 2. Storage event listener fallback
     const handleStorage = (e) => {
@@ -565,7 +571,7 @@ const FounderMembersOffers = () => {
           if (Array.isArray(parsed)) {
             applyPlans(parsed);
           }
-        } catch (err) {}
+        } catch (err) { }
       }
     };
     window.addEventListener("storage", handleStorage);
@@ -639,11 +645,10 @@ const FounderMembersOffers = () => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.15 }}
       onClick={() => setActiveTab(prog.id)}
-      className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
-        activeTab === prog.id
+      className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
           ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
           : "border-gray-800 hover:border-gray-600"
-      }`}
+        }`}
     >
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0 bg-black overflow-hidden">
@@ -681,13 +686,15 @@ const FounderMembersOffers = () => {
             This pathway is currently preparing for launch. Online registrations will open shortly.
           </p>
 
-          <div
-            className="px-5 py-2.5 rounded-xl border border-amber-500/60 bg-amber-500/15 text-amber-300 text-[11px] font-black uppercase tracking-widest flex items-center gap-2 group-hover:bg-amber-500 group-hover:text-black transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+          <button
+            type="button"
+            onClick={(e) => handleScrollToPlans(e, prog.id)}
+            className="px-5 py-2.5 rounded-xl border border-amber-500/60 bg-amber-500/15 text-amber-300 text-[11px] font-black uppercase tracking-widest flex items-center gap-2 group-hover:bg-amber-500 group-hover:text-black transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)] cursor-pointer"
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
             <span>STAY TUNED</span>
             <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-          </div>
+          </button>
         </div>
       ) : prog.popular ? (
         <div className="absolute top-0 right-0 bg-[#ccf141] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
@@ -759,13 +766,12 @@ const FounderMembersOffers = () => {
 
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
-            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
-              prog.isComingSoon
+            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${prog.isComingSoon
                 ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
                 : activeTab === prog.id
                   ? "bg-[#ccf141] border-[#ccf141] text-black"
                   : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
-            }`}
+              }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",
@@ -796,7 +802,7 @@ const FounderMembersOffers = () => {
         <title>Founder Members Offers | Box &amp; Cross — The Founding 100</title>
         <meta
           name="description"
-          content="Exclusive founder members offers at Box &amp; Cross. Permanent rate locks, Founding Wall inscription, and elite coaching."
+          content="Exclusive founder members offers at Box &amp; Cross. Founding Wall inscription, and elite coaching."
         />
       </Helmet>
 
@@ -1051,7 +1057,7 @@ const FounderMembersOffers = () => {
                   fontWeight: "600",
                 }}
               >
-               Founder 100-Members offer 
+                Founder 100-Members offer
               </span>
             </div>
 
@@ -1106,11 +1112,10 @@ const FounderMembersOffers = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
                 onClick={() => setActiveTab(juniorProgram.id)}
-                className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${
-                  activeTab === juniorProgram.id
+                className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${activeTab === juniorProgram.id
                     ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
                     : "border-zinc-800 hover:border-zinc-700"
-                } bg-[#0b0b0d]`}
+                  } bg-[#0b0b0d]`}
               >
                 {/* Background Glow Overlay */}
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none -z-0" />
@@ -1137,13 +1142,15 @@ const FounderMembersOffers = () => {
                     >
                       Our youth boxing fundamentals and athletic development program is opening soon.
                     </p>
-                    <div
-                      className="px-6 py-2.5 rounded-xl border border-amber-500/60 bg-amber-500/15 text-amber-300 text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                    <button
+                      type="button"
+                      onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
+                      className="px-6 py-2.5 rounded-xl border border-amber-500/60 bg-amber-500/15 text-amber-300 text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.25)] hover:bg-amber-500 hover:text-black transition-all cursor-pointer"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       <span>STAY TUNED</span>
                       <ArrowRight size={14} />
-                    </div>
+                    </button>
                   </div>
                 )}
 
@@ -1220,13 +1227,12 @@ const FounderMembersOffers = () => {
                       <button
                         type="button"
                         onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
-                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${
-                          juniorProgram.isComingSoon
+                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${juniorProgram.isComingSoon
                             ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black"
                             : activeTab === juniorProgram.id
                               ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
                               : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
-                        }`}
+                          }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         <span>

@@ -811,15 +811,15 @@ const Membership = () => {
 
           <div>
             <span
-              className="text-lg text-[#ccf141] text-[30px] md:text-[48px] mx-1.5"
+              className="text-lg text-[#ccf141] text-[20px] mx-1.5"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: "700",
               }}
             >
-              ₹{prog.price}
+             ₹ 3,500 <span className="line-through"> ₹ 4,500</span> /MONTH
             </span>
-            / MONTH
+            
           </div>
 
           <button
@@ -1023,14 +1023,12 @@ const Membership = () => {
                         </span>
                         <div className="flex items-baseline gap-2 mt-0.5">
                           <span
-                            className="text-3xl sm:text-4xl md:text-5xl font-black text-[#ccf141] leading-none"
+                            className="text-3xl  font-black text-[#ccf141] leading-none"
                             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                           >
-                            ₹{juniorProgram.price}
+                           ₹3,000  <span className="line-through"> ₹ 4,500</span>
                           </span>
-                          <span className="text-zinc-400 text-xs sm:text-sm font-bold uppercase tracking-wider">
-                            / MONTH
-                          </span>
+                         
                         </div>
                       </div>
 

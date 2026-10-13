@@ -61,7 +61,11 @@ const founderPlanSchema = new mongoose.Schema(
         normalText: { type: String, default: "" }
       }
     ],
-    plans: [planOptionSchema]
+    plans: [planOptionSchema],
+    isComingSoon: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true
