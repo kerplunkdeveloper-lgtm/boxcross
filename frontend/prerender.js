@@ -53,7 +53,8 @@ const getOptimizedOgImageUrl = (rawUrl, fallback = 'https://membership.boxandcro
 const filesToCopy = [
   { src: 'og-membership.png', dest: 'og-membership.png' },
   { src: 'og-events.jpg', dest: 'og-events.jpg' },
-  { src: 'og-community.jpg', dest: 'og-community.jpg' }
+  { src: 'og-community.jpg', dest: 'og-community.jpg' },
+  { src: 'og-founding100.jpg', dest: 'og-founding100.jpg' }
 ];
 
 filesToCopy.forEach(file => {
@@ -189,6 +190,22 @@ async function runPrerender() {
       image: 'https://membership.boxandcross.com/og-community.jpg',
       imageAlt: 'Box and Cross Community and Tribe',
       url: 'https://membership.boxandcross.com/community'
+    },
+    {
+      path: 'founding100',
+      title: 'Founding 100 Exclusive Offer | 12 Months at ₹14,999 – Box & Cross',
+      description: 'Limited time offer – Hurry up 8 days only! 12 Months Founding Membership for ₹14,999/- (₹1,250/month) — Save ₹18,601 (Original ₹33,600/-). Permanent rate lock, founder perks & full arena access at Box & Cross.',
+      image: 'https://membership.boxandcross.com/og-founding100.jpg',
+      imageAlt: 'Founding 100 Membership Offer - 12 Months at ₹14,999',
+      url: 'https://membership.boxandcross.com/founding100'
+    },
+    {
+      path: 'foundersoffers',
+      title: 'Founding 100 Exclusive Offer | 12 Months at ₹14,999 – Box & Cross',
+      description: 'Limited time offer – Hurry up 8 days only! 12 Months Founding Membership for ₹14,999/- (₹1,250/month) — Save ₹18,601 (Original ₹33,600/-). Permanent rate lock, founder perks & full arena access at Box & Cross.',
+      image: 'https://membership.boxandcross.com/og-founding100.jpg',
+      imageAlt: 'Founding 100 Membership Offer - 12 Months at ₹14,999',
+      url: 'https://membership.boxandcross.com/founding100'
     }
   ];
 

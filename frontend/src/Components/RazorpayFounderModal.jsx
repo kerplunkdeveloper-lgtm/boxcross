@@ -15,7 +15,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "../context/AuthContext";
 import {
   createFounderPayment,
   verifyFounderPayment,
@@ -23,7 +22,6 @@ import {
 import { toast } from "react-hot-toast";
 
 const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
-  const { user: authUser } = useAuth();
   const [step, setStep] = useState(1);
   const [payState, setPayState] = useState("idle");
   const [loading, setLoading] = useState(false);
@@ -39,9 +37,9 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
       setCreatedOrder(null);
       setLoading(false);
       setUser({
-        name: authUser?.name || "",
-        email: authUser?.email || "",
-        phone: authUser?.phone || "",
+        name: "",
+        email: "",
+        phone: "",
       });
       setErrors({});
       document.body.style.overflow = "hidden";
@@ -51,7 +49,7 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isOpen, authUser]);
+  }, [isOpen]);
 
   const validate = () => {
     const e = {};
@@ -328,7 +326,7 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
                 </div>
               </motion.div>
             ) : step === 1 ? (
-              <form onSubmit={handleContinue} className="space-y-4">
+              <form onSubmit={handleContinue} className="space-y-4" autoComplete="off">
                 {/* Plan Summary Badge */}
                 <div className="p-4 rounded-xl bg-neutral-900/90 border border-white/5 flex items-center justify-between">
                   <div>
@@ -354,6 +352,7 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
                       <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                       <input
                         type="text"
+                        autoComplete="off"
                         placeholder="John Doe"
                         value={user.name}
                         onChange={(e) => setUser({ ...user, name: e.target.value })}
@@ -373,6 +372,7 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
                       <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                       <input
                         type="tel"
+                        autoComplete="off"
                         maxLength="10"
                         placeholder="9876543210"
                         value={user.phone}
@@ -393,6 +393,7 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
                       <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                       <input
                         type="email"
+                        autoComplete="off"
                         placeholder="john@example.com"
                         value={user.email}
                         onChange={(e) => setUser({ ...user, email: e.target.value })}

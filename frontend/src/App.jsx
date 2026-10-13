@@ -142,7 +142,7 @@ const MemfoundGuard = () => {
       const isAdminRoute =
         location.pathname.startsWith("/dashboard") ||
         location.pathname.startsWith("/login") ||
-        location.pathname.toLowerCase().startsWith("/foundersoffers") ||
+        location.pathname.toLowerCase().startsWith("/founding100") ||
         location.pathname.toLowerCase().startsWith("/founder-members-offers");
       if (!isAdminRoute) {
         navigate("/Founding100access", { replace: true });
@@ -194,16 +194,16 @@ const App = () => {
                   <Route path="/events/:id" element={<Eventpage />} />
                   <Route path="/community" element={<Community />} />
                   <Route
-                    path="/foundersoffers"
+                    path="/founding100"
                     element={<FounderMembersOffers />}
                   />
                   <Route
                     path="/founder-members-offers"
-                    element={<Navigate to="/foundersoffers" replace />}
+                    element={<Navigate to="/founding100" replace />}
                   />
                   <Route
                     path="/Founder-members-offers"
-                    element={<Navigate to="/foundersoffers" replace />}
+                    element={<Navigate to="/founding100" replace />}
                   />
                 </Route>
 

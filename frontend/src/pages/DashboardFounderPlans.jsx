@@ -151,25 +151,25 @@ const DashboardFounderPlans = () => {
     setFormBenefits(
       plan.benefits && plan.benefits.length > 0
         ? plan.benefits.map((b) => ({
-            boldText: b.boldText || "",
-            normalText: b.normalText || "",
-          }))
+          boldText: b.boldText || "",
+          normalText: b.normalText || "",
+        }))
         : []
     );
     setFormPlans(
       plan.plans && plan.plans.length > 0
         ? plan.plans.map((p) => ({
-            months: p.months || "",
-            subtitle: p.subtitle || "",
-            price: p.price || p.totalPrice || "",
-            perMonth: p.perMonth || "",
-            originalPrice: p.originalPrice || "",
-            totalPrice: p.totalPrice || p.price || "",
-            highlights: p.highlights || [],
-            tag: p.tag || "",
-            buttonText: p.buttonText || "CLAIM OFFER",
-            isPopular: !!p.isPopular,
-          }))
+          months: p.months || "",
+          subtitle: p.subtitle || "",
+          price: p.price || p.totalPrice || "",
+          perMonth: p.perMonth || "",
+          originalPrice: p.originalPrice || "",
+          totalPrice: p.totalPrice || p.price || "",
+          highlights: p.highlights || [],
+          tag: p.tag || "",
+          buttonText: p.buttonText || "CLAIM OFFER",
+          isPopular: !!p.isPopular,
+        }))
         : []
     );
     setFormIsComingSoon(!!plan.isComingSoon);
@@ -440,13 +440,13 @@ const DashboardFounderPlans = () => {
               <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#ccf141]/20 text-[#ccf141] font-mono">
                 FOUNDERS CLUB
               </span>
-              
+
             </div>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-black  tracking-tight text-[var(--db-text)] flex items-center gap-2.5 font-['BrutalTypeBold',sans-serif]">
               <Crown className="text-[#ccf141] shrink-0" size={26} />
               <span>Founder Plans Manage</span>
             </h1>
-          
+
           </div>
 
           <div className="flex items-center gap-2">
@@ -465,7 +465,7 @@ const DashboardFounderPlans = () => {
               <span>Refresh</span>
             </button>
             <a
-              href="/foundersoffers"
+              href="/founding100"
               target="_blank"
               rel="noopener noreferrer"
               className="px-4 py-2 rounded-xl border border-[#ccf141]/40 bg-[#ccf141]/10 text-[#ccf141] hover:bg-[#ccf141] hover:text-black font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
@@ -475,7 +475,7 @@ const DashboardFounderPlans = () => {
           </div>
         </div>
 
-      
+
 
         {/* Plans Table Card */}
         <div className="rounded-2xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-sm overflow-hidden">
@@ -519,25 +519,22 @@ const DashboardFounderPlans = () => {
                               aria-checked={plan.isComingSoon}
                               disabled={togglingId === (plan._id || plan.id || plan.key)}
                               onClick={() => handleToggleComingSoon(plan)}
-                              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
-                                plan.isComingSoon
-                                  ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]"
-                                  : "bg-zinc-700"
-                              }`}
+                              className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${plan.isComingSoon
+                                ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]"
+                                : "bg-zinc-700"
+                                }`}
                               title={plan.isComingSoon ? "Turn Off Coming Soon" : "Turn On Coming Soon"}
                             >
                               <span
-                                className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                                  plan.isComingSoon ? "translate-x-4" : "translate-x-0"
-                                }`}
+                                className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${plan.isComingSoon ? "translate-x-4" : "translate-x-0"
+                                  }`}
                               />
                             </button>
                             <span
-                              className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                                plan.isComingSoon
-                                  ? "bg-amber-500/15 text-amber-400 border border-amber-500/40"
-                                  : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/40"
-                              }`}
+                              className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${plan.isComingSoon
+                                ? "bg-amber-500/15 text-amber-400 border border-amber-500/40"
+                                : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/40"
+                                }`}
                             >
                               {plan.isComingSoon ? "Soon" : "Active"}
                             </span>
@@ -751,11 +748,10 @@ const DashboardFounderPlans = () => {
                               aria-checked={plan.isComingSoon}
                               disabled={togglingId === (plan._id || plan.id || plan.key)}
                               onClick={() => handleToggleComingSoon(plan)}
-                              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                                plan.isComingSoon
-                                  ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]"
-                                  : "bg-zinc-700 hover:bg-zinc-600"
-                              }`}
+                              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${plan.isComingSoon
+                                ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]"
+                                : "bg-zinc-700 hover:bg-zinc-600"
+                                }`}
                               title={
                                 plan.isComingSoon
                                   ? "Currently Coming Soon (click to activate)"
@@ -763,9 +759,8 @@ const DashboardFounderPlans = () => {
                               }
                             >
                               <span
-                                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
-                                  plan.isComingSoon ? "translate-x-5" : "translate-x-0"
-                                }`}
+                                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${plan.isComingSoon ? "translate-x-5" : "translate-x-0"
+                                  }`}
                               />
                             </button>
                             <div>
@@ -890,11 +885,10 @@ const DashboardFounderPlans = () => {
                           Coming Soon Status:
                         </span>
                         <span
-                          className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${
-                            formIsComingSoon
-                              ? "bg-amber-500/20 text-amber-400 border border-amber-500/40"
-                              : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
-                          }`}
+                          className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${formIsComingSoon
+                            ? "bg-amber-500/20 text-amber-400 border border-amber-500/40"
+                            : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
+                            }`}
                         >
                           {formIsComingSoon ? "Coming Soon (Inactive)" : "Active (Available Live)"}
                         </span>
@@ -909,16 +903,14 @@ const DashboardFounderPlans = () => {
                       role="switch"
                       aria-checked={formIsComingSoon}
                       onClick={() => setFormIsComingSoon(!formIsComingSoon)}
-                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                        formIsComingSoon
-                          ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]"
-                          : "bg-zinc-700 hover:bg-zinc-600"
-                      }`}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${formIsComingSoon
+                        ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]"
+                        : "bg-zinc-700 hover:bg-zinc-600"
+                        }`}
                     >
                       <span
-                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
-                          formIsComingSoon ? "translate-x-5" : "translate-x-0"
-                        }`}
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${formIsComingSoon ? "translate-x-5" : "translate-x-0"
+                          }`}
                       />
                     </button>
                   </div>

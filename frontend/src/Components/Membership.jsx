@@ -862,7 +862,7 @@ const Membership = () => {
         className="w-full bg-[#0a0a0a] py-8 md:py-12 px-2 md:px-6 flex flex-col items-center justify-center font-sans text-white"
       >
         {/* STEP 1: CHOOSE PROGRAM */}
-        <div className="w-full max-w-7xl mx-auto mb-12">
+        <div className="w-full max-w-7xl mx-auto mb-12 p-3 md:p-0">
           {/*................................................................. Membership Plans heading start.............................. */}
 
           <motion.div

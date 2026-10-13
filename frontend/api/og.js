@@ -24,8 +24,54 @@ const getOptimizedOgImageUrl = (rawUrl, fallback = "https://membership.boxandcro
 };
 
 export default async function handler(req, res) {
-  const { id } = req.query;
+  const { id, page } = req.query;
   const frontendUrl = "https://membership.boxandcross.com";
+
+  if (page === "founding100") {
+    const title = "Founding 100 Exclusive Offer | 12 Months at ₹14,999 – Box & Cross";
+    const description = "Limited time offer – Hurry up 8 days only! 12 Months Founding Membership for ₹14,999/- (₹1,250/month) — Save ₹18,601 (Original ₹33,600/-). Permanent rate lock, founder perks & full arena access.";
+    const imageUrl = `${frontendUrl}/og-founding100.jpg`;
+    const targetUrl = `${frontendUrl}/founding100`;
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
+  <meta name="description" content="${description}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Box &amp; Cross" />
+  <meta property="og:url" content="${targetUrl}" />
+  <meta property="og:title" content="${title}" />
+  <meta property="og:description" content="${description}" />
+  <meta property="og:image" content="${imageUrl}" />
+  <meta property="og:image:secure_url" content="${imageUrl}" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1080" />
+  <meta property="og:image:height" content="1620" />
+  <meta property="og:image:alt" content="${title}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="${targetUrl}" />
+  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:description" content="${description}" />
+  <meta name="twitter:image" content="${imageUrl}" />
+  <link rel="canonical" href="${targetUrl}" />
+  <script>
+    if (!/bot|crawler|spider|whatsapp|facebookexternalhit|twitterbot|slackbot|discordbot|telegrambot/i.test(navigator.userAgent)) {
+      window.location.replace("${targetUrl}");
+    }
+  </script>
+</head>
+<body>
+  <p>Redirecting to <a href="${targetUrl}">${title}</a>...</p>
+</body>
+</html>`;
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    return res.status(200).send(html);
+  }
+
   const defaultRedirect = `${frontendUrl}/events`;
 
   // Dynamic backend base URL from Vercel environment variables or local fallback

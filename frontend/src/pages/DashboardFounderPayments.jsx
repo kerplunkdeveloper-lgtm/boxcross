@@ -300,13 +300,12 @@ const DashboardFounderPayments = () => {
 
                     <div className="flex items-center justify-between pt-1 border-t border-[var(--db-card-border)]/50">
                       <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] uppercase tracking-wider font-black ${
-                          payment.paymentStatus === "success"
-                            ? "bg-green-500/15 text-green-400 border border-green-500/30"
-                            : payment.paymentStatus === "pending"
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] uppercase tracking-wider font-black ${payment.paymentStatus === "success"
+                          ? "bg-green-500/15 text-green-400 border border-green-500/30"
+                          : payment.paymentStatus === "pending"
                             ? "bg-yellow-500/15 text-yellow-400 border border-yellow-500/30"
                             : "bg-red-500/15 text-red-400 border border-red-500/30"
-                        }`}
+                          }`}
                       >
                         {payment.paymentStatus}
                       </span>
@@ -371,13 +370,12 @@ const DashboardFounderPayments = () => {
 
                         <td className="py-3.5 px-4">
                           <span
-                            className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] uppercase tracking-wider font-black ${
-                              payment.paymentStatus === "success"
-                                ? "bg-green-500/15 text-green-400 border border-green-500/30"
-                                : payment.paymentStatus === "pending"
+                            className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] uppercase tracking-wider font-black ${payment.paymentStatus === "success"
+                              ? "bg-green-500/15 text-green-400 border border-green-500/30"
+                              : payment.paymentStatus === "pending"
                                 ? "bg-yellow-500/15 text-yellow-400 border border-yellow-500/30"
                                 : "bg-red-500/15 text-red-400 border border-red-500/30"
-                            }`}
+                              }`}
                           >
                             {payment.paymentStatus}
                           </span>
@@ -410,7 +408,7 @@ const DashboardFounderPayments = () => {
             <div className="py-12 text-center text-xs text-[var(--db-text-muted)] space-y-1">
               <Crown className="mx-auto text-neutral-600 mb-2" size={28} />
               <p className="font-bold text-sm text-[var(--db-text)]">No founder payments found</p>
-              <p>Transactions will appear here in real-time when users purchase on /foundersoffers.</p>
+              <p>Transactions will appear here in real-time when users purchase on /founding100.</p>
             </div>
           )}
         </motion.div>

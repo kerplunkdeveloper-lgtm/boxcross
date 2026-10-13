@@ -69,7 +69,7 @@ const Navbar = () => {
   const membershipDropdown = [
     {
       name: "Founder Members 100",
-      path: "/foundersoffers",
+      path: "/founding100",
     },
     {
       name: "BOOK FREE TRIAL",
@@ -175,11 +175,10 @@ const Navbar = () => {
           className={`
     relative z-50 w-full
     transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]
-    ${
-      scrolled
-        ? "py-3 px-4 md:px-8 bg-black backdrop-blur-xl border-b border-white/10 md:rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-        : "py-3 px-4 md:px-5 bg-black backdrop-blur-md md:rounded-2xl border border-white/5 shadow-none"
-    }
+    ${scrolled
+              ? "py-3 px-4 md:px-8 bg-black backdrop-blur-xl border-b border-white/10 md:rounded-none shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+              : "py-3 px-4 md:px-5 bg-black backdrop-blur-md md:rounded-2xl border border-white/5 shadow-none"
+            }
   `}
         >
           <div
@@ -242,11 +241,10 @@ const Navbar = () => {
                         <a
                           key={item.name}
                           href={item.path}
-                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
-                            idx !== arenaDropdown.length - 1
-                              ? "border-b border-gray-200"
-                              : ""
-                          }`}
+                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${idx !== arenaDropdown.length - 1
+                            ? "border-b border-gray-200"
+                            : ""
+                            }`}
                         >
                           {/* Hover Line */}
                           <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
@@ -287,11 +285,10 @@ const Navbar = () => {
                   <NavLink
                     to="/"
                     className={({ isActive }) =>
-                      `px-2 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${
-                        (isActive && location.pathname === "/") ||
+                      `px-2 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${(isActive && location.pathname === "/") ||
                         location.pathname.includes("/membership")
-                          ? "text-[#fffffff]"
-                          : "text-gray-400 hover:text-white"
+                        ? "text-[#fffffff]"
+                        : "text-gray-400 hover:text-white"
                       }`
                     }
                     style={{
@@ -324,11 +321,10 @@ const Navbar = () => {
                           </>
                         );
 
-                        const itemClass = `group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
-                          idx !== membershipDropdown.length - 1
-                            ? "border-b border-gray-200"
-                            : ""
-                        }`;
+                        const itemClass = `group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${idx !== membershipDropdown.length - 1
+                          ? "border-b border-gray-200"
+                          : ""
+                          }`;
 
                         if (item.path) {
                           return (
@@ -379,10 +375,9 @@ const Navbar = () => {
                   <NavLink
                     to="/community"
                     className={({ isActive }) =>
-                      `px-2 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${
-                        isActive || location.pathname === "/events"
-                          ? "text-white"
-                          : "text-[#808080] hover:text-white"
+                      `px-2 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${isActive || location.pathname === "/events"
+                        ? "text-white"
+                        : "text-[#808080] hover:text-white"
                       }`
                     }
                     style={{
@@ -405,11 +400,10 @@ const Navbar = () => {
                           key={item.name}
                           to={item.path}
                           onClick={() => setOpenDropdown(null)}
-                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${
-                            idx !== communityDropdown.length - 1
-                              ? "border-b border-gray-200"
-                              : ""
-                          }`}
+                          className={`group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${idx !== communityDropdown.length - 1
+                            ? "border-b border-gray-200"
+                            : ""
+                            }`}
                         >
                           {/* Hover Line */}
                           <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
@@ -544,9 +538,8 @@ const Navbar = () => {
 
       <div
         onClick={closeOffcanvas}
-        className={`fixed inset-0 bg-black/70 backdrop-blur-sm z-[90] transition-all duration-500 lg:hidden ${
-          offcanvasOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 bg-black/70 backdrop-blur-sm z-[90] transition-all duration-500 lg:hidden ${offcanvasOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
       />
 
       {/* ================= MOBILE MENU ================= */}
@@ -604,9 +597,8 @@ const Navbar = () => {
             </button>
 
             <div
-              className={`overflow-hidden transition-all duration-300 ${
-                openDropdown === "arena" ? "max-h-60 pb-4" : "max-h-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ${openDropdown === "arena" ? "max-h-60 pb-4" : "max-h-0"
+                }`}
             >
               <div className="flex flex-col gap-3 pl-2">
                 {arenaDropdown.map((item) => (
@@ -643,10 +635,9 @@ const Navbar = () => {
                 to="/"
                 onClick={closeOffcanvas}
                 className={({ isActive }) =>
-                  `text-[14px] font-extrabold transition-colors ${
-                    isActive
-                      ? "text-[#ccf141]"
-                      : "text-white hover:text-[#ccf141]"
+                  `text-[14px] font-extrabold transition-colors ${isActive
+                    ? "text-[#ccf141]"
+                    : "text-white hover:text-[#ccf141]"
                   }`
                 }
               >
@@ -661,9 +652,8 @@ const Navbar = () => {
             </div>
 
             <div
-              className={`overflow-hidden transition-all duration-300 ${
-                openDropdown === "membership" ? "max-h-[500px] pb-4" : "max-h-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ${openDropdown === "membership" ? "max-h-[500px] pb-4" : "max-h-0"
+                }`}
             >
               <div className="flex flex-col gap-3 pl-2">
                 {membershipDropdown.map((item) =>
@@ -708,10 +698,9 @@ const Navbar = () => {
                 to="/community"
                 onClick={closeOffcanvas}
                 className={({ isActive }) =>
-                  `text-[14px] font-extrabold transition-colors ${
-                    isActive || location.pathname === "/events"
-                      ? "text-[#ccf141]"
-                      : "text-white hover:text-[#ccf141]"
+                  `text-[14px] font-extrabold transition-colors ${isActive || location.pathname === "/events"
+                    ? "text-[#ccf141]"
+                    : "text-white hover:text-[#ccf141]"
                   }`
                 }
               >
@@ -726,9 +715,8 @@ const Navbar = () => {
             </div>
 
             <div
-              className={`overflow-hidden transition-all duration-300 ${
-                openDropdown === "community" ? "max-h-60 pb-4" : "max-h-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ${openDropdown === "community" ? "max-h-60 pb-4" : "max-h-0"
+                }`}
             >
               <div className="flex flex-col gap-3 pl-2">
                 {communityDropdown.map((item) => (
@@ -737,10 +725,9 @@ const Navbar = () => {
                     to={item.path}
                     onClick={closeOffcanvas}
                     className={({ isActive }) =>
-                      `text-sm font-medium tracking-wider transition-colors ${
-                        isActive
-                          ? "text-[#ccf141]"
-                          : "text-gray-400 hover:text-white"
+                      `text-sm font-medium tracking-wider transition-colors ${isActive
+                        ? "text-[#ccf141]"
+                        : "text-gray-400 hover:text-white"
                       }`
                     }
                   >
@@ -794,9 +781,8 @@ const Navbar = () => {
       {/* Overlay */}
       <div
         onClick={() => setDesktopOffcanvasOpen(false)}
-        className={`fixed inset-0 bg-black/70 backdrop-blur-sm z-[95] transition-all duration-500 hidden lg:block ${
-          desktopOffcanvasOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
+        className={`fixed inset-0 bg-black/70 backdrop-blur-sm z-[95] transition-all duration-500 hidden lg:block ${desktopOffcanvasOpen ? "opacity-100 visible" : "opacity-0 invisible"
+          }`}
       />
 
       {/* Panel */}

@@ -21,6 +21,8 @@ import RazorpayFounderModal from "../Components/RazorpayFounderModal";
 import ChoosePlan from "../Components/ChoosePlan";
 import BCMonogram from "../Components/BCMonogram";
 
+const BASE_URL = "https://membership.boxandcross.com";
+
 const defaultPrograms = [
   {
     id: "founder-core",
@@ -799,11 +801,46 @@ const FounderMembersOffers = () => {
   return (
     <div className="w-full bg-[#050505] text-white flex flex-col overflow-hidden selection:bg-[#ccf141] selection:text-black">
       <Helmet>
-        <title>Founder Members Offers | Box &amp; Cross — The Founding 100</title>
+        <title>Founding 100 Exclusive Offer | 12 Months at ₹14,999 – Box &amp; Cross</title>
         <meta
           name="description"
-          content="Exclusive founder members offers at Box &amp; Cross. Founding Wall inscription, and elite coaching."
+          content="Limited time offer – Hurry up 8 days only! 12 Months Founding Membership for ₹14,999/- (₹1,250/month) — Save ₹18,601 (Original ₹33,600/-). Permanent rate lock, founder perks &amp; full arena access at Box &amp; Cross."
         />
+
+        {/* Open Graph / Facebook / WhatsApp */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Box &amp; Cross" />
+        <meta property="og:url" content={`${BASE_URL}/founding100`} />
+        <meta
+          property="og:title"
+          content="Founding 100 Exclusive Offer | 12 Months at ₹14,999 – Box &amp; Cross"
+        />
+        <meta
+          property="og:description"
+          content="Limited time offer – Hurry up 8 days only! 12 Months Founding Membership for ₹14,999/- (₹1,250/month) — Save ₹18,601 (Original ₹33,600/-). Permanent rate lock, founder perks &amp; full arena access."
+        />
+        <meta property="og:image" content={`${BASE_URL}/og-founding100.jpg`} />
+        <meta property="og:image:secure_url" content={`${BASE_URL}/og-founding100.jpg`} />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1080" />
+        <meta property="og:image:height" content="1620" />
+        <meta property="og:image:alt" content="Founding 100 Membership Offer - 12 Months at ₹14,999" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={`${BASE_URL}/founding100`} />
+        <meta
+          name="twitter:title"
+          content="Founding 100 Exclusive Offer | 12 Months at ₹14,999 – Box &amp; Cross"
+        />
+        <meta
+          name="twitter:description"
+          content="Limited time offer – Hurry up 8 days only! 12 Months Founding Membership for ₹14,999/- (₹1,250/month) — Save ₹18,601 (Original ₹33,600/-)."
+        />
+        <meta name="twitter:image" content={`${BASE_URL}/og-founding100.jpg`} />
+
+        {/* Canonical */}
+        <link rel="canonical" href={`${BASE_URL}/founding100`} />
       </Helmet>
 
       {/* HERO BANNER SECTION */}
@@ -1040,7 +1077,7 @@ const FounderMembersOffers = () => {
 
 
         {/* STEP 1: CHOOSE PROGRAM */}
-        <div className="w-full max-w-7xl mx-auto mb-12">
+        <div className="w-full max-w-7xl mx-auto mb-12 p-4 md:p-0">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

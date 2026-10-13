@@ -12,6 +12,28 @@
       "destination": "/api/og?id=:id"
     },
     {
+      "source": "/founding100",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|whatsapp|twitterbot|Twitterbot|telegrambot|TelegramBot|discordbot|Discordbot|slackbot|Slackbot|linkedinbot|LinkedInBot|googlebot|Googlebot|bingbot|Bingbot|baiduspider|yandexbot|embedly).*"
+        }
+      ],
+      "destination": "/api/og?page=founding100"
+    },
+    {
+      "source": "/foundersoffers",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|whatsapp|twitterbot|Twitterbot|telegrambot|TelegramBot|discordbot|Discordbot|slackbot|Slackbot|linkedinbot|LinkedInBot|googlebot|Googlebot|bingbot|Bingbot|baiduspider|yandexbot|embedly).*"
+        }
+      ],
+      "destination": "/api/og?page=founding100"
+    },
+    {
       "source": "/api/:path*",
       "destination": "/api/:path*"
     },

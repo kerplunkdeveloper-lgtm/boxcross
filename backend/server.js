@@ -3,7 +3,11 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
+const fs = require("fs");
+const path = require("path");
 const bookingRoutes = require("./routes/bookingRoutes");
+
+
 const authRoutes = require("./routes/authRoutes");
 const membershipRoutes = require("./routes/membershipRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
