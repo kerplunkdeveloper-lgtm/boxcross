@@ -113,6 +113,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
-// Assets should be placed directly in /frontend/public/ and committed to git.
+
+
 
 

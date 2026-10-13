@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import MembershipPlans from "../Components/Membership";
+import Founding30Section from "../Components/Founding30Section";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import bannerImg from "../assets/banner.png";
@@ -284,6 +285,11 @@ const Membership = () => {
             }
           }
         `}</style>
+      </div>
+
+      {/* FOUNDING 30 EXCLUSIVE SECTION */}
+      <div data-aos="fade-up" data-aos-delay="100">
+        <Founding30Section />
       </div>
 
       {/* MEMBERSHIP SECTION */}

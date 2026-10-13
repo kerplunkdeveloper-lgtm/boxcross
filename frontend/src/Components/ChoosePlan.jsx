@@ -356,6 +356,20 @@ const ChoosePlan = React.forwardRef(
               const isSaveTag =
                 plan.tag && plan.tag.toUpperCase().startsWith("SAVE");
 
+              const saveText =
+                (plan.tag && plan.tag.toUpperCase().includes("SAVE")
+                  ? plan.tag
+                  : null) ||
+                (plan.subtitle && plan.subtitle.toUpperCase().includes("SAVE")
+                  ? plan.subtitle
+                  : null) ||
+                (hasDiscount && plan.originalPrice
+                  ? `SAVE ₹${(
+                      (Number(String(plan.originalPrice).replace(/[^0-9]/g, "")) || 0) -
+                      (Number(String(cleanTotal).replace(/[^0-9]/g, "")) || 0)
+                    ).toLocaleString("en-IN")}`
+                  : null);
+
               const isSelected = selectedPlanIdx === idx;
               const planNumericPrice =
                 Number(String(cleanTotal).replace(/[^0-9]/g, "")) || 0;
@@ -382,28 +396,43 @@ const ChoosePlan = React.forwardRef(
                   <div className="w-full flex flex-col items-center">
                     {/* Duration Label */}
                     <span
-                      className="text-zinc-400 font-bold uppercase tracking-[0.2em] text-xs sm:text-[13px] mb-2 select-none"
+                      className="text-zinc-400 font-bold uppercase  text-[35px] sm:text-[13px] mb-2 select-none"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       {plan.months}
                     </span>
 
-                    {/* Total Price Line with Strikethrough if discounted */}
-                    <div className="text-xs sm:text-[45px] font-medium text-zinc-400 flex items-center justify-center gap-1.5 flex-wrap">
-                      <span className="font-bold text-white">
+                    {/* Total Price Line with Save Tag right beside it */}
+                    <div className="flex items-center justify-center gap-2 flex-wrap my-1">
+                      <span
+                        className="font-black text-white text-[30px] sm:text-3xl md:text-[38px] leading-tight tracking-tight"
+                        style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                      >
                         ₹{cleanTotal}/-
                       </span>
-                    </div>
-                    <div>
-                      {hasDiscount && (
-                        <span className="line-through text-zinc-200 font-light text-sm">
-                          ₹{plan.originalPrice}/-
+                      {saveText && (
+                        <span
+                          className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#ccf141]/20 border border-[#ccf141]/50 text-[#ccf141] text-[10px] sm:text-[11px] font-black uppercase tracking-wider select-none whitespace-nowrap shadow-[0_0_10px_rgba(204,241,65,0.2)]"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141]"></span>
+                          {saveText}
                         </span>
                       )}
                     </div>
 
+                    {/* Strikethrough if discounted */}
+                    {hasDiscount && (
+                      <div className="my-0.5">
+                        <span className="line-through text-zinc-400 font-medium  sm:text-[13px]">
+                          ₹{plan.originalPrice}/-
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Per Month Price */}
                     <div
-                      className="text-sm font-black text-yellow-400 tracking-tight leading-none my-1 flex items-baseline justify-center"
+                      className="text-xs sm:text-sm font-black text-yellow-400 tracking-tight leading-none my-1 flex items-baseline justify-center"
                       style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                     >
                       <span>₹{cleanPerMonth} / Month</span>
@@ -459,44 +488,48 @@ const ChoosePlan = React.forwardRef(
                     </div>
                   </div>
 
-                  {/* Bottom Action Badge / Button */}
-                  <div className="w-full pt-2">
-                    {isSaveTag ? (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedPlanIdx(idx);
-                          handlePlanSelect(
-                            `${currentTitle} - ${plan.months}`,
-                            cleanTotal,
-                            plan.months,
-                          );
-                        }}
-                        className="w-full py-2.5 px-4 bg-[#ccf141] hover:bg-[#bfe635] text-black font-black uppercase tracking-wider text-xs sm:text-sm rounded-none transition-all duration-200 cursor-pointer shadow-sm hover:shadow flex items-center justify-center gap-1.5 active:scale-[0.98]"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  {/* Bottom Action Button: Outline Button with Spinning Border Beam */}
+                  <div className="w-full pt-3">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedPlanIdx(idx);
+                        handlePlanSelect(
+                          `${currentTitle} - ${plan.months}`,
+                          cleanTotal,
+                          plan.months,
+                        );
+                      }}
+                      className={`relative w-full p-[1.5px] rounded-xl overflow-hidden cursor-pointer group select-none transition-all duration-300 active:scale-[0.98] ${
+                        isSelected
+                          ? "shadow-[0_0_25px_rgba(204,241,65,0.35)]"
+                          : "shadow-[0_0_15px_rgba(204,241,65,0.1)] hover:shadow-[0_0_25px_rgba(204,241,65,0.3)]"
+                      }`}
+                    >
+                      {/* 360° Continuous Spinning Conic Border Animation */}
+                      <div className="absolute inset-[-250%] bg-[conic-gradient(from_0deg,#ccf141_0deg,transparent_70deg,transparent_180deg,#ccf141_250deg,transparent_360deg)] animate-spin-border" />
+
+                      {/* Outline Button Body */}
+                      <div
+                        className={`relative z-10 w-full py-2.5 sm:py-3 px-4 rounded-[10.5px] flex items-center justify-center gap-2 transition-all duration-300 ${
+                          isSelected
+                            ? "bg-black text-[#ccf141] group-hover:bg-[#ccf141] group-hover:text-black"
+                            : "bg-black text-white group-hover:bg-[#ccf141] group-hover:text-black"
+                        }`}
                       >
-                        {/* save price button */}
-                        <span>{plan.tag}</span>
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedPlanIdx(idx);
-                          handlePlanSelect(
-                            `${currentTitle} - ${plan.months}`,
-                            cleanTotal,
-                            plan.months,
-                          );
-                        }}
-                        className="w-full py-2 px-4 border border-zinc-700 hover:border-[#ccf141] text-zinc-300 hover:text-white font-bold uppercase tracking-wider text-xs rounded-none transition-all duration-200 cursor-pointer active:scale-[0.98] bg-transparent"
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                      >
-                        <span>{plan.buttonText || "STANDARD"}</span>
-                      </button>
-                    )}
+                        <span
+                          className="font-black uppercase tracking-wider text-xs sm:text-sm whitespace-nowrap"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          GET PACK
+                        </span>
+                        <ArrowRight
+                          size={14}
+                          className="transition-transform duration-300 group-hover:translate-x-1 shrink-0"
+                        />
+                      </div>
+                    </button>
                   </div>
                 </div>
               );
