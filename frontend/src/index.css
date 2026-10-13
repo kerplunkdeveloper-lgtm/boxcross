@@ -725,9 +725,55 @@ html {
 }
 
 /* Razorpay Affordability Widget Theme Integration */
-#razorpay-affordability-widget {
-  filter: invert(1) hue-rotate(180deg) brightness(1.25) contrast(1.1);
-  display: inline-block;
-  max-width: 100%;
-  transition: filter 0.2s ease;
+#razorpay-affordability-widget,
+[id^="razorpay-affordability-widget"],
+.razorpay-affordability-widget {
+  color: #f4f4f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+  min-height: 38px;
+}
+
+#razorpay-affordability-widget:not(:empty) + .razorpay-fallback {
+  display: none !important;
+}
+
+iframe#rzpAffordabilityMainFrame,
+.rzp-affordability-container iframe,
+#razorpay-affordability-widget iframe {
+  width: 100% !important;
+  min-height: 38px !important;
+  border: none !important;
+  display: block !important;
+  color-scheme: dark;
+}
+
+#razorpay-affordability-widget a,
+[id^="razorpay-affordability-widget"] a,
+.razorpay-affordability-widget a,
+#razorpay-affordability-widget button,
+[id^="razorpay-affordability-widget"] button,
+.razorpay-affordability-widget button,
+#razorpay-affordability-widget [role="button"],
+[id^="razorpay-affordability-widget"] [role="button"],
+.razorpay-affordability-widget [role="button"] {
+  color: #ccf141 !important;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+#razorpay-affordability-widget a:hover,
+[id^="razorpay-affordability-widget"] a:hover,
+.razorpay-affordability-widget a:hover,
+#razorpay-affordability-widget button:hover,
+[id^="razorpay-affordability-widget"] button:hover,
+.razorpay-affordability-widget button:hover {
+  opacity: 0.85;
 }
