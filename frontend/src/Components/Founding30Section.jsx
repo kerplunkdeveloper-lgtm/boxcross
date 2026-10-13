@@ -6,9 +6,27 @@ import boxerImg from "../assets/founding30_boxer.jpg";
 const Founding30Section = () => {
   const navigate = useNavigate();
 
-  const handleClaimSpot = () => {
-    navigate("/foundersoffers");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleClaimSpot = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const choosePlanElement =
+      document.getElementById("choose-plan") ||
+      document.getElementById("pricing") ||
+      document.getElementById("membership-plans");
+
+    if (choosePlanElement) {
+      choosePlanElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      navigate("/");
+      setTimeout(() => {
+        const target =
+          document.getElementById("choose-plan") ||
+          document.getElementById("pricing") ||
+          document.getElementById("membership-plans");
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 250);
+    }
   };
 
   return (
@@ -51,7 +69,7 @@ const Founding30Section = () => {
                   className="text-[#ccf141] text-[11px] sm:text-[13px] font-black uppercase tracking-[0.22em]"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
-                  FOUNDING 30
+                  FOUNDING 100
                 </span>
               </div>
             </div>
@@ -62,7 +80,7 @@ const Founding30Section = () => {
                 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-black uppercase leading-[1.02] tracking-tight"
                 style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
               >
-                THE FIRST 50.
+                THE FIRST 100.
               </h2>
               <h2
                 className="text-[#ccf141] text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-black uppercase leading-[1.02] tracking-tight drop-shadow-[0_0_25px_rgba(204,241,65,0.25)]"
@@ -105,7 +123,7 @@ const Founding30Section = () => {
                     LOCK THE PRICE
                   </h4>
                   <p className="text-zinc-400 text-xs sm:text-[13px] leading-snug">
-                    Your founding membership is secured at ₹14,000.
+                    Your founding membership is secured at ₹14,999.
                   </p>
                 </div>
               </div>
@@ -159,7 +177,7 @@ const Founding30Section = () => {
                     FOUNDING STATUS
                   </h4>
                   <p className="text-zinc-400 text-xs sm:text-[13px] leading-snug">
-                    You're not joining an established gym. You're entering at the beginning of something bigger.
+                    Build strength, sharpen your skills, and track your progress with coaching designed around your performance.
                   </p>
                 </div>
               </div>
@@ -224,7 +242,7 @@ const Founding30Section = () => {
                   className="text-[#ccf141] font-black text-sm sm:text-base tracking-wider uppercase"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
-                  SAVE ₹11,000
+                  SAVE ₹27,000
                 </span>
               </div>
 
@@ -235,7 +253,7 @@ const Founding30Section = () => {
                   className="font-black text-xs sm:text-[13px] uppercase tracking-wider"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
-                  ONLY 50 MEMBERS
+                  ONLY 100 MEMBERS
                 </span>
               </div>
 
@@ -261,7 +279,7 @@ const Founding30Section = () => {
                 className="text-[#ccf141] text-4xl sm:text-5xl lg:text-[62px] font-black uppercase leading-[0.95] tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.3)]"
                 style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
               >
-                50 SPOTS.
+                100 SPOTS.
               </h2>
               <h2
                 className="text-white text-4xl sm:text-5xl lg:text-[62px] font-black uppercase leading-[0.95] tracking-tight"

@@ -14,6 +14,7 @@ import box1 from "../assets/box1.png";
 import box2 from "../assets/box2.png";
 import box3 from "../assets/box3.png";
 import juniorBoxer from "../assets/junior_boxer.jpg";
+import founderBanner from "../assets/founder_banner.jpg";
 import { getFounderPlans } from "../api/api";
 import RazorpayFounderModal from "../Components/RazorpayFounderModal";
 
@@ -732,10 +733,233 @@ const FounderMembersOffers = () => {
         />
       </Helmet>
 
+      {/* HERO BANNER SECTION */}
+      <section className="relative mt-[80px] md:mt-0 w-full h-[45vh] md:h-[70vh] flex items-center justify-center overflow-hidden mb-6">
+        {/* IMAGE BACKGROUND */}
+        <img
+          src={founderBanner}
+          alt="Founder Arena Background"
+          className="absolute inset-0 w-full h-full object-cover scale-105 filter brightness-90 contrast-110"
+        />
+
+        {/* DARK OVERLAY */}
+        <div className="absolute inset-0 bg-black/60 z-[1]"></div>
+
+        {/* GRADIENT OVERLAY */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-[#050505] z-[2]"></div>
+
+        {/* HUGE BACKGROUND TEXT (Outline) */}
+        <div className="absolute inset-x-0 top-10 md:top-28 flex justify-center pointer-events-none z-[5] overflow-hidden">
+          <span
+            className="text-transparent font-black uppercase text-[50px] md:text-[150px] whitespace-nowrap select-none tracking-widest leading-none"
+            style={{
+              WebkitTextStroke: "1px rgba(255, 255, 255, 0.22)",
+              fontFamily: '"BrutalTypeBold", Arial, sans-serif',
+            }}
+          >
+            FOUNDERS
+          </span>
+        </div>
+
+        {/* CONTENT */}
+        <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between md:gap-16 pt-20 md:pt-0">
+          {/* LEFT SIDE: HEADING */}
+          <div
+            data-aos="fade-right"
+            className="flex-1 w-full flex flex-col justify-center text-center md:text-left z-10"
+          >
+            <div className="inline-flex items-center gap-2 mb-3 self-center md:self-start">
+              <span className="px-3.5 py-1 rounded-full bg-[#ccf141]/20 border border-[#ccf141]/60 text-[#ccf141] text-[11px] sm:text-xs font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[0_0_15px_rgba(204,241,65,0.2)]">
+                <Crown size={13} className="text-[#ccf141]" />
+                EXCLUSIVE FOUNDING OFFERS
+              </span>
+            </div>
+
+            <h1
+              className="
+                text-white
+                font-black
+                uppercase
+                leading-[0.95]
+                tracking-tight
+                drop-shadow-[0_5px_20px_rgba(0,0,0,0.9)]
+              "
+              style={{
+                fontFamily: '"BrutalTypeBold", Impact, sans-serif',
+              }}
+            >
+              <span className="block text-[40px] sm:text-[55px] md:text-[80px] whitespace-normal md:whitespace-nowrap">
+                FOUNDER
+              </span>
+              <span className="block text-[40px] sm:text-[55px] md:text-[80px] text-[#ccf141] whitespace-normal md:whitespace-nowrap">
+                MEMBERS
+              </span>
+              <span className="block text-[40px] sm:text-[55px] md:text-[80px] whitespace-normal md:whitespace-nowrap">
+                OFFERS
+              </span>
+            </h1>
+          </div>
+
+          {/* RIGHT SIDE: SUBTITLE & BUTTONS */}
+          <div
+            data-aos="fade-left"
+            data-aos-delay="200"
+            className="flex-1 w-full flex flex-col justify-center items-start md:max-w-lg z-10"
+          >
+            <p
+              className="
+                text-[#c9c9c9]
+                text-base md:text-[17px]
+                mt-[-3px] md:mt-16
+                leading-relaxed
+                hidden md:block
+                mb-5
+              "
+              style={{
+                fontFamily: '"Brutal Font Light", sans-serif',
+                fontWeight: 700,
+              }}
+            >
+              Exclusive founding member privileges, permanent locked rates, and priority arena access. Be part of the first generation of athletes at Box &amp; Cross.
+            </p>
+
+            <div
+              data-aos="fade-up"
+              data-aos-delay="400"
+              className="
+                flex
+                flex-row
+                items-center
+                justify-center
+                md:justify-start
+                gap-3 sm:gap-4
+                w-full
+                max-w-[700px]
+              "
+              style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+                fontWeight: 700,
+              }}
+            >
+              <button
+                onClick={() => {
+                  const el = document.getElementById("pricing");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="
+                  group relative overflow-hidden
+                  px-4 py-3 md:px-8 md:py-3.5
+                  bg-[#ccf141] text-black
+                  uppercase tracking-wider md:tracking-[0.05em]
+                  rounded-lg
+                  transition-all duration-500
+                  cursor-pointer
+                  flex justify-center items-center
+                  shadow-[0_0_20px_rgba(229,255,0,0.25)]
+                "
+              >
+                <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
+                <span
+                  className="relative z-10 text-[11px] sm:text-[13px] md:text-[15px] whitespace-nowrap"
+                  style={{
+                    fontFamily: '"Brutal Font Bold", sans-serif',
+                    fontWeight: 800,
+                  }}
+                >
+                  View Founder Plans
+                </span>
+              </button>
+
+              <button
+                onClick={() => {
+                  const el = document.getElementById("membership-plans");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="
+                  group relative overflow-hidden
+                  px-4 py-3 md:px-8 md:py-3.5
+                  bg-white
+                  text-black
+                  uppercase tracking-wider md:tracking-[0.05em]
+                  rounded-lg
+                  transition-all duration-500
+                  cursor-pointer
+                  flex justify-center items-center
+                "
+              >
+                <span className="absolute inset-0 bg-[#ccf141] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
+                <span
+                  className="relative z-10 text-[11px] sm:text-[13px] md:text-[15px] whitespace-nowrap"
+                  style={{
+                    fontFamily: '"Brutal Font Bold", sans-serif',
+                    fontWeight: 800,
+                  }}
+                >
+                  Explore Pathways
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Infinite Text Marquee */}
+      <div className="w-full bg-black py-4 md:py-5 border-y border-zinc-900/80 overflow-hidden select-none pointer-events-none mb-6">
+        <div className="marquee-experience-wrapper">
+          <div className="marquee-experience-track">
+            {Array(8)
+              .fill([
+                { text: "FOUNDING MEMBERS.", outline: false },
+                { text: "PERMANENT RATE LOCK.", outline: true },
+                { text: "FOUNDERS WALL.", outline: false },
+                { text: "FIGHT CLUB ARENA.", outline: true },
+              ])
+              .flat()
+              .map((item, idx) => (
+                <span
+                  key={idx}
+                  className="text-[35px] sm:text-[50px] md:text-[65px] font-black uppercase tracking-tight mx-4 sm:mx-6 md:mx-8 inline-block"
+                  style={{
+                    fontFamily: '"Bebas Neue", sans-serif',
+                    color: item.outline ? "transparent" : "#ffffff",
+                    WebkitTextStroke: item.outline
+                      ? "1px rgba(255, 255, 255, 0.75)"
+                      : "none",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {item.text}
+                </span>
+              ))}
+          </div>
+        </div>
+        <style>{`
+          .marquee-experience-wrapper {
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+          }
+          .marquee-experience-track {
+            display: flex;
+            white-space: nowrap;
+            width: max-content;
+            animation: scrollLeftExperienceMarquee 95s linear infinite;
+          }
+          @keyframes scrollLeftExperienceMarquee {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
+        `}</style>
+      </div>
+
       {/* MEMBERSHIP PLANS WORKFLOW SECTION */}
       <section
         id="membership-plans"
-        className="w-full bg-[#0a0a0a] pt-28 sm:pt-32 pb-12 px-2 md:px-6 flex flex-col items-center justify-center font-sans text-white relative z-20"
+        className="w-full bg-[#0a0a0a] pt-6 sm:pt-10 pb-12 px-2 md:px-6 flex flex-col items-center justify-center font-sans text-white relative z-20"
       >
 
 
@@ -760,7 +984,7 @@ const FounderMembersOffers = () => {
                   fontWeight: "600",
                 }}
               >
-               Founder Offer
+               Founder 100-Members offer 
               </span>
             </div>
 
@@ -890,11 +1114,21 @@ const FounderMembersOffers = () => {
                 const hasDiscount = Boolean(plan.originalPrice);
                 const isSaveTag =
                   plan.tag && plan.tag.toUpperCase().startsWith("SAVE");
+                const isTwelveMonth = Boolean(
+                  plan.months &&
+                    (plan.months.includes("12") ||
+                      plan.months.toLowerCase().includes("12 month") ||
+                      plan.months.toLowerCase().includes("1 year")),
+                );
 
                 return (
                   <div
                     key={idx}
-                    className="p-6 sm:p-7 md:p-8 flex flex-col items-center text-center justify-between transition-colors duration-200 hover:bg-zinc-900/60 group cursor-pointer"
+                    className={`p-6 sm:p-7 md:p-8 flex flex-col items-center text-center justify-between transition-all duration-300 group cursor-pointer relative ${
+                      isTwelveMonth
+                        ? "bg-zinc-900/60 ring-2 ring-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)] rounded-xl z-10"
+                        : "hover:bg-zinc-900/60"
+                    }`}
                     onClick={() =>
                       handlePlanSelect(
                         `${currentTitle} - ${plan.months}`,
@@ -903,9 +1137,50 @@ const FounderMembersOffers = () => {
                       )
                     }
                   >
+                    {/* Fixed Center Highlight Badge for 12-Month Plan: 54.4% OFFER & HURRY UP 8 DAYS ONLY */}
+                    {isTwelveMonth && (
+                      <div className="absolute top-2.5 sm:top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max max-w-[95%]">
+                        <div className="relative group/offer">
+                          {/* Outer ambient glow */}
+                          <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 via-amber-400 to-[#ccf141] rounded-full blur-[4px] opacity-75 animate-pulse" />
+
+                          {/* Pill badge container */}
+                          <div className="relative px-3 sm:px-3.5 py-1 sm:py-1.5 bg-[#0b0b0e]/95 backdrop-blur-md border border-[#ccf141]/60 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(204,241,65,0.25)]">
+                            {/* Pulsing red live beacon */}
+                            <span className="relative flex h-2 w-2 shrink-0">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                            </span>
+
+                            {/* 54.4% OFFER */}
+                            <span
+                              className="text-[11px] sm:text-xs font-black tracking-wider text-[#ccf141] uppercase drop-shadow-[0_0_8px_rgba(204,241,65,0.6)] leading-none whitespace-nowrap"
+                              style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                            >
+                              54.4% OFFER
+                            </span>
+
+                            <span className="w-1 h-1 rounded-full bg-zinc-600 shrink-0" />
+
+                            {/* Urgent limited tag */}
+                            <span className="px-1.5 py-0.5 rounded-[4px] bg-red-500/25 border border-red-500/50 text-red-400 font-mono font-black text-[8px] sm:text-[9px] uppercase tracking-wider leading-none shrink-0 animate-pulse">
+                              LIMITED
+                            </span>
+
+                            {/* HURRY UP 8 DAYS ONLY */}
+                            <span className="text-[9px] sm:text-[10px] font-mono font-extrabold uppercase tracking-tight text-yellow-400 leading-none whitespace-nowrap">
+                              HURRY UP 8 DAYS ONLY
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="w-full flex flex-col items-center">
                       <span
-                        className="text-zinc-400 font-bold uppercase tracking-[0.18em] text-xs sm:text-[13px] mb-2 select-none group-hover:text-zinc-200 transition-colors"
+                        className={`text-zinc-400 font-bold uppercase tracking-[0.18em] text-xs sm:text-[13px] mb-2 select-none group-hover:text-zinc-200 transition-colors ${
+                          isTwelveMonth ? "mt-6 sm:mt-6 text-white" : ""
+                        }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         {plan.months}

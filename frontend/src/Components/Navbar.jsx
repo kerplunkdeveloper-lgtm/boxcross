@@ -68,7 +68,7 @@ const Navbar = () => {
 
   const membershipDropdown = [
     {
-      name: "Founders First 100 offer",
+      name: "Founder Members 100",
       path: "/foundersoffers",
     },
     {

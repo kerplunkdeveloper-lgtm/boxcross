@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Check, ArrowRight, ShieldCheck, Zap } from "lucide-react";
+import { Check, ArrowRight, ShieldCheck, Zap, Lock } from "lucide-react";
 import { motion } from "framer-motion";
+import BCMonogram from "./BCMonogram";
 
 const getEmiPerMonth = (totalPriceStr, monthsStr = "") => {
   const numeric = Number(String(totalPriceStr).replace(/[^0-9]/g, "")) || 0;
@@ -155,15 +156,30 @@ const ChoosePlan = React.forwardRef(
         ? activeData.plans
         : [];
 
-    // Track which plan duration is selected to dynamically show EMI / Affordability
-    const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
+    const getTwelveMonthIndex = (plansList) => {
+      if (!plansList || plansList.length === 0) return 0;
+      const idx = plansList.findIndex(
+        (p) =>
+          p.months &&
+          (p.months.includes("12") ||
+            p.months.toLowerCase().includes("12 month") ||
+            p.months.toLowerCase().includes("1 year")),
+      );
+      return idx !== -1 ? idx : plansList.length - 1;
+    };
 
-    // Keep index in bounds if activeData changes
+    // Track which plan duration is selected to dynamically show EMI / Affordability - default to 12-month plan
+    const [selectedPlanIdx, setSelectedPlanIdx] = useState(() =>
+      getTwelveMonthIndex(plans),
+    );
+
+    // Keep index in bounds and default to 12-month plan if activeData / plans change
     useEffect(() => {
-      if (selectedPlanIdx >= plans.length && plans.length > 0) {
-        setSelectedPlanIdx(0);
+      if (plans && plans.length > 0) {
+        const twelveIdx = getTwelveMonthIndex(plans);
+        setSelectedPlanIdx(twelveIdx);
       }
-    }, [plans, selectedPlanIdx]);
+    }, [activeData?.title]);
 
     const razorpayKey =
       import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TS0kzk3tqsYO7Z";
@@ -233,8 +249,9 @@ const ChoosePlan = React.forwardRef(
       <div
         ref={ref}
         id="pricing"
-        className="w-full max-w-7xl mx-auto border-t border-zinc-800/80 pt-12 pb-12 scroll-mt-10 px-2 sm:px-4"
+        className="w-full max-w-7xl mx-auto border-t border-zinc-800/80 pt-12 pb-12 scroll-mt-20 md:scroll-mt-24 px-2 sm:px-4"
       >
+        <span id="choose-plan" className="sr-only" />
         {/* STEP 2 HEADER */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -281,7 +298,7 @@ const ChoosePlan = React.forwardRef(
                         <div className="absolute inset-[-250%] bg-[conic-gradient(from_0deg,#ccf141_0deg,transparent_70deg,transparent_180deg,#ccf141_250deg,transparent_360deg)] animate-spin-border" />
                         {/* Active Tab Core Body */}
                         <div className="relative z-10 bg-black px-4 sm:px-6 py-2.5 sm:py-3 rounded-[10px] sm:rounded-full flex items-center justify-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ccf141] shadow-[0_0_10px_#ccf141] animate-pulse shrink-0" />
+                          <span className={`w-2 h-2 rounded-full ${prog.isComingSoon ? "bg-amber-400 shadow-[0_0_10px_#f59e0b]" : "bg-[#ccf141] shadow-[0_0_10px_#ccf141]"} animate-pulse shrink-0`} />
                           <span
                             className="font-black text-xs sm:text-[14px] text-white tracking-wider"
                             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -291,6 +308,11 @@ const ChoosePlan = React.forwardRef(
                           <span className="text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-md sm:rounded-full tracking-wider font-extrabold bg-[#ccf141] text-black">
                             {prog.subtitle}
                           </span>
+                          {prog.isComingSoon && (
+                            <span className="text-[9px] font-mono px-2 py-0.5 rounded-full tracking-wider font-black bg-amber-500 text-black uppercase shadow-sm">
+                              COMING SOON
+                            </span>
+                          )}
                         </div>
                       </div>
                     ) : (
@@ -305,6 +327,11 @@ const ChoosePlan = React.forwardRef(
                         <span className="text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-md sm:rounded-full tracking-wider font-extrabold bg-zinc-900/90 text-zinc-400 border border-zinc-700/50">
                           {prog.subtitle}
                         </span>
+                        {prog.isComingSoon && (
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded tracking-wider font-black bg-amber-500/15 text-amber-400 border border-amber-500/40 uppercase">
+                            SOON
+                          </span>
+                        )}
                       </div>
                     )}
                   </button>
@@ -324,7 +351,7 @@ const ChoosePlan = React.forwardRef(
         >
           {/* CARD TOP HEADER STRIP: PROGRAM + SUBTITLE + SESSION INFO */}
           <div className="bg-black text-white px-5 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800">
-            <div className="flex items-baseline gap-3.5">
+            <div className="flex items-center gap-3.5 flex-wrap">
               <span
                 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white leading-none"
                 style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
@@ -337,15 +364,23 @@ const ChoosePlan = React.forwardRef(
               >
                 {currentSubtitle}
               </span>
+              {activeData.isComingSoon && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/60 text-amber-400 text-xs font-mono font-black tracking-widest uppercase shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                  COMING SOON
+                </span>
+              )}
             </div>
             <p className="text-xs sm:text-[13px] text-zinc-300 font-medium">
               {currentSessionInfo}
             </p>
           </div>
 
-          {/* 4 DURATION COLUMNS GRID */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-zinc-800 bg-[#0a0a0a]">
-            {plans.map((plan, idx) => {
+          {/* CARD BODY WITH DURATION COLUMNS & BENEFITS (WITH FULL BLUR OVERLAY WHEN COMING SOON) */}
+          <div className="relative">
+            {/* 4 DURATION COLUMNS GRID */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-zinc-800 bg-[#0a0a0a]">
+              {plans.map((plan, idx) => {
               const cleanTotal =
                 plan.price ||
                 plan.totalPrice ||
@@ -371,6 +406,12 @@ const ChoosePlan = React.forwardRef(
                   : null);
 
               const isSelected = selectedPlanIdx === idx;
+              const isTwelveMonth = Boolean(
+                plan.months &&
+                  (plan.months.includes("12") ||
+                    plan.months.toLowerCase().includes("12 month") ||
+                    plan.months.toLowerCase().includes("1 year")),
+              );
               const planNumericPrice =
                 Number(String(cleanTotal).replace(/[^0-9]/g, "")) || 0;
               const planAmountInPaise = planNumericPrice * 100;
@@ -378,10 +419,18 @@ const ChoosePlan = React.forwardRef(
               return (
                 <div
                   key={idx}
-                  className={`p-6 sm:p-7 md:p-8 flex flex-col items-center text-center justify-between transition-all duration-200 hover:bg-zinc-900/60 group cursor-pointer relative ${
-                    isSelected ? "bg-zinc-900/50 ring-2 ring-[#ccf141]/80 shadow-[0_0_20px_rgba(204,241,65,0.15)]" : ""
+                  className={`p-6 sm:p-7 md:p-8 flex flex-col items-center text-center justify-between transition-all duration-300 group cursor-pointer relative ${
+                    isTwelveMonth
+                      ? "bg-zinc-900/60 ring-2 ring-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)] rounded-xl z-10"
+                      : isSelected
+                        ? "bg-zinc-900/50 ring-2 ring-[#ccf141]/80 shadow-[0_0_20px_rgba(204,241,65,0.15)] rounded-xl z-10"
+                        : "hover:bg-zinc-900/40 rounded-xl"
                   }`}
                   onClick={() => {
+                    if (activeData.isComingSoon) {
+                      setSelectedPlanIdx(idx);
+                      return;
+                    }
                     if (isSelected) {
                       handlePlanSelect(
                         `${currentTitle} - ${plan.months}`,
@@ -393,10 +442,51 @@ const ChoosePlan = React.forwardRef(
                     }
                   }}
                 >
+                  {/* Fixed Center Highlight Badge for 12-Month Plan: 54.4% OFFER & HURRY UP 8 DAYS ONLY */}
+                  {isTwelveMonth && (
+                    <div className="absolute top-2.5 sm:top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max max-w-[95%]">
+                      <div className="relative group/offer">
+                        {/* Outer ambient glow */}
+                        <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 via-amber-400 to-[#ccf141] rounded-full blur-[4px] opacity-75 animate-pulse" />
+
+                        {/* Pill badge container */}
+                        <div className="relative px-3 sm:px-3.5 py-1 sm:py-1.5 bg-[#0b0b0e]/95 backdrop-blur-md border border-[#ccf141]/60 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(204,241,65,0.25)]">
+                          {/* Pulsing red live beacon */}
+                          <span className="relative flex h-2 w-2 shrink-0">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                          </span>
+
+                          {/* 54.4% OFFER */}
+                          <span
+                            className="text-[11px] sm:text-xs font-black tracking-wider text-[#ccf141] uppercase drop-shadow-[0_0_8px_rgba(204,241,65,0.6)] leading-none whitespace-nowrap"
+                            style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                          >
+                            54.4% OFFER
+                          </span>
+
+                          <span className="w-1 h-1 rounded-full bg-zinc-600 shrink-0" />
+
+                          {/* Urgent limited tag */}
+                          <span className="px-1.5 py-0.5 rounded-[4px] bg-red-500/25 border border-red-500/50 text-red-400 font-mono font-black text-[8px] sm:text-[9px] uppercase tracking-wider leading-none shrink-0 animate-pulse">
+                            LIMITED
+                          </span>
+
+                          {/* HURRY UP 8 DAYS ONLY */}
+                          <span className="text-[9px] sm:text-[10px] font-mono font-extrabold uppercase tracking-tight text-yellow-400 leading-none whitespace-nowrap">
+                            HURRY UP 8 DAYS ONLY
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="w-full flex flex-col items-center">
                     {/* Duration Label */}
                     <span
-                      className="text-zinc-400 font-bold uppercase  text-[35px] sm:text-[13px] mb-2 select-none"
+                      className={`text-zinc-400 font-bold uppercase text-xs sm:text-[13px] mb-2 select-none transition-colors ${
+                        isTwelveMonth ? "mt-6 sm:mt-6 text-white" : ""
+                      }`}
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       {plan.months}
@@ -443,7 +533,9 @@ const ChoosePlan = React.forwardRef(
                       className={`w-full mt-3.5 mb-1 px-3 py-2.5 rounded-lg border transition-all duration-200 flex flex-col items-center justify-center min-h-[44px] cursor-pointer ${
                         isSelected
                           ? "border-[#ccf141]/60 bg-[#121215] shadow-[0_0_12px_rgba(204,241,65,0.1)]"
-                          : "border-zinc-800/90 bg-[#0d0d10] hover:border-zinc-700"
+                          : isTwelveMonth
+                            ? "border-[#ccf141]/40 bg-[#121215]/80 hover:border-[#ccf141]/70"
+                            : "border-zinc-800/90 bg-[#0d0d10] hover:border-zinc-700"
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -492,8 +584,10 @@ const ChoosePlan = React.forwardRef(
                   <div className="w-full pt-3">
                     <button
                       type="button"
+                      disabled={activeData.isComingSoon}
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (activeData.isComingSoon) return;
                         setSelectedPlanIdx(idx);
                         handlePlanSelect(
                           `${currentTitle} - ${plan.months}`,
@@ -501,33 +595,41 @@ const ChoosePlan = React.forwardRef(
                           plan.months,
                         );
                       }}
-                      className={`relative w-full p-[1.5px] rounded-xl overflow-hidden cursor-pointer group select-none transition-all duration-300 active:scale-[0.98] ${
-                        isSelected
-                          ? "shadow-[0_0_25px_rgba(204,241,65,0.35)]"
-                          : "shadow-[0_0_15px_rgba(204,241,65,0.1)] hover:shadow-[0_0_25px_rgba(204,241,65,0.3)]"
+                      className={`relative w-full p-[1.5px] rounded-xl overflow-hidden select-none transition-all duration-300 ${
+                        activeData.isComingSoon
+                          ? "opacity-90 cursor-not-allowed border border-amber-500/40"
+                          : isTwelveMonth || isSelected
+                            ? "cursor-pointer shadow-[0_0_25px_rgba(204,241,65,0.35)] active:scale-[0.98]"
+                            : "cursor-pointer shadow-[0_0_15px_rgba(204,241,65,0.1)] hover:shadow-[0_0_25px_rgba(204,241,65,0.3)] active:scale-[0.98]"
                       }`}
                     >
                       {/* 360° Continuous Spinning Conic Border Animation */}
-                      <div className="absolute inset-[-250%] bg-[conic-gradient(from_0deg,#ccf141_0deg,transparent_70deg,transparent_180deg,#ccf141_250deg,transparent_360deg)] animate-spin-border" />
+                      {!activeData.isComingSoon && (
+                        <div className="absolute inset-[-250%] bg-[conic-gradient(from_0deg,#ccf141_0deg,transparent_70deg,transparent_180deg,#ccf141_250deg,transparent_360deg)] animate-spin-border" />
+                      )}
 
                       {/* Outline Button Body */}
                       <div
                         className={`relative z-10 w-full py-2.5 sm:py-3 px-4 rounded-[10.5px] flex items-center justify-center gap-2 transition-all duration-300 ${
-                          isSelected
-                            ? "bg-black text-[#ccf141] group-hover:bg-[#ccf141] group-hover:text-black"
-                            : "bg-black text-white group-hover:bg-[#ccf141] group-hover:text-black"
+                          activeData.isComingSoon
+                            ? "bg-zinc-900/90 text-amber-400 font-black border border-amber-500/30"
+                            : isTwelveMonth || isSelected
+                              ? "bg-black text-[#ccf141] group-hover:bg-[#ccf141] group-hover:text-black"
+                              : "bg-black text-white group-hover:bg-[#ccf141] group-hover:text-black"
                         }`}
                       >
                         <span
                           className="font-black uppercase tracking-wider text-xs sm:text-sm whitespace-nowrap"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
-                          GET PACK
+                          {activeData.isComingSoon ? "COMING SOON" : "GET PACK"}
                         </span>
-                        <ArrowRight
-                          size={14}
-                          className="transition-transform duration-300 group-hover:translate-x-1 shrink-0"
-                        />
+                        {!activeData.isComingSoon && (
+                          <ArrowRight
+                            size={14}
+                            className="transition-transform duration-300 group-hover:translate-x-1 shrink-0"
+                          />
+                        )}
                       </div>
                     </button>
                   </div>
@@ -591,6 +693,41 @@ const ChoosePlan = React.forwardRef(
               </div>
             </div>
           </div>
+
+          {/* COMING SOON FULL BLUR OVERLAY OVER PRICING COLUMNS & BENEFITS */}
+          {activeData.isComingSoon && (
+            <div className="absolute inset-0 z-30 backdrop-blur-md bg-black/85 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none transition-all duration-300">
+              {/* Subtle Ambient Amber Glow */}
+              <div className="absolute w-96 h-96 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
+
+              
+
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs font-mono font-black uppercase tracking-widest mb-4 shadow-sm">
+                <span>{currentTitle} · ADMISSIONS LAUNCHING SOON</span>
+              </div>
+
+              {/* Main Title */}
+              <h3
+                className="text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-white mb-3 leading-none drop-shadow-lg"
+                style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+              >
+                COMING SOON
+              </h3>
+
+              {/* Explanatory Description */}
+              <p
+                className="text-zinc-300 text-sm sm:text-base md:text-lg max-w-xl leading-relaxed mb-8 font-medium"
+                style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+              >
+                We are currently setting up the arena floor and coaching cohorts for the{" "}
+                <strong className="text-white font-bold">{currentTitle}</strong> pathway. Online bookings and admissions will unlock shortly.
+              </p>
+
+           
+            </div>
+          )}
+        </div>
         </motion.div>
       </div>
     );

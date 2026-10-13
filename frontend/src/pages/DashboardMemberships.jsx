@@ -47,11 +47,43 @@ const DashboardMemberships = () => {
   const [formFeatures, setFormFeatures] = useState("");
   const [formBenefits, setFormBenefits] = useState([]);
   const [formPlans, setFormPlans] = useState([]);
+  const [formIsComingSoon, setFormIsComingSoon] = useState(false);
+  const [togglingId, setTogglingId] = useState(null);
 
   // Inline table edit states
   const [inlineEditId, setInlineEditId] = useState(null);
   const [inlineData, setInlineData] = useState({});
   const [inlineSaving, setInlineSaving] = useState(false);
+
+  const handleToggleComingSoon = async (plan) => {
+    const newStatus = !plan.isComingSoon;
+    setTogglingId(plan._id);
+
+    // Optimistic UI update
+    setPlans((prev) =>
+      prev.map((p) => (p._id === plan._id ? { ...p, isComingSoon: newStatus } : p))
+    );
+
+    try {
+      const { data } = await updateMembershipPlan(plan._id, {
+        isComingSoon: newStatus,
+      });
+      if (data.success) {
+        toast.success(
+          `${plan.title} is now ${newStatus ? "marked as COMING SOON" : "ACTIVE"}!`
+        );
+        notifyPlanUpdate();
+      } else {
+        fetchPlans();
+      }
+    } catch (err) {
+      console.error("Error toggling coming soon status:", err);
+      toast.error("Failed to update status");
+      fetchPlans();
+    } finally {
+      setTogglingId(null);
+    }
+  };
 
   const notifyPlanUpdate = () => {
     try {
@@ -133,6 +165,7 @@ const DashboardMemberships = () => {
         }))
         : []
     );
+    setFormIsComingSoon(!!plan.isComingSoon);
     setIsModalOpen(true);
   };
 
@@ -213,6 +246,7 @@ const DashboardMemberships = () => {
     const updatedData = {
       title: formTitle,
       subtitle: formSubtitle,
+      isComingSoon: formIsComingSoon,
       starterPrice: formStarterPrice,
       dailyRate: formDailyRate,
       dailyRateLabel: formDailyRateLabel,
@@ -394,9 +428,39 @@ const DashboardMemberships = () => {
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1">
-                          <span className="inline-block px-2 py-0.5 mb-1 text-[9px] font-mono font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-highlight)]/10 rounded-md border border-[var(--db-accent-highlight)]/25">
-                            {plan.key}
-                          </span>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="inline-block px-2 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-highlight)]/10 rounded-md border border-[var(--db-accent-highlight)]/25">
+                              {plan.key}
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={plan.isComingSoon}
+                                disabled={togglingId === plan._id}
+                                onClick={() => handleToggleComingSoon(plan)}
+                                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${
+                                  plan.isComingSoon ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.4)]" : "bg-zinc-700"
+                                }`}
+                                title={plan.isComingSoon ? "Turn Off Coming Soon" : "Turn On Coming Soon"}
+                              >
+                                <span
+                                  className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                                    plan.isComingSoon ? "translate-x-4" : "translate-x-0"
+                                  }`}
+                                />
+                              </button>
+                              <span
+                                className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                                  plan.isComingSoon
+                                    ? "bg-amber-500/15 text-amber-400 border border-amber-500/40"
+                                    : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/40"
+                                }`}
+                              >
+                                {plan.isComingSoon ? "Soon" : "Active"}
+                              </span>
+                            </div>
+                          </div>
                           {isInline ? (
                             <div className="space-y-1.5 mt-1">
                               <input
@@ -609,6 +673,7 @@ const DashboardMemberships = () => {
                   <thead>
                     <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
                       <th className="py-4 px-4 rounded-l-xl">Program</th>
+                      <th className="py-4 px-4">Status / Coming Soon</th>
                       <th className="py-4 px-4">Starter Price</th>
                       <th className="py-4 px-4">Daily Rate &amp; Comparison</th>
                       <th className="py-4 px-4">Session Info</th>
@@ -668,6 +733,48 @@ const DashboardMemberships = () => {
                                 )}
                               </div>
                             )}
+                          </td>
+
+                          {/* Status / Coming Soon Toggle */}
+                          <td className="py-4 px-4">
+                            <div className="flex items-center gap-2.5">
+                              <button
+                                type="button"
+                                role="switch"
+                                aria-checked={plan.isComingSoon}
+                                disabled={togglingId === plan._id}
+                                onClick={() => handleToggleComingSoon(plan)}
+                                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                                  plan.isComingSoon
+                                    ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]"
+                                    : "bg-zinc-700 hover:bg-zinc-600"
+                                }`}
+                                title={
+                                  plan.isComingSoon
+                                    ? "Currently Coming Soon (click to activate)"
+                                    : "Currently Active (click to set Coming Soon)"
+                                }
+                              >
+                                <span
+                                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                                    plan.isComingSoon ? "translate-x-5" : "translate-x-0"
+                                  }`}
+                                />
+                              </button>
+                              <div>
+                                {plan.isComingSoon ? (
+                                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider bg-amber-500/15 border border-amber-500/40 text-amber-400 shadow-sm whitespace-nowrap">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                                    Coming Soon
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 whitespace-nowrap">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                    Active
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </td>
 
                           {/* Starter Price */}
@@ -917,6 +1024,47 @@ const DashboardMemberships = () => {
                     <span className="text-[11px] font-black uppercase tracking-wider text-[var(--db-text)]">
                       1. General Details &amp; Display Rates
                     </span>
+                  </div>
+
+                  {/* Coming Soon Switch Banner */}
+                  <div className="flex items-center justify-between p-3.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)]">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black uppercase tracking-wider text-[var(--db-text)]">
+                          Coming Soon Status:
+                        </span>
+                        <span
+                          className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${
+                            formIsComingSoon
+                              ? "bg-amber-500/20 text-amber-400 border border-amber-500/40"
+                              : "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
+                          }`}
+                        >
+                          {formIsComingSoon ? "Coming Soon (Inactive)" : "Active (Available Live)"}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[var(--db-text-muted)]">
+                        Turn this ON to mark this program as &quot;Coming Soon&quot; on the website. Users will see a Coming Soon badge and cannot purchase it.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={formIsComingSoon}
+                      onClick={() => setFormIsComingSoon(!formIsComingSoon)}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                        formIsComingSoon
+                          ? "bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]"
+                          : "bg-zinc-700 hover:bg-zinc-600"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                          formIsComingSoon ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

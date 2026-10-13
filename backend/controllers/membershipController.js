@@ -100,10 +100,12 @@ const defaultMembershipPlans = [
         buttonText: "SAVE ₹8,400",
         isPopular: false
       }
-    ]
+    ],
+    isComingSoon: false
   },
   {
     key: "athlete",
+    isComingSoon: true,
     title: "ATHLETE",
     subtitle: "TWO PATHWAYS",
     sessionInfo: "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)",
@@ -205,6 +207,7 @@ const defaultMembershipPlans = [
   },
   {
     key: "arena",
+    isComingSoon: true,
     title: "ARENA",
     subtitle: "EVERYTHING",
     sessionInfo: "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)",
@@ -403,7 +406,8 @@ const defaultMembershipPlans = [
         buttonText: "SAVE ₹5,300",
         isPopular: false
       }
-    ]
+    ],
+    isComingSoon: false
   }
 ];
 
@@ -429,6 +433,16 @@ exports.getMembershipPlans = async (req, res) => {
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
     }
+
+    // If isComingSoon is undefined in existing DB records, initialize them
+    await MembershipPlan.updateMany(
+      { key: { $in: ["athlete", "arena"] }, isComingSoon: { $exists: false } },
+      { $set: { isComingSoon: true } }
+    );
+    await MembershipPlan.updateMany(
+      { key: { $in: ["core", "junior"] }, isComingSoon: { $exists: false } },
+      { $set: { isComingSoon: false } }
+    );
 
     plans = await MembershipPlan.find({
       key: { $in: ["core", "athlete", "arena", "junior"] }

@@ -15,6 +15,7 @@ import {
   Shield,
   User,
   Star,
+  Lock,
 } from "lucide-react";
 import RazorpayMembershipModal from "./RazorpayMembershipModal";
 import { motion } from "framer-motion";
@@ -22,6 +23,7 @@ import box1 from "../assets/box1.png";
 import box2 from "../assets/box2.png";
 import box3 from "../assets/box3.png";
 import juniorBoxer from "../assets/junior_boxer.jpg";
+import BCMonogram from "./BCMonogram";
 
 import ChoosePlan from "./ChoosePlan";
 import { getMembershipPlans } from "../api/api";
@@ -551,6 +553,7 @@ const Membership = () => {
                 subtitle: cachedProg.subtitle || prog.subtitle,
                 desc: cachedProg.desc || prog.desc,
                 price: cachedProg.price || prog.price,
+                isComingSoon: !!cachedProg.isComingSoon,
               };
             }
             return prog;
@@ -594,6 +597,7 @@ const Membership = () => {
                 benefits: plan.benefits?.length ? plan.benefits : newPricingData[keyLower]?.benefits,
                 plans: plan.plans?.length ? plan.plans : newPricingData[keyLower]?.plans,
                 starterPrice: plan.starterPrice || newPricingData[keyLower]?.starterPrice,
+                isComingSoon: !!plan.isComingSoon,
               };
             }
           });
@@ -609,6 +613,7 @@ const Membership = () => {
                 subtitle: dbPlan.subtitle || prog.subtitle,
                 desc: dbPlan.sessionInfo || prog.desc,
                 price: dbPlan.starterPrice || prog.price,
+                isComingSoon: !!dbPlan.isComingSoon,
               };
             }
             return prog;
@@ -627,6 +632,7 @@ const Membership = () => {
                   subtitle: p.subtitle,
                   desc: p.desc,
                   price: p.price,
+                  isComingSoon: !!p.isComingSoon,
                 }))
               )
             );
@@ -712,11 +718,47 @@ const Membership = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-[#0a0a0a]/10"></div>
       </div>
 
-      {prog.popular && (
+      {prog.isComingSoon ? (
+        /* FULL BLUR COMING SOON OVERLAY */
+        <div className="absolute inset-0 z-30 backdrop-blur-md bg-black/80 flex flex-col items-center justify-center p-6 text-center select-none transition-all duration-300">
+          {/* Subtle Ambient Glow */}
+          <div className="absolute w-44 h-44 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
+
+         
+
+          {/* Pathway Badge */}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-[10.5px] font-mono font-black uppercase tracking-widest shadow-sm mb-3">
+            <span>{prog.title} · {prog.subtitle}</span>
+          </div>
+
+          {/* Heading */}
+          <h3
+            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white mb-2 leading-none drop-shadow-md"
+            style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+          >
+            COMING SOON
+          </h3>
+
+          <p
+            className="text-zinc-300 text-xs sm:text-[13px] leading-relaxed max-w-[240px] mb-6 font-medium"
+            style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+          >
+            This pathway is currently preparing for launch. Online registrations will open shortly.
+          </p>
+
+          <div
+            className="px-5 py-2.5 rounded-xl border border-amber-500/60 bg-amber-500/15 text-amber-300 text-[11px] font-black uppercase tracking-widest flex items-center gap-2 group-hover:bg-amber-500 group-hover:text-black transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+          >
+            <span>STAY TUNED</span>
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+      ) : prog.popular ? (
         <div className="absolute top-0 right-0 bg-[#ccf141] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
           MOST POPULAR
         </div>
-      )}
+      ) : null}
 
       <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
         <div>
@@ -782,10 +824,13 @@ const Membership = () => {
 
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
-            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${activeTab === prog.id
-                ? "bg-[#ccf141] border-[#ccf141] text-black"
-                : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
-              }`}
+            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
+              prog.isComingSoon
+                ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                : activeTab === prog.id
+                  ? "bg-[#ccf141] border-[#ccf141] text-black"
+                  : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
+            }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "700",
@@ -798,7 +843,7 @@ const Membership = () => {
                 fontWeight: "700",
               }}
             >
-              VIEW PLANS{" "}
+              {prog.isComingSoon ? "VIEW DETAILS · COMING SOON" : "VIEW PLANS"}{" "}
               <ArrowRight
                 size={14}
                 className="group-hover/btn:translate-x-1 transition-transform"
@@ -886,6 +931,38 @@ const Membership = () => {
                 {/* Background Glow Overlay */}
                 <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none -z-0" />
 
+                {/* JUNIOR COMING SOON FULL BLUR OVERLAY */}
+                {juniorProgram.isComingSoon && (
+                  <div className="absolute inset-0 z-30 backdrop-blur-md bg-black/85 flex flex-col items-center justify-center p-6 sm:p-10 text-center select-none">
+                    <div className="relative w-20 h-16 rounded-2xl bg-gradient-to-b from-zinc-900/90 to-black/90 border border-[#ccf141]/50 flex items-center justify-center px-2 py-1 shadow-[0_0_30px_rgba(204,241,65,0.3)] mb-4">
+                      <BCMonogram className="w-16 h-10" />
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-ping" />
+                    </div>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs font-mono font-bold tracking-widest uppercase mb-3">
+                      <span>JUNIOR ATHLETE · UNDER 13</span>
+                    </div>
+                    <h3
+                      className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-2 leading-none"
+                      style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                    >
+                      COMING SOON
+                    </h3>
+                    <p
+                      className="text-zinc-300 text-xs sm:text-sm max-w-md mb-6 font-medium"
+                      style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                    >
+                      Our youth boxing fundamentals and athletic development program is opening soon.
+                    </p>
+                    <div
+                      className="px-6 py-2.5 rounded-xl border border-amber-500/60 bg-amber-500/15 text-amber-300 text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      <span>STAY TUNED</span>
+                      <ArrowRight size={14} />
+                    </div>
+                  </div>
+                )}
+
                 <div className="relative z-10 flex flex-col lg:flex-row items-stretch justify-between">
                   {/* Left & Center: Rich Program Content */}
                   <div className="flex-1 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-between">
@@ -899,6 +976,12 @@ const Membership = () => {
                           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-[11px] font-mono font-bold tracking-widest uppercase">
                             YOUTH &amp; ATHLETIC DEVELOPMENT
                           </div>
+                          {juniorProgram.isComingSoon && (
+                            <span className="inline-flex items-center gap-1.5 ml-2 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[10px] font-black uppercase tracking-widest">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                              COMING SOON
+                            </span>
+                          )}
                           <p className="text-zinc-400 text-xs mt-1 font-mono">
                             Ages 7 to 13 · All Experience Levels
                           </p>
@@ -954,13 +1037,20 @@ const Membership = () => {
                       <button
                         type="button"
                         onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
-                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${activeTab === juniorProgram.id
-                            ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
-                            : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
-                          }`}
+                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${
+                          juniorProgram.isComingSoon
+                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black"
+                            : activeTab === juniorProgram.id
+                              ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
+                              : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
+                        }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
-                        <span>VIEW JUNIOR PLANS</span>
+                        <span>
+                          {juniorProgram.isComingSoon
+                            ? "VIEW DETAILS · COMING SOON"
+                            : "VIEW JUNIOR PLANS"}
+                        </span>
                         <ArrowRight
                           size={16}
                           className="group-hover/btn:translate-x-1 transition-transform"
