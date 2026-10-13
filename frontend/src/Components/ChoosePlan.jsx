@@ -457,13 +457,7 @@ const ChoosePlan = React.forwardRef(
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                           </span>
 
-                          {/* 54.4% OFFER */}
-                          <span
-                            className="text-[11px] sm:text-xs font-black tracking-wider text-[#ccf141] uppercase drop-shadow-[0_0_8px_rgba(204,241,65,0.6)] leading-none whitespace-nowrap"
-                            style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                          >
-                            54.4% OFFER
-                          </span>
+                        
 
                           <span className="w-1 h-1 rounded-full bg-zinc-600 shrink-0" />
 
@@ -674,7 +668,7 @@ const ChoosePlan = React.forwardRef(
                 className="text-6xl sm:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.45)]"
                 style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
               >
-                {dailyRate}
+                {dailyRate}  <span style={{ fontSize: "1.5rem" }}>per day</span>
               </div>
 
               {/* Subtitle */}

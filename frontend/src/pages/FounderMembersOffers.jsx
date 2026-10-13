@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Helmet } from "react-helmet-async";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -17,6 +18,8 @@ import juniorBoxer from "../assets/junior_boxer.jpg";
 import founderBanner from "../assets/founder_banner.jpg";
 import { getFounderPlans } from "../api/api";
 import RazorpayFounderModal from "../Components/RazorpayFounderModal";
+import ChoosePlan from "../Components/ChoosePlan";
+import BCMonogram from "../Components/BCMonogram";
 
 const defaultPrograms = [
   {
@@ -448,6 +451,7 @@ const FounderMembersOffers = () => {
                 subtitle: dbPlan.subtitle || prog.subtitle,
                 desc: dbPlan.sessionInfo || dbPlan.desc || prog.desc,
                 price: dbPlan.starterPrice || prog.price,
+                isComingSoon: !!dbPlan.isComingSoon,
               };
             }
             return prog;
@@ -484,6 +488,7 @@ const FounderMembersOffers = () => {
           subtitle: dbPlan.subtitle || prog.subtitle,
           desc: dbPlan.sessionInfo || dbPlan.desc || prog.desc,
           price: dbPlan.starterPrice || prog.price,
+          isComingSoon: !!dbPlan.isComingSoon,
         };
       }
       return prog;
@@ -497,6 +502,30 @@ const FounderMembersOffers = () => {
       localStorage.setItem("boxcross_founder_plans_timestamp", Date.now().toString());
     } catch (e) {}
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const plan = params.get("plan");
+
+    if (plan) {
+      const planLower = plan.toLowerCase();
+      const matched = ["founder-core", "founder-athlete", "founder-arena", "founder-junior"].find(
+        (k) => k === planLower || k.replace("founder-", "") === planLower
+      );
+      if (matched) {
+        setActiveTab(matched);
+        setTimeout(() => {
+          const pricingSection = document.getElementById("pricing");
+          if (pricingSection) {
+            pricingSection.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 800);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     AOS.init({ duration: 900, once: true });
@@ -572,12 +601,16 @@ const FounderMembersOffers = () => {
   const dailyComparison =
     activePlanData?.dailyComparison || "A dosa and a filter coffee.";
 
-  const benefits =
-    activePlanData?.benefits && activePlanData.benefits.length > 0
-      ? activePlanData.benefits
-      : initialFounderPlansMap[activeTab]?.benefits || [];
-
-  const plans = activePlanData?.plans || initialFounderPlansMap[activeTab]?.plans || [];
+  const adultPrograms = programsList.filter(
+    (p) =>
+      !p.id?.toLowerCase().includes("junior") &&
+      !p.key?.toLowerCase().includes("junior"),
+  );
+  const juniorProgram = programsList.find(
+    (p) =>
+      p.id?.toLowerCase().includes("junior") ||
+      p.key?.toLowerCase().includes("junior"),
+  );
 
   const handlePlanSelect = (planName, price, durationStr) => {
     const monthsVal = durationStr ? parseInt(durationStr) : 1;
@@ -606,7 +639,7 @@ const FounderMembersOffers = () => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.15 }}
       onClick={() => setActiveTab(prog.id)}
-      className={`relative rounded-xl p-5 md:p-6 min-h-[380px] md:min-h-[400px] lg:min-h-[430px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
+      className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
         activeTab === prog.id
           ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
           : "border-gray-800 hover:border-gray-600"
@@ -625,15 +658,46 @@ const FounderMembersOffers = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-[#0a0a0a]/10" />
       </div>
 
-      {prog.popular && (
+      {prog.isComingSoon ? (
+        /* FULL BLUR COMING SOON OVERLAY */
+        <div className="absolute inset-0 z-30 backdrop-blur-md bg-black/80 flex flex-col items-center justify-center p-6 text-center select-none transition-all duration-300">
+          <div className="absolute w-44 h-44 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
+
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-[10.5px] font-mono font-black uppercase tracking-widest shadow-sm mb-3">
+            <span>{prog.title} · {prog.subtitle}</span>
+          </div>
+
+          <h3
+            className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white mb-2 leading-none drop-shadow-md"
+            style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+          >
+            COMING SOON
+          </h3>
+
+          <p
+            className="text-zinc-300 text-xs sm:text-[13px] leading-relaxed max-w-[240px] mb-6 font-medium"
+            style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+          >
+            This pathway is currently preparing for launch. Online registrations will open shortly.
+          </p>
+
+          <div
+            className="px-5 py-2.5 rounded-xl border border-amber-500/60 bg-amber-500/15 text-amber-300 text-[11px] font-black uppercase tracking-widest flex items-center gap-2 group-hover:bg-amber-500 group-hover:text-black transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+          >
+            <span>STAY TUNED</span>
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+      ) : prog.popular ? (
         <div className="absolute top-0 right-0 bg-[#ccf141] text-black text-[10px] font-bold px-3 py-1.5 rounded-bl-xl tracking-wider uppercase z-20">
           MOST POPULAR
         </div>
-      )}
+      ) : null}
 
       <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
         <div>
-          <div className="w-14 h-12 flex items-center justify-center mb-4">
+          <div className="w-16 h-14 flex items-center justify-center mb-5">
             {prog.icon}
           </div>
 
@@ -642,36 +706,36 @@ const FounderMembersOffers = () => {
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "900",
-              fontSize: "28px",
+              fontSize: "35px",
             }}
           >
             {prog.title}
           </h3>
           <p
-            className="text-[#ccf141] tracking-widest uppercase mb-2"
+            className="text-[#ccf141] tracking-widest uppercase mb-3"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "400",
-              fontSize: "15px",
+              fontSize: "19px",
             }}
           >
             {prog.subtitle}
           </p>
           <p
-            className="text-gray-200 mb-4 leading-relaxed max-w-[95%]"
+            className="text-gray-200 mb-4 leading-relaxed max-w-[90%]"
             style={{
               fontFamily: '"Brutal Font Light", sans-serif',
               fontWeight: "400",
-              fontSize: "14px",
+              fontSize: "17px",
             }}
           >
             {prog.desc}
           </p>
         </div>
 
-        <div className="mt-auto pt-3 w-full">
+        <div className="mt-auto pt-4 w-full">
           <p
-            className="text-[12px] text-gray-300 uppercase tracking-widest font-bold flex items-center"
+            className="text-[14px] text-gray-300 uppercase tracking-widest font-bold flex items-center"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
               fontWeight: "600",
@@ -680,24 +744,27 @@ const FounderMembersOffers = () => {
             FROM
           </p>
 
-          <div className="flex items-baseline">
+          <div>
             <span
-              className="text-[#ccf141] text-[28px] md:text-[36px] font-black mr-1"
+              className="text-lg text-[#ccf141] text-[30px] md:text-[48px] mx-1.5"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
+                fontWeight: "700",
               }}
             >
               ₹{prog.price}
             </span>
-            <span className="text-xs text-gray-300 uppercase font-bold">/ MONTH</span>
+            / MONTH
           </div>
 
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
-            className={`group/btn mt-6 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
-              activeTab === prog.id
-                ? "bg-[#ccf141] border-[#ccf141] text-black"
-                : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
+            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
+              prog.isComingSoon
+                ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                : activeTab === prog.id
+                  ? "bg-[#ccf141] border-[#ccf141] text-black"
+                  : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
             }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
@@ -711,7 +778,7 @@ const FounderMembersOffers = () => {
                 fontWeight: "700",
               }}
             >
-              VIEW PLANS{" "}
+              {prog.isComingSoon ? "VIEW DETAILS · COMING SOON" : "VIEW PLANS"}{" "}
               <ArrowRight
                 size={14}
                 className="group-hover/btn:translate-x-1 transition-transform"
@@ -988,326 +1055,236 @@ const FounderMembersOffers = () => {
               </span>
             </div>
 
-
-          </motion.div>
-
-          {/* STEP 1: 4 PROGRAM PATHWAYS GRID */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 mt-8 md:mt-12">
-            {programsList.map((prog, index) => renderProgramCard(prog, index))}
-          </div>
-        </div>
-
-        {/* STEP 2: CHOOSE PLAN (EXACT CHOOSEPLAN UI) */}
-        <div
-          ref={pricingRef}
-          id="pricing"
-          className="w-full max-w-7xl mx-auto border-t border-zinc-800/80 pt-12 pb-12 scroll-mt-10 px-2 sm:px-4"
-        >
-          {/* STEP 2 HEADER */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-8 flex flex-col items-center justify-center gap-3"
-          >
             <div>
               <span
-                className="px-4 py-1.5 rounded-md border border-[#ccf141]/40 bg-[#ccf141]/10 text-[#ccf141] text-xs sm:text-sm uppercase tracking-widest font-black inline-flex items-center gap-2"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                className="px-4 py-2 rounded-md border border-[#ccf141]/30 bg-[#ccf141] text-[#1e1111] uppercase"
+                style={{
+                  fontFamily: '"BrutalTypeBold", sans-serif',
+                  fontSize: "16px",
+                  fontWeight: "600",
+                }}
               >
-                <Zap size={14} className="text-[#ccf141]" />
-                STEP 2
+                STEP 1
               </span>
             </div>
 
-            <h2
-              className="mt-1 mb-0 text-3xl sm:text-4xl md:text-5xl font-black uppercase text-white tracking-tight"
-              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-            >
-              CHOOSE YOUR <span className="text-[#ccf141]">PLAN</span>
-            </h2>
-
-            {/* PROGRAM SWITCHER TABS WITH 360° SPINNING BORDER BEAM */}
-            <div className="w-full flex justify-center mt-5 mb-3 px-1 sm:px-4">
-              <div className="relative inline-flex items-center p-1.5 sm:p-2 bg-[#101012]/95 backdrop-blur-xl border border-zinc-800/90 rounded-2xl sm:rounded-full shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.06)] max-w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden gap-1.5 sm:gap-2">
-                {programsList.map((prog) => {
-                  const isActive = activeTab === prog.id;
-                  return (
-                    <button
-                      key={prog.id}
-                      type="button"
-                      onClick={() => setActiveTab(prog.id)}
-                      className="relative shrink-0 cursor-pointer select-none rounded-xl sm:rounded-full p-0 transition-transform active:scale-95 group focus:outline-none"
-                    >
-                      {isActive ? (
-                        <div className="relative p-[2px] rounded-xl sm:rounded-full overflow-hidden shadow-[0_0_30px_rgba(204,241,65,0.4)]">
-                          <div className="absolute inset-[-250%] bg-[conic-gradient(from_0deg,#ccf141_0deg,transparent_70deg,transparent_180deg,#ccf141_250deg,transparent_360deg)] animate-spin-border" />
-                          <div className="relative z-10 bg-black px-4 sm:px-6 py-2.5 sm:py-3 rounded-[10px] sm:rounded-full flex items-center justify-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-[#ccf141] shadow-[0_0_10px_#ccf141] animate-pulse shrink-0" />
-                            <span
-                              className="font-black text-xs sm:text-[14px] text-white tracking-wider"
-                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                            >
-                              {prog.title}
-                            </span>
-                            <span className="text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-md sm:rounded-full tracking-wider font-extrabold bg-[#ccf141] text-black">
-                              {prog.subtitle}
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-full font-black text-xs sm:text-sm uppercase tracking-wider text-zinc-400 hover:text-white hover:bg-zinc-800/60 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-200 flex items-center justify-center gap-2">
-                          <span
-                            className="font-black text-xs sm:text-[14px] tracking-wider"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                          >
-                            {prog.title}
-                          </span>
-                          <span className="text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-md sm:rounded-full tracking-wider font-extrabold bg-zinc-900/90 text-zinc-400 border border-zinc-700/50">
-                            {prog.subtitle}
-                          </span>
-                        </div>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
+            <div>
+              <h2
+                className="mt-2 md:mt-4 mb-0 text-[32px] md:text-[48px] leading-[40px] md:leading-[55px]"
+                style={{
+                  fontFamily: '"BrutalTypeBold", sans-serif',
+                  fontWeight: "700",
+                }}
+              >
+                CHOOSE YOUR <span className="text-[#ccf141]">PROGRAM</span>
+              </h2>
             </div>
           </motion.div>
 
-          {/* MAIN PRICING CARD */}
-          <motion.div
-            key={currentTitle}
-            initial={{ opacity: 0, scale: 0.99 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.35 }}
-            className="w-full bg-black text-white border border-zinc-700/80 rounded-none sm:rounded-sm overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
-          >
-            {/* CARD TOP HEADER STRIP */}
-            <div className="bg-black text-white px-5 sm:px-8 py-4 sm:py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800">
-              <div className="flex items-baseline gap-3.5 flex-wrap">
-                <span
-                  className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white leading-none"
-                  style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                >
-                  {currentTitle}
-                </span>
-                <span
-                  className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-[#ccf141]"
-                  style={{ fontFamily: '"BrutalTypeBold", monospace' }}
-                >
-                  {currentSubtitle}
-                </span>
+          {/* STEP 1: 3 ADULT PATHWAYS GRID (CORE, ATHLETE, ARENA) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7 mt-8 md:mt-15">
+            {adultPrograms.map((prog, index) => renderProgramCard(prog, index))}
+          </div>
+
+          {/* HORIZONTAL FULL-WIDTH JUNIOR PROGRAM BANNER (UNDER 13) */}
+          {juniorProgram && (
+            <div className="mt-12 md:mt-16 w-full">
+              {/* Section Header & Divider */}
+              <div className="flex items-center gap-3 sm:gap-4 w-full mb-6 px-1">
+                <div className="h-[1px] bg-gradient-to-r from-transparent via-zinc-800 to-zinc-700 flex-1" />
+                <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-zinc-800 bg-[#121214] text-zinc-300 text-xs font-bold uppercase tracking-widest shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-pulse" />
+                  <span>JUNIOR PROGRAM · UNDER 13</span>
+                </div>
+                <div className="h-[1px] bg-gradient-to-l from-transparent via-zinc-800 to-zinc-700 flex-1" />
               </div>
-              <p className="text-xs sm:text-[13px] text-zinc-300 font-normal">
-                {currentSessionInfo}
-              </p>
-            </div>
 
-            {/* DURATION COLUMNS GRID */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-zinc-800 bg-black border-b border-zinc-800">
-              {plans.map((plan, idx) => {
-                const cleanTotal =
-                  plan.totalPrice || plan.price || "";
-                const cleanPerMonth = plan.perMonth || plan.price;
-                const hasDiscount = Boolean(plan.originalPrice);
-                const isSaveTag =
-                  plan.tag && plan.tag.toUpperCase().startsWith("SAVE");
-                const isTwelveMonth = Boolean(
-                  plan.months &&
-                    (plan.months.includes("12") ||
-                      plan.months.toLowerCase().includes("12 month") ||
-                      plan.months.toLowerCase().includes("1 year")),
-                );
+              {/* Full Width Horizontal Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                onClick={() => setActiveTab(juniorProgram.id)}
+                className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${
+                  activeTab === juniorProgram.id
+                    ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
+                    : "border-zinc-800 hover:border-zinc-700"
+                } bg-[#0b0b0d]`}
+              >
+                {/* Background Glow Overlay */}
+                <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none -z-0" />
 
-                return (
-                  <div
-                    key={idx}
-                    className={`p-6 sm:p-7 md:p-8 flex flex-col items-center text-center justify-between transition-all duration-300 group cursor-pointer relative ${
-                      isTwelveMonth
-                        ? "bg-zinc-900/60 ring-2 ring-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)] rounded-xl z-10"
-                        : "hover:bg-zinc-900/60"
-                    }`}
-                    onClick={() =>
-                      handlePlanSelect(
-                        `${currentTitle} - ${plan.months}`,
-                        cleanTotal,
-                        plan.months,
-                      )
-                    }
-                  >
-                    {/* Fixed Center Highlight Badge for 12-Month Plan: 54.4% OFFER & HURRY UP 8 DAYS ONLY */}
-                    {isTwelveMonth && (
-                      <div className="absolute top-2.5 sm:top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max max-w-[95%]">
-                        <div className="relative group/offer">
-                          {/* Outer ambient glow */}
-                          <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 via-amber-400 to-[#ccf141] rounded-full blur-[4px] opacity-75 animate-pulse" />
+                {/* JUNIOR COMING SOON FULL BLUR OVERLAY */}
+                {juniorProgram.isComingSoon && (
+                  <div className="absolute inset-0 z-30 backdrop-blur-md bg-black/85 flex flex-col items-center justify-center p-6 sm:p-10 text-center select-none">
+                    <div className="relative w-20 h-16 rounded-2xl bg-gradient-to-b from-zinc-900/90 to-black/90 border border-[#ccf141]/50 flex items-center justify-center px-2 py-1 shadow-[0_0_30px_rgba(204,241,65,0.3)] mb-4">
+                      <BCMonogram className="w-16 h-10" />
+                      <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-ping" />
+                    </div>
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs font-mono font-bold tracking-widest uppercase mb-3">
+                      <span>JUNIOR ATHLETE · UNDER 13</span>
+                    </div>
+                    <h3
+                      className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white mb-2 leading-none"
+                      style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                    >
+                      COMING SOON
+                    </h3>
+                    <p
+                      className="text-zinc-300 text-xs sm:text-sm max-w-md mb-6 font-medium"
+                      style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                    >
+                      Our youth boxing fundamentals and athletic development program is opening soon.
+                    </p>
+                    <div
+                      className="px-6 py-2.5 rounded-xl border border-amber-500/60 bg-amber-500/15 text-amber-300 text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      <span>STAY TUNED</span>
+                      <ArrowRight size={14} />
+                    </div>
+                  </div>
+                )}
 
-                          {/* Pill badge container */}
-                          <div className="relative px-3 sm:px-3.5 py-1 sm:py-1.5 bg-[#0b0b0e]/95 backdrop-blur-md border border-[#ccf141]/60 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(204,241,65,0.25)]">
-                            {/* Pulsing red live beacon */}
-                            <span className="relative flex h-2 w-2 shrink-0">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                            </span>
-
-                            {/* 54.4% OFFER */}
-                            <span
-                              className="text-[11px] sm:text-xs font-black tracking-wider text-[#ccf141] uppercase drop-shadow-[0_0_8px_rgba(204,241,65,0.6)] leading-none whitespace-nowrap"
-                              style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                            >
-                              54.4% OFFER
-                            </span>
-
-                            <span className="w-1 h-1 rounded-full bg-zinc-600 shrink-0" />
-
-                            {/* Urgent limited tag */}
-                            <span className="px-1.5 py-0.5 rounded-[4px] bg-red-500/25 border border-red-500/50 text-red-400 font-mono font-black text-[8px] sm:text-[9px] uppercase tracking-wider leading-none shrink-0 animate-pulse">
-                              LIMITED
-                            </span>
-
-                            {/* HURRY UP 8 DAYS ONLY */}
-                            <span className="text-[9px] sm:text-[10px] font-mono font-extrabold uppercase tracking-tight text-yellow-400 leading-none whitespace-nowrap">
-                              HURRY UP 8 DAYS ONLY
-                            </span>
+                <div className="relative z-10 flex flex-col lg:flex-row items-stretch justify-between">
+                  {/* Left & Center: Rich Program Content */}
+                  <div className="flex-1 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-between">
+                    <div>
+                      {/* Top Row: Icon + Subtitle Badge */}
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-14 h-14 rounded-2xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-center text-[#ccf141] shadow-inner shrink-0">
+                          {juniorProgram.icon}
+                        </div>
+                        <div>
+                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-[11px] font-mono font-bold tracking-widest uppercase">
+                            YOUTH &amp; ATHLETIC DEVELOPMENT
                           </div>
+                          {juniorProgram.isComingSoon && (
+                            <span className="inline-flex items-center gap-1.5 ml-2 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[10px] font-black uppercase tracking-widest">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                              COMING SOON
+                            </span>
+                          )}
+                          <p className="text-zinc-400 text-xs mt-1 font-mono">
+                            Ages 7 to 13 · All Experience Levels
+                          </p>
                         </div>
                       </div>
-                    )}
 
-                    <div className="w-full flex flex-col items-center">
-                      <span
-                        className={`text-zinc-400 font-bold uppercase tracking-[0.18em] text-xs sm:text-[13px] mb-2 select-none group-hover:text-zinc-200 transition-colors ${
-                          isTwelveMonth ? "mt-6 sm:mt-6 text-white" : ""
+                      {/* Main Title & Tagline */}
+                      <div className="mt-2">
+                        <div className="flex items-baseline gap-3 flex-wrap">
+                          <h3
+                            className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-none"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            {juniorProgram.title}
+                          </h3>
+                          <span
+                            className="text-lg sm:text-2xl font-bold text-[#ccf141] tracking-widest uppercase"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            {juniorProgram.subtitle}
+                          </span>
+                        </div>
+
+                        <p
+                          className="text-zinc-300 text-sm sm:text-base md:text-lg mt-3 leading-relaxed max-w-2xl font-normal"
+                          style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
+                        >
+                          {juniorProgram.desc}. Built specifically to develop boxing fundamentals, agile footwork, screen-free focus, and lifelong discipline.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Bottom Pricing & CTA Row */}
+                    <div className="mt-8 pt-6 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div>
+                        <span className="block text-zinc-400 text-xs uppercase font-bold tracking-widest">
+                          MEMBERSHIP STARTS FROM
+                        </span>
+                        <div className="flex items-baseline gap-2 mt-0.5">
+                          <span
+                            className="text-3xl sm:text-4xl md:text-5xl font-black text-[#ccf141] leading-none"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            ₹{juniorProgram.price}
+                          </span>
+                          <span className="text-zinc-400 text-xs sm:text-sm font-bold uppercase tracking-wider">
+                            / MONTH
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
+                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${
+                          juniorProgram.isComingSoon
+                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black"
+                            : activeTab === juniorProgram.id
+                              ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
+                              : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
                         }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
-                        {plan.months}
-                      </span>
-
-                      <div
-                        className="text-4xl sm:text-5xl md:text-[54px] font-black text-white tracking-tight leading-none my-1 flex items-baseline justify-center"
-                        style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                      >
-                        <span>₹{cleanPerMonth}</span>
-                      </div>
-
-                      <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.16em] text-zinc-400 mt-1 mb-3">
-                        A MONTH
-                      </span>
-
-                      <div className="text-xs sm:text-[13px] font-medium text-zinc-400 mb-6 flex items-center justify-center gap-1.5 flex-wrap">
-                        {hasDiscount && (
-                          <span className="line-through text-zinc-500 font-normal">
-                            ₹{plan.originalPrice}
-                          </span>
-                        )}
-                        <span className="font-bold text-white">
-                          ₹{cleanTotal} total
+                        <span>
+                          {juniorProgram.isComingSoon
+                            ? "VIEW DETAILS · COMING SOON"
+                            : "VIEW JUNIOR PLANS"}
                         </span>
-                      </div>
-                    </div>
-
-                    <div className="w-full pt-2">
-                      {isSaveTag ? (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handlePlanSelect(
-                              `${currentTitle} - ${plan.months}`,
-                              cleanTotal,
-                              plan.months,
-                            );
-                          }}
-                          className="w-full py-2 px-4 bg-[#ccf141] hover:bg-[#bfe635] text-black font-black uppercase tracking-wider text-xs sm:text-sm rounded-none transition-all duration-200 cursor-pointer shadow-[0_0_15px_rgba(204,241,65,0.2)] hover:shadow-[0_0_20px_rgba(204,241,65,0.4)] flex items-center justify-center gap-1.5 active:scale-[0.98]"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          <span>{plan.tag}</span>
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handlePlanSelect(
-                              `${currentTitle} - ${plan.months}`,
-                              cleanTotal,
-                              plan.months,
-                            );
-                          }}
-                          className="w-full py-1.5 px-4 border border-zinc-700 hover:border-zinc-500 text-zinc-400 hover:text-white font-bold uppercase tracking-widest text-xs rounded-none transition-all duration-200 cursor-pointer active:scale-[0.98] bg-zinc-900/40 hover:bg-zinc-800"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          <span>{plan.buttonText || "STANDARD"}</span>
-                        </button>
-                      )}
+                        <ArrowRight
+                          size={16}
+                          className="group-hover/btn:translate-x-1 transition-transform"
+                        />
+                      </button>
                     </div>
                   </div>
-                );
-              })}
-            </div>
 
-            {/* CARD BOTTOM SECTION: WHAT IT ACTUALLY GIVES YOU + RIGHT BLACK BOX */}
-            <div className="flex flex-col md:flex-row items-stretch bg-black">
-              {/* Left Side: Solid Black Background with White Text */}
-              <div className="flex-1 p-6 sm:p-8 md:p-9 bg-black">
-                <span
-                  className="block text-xs sm:text-[13px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-5 select-none"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  WHAT IT ACTUALLY GIVES YOU
-                </span>
+                  {/* Right Side: The Boxer Photo (Hero Visual with Cinematic Fade) */}
+                  <div className="w-full lg:w-[420px] xl:w-[480px] min-h-[300px] sm:min-h-[360px] lg:min-h-[460px] relative overflow-hidden bg-black shrink-0">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      style={{
+                        backgroundImage: `url(${juniorProgram.image})`,
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#0b0b0d] via-transparent to-transparent z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-10" />
 
-                <div className="space-y-4">
-                  {benefits.map((b, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      <span className="w-2.5 h-2.5 bg-[#ccf141] shrink-0 mt-1.5 rounded-[1px] shadow-[0_0_8px_rgba(204,241,65,0.4)]" />
-                      <p className="text-xs sm:text-[14px] leading-relaxed text-zinc-300">
-                        <strong className="text-white font-extrabold mr-1">
-                          {b.boldText}
-                        </strong>
-                        <span className="text-zinc-400 font-normal">
-                          {b.normalText}
-                        </span>
-                      </p>
+                    <div className="absolute top-4 right-4 z-20 bg-black/70 backdrop-blur-md border border-zinc-800 text-[#ccf141] text-[10px] font-mono font-bold px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] animate-ping" />
+                      BOX &amp; CROSS YOUTH
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-
-              {/* Right Side: Black Box with Daily Rate */}
-              <div className="w-full md:w-[320px] lg:w-[360px] bg-black text-white p-6 sm:p-8 flex flex-col items-center justify-center text-center border-t md:border-t-0 md:border-l border-zinc-800 shrink-0">
-                <div
-                  className="text-6xl sm:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.45)]"
-                  style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                >
-                  {dailyRate}
-                </div>
-
-                <span className="mt-2 text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.18em] text-zinc-300 uppercase select-none">
-                  {dailyRateLabel}
-                </span>
-
-                <div
-                  className="mt-4 text-base sm:text-lg lg:text-xl font-bold text-white select-none leading-snug"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  {dailyComparison}
-                </div>
-              </div>
+              </motion.div>
             </div>
-          </motion.div>
+          )}
         </div>
+
+        {/* STEP 2: CHOOSE PLAN (EXACT CHOOSEPLAN COMPONENT) */}
+        <ChoosePlan
+          ref={pricingRef}
+          activeData={activePlanData}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          handlePlanSelect={handlePlanSelect}
+          programs={programsList}
+        />
       </section>
 
       {/* RAZORPAY FOUNDER PAYMENT MODAL */}
-      <RazorpayFounderModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        planDetails={selectedPlan}
-      />
+      {typeof document !== "undefined" &&
+        createPortal(
+          <RazorpayFounderModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            planDetails={selectedPlan}
+          />,
+          document.body,
+        )}
     </div>
   );
 };

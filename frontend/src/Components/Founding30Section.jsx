@@ -54,52 +54,55 @@ const Founding30Section = () => {
         <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-[#ccf141]/5 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 lg:px-14">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-center">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 lg:items-stretch items-center">
           
           {/* ======================================================== */}
           {/* LEFT COLUMN: Headings, Subtext & 3 Features (col-span-5) */}
           {/* ======================================================== */}
-          <div className="lg:col-span-5 flex flex-col justify-center space-y-6">
+          <div className="lg:col-span-5 flex flex-col lg:justify-between lg:h-full space-y-6 lg:space-y-0">
             
-            {/* Top Badge: FOUNDING 30 */}
-            <div>
-              <div className="inline-flex items-center justify-center px-4 py-1 rounded-md border border-[#ccf141] bg-black/40 backdrop-blur-sm">
-                <span
-                  className="text-[#ccf141] text-[11px] sm:text-[13px] font-black uppercase tracking-[0.22em]"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  FOUNDING 100
-                </span>
+            {/* Top Area: Badge + Main Headline + Subtitle */}
+            <div className="space-y-4">
+              {/* Top Badge: MEMBERS OFFER 100 */}
+              <div>
+                <div className="inline-flex items-center justify-center px-3.5 py-1 rounded-md border border-[#ccf141] bg-black/50 backdrop-blur-sm shadow-[0_0_15px_rgba(204,241,65,0.15)]">
+                  <span
+                    className="text-[#ccf141] text-[11px] sm:text-xs font-black uppercase tracking-[0.22em]"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    MEMBERS OFFER 100
+                  </span>
+                </div>
               </div>
+
+              {/* Big Main Headline */}
+              <div className="space-y-1">
+                <h2
+                  className="text-white text-3xl sm:text-4xl lg:text-[40px] xl:text-[44px] font-black uppercase leading-[1.02] tracking-tight"
+                  style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                >
+                  THE FIRST 100.
+                </h2>
+                <h2
+                  className="text-[#ccf141] text-3xl sm:text-4xl lg:text-[40px] xl:text-[44px] font-black uppercase leading-[1.02] tracking-tight drop-shadow-[0_0_25px_rgba(204,241,65,0.25)]"
+                  style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                >
+                  GET IN FOR ₹14,999/-
+                </h2>
+              </div>
+
+              {/* Subtitle */}
+              <p
+                className="text-zinc-400 text-[10px] sm:text-[11px] lg:text-[11.5px] uppercase tracking-[0.16em] font-bold leading-relaxed max-w-md"
+                style={{ fontFamily: '"Brutal Font Bold", sans-serif' }}
+              >
+                BE PART OF THE FIRST MEMBERS AT BOX &amp; CROSS PERFORMANCE ARENA.
+              </p>
             </div>
 
-            {/* Big Main Headline */}
-            <div className="space-y-1">
-              <h2
-                className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-black uppercase leading-[1.02] tracking-tight"
-                style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-              >
-                THE FIRST 100.
-              </h2>
-              <h2
-                className="text-[#ccf141] text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-black uppercase leading-[1.02] tracking-tight drop-shadow-[0_0_25px_rgba(204,241,65,0.25)]"
-                style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-              >
-                GET IN FOR ₹14,999/-
-              </h2>
-            </div>
-
-            {/* Subtitle */}
-            <p
-              className="text-[#9ca3af] text-[11px] sm:text-[13px] uppercase tracking-[0.16em] font-bold leading-relaxed max-w-md"
-              style={{ fontFamily: '"Brutal Font Bold", sans-serif' }}
-            >
-              BE PART OF THE FIRST MEMBERS AT BOX &amp; CROSS PERFORMANCE ARENA.
-            </p>
-
-            {/* 3 Numbered Feature Items */}
-            <div className="space-y-4 pt-2">
+            {/* Bottom Area: 3 Numbered Feature Items */}
+            <div className="space-y-3.5 sm:space-y-4 pt-4 lg:pt-6">
               
               {/* Item 01 */}
               <div className="flex items-center gap-3 sm:gap-4 group">
@@ -188,56 +191,59 @@ const Founding30Section = () => {
           {/* ======================================================== */}
           {/* CENTER COLUMN: The High-Contrast Pricing Card (col-span-4) */}
           {/* ======================================================== */}
-          <div className="lg:col-span-4 flex justify-center py-2">
+          <div className="lg:col-span-4 flex justify-center lg:items-stretch lg:h-full py-2 lg:py-0">
             <div
               onClick={handleClaimSpot}
-              className="relative w-full max-w-[340px] sm:max-w-[360px] rounded-[28px] border-2 border-[#ccf141] bg-black/90 backdrop-blur-xl p-6 sm:p-8 flex flex-col items-center text-center shadow-[0_0_45px_rgba(204,241,65,0.18)] transition-all duration-300 hover:shadow-[0_0_65px_rgba(204,241,65,0.32)] cursor-pointer hover:scale-[1.01]"
+              className="relative w-full max-w-[340px] sm:max-w-[360px] lg:h-full rounded-[26px] lg:rounded-[28px] border-2 border-[#ccf141] bg-black/90 backdrop-blur-xl p-6 sm:p-7 xl:p-8 flex flex-col justify-between items-center text-center shadow-[0_0_45px_rgba(204,241,65,0.18)] transition-all duration-300 hover:shadow-[0_0_65px_rgba(204,241,65,0.32)] cursor-pointer hover:scale-[1.01]"
             >
               
-              {/* Header: REGULAR MEMBERSHIP */}
-              <span
-                className="text-zinc-400 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] font-bold"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                REGULAR MEMBERSHIP
-              </span>
-
-              {/* Crossed-out Price: ₹25,000 */}
-              <div className="relative inline-block my-1.5">
+              {/* Card Top: Regular price, strikethrough, giant price & label */}
+              <div className="w-full flex flex-col items-center">
+                {/* Header: REGULAR MEMBERSHIP */}
                 <span
-                  className="text-zinc-300 font-black text-2xl sm:text-3xl tracking-tight opacity-90"
+                  className="text-zinc-400 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] font-bold"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
-                  ₹42,000/-
+                  REGULAR MEMBERSHIP
                 </span>
-                {/* Red diagonal slash mark */}
-                <div className="absolute left-[-10%] right-[-10%] top-1/2 h-[3px] bg-[#ef4444] -rotate-6 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.7)] pointer-events-none"></div>
+
+                {/* Crossed-out Price: ₹42,000 */}
+                <div className="relative inline-block my-1 sm:my-1.5">
+                  <span
+                    className="text-zinc-300 font-black text-2xl sm:text-3xl tracking-tight opacity-90"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    ₹42,000/-
+                  </span>
+                  {/* Red diagonal slash mark */}
+                  <div className="absolute left-[-10%] right-[-10%] top-1/2 h-[3px] bg-[#ef4444] -rotate-6 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.7)] pointer-events-none"></div>
+                </div>
+
+                {/* Giant Price: ₹ 14,999 */}
+                <div className="my-0.5 sm:my-1">
+                  <span
+                    className="text-[#ccf141] font-black text-5xl sm:text-[58px] xl:text-[62px] leading-none tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.35)]"
+                    style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                  >
+                    ₹ 14,999
+                  </span>
+                </div>
+
+                {/* Label: — FOUNDING MEMBER PRICE — */}
+                <div className="flex items-center justify-center gap-2 w-full my-2.5 sm:my-3">
+                  <div className="h-[1px] bg-zinc-700 flex-1 max-w-[20px]"></div>
+                  <span
+                    className="text-white/90 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] font-black whitespace-nowrap"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    FOUNDING MEMBER PRICE
+                  </span>
+                  <div className="h-[1px] bg-zinc-700 flex-1 max-w-[20px]"></div>
+                </div>
               </div>
 
-              {/* Giant Price: ₹ 14,000 */}
-              <div className="my-1">
-                <span
-                  className="text-[#ccf141] font-black text-5xl sm:text-[62px] leading-none tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.35)]"
-                  style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                >
-                  ₹ 14,999
-                </span>
-              </div>
-
-              {/* Label: — FOUNDING MEMBER PRICE — */}
-              <div className="flex items-center justify-center gap-2 w-full my-3">
-                <div className="h-[1px] bg-zinc-700 flex-1 max-w-[20px]"></div>
-                <span
-                  className="text-white/90 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] font-black whitespace-nowrap"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  FOUNDING MEMBER PRICE
-                </span>
-                <div className="h-[1px] bg-zinc-700 flex-1 max-w-[20px]"></div>
-              </div>
-
-              {/* Olive Green Pill Badge: SAVE ₹11,000 */}
-              <div className="w-full max-w-[260px] py-2.5 px-4 rounded-xl bg-[#2a340b] border border-[#ccf141]/40 flex items-center justify-center shadow-inner my-2 hover:bg-[#34400e] transition-colors">
+              {/* Card Middle: Olive Green Pill Badge: SAVE ₹27,000 */}
+              <div className="w-full max-w-[260px] py-2.5 px-4 rounded-xl bg-[#2a340b] border border-[#ccf141]/40 flex items-center justify-center shadow-inner my-2 sm:my-3 hover:bg-[#34400e] transition-colors">
                 <span
                   className="text-[#ccf141] font-black text-sm sm:text-base tracking-wider uppercase"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -246,66 +252,72 @@ const Founding30Section = () => {
                 </span>
               </div>
 
-              {/* Spot Counter: ONLY 30 MEMBERS */}
-              <div className="flex items-center justify-center gap-2 mt-4 text-[#ccf141]">
-                <Users size={16} />
-                <span
-                  className="font-black text-xs sm:text-[13px] uppercase tracking-wider"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  ONLY 100 MEMBERS
-                </span>
-              </div>
+              {/* Card Bottom: Spot Counter & Subtext */}
+              <div className="w-full flex flex-col items-center">
+                {/* Spot Counter: ONLY 100 MEMBERS */}
+                <div className="flex items-center justify-center gap-2 text-[#ccf141]">
+                  <Users size={16} />
+                  <span
+                    className="font-black text-xs sm:text-[13px] uppercase tracking-wider"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    ONLY 100 MEMBERS
+                  </span>
+                </div>
 
-              {/* Subtext: ONCE THEY'RE GONE, REGULAR PRICING BEGINS. */}
-              <p
-                className="text-zinc-500 text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold mt-1 text-center"
-                style={{ fontFamily: '"Brutal Font Bold", sans-serif' }}
-              >
-                ONCE THEY&apos;RE GONE, REGULAR PRICING BEGINS.
-              </p>
+                {/* Subtext: ONCE THEY'RE GONE, REGULAR PRICING BEGINS. */}
+                <p
+                  className="text-zinc-500 text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold mt-1 text-center"
+                  style={{ fontFamily: '"Brutal Font Bold", sans-serif' }}
+                >
+                  ONCE THEY&apos;RE GONE, REGULAR PRICING BEGINS.
+                </p>
+              </div>
 
             </div>
           </div>
 
           {/* ======================================================== */}
-          {/* RIGHT COLUMN: 30 SPOTS. NO MORE. + CTA (col-span-3)       */}
+          {/* RIGHT COLUMN: 100 SPOTS. NO MORE. + CTA (col-span-3)      */}
           {/* ======================================================== */}
-          <div className="lg:col-span-3 flex flex-col items-start lg:items-start justify-center space-y-6 pt-4 lg:pt-0">
+          <div className="lg:col-span-3 flex flex-col lg:justify-between lg:h-full space-y-6 lg:space-y-0 pt-4 lg:pt-0">
             
-            {/* Headline */}
+            {/* Top Area: Headline */}
             <div className="space-y-0 text-left">
               <h2
-                className="text-[#ccf141] text-4xl sm:text-5xl lg:text-[62px] font-black uppercase leading-[0.95] tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.3)]"
+                className="text-[#ccf141] text-4xl sm:text-5xl lg:text-[46px] xl:text-[54px] font-black uppercase leading-[0.95] tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.3)]"
                 style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
               >
                 100 SPOTS.
               </h2>
               <h2
-                className="text-white text-4xl sm:text-5xl lg:text-[62px] font-black uppercase leading-[0.95] tracking-tight"
+                className="text-white text-4xl sm:text-5xl lg:text-[46px] xl:text-[54px] font-black uppercase leading-[0.95] tracking-tight"
                 style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
               >
                 NO MORE.
               </h2>
             </div>
 
-            {/* CTA Button */}
-            <button
-              onClick={handleClaimSpot}
-              className="group w-full sm:w-auto px-6 sm:px-8 py-4 rounded-xl bg-[#ccf141] hover:bg-white text-black font-black uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-3 transition-all duration-300 shadow-[0_0_30px_rgba(204,241,65,0.4)] hover:shadow-[0_0_40px_rgba(255,255,255,0.6)] cursor-pointer hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
-              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-            >
-              <span>CLAIM YOUR FOUNDING SPOT</span>
-              <ArrowRight
-                size={18}
-                className="group-hover:translate-x-1.5 transition-transform duration-300 shrink-0"
-              />
-            </button>
+            {/* Bottom Area: CTA Button + Trust Badge */}
+            <div className="w-full flex flex-col items-start space-y-3 pt-4 lg:pt-6">
+              {/* CTA Button */}
+              <button
+                onClick={handleClaimSpot}
+                className="group w-full max-w-[340px] px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl bg-[#ccf141] hover:bg-white text-black font-black uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all duration-300 shadow-[0_0_30px_rgba(204,241,65,0.4)] hover:shadow-[0_0_40px_rgba(255,255,255,0.6)] cursor-pointer hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                <span>CLAIM YOUR FOUNDING SPOT</span>
+                <ArrowRight
+                  size={18}
+                  className="group-hover:translate-x-1.5 transition-transform duration-300 shrink-0"
+                />
+              </button>
 
-            {/* Instant Trust Badge */}
-            <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium">
-              <ShieldCheck size={15} className="text-[#ccf141]" />
-              <span>Direct WhatsApp &amp; In-Arena Priority Desk</span>
+              {/* Instant Trust Badge */}
+              <div className="flex items-center gap-2 text-zinc-400 text-xs font-medium pl-0.5">
+                <ShieldCheck size={15} className="text-[#ccf141] shrink-0" />
+                <span className="whitespace-nowrap">Direct WhatsApp &amp; In-Arena Priority Desk</span>
+              </div>
             </div>
 
           </div>
