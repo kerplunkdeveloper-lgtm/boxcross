@@ -11,7 +11,9 @@ const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 1024);
+  const [sidebarOpen, setSidebarOpen] = useState(
+    typeof window !== "undefined" ? window.innerWidth >= 1024 : true
+  );
 
   const handleLogout = async () => {
     const res = await logout();

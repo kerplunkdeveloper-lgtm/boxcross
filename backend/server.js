@@ -83,12 +83,12 @@ app.use("/api/leads", leadRoutes);
 app.use("/api/homec1", homec1routes);
 app.use("/api/homec2", homec2routes);
 app.use("/api/homec3", homec3routes); 
-app.use("/api/athletes", athleteRoutes);
-app.use("/api/user-management", athleteRoutes);
+app.use("/api/athletes", athleteRoutes);           // canonical
+app.use("/api/user-management", athleteRoutes);    // alias — keep for sidebar links
 app.use("/api/goals-readiness", goalsReadinessRoutes);
 app.use("/api/ai-analysis", aiAnalysisRoutes);
-app.use("/api/entry-baseline", entryBaselineRoutes);
-app.use("/api/entrybaseline", entryBaselineRoutes);
+app.use("/api/entry-baseline", entryBaselineRoutes);  // canonical
+app.use("/api/entrybaseline", entryBaselineRoutes);   // alias — keep for legacy links
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/fightclub", fightClubRoutes);
 app.use("/api/performanceboxing", performanceBoxingRoutes);
@@ -113,37 +113,6 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
-// Copy barcode and admin portal assets to frontend
-const fs = require("fs");
-const path = require("path");
-
-const copyFileSafe = (src, dest) => {
-  try {
-    if (fs.existsSync(src)) {
-      const destDir = path.dirname(dest);
-      if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
-      fs.copyFileSync(src, dest);
-      console.log(`✅ Asset copied: ${path.basename(dest)}`);
-    }
-  } catch (err) {
-    console.error(`❌ Failed to copy ${path.basename(dest)}:`, err.message);
-  }
-};
-
-const srcBarcode = "C:/Users/Admin/.gemini/antigravity-ide/brain/bb465527-de2b-4ae6-a542-45b6fbe0f108/media__1786000584749.png";
-copyFileSafe(srcBarcode, path.join(__dirname, "../frontend/public/barcode.png"));
-
-const srcAdminRef = "C:/Users/Admin/.gemini/antigravity-ide/brain/0ec507a5-b680-4b7b-bbec-50f7fdb089cd/.user_uploaded/media_1790746559259.png";
-if (fs.existsSync(srcAdminRef)) {
-  // Simple check or clean up dims
-  try {
-    fs.unlinkSync(path.join(__dirname, "dims.txt"));
-  } catch (e) {}
-}
-copyFileSafe(srcAdminRef, path.join(__dirname, "../frontend/public/admin_portal_ref.png"));
-
-const srcAdminMobileRef = "C:/Users/Admin/.gemini/antigravity-ide/brain/0ec507a5-b680-4b7b-bbec-50f7fdb089cd/.user_uploaded/media_1790747547849.jpg";
-copyFileSafe(srcAdminMobileRef, path.join(__dirname, "../frontend/public/admin_mobile_ref.jpg"));
-copyFileSafe(srcAdminMobileRef, path.join(__dirname, "../frontend/src/assets/admin_mobile_ref.jpg"));
+// Assets should be placed directly in /frontend/public/ and committed to git.
 
 

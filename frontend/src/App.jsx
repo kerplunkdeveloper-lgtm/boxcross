@@ -18,7 +18,6 @@ import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Toaster } from "react-hot-toast";
 import { HelmetProvider } from "react-helmet-async";
-import Commingsoon from "./pages/Commingsoon";
 
 // Lazy-load page components for code splitting & optimized initial bundle sizes
 const MembershipPage = lazy(() => import("./pages/Membership"));
@@ -85,8 +84,7 @@ const Layout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-black text-white">
       {!isEventsPage && <Navbar />}
-      <ScrollToTop />
-      {/* <LeadModal /> */}
+      {/* ScrollToTop is mounted globally in App — no duplicate here */}
       <main className="flex-grow">
         <Outlet />
       </main>
@@ -243,48 +241,34 @@ const App = () => {
                 >
                   <Route index element={<DashboardHome />} />
                   <Route path="bookings" element={<DashboardBookings />} />
-                  <Route
-                    path="memberships"
-                    element={<DashboardMemberships />}
-                  />
+                  <Route path="memberships" element={<DashboardMemberships />} />
                   <Route path="payments" element={<DashboardPayments />} />
                   <Route path="events" element={<DashboardEvents />} />
                   <Route path="events-list" element={<DashboardEventsList />} />
-                  <Route
-                    path="event-payments"
-                    element={<DashboardEventPayments />}
-                  />
-                  <Route
-                    path="event-participants"
-                    element={<DashboardEventParticipants />}
-                  />
+                  <Route path="event-payments" element={<DashboardEventPayments />} />
+                  <Route path="event-participants" element={<DashboardEventParticipants />} />
                   <Route path="profile" element={<DashboardProfile />} />
                   <Route path="homec1" element={<DashboardHomec1 />} />
                   <Route path="homec2" element={<DashboardHomec2 />} />
                   <Route path="homec3" element={<DashboardHomec3 />} />
                   <Route path="memfound" element={<DashboardMemfound />} />
+                  {/* Canonical founder routes — aliases use Navigate redirect */}
                   <Route path="founder-plans" element={<DashboardFounderPlans />} />
-                  <Route path="founderplans" element={<DashboardFounderPlans />} />
+                  <Route path="founderplans" element={<Navigate to="/dashboard/founder-plans" replace />} />
                   <Route path="founder-payments" element={<DashboardFounderPayments />} />
-                  <Route path="founderpayment-history" element={<DashboardFounderPayments />} />
-                  <Route path="founder-payment-history" element={<DashboardFounderPayments />} />
+                  <Route path="founderpayment-history" element={<Navigate to="/dashboard/founder-payments" replace />} />
+                  <Route path="founder-payment-history" element={<Navigate to="/dashboard/founder-payments" replace />} />
                   <Route path="settings" element={<DashboardSettings />} />
                   <Route path="calendar" element={<DashboardCalendar />} />
-                  <Route
-                    path="user-management"
-                    element={<Usermanagementdetails />}
-                  />
-                  <Route
-                    path="usermanagementdetails"
-                    element={<Usermanagementdetails />}
-                  />
+                  {/* Canonical user-management — alias redirects */}
+                  <Route path="user-management" element={<Usermanagementdetails />} />
+                  <Route path="usermanagementdetails" element={<Navigate to="/dashboard/user-management" replace />} />
+                  {/* Canonical entry-baseline — alias redirects */}
                   <Route path="entry-baseline" element={<Entrybaseline />} />
-                  <Route path="entrybaseline" element={<Entrybaseline />} />
+                  <Route path="entrybaseline" element={<Navigate to="/dashboard/entry-baseline" replace />} />
+                  {/* Canonical goals-readiness — alias redirects */}
                   <Route path="goals-readiness" element={<GoalsReadiness />} />
-                  <Route
-                    path="goals-and-readiness"
-                    element={<GoalsReadiness />}
-                  />
+                  <Route path="goals-and-readiness" element={<Navigate to="/dashboard/goals-readiness" replace />} />
                   <Route path="ai-body-analysis" element={<AIBodyAnalysis />} />
                   <Route path="attendance" element={<DashboardAttendance />} />
                   <Route path="fight-club" element={<FightClub />} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Menu,
   User,
@@ -58,11 +58,15 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
   const prevIdsRef = useRef([]);
   const [latestNotification, setLatestNotification] = useState(null);
 
-  const playNotificationSound = () => {
+  // Singleton AudioContext to prevent memory leak (browsers cap at 6 contexts)
+  const playNotificationSound = useCallback(() => {
     try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
-      const ctx = new AudioContext();
+      if (!window.AudioContext && !window.webkitAudioContext) return;
+      if (!window._bxcAudioCtx || window._bxcAudioCtx.state === "closed") {
+        window._bxcAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const ctx = window._bxcAudioCtx;
+      if (ctx.state === "suspended") ctx.resume();
       const playTone = (freq, startTime, duration, vol = 0.12) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -83,7 +87,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
     } catch (e) {
       console.warn("Audio playback context failed or blocked", e);
     }
-  };
+  }, []);
 
   // Profile Dropdown States
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -125,21 +129,22 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
   });
 
   // Resolve current active title based on path
+  // NOTE: More specific paths (event-payments) MUST come before generic ones (/payments)
   let activeTitle = isAdmin ? "Admin Dashboard" : "Dashboard";
   if (location.pathname.includes("/bookings")) {
     activeTitle = "Enquiry Members";
   } else if (location.pathname.includes("/memberships")) {
     activeTitle = "Membership Edit";
+  } else if (location.pathname.includes("/event-payments")) {
+    activeTitle = "Event Payments";         // Must be before /payments
+  } else if (location.pathname.includes("/event-participants")) {
+    activeTitle = "Event Participants";     // Must be before /events
   } else if (location.pathname.includes("/payments")) {
     activeTitle = "Payment Details";
   } else if (location.pathname.includes("/events-list")) {
-    activeTitle = "Events List";
+    activeTitle = "Events List";            // Must be before /events
   } else if (location.pathname.includes("/events")) {
     activeTitle = "Event Banners";
-  } else if (location.pathname.includes("/event-payments")) {
-    activeTitle = "Event Payments";
-  } else if (location.pathname.includes("/event-participants")) {
-    activeTitle = "Event Participants";
   } else if (location.pathname.includes("/profile")) {
     activeTitle = "Profile Settings";
   } else if (location.pathname.includes("/settings")) {
@@ -168,8 +173,8 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
     activeTitle = "AI Body & Posture Analysis";
   }
 
-  // Fetch real-time data and aggregate as notifications
-  const fetchNotifications = async () => {
+  // Fetch real-time data and aggregate as notifications (wrapped in useCallback to avoid stale closure)
+  const fetchNotifications = useCallback(async () => {
     try {
       let aggregated = [];
 
@@ -355,7 +360,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
     } catch (err) {
       console.error("Notification aggregation error", err);
     }
-  };
+  }, [deletedIds, readIds, playNotificationSound]);
 
   // Fetch immediately, and poll every 5 seconds when tab is active (for real-time updates and performance optimization)
   useEffect(() => {
@@ -373,7 +378,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       if (document.visibilityState === "visible") {
         fetchNotifications();
       }
-    }, 5000);
+    }, 30000); // 30s interval — reduced from 5s (was 84 API calls/min, now ~14/min)
 
     // Global BroadcastChannel listener for immediate notifications across all dashboard pages
     const channel = new BroadcastChannel("founding_members_updates");
@@ -389,7 +394,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       channel.close();
     };
-  }, []);
+  }, [fetchNotifications]);
 
   // Handle clicking outside the notifications dropdown to close it
   useEffect(() => {

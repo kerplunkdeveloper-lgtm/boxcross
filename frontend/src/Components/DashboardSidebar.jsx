@@ -68,8 +68,8 @@ const DashboardSidebar = ({
       location.pathname.includes("/homec1") ||
       location.pathname.includes("/homec2") ||
       location.pathname.includes("/homec3") ||
-      location.pathname.includes("/bookings") ||
-      location.pathname.includes("/memfound")
+      location.pathname.includes("/bookings")
+      // Note: /memfound is intentionally excluded — it belongs only to offerFoundersOpen
     );
   });
 
@@ -90,49 +90,33 @@ const DashboardSidebar = ({
     );
   });
 
-  // Keep dropdowns open if active route is within them
+  // Single combined useEffect replaces 4 separate ones watching the same dep
   useEffect(() => {
+    const p = location.pathname;
     if (
-      location.pathname.includes("/events") ||
-      location.pathname.includes("/events-list") ||
-      location.pathname.includes("/event-payments") ||
-      location.pathname.includes("/event-participants")
-    ) {
-      setEventsOpen(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
+      p.includes("/events") ||
+      p.includes("/events-list") ||
+      p.includes("/event-payments") ||
+      p.includes("/event-participants")
+    ) setEventsOpen(true);
     if (
-      location.pathname.includes("/homec1") ||
-      location.pathname.includes("/homec2") ||
-      location.pathname.includes("/homec3") ||
-      location.pathname.includes("/bookings") ||
-      location.pathname.includes("/memfound")
-    ) {
-      setEnquiriesOpen(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
+      p.includes("/homec1") ||
+      p.includes("/homec2") ||
+      p.includes("/homec3") ||
+      p.includes("/bookings")
+      // /memfound excluded — only opens offerFoundersOpen
+    ) setEnquiriesOpen(true);
     if (
-      location.pathname.includes("/memberships") ||
-      location.pathname.includes("/payments")
-    ) {
-      setMembershipOpen(true);
-    }
-  }, [location.pathname]);
-
-  useEffect(() => {
+      p.includes("/memberships") ||
+      p.includes("/payments")
+    ) setMembershipOpen(true);
     if (
-      location.pathname.includes("/memfound") ||
-      location.pathname.includes("/founder-plans") ||
-      location.pathname.includes("/founderplans") ||
-      location.pathname.includes("/founder-payments") ||
-      location.pathname.includes("/founderpayment")
-    ) {
-      setOfferFoundersOpen(true);
-    }
+      p.includes("/memfound") ||
+      p.includes("/founder-plans") ||
+      p.includes("/founderplans") ||
+      p.includes("/founder-payments") ||
+      p.includes("/founderpayment")
+    ) setOfferFoundersOpen(true);
   }, [location.pathname]);
 
   // Style helpers for items

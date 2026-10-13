@@ -7,9 +7,13 @@ const RealTimeContext = createContext(null);
 
 export const playNotificationSound = () => {
   try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    const audioCtx = new AudioContextClass();
+    if (!window.AudioContext && !window.webkitAudioContext) return;
+    // Reuse singleton AudioContext — browsers cap at 6 simultaneous contexts
+    if (!window._bxcAudioCtx || window._bxcAudioCtx.state === "closed") {
+      window._bxcAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    const audioCtx = window._bxcAudioCtx;
+    if (audioCtx.state === "suspended") audioCtx.resume();
     
     const playTone = (freq, type, startTime, duration, vol) => {
       const osc = audioCtx.createOscillator();

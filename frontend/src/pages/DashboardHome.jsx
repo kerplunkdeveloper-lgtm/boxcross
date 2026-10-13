@@ -152,9 +152,10 @@ const DashboardHome = () => {
   useEffect(() => {
     if (user) {
       fetchDashboardStats(true);
+      // Reduced from 5s to 30s — was 72 API calls/min, now 12/min (6x improvement)
       const interval = setInterval(() => {
         fetchDashboardStats(false);
-      }, 5000);
+      }, 30000);
       return () => clearInterval(interval);
     }
   }, [user]);
