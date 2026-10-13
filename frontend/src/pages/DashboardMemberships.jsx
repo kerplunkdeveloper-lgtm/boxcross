@@ -45,6 +45,7 @@ const DashboardMemberships = () => {
   const [formDailyComparison, setFormDailyComparison] = useState("");
   const [formSessionInfo, setFormSessionInfo] = useState("");
   const [formFeatures, setFormFeatures] = useState("");
+  const [formBenefits, setFormBenefits] = useState([]);
   const [formPlans, setFormPlans] = useState([]);
 
   // Inline table edit states
@@ -52,11 +53,34 @@ const DashboardMemberships = () => {
   const [inlineData, setInlineData] = useState({});
   const [inlineSaving, setInlineSaving] = useState(false);
 
+  const notifyPlanUpdate = () => {
+    try {
+      localStorage.setItem("boxcross_membership_plans_updated", Date.now().toString());
+      if (typeof window !== "undefined" && "BroadcastChannel" in window) {
+        const channel = new BroadcastChannel("membership_plan_updates");
+        channel.postMessage("PLAN_UPDATED");
+        setTimeout(() => channel.close(), 500);
+      }
+    } catch (e) {
+      console.error("Broadcast update error:", e);
+    }
+  };
+
+  const sortPlansOrder = (planList) => {
+    if (!Array.isArray(planList)) return [];
+    const sortOrder = ["core", "athlete", "arena", "junior"];
+    return [...planList].sort((a, b) => {
+      const idxA = sortOrder.indexOf(a.key?.toLowerCase());
+      const idxB = sortOrder.indexOf(b.key?.toLowerCase());
+      return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+    });
+  };
+
   const fetchPlans = async () => {
     try {
       const { data } = await getMembershipPlans();
       if (data.success) {
-        setPlans(data.data);
+        setPlans(sortPlansOrder(data.data));
       }
     } catch (error) {
       console.error("Error fetching membership plans", error);
@@ -85,12 +109,20 @@ const DashboardMemberships = () => {
     setFormDailyComparison(plan.dailyComparison || "");
     setFormSessionInfo(plan.sessionInfo || plan.desc || "");
     setFormFeatures(plan.features ? plan.features.join(", ") : "");
+    setFormBenefits(
+      plan.benefits && plan.benefits.length > 0
+        ? plan.benefits.map((b) => ({
+            boldText: b.boldText || "",
+            normalText: b.normalText || "",
+          }))
+        : []
+    );
     setFormPlans(
       plan.plans && plan.plans.length > 0
         ? plan.plans.map((p) => ({
           months: p.months || "",
           subtitle: p.subtitle || "",
-          price: p.price || "",
+          price: p.price || p.totalPrice || "",
           perMonth: p.perMonth || "",
           originalPrice: p.originalPrice || "",
           totalPrice: p.totalPrice || p.price || "",
@@ -104,9 +136,33 @@ const DashboardMemberships = () => {
     setIsModalOpen(true);
   };
 
+  const handleBenefitChange = (index, field, value) => {
+    const updated = [...formBenefits];
+    updated[index] = { ...updated[index], [field]: value };
+    setFormBenefits(updated);
+  };
+
+  const handleAddBenefit = () => {
+    setFormBenefits([
+      ...formBenefits,
+      { boldText: "", normalText: "" },
+    ]);
+  };
+
+  const handleRemoveBenefit = (index) => {
+    const updated = formBenefits.filter((_, i) => i !== index);
+    setFormBenefits(updated);
+  };
+
   const handleSubPlanChange = (index, field, value) => {
     const updated = [...formPlans];
     updated[index] = { ...updated[index], [field]: value };
+    if (field === "price") {
+      updated[index].totalPrice = value;
+    }
+    if (field === "totalPrice" && !updated[index].price) {
+      updated[index].price = value;
+    }
     setFormPlans(updated);
   };
 
@@ -167,7 +223,12 @@ const DashboardMemberships = () => {
         .split(",")
         .map((item) => item.trim())
         .filter(Boolean),
-      plans: formPlans,
+      benefits: formBenefits,
+      plans: formPlans.map((p) => ({
+        ...p,
+        price: p.price || p.totalPrice || "",
+        totalPrice: p.price || p.totalPrice || "",
+      })),
     };
 
     try {
@@ -176,11 +237,7 @@ const DashboardMemberships = () => {
         toast.success("Membership plan updated successfully!");
         setIsModalOpen(false);
         fetchPlans(); // Reload list
-        try {
-          const channel = new BroadcastChannel("membership_plan_updates");
-          channel.postMessage("PLAN_UPDATED");
-          channel.close();
-        } catch (err) { }
+        notifyPlanUpdate();
       }
     } catch (error) {
       console.error("Error updating membership plan", error);
@@ -233,11 +290,7 @@ const DashboardMemberships = () => {
         );
         setInlineEditId(null);
         fetchPlans();
-        try {
-          const channel = new BroadcastChannel("membership_plan_updates");
-          channel.postMessage("PLAN_UPDATED");
-          channel.close();
-        } catch (err) { }
+        notifyPlanUpdate();
       }
     } catch (error) {
       console.error("Error inline updating plan", error);
@@ -263,13 +316,13 @@ const DashboardMemberships = () => {
   };
 
   return (
-    <div className="p-3.5 sm:p-5 md:p-8 min-h-screen bg-[var(--db-bg)] text-[var(--db-text)] transition-colors">
+    <div className="min-h-screen text-[var(--db-text)] transition-colors">
       <div className="max-w-8xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[24px] p-4 sm:p-6 md:p-8 shadow-2xl transition-colors"
+          className=" p-5 transition-colors"
         >
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5 pb-3 border-b border-[var(--db-card-border)]">
@@ -1007,7 +1060,74 @@ const DashboardMemberships = () => {
                   </div>
                 </div>
 
-                {/* 3. Duration Plans & Rates (Full editor) */}
+                {/* 3. What It Actually Gives You (Benefits displayed on website) */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between border-b border-[var(--db-card-border)] pb-1.5">
+                    <div className="flex items-center gap-2">
+                      <Sparkles
+                        size={14}
+                        className="text-[var(--db-accent-highlight)]"
+                      />
+                      <span className="text-[11px] font-black uppercase tracking-wider text-[var(--db-text)]">
+                        3. What It Actually Gives You (Benefits Shown on Website)
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleAddBenefit}
+                      className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[var(--db-accent-highlight)]/10 border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] hover:bg-[var(--db-accent-highlight)]/20 text-xs font-bold transition-all cursor-pointer"
+                    >
+                      <Plus size={13} />
+                      <span>Add Benefit</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {formBenefits.map((b, bIdx) => (
+                      <div
+                        key={bIdx}
+                        className="flex flex-col sm:flex-row items-start sm:items-center gap-2 p-3 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl"
+                      >
+                        <span className="text-[10px] font-mono text-[var(--db-accent-highlight)] font-bold px-1.5 py-0.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded">
+                          #{bIdx + 1}
+                        </span>
+                        <input
+                          type="text"
+                          value={b.boldText}
+                          onChange={(e) =>
+                            handleBenefitChange(bIdx, "boldText", e.target.value)
+                          }
+                          placeholder="Bold title (e.g. You can defend yourself.)"
+                          className="w-full sm:w-1/3 h-9 px-3 bg-[var(--db-card)] border border-[var(--db-input-border)] text-xs font-bold text-[var(--db-text)] rounded-lg outline-none focus:border-[var(--db-accent-highlight)]"
+                        />
+                        <input
+                          type="text"
+                          value={b.normalText}
+                          onChange={(e) =>
+                            handleBenefitChange(bIdx, "normalText", e.target.value)
+                          }
+                          placeholder="Description (e.g. Quietly knowing that changes how you walk down a street at night.)"
+                          className="w-full sm:flex-1 h-9 px-3 bg-[var(--db-card)] border border-[var(--db-input-border)] text-xs text-[var(--db-text-muted)] rounded-lg outline-none focus:border-[var(--db-accent-highlight)]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveBenefit(bIdx)}
+                          className="p-2 text-[var(--db-text-muted)] hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer self-end sm:self-auto"
+                          title="Remove benefit"
+                        >
+                          <Trash size={14} />
+                        </button>
+                      </div>
+                    ))}
+                    {formBenefits.length === 0 && (
+                      <p className="text-xs text-[var(--db-text-muted)] italic py-1">
+                        No benefits added yet. Click &quot;Add Benefit&quot; above to add bullet points to the &quot;What It Actually Gives You&quot; section on the website.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* 4. Duration Plans & Rates (Full editor) */}
                 <div className="space-y-3.5">
                   <div className="flex items-center justify-between border-b border-[var(--db-card-border)] pb-1.5">
                     <div className="flex items-center gap-2">
@@ -1016,7 +1136,7 @@ const DashboardMemberships = () => {
                         className="text-[var(--db-accent-highlight)]"
                       />
                       <span className="text-[11px] font-black uppercase tracking-wider text-[var(--db-text)]">
-                        3. Membership Duration Rates &amp; Pricing Options
+                        4. Membership Duration Rates &amp; Pricing Options
                       </span>
                     </div>
                     <button

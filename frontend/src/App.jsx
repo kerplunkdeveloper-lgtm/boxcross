@@ -28,12 +28,6 @@ const DashboardHome = lazy(() => import("./pages/DashboardHome"));
 const DashboardBookings = lazy(() => import("./pages/DashboardBookings"));
 const DashboardSettings = lazy(() => import("./pages/DashboardSettings"));
 const DashboardMemberships = lazy(() => import("./pages/DashboardMemberships"));
-const DashboardFoundingMembers = lazy(
-  () => import("./pages/DashboardFoundingMembers"),
-);
-const DashboardFoundingOffer = lazy(
-  () => import("./pages/DashboardFoundingOffer"),
-);
 const DashboardPayments = lazy(() => import("./pages/DashboardPayments"));
 const DashboardEvents = lazy(() => import("./pages/DashboardEvents"));
 const DashboardEventsList = lazy(() => import("./pages/DashboardEventsList"));
@@ -73,6 +67,12 @@ const Memfound = lazy(() => import("./pages/Memfound"));
 const DashboardMemfound = lazy(() => import("./pages/DashboardMemfound"));
 const FounderMembersOffers = lazy(
   () => import("./pages/FounderMembersOffers"),
+);
+const DashboardFounderPlans = lazy(
+  () => import("./pages/DashboardFounderPlans"),
+);
+const DashboardFounderPayments = lazy(
+  () => import("./pages/DashboardFounderPayments"),
 );
 
 // import LeadModal from "./Components/LeadModal";
@@ -247,14 +247,6 @@ const App = () => {
                     path="memberships"
                     element={<DashboardMemberships />}
                   />
-                  <Route
-                    path="founding-members"
-                    element={<DashboardFoundingMembers />}
-                  />
-                  <Route
-                    path="founding-offer"
-                    element={<DashboardFoundingOffer />}
-                  />
                   <Route path="payments" element={<DashboardPayments />} />
                   <Route path="events" element={<DashboardEvents />} />
                   <Route path="events-list" element={<DashboardEventsList />} />
@@ -271,6 +263,11 @@ const App = () => {
                   <Route path="homec2" element={<DashboardHomec2 />} />
                   <Route path="homec3" element={<DashboardHomec3 />} />
                   <Route path="memfound" element={<DashboardMemfound />} />
+                  <Route path="founder-plans" element={<DashboardFounderPlans />} />
+                  <Route path="founderplans" element={<DashboardFounderPlans />} />
+                  <Route path="founder-payments" element={<DashboardFounderPayments />} />
+                  <Route path="founderpayment-history" element={<DashboardFounderPayments />} />
+                  <Route path="founder-payment-history" element={<DashboardFounderPayments />} />
                   <Route path="settings" element={<DashboardSettings />} />
                   <Route path="calendar" element={<DashboardCalendar />} />
                   <Route

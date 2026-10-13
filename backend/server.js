@@ -13,8 +13,6 @@ const leadRoutes = require("./routes/leadRoutes");
 const homec1routes = require("./routes/homec1routes");
 const homec2routes = require("./routes/homec2routes");
 const homec3routes = require("./routes/homec3routes");
-const founderRoutes = require("./routes/founderRoutes");
-const foundingOfferRoutes = require("./routes/foundingOfferRoutes");
 const athleteRoutes = require("./routes/athleteRoutes");
 const goalsReadinessRoutes = require("./routes/goalsReadinessRoutes");
 const aiAnalysisRoutes = require("./routes/aiAnalysisRoutes");
@@ -28,6 +26,8 @@ const hybridPerformanceRoutes = require("./routes/hybridPerformanceRoutes");
 const athletePerformanceProfileRoutes = require("./routes/athletePerformanceProfileRoutes");
 const juniorAthleteProfileRoutes = require("./routes/juniorAthleteProfileRoutes");
 const memfoundRoutes = require("./routes/memfoundRoutes");
+const founderPlanRoutes = require("./routes/founderPlanRoutes");
+const founderPaymentRoutes = require("./routes/founderPaymentRoutes");
 
 // Load env
 dotenv.config();
@@ -83,8 +83,6 @@ app.use("/api/leads", leadRoutes);
 app.use("/api/homec1", homec1routes);
 app.use("/api/homec2", homec2routes);
 app.use("/api/homec3", homec3routes); 
-app.use("/api/founders", founderRoutes);
-app.use("/api/founding-offer", foundingOfferRoutes);
 app.use("/api/athletes", athleteRoutes);
 app.use("/api/user-management", athleteRoutes);
 app.use("/api/goals-readiness", goalsReadinessRoutes);
@@ -101,6 +99,8 @@ app.use("/api/athleteprofile", athletePerformanceProfileRoutes);
 app.use("/api/juniorprofile", juniorAthleteProfileRoutes);
 app.use("/api/memfound", memfoundRoutes);
 app.use("/api/founding100access", memfoundRoutes);
+app.use("/api/founder-plans", founderPlanRoutes);
+app.use("/api/founder-payments", founderPaymentRoutes);
 
 // Health check
 app.get("/", (req, res) => {

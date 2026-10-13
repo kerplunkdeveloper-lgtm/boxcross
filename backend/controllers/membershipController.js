@@ -430,37 +430,15 @@ exports.getMembershipPlans = async (req, res) => {
       );
     }
 
-    // Auto-update MongoDB records if they still have old strings (e.g. Fight instead of Boxing)
-    await MembershipPlan.updateOne(
-      { key: "core", sessionInfo: /Fight/i },
-      {
-        $set: {
-          sessionInfo: "Five Coached sessions a week — Boxing, HYROX or Strength Training",
-          desc: "Five Coached sessions a week — Boxing, HYROX or Strength Training."
-        }
-      }
-    );
-    await MembershipPlan.updateOne(
-      { key: "athlete", sessionInfo: { $not: /Boxing/i } },
-      {
-        $set: {
-          sessionInfo: "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)",
-          desc: "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)."
-        }
-      }
-    );
-    await MembershipPlan.updateOne(
-      { key: "arena", sessionInfo: { $not: /Boxing/i } },
-      {
-        $set: {
-          sessionInfo: "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)",
-          desc: "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)."
-        }
-      }
-    );
-
     plans = await MembershipPlan.find({
       key: { $in: ["core", "athlete", "arena", "junior"] }
+    });
+
+    const sortOrder = ["core", "athlete", "arena", "junior"];
+    plans.sort((a, b) => {
+      const idxA = sortOrder.indexOf(a.key?.toLowerCase());
+      const idxB = sortOrder.indexOf(b.key?.toLowerCase());
+      return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
     });
 
     res.status(200).json({
@@ -508,25 +486,63 @@ exports.getMembershipPlanByKey = async (req, res) => {
 // @access  Private/Admin
 exports.updateMembershipPlan = async (req, res) => {
   try {
-    let plan = await MembershipPlan.findById(req.params.id);
+    const target = req.params.id;
+    let plan = null;
+
+    const mongoose = require("mongoose");
+    if (mongoose.Types.ObjectId.isValid(target)) {
+      plan = await MembershipPlan.findById(target);
+    }
+    if (!plan) {
+      plan = await MembershipPlan.findOne({ key: target });
+    }
+    if (!plan) {
+      plan = await MembershipPlan.findOne({
+        key: { $regex: new RegExp(`^${target}$`, "i") }
+      });
+    }
+    if (!plan) {
+      plan = await MembershipPlan.findOne({
+        title: { $regex: new RegExp(`^${target}$`, "i") }
+      });
+    }
 
     if (!plan) {
       return res.status(404).json({
         success: false,
-        message: `Membership plan not found with id of ${req.params.id}`
+        message: `Membership plan not found with id or key of "${req.params.id}"`
       });
     }
 
-    plan = await MembershipPlan.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
+    // Strip immutable fields
+    const updateData = { ...req.body };
+    delete updateData._id;
+    delete updateData.id;
+    delete updateData.__v;
+    delete updateData.createdAt;
+    delete updateData.updatedAt;
+
+    // Synchronize price and totalPrice inside plans array if provided
+    if (Array.isArray(updateData.plans)) {
+      updateData.plans = updateData.plans.map((p) => ({
+        ...p,
+        price: p.price || p.totalPrice || "",
+        totalPrice: p.price || p.totalPrice || ""
+      }));
+    }
+
+    const updatedPlan = await MembershipPlan.findByIdAndUpdate(
+      plan._id,
+      { $set: updateData },
+      { new: true, runValidators: false }
+    );
 
     res.status(200).json({
       success: true,
-      data: plan
+      data: updatedPlan
     });
   } catch (error) {
+    console.error("Server Error updating membership plan:", error);
     res.status(500).json({
       success: false,
       message: "Server Error updating membership plan",

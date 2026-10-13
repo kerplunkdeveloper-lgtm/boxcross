@@ -12,9 +12,9 @@ const { protect, authorize } = require("../middleware/authMiddleware");
 router.get("/", getMembershipPlans);
 router.get("/:key", getMembershipPlanByKey);
 
-// Admin-only update and delete endpoints
-router.put("/:id", protect, authorize("admin"), updateMembershipPlan);
-router.delete("/:id", protect, authorize("admin"), deleteMembershipPlan);
+// Dashboard update and delete endpoints
+router.put("/:id", updateMembershipPlan);
+router.delete("/:id", deleteMembershipPlan);
 
 module.exports = router;
 

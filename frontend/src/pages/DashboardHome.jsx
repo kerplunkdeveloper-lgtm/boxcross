@@ -29,7 +29,6 @@ import {
   getPayments,
   getEventsListAdmin,
   getEventBookings,
-  getFounders,
   getAttendance,
   getAthletes,
 } from "../api/api";
@@ -42,7 +41,6 @@ const DashboardHome = () => {
   const [totalPayments, setTotalPayments] = useState(0);
   const [events, setEvents] = useState([]);
   const [eventRevenue, setEventRevenue] = useState(0);
-  const [paidFounders, setPaidFounders] = useState(0);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -72,7 +70,6 @@ const DashboardHome = () => {
         paymentsRes,
         eventsRes,
         eventBookingsRes,
-        foundersRes,
         attendanceRes,
         athletesRes,
       ] = await Promise.all([
@@ -80,7 +77,6 @@ const DashboardHome = () => {
         getPayments(),
         getEventsListAdmin(),
         getEventBookings(),
-        getFounders(),
         getAttendance({ date: dateStr }),
         getAthletes({ limit: 5 }),
       ]);
@@ -135,14 +131,6 @@ const DashboardHome = () => {
           )
           .reduce((sum, b) => sum + (Number(b.totalAmount) || 0), 0);
         setEventRevenue(revenue);
-      }
-
-      if (foundersRes.data?.success && Array.isArray(foundersRes.data.data)) {
-        const paidCount = foundersRes.data.data.filter(
-          (f) =>
-            f.paymentStatus === "Completed" || f.paymentStatus === "completed",
-        ).length;
-        setPaidFounders(paidCount);
       }
 
       if (attendanceRes.data?.success && attendanceRes.data.stats) {
@@ -461,22 +449,6 @@ const DashboardHome = () => {
               loaderColor: theme === "dark" ? "text-teal-400" : "text-teal-600",
               badgeText: "Collection",
               link: "/dashboard/event-payments",
-            },
-            {
-              id: "founders",
-              title: "Paid Founders",
-              shortTitle: "Founders",
-              value: paidFounders,
-              displayValue: paidFounders.toLocaleString("en-IN"),
-              icon: ShieldCheck,
-              accentText: theme === "dark" ? "text-purple-400" : "text-purple-600",
-              iconBg: theme === "dark" ? "bg-purple-500/10 text-purple-400 border-purple-500/25 shadow-[0_0_14px_rgba(168,85,247,0.15)]" : "bg-purple-50 text-purple-600 border-purple-200 shadow-sm",
-              glowBg: theme === "dark" ? "bg-purple-500" : "bg-purple-500",
-              borderHover: theme === "dark" ? "hover:border-purple-500/40 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]" : "hover:border-purple-500/40 hover:shadow-[0_8px_24px_rgba(168,85,247,0.12)]",
-              dotBg: theme === "dark" ? "bg-purple-400" : "bg-purple-500",
-              loaderColor: theme === "dark" ? "text-purple-400" : "text-purple-600",
-              badgeText: "Founders",
-              link: "/dashboard/founding-members",
             },
           ];
 

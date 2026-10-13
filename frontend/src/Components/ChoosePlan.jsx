@@ -50,7 +50,9 @@ const ChoosePlan = React.forwardRef(
     const benefits =
       activeData.benefits && activeData.benefits.length > 0
         ? activeData.benefits
-        : currentTitle === "CORE"
+        : activeData.features && activeData.features.length > 0
+          ? activeData.features.map((f) => ({ boldText: f, normalText: "" }))
+          : currentTitle === "CORE"
           ? [
             {
               boldText: "You can defend yourself.",
@@ -259,8 +261,8 @@ const ChoosePlan = React.forwardRef(
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-zinc-800 bg-[#0a0a0a]">
             {plans.map((plan, idx) => {
               const cleanTotal =
-                plan.totalPrice ||
                 plan.price ||
+                plan.totalPrice ||
                 "";
               const cleanPerMonth = plan.perMonth || plan.price;
               const hasDiscount = Boolean(plan.originalPrice);
@@ -290,29 +292,35 @@ const ChoosePlan = React.forwardRef(
                     </span>
 
                     {/* Massive Bold Monthly Rate */}
-                    <div
-                      className="text-4xl sm:text-5xl md:text-[54px] font-black text-white tracking-tight leading-none my-1 flex items-baseline justify-center"
-                      style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                    >
-                      <span>₹{cleanPerMonth}</span>
-                    </div>
-
-                    {/* Subtext: A MONTH */}
-                    <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.16em] text-zinc-400 mt-1 mb-3">
-                      A MONTH
-                    </span>
+                   
 
                     {/* Total Price Line with Strikethrough if discounted */}
-                    <div className="text-xs sm:text-[13px] font-medium text-zinc-400 mb-6 flex items-center justify-center gap-1.5 flex-wrap">
-                      {hasDiscount && (
-                        <span className="line-through text-zinc-500 font-normal">
-                          ₹{plan.originalPrice}
+                    <div className="text-xs sm:text-[30px] font-medium text-zinc-400  flex items-center justify-center gap-1.5 flex-wrap">
+                     
+                      <span className="font-bold text-white">
+                        ₹{cleanTotal}/-
+                      </span>
+                      
+                    </div>
+                    <div className="">
+                       {hasDiscount && (
+                        <span className="line-through text-zinc-200 font-light text-sm">
+                          ₹{plan.originalPrice}/-
                         </span>
                       )}
-                      <span className="font-bold text-white">
-                        ₹{cleanTotal} total
-                      </span>
                     </div>
+
+
+ <div
+                      className="text-sm font-black text-yellow-400 tracking-tight leading-none my-1 flex items-baseline justify-center"
+                      style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                    >
+                      <span>₹{cleanPerMonth} / Month</span>
+                    </div>
+
+                   
+
+
                   </div>
 
                   {/* Bottom Action Badge / Button */}

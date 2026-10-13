@@ -82,9 +82,11 @@ const DashboardSidebar = ({
 
   const [offerFoundersOpen, setOfferFoundersOpen] = useState(() => {
     return (
-      location.pathname.includes("/founding-members") ||
-      location.pathname.includes("/founding-offer") ||
-      location.pathname.includes("/memfound")
+      location.pathname.includes("/memfound") ||
+      location.pathname.includes("/founder-plans") ||
+      location.pathname.includes("/founderplans") ||
+      location.pathname.includes("/founder-payments") ||
+      location.pathname.includes("/founderpayment")
     );
   });
 
@@ -123,9 +125,11 @@ const DashboardSidebar = ({
 
   useEffect(() => {
     if (
-      location.pathname.includes("/founding-members") ||
-      location.pathname.includes("/founding-offer") ||
-      location.pathname.includes("/memfound")
+      location.pathname.includes("/memfound") ||
+      location.pathname.includes("/founder-plans") ||
+      location.pathname.includes("/founderplans") ||
+      location.pathname.includes("/founder-payments") ||
+      location.pathname.includes("/founderpayment")
     ) {
       setOfferFoundersOpen(true);
     }
@@ -552,22 +556,28 @@ const DashboardSidebar = ({
                 icon: Crown,
                 isOpen: offerFoundersOpen,
                 setIsOpen: setOfferFoundersOpen,
-                pathMatch: ["/founding-members", "/founding-offer", "/memfound"],
+                pathMatch: [
+                  "/founder-plans",
+                  "/founderplans",
+                  "/founder-payments",
+                  "/founderpayment",
+                  "/memfound",
+                ],
                 items: [
+                  {
+                    name: "Founder Plans",
+                    path: "/dashboard/founder-plans",
+                    icon: Crown,
+                  },
+                  {
+                    name: "Founder Payment History",
+                    path: "/dashboard/founder-payments",
+                    icon: DollarSign,
+                  },
                   {
                     name: "Memfound Registrations",
                     path: "/dashboard/memfound",
                     icon: Sparkles,
-                  },
-                  {
-                    name: "Offer Details Edit",
-                    path: "/dashboard/founding-offer",
-                    icon: Sparkles,
-                  },
-                  {
-                    name: "Founding Members",
-                    path: "/dashboard/founding-members",
-                    icon: Users,
                   },
                 ],
               })}

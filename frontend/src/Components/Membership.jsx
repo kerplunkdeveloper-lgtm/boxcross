@@ -523,12 +523,50 @@ const Membership = () => {
     }
   }, []);
 
+  const getInitialPricingData = () => {
+    try {
+      const cached = localStorage.getItem("boxcross_membership_plans_cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && typeof parsed === "object") {
+          return { ...pricingData, ...parsed };
+        }
+      }
+    } catch (e) { }
+    return pricingData;
+  };
+
+  const getInitialPrograms = () => {
+    try {
+      const cached = localStorage.getItem("boxcross_membership_programs_cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return programs.map((prog) => {
+            const cachedProg = parsed.find((cp) => cp.id === prog.id);
+            if (cachedProg) {
+              return {
+                ...prog,
+                title: cachedProg.title || prog.title,
+                subtitle: cachedProg.subtitle || prog.subtitle,
+                desc: cachedProg.desc || prog.desc,
+                price: cachedProg.price || prog.price,
+              };
+            }
+            return prog;
+          });
+        }
+      }
+    } catch (e) { }
+    return programs;
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const pricingRef = useRef(null);
 
-  const [dynamicPrograms, setDynamicPrograms] = useState(programs);
-  const [dynamicPricingData, setDynamicPricingData] = useState(pricingData);
+  const [dynamicPrograms, setDynamicPrograms] = useState(getInitialPrograms);
+  const [dynamicPricingData, setDynamicPricingData] = useState(getInitialPricingData);
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -540,21 +578,22 @@ const Membership = () => {
           // Rebuild pricingData dynamically
           const newPricingData = { ...pricingData };
           plans.forEach((plan) => {
-            if (["core", "athlete", "arena", "junior"].includes(plan.key)) {
-              newPricingData[plan.key] = {
-                ...newPricingData[plan.key],
+            const keyLower = plan.key?.toLowerCase();
+            if (["core", "athlete", "arena", "junior"].includes(keyLower)) {
+              newPricingData[keyLower] = {
+                ...newPricingData[keyLower],
                 _id: plan._id,
-                key: plan.key,
-                title: plan.title || newPricingData[plan.key]?.title,
-                subtitle: plan.subtitle || newPricingData[plan.key]?.subtitle,
-                sessionInfo: plan.sessionInfo || newPricingData[plan.key]?.sessionInfo,
-                dailyRate: plan.dailyRate || newPricingData[plan.key]?.dailyRate,
-                dailyRateLabel: plan.dailyRateLabel || newPricingData[plan.key]?.dailyRateLabel,
-                dailyComparison: plan.dailyComparison || newPricingData[plan.key]?.dailyComparison,
-                features: plan.features?.length ? plan.features : newPricingData[plan.key]?.features,
-                benefits: plan.benefits?.length ? plan.benefits : newPricingData[plan.key]?.benefits,
-                plans: plan.plans?.length ? plan.plans : newPricingData[plan.key]?.plans,
-                starterPrice: plan.starterPrice || newPricingData[plan.key]?.starterPrice,
+                key: keyLower,
+                title: plan.title || newPricingData[keyLower]?.title,
+                subtitle: plan.subtitle || newPricingData[keyLower]?.subtitle,
+                sessionInfo: plan.sessionInfo || newPricingData[keyLower]?.sessionInfo,
+                dailyRate: plan.dailyRate || newPricingData[keyLower]?.dailyRate,
+                dailyRateLabel: plan.dailyRateLabel || newPricingData[keyLower]?.dailyRateLabel,
+                dailyComparison: plan.dailyComparison || newPricingData[keyLower]?.dailyComparison,
+                features: plan.features?.length ? plan.features : newPricingData[keyLower]?.features,
+                benefits: plan.benefits?.length ? plan.benefits : newPricingData[keyLower]?.benefits,
+                plans: plan.plans?.length ? plan.plans : newPricingData[keyLower]?.plans,
+                starterPrice: plan.starterPrice || newPricingData[keyLower]?.starterPrice,
               };
             }
           });
@@ -562,7 +601,7 @@ const Membership = () => {
 
           // Update programs prices from DB plans
           const updatedPrograms = programs.map((prog) => {
-            const dbPlan = plans.find((p) => p.key === prog.id);
+            const dbPlan = plans.find((p) => p.key?.toLowerCase() === prog.id.toLowerCase());
             if (dbPlan) {
               return {
                 ...prog,
@@ -575,6 +614,23 @@ const Membership = () => {
             return prog;
           });
           setDynamicPrograms(updatedPrograms);
+
+          // Cache to localStorage
+          try {
+            localStorage.setItem("boxcross_membership_plans_cache", JSON.stringify(newPricingData));
+            localStorage.setItem(
+              "boxcross_membership_programs_cache",
+              JSON.stringify(
+                updatedPrograms.map((p) => ({
+                  id: p.id,
+                  title: p.title,
+                  subtitle: p.subtitle,
+                  desc: p.desc,
+                  price: p.price,
+                }))
+              )
+            );
+          } catch (e) { }
         }
       } catch (err) {
         console.error("Error loading membership plans from API:", err);
@@ -582,17 +638,31 @@ const Membership = () => {
     };
     fetchPlans();
 
+    let channel = null;
     try {
-      const channel = new BroadcastChannel("membership_plan_updates");
+      channel = new BroadcastChannel("membership_plan_updates");
       channel.onmessage = (event) => {
         if (event.data === "PLAN_UPDATED") {
           fetchPlans();
         }
       };
-      return () => {
-        channel.close();
-      };
     } catch (e) { }
+
+    const handleStorage = (e) => {
+      if (e.key === "boxcross_membership_plans_updated") {
+        fetchPlans();
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+
+    return () => {
+      if (channel) {
+        try {
+          channel.close();
+        } catch (e) { }
+      }
+      window.removeEventListener("storage", handleStorage);
+    };
   }, []);
 
   const activeData = dynamicPricingData[activeTab] || pricingData[activeTab];

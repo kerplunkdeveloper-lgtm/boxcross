@@ -29,7 +29,6 @@ import {
   getHomec2,
   getHomec3,
   getLeadsAdmin,
-  getFounders,
 } from "../api/api";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -155,10 +154,6 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
     activeTitle = "Contact Enquiries";
   } else if (location.pathname.includes("/leads")) {
     activeTitle = "Captured Leads";
-  } else if (location.pathname.includes("/founding-members")) {
-    activeTitle = "Founding Members";
-  } else if (location.pathname.includes("/founding-offer")) {
-    activeTitle = "Offer Details Edit";
   } else if (
     location.pathname.includes("/user-management") ||
     location.pathname.includes("/usermanagementdetails")
@@ -186,7 +181,6 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         getHomec2(),
         getHomec3(),
         getLeadsAdmin(),
-        getFounders(),
       ]);
 
       const [
@@ -197,7 +191,6 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         homec2Res,
         homec3Res,
         leadsRes,
-        foundersRes,
       ] = results;
 
       // 1. Fetch Enquiry Bookings
@@ -322,24 +315,6 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
             time: new Date(item.createdAt || Date.now()),
             type: "event",
             link: "/dashboard/leads",
-          });
-        });
-      }
-
-      // 8. Fetch Founding Members
-      if (
-        foundersRes.status === "fulfilled" &&
-        foundersRes.value.data?.success &&
-        Array.isArray(foundersRes.value.data.data)
-      ) {
-        foundersRes.value.data.data.forEach((item) => {
-          aggregated.push({
-            id: `founder-${item._id}`,
-            title: "New Founding Member",
-            message: `${item.name} claimed the Founding Offer!`,
-            time: new Date(item.createdAt || Date.now()),
-            type: "payment",
-            link: "/dashboard/founding-members",
           });
         });
       }

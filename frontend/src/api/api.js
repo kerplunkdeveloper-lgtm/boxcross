@@ -74,6 +74,22 @@ export const updatePaymentStatus = (id, data) => API.put(`/payments/${id}`, data
 
 export const deletePayment = (id) => API.delete(`/payments/${id}`);
 
+// ──────────────── FOUNDER PLANS API ────────────────
+
+export const getFounderPlans = () => API.get("/founder-plans");
+export const getFounderPlanByKey = (key) => API.get(`/founder-plans/${key}`);
+export const createFounderPlan = (data) => API.post("/founder-plans", data);
+export const updateFounderPlan = (id, data) => API.put(`/founder-plans/${id}`, data);
+export const deleteFounderPlan = (id) => API.delete(`/founder-plans/${id}`);
+
+// ──────────────── FOUNDER PAYMENT API ────────────────
+
+export const createFounderPayment = (data) => API.post("/founder-payments", data);
+export const verifyFounderPayment = (data) => API.post("/founder-payments/verify", data);
+export const getFounderPayments = () => API.get("/founder-payments");
+export const updateFounderPaymentStatus = (id, data) => API.put(`/founder-payments/${id}`, data);
+export const deleteFounderPayment = (id) => API.delete(`/founder-payments/${id}`);
+
 // ──────────────── EVENT BANNERS API ────────────────
 
 export const getActiveBanners = () => API.get("/event-banners");
@@ -139,17 +155,6 @@ export const deleteHomec2 = (id) => API.delete(`/homec2/${id}`);
 
 export const getHomec3 = () => API.get("/homec3");
 export const deleteHomec3 = (id) => API.delete(`/homec3/${id}`);
-
-// ──────────────── FOUNDER API ────────────────
-export const getFounders = () => API.get("/founders");
-export const createFounder = (data) => API.post("/founders", data);
-export const verifyFounderPayment = (data) => API.post("/founders/verify", data);
-export const updateFounder = (id, data) => API.put(`/founders/${id}`, data);
-export const deleteFounder = (id) => API.delete(`/founders/${id}`);
-
-// ──────────────── FOUNDING OFFER API ────────────────
-export const getFoundingOffer = () => API.get("/founding-offer");
-export const updateFoundingOffer = (id, data) => API.put(`/founding-offer/${id}`, data);
 
 // ──────────────── USER / ATHLETE MANAGEMENT API ────────────────
 export const getAthletes = (params) => API.get("/athletes", { params });

@@ -8,7 +8,6 @@ import WhatWeOffer from "../Components/WhatWeOffer";
 import TrainingZones from "../Components/TrainingZones";
 // import BuildProgress from "../Components/BuildProgress";
 import BookForm from "../Components/BookForm";
-import Founding from "../Components/Founding";
 
 const BASE_URL = "https://membership.boxandcross.com";
 
@@ -289,14 +288,8 @@ const Membership = () => {
 
       {/* MEMBERSHIP SECTION */}
       <div className="relative z-20">
-        <div data-aos="fade-up">
-          <Founding />
-        </div>
 
-        {/* <BuildProgress /> */}
-        <div data-aos="fade-up" data-aos-delay="100">
-          <BookForm />
-        </div>
+      
         {/* Membership Plans section (Step 1 & Step 2) */}
         <div data-aos="fade-up" data-aos-delay="100">
           <MembershipPlans />
@@ -305,8 +298,14 @@ const Membership = () => {
         <div data-aos="fade-up" data-aos-delay="100">
           <WhatWeOffer />
         </div>
+
         <div data-aos="fade-up" data-aos-delay="100">
           <TrainingZones />
+        </div>
+
+        {/* <BuildProgress /> */}
+        <div data-aos="fade-up" data-aos-delay="100">
+          <BookForm />
         </div>
       </div>
     </div>
