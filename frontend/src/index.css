@@ -133,8 +133,8 @@ html {
   --db-card-border: #e2e8f0;
   --db-text: #0f172a;
   --db-text-muted: #334155;
-  --db-sidebar: #ffffff;
-  --db-sidebar-border: #e2e8f0;
+  --db-sidebar: #000000;
+  --db-sidebar-border: rgba(255, 255, 255, 0.08);
   --db-header: #ffffff;
   --db-header-border: #e2e8f0;
   --db-input-bg: #f8fafc;

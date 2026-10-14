@@ -10,6 +10,11 @@ import {
   Dumbbell,
   Crown,
   Check,
+  Lock,
+  Users,
+  Star,
+  ShieldCheck,
+  Award,
 } from "lucide-react";
 import box1 from "../assets/box1.png";
 import box2 from "../assets/box2.png";
@@ -20,6 +25,7 @@ import { getFounderPlans } from "../api/api";
 import RazorpayFounderModal from "../Components/RazorpayFounderModal";
 import ChoosePlan from "../Components/ChoosePlan";
 import BCMonogram from "../Components/BCMonogram";
+import Founding30Section from "../Components/Founding30Section";
 
 const BASE_URL = "https://membership.boxandcross.com";
 
@@ -127,22 +133,22 @@ const initialFounderPlansMap = {
     dailyComparison: "A dosa and a filter coffee.",
     benefits: [
       {
-        boldText: "You can defend yourself.",
+        boldText: "Five coached sessions a week.",
         normalText:
-          "Quietly knowing that changes how you walk down a street at night.",
+          "Coached, not a floor you let yourself into.",
       },
       {
-        boldText: "The bad day goes into the bag.",
-        normalText: "Not into your family, not into your sleep.",
+        boldText: "Your personal athlete card.",
+        normalText: "Your levels, your targets and your trend, carried from block to block.",
       },
       {
-        boldText: "Sharper at work.",
+        boldText: "Your entry assessment.",
         normalText:
-          "Boxing is a thinking sport — you read, decide and move in the same second.",
+          "Movement, strength, engine and skill, measured on day one so progress is a number and not an opinion.",
       },
       {
-        boldText: "A coach who knows your name and your weakness.",
-        normalText: "Nobody improves alone on a gym floor.",
+        boldText: "BXC Tribe access.",
+        normalText: "The member group — timings, open sessions, events and the people you train beside.",
       },
     ],
     plans: [
@@ -648,8 +654,8 @@ const FounderMembersOffers = () => {
       transition={{ duration: 0.5, delay: index * 0.15 }}
       onClick={() => setActiveTab(prog.id)}
       className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
-          ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
-          : "border-gray-800 hover:border-gray-600"
+        ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
+        : "border-gray-800 hover:border-gray-600"
         }`}
     >
       {/* Background Image Container */}
@@ -769,10 +775,10 @@ const FounderMembersOffers = () => {
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
             className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${prog.isComingSoon
-                ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
-                : activeTab === prog.id
-                  ? "bg-[#ccf141] border-[#ccf141] text-black"
-                  : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
+              ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+              : activeTab === prog.id
+                ? "bg-[#ccf141] border-[#ccf141] text-black"
+                : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
               }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
@@ -797,6 +803,46 @@ const FounderMembersOffers = () => {
       </div>
     </motion.div>
   );
+
+  // Customizable Founding 100 Exclusive Offer Data (same design as Membership page)
+  const founding100SectionData = {
+    badge: "FOUNDING 100 EXCLUSIVE",
+    heading1: "THE FIRST 100.",
+    heading2: "GET IN FOR ₹14,999/-",
+    subtitle: "BE PART OF THE FIRST GENERATION OF ATHLETES AT BOX & CROSS.",
+    regularLabel: "ANNUAL REGULAR MEMBERSHIP",
+    regularPrice: "₹33,600/-",
+    offerPrice: "₹ 14,999",
+    priceLabel: "FOUNDING ATHLETE PRICE",
+    saveAmount: "SAVE ₹18,601",
+    spotsText: "ONLY 100 MEMBERS",
+    disclaimer: "ONCE THEY'RE GONE, REGULAR PRICING BEGINS.",
+    rightColHeading1: "100 SPOTS.",
+    rightColHeading2: "NO MORE.",
+    ctaButtonText: "CLAIM YOUR FOUNDING SPOT",
+    trustText: "Direct WhatsApp & In-Arena Priority Desk",
+    targetSectionId: "pricing",
+    features: [
+      {
+        num: "01",
+        icon: <Lock size={17} className="text-[#ccf141]" />,
+        title: "EXCLUSIVE LOCKED RATES",
+        desc: "Permanent founding rate lock at ₹14,999 — never face regular renewal increases.",
+      },
+      {
+        num: "02",
+        icon: <Users size={17} className="text-[#ccf141]" />,
+        title: "FOUNDERS WALL OF FAME",
+        desc: "Your name permanently etched on the Box & Cross Performance Arena Founders Wall.",
+      },
+      {
+        num: "03",
+        icon: <Star size={17} className="text-[#ccf141]" />,
+        title: "VIP GUEST PASSES & ARENA ACCESS",
+        desc: "Structured boxing, HYROX & strength coaching with complimentary guest passes.",
+      },
+    ],
+  };
 
   return (
     <div className="w-full bg-[#050505] text-white flex flex-col overflow-hidden selection:bg-[#ccf141] selection:text-black">
@@ -1005,7 +1051,7 @@ const FounderMembersOffers = () => {
                     fontWeight: 800,
                   }}
                 >
-                  Explore Pathways
+                  Explore Tiers
                 </span>
               </button>
             </div>
@@ -1014,15 +1060,15 @@ const FounderMembersOffers = () => {
       </section>
 
       {/* Infinite Text Marquee */}
-      <div className="w-full bg-black py-4 md:py-5 border-y border-zinc-900/80 overflow-hidden select-none pointer-events-none mb-6">
+      <div className="w-full bg-black py-4 md:py-5 border-y border-zinc-900/80 overflow-hidden select-none pointer-events-none">
         <div className="marquee-experience-wrapper">
           <div className="marquee-experience-track">
             {Array(8)
               .fill([
-                { text: "FOUNDING MEMBERS.", outline: false },
-                { text: "PERMANENT RATE LOCK.", outline: true },
+                { text: "EXCLUSIVE RATES.", outline: false },
                 { text: "FOUNDERS WALL.", outline: false },
-                { text: "FIGHT CLUB ARENA.", outline: true },
+                { text: "GUEST PASSES.", outline: true },
+                { text: "STRUCTURED TRAINING.", outline: false },
               ])
               .flat()
               .map((item, idx) => (
@@ -1064,6 +1110,11 @@ const FounderMembersOffers = () => {
             }
           }
         `}</style>
+      </div>
+
+      {/* FOUNDING 100 EXCLUSIVE SECTION (Same design as Membership page with custom data) */}
+      <div data-aos="fade-up" data-aos-delay="100">
+        <Founding30Section {...founding100SectionData} />
       </div>
 
       {/* MEMBERSHIP PLANS WORKFLOW SECTION */}
@@ -1150,8 +1201,8 @@ const FounderMembersOffers = () => {
                 transition={{ duration: 0.6 }}
                 onClick={() => setActiveTab(juniorProgram.id)}
                 className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${activeTab === juniorProgram.id
-                    ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
-                    : "border-zinc-800 hover:border-zinc-700"
+                  ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
+                  : "border-zinc-800 hover:border-zinc-700"
                   } bg-[#0b0b0d]`}
               >
                 {/* Background Glow Overlay */}
@@ -1265,10 +1316,10 @@ const FounderMembersOffers = () => {
                         type="button"
                         onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
                         className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${juniorProgram.isComingSoon
-                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black"
-                            : activeTab === juniorProgram.id
-                              ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
-                              : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
+                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black"
+                          : activeTab === juniorProgram.id
+                            ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
+                            : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
                           }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >

@@ -852,7 +852,7 @@ const DashboardFounderPlans = () => {
               className="relative w-full max-w-3xl bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-10 max-h-[90vh] flex flex-col my-8 overflow-hidden text-[var(--db-text)]"
             >
               {/* Modal Header */}
-              <div className="px-6 py-4 border-b border-[var(--db-card-border)] flex items-center justify-between shrink-0 bg-[var(--db-sidebar)]">
+              <div className="px-6 py-4 border-b border-[var(--db-card-border)] flex items-center justify-between shrink-0 bg-[var(--db-input-bg)]">
                 <div>
                   <h3 className="text-base font-black uppercase text-[var(--db-text)] font-['BrutalTypeBold',sans-serif]">
                     {editingPlan ? `Edit Founder Plan: ${formTitle}` : "Create New Founder Plan"}

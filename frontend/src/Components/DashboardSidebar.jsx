@@ -31,7 +31,6 @@ import {
   Target,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
-import logo2 from "../assets/images/lightmode.png";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 
@@ -122,29 +121,23 @@ const DashboardSidebar = ({
   // Style helpers for items
   const getItemClass = (isActive) => {
     if (isActive) {
-      return theme === "dark"
-        ? "bg-[#ccf141]/12 text-[#ccf141] border border-[#ccf141]/30 shadow-[0_0_12px_rgba(229,255,0,0.1)] font-semibold"
-        : "bg-slate-900 text-white font-semibold shadow-sm";
+      return "relative bg-gradient-to-r from-[#ccf141]/20 via-[#ccf141]/12 to-[#ccf141]/5 text-[#ccf141] border border-[#ccf141]/40 shadow-[0_0_16px_rgba(204,241,65,0.22),inset_0_1px_1px_rgba(255,255,255,0.25)] font-semibold backdrop-blur-md";
     }
-    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
+    return "text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-transparent transition-colors";
   };
 
   const getSubItemClass = (isActive) => {
     if (isActive) {
-      return theme === "dark"
-        ? "bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/35 font-semibold shadow-sm"
-        : "bg-slate-800 text-white font-semibold shadow-sm";
+      return "bg-[#ccf141]/20 text-[#ccf141] border border-[#ccf141]/40 shadow-[0_0_12px_rgba(204,241,65,0.2),inset_0_1px_0_rgba(255,255,255,0.2)] font-semibold backdrop-blur-sm";
     }
-    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
+    return "text-zinc-400 hover:text-white hover:bg-white/[0.08] border border-transparent transition-colors";
   };
 
   const getTriggerClass = (hasActive) => {
     if (hasActive) {
-      return theme === "dark"
-        ? "text-[#ccf141] bg-[#ccf141]/8 border border-[#ccf141]/20 font-semibold"
-        : "text-slate-900 bg-slate-100 border border-slate-200 font-semibold";
+      return "text-[#ccf141] bg-[#ccf141]/10 border border-[#ccf141]/25 font-semibold backdrop-blur-sm";
     }
-    return "text-[var(--db-sidebar-link-text)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]";
+    return "text-zinc-300 hover:text-white hover:bg-white/[0.08] border border-transparent transition-colors";
   };
 
   // Helper to render single nav item with tooltip for collapsed state
@@ -171,28 +164,42 @@ const DashboardSidebar = ({
                 )}`
           }
         >
-          {sidebarOpen ? (
+          {({ isActive }) => (
             <>
-              <div className="flex items-center gap-2.5 min-w-0">
-                <Icon size={15} className="shrink-0" />
-                <span className="truncate">{name}</span>
-              </div>
-              {badge && (
-                <span className="text-[8px] font-semibold uppercase px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                  {badge}
-                </span>
+              {sidebarOpen ? (
+                <>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <Icon
+                      size={15}
+                      className={`shrink-0 transition-colors ${
+                        isActive ? "text-[#ccf141]" : "text-zinc-400 group-hover:text-white"
+                      }`}
+                    />
+                    <span className="truncate">{name}</span>
+                  </div>
+                  {badge && (
+                    <span className="text-[8px] font-semibold uppercase px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                      {badge}
+                    </span>
+                  )}
+                </>
+              ) : (
+                <Icon
+                  size={16}
+                  className={`shrink-0 transition-colors ${
+                    isActive ? "text-[#ccf141]" : "text-zinc-400 group-hover:text-white"
+                  }`}
+                />
               )}
             </>
-          ) : (
-            <Icon size={16} className="shrink-0" />
           )}
         </NavLink>
 
         {/* Hover Tooltip when sidebar is collapsed (Desktop only) */}
         {!sidebarOpen && (
           <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
-            <div className="relative px-2.5 py-1.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-2xl flex items-center gap-1.5 whitespace-nowrap">
-              <span className="text-[11.5px] font-bold text-[var(--db-text)]">
+            <div className="relative px-2.5 py-1.5 bg-[#09090b] border border-white/15 rounded-lg shadow-2xl flex items-center gap-1.5 whitespace-nowrap backdrop-blur-md">
+              <span className="text-[11.5px] font-bold text-white">
                 {name}
               </span>
               {badge && (
@@ -201,8 +208,8 @@ const DashboardSidebar = ({
                 </span>
               )}
               {/* Tooltip arrow pointer */}
-              <div className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-[var(--db-card-border)]" />
-              <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
+              <div className="absolute right-full top-1/2 -translate-y-1/2 border-[5px] border-transparent border-r-white/15" />
+              <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[#09090b] mr-[-1px]" />
             </div>
           </div>
         )}
@@ -234,7 +241,12 @@ const DashboardSidebar = ({
               )}`}
             >
               <div className="flex items-center gap-2.5 min-w-0">
-                <Icon size={15} className="shrink-0" />
+                <Icon
+                  size={15}
+                  className={`shrink-0 transition-colors ${
+                    hasActiveChild ? "text-[#ccf141]" : "text-zinc-400 group-hover:text-white"
+                  }`}
+                />
                 <span className="truncate">{title}</span>
               </div>
               <ChevronDown
@@ -246,7 +258,7 @@ const DashboardSidebar = ({
             </button>
 
             {isOpen && (
-              <div className="ml-2.5 pl-2.5 border-l border-[var(--db-card-border)] space-y-0.5 my-1">
+              <div className="ml-2.5 pl-2.5 border-l border-white/10 space-y-0.5 my-1">
                 {items.map((sub) => {
                   const SubIcon = sub.icon;
                   return (
@@ -260,8 +272,17 @@ const DashboardSidebar = ({
                         )}`
                       }
                     >
-                      <SubIcon size={13} className="shrink-0" />
-                      <span className="truncate">{sub.name}</span>
+                      {({ isActive }) => (
+                        <>
+                          <SubIcon
+                            size={13}
+                            className={`shrink-0 transition-colors ${
+                              isActive ? "text-[#ccf141]" : "text-zinc-400 group-hover:text-white"
+                            }`}
+                          />
+                          <span className="truncate">{sub.name}</span>
+                        </>
+                      )}
                     </NavLink>
                   );
                 })}
@@ -276,18 +297,23 @@ const DashboardSidebar = ({
                 hasActiveChild,
               )}`}
             >
-              <Icon size={16} className="shrink-0" />
+              <Icon
+                size={16}
+                className={`shrink-0 ${
+                  hasActiveChild ? "text-[#ccf141]" : "text-zinc-400"
+                }`}
+              />
             </button>
 
             {/* Flyout Submenu Popover on Hover (Desktop only) */}
             <div className="hidden lg:group-hover:block absolute left-full top-0 pl-2.5 z-50">
-              <div className="w-52 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.45)] p-2 space-y-1 backdrop-blur-md">
+              <div className="w-52 bg-[#09090b]/95 border border-white/15 rounded-xl shadow-[0_16px_40px_rgba(0,0,0,0.65)] p-2 space-y-1 backdrop-blur-xl">
                 {/* Popover Header */}
-                <div className="px-2 py-1 border-b border-[var(--db-card-border)] mb-1 flex items-center justify-between">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--db-text-muted)]">
+                <div className="px-2 py-1 border-b border-white/10 mb-1 flex items-center justify-between">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
                     {title}
                   </span>
-                  <span className="text-[9px] font-semibold text-[var(--db-accent-highlight)]">
+                  <span className="text-[9px] font-semibold text-[#ccf141]">
                     {items.length} links
                   </span>
                 </div>
@@ -306,15 +332,24 @@ const DashboardSidebar = ({
                         )}`
                       }
                     >
-                      <SubIcon size={13} className="shrink-0" />
-                      <span className="truncate">{sub.name}</span>
+                      {({ isActive }) => (
+                        <>
+                          <SubIcon
+                            size={13}
+                            className={`shrink-0 ${
+                              isActive ? "text-[#ccf141]" : "text-zinc-400"
+                            }`}
+                          />
+                          <span className="truncate">{sub.name}</span>
+                        </>
+                      )}
                     </NavLink>
                   );
                 })}
 
                 {/* Flyout pointer arrow */}
-                <div className="absolute right-full top-3 border-[6px] border-transparent border-r-[var(--db-card-border)]" />
-                <div className="absolute right-full top-3 border-[5px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
+                <div className="absolute right-full top-3 border-[6px] border-transparent border-r-white/15" />
+                <div className="absolute right-full top-3 border-[5px] border-transparent border-r-[#09090b] mr-[-1px]" />
               </div>
             </div>
           </div>
@@ -327,19 +362,19 @@ const DashboardSidebar = ({
   const renderSectionHeader = (title) => {
     if (sidebarOpen) {
       return (
-        <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--db-text-muted)]/70 flex items-center justify-between select-none">
+        <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-zinc-400 flex items-center justify-between select-none">
           <span>{title}</span>
         </div>
       );
     }
     return (
-      <div className="h-[1px] bg-[var(--db-card-border)]/60 my-2 mx-1.5" />
+      <div className="h-[1px] bg-white/10 my-2 mx-1.5" />
     );
   };
 
   return (
     <aside
-      className={`fixed lg:static inset-y-0 left-0 z-50 bg-[var(--db-sidebar)] border-r border-[var(--db-sidebar-border)] flex flex-col justify-between transform transition-all duration-300 select-none shadow-2xl lg:shadow-none ${
+      className={`fixed lg:static inset-y-0 left-0 z-50 bg-[#000000] border-r border-white/10 flex flex-col justify-between transform transition-all duration-300 select-none shadow-2xl lg:shadow-none ${
         sidebarOpen
           ? "translate-x-0 w-[264px] sm:w-[270px] lg:w-[232px]"
           : "-translate-x-full lg:w-[68px] lg:translate-x-0"
@@ -347,7 +382,7 @@ const DashboardSidebar = ({
     >
       {/* Brand Header */}
       <div
-        className={`h-14 flex items-center border-b border-[var(--db-sidebar-border)] flex-shrink-0 bg-[var(--db-sidebar)] ${
+        className={`h-14 flex items-center border-b border-white/10 flex-shrink-0 bg-[#000000] ${
           sidebarOpen ? "justify-between px-3.5" : "justify-center px-2"
         }`}
       >
@@ -355,12 +390,12 @@ const DashboardSidebar = ({
           <>
             <div className="flex items-center gap-2">
               <img
-                src={theme === "light" ? logo2 : logo}
+                src={logo}
                 alt="Box & Cross"
                 className="w-[105px] h-7 object-contain"
               />
               {isAdmin && (
-                <span className="text-[9px] text-[var(--db-accent-text)] font-black px-2 py-0.5 rounded-md bg-[var(--db-accent)] tracking-wider shadow-sm select-none shrink-0">
+                <span className="text-[9px] text-black font-black px-2 py-0.5 rounded-md bg-[#ccf141] tracking-wider shadow-sm select-none shrink-0">
                   <span style={{ fontFamily: '"Brutal Font", sans-serif' }}>
                     ADMIN
                   </span>
@@ -368,7 +403,7 @@ const DashboardSidebar = ({
               )}
             </div>
             <button
-              className="lg:hidden p-2 rounded-xl text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors cursor-pointer"
+              className="lg:hidden p-2 rounded-xl text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               onClick={() => setSidebarOpen(false)}
               title="Close sidebar"
             >
@@ -379,15 +414,15 @@ const DashboardSidebar = ({
           <div className="relative group">
             <div
               onClick={() => setSidebarOpen(true)}
-              className="w-8 h-8 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] flex items-center justify-center font-black text-xs shadow-sm cursor-pointer"
+              className="w-8 h-8 rounded-xl bg-[#ccf141] text-black flex items-center justify-center font-black text-xs shadow-sm cursor-pointer"
             >
               BX
             </div>
             {/* Tooltip on logo */}
             <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
-              <div className="relative px-2.5 py-1 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-xl text-[11px] font-bold text-[var(--db-text)] whitespace-nowrap">
+              <div className="relative px-2.5 py-1 bg-[#09090b] border border-white/15 rounded-lg shadow-xl text-[11px] font-bold text-white whitespace-nowrap">
                 Box & Cross Admin
-                <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card-border)]" />
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-white/15" />
               </div>
             </div>
           </div>
@@ -662,11 +697,11 @@ const DashboardSidebar = ({
       </div>
 
       {/* Footer Profile Snapshot & Logout */}
-      <div className="p-2 border-t border-[var(--db-sidebar-border)] flex-shrink-0 bg-[var(--db-sidebar)] space-y-2">
+      <div className="p-2 border-t border-white/10 flex-shrink-0 bg-[#000000] space-y-2">
         {sidebarOpen ? (
-          <div className="flex items-center justify-between p-2 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)]">
+          <div className="flex items-center justify-between p-2 rounded-xl bg-white/[0.04] border border-white/10">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[var(--db-accent-glow)] to-transparent border border-[var(--db-accent-highlight)]/40 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#ccf141]/20 to-transparent border border-[#ccf141]/40 flex items-center justify-center overflow-hidden shrink-0">
                 {user?.profileImage ? (
                   <img
                     src={user.profileImage}
@@ -680,12 +715,12 @@ const DashboardSidebar = ({
                 )}
               </div>
               <div className="min-w-0">
-                <p className="text-[11.5px] font-bold text-[var(--db-text)] truncate leading-tight">
+                <p className="text-[11.5px] font-bold text-white truncate leading-tight">
                   {user?.name || "Admin"}
                 </p>
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-[9px] font-bold text-[var(--db-accent-highlight)] uppercase tracking-wider">
+                  <span className="text-[9px] font-bold text-[#ccf141] uppercase tracking-wider">
                     {user?.role || "ADMIN"}
                   </span>
                 </div>
@@ -703,7 +738,7 @@ const DashboardSidebar = ({
           <div className="space-y-1.5 flex flex-col items-center">
             {/* Profile Avatar Icon with Tooltip */}
             <div className="relative group hover:z-50">
-              <div className="w-8 h-8 rounded-xl overflow-hidden border border-[var(--db-accent-highlight)]/30 flex items-center justify-center cursor-pointer">
+              <div className="w-8 h-8 rounded-xl overflow-hidden border border-[#ccf141]/40 flex items-center justify-center cursor-pointer">
                 {user?.profileImage ? (
                   <img
                     src={user.profileImage}
@@ -717,15 +752,15 @@ const DashboardSidebar = ({
                 )}
               </div>
               <div className="hidden lg:group-hover:flex pointer-events-none absolute left-full top-1/2 -translate-y-1/2 pl-2.5 z-50 items-center">
-                <div className="relative px-2.5 py-1.5 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg shadow-xl text-[11px] font-bold text-[var(--db-text)] whitespace-nowrap">
-                  <p className="font-semibold text-[var(--db-text)]">
+                <div className="relative px-2.5 py-1.5 bg-[#09090b] border border-white/15 rounded-lg shadow-xl text-[11px] font-bold text-white whitespace-nowrap">
+                  <p className="font-semibold text-white">
                     {user?.name || "Admin"}
                   </p>
-                  <p className="text-[9px] text-[var(--db-accent-highlight)] uppercase font-semibold tracking-wider">
+                  <p className="text-[9px] text-[#ccf141] uppercase font-semibold tracking-wider">
                     {user?.role || "ADMIN"}
                   </p>
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-[var(--db-card-border)]" />
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[3px] border-transparent border-r-[var(--db-card)] mr-[-1px]" />
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-white/15" />
+                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-[3px] border-transparent border-r-[#09090b] mr-[-1px]" />
                 </div>
               </div>
             </div>
