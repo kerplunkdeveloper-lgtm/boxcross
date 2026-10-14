@@ -283,12 +283,8 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-[#ccf141] font-bold">
-                    Founders Club Exclusive
-                  </span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] bg-[#ccf141]/20 text-[#ccf141] font-mono font-bold">
-                    LOCKED RATE
-                  </span>
+                 
+                 
                 </div>
                 <h3 className="text-sm sm:text-base md:text-lg font-black tracking-wide uppercase text-white" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                   {planDetails?.name || "Founding Member Offer"}
@@ -374,9 +370,7 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
                     <div className="text-xs sm:text-sm font-bold text-white uppercase mt-0.5" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
                       {planDetails?.name}
                     </div>
-                    <div className="text-[10px] text-[#ccf141] mt-0.5 flex items-center gap-1 font-mono font-bold">
-                      <Sparkles size={11} /> Permanent Founding Rate Locked
-                    </div>
+                   
                   </div>
                   <div className="text-right">
                     <div className="text-[10px] font-mono text-neutral-400 uppercase">Total Price</div>
