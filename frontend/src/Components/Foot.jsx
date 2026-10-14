@@ -113,26 +113,26 @@ const Foot = () => {
 
           <ul className="mt-8 space-y-5">
             {[
-              { name: "HYROX Lab", path: "https://boxandcross.com/hyrox-lab/" },
+              { name: "HYROX Lab", path: "#" },
               {
                 name: "Fight Club",
-                path: "https://boxandcross.com/fight-club/",
+                path: "#",
               },
               {
                 name: "Strength Lab",
-                path: "https://boxandcross.com/strength-lab/",
+                path: "#",
               },
               {
                 name: "Hybrid Performance",
-                path: "https://boxandcross.com/hybrid-performance/",
+                path: "#",
               },
               {
                 name: "Fight Performance",
-                path: "https://boxandcross.com/fight-performance/",
+                path: "#",
               },
               {
                 name: "1:1 Coaching",
-                path: "https://boxandcross.com/service/11-performance-coaching/",
+                path: "#",
               },
             ].map((item, index) => (
               <li key={index}>

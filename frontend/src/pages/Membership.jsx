@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
+import { motion } from "framer-motion";
 import MembershipPlans from "../Components/Membership";
 import Founding30Section from "../Components/Founding30Section";
 import AOS from "aos";
@@ -95,10 +96,12 @@ const Membership = () => {
         </div>
 
         {/* CONTENT */}
-        <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between   md:gap-16 pt-20 md:pt-0">
+        <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between md:gap-16 pt-20 md:pt-0">
           {/* LEFT SIDE: HEADING */}
-          <div
-            data-aos="fade-right"
+          <motion.div
+            initial={{ opacity: 0, x: -35 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex-1 w-full flex flex-col justify-center text-center md:text-left z-10"
           >
             <h1
@@ -115,22 +118,38 @@ const Membership = () => {
                 fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
-              <span className="block text-[44px] sm:text-[60px] md:text-[85px]   whitespace-normal md:whitespace-nowrap">
+              <motion.span
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="block text-[44px] sm:text-[60px] md:text-[85px] whitespace-normal md:whitespace-nowrap"
+              >
                 BXC
-              </span>
-              <span className="block text-[44px] sm:text-[60px] md:text-[85px]  whitespace-normal md:whitespace-nowrap">
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="block text-[44px] sm:text-[60px] md:text-[85px] text-[#ccf141] whitespace-normal md:whitespace-nowrap"
+              >
                 MEMBERSHIP
-              </span>
-              <span className="block text-[44px] sm:text-[60px] md:text-[85px]  whitespace-normal md:whitespace-nowrap">
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="block text-[44px] sm:text-[60px] md:text-[85px] whitespace-normal md:whitespace-nowrap"
+              >
                 PLANS
-              </span>
+              </motion.span>
             </h1>
-          </div>
+          </motion.div>
 
           {/* RIGHT SIDE: SUBTITLE & BUTTONS */}
-          <div
-            data-aos="fade-left"
-            data-aos-delay="200"
+          <motion.div
+            initial={{ opacity: 0, x: 35 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="flex-1 w-full flex flex-col justify-center items-start md:max-w-lg z-10"
           >
             <p
@@ -152,9 +171,10 @@ const Membership = () => {
               Choose the plan that suits your goals and timeline.
             </p>
 
-            <div
-              data-aos="fade-up"
-              data-aos-delay="400"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
               className="
                 flex
                 flex-row
@@ -170,7 +190,9 @@ const Membership = () => {
                 fontWeight: 700,
               }}
             >
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => {
                   const el = document.getElementById("book-your-free-gym-tour");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -181,10 +203,10 @@ const Membership = () => {
                   bg-[#ccf141] text-black
                   uppercase tracking-wider md:tracking-[0.05em]
                   rounded-lg
-                  transition-all duration-500
+                  transition-all duration-300
                   cursor-pointer
                   flex justify-center items-center
-                  shadow-[0_0_20px_rgba(229,255,0,0.15)]
+                  shadow-[0_0_20px_rgba(229,255,0,0.25)]
                 "
               >
                 <span className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out rounded-lg"></span>
@@ -197,10 +219,12 @@ const Membership = () => {
                 >
                   Book Your Free Gym Tour
                 </span>
-              </button>
+              </motion.button>
 
               {/* PLANS BUTTON */}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => {
                   const el = document.getElementById("membership-plans");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -212,7 +236,7 @@ const Membership = () => {
                   text-black
                   uppercase tracking-wider md:tracking-[0.05em]
                   rounded-lg
-                  transition-all duration-500
+                  transition-all duration-300
                   cursor-pointer
                   flex justify-center items-center
                 "
@@ -227,9 +251,9 @@ const Membership = () => {
                 >
                   Membership Plans
                 </span>
-              </button>
-            </div>
-          </div>
+              </motion.button>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -288,31 +312,54 @@ const Membership = () => {
       </div>
 
       {/* FOUNDING 30 EXCLUSIVE SECTION */}
-      <div data-aos="fade-up" data-aos-delay="100">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
         <Founding30Section />
-      </div>
+      </motion.div>
 
       {/* MEMBERSHIP SECTION */}
       <div className="relative z-20">
-
-      
         {/* Membership Plans section (Step 1 & Step 2) */}
-        <div data-aos="fade-up" data-aos-delay="100">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
           <MembershipPlans />
-        </div>
+        </motion.div>
 
-        <div data-aos="fade-up" data-aos-delay="100">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
           <WhatWeOffer />
-        </div>
+        </motion.div>
 
-        <div data-aos="fade-up" data-aos-delay="100">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
           <TrainingZones />
-        </div>
+        </motion.div>
 
         {/* <BuildProgress /> */}
-        <div data-aos="fade-up" data-aos-delay="100">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
           <BookForm />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

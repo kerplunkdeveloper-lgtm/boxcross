@@ -680,15 +680,17 @@ const FounderMembersOffers = () => {
   const renderProgramCard = (prog, index = 0) => (
     <motion.div
       key={prog.id}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 35 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -6, transition: { type: "spring", stiffness: 350, damping: 25 } }}
+      whileTap={{ scale: 0.98 }}
       animate={{ scale: activeTab === prog.id ? 1.02 : 1 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.15 }}
+      transition={{ duration: 0.55, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       onClick={() => setActiveTab(prog.id)}
-      className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
-        ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
-        : "border-gray-800 hover:border-gray-600"
+      className={`relative rounded-2xl md:rounded-xl p-5 sm:p-6 md:p-8 min-h-[350px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
+        ? "border-[#ccf141] shadow-[0_0_25px_rgba(204,241,65,0.25)] z-10"
+        : "border-zinc-800 hover:border-zinc-700"
         }`}
     >
       {/* Background Image Container */}
@@ -745,48 +747,41 @@ const FounderMembersOffers = () => {
 
       <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
         <div>
-          <div className="w-16 h-14 flex items-center justify-center mb-5">
+          <div className="w-14 h-12 sm:w-16 sm:h-14 flex items-center justify-center mb-3 sm:mb-5">
             {prog.icon}
           </div>
 
           <h3
-            className="font-black mb-1 tracking-wide uppercase"
+            className="font-black mb-1 tracking-wide uppercase text-2xl sm:text-3xl lg:text-[35px]"
             style={{
-              fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "900",
-              fontSize: "35px",
+              fontFamily: '"BrutalTypeBold", Impact, sans-serif',
             }}
           >
             {prog.title}
           </h3>
           <p
-            className="text-[#ccf141] tracking-widest uppercase mb-3"
+            className="text-[#ccf141] tracking-widest uppercase mb-2 sm:mb-3 text-sm sm:text-base lg:text-[19px] font-bold"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "400",
-              fontSize: "19px",
             }}
           >
             {prog.subtitle}
           </p>
           <p
-            className="text-gray-200 mb-4 leading-relaxed max-w-[90%]"
+            className="text-gray-200 mb-3 sm:mb-4 leading-relaxed max-w-[95%] text-xs sm:text-sm lg:text-[16px]"
             style={{
               fontFamily: '"Brutal Font Light", sans-serif',
-              fontWeight: "400",
-              fontSize: "17px",
             }}
           >
             {prog.desc}
           </p>
         </div>
 
-        <div className="mt-auto pt-4 w-full">
+        <div className="mt-auto pt-3 sm:pt-4 w-full">
           <p
-            className="text-[14px] text-gray-300 uppercase tracking-widest font-bold flex items-center"
+            className="text-xs sm:text-[14px] text-gray-300 uppercase tracking-widest font-bold flex items-center"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "600",
             }}
           >
             FROM
@@ -794,17 +789,16 @@ const FounderMembersOffers = () => {
 
           <div className="flex items-baseline flex-wrap gap-2 my-1">
             <span
-              className="text-lg text-[#ccf141] text-[30px] md:text-[46px]"
+              className="text-[#ccf141] font-black text-2xl sm:text-3xl lg:text-[34px]"
               style={{
-                fontFamily: '"BrutalTypeBold", sans-serif',
-                fontWeight: "700",
+                fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
               ₹{prog.price}
             </span>
             {prog.originalPrice && (
               <span
-                className="line-through text-zinc-500 text-[18px] md:text-[24px] font-bold"
+                className="line-through text-zinc-400 font-bold text-xs sm:text-sm"
                 style={{
                   fontFamily: '"BrutalTypeBold", sans-serif',
                 }}
@@ -812,29 +806,27 @@ const FounderMembersOffers = () => {
                 ₹{prog.originalPrice}
               </span>
             )}
-            <span className="text-gray-300 text-xs md:text-sm font-bold uppercase tracking-wider">
+            <span className="text-gray-300 text-xs sm:text-sm font-bold uppercase tracking-wider">
               / MONTH
             </span>
           </div>
 
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
-            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${prog.isComingSoon
+            className={`group/btn mt-5 sm:mt-8 w-full py-3 sm:py-2.5 text-xs sm:text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-xl border ${prog.isComingSoon
               ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
               : activeTab === prog.id
-                ? "bg-[#ccf141] border-[#ccf141] text-black"
-                : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
+                ? "bg-[#ccf141] border-[#ccf141] text-black shadow-[0_0_15px_rgba(204,241,65,0.3)]"
+                : "border-gray-600 text-white hover:border-[#ccf141] bg-transparent"
               }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "700",
             }}
           >
             <span
               className="flex items-center gap-2"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
-                fontWeight: "700",
               }}
             >
               {prog.isComingSoon ? "VIEW DETAILS · COMING SOON" : "VIEW PLANS"}{" "}
@@ -866,7 +858,7 @@ const FounderMembersOffers = () => {
     rightColHeading2: "NO MORE.",
     ctaButtonText: "CLAIM YOUR FOUNDING SPOT",
     trustText: "Direct WhatsApp & In-Arena Priority Desk",
-    targetSectionId: "pricing",
+    targetSectionId: "twelve-month-card",
     features: [
       {
         num: "01",
@@ -965,12 +957,12 @@ const FounderMembersOffers = () => {
         {/* CONTENT */}
         <div className="relative md:mt-[90px] z-10 w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-20 flex flex-col md:flex-row items-start md:items-center justify-center md:justify-between md:gap-16 pt-20 md:pt-0">
           {/* LEFT SIDE: HEADING */}
-          <div
-            data-aos="fade-right"
+          <motion.div
+            initial={{ opacity: 0, x: -35 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex-1 w-full flex flex-col justify-center text-center md:text-left z-10"
           >
-
-
             <h1
               className="
                 text-white
@@ -984,22 +976,38 @@ const FounderMembersOffers = () => {
                 fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
-              <span className="block text-[40px] sm:text-[55px] md:text-[80px] whitespace-normal md:whitespace-nowrap">
+              <motion.span
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="block text-[40px] sm:text-[55px] md:text-[80px] whitespace-normal md:whitespace-nowrap"
+              >
                 FOUNDER
-              </span>
-              <span className="block text-[40px] sm:text-[55px] md:text-[80px] text-[#ccf141] whitespace-normal md:whitespace-nowrap">
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="block text-[40px] sm:text-[55px] md:text-[80px] text-[#ccf141] whitespace-normal md:whitespace-nowrap"
+              >
                 MEMBERS
-              </span>
-              <span className="block text-[40px] sm:text-[55px] md:text-[80px] whitespace-normal md:whitespace-nowrap">
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 25 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="block text-[40px] sm:text-[55px] md:text-[80px] whitespace-normal md:whitespace-nowrap"
+              >
                 OFFERS
-              </span>
+              </motion.span>
             </h1>
-          </div>
+          </motion.div>
 
           {/* RIGHT SIDE: SUBTITLE & BUTTONS */}
-          <div
-            data-aos="fade-left"
-            data-aos-delay="200"
+          <motion.div
+            initial={{ opacity: 0, x: 35 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="flex-1 w-full flex flex-col justify-center items-start md:max-w-lg z-10"
           >
             <p
@@ -1019,9 +1027,10 @@ const FounderMembersOffers = () => {
               Exclusive founding member privileges & priority arena access. Be part of the first generation of athletes at Box &amp; Cross.
             </p>
 
-            <div
-              data-aos="fade-up"
-              data-aos-delay="400"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
               className="
                 flex
                 flex-row
@@ -1037,7 +1046,9 @@ const FounderMembersOffers = () => {
                 fontWeight: 700,
               }}
             >
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => {
                   const el = document.getElementById("pricing");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -1048,7 +1059,7 @@ const FounderMembersOffers = () => {
                   bg-[#ccf141] text-black
                   uppercase tracking-wider md:tracking-[0.05em]
                   rounded-lg
-                  transition-all duration-500
+                  transition-all duration-300
                   cursor-pointer
                   flex justify-center items-center
                   shadow-[0_0_20px_rgba(229,255,0,0.25)]
@@ -1064,9 +1075,11 @@ const FounderMembersOffers = () => {
                 >
                   View Founder Plans
                 </span>
-              </button>
+              </motion.button>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => {
                   const el = document.getElementById("membership-plans");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -1078,7 +1091,7 @@ const FounderMembersOffers = () => {
                   text-black
                   uppercase tracking-wider md:tracking-[0.05em]
                   rounded-lg
-                  transition-all duration-500
+                  transition-all duration-300
                   cursor-pointer
                   flex justify-center items-center
                 "
@@ -1093,9 +1106,9 @@ const FounderMembersOffers = () => {
                 >
                   Explore Tiers
                 </span>
-              </button>
-            </div>
-          </div>
+              </motion.button>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -1105,7 +1118,7 @@ const FounderMembersOffers = () => {
           <div className="marquee-experience-track">
             {Array(8)
               .fill([
-                { text: "EXCLUSIVE RATES.", outline: false },
+                { text: "EXCLUSIVE RATES.", outline: true },
                 { text: "FOUNDERS WALL.", outline: false },
                 { text: "GUEST PASSES.", outline: true },
                 { text: "STRUCTURED TRAINING.", outline: false },
@@ -1153,9 +1166,14 @@ const FounderMembersOffers = () => {
       </div>
 
       {/* FOUNDING 100 EXCLUSIVE SECTION (Same design as Membership page with custom data) */}
-      <div data-aos="fade-up" data-aos-delay="100">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      >
         <Founding30Section {...founding100SectionData} />
-      </div>
+      </motion.div>
 
       {/* MEMBERSHIP PLANS WORKFLOW SECTION */}
       <section
@@ -1176,31 +1194,9 @@ const FounderMembersOffers = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-8 flex flex-col items-center justify-start gap-4"
           >
-            <div>
-              <span
-                className="px-4 py-2 rounded-md border border-[#ccf141]/30 bg-[#ccf141] text-[#1e1111] uppercase"
-                style={{
-                  fontFamily: '"BrutalTypeBold", sans-serif',
-                  fontSize: "16px",
-                  fontWeight: "600",
-                }}
-              >
-                Founder 100-Members offer
-              </span>
-            </div>
+           
 
-            <div>
-              <span
-                className="px-4 py-2 rounded-md border border-[#ccf141]/30 bg-[#ccf141] text-[#1e1111] uppercase"
-                style={{
-                  fontFamily: '"BrutalTypeBold", sans-serif',
-                  fontSize: "16px",
-                  fontWeight: "600",
-                }}
-              >
-                STEP 1
-              </span>
-            </div>
+            
 
             <div>
               <h2

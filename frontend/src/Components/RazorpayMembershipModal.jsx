@@ -293,17 +293,17 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 md:p-6 font-sans">
+        <div className="fixed inset-0 z-[99999] flex items-end sm:items-center justify-center p-0 sm:p-4 md:p-6 font-sans">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/85 backdrop-blur-md"
+            className="fixed inset-0 bg-black/85 backdrop-blur-md"
             onClick={!busy ? onClose : undefined}
           />
 
           <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.96 }}
+            initial={{ opacity: 0, y: 50, scale: 0.98 }}
             animate={{
               opacity: 1,
               y: 0,
@@ -312,29 +312,31 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
             }}
             exit={{
               opacity: 0,
-              y: 30,
-              scale: 0.96,
+              y: 40,
+              scale: 0.98,
               transition: { duration: 0.2 },
             }}
-            className="relative w-full max-w-[1000px] max-h-[90vh] rounded-[24px] p-[2px] shadow-2xl overflow-hidden z-10"
+            className="relative w-full max-w-[980px] max-h-[92vh] sm:max-h-[88vh] rounded-t-[32px] sm:rounded-[26px] p-[1.5px] sm:p-[2px] shadow-[0_25px_60px_rgba(0,0,0,0.95)] overflow-hidden z-10 flex flex-col"
           >
-            {/* Spinning animated border */}
-            <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0%,transparent_75%,#ccf141_100%)] animate-[spin_3s_linear_infinite]" />
+            {/* Ambient Spinning Conic Gradient Border */}
+            <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg_at_50%_50%,transparent_0%,transparent_75%,#ccf141_100%)] animate-[spin_4s_linear_infinite] pointer-events-none" />
 
-            {/* Content Container (protecting card boundary) */}
+            {/* Content Container */}
             <div
-              className="relative w-full h-full bg-[#070708] rounded-[22px] flex flex-col md:flex-row overflow-hidden z-10"
-              style={{ maxHeight: "calc(90vh - 4px)" }}
+              className="relative w-full h-full bg-[#08080a] rounded-t-[30px] sm:rounded-[24px] flex flex-col md:flex-row overflow-hidden z-10 max-h-[92vh] sm:max-h-[calc(88vh-4px)]"
             >
-              {/* ═══ LEFT DARK PANEL ═══ */}
-              <div className="hidden md:flex flex-col justify-between w-[350px] shrink-0 bg-[#0f0f13] text-white p-8 relative overflow-hidden border-r border-white/5">
+              {/* Mobile Grabber Handle */}
+              <div className="w-12 h-1.5 bg-zinc-700/60 rounded-full mx-auto mt-2.5 mb-1 sm:hidden shrink-0" />
+
+              {/* ═══ LEFT DARK PANEL (Desktop & Tablet) ═══ */}
+              <div className="hidden md:flex flex-col justify-between w-[350px] shrink-0 bg-[#0c0c10] text-white p-8 relative overflow-hidden border-r border-white/5">
                 <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute -bottom-20 -right-10 w-56 h-56 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="relative z-10">
                   {/* Logo / Badge */}
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="w-10 h-10 bg-[#ccf141] rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-10 h-10 bg-[#ccf141] rounded-2xl flex items-center justify-center shadow-lg shadow-[#ccf141]/20">
                       <span className="text-black font-black text-lg leading-none pt-0.5">
                         ⚡
                       </span>
@@ -346,8 +348,8 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                       >
                         BoxCross
                       </p>
-                      <p className="text-gray-400 text-[10px] uppercase tracking-widest font-semibold">
-                        Razorpay Checkout
+                      <p className="text-zinc-400 text-[10px] uppercase tracking-widest font-semibold flex items-center gap-1">
+                        <ShieldCheck size={11} className="text-[#ccf141]" /> Razorpay Checkout
                       </p>
                     </div>
                   </div>
@@ -372,11 +374,11 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                             step > s.n
                               ? "bg-[#ccf141] border-[#ccf141] text-black"
                               : step === s.n
-                                ? "bg-[#ccf141]/10 border-[#ccf141] text-[#ccf141]"
+                                ? "bg-[#ccf141]/15 border-[#ccf141] text-[#ccf141]"
                                 : "bg-transparent border-white/20 text-white/30"
                           }`}
                         >
-                          {step > s.n ? <Check size={16} /> : s.n}
+                          {step > s.n ? <Check size={16} strokeWidth={3} /> : s.n}
                         </div>
                         <div>
                           <p
@@ -396,8 +398,8 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
 
                   {/* Plan Card */}
                   {planDetails && (
-                    <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-4 backdrop-blur-sm">
-                      <p className="text-white/50 text-[10px] uppercase tracking-widest font-bold mb-1">
+                    <div className="bg-gradient-to-b from-white/[0.04] to-transparent border border-white/10 rounded-2xl p-4.5 backdrop-blur-sm shadow-inner">
+                      <p className="text-[#ccf141] text-[10px] uppercase tracking-widest font-black mb-1 font-mono">
                         Selected Plan
                       </p>
                       <p
@@ -406,14 +408,14 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                       >
                         {planDetails.name}
                       </p>
-                      <div className="flex items-end gap-1">
+                      <div className="flex items-end gap-1.5">
                         <span
-                          className="text-[#ccf141] font-black text-3xl"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          className="text-[#ccf141] font-black text-3xl leading-none"
+                          style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                         >
                           ₹{planDetails.price}
                         </span>
-                        <span className="text-white/40 text-[11px] mb-1">
+                        <span className="text-zinc-400 text-[11px] mb-0.5">
                           one-time
                         </span>
                       </div>
@@ -446,32 +448,94 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                 </div>
               </div>
 
-              {/* ═══ RIGHT WHITE PANEL ═══ */}
-              <div className="flex-1 flex flex-col min-h-0 bg-[#0c0c0d]">
-                {/* Mobile header */}
-                <div className="md:hidden bg-gradient-to-r from-[#111] to-[#222] px-5 py-4 flex items-center justify-between text-white shrink-0 border-b border-white/5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-[#ccf141] rounded-full flex items-center justify-center text-black font-black text-base">
+              {/* ═══ RIGHT PANEL (Main Content on Mobile & Desktop) ═══ */}
+              <div className="flex-1 flex flex-col min-h-0 bg-[#08080a]">
+
+                {/* ── MOBILE HEADER (Modern Glass Top Bar) ── */}
+                <div className="md:hidden bg-gradient-to-r from-[#0c0c10] to-[#121217] px-4 sm:px-5 py-3.5 flex items-center justify-between text-white shrink-0 border-b border-white/5">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-[#ccf141] rounded-xl flex items-center justify-center text-black font-black text-sm shadow-[0_0_12px_rgba(204,241,65,0.3)]">
                       ⚡
                     </div>
                     <div>
-                      <p className="font-black text-sm">BoxCross Checkout</p>
-                      <p className="text-white/70 text-[10px] uppercase tracking-widest">
-                        Step {step} of 2
+                      <p className="font-black text-xs tracking-wider uppercase text-white" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                        BoxCross Checkout
                       </p>
+                      <div className="flex items-center gap-1.5 text-[9.5px] text-zinc-400 font-mono">
+                        <ShieldCheck size={11} className="text-[#ccf141]" />
+                        <span>256-Bit SSL Encrypted</span>
+                      </div>
                     </div>
                   </div>
                   {!busy && (
                     <button
                       onClick={onClose}
-                      className="p-1.5 hover:bg-white/20 rounded-full"
+                      className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
                     >
-                      <X size={18} />
+                      <X size={16} />
                     </button>
                   )}
                 </div>
 
-                {/* Desktop close + heading */}
+                {/* ── MOBILE 2-STEP PROGRESS SEGMENT + PLAN SNAPSHOT ── */}
+                {!busy && (
+                  <div className="md:hidden px-4 pt-3 pb-2.5 bg-[#0b0b0e] border-b border-white/5 shrink-0 space-y-2.5">
+                    {/* Stepper Buttons */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all ${
+                        step === 1
+                          ? "bg-[#ccf141]/10 border-[#ccf141] text-[#ccf141]"
+                          : "bg-white/[0.02] border-white/10 text-zinc-400"
+                      }`}>
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
+                          step > 1 ? "bg-[#ccf141] text-black" : step === 1 ? "bg-[#ccf141] text-black" : "bg-zinc-800 text-zinc-400"
+                        }`}>
+                          {step > 1 ? <Check size={11} strokeWidth={3} /> : "1"}
+                        </div>
+                        <span className="text-[10.5px] font-bold uppercase tracking-wider truncate" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                          1. Details
+                        </span>
+                      </div>
+
+                      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all ${
+                        step === 2
+                          ? "bg-[#ccf141]/10 border-[#ccf141] text-[#ccf141]"
+                          : "bg-white/[0.02] border-white/10 text-zinc-500"
+                      }`}>
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${
+                          step === 2 ? "bg-[#ccf141] text-black" : "bg-zinc-800 text-zinc-500"
+                        }`}>
+                          2
+                        </div>
+                        <span className="text-[10.5px] font-bold uppercase tracking-wider truncate" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                          2. Payment
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Plan Snapshot Badge */}
+                    {planDetails && (
+                      <div className="p-3 rounded-2xl bg-gradient-to-r from-zinc-900 via-zinc-900/90 to-[#ccf141]/10 border border-[#ccf141]/30 flex items-center justify-between shadow-inner">
+                        <div className="min-w-0 pr-2">
+                          <span className="text-[9px] font-mono uppercase tracking-widest text-[#ccf141] font-bold block">
+                            MEMBERSHIP PLAN
+                          </span>
+                          <h4 className="text-xs font-black text-white uppercase truncate" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                            {planDetails.name}
+                          </h4>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <span className="text-base font-black text-[#ccf141] leading-none block" style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}>
+                            ₹{planDetails.price}
+                          </span>
+                          <span className="text-[9px] text-zinc-400 font-mono">Total Payable</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* ── DESKTOP HEADER (Close + Step Heading) ── */}
                 {!busy && (
                   <div className="hidden md:flex items-center justify-between px-8 pt-7 pb-2 shrink-0">
                     <div>
@@ -485,93 +549,79 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                         className="text-white font-black text-xl uppercase"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
-                        {step === 1 ? "Your Details" : "Secure Checkout"}
+                        {step === 1 ? "Your Contact Details" : "Order Review & Pay"}
                       </h2>
                     </div>
                     <button
                       onClick={onClose}
-                      className="p-2 hover:bg-white/5 rounded-full transition-colors"
+                      className="p-2 hover:bg-white/5 rounded-full transition-colors cursor-pointer"
                     >
                       <X size={18} className="text-gray-400 hover:text-white" />
                     </button>
                   </div>
                 )}
 
-                {/* Mobile plan summary */}
-                {!busy && (
-                  <div className="md:hidden bg-[#111] border-b border-white/5 px-5 py-3 flex items-center justify-between shrink-0">
-                    <p className="text-gray-300 text-[12px] font-semibold line-clamp-1 flex-1 mr-3 uppercase">
-                      {planDetails?.name}
-                    </p>
-                    <p className="text-[#ccf141] font-black text-lg shrink-0">
-                      ₹{planDetails?.price}
-                    </p>
-                  </div>
-                )}
-
-                {/* Scrollable content */}
-                <div className="flex-1 overflow-y-auto">
+                {/* ── SCROLLABLE CONTENT BODY ── */}
+                <div className="flex-1 overflow-y-auto px-4 sm:px-8 py-4 sm:py-6 custom-scrollbar">
                   <AnimatePresence mode="wait">
                     {/* ── STEP 1: USER DETAILS ── */}
                     {step === 1 && payState === "idle" && (
                       <motion.form
                         key="s1"
                         onSubmit={handleContinue}
-                        initial={{ opacity: 0, x: 40 }}
+                        initial={{ opacity: 0, x: 25 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -40 }}
-                        transition={{ duration: 0.3 }}
-                        className="px-5 md:px-8 py-5 md:py-6 space-y-5"
+                        exit={{ opacity: 0, x: -25 }}
+                        transition={{ duration: 0.25 }}
+                        className="space-y-4 sm:space-y-5 max-w-md mx-auto md:max-w-none"
                       >
                         {/* Name */}
-                        <div>
+                        <div className="space-y-1.5">
                           <label
-                            className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
+                            className="text-[11px] font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                           >
-                            <User size={11} className="text-[#ccf141]" /> Full
-                            Name
+                            <User size={13} className="text-[#ccf141]" /> Full Name *
                           </label>
                           <input
                             type="text"
                             value={user.name}
+                            autoComplete="name"
                             onChange={(e) => {
                               setUser((p) => ({ ...p, name: e.target.value }));
                               setErrors((p) => ({ ...p, name: "" }));
                             }}
-                            placeholder="Enter your full name"
-                            className={`w-full border-2 ${errors.name ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#ccf141]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
+                            placeholder="e.g. Rahul Sharma"
+                            className={`w-full bg-[#111115] border ${
+                              errors.name ? "border-red-500/80 bg-red-950/20" : "border-zinc-800 focus:border-[#ccf141] focus:ring-2 focus:ring-[#ccf141]/20"
+                            } rounded-xl px-4 py-3 text-sm outline-none transition-all font-semibold text-white placeholder-zinc-500`}
                             required
                           />
                           {errors.name && (
-                            <p className="text-red-400 text-[11px] mt-1.5 flex items-center gap-1">
-                              <Info size={10} />
-                              {errors.name}
+                            <p className="text-red-400 text-[11px] flex items-center gap-1 font-medium pl-1">
+                              <Info size={11} /> {errors.name}
                             </p>
                           )}
                         </div>
 
                         {/* Phone */}
-                        <div>
+                        <div className="space-y-1.5">
                           <label
-                            className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
+                            className="text-[11px] font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                           >
-                            <Phone size={11} className="text-[#ccf141]" /> Phone
-                            Number
+                            <Phone size={13} className="text-[#ccf141]" /> WhatsApp / Phone Number *
                           </label>
-                          <div className="relative">
-                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm border-r border-white/10 pr-3">
-                              +91
-                            </span>
+                          <div className="relative flex items-center">
+                            <div className="absolute left-3.5 flex items-center gap-1.5 text-zinc-400 font-bold text-xs pointer-events-none border-r border-zinc-700/80 pr-2.5">
+                              <span className="text-[14px]">🇮🇳</span>
+                              <span>+91</span>
+                            </div>
                             <input
                               type="tel"
                               value={user.phone}
                               maxLength={10}
+                              autoComplete="tel"
                               onChange={(e) => {
                                 setUser((p) => ({
                                   ...p,
@@ -579,145 +629,163 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                                 }));
                                 setErrors((p) => ({ ...p, phone: "" }));
                               }}
-                              placeholder="Enter your phone number"
-                              className={`w-full border-2 pl-16 ${errors.phone ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#ccf141]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
+                              placeholder="98765 43210"
+                              className={`w-full bg-[#111115] border pl-[82px] pr-4 py-3 ${
+                                errors.phone ? "border-red-500/80 bg-red-950/20" : "border-zinc-800 focus:border-[#ccf141] focus:ring-2 focus:ring-[#ccf141]/20"
+                              } rounded-xl text-sm outline-none transition-all font-semibold text-white placeholder-zinc-500 font-mono`}
                               required
                             />
                           </div>
                           {errors.phone && (
-                            <p className="text-red-400 text-[11px] mt-1.5 flex items-center gap-1">
-                              <Info size={10} />
-                              {errors.phone}
+                            <p className="text-red-400 text-[11px] flex items-center gap-1 font-medium pl-1">
+                              <Info size={11} /> {errors.phone}
                             </p>
                           )}
                         </div>
 
                         {/* Email */}
-                        <div>
+                        <div className="space-y-1.5">
                           <label
-                            className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
+                            className="text-[11px] font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-1.5"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                           >
-                            <Mail size={11} className="text-[#ccf141]" /> Email
-                            Address
+                            <Mail size={13} className="text-[#ccf141]" /> Email Address *
                           </label>
                           <input
                             type="email"
                             value={user.email}
+                            autoComplete="email"
                             onChange={(e) => {
                               setUser((p) => ({ ...p, email: e.target.value }));
                               setErrors((p) => ({ ...p, email: "" }));
                             }}
-                            placeholder="Enter your email address"
-                            className={`w-full border-2 ${errors.email ? "border-red-500/50 bg-red-950/20" : "border-white/10 bg-[#111] focus:border-[#ccf141]"} rounded-2xl px-4 py-3.5 text-sm outline-none transition-all font-semibold text-white`}
+                            placeholder="name@example.com"
+                            className={`w-full bg-[#111115] border px-4 py-3 ${
+                              errors.email ? "border-red-500/80 bg-red-950/20" : "border-zinc-800 focus:border-[#ccf141] focus:ring-2 focus:ring-[#ccf141]/20"
+                            } rounded-xl text-sm outline-none transition-all font-semibold text-white placeholder-zinc-500`}
                             required
                           />
                           {errors.email && (
-                            <p className="text-red-400 text-[11px] mt-1.5 flex items-center gap-1">
-                              <Info size={10} />
-                              {errors.email}
+                            <p className="text-red-400 text-[11px] flex items-center gap-1 font-medium pl-1">
+                              <Info size={11} /> {errors.email}
                             </p>
                           )}
                         </div>
 
-                        <button
-                          type="submit"
-                          disabled={loading}
-                          className="w-full bg-[#ccf141] hover:bg-[#d8f000] text-black font-black py-4 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm tracking-widest disabled:opacity-50 uppercase"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          {loading ? (
-                            <>
-                              <Loader2 className="animate-spin" size={16} />{" "}
-                              Creating Order...
-                            </>
-                          ) : (
-                            <>
-                              Continue to Payment <ChevronRight size={16} />
-                            </>
-                          )}
-                        </button>
+                        {/* Submit Button */}
+                        <div className="pt-2">
+                          <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-[#ccf141] hover:bg-white text-black font-black py-4 rounded-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm tracking-widest disabled:opacity-50 uppercase cursor-pointer shadow-[0_0_25px_rgba(204,241,65,0.35)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] active:scale-[0.98]"
+                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                          >
+                            {loading ? (
+                              <>
+                                <Loader2 className="animate-spin" size={16} /> Generating Order...
+                              </>
+                            ) : (
+                              <>
+                                Continue to Payment <ChevronRight size={16} />
+                              </>
+                            )}
+                          </button>
+                        </div>
                       </motion.form>
                     )}
 
-                    {/* ── STEP 2: SECURE CHECKOUT ── */}
+                    {/* ── STEP 2: SECURE CHECKOUT (DIGITAL RECEIPT TICKET) ── */}
                     {step === 2 && payState === "idle" && (
                       <motion.div
                         key="s2"
-                        initial={{ opacity: 0, x: 40 }}
+                        initial={{ opacity: 0, x: 25 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -40 }}
-                        transition={{ duration: 0.3 }}
-                        className="px-5 md:px-8 py-8 flex flex-col items-center justify-center text-center h-full"
+                        exit={{ opacity: 0, x: -25 }}
+                        transition={{ duration: 0.25 }}
+                        className="max-w-md mx-auto space-y-4"
                       >
-                        <div className="w-16 h-16 bg-[#ccf141]/10 text-[#ccf141] rounded-full flex items-center justify-center mb-6 shadow-lg shadow-[#ccf141]/5">
-                          ⚡
-                        </div>
-                        <h3
-                          className="text-white text-xl font-bold mb-2 uppercase"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          Secure Payment Checkout
-                        </h3>
-                        <p className="text-gray-400 text-sm mb-6 max-w-sm">
-                          Clicking below will launch the secure Razorpay Payment
-                          Gateway.
-                        </p>
+                        {/* Digital Ticket Container */}
+                        <div className="relative rounded-2xl bg-[#111115] border border-zinc-800/90 overflow-hidden shadow-xl">
+                          {/* Ticket Header */}
+                          <div className="p-3.5 sm:p-4 bg-gradient-to-r from-zinc-900 to-black border-b border-zinc-800 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <div className="w-6 h-6 rounded-md bg-[#ccf141] text-black font-black flex items-center justify-center text-xs">
+                                ⚡
+                              </div>
+                              <span className="text-xs font-black uppercase tracking-wider text-white" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                                Payment Summary
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/40 font-bold">
+                              ORDER READY
+                            </span>
+                          </div>
 
-                        <div className="bg-white/[0.02] border border-white/5 w-full max-w-sm p-5 rounded-2xl text-left mb-8 space-y-3 text-xs">
-                          <div className="flex justify-between items-center text-gray-400 font-bold uppercase tracking-wider">
-                            <span>Name</span>
-                            <span className="text-white font-semibold truncate max-w-[200px]">
-                              {user.name}
-                            </span>
+                          {/* Ticket Body */}
+                          <div className="p-4 space-y-2.5 text-xs">
+                            <div className="flex justify-between items-center text-zinc-400">
+                              <span className="font-medium">Member Name</span>
+                              <span className="text-white font-bold truncate max-w-[190px]">{user.name}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-zinc-400">
+                              <span className="font-medium">Phone</span>
+                              <span className="text-white font-mono font-semibold">+91 {user.phone}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-zinc-400">
+                              <span className="font-medium">Email</span>
+                              <span className="text-white font-medium truncate max-w-[190px]">{user.email}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-zinc-400">
+                              <span className="font-medium">Selected Plan</span>
+                              <span className="text-[#ccf141] font-bold uppercase truncate max-w-[190px]">{planDetails?.name}</span>
+                            </div>
+
+                            {/* Perforated Divider */}
+                            <div className="pt-2.5 border-t border-dashed border-zinc-700/80 flex justify-between items-baseline">
+                              <span className="text-xs sm:text-sm font-black uppercase text-white tracking-wider" style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}>
+                                Total Amount
+                              </span>
+                              <span className="text-2xl font-black text-[#ccf141]" style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}>
+                                ₹{planDetails?.price}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex justify-between items-center text-gray-400 font-bold uppercase tracking-wider">
-                            <span>Phone</span>
-                            <span className="text-white font-semibold">
-                              {user.phone}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center text-gray-400 font-bold uppercase tracking-wider">
-                            <span>Plan</span>
-                            <span className="text-white font-semibold truncate max-w-[200px]">
-                              {planDetails?.name}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center pt-3 border-t border-dashed border-white/10 font-bold text-sm">
-                            <span className="text-white uppercase">
-                              Total Amount
-                            </span>
-                            <span className="text-[#ccf141]">
-                              ₹{planDetails?.price}
-                            </span>
+
+                          {/* Supported Payment Gateways row */}
+                          <div className="px-4 py-2.5 bg-black/60 border-t border-zinc-800/80 flex items-center justify-between text-[10px] text-zinc-400 font-medium">
+                            <span>Supported:</span>
+                            <span className="text-zinc-300 font-semibold truncate ml-2">UPI · GPay · PhonePe · Cards · EMI</span>
                           </div>
                         </div>
 
+                        {/* Proceed to Pay CTA */}
                         <button
                           onClick={handleProceedToPay}
                           disabled={loading}
-                          className="w-full max-w-sm bg-[#ccf141] hover:bg-[#d8f000] text-black font-black py-4 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm tracking-widest disabled:opacity-50 uppercase"
+                          className="w-full bg-[#ccf141] hover:bg-white text-black font-black py-4 rounded-xl transition-all flex items-center justify-center gap-2 text-xs sm:text-sm tracking-widest disabled:opacity-50 uppercase cursor-pointer shadow-[0_0_30px_rgba(204,241,65,0.4)] hover:shadow-[0_0_35px_rgba(255,255,255,0.6)] active:scale-[0.98]"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           {loading ? (
                             <>
-                              <Loader2 className="animate-spin" size={16} />{" "}
-                              Initiating...
+                              <Loader2 className="animate-spin" size={16} /> Connecting Gateway...
                             </>
                           ) : (
-                            <>Pay with Razorpay</>
+                            <>
+                              <Smartphone size={16} /> Pay ₹{planDetails?.price} via Razorpay
+                            </>
                           )}
                         </button>
 
-                        <button
-                          onClick={() => setStep(1)}
-                          disabled={loading}
-                          className="mt-4 text-[11px] text-gray-400 hover:text-white font-semibold flex items-center gap-1 transition-colors"
-                        >
-                          ← Edit details
-                        </button>
+                        {/* Back / Edit Button */}
+                        <div className="flex justify-center pt-1">
+                          <button
+                            onClick={() => setStep(1)}
+                            disabled={loading}
+                            className="text-xs text-zinc-400 hover:text-white font-semibold transition-colors cursor-pointer py-1 px-3 rounded-lg hover:bg-white/5"
+                          >
+                            ← Edit my contact details
+                          </button>
+                        </div>
                       </motion.div>
                     )}
 

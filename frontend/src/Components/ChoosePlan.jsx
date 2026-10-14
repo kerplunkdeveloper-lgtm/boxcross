@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Check, ArrowRight, ShieldCheck, Zap, Lock } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import BCMonogram from "./BCMonogram";
 
 const getEmiPerMonth = (totalPriceStr, monthsStr = "") => {
@@ -180,6 +180,20 @@ const ChoosePlan = React.forwardRef(
         setSelectedPlanIdx(twelveIdx);
       }
     }, [activeData?.title]);
+
+    // Listen for custom trigger to auto-select and highlight 12-month plan (e.g. from Founding30 CTA)
+    useEffect(() => {
+      const handleSelect12 = () => {
+        if (plans && plans.length > 0) {
+          const twelveIdx = getTwelveMonthIndex(plans);
+          setSelectedPlanIdx(twelveIdx);
+        }
+      };
+      window.addEventListener("select-twelve-month-plan", handleSelect12);
+      return () => {
+        window.removeEventListener("select-twelve-month-plan", handleSelect12);
+      };
+    }, [plans]);
 
     const razorpayKey =
       import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TS0kzk3tqsYO7Z";
@@ -378,8 +392,16 @@ const ChoosePlan = React.forwardRef(
 
           {/* CARD BODY WITH DURATION COLUMNS & BENEFITS (WITH FULL BLUR OVERLAY WHEN COMING SOON) */}
           <div className="relative">
-            {/* 4 DURATION COLUMNS GRID */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-zinc-800 bg-[#0a0a0a]">
+            {/* 4 DURATION COLUMNS GRID - DISTINCT ELEVATED CARDS ON MOBILE, DIVIDED TABLE ON DESKTOP */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentTitle}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-0 sm:divide-x divide-zinc-800 p-3 sm:p-0 bg-[#0a0a0a]"
+              >
               {plans.map((plan, idx) => {
                 const cleanTotal =
                   plan.price ||
@@ -417,14 +439,22 @@ const ChoosePlan = React.forwardRef(
                 const planAmountInPaise = planNumericPrice * 100;
 
                 return (
-                  <div
+                  <motion.div
                     key={idx}
-                    className={`p-6 sm:p-7 md:p-8 flex flex-col items-center text-center justify-between transition-all duration-300 group cursor-pointer relative ${isTwelveMonth
-                        ? "bg-zinc-900/60 ring-2 ring-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)] rounded-xl z-10"
+                    id={isTwelveMonth ? "twelve-month-card" : `plan-card-${idx}`}
+                    data-twelve-month={isTwelveMonth ? "true" : undefined}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.45, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                    whileHover={{ y: -5, transition: { type: "spring", stiffness: 350, damping: 25 } }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`scroll-mt-24 sm:scroll-mt-28 p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-none flex flex-col items-center text-center justify-between transition-all duration-300 group cursor-pointer relative ${
+                      isTwelveMonth
+                        ? "bg-gradient-to-b from-[#181d09] via-[#0f1114] to-[#0a0a0c] sm:bg-zinc-900/60 border-2 sm:border-0 border-[#ccf141] sm:ring-2 sm:ring-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)] z-10"
                         : isSelected
-                          ? "bg-zinc-900/50 ring-2 ring-[#ccf141]/80 shadow-[0_0_20px_rgba(204,241,65,0.15)] rounded-xl z-10"
-                          : "hover:bg-zinc-900/40 rounded-xl"
-                      }`}
+                          ? "bg-gradient-to-b from-zinc-900/90 to-[#0e0e11] sm:bg-zinc-900/50 border-2 sm:border-0 border-[#ccf141]/80 sm:ring-2 sm:ring-[#ccf141]/80 shadow-[0_0_20px_rgba(204,241,65,0.15)] z-10"
+                          : "bg-[#0d0d10]/95 sm:bg-transparent border border-zinc-800/80 sm:border-0 hover:bg-zinc-900/40"
+                    }`}
                     onClick={() => {
                       if (activeData.isComingSoon) {
                         setSelectedPlanIdx(idx);
@@ -443,20 +473,18 @@ const ChoosePlan = React.forwardRef(
                   >
                     {/* Fixed Center Highlight Badge for 12-Month Plan: 54.4% OFFER & HURRY UP 8 DAYS ONLY */}
                     {isTwelveMonth && (
-                      <div className="absolute top-2.5 sm:top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max max-w-[95%]">
+                      <div className="absolute top-2 sm:top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max max-w-[95%]">
                         <div className="relative group/offer">
                           {/* Outer ambient glow */}
                           <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 via-amber-400 to-[#ccf141] rounded-full blur-[4px] opacity-75 animate-pulse" />
 
                           {/* Pill badge container */}
-                          <div className="relative px-3 sm:px-3.5 py-1 sm:py-1.5 bg-[#0b0b0e]/95 backdrop-blur-md border border-[#ccf141]/60 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(204,241,65,0.25)]">
+                          <div className="relative px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-[#0b0b0e]/95 backdrop-blur-md border border-[#ccf141]/60 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(204,241,65,0.25)]">
                             {/* Pulsing red live beacon */}
                             <span className="relative flex h-2 w-2 shrink-0">
                               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                             </span>
-
-
 
                             <span className="w-1 h-1 rounded-full bg-zinc-600 shrink-0" />
 
@@ -466,7 +494,7 @@ const ChoosePlan = React.forwardRef(
                             </span>
 
                             {/* HURRY UP 8 DAYS ONLY */}
-                            <span className="text-[9px] sm:text-[10px] font-mono font-extrabold uppercase tracking-tight text-yellow-400 leading-none whitespace-nowrap">
+                            <span className="text-[8.5px] sm:text-[10px] font-mono font-extrabold uppercase tracking-tight text-yellow-400 leading-none whitespace-nowrap">
                               HURRY UP 8 DAYS ONLY
                             </span>
                           </div>
@@ -475,26 +503,34 @@ const ChoosePlan = React.forwardRef(
                     )}
 
                     <div className="w-full flex flex-col items-center">
-                      {/* Duration Label */}
-                      <span
-                        className={`text-zinc-400 font-bold uppercase text-xs sm:text-[13px] mb-2 select-none transition-colors ${isTwelveMonth ? "mt-6 sm:mt-6 text-white" : ""
-                          }`}
-                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                      >
-                        {plan.months}
-                      </span>
-
-                      {/* Total Price Line with Save Tag right beside it */}
-                      <div className="flex items-center justify-center gap-2 flex-wrap my-1">
+                      {/* Duration Label & Mobile Status Pill */}
+                      <div className={`flex items-center justify-center gap-2 mb-1.5 select-none ${isTwelveMonth ? "mt-6 sm:mt-6" : "mt-0"}`}>
                         <span
-                          className="font-black text-white text-[30px] sm:text-3xl md:text-[45px] leading-tight tracking-tight"
+                          className={`font-black uppercase text-xs sm:text-[13px] tracking-wider transition-colors ${
+                            isTwelveMonth ? "text-white" : isSelected ? "text-[#ccf141]" : "text-zinc-400"
+                          }`}
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          {plan.months}
+                        </span>
+                        {isSelected && !isTwelveMonth && (
+                          <span className="sm:hidden inline-flex items-center gap-1 text-[9px] font-bold text-[#ccf141] bg-[#ccf141]/15 px-2 py-0.5 rounded-full border border-[#ccf141]/40">
+                            SELECTED
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Total Price Line with Save Tag */}
+                      <div className="flex flex-col items-center justify-center gap-2 flex-wrap my-1">
+                        <span
+                          className="font-black text-white text-[48px] sm:text-3xl md:text-[42px] lg:text-[45px] leading-tight tracking-tight"
                           style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                         >
                           ₹{cleanTotal}/-
                         </span>
                         {saveText && (
                           <span
-                            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#ccf141]/20 border border-[#ccf141]/50 text-[#ccf141] text-[10px] sm:text-[11px] font-black uppercase tracking-wider select-none whitespace-nowrap shadow-[0_0_10px_rgba(204,241,65,0.2)]"
+                            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#ccf141]/20 border border-[#ccf141]/50 text-[#ccf141] text-[14px] sm:text-[11px] font-black uppercase tracking-wider select-none whitespace-nowrap shadow-[0_0_10px_rgba(204,241,65,0.2)]"
                             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                           >
                             <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141]"></span>
@@ -506,7 +542,7 @@ const ChoosePlan = React.forwardRef(
                       {/* Strikethrough if discounted */}
                       {hasDiscount && (
                         <div className="my-0.5">
-                          <span className="line-through text-zinc-400 font-medium  sm:text-[13px]">
+                          <span className="line-through text-zinc-400 font-medium text-xs sm:text-[13px]">
                             ₹{plan.originalPrice}/-
                           </span>
                         </div>
@@ -522,12 +558,13 @@ const ChoosePlan = React.forwardRef(
 
                       {/* EMI Affordability Widget with border and enhanced UI/UX */}
                       <div
-                        className={`w-full mt-3.5 mb-1 px-3 py-2.5 rounded-lg border transition-all duration-200 flex flex-col items-center justify-center min-h-[44px] cursor-pointer ${isSelected
+                        className={`w-full mt-3 mb-1 px-3 py-2 rounded-xl border transition-all duration-200 flex flex-col items-center justify-center min-h-[44px] cursor-pointer ${
+                          isSelected
                             ? "border-[#ccf141]/60 bg-[#121215] shadow-[0_0_12px_rgba(204,241,65,0.1)]"
                             : isTwelveMonth
                               ? "border-[#ccf141]/40 bg-[#121215]/80 hover:border-[#ccf141]/70"
                               : "border-zinc-800/90 bg-[#0d0d10] hover:border-zinc-700"
-                          }`}
+                        }`}
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedPlanIdx(idx);
@@ -545,7 +582,7 @@ const ChoosePlan = React.forwardRef(
                               ></div>
                               <div className="razorpay-fallback flex items-center justify-center gap-1.5 text-xs text-zinc-300 pointer-events-none">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] animate-pulse"></span>
-                                <span className="text-[11.5px] font-medium text-white">
+                                <span className="text-[15px] font-medium text-white">
                                   EMI from <strong className="text-[#ccf141] font-bold">₹{getEmiPerMonth(cleanTotal, plan.months)}/mo</strong>
                                 </span>
                                 <span className="text-[10px] text-zinc-500">•</span>
@@ -586,12 +623,13 @@ const ChoosePlan = React.forwardRef(
                             plan.months,
                           );
                         }}
-                        className={`relative w-full p-[1.5px] rounded-xl overflow-hidden select-none transition-all duration-300 ${activeData.isComingSoon
+                        className={`relative w-full p-[1.5px] rounded-xl overflow-hidden select-none transition-all duration-300 ${
+                          activeData.isComingSoon
                             ? "opacity-90 cursor-not-allowed border border-amber-500/40"
                             : isTwelveMonth || isSelected
                               ? "cursor-pointer shadow-[0_0_25px_rgba(204,241,65,0.35)] active:scale-[0.98]"
                               : "cursor-pointer shadow-[0_0_15px_rgba(204,241,65,0.1)] hover:shadow-[0_0_25px_rgba(204,241,65,0.3)] active:scale-[0.98]"
-                          }`}
+                        }`}
                       >
                         {/* 360° Continuous Spinning Conic Border Animation */}
                         {!activeData.isComingSoon && (
@@ -600,12 +638,13 @@ const ChoosePlan = React.forwardRef(
 
                         {/* Outline Button Body */}
                         <div
-                          className={`relative z-10 w-full py-2.5 sm:py-3 px-4 rounded-[10.5px] flex items-center justify-center gap-2 transition-all duration-300 ${activeData.isComingSoon
+                          className={`relative z-10 w-full py-2.5 sm:py-3 px-4 rounded-[10.5px] flex items-center justify-center gap-2 transition-all duration-300 ${
+                            activeData.isComingSoon
                               ? "bg-zinc-900/90 text-amber-400 font-black border border-amber-500/30"
                               : isTwelveMonth || isSelected
-                                ? "bg-black text-[#ccf141] group-hover:bg-[#ccf141] group-hover:text-black"
+                                ? "bg-[#ccf141] text-black sm:bg-black sm:text-[#ccf141] group-hover:bg-[#ccf141] group-hover:text-black font-black"
                                 : "bg-black text-white group-hover:bg-[#ccf141] group-hover:text-black"
-                            }`}
+                          }`}
                         >
                           <span
                             className="font-black uppercase tracking-wider text-xs sm:text-sm whitespace-nowrap"
@@ -622,27 +661,28 @@ const ChoosePlan = React.forwardRef(
                         </div>
                       </button>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
+          </AnimatePresence>
 
             {/* CARD BOTTOM SECTION: WHAT IT ACTUALLY GIVES YOU + RIGHT BLACK BOX */}
             <div className="border-t border-zinc-800 flex flex-col md:flex-row items-stretch bg-black">
               {/* Left Side: WHAT IT ACTUALLY GIVES YOU */}
-              <div className="flex-1 p-6 sm:p-8 md:p-9 bg-[#0e0e0e]">
+              <div className="flex-1 p-5 sm:p-8 md:p-9 bg-[#0e0e0e]">
                 <span
-                  className="block text-xs sm:text-[13px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-5 select-none"
+                  className="block text-xs sm:text-[20px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-4 sm:mb-5 select-none"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
-                  WHAT IT ACTUALLY GIVES YOU
+                  WHAT IT ACTUALLY GIVES YOU  
                 </span>
 
-                <div className="space-y-4">
+                <div className="space-y-3.5 sm:space-y-4">
                   {benefits.map((b, idx) => (
                     <div key={idx} className="flex items-start gap-3">
                       {/* Neon Lime Square Bullet from Reference Images */}
-                      <span className="w-2.5 h-2.5 bg-[#ccf141] shrink-0 mt-1 rounded-[1.5px]" />
+                      <span className="w-2.5 h-2.5 bg-[#ccf141] shrink-0 mt-1 rounded-[1.5px] shadow-[0_0_6px_rgba(204,241,65,0.4)]" />
                       <p className="text-xs sm:text-[13.5px] leading-relaxed text-zinc-300">
                         <strong className="text-white font-black mr-1">
                           {b.boldText}
@@ -656,26 +696,27 @@ const ChoosePlan = React.forwardRef(
                 </div>
               </div>
 
-              {/* Right Side: BLACK BOX (₹75 / ₹108 / ₹151 A DAY AS A FOUNDING MEMBER) */}
+              {/* Right Side: BLACK BOX (DAILY RATE) */}
               <div className="w-full md:w-[320px] lg:w-[360px] bg-black text-white p-6 sm:p-8 flex flex-col items-center justify-center text-center border-t md:border-t-0 md:border-l border-zinc-800 shrink-0">
                 {/* Giant Neon Rate */}
                 <div
-                  className="text-6xl sm:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.45)]"
+                  className="text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.45)] flex items-baseline justify-center gap-2"
                   style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                 >
-                  {dailyRate}  <span style={{ fontSize: "1.5rem" }}>per day</span>
+                  <span>{dailyRate}</span>
+                  <span className="text-lg sm:text-xl font-sans font-bold text-zinc-300">/ day</span>
                 </div>
 
                 {/* Subtitle */}
                 <span
-                  className="mt-2 text-[10px] sm:text-[11px] font-mono font-bold tracking-[0.18em] text-zinc-300 uppercase select-none"
+                  className="mt-2 text-[15px] sm:text-[11px] font-mono font-bold tracking-[0.18em] text-zinc-300 uppercase select-none"
                 >
                   {dailyRateLabel}
                 </span>
 
                 {/* Daily Comparison Punchline (e.g. "A dosa and a filter coffee.") */}
                 <div
-                  className="mt-4 text-base sm:text-lg lg:text-xl font-bold text-white select-none leading-snug"
+                  className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white select-none leading-snug max-w-xs"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   {dailyComparison}

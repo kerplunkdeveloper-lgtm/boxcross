@@ -694,15 +694,17 @@ const Membership = () => {
   const renderProgramCard = (prog, index = 0) => (
     <motion.div
       key={prog.id}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 35 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -6, transition: { type: "spring", stiffness: 350, damping: 25 } }}
+      whileTap={{ scale: 0.98 }}
       animate={{ scale: activeTab === prog.id ? 1.02 : 1 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.15 }}
+      transition={{ duration: 0.55, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       onClick={() => setActiveTab(prog.id)}
-      className={`relative rounded-xl p-6 md:p-8 min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
-          ? "border-[#ccf141] shadow-[0_0_20px_rgba(222,251,2,0.2)] z-10"
-          : "border-gray-800 hover:border-gray-600"
+      className={`relative rounded-2xl md:rounded-xl p-5 sm:p-6 md:p-8 min-h-[350px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
+          ? "border-[#ccf141] shadow-[0_0_25px_rgba(204,241,65,0.25)] z-10"
+          : "border-zinc-800 hover:border-zinc-700"
         }`}
     >
       {/* Background Image Container */}
@@ -723,8 +725,6 @@ const Membership = () => {
         <div className="absolute inset-0 z-30 backdrop-blur-md bg-black/80 flex flex-col items-center justify-center p-6 text-center select-none transition-all duration-300">
           {/* Subtle Ambient Glow */}
           <div className="absolute w-44 h-44 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
-
-         
 
           {/* Pathway Badge */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-[10.5px] font-mono font-black uppercase tracking-widest shadow-sm mb-3">
@@ -762,87 +762,79 @@ const Membership = () => {
 
       <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
         <div>
-          <div className="w-16 h-14 flex items-center justify-center mb-5">
+          <div className="w-14 h-12 sm:w-16 sm:h-14 flex items-center justify-center mb-3 sm:mb-5">
             {prog.icon}
           </div>
 
           <h3
-            className="font-black mb-1 tracking-wide uppercase"
+            className="font-black mb-1 tracking-wide uppercase text-2xl sm:text-3xl lg:text-[35px]"
             style={{
-              fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "900",
-              fontSize: "35px",
+              fontFamily: '"BrutalTypeBold", Impact, sans-serif',
             }}
           >
             {prog.title}
           </h3>
           <p
-            className="text-[#ccf141] tracking-widest uppercase mb-3"
+            className="text-[#ccf141] tracking-widest uppercase mb-2 sm:mb-3 text-sm sm:text-base lg:text-[19px] font-bold"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "400",
-              fontSize: "19px",
             }}
           >
             {prog.subtitle}
           </p>
           <p
-            className="text-gray-200 mb-4 leading-relaxed max-w-[90%]"
+            className="text-gray-200 mb-3 sm:mb-4 leading-relaxed max-w-[95%] text-xs sm:text-sm lg:text-[16px]"
             style={{
               fontFamily: '"Brutal Font Light", sans-serif',
-              fontWeight: "400",
-              fontSize: "17px",
             }}
           >
             {prog.desc}
           </p>
         </div>
 
-        <div className="mt-auto pt-4 w-full">
+        <div className="mt-auto pt-3 sm:pt-4 w-full">
           <p
-            className="text-[14px] text-gray-300 uppercase tracking-widest font-bold flex items-center"
+            className="text-xs sm:text-[14px] text-gray-300 uppercase tracking-widest font-bold flex items-center"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "600",
             }}
           >
             FROM
           </p>
 
-          <div>
+          <div className="flex items-baseline flex-wrap gap-2 my-1">
             <span
-              className="text-lg text-[#ccf141] text-[20px] mx-1.5"
+              className="text-[#ccf141] font-black text-2xl sm:text-3xl lg:text-[34px]"
               style={{
-                fontFamily: '"BrutalTypeBold", sans-serif',
-                fontWeight: "700",
+                fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
             >
-             ₹ 3,500 <span className="line-through"> ₹ 4,500</span> /MONTH
+              ₹{prog.price || "3,500"}
             </span>
-            
+            {prog.originalPrice && (
+              <span className="line-through text-zinc-400 font-bold text-xs sm:text-sm">
+                ₹{prog.originalPrice}
+              </span>
+            )}
+            <span className="text-gray-300 text-xs sm:text-sm font-bold uppercase tracking-wider">
+              / MONTH
+            </span>
           </div>
 
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
-            className={`group/btn mt-10 w-full py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-lg border ${
+            className={`group/btn mt-5 sm:mt-8 w-full py-3 sm:py-2.5 text-xs sm:text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-xl border ${
               prog.isComingSoon
                 ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
                 : activeTab === prog.id
-                  ? "bg-[#ccf141] border-[#ccf141] text-black"
-                  : "border-gray-500 text-white hover:border-[#ccf141] bg-transparent"
+                  ? "bg-[#ccf141] border-[#ccf141] text-black shadow-[0_0_15px_rgba(204,241,65,0.3)]"
+                  : "border-gray-600 text-white hover:border-[#ccf141] bg-transparent"
             }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
-              fontWeight: "700",
             }}
           >
-            <span
-              className="flex items-center gap-2"
-              style={{
-                fontFamily: '"BrutalTypeBold", sans-serif',
-                fontWeight: "700",
-              }}
-            >
+            <span className="flex items-center gap-2">
               {prog.isComingSoon ? "VIEW DETAILS · COMING SOON" : "VIEW PLANS"}{" "}
               <ArrowRight
                 size={14}
