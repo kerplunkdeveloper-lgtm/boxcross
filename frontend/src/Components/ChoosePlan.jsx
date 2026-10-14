@@ -487,7 +487,7 @@ const ChoosePlan = React.forwardRef(
                       {/* Total Price Line with Save Tag right beside it */}
                       <div className="flex items-center justify-center gap-2 flex-wrap my-1">
                         <span
-                          className="font-black text-white text-[30px] sm:text-3xl md:text-[38px] leading-tight tracking-tight"
+                          className="font-black text-white text-[30px] sm:text-3xl md:text-[45px] leading-tight tracking-tight"
                           style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                         >
                           ₹{cleanTotal}/-
