@@ -704,7 +704,7 @@ const DashboardAttendance = () => {
     const headers = [
       "Date",
       "Member ID",
-      "Athlete Name",
+      "User Name",
       "Coach",
       "Status",
       "Check-In",
@@ -777,7 +777,7 @@ const DashboardAttendance = () => {
             </div>
             <div>
               <h1 className="text-xl sm:text-2xl font-black tracking-tight text-[var(--db-text)] flex items-center gap-2">
-                Athlete Attendance &amp; Biometrics
+                User Attendance &amp; Biometrics
                 <span className="text-[10px] font-black tracking-widest uppercase px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                   LIVE TERMINAL
                 </span>
@@ -844,7 +844,7 @@ const DashboardAttendance = () => {
         {/* Total Athletes */}
         <div className="p-3 sm:p-3.5 rounded-xl bg-[var(--db-card)] border border-[var(--db-card-border)] shadow-sm">
           <div className="flex items-center justify-between text-[var(--db-text-muted)] mb-1">
-            <span className="text-[10.5px] font-bold uppercase tracking-wider">Total Athletes</span>
+            <span className="text-[10.5px] font-bold uppercase tracking-wider">Total Users</span>
             <Users size={14} />
           </div>
           <p className="text-xl sm:text-2xl font-black text-[var(--db-text)]">
@@ -1138,7 +1138,7 @@ const DashboardAttendance = () => {
                   {/* Select Registered Athlete */}
                   <div className="sm:col-span-7">
                     <label className="block text-[11px] font-bold text-[var(--db-text-muted)] mb-1 uppercase tracking-wider">
-                      Select Athlete to Punch
+                      Select User to Punch
                     </label>
                     <div className="flex gap-2">
                       <select
@@ -1524,7 +1524,7 @@ const DashboardAttendance = () => {
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="border-b border-[var(--db-card-border)] bg-[var(--db-sidebar)]/50 text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)] select-none">
-                    <th className="py-3 px-4">Athlete / Member</th>
+                    <th className="py-3 px-4">User / Member</th>
                     <th className="py-3 px-3">Coach</th>
                     <th className="py-3 px-3 text-center">Status</th>
                     <th className="py-3 px-3">Check-In Time</th>
@@ -1847,7 +1847,7 @@ const DashboardAttendance = () => {
                 <thead>
                   <tr className="border-b border-[var(--db-card-border)] bg-[var(--db-sidebar)]/50 text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
                     <th className="py-3 px-4">Date</th>
-                    <th className="py-3 px-4">Athlete</th>
+                    <th className="py-3 px-4">User</th>
                     <th className="py-3 px-3">Member ID</th>
                     <th className="py-3 px-3">Check-In</th>
                     <th className="py-3 px-3">Check-Out</th>
@@ -2354,7 +2354,7 @@ const DashboardAttendance = () => {
                 {/* Choose Athlete */}
                 <div>
                   <label className="block text-[11px] font-bold text-[var(--db-text-muted)] uppercase tracking-wider mb-1">
-                    Select Athlete *
+                    Select User *
                   </label>
                   <select
                     value={creatingRecord.athleteId}
@@ -2364,7 +2364,7 @@ const DashboardAttendance = () => {
                     className="w-full px-3 py-2.5 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-xs font-semibold text-[var(--db-text)] focus:outline-none focus:border-[var(--db-accent-highlight)] cursor-pointer"
                     required
                   >
-                    <option value="">-- Choose Athlete --</option>
+                    <option value="">-- Choose User --</option>
                     {allAthletes.map((a) => (
                       <option key={a._id} value={a._id} className="bg-zinc-900 text-white">
                         {a.memberId} — {a.athleteName} ({a.coach || "No Coach"})

@@ -128,32 +128,34 @@ html {
 }
 
 .dashboard-light {
-  --db-bg: #f1f5f9;
+  --db-bg: #f8fafc;
   --db-card: #ffffff;
   --db-card-border: #e2e8f0;
+  --db-card-border-hover: #cbd5e1;
   --db-text: #0f172a;
-  --db-text-muted: #334155;
-  --db-sidebar: #000000;
-  --db-sidebar-border: rgba(255, 255, 255, 0.08);
+  --db-text-muted: #475569;
+  --db-sidebar: #0c0c0e;
+  --db-sidebar-border: rgba(255, 255, 255, 0.05);
   --db-header: #ffffff;
   --db-header-border: #e2e8f0;
-  --db-input-bg: #f8fafc;
+  --db-input-bg: #ffffff;
   --db-input-border: #cbd5e1;
   --db-text-title: #020617;
   --db-sidebar-link-hover: #f1f5f9;
   --db-sidebar-link-text: #1e293b;
   --db-table-hover: #f1f5f9;
-  --db-accent-dim: rgba(15, 23, 42, 0.06);
-  --db-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-  --db-glass-bg: rgba(255, 255, 255, 0.92);
+  --db-accent-dim: rgba(15, 23, 42, 0.04);
+  --db-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --db-shadow-lg: 0 10px 25px -3px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+  --db-glass-bg: rgba(255, 255, 255, 0.96);
   --db-glass-border: #e2e8f0;
 
   /* Dynamic Accent Brand Tokens */
   --db-accent: #0f172a;
   --db-accent-text: #ffffff;
   --db-accent-hover: #1e293b;
-  --db-accent-highlight: #0f172a;
-  --db-accent-glow: rgba(15, 23, 42, 0.08);
+  --db-accent-highlight: #15803d;
+  --db-accent-glow: rgba(22, 163, 74, 0.12);
 }
 
 /* ==========================================================================
@@ -278,6 +280,340 @@ html {
   font-weight: 450;
   font-size: 0.8125rem;
   letter-spacing: -0.005em;
+}
+
+/* ==========================================================================
+   SIDEBAR STRICT ISOLATION IN LIGHT MODE
+   User rule: "except sidebar thavara" (Leave sidebar 100% dark, untouched)
+   ========================================================================== */
+.dashboard-light aside {
+  background-color: #0c0c0e !important;
+  border-right-color: rgba(255, 255, 255, 0.05) !important;
+  color: #d4d4d8 !important;
+}
+
+.dashboard-light aside a,
+.dashboard-light aside button,
+.dashboard-light aside span,
+.dashboard-light aside p,
+.dashboard-light aside div,
+.dashboard-light aside h1,
+.dashboard-light aside h2,
+.dashboard-light aside h3,
+.dashboard-light aside svg {
+  /* Strictly isolate sidebar from light mode text/button rules */
+}
+
+/* ==========================================================================
+   DASHBOARD LIGHT MODE - HIGH CONTRAST & PREMIUM TEXT SYSTEM
+   Addresses: "elamthuku text color better view la venum"
+   ========================================================================== */
+
+/* 1. Headings in main content and header: deep, crisp slate-950 */
+.dashboard-light header h1,
+.dashboard-light header h2,
+.dashboard-light header h3,
+.dashboard-light header h4,
+.dashboard-light main h1:not([class*="text-white"]),
+.dashboard-light main h2:not([class*="text-white"]),
+.dashboard-light main h3:not([class*="text-white"]),
+.dashboard-light main h4:not([class*="text-white"]),
+.dashboard-light main h5:not([class*="text-white"]),
+.dashboard-light main h6:not([class*="text-white"]),
+.dashboard-light [role="dialog"] h1,
+.dashboard-light [role="dialog"] h2,
+.dashboard-light [role="dialog"] h3,
+.dashboard-light [role="dialog"] h4 {
+  color: #020617 !important;
+}
+
+/* 2. Primary body text and card titles */
+.dashboard-light main .text-\[var\(--db-text\)\],
+.dashboard-light main [class*="text-[var(--db-text)]"],
+.dashboard-light header .text-\[var\(--db-text\)\],
+.dashboard-light header [class*="text-[var(--db-text)]"],
+.dashboard-light [role="dialog"] .text-\[var\(--db-text\)\],
+.dashboard-light [role="dialog"] [class*="text-[var(--db-text)]"] {
+  color: #0f172a !important;
+}
+
+/* 3. Secondary & Muted Text: dark slate-600 (not faint/washed-out gray) */
+.dashboard-light main .text-\[var\(--db-text-muted\)\],
+.dashboard-light main [class*="text-[var(--db-text-muted)]"],
+.dashboard-light main span.text-\[var\(--db-text-muted\)\],
+.dashboard-light main p.text-\[var\(--db-text-muted\)\],
+.dashboard-light main div.text-\[var\(--db-text-muted\)\],
+.dashboard-light main .text-gray-400,
+.dashboard-light main .text-zinc-400,
+.dashboard-light main .text-neutral-400,
+.dashboard-light main .text-slate-400,
+.dashboard-light main .text-gray-500,
+.dashboard-light main .text-zinc-500,
+.dashboard-light main .text-neutral-500,
+.dashboard-light main .text-slate-500,
+.dashboard-light header .text-\[var\(--db-text-muted\)\],
+.dashboard-light header [class*="text-[var(--db-text-muted)]"],
+.dashboard-light [role="dialog"] .text-\[var\(--db-text-muted\)\],
+.dashboard-light [role="dialog"] [class*="text-[var(--db-text-muted)]"] {
+  color: #475569 !important;
+}
+
+/* When muted text is bold, make it even darker slate-700 */
+.dashboard-light main .text-\[var\(--db-text-muted\)\].font-bold,
+.dashboard-light main .text-\[var\(--db-text-muted\)\].font-semibold,
+.dashboard-light main .text-\[var\(--db-text-muted\)\].font-black,
+.dashboard-light main [class*="text-[var(--db-text-muted)]"].font-bold,
+.dashboard-light main [class*="text-[var(--db-text-muted)]"].font-semibold,
+.dashboard-light main [class*="text-[var(--db-text-muted)]"].font-black {
+  color: #334155 !important;
+}
+
+/* 4. Fix neon lime #ccf141 in light mode (turns into readable rich athletic green) */
+.dashboard-light main .text-\[\#ccf141\],
+.dashboard-light main [class*="text-[#ccf141]"],
+.dashboard-light [role="dialog"] .text-\[\#ccf141\],
+.dashboard-light [role="dialog"] [class*="text-[#ccf141]"] {
+  color: #15803d !important;
+}
+
+.dashboard-light main svg.text-\[\#ccf141\],
+.dashboard-light main svg[class*="text-[#ccf141]"] {
+  color: #15803d !important;
+}
+
+/* Badges with #ccf141 background */
+.dashboard-light main [class*="bg-[#ccf141]/"],
+.dashboard-light main [class*="bg-[#ccf141]"]:not(button):not(button *) {
+  background-color: #dcfce7 !important;
+  border-color: #bbf7d0 !important;
+  color: #166534 !important;
+}
+
+/* 5. Highlight text tokens */
+.dashboard-light main .text-\[var\(--db-accent-highlight\)\],
+.dashboard-light main [class*="text-[var(--db-accent-highlight)]"] {
+  color: #15803d !important;
+}
+
+/* 6. Form labels & Inputs */
+.dashboard-light main label:not(aside label),
+.dashboard-light [role="dialog"] label {
+  color: #1e293b !important;
+  font-weight: 700 !important;
+}
+
+.dashboard-light main input:not(aside input),
+.dashboard-light main select:not(aside select),
+.dashboard-light main textarea:not(aside textarea),
+.dashboard-light [role="dialog"] input,
+.dashboard-light [role="dialog"] select,
+.dashboard-light [role="dialog"] textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04) !important;
+}
+
+.dashboard-light main input:focus,
+.dashboard-light main select:focus,
+.dashboard-light main textarea:focus,
+.dashboard-light [role="dialog"] input:focus,
+.dashboard-light [role="dialog"] select:focus,
+.dashboard-light [role="dialog"] textarea:focus {
+  border-color: #0f172a !important;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08) !important;
+  outline: none !important;
+}
+
+.dashboard-light main input::placeholder,
+.dashboard-light main textarea::placeholder,
+.dashboard-light [role="dialog"] input::placeholder,
+.dashboard-light [role="dialog"] textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* ==========================================================================
+   DASHBOARD LIGHT MODE - PREMIUM BUTTON SYSTEM
+   Addresses: "button color better venum"
+   ========================================================================== */
+
+/* 1. Primary CTA Buttons (bg-[var(--db-accent)], bg-[#ccf141], Add Event, Add Plan, Full Edit, Quick Add, View Profile) */
+.dashboard-light main button.bg-\[var\(--db-accent\)\],
+.dashboard-light main button[class*="bg-[var(--db-accent)]"],
+.dashboard-light main button.bg-\[\#ccf141\],
+.dashboard-light main button[class*="bg-[#ccf141]"],
+.dashboard-light [role="dialog"] button.bg-\[var\(--db-accent\)\],
+.dashboard-light [role="dialog"] button[class*="bg-[var(--db-accent)]"],
+.dashboard-light [role="dialog"] button.bg-\[\#ccf141\],
+.dashboard-light [role="dialog"] button[class*="bg-[#ccf141]"] {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border: 1px solid #0f172a !important;
+  box-shadow: 0 2px 8px -1px rgba(15, 23, 42, 0.22), 0 1px 3px 0 rgba(15, 23, 42, 0.12) !important;
+  font-weight: 700 !important;
+  transition: all 140ms ease !important;
+}
+
+.dashboard-light main button.bg-\[var\(--db-accent\)\]:hover,
+.dashboard-light main button[class*="bg-[var(--db-accent)]"]:hover,
+.dashboard-light main button.bg-\[\#ccf141\]:hover,
+.dashboard-light main button[class*="bg-[#ccf141]"]:hover,
+.dashboard-light [role="dialog"] button.bg-\[var\(--db-accent\)\]:hover,
+.dashboard-light [role="dialog"] button[class*="bg-[var(--db-accent)]"]:hover,
+.dashboard-light [role="dialog"] button.bg-\[\#ccf141\]:hover,
+.dashboard-light [role="dialog"] button[class*="bg-[#ccf141]"]:hover {
+  background: #1e293b !important;
+  border-color: #1e293b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px -1px rgba(15, 23, 42, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+.dashboard-light main button.bg-\[var\(--db-accent\)\] svg,
+.dashboard-light main button[class*="bg-[var(--db-accent)]"] svg,
+.dashboard-light main button.bg-\[\#ccf141\] svg,
+.dashboard-light main button[class*="bg-[#ccf141]"] svg,
+.dashboard-light [role="dialog"] button.bg-\[var\(--db-accent\)\] svg,
+.dashboard-light [role="dialog"] button[class*="bg-[var(--db-accent)]"] svg,
+.dashboard-light [role="dialog"] button.bg-\[\#ccf141\] svg,
+.dashboard-light [role="dialog"] button[class*="bg-[#ccf141]"] svg {
+  color: #ffffff !important;
+}
+
+/* 2. Secondary & Utility Buttons (Sync/Refresh, Export CSV, Cancel, Quick, Today, View Live Page) */
+.dashboard-light main button.border:not([class*="bg-[var(--db-accent)]"]):not([class*="bg-[#ccf141]"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-blue"]):not([class*="bg-purple"]):not([class*="bg-transparent"]),
+.dashboard-light [role="dialog"] button.border:not([class*="bg-[var(--db-accent)]"]):not([class*="bg-[#ccf141]"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-blue"]):not([class*="bg-purple"]):not([class*="bg-transparent"]) {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.03) !important;
+  font-weight: 600 !important;
+}
+
+.dashboard-light main button.border:not([class*="bg-[var(--db-accent)]"]):not([class*="bg-[#ccf141]"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-blue"]):not([class*="bg-purple"]):not([class*="bg-transparent"]):hover,
+.dashboard-light [role="dialog"] button.border:not([class*="bg-[var(--db-accent)]"]):not([class*="bg-[#ccf141]"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-blue"]):not([class*="bg-purple"]):not([class*="bg-transparent"]):hover {
+  background-color: #f8fafc !important;
+  border-color: #94a3b8 !important;
+  color: #020617 !important;
+  box-shadow: 0 2px 6px 0 rgba(15, 23, 42, 0.08) !important;
+}
+
+.dashboard-light main button.border:not([class*="bg-[var(--db-accent)]"]):not([class*="bg-[#ccf141]"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-blue"]):not([class*="bg-purple"]):not([class*="bg-transparent"]) svg,
+.dashboard-light [role="dialog"] button.border:not([class*="bg-[var(--db-accent)]"]):not([class*="bg-[#ccf141]"]):not([class*="bg-emerald"]):not([class*="bg-red"]):not([class*="bg-rose"]):not([class*="bg-amber"]):not([class*="bg-blue"]):not([class*="bg-purple"]):not([class*="bg-transparent"]) svg {
+  color: #334155 !important;
+}
+
+/* 3. Success / Save Buttons */
+.dashboard-light main button[class*="bg-emerald"],
+.dashboard-light [role="dialog"] button[class*="bg-emerald"] {
+  background-color: #16a34a !important;
+  color: #ffffff !important;
+  border: 1px solid #15803d !important;
+  box-shadow: 0 2px 8px -1px rgba(22, 163, 74, 0.3) !important;
+  font-weight: 700 !important;
+}
+
+.dashboard-light main button[class*="bg-emerald"]:hover,
+.dashboard-light [role="dialog"] button[class*="bg-emerald"]:hover {
+  background-color: #15803d !important;
+  box-shadow: 0 4px 12px -1px rgba(22, 163, 74, 0.4) !important;
+}
+
+/* 4. Destructive / Delete / Undo Buttons */
+.dashboard-light main button[class*="bg-red-500/10"],
+.dashboard-light main button[class*="bg-rose-500/10"],
+.dashboard-light main button[class*="hover:text-red-500"],
+.dashboard-light [role="dialog"] button[class*="bg-red-500/10"],
+.dashboard-light [role="dialog"] button[class*="bg-rose-500/10"] {
+  background-color: #fee2e2 !important;
+  color: #dc2626 !important;
+  border: 1px solid #fca5a5 !important;
+  font-weight: 600 !important;
+}
+
+.dashboard-light main button[class*="bg-red-500/10"]:hover,
+.dashboard-light main button[class*="bg-rose-500/10"]:hover,
+.dashboard-light main button[class*="hover:text-red-500"]:hover,
+.dashboard-light [role="dialog"] button[class*="bg-red-500/10"]:hover,
+.dashboard-light [role="dialog"] button[class*="bg-rose-500/10"]:hover {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+  border-color: #b91c1c !important;
+  box-shadow: 0 2px 8px -1px rgba(220, 38, 38, 0.35) !important;
+}
+
+.dashboard-light main button[class*="bg-red-500/10"]:hover svg,
+.dashboard-light main button[class*="bg-rose-500/10"]:hover svg,
+.dashboard-light [role="dialog"] button[class*="bg-red-500/10"]:hover svg,
+.dashboard-light [role="dialog"] button[class*="bg-rose-500/10"]:hover svg {
+  color: #ffffff !important;
+}
+
+/* 5. Warning / Impersonate / Amber Buttons */
+.dashboard-light main button[class*="bg-amber-500/10"],
+.dashboard-light [role="dialog"] button[class*="bg-amber-500/10"] {
+  background-color: #fef3c7 !important;
+  color: #b45309 !important;
+  border: 1px solid #fcd34d !important;
+  font-weight: 700 !important;
+}
+
+.dashboard-light main button[class*="bg-amber-500/10"]:hover,
+.dashboard-light [role="dialog"] button[class*="bg-amber-500/10"]:hover {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+  border-color: #b45309 !important;
+  box-shadow: 0 2px 8px -1px rgba(217, 119, 6, 0.35) !important;
+}
+
+.dashboard-light main button[class*="bg-amber-500/10"]:hover svg,
+.dashboard-light [role="dialog"] button[class*="bg-amber-500/10"]:hover svg {
+  color: #ffffff !important;
+}
+
+/* 6. Tabs & Active State Controls */
+.dashboard-light main .flex.items-center.gap-1 > button[class*="bg-[var(--db-accent)]"],
+.dashboard-light main div[class*="bg-[var(--db-card)]"] button[class*="bg-[var(--db-accent)]"] {
+  background-color: #0f172a !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px -1px rgba(15, 23, 42, 0.25) !important;
+}
+
+.dashboard-light main .flex.items-center.gap-1 > button:not([class*="bg-[var(--db-accent)]"]),
+.dashboard-light main div[class*="bg-[var(--db-card)]"] button:not([class*="bg-[var(--db-accent)]"]) {
+  background-color: transparent !important;
+  color: #475569 !important;
+  border: 1px solid transparent !important;
+}
+
+.dashboard-light main .flex.items-center.gap-1 > button:not([class*="bg-[var(--db-accent)]"]):hover,
+.dashboard-light main div[class*="bg-[var(--db-card)]"] button:not([class*="bg-[var(--db-accent)]"]):hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* 7. Header Controls */
+.dashboard-light header a.border {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+  box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.04) !important;
+}
+
+.dashboard-light header a.border:hover {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+.dashboard-light header button {
+  color: #475569 !important;
+}
+
+.dashboard-light header button:hover {
+  color: #0f172a !important;
+  background-color: #f1f5f9 !important;
 }
 
 /* ==========================================================================

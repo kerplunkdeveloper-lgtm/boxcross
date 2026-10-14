@@ -335,8 +335,8 @@ const DashboardHome = () => {
           const statCards = [
             {
               id: "total-athletes",
-              title: "Total Athletes",
-              shortTitle: "Athletes",
+              title: "Total Users",
+              shortTitle: "Users",
               value: totalAthletes,
               displayValue: totalAthletes.toLocaleString("en-IN"),
               icon: Users,
@@ -346,12 +346,12 @@ const DashboardHome = () => {
               borderHover: theme === "dark" ? "hover:border-blue-500/40 hover:shadow-[0_8px_24px_rgba(59,130,246,0.12)]" : "hover:border-blue-500/40 hover:shadow-[0_8px_24px_rgba(59,130,246,0.12)]",
               dotBg: theme === "dark" ? "bg-blue-400" : "bg-blue-500",
               loaderColor: theme === "dark" ? "text-blue-400" : "text-blue-600",
-              badgeText: "Athletes",
+              badgeText: "Users",
               link: "/dashboard/user-management",
             },
             {
               id: "present-athletes",
-              title: "Athletes Present",
+              title: "Users Present",
               shortTitle: "Present",
               value: presentAthletes,
               displayValue: presentAthletes.toLocaleString("en-IN"),
@@ -367,7 +367,7 @@ const DashboardHome = () => {
             },
             {
               id: "absent-athletes",
-              title: "Athletes Absent",
+              title: "Users Absent",
               shortTitle: "Absent",
               value: absentAthletes,
               displayValue: absentAthletes.toLocaleString("en-IN"),
@@ -529,7 +529,7 @@ const DashboardHome = () => {
           <div className="flex items-center justify-between mb-4 sm:mb-5">
             <div>
               <h2 className="text-md sm:text-lg md:text-xl font-black uppercase tracking-wide text-[var(--db-text-title)]" style={{ fontFamily: '"Brutal Font", sans-serif' }}>
-                Recent Athletes
+                Recent Users
               </h2>
               <p className="text-[var(--db-text-muted)] text-[10px] sm:text-xs mt-0.5">
                 Latest user registrations and profiles.
@@ -545,7 +545,7 @@ const DashboardHome = () => {
               <table className="w-full text-sm text-left border-separate border-spacing-y-2">
                 <thead>
                   <tr className="text-[9px] sm:text-[10px] font-black text-[var(--db-text-muted)] uppercase tracking-wider">
-                    <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)] rounded-l-xl">Athlete Profile</th>
+                    <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)] rounded-l-xl">User Profile</th>
                     <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)]">Member ID</th>
                     <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)]">Contact</th>
                     <th className="px-3 sm:px-4 py-2 bg-[var(--db-input-bg)]">Batch</th>
@@ -556,7 +556,7 @@ const DashboardHome = () => {
                   {recentUsers.length === 0 && !loading ? (
                     <tr>
                       <td colSpan="5" className="text-center py-8 text-[var(--db-text-muted)] text-sm font-semibold bg-[var(--db-input-bg)]/30 rounded-xl">
-                        No recent athletes found
+                        No recent users found
                       </td>
                     </tr>
                   ) : (

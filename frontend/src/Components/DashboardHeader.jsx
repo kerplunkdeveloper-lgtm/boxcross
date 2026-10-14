@@ -795,7 +795,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                 />
               </div>
               <p className="text-[8.5px] text-[var(--db-accent-highlight)] font-bold uppercase tracking-wider">
-                {user.role}
+                {user?.role?.toLowerCase() === "athlete" ? "USER" : user?.role}
               </p>
             </div>
           </button>
@@ -834,7 +834,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
                       {user.email}
                     </p>
                     <span className="inline-block px-2 py-0.5 mt-1 text-[8px] font-bold uppercase tracking-wider text-[var(--db-accent-highlight)] bg-[var(--db-accent-glow)] rounded-full border border-[var(--db-accent-highlight)]/20">
-                      {user.role}
+                      {user?.role?.toLowerCase() === "athlete" ? "USER" : user?.role}
                     </span>
                   </div>
                 </div>

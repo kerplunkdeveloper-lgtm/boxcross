@@ -450,17 +450,9 @@ const RazorpayFounderModal = ({ isOpen, onClose, planDetails }) => {
                   </div>
                 </div>
 
-                {/* Founding Perks bullet */}
-                <div className="p-3.5 rounded-xl bg-[#ccf141]/5 border border-[#ccf141]/20 space-y-1.5 text-xs text-neutral-300">
-                  <div className="flex items-center gap-2 text-[#ccf141] font-bold text-[11px] font-mono">
-                    <ShieldCheck size={14} /> FOUNDING PRIVILEGES GUARANTEED
-                  </div>
-                  <p className="text-[11px] text-neutral-400 leading-relaxed">
-                    Includes permanent rate lock on renewals, Box &amp; Cross Founding Wall inscription, and founding priority desk access.
-                  </p>
-                </div>
+                
 
-                <div className="pt-1">
+                <div className="pt-1 mb-10  ">
                   <button
                     type="submit"
                     disabled={loading}

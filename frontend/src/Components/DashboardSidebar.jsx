@@ -470,7 +470,7 @@ const DashboardSidebar = ({
               {/* Attendance & Biometrics */}
               {renderSingleItem({
                 to: "/dashboard/attendance",
-                name: "Athlete Attendance",
+                name: "User Attendance",
                 icon: Fingerprint,
                 badge: "LIVE",
               })}
@@ -721,7 +721,7 @@ const DashboardSidebar = ({
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   <span className="text-[9px] font-bold text-[#ccf141] uppercase tracking-wider">
-                    {user?.role || "ADMIN"}
+                    {(user?.role?.toLowerCase() === "athlete" ? "USER" : user?.role) || "ADMIN"}
                   </span>
                 </div>
               </div>
@@ -757,7 +757,7 @@ const DashboardSidebar = ({
                     {user?.name || "Admin"}
                   </p>
                   <p className="text-[9px] text-[#ccf141] uppercase font-semibold tracking-wider">
-                    {user?.role || "ADMIN"}
+                    {(user?.role?.toLowerCase() === "athlete" ? "USER" : user?.role) || "ADMIN"}
                   </p>
                   <div className="absolute right-full top-1/2 -translate-y-1/2 border-[4px] border-transparent border-r-white/15" />
                   <div className="absolute right-full top-1/2 -translate-y-1/2 border-[3px] border-transparent border-r-[#09090b] mr-[-1px]" />

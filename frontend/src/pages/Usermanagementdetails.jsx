@@ -246,7 +246,7 @@ const Usermanagementdetails = () => {
     e.preventDefault();
 
     if (!formData.athleteName.trim()) {
-      toast.error("Athlete Name is required");
+      toast.error("User Name is required");
       return;
     }
     if (!formData.age || Number(formData.age) <= 0) {
@@ -290,7 +290,7 @@ const Usermanagementdetails = () => {
       if (isEditing) {
         const { data } = await updateAthlete(selectedAthleteId, payload);
         if (data && data.success) {
-          toast.success("Athlete profile updated successfully!");
+          toast.success("User profile updated successfully!");
           setIsModalOpen(false);
           fetchAthletesList(false);
           fetchStatsData();
@@ -299,7 +299,7 @@ const Usermanagementdetails = () => {
         const { data } = await createAthlete(payload);
         if (data && data.success) {
           toast.success(
-            `Athlete registered as ${data.data.memberId} with password!`,
+            `User registered as ${data.data.memberId} with password!`,
             { duration: 5000 },
           );
           setIsModalOpen(false);
@@ -321,7 +321,7 @@ const Usermanagementdetails = () => {
   const handleDelete = async (id, memberId, name) => {
     if (
       !window.confirm(
-        `Are you sure you want to remove athlete ${name} (${memberId})?`,
+        `Are you sure you want to remove user ${name} (${memberId})?`,
       )
     ) {
       return;
@@ -336,7 +336,7 @@ const Usermanagementdetails = () => {
       }
     } catch (err) {
       console.error("Delete error:", err);
-      toast.error(err.response?.data?.message || "Failed to delete athlete.");
+      toast.error(err.response?.data?.message || "Failed to delete user.");
     }
   };
 
@@ -400,7 +400,7 @@ const Usermanagementdetails = () => {
 
     const headers = [
       "Member ID",
-      "Athlete Name",
+      "User Name",
       "Password",
       "Age",
       "Gender",
@@ -433,7 +433,7 @@ const Usermanagementdetails = () => {
     link.setAttribute("href", encodedUri);
     link.setAttribute(
       "download",
-      `BoxCross_Athletes_${new Date().toISOString().split("T")[0]}.csv`,
+      `BoxCross_Users_${new Date().toISOString().split("T")[0]}.csv`,
     );
     document.body.appendChild(link);
     link.click();
@@ -496,7 +496,7 @@ const Usermanagementdetails = () => {
               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
             >
               <Plus size={15} />
-              <span>Add Athlete <span className="hidden sm:inline">/ User</span></span>
+              <span>Add User</span>
             </button>
           </div>
         </div>
@@ -510,7 +510,7 @@ const Usermanagementdetails = () => {
           >
             <div className="min-w-0">
               <p className="text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest text-[var(--db-text-muted)] truncate">
-                Total Athletes
+                Total Users
               </p>
               <h3 className="text-xl sm:text-2xl font-black mt-0.5 sm:mt-1 text-[var(--db-text)]">
                 {stats.total || athletes.length}
@@ -608,7 +608,7 @@ const Usermanagementdetails = () => {
               />
               <input
                 type="text"
-                placeholder="Search by Athlete name, MemberID (e.g. BOXCROSS-001), Coach, Phone..."
+                placeholder="Search by User name, MemberID (e.g. BOXCROSS-001), Coach, Phone..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-[var(--db-text-muted)] focus:outline-none focus:border-[var(--db-accent-highlight)] focus:ring-1 focus:ring-[var(--db-accent-highlight)]/40 transition-all"
@@ -751,11 +751,11 @@ const Usermanagementdetails = () => {
                 className="text-xs font-extrabold uppercase tracking-widest text-[var(--db-text)]"
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
-                Athletes Directory ({athletes.length})
+                Users Directory ({athletes.length})
               </h2>
             </div>
             <span className="text-[10px] text-[var(--db-text-muted)] font-medium">
-              Click any athlete to view their Digital Pass & Credentials
+              Click any user to view their Digital Pass & Credentials
             </span>
           </div>
 
@@ -763,7 +763,7 @@ const Usermanagementdetails = () => {
             <div className="py-20 flex flex-col items-center justify-center text-[var(--db-text-muted)] gap-3">
               <div className="w-9 h-9 border-2 border-[var(--db-accent-highlight)]/20 border-t-[var(--db-accent-highlight)] rounded-full animate-spin" />
               <p className="text-xs font-semibold">
-                Loading athletes database...
+                Loading users database...
               </p>
             </div>
           ) : athletes.length === 0 ? (
@@ -772,17 +772,17 @@ const Usermanagementdetails = () => {
                 <Users size={28} />
               </div>
               <h3 className="text-base font-bold text-[var(--db-text)]">
-                No Athletes Found
+                No Users Found
               </h3>
               <p className="text-xs text-[var(--db-text-muted)] max-w-md mx-auto">
-                No athletes matched your query. Click below to add the first
-                athlete with auto-generated ID (BOXCROSS-001) and password.
+                No users matched your query. Click below to add the first
+                user with auto-generated ID (BOXCROSS-001) and password.
               </p>
               <button
                 onClick={handleOpenAddModal}
                 className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--db-accent)] text-[var(--db-accent-text)] text-xs font-bold uppercase tracking-wider cursor-pointer"
               >
-                <Plus size={14} /> Add Athlete
+                <Plus size={14} /> Add User
               </button>
             </div>
           ) : (
@@ -951,7 +951,7 @@ const Usermanagementdetails = () => {
 
                         <button
                           onClick={() => handleOpenEditModal(athlete)}
-                          title="Edit Athlete"
+                          title="Edit User"
                           className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white transition-all cursor-pointer shadow-sm active:scale-95"
                         >
                           <Edit2 size={13} />
@@ -965,7 +965,7 @@ const Usermanagementdetails = () => {
                               athlete.athleteName,
                             )
                           }
-                          title="Delete Athlete"
+                          title="Delete User"
                           className="p-1.5 rounded-lg border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-all cursor-pointer shadow-sm active:scale-95"
                         >
                           <Trash2 size={13} />
@@ -985,7 +985,7 @@ const Usermanagementdetails = () => {
                         Member ID
                       </th>
                       <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[210px] text-left">
-                        Athlete / User Name
+                        User Name
                       </th>
                       <th className="py-2.5 px-3.5 whitespace-nowrap min-w-[145px] text-left">
                         Portal Password
@@ -1223,16 +1223,16 @@ const Usermanagementdetails = () => {
                                 <QrCode size={13} />
                               </button>
 
-                              {/* Edit Athlete */}
+                              {/* Edit User */}
                               <button
                                 onClick={() => handleOpenEditModal(athlete)}
-                                title="Edit Athlete"
+                                title="Edit User"
                                 className="p-1.5 rounded-lg border border-[var(--db-card-border)] bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)] hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-sm hover:scale-105"
                               >
                                 <Edit2 size={13} />
                               </button>
 
-                              {/* Delete Athlete */}
+                              {/* Delete User */}
                               <button
                                 onClick={() =>
                                   handleDelete(
@@ -1241,7 +1241,7 @@ const Usermanagementdetails = () => {
                                     athlete.athleteName,
                                   )
                                 }
-                                title="Delete Athlete"
+                                title="Delete User"
                                 className="p-1.5 rounded-lg border border-red-500/25 bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all cursor-pointer shadow-sm hover:scale-105"
                               >
                                 <Trash2 size={13} />
@@ -1288,13 +1288,13 @@ const Usermanagementdetails = () => {
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     {isEditing
-                      ? "Edit Athlete Details"
-                      : "Register New Athlete / User"}
+                      ? "Edit User Details"
+                      : "Register New User"}
                   </h3>
                   <p className="text-xs text-[var(--db-text-muted)]">
                     {isEditing
-                      ? "Update athlete profile and credentials"
-                      : "Create athlete record with auto-generated Member ID & password"}
+                      ? "Update user profile and credentials"
+                      : "Create user record with auto-generated Member ID & password"}
                   </p>
                 </div>
               </div>
@@ -1386,10 +1386,10 @@ const Usermanagementdetails = () => {
                   </div>
                 </div>
 
-                {/* Athlete Name */}
+                {/* User Name */}
                 <div>
                   <label className="block text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] mb-1.5">
-                    Athlete Name / User Name{" "}
+                    User Name{" "}
                     <span className="text-red-400">*</span>
                   </label>
                   <input
@@ -1605,8 +1605,8 @@ const Usermanagementdetails = () => {
                     {submitting
                       ? "Saving..."
                       : isEditing
-                        ? "Update Athlete"
-                        : "Save Athlete & Credentials"}
+                        ? "Update User"
+                        : "Save User & Credentials"}
                   </button>
                 </div>
               </form>
@@ -1637,7 +1637,7 @@ const Usermanagementdetails = () => {
                 <div className="flex items-center justify-between pb-4 border-b border-white/10">
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-[#ccf141]">
-                      BOX & CROSS ATHLETE PASS
+                      BOX & CROSS USER PASS
                     </span>
                     <h2
                       className="text-xl font-black uppercase tracking-wider text-white"
@@ -1731,7 +1731,7 @@ const Usermanagementdetails = () => {
                     className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:brightness-110 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-amber-500/20"
                   >
                     <UserCheck size={16} />
-                    <span>Login / Switch to Athlete Portal</span>
+                    <span>Login / Switch to User Portal</span>
                   </button>
 
                   <div className="flex gap-2">
@@ -1746,7 +1746,7 @@ const Usermanagementdetails = () => {
                     {viewingAthlete.phone && (
                       <a
                         href={`https://wa.me/${viewingAthlete.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                          `Hi ${viewingAthlete.athleteName}, Welcome to Box & Cross! Here are your Athlete Portal credentials:\nMember ID: ${viewingAthlete.memberId}\nPassword: ${viewingAthlete.initialPassword || "bxc12345"}\nLogin: ${window.location.origin}/login?tab=athlete`,
+                          `Hi ${viewingAthlete.athleteName}, Welcome to Box & Cross! Here are your User Portal credentials:\nMember ID: ${viewingAthlete.memberId}\nPassword: ${viewingAthlete.initialPassword || "bxc12345"}\nLogin: ${window.location.origin}/login?tab=athlete`,
                         )}`}
                         target="_blank"
                         rel="noreferrer"
