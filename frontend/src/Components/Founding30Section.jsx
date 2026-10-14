@@ -104,13 +104,13 @@ const Founding30Section = ({
       </div>
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 lg:items-stretch items-center">
-          
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 lg:items-stretch  items-center">
+
           {/* ======================================================== */}
           {/* LEFT COLUMN: Headings, Subtext & 3 Features (col-span-5) */}
           {/* ======================================================== */}
           <div className="lg:col-span-5 flex flex-col lg:justify-between lg:h-full space-y-6 lg:space-y-0">
-            
+
             {/* Top Area: Badge + Main Headline + Subtitle */}
             <div className="space-y-4">
               {/* Top Badge */}
@@ -190,7 +190,7 @@ const Founding30Section = ({
               onClick={handleClaimSpot}
               className="relative w-full max-w-[340px] sm:max-w-[360px] lg:h-full rounded-[26px] lg:rounded-[28px] border-2 border-[#ccf141] bg-black/90 backdrop-blur-xl p-6 sm:p-7 xl:p-8 flex flex-col justify-between items-center text-center shadow-[0_0_45px_rgba(204,241,65,0.18)] transition-all duration-300 hover:shadow-[0_0_65px_rgba(204,241,65,0.32)] cursor-pointer hover:scale-[1.01]"
             >
-              
+
               {/* Card Top: Regular price, strikethrough, giant price & label */}
               <div className="w-full flex flex-col items-center">
                 {/* Header */}
@@ -275,7 +275,7 @@ const Founding30Section = ({
           {/* RIGHT COLUMN: Spots Headline + CTA (col-span-3)           */}
           {/* ======================================================== */}
           <div className="lg:col-span-3 flex flex-col lg:justify-between lg:h-full space-y-6 lg:space-y-0 pt-4 lg:pt-0">
-            
+
             {/* Top Area: Headline */}
             <div className="space-y-0 text-left">
               <h2

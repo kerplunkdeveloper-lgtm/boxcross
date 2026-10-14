@@ -865,7 +865,7 @@ const Membership = () => {
         <div className="w-full max-w-7xl mx-auto mb-12 p-3 md:p-0">
           {/*................................................................. Membership Plans heading start.............................. */}
 
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

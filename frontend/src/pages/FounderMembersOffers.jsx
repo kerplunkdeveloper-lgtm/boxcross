@@ -56,7 +56,8 @@ const defaultPrograms = [
     title: "CORE",
     subtitle: "ONE PATHWAY",
     desc: "Three coached sessions a week — Fight, HYROX or Strength",
-    price: "2,292",
+    price: "3,500",
+    originalPrice: "4,500",
     image: box1,
   },
   {
@@ -66,7 +67,8 @@ const defaultPrograms = [
     title: "ATHLETE",
     subtitle: "TWO PATHWAYS",
     desc: "Four coached sessions a week across two disciplines",
-    price: "3,275",
+    price: "4,500",
+    originalPrice: "5,500",
     popular: true,
     image: box2,
   },
@@ -88,7 +90,8 @@ const defaultPrograms = [
     title: "ARENA",
     subtitle: "EVERYTHING",
     desc: "Five coached sessions a week, every pathway, every class",
-    price: "4,583",
+    price: "6,000",
+    originalPrice: "7,500",
     image: box3,
   },
   {
@@ -115,7 +118,8 @@ const defaultPrograms = [
     title: "JUNIOR",
     subtitle: "UNDER 13",
     desc: "Three coached sessions a week",
-    price: "1,958",
+    price: "3,000",
+    originalPrice: "4,500",
     image: juniorBoxer,
   },
 ];
@@ -427,6 +431,23 @@ const initialFounderPlansMap = {
   },
 };
 
+const getDefaultOriginalPrice = (key, price) => {
+  const clean = String(price || "").replace(/[^0-9]/g, "");
+  if (clean === "3500") return "4,500";
+  if (clean === "3000") return "4,500";
+  if (clean === "2292") return "3,500";
+  if (clean === "3275") return "4,500";
+  if (clean === "4583") return "6,000";
+  if (clean === "1600" || clean === "1958") return "4,500";
+  if (clean === "4500") return "5,500";
+  if (clean === "6000") return "7,500";
+  if (key?.includes("core")) return "4,500";
+  if (key?.includes("athlete")) return "5,500";
+  if (key?.includes("arena")) return "7,500";
+  if (key?.includes("junior")) return "4,500";
+  return "4,500";
+};
+
 const FounderMembersOffers = () => {
   const [activeTab, setActiveTab] = useState("founder-core");
 
@@ -453,12 +474,18 @@ const FounderMembersOffers = () => {
           return defaultPrograms.map((prog) => {
             const dbPlan = plans.find((p) => p.key === prog.key);
             if (dbPlan) {
+              const curPrice = dbPlan.starterPrice || prog.price;
               return {
                 ...prog,
                 title: dbPlan.title || prog.title,
                 subtitle: dbPlan.subtitle || prog.subtitle,
                 desc: dbPlan.sessionInfo || dbPlan.desc || prog.desc,
-                price: dbPlan.starterPrice || prog.price,
+                price: curPrice,
+                originalPrice:
+                  dbPlan.originalPrice ||
+                  dbPlan.starterOriginalPrice ||
+                  prog.originalPrice ||
+                  getDefaultOriginalPrice(prog.key, curPrice),
                 isComingSoon: !!dbPlan.isComingSoon,
               };
             }
@@ -496,12 +523,18 @@ const FounderMembersOffers = () => {
     const updated = defaultPrograms.map((prog) => {
       const dbPlan = plans.find((p) => p.key === prog.key);
       if (dbPlan) {
+        const curPrice = dbPlan.starterPrice || prog.price;
         return {
           ...prog,
           title: dbPlan.title || prog.title,
           subtitle: dbPlan.subtitle || prog.subtitle,
           desc: dbPlan.sessionInfo || dbPlan.desc || prog.desc,
-          price: dbPlan.starterPrice || prog.price,
+          price: curPrice,
+          originalPrice:
+            dbPlan.originalPrice ||
+            dbPlan.starterOriginalPrice ||
+            prog.originalPrice ||
+            getDefaultOriginalPrice(prog.key, curPrice),
           isComingSoon: !!dbPlan.isComingSoon,
         };
       }
@@ -759,9 +792,9 @@ const FounderMembersOffers = () => {
             FROM
           </p>
 
-          <div>
+          <div className="flex items-baseline flex-wrap gap-2 my-1">
             <span
-              className="text-lg text-[#ccf141] text-[30px] md:text-[48px] mx-1.5"
+              className="text-lg text-[#ccf141] text-[30px] md:text-[46px]"
               style={{
                 fontFamily: '"BrutalTypeBold", sans-serif',
                 fontWeight: "700",
@@ -769,7 +802,19 @@ const FounderMembersOffers = () => {
             >
               ₹{prog.price}
             </span>
-            / MONTH
+            {prog.originalPrice && (
+              <span
+                className="line-through text-zinc-500 text-[18px] md:text-[24px] font-bold"
+                style={{
+                  fontFamily: '"BrutalTypeBold", sans-serif',
+                }}
+              >
+                ₹{prog.originalPrice}
+              </span>
+            )}
+            <span className="text-gray-300 text-xs md:text-sm font-bold uppercase tracking-wider">
+              / MONTH
+            </span>
           </div>
 
           <button
@@ -826,8 +871,8 @@ const FounderMembersOffers = () => {
       {
         num: "01",
         icon: <Lock size={17} className="text-[#ccf141]" />,
-        title: "EXCLUSIVE LOCKED RATES",
-        desc: "Permanent founding rate lock at ₹14,999 — never face regular renewal increases.",
+        title: "EXCLUSIVE RATES",
+        desc: "Special Founding 100 membership pricing, reserved exclusively for existing Box & Cross members.",
       },
       {
         num: "02",
@@ -924,12 +969,7 @@ const FounderMembersOffers = () => {
             data-aos="fade-right"
             className="flex-1 w-full flex flex-col justify-center text-center md:text-left z-10"
           >
-            <div className="inline-flex items-center gap-2 mb-3 self-center md:self-start">
-              <span className="px-3.5 py-1 rounded-full bg-[#ccf141]/20 border border-[#ccf141]/60 text-[#ccf141] text-[11px] sm:text-xs font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[0_0_15px_rgba(204,241,65,0.2)]">
-                <Crown size={13} className="text-[#ccf141]" />
-                EXCLUSIVE FOUNDING OFFERS
-              </span>
-            </div>
+
 
             <h1
               className="
@@ -976,7 +1016,7 @@ const FounderMembersOffers = () => {
                 fontWeight: 700,
               }}
             >
-              Exclusive founding member privileges, permanent locked rates, and priority arena access. Be part of the first generation of athletes at Box &amp; Cross.
+              Exclusive founding member privileges & priority arena access. Be part of the first generation of athletes at Box &amp; Cross.
             </p>
 
             <div
@@ -1299,13 +1339,21 @@ const FounderMembersOffers = () => {
                         <span className="block text-zinc-400 text-xs uppercase font-bold tracking-widest">
                           MEMBERSHIP STARTS FROM
                         </span>
-                        <div className="flex items-baseline gap-2 mt-0.5">
+                        <div className="flex items-baseline flex-wrap gap-2 sm:gap-3 mt-0.5">
                           <span
                             className="text-3xl sm:text-4xl md:text-5xl font-black text-[#ccf141] leading-none"
                             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                           >
                             ₹{juniorProgram.price}
                           </span>
+                          {juniorProgram.originalPrice && (
+                            <span
+                              className="line-through text-zinc-500 text-xl sm:text-2xl md:text-3xl font-bold leading-none"
+                              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            >
+                              ₹{juniorProgram.originalPrice}
+                            </span>
+                          )}
                           <span className="text-zinc-400 text-xs sm:text-sm font-bold uppercase tracking-wider">
                             / MONTH
                           </span>
