@@ -29,7 +29,7 @@ const DashboardLayout = () => {
 
   return (
     <div 
-      style={{ fontFamily: "var(--admin-font, 'Plus Jakarta Sans', 'Inter', sans-serif)" }}
+      style={{ fontFamily: "var(--admin-font, 'Poppins', sans-serif)" }}
       className={`h-screen flex overflow-hidden ${theme === 'dark' ? 'dashboard-dark' : 'dashboard-light'} bg-[var(--db-bg)] text-[var(--db-text)]`}
     >
       {/* Sidebar */}

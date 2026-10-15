@@ -29,6 +29,7 @@ import {
   Zap,
   Smile,
   Target,
+  Flame,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import { useAuth } from "../context/AuthContext";
@@ -89,6 +90,18 @@ const DashboardSidebar = ({
     );
   });
 
+  const [clubOpen, setClubOpen] = useState(() => {
+    return (
+      location.pathname.includes("/fight-club") ||
+      location.pathname.includes("/performance-boxing") ||
+      location.pathname.includes("/strength-lab") ||
+      location.pathname.includes("/hyrox-lab") ||
+      location.pathname.includes("/hybrid-performance") ||
+      location.pathname.includes("/athlete-performance-profile") ||
+      location.pathname.includes("/junior-athlete-profile")
+    );
+  });
+
   // Single combined useEffect replaces 4 separate ones watching the same dep
   useEffect(() => {
     const p = location.pathname;
@@ -116,6 +129,15 @@ const DashboardSidebar = ({
       p.includes("/founder-payments") ||
       p.includes("/founderpayment")
     ) setOfferFoundersOpen(true);
+    if (
+      p.includes("/fight-club") ||
+      p.includes("/performance-boxing") ||
+      p.includes("/strength-lab") ||
+      p.includes("/hyrox-lab") ||
+      p.includes("/hybrid-performance") ||
+      p.includes("/athlete-performance-profile") ||
+      p.includes("/junior-athlete-profile")
+    ) setClubOpen(true);
   }, [location.pathname]);
 
   // Style helpers for items
@@ -281,6 +303,11 @@ const DashboardSidebar = ({
                             }`}
                           />
                           <span className="truncate">{sub.name}</span>
+                          {sub.badge && (
+                            <span className="ml-auto text-[8px] font-semibold uppercase px-1 py-0.2 rounded bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/30">
+                              {sub.badge}
+                            </span>
+                          )}
                         </>
                       )}
                     </NavLink>
@@ -341,6 +368,11 @@ const DashboardSidebar = ({
                             }`}
                           />
                           <span className="truncate">{sub.name}</span>
+                          {sub.badge && (
+                            <span className="ml-auto text-[8px] font-semibold uppercase px-1 py-0.2 rounded bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/30">
+                              {sub.badge}
+                            </span>
+                          )}
                         </>
                       )}
                     </NavLink>
@@ -396,7 +428,7 @@ const DashboardSidebar = ({
               />
               {isAdmin && (
                 <span className="text-[9px] text-black font-black px-2 py-0.5 rounded-md bg-[#ccf141] tracking-wider shadow-sm select-none shrink-0">
-                  <span style={{ fontFamily: '"Brutal Font", sans-serif' }}>
+                  <span style={{ fontFamily: "var(--admin-font, 'Poppins', sans-serif)" }}>
                     ADMIN
                   </span>
                 </span>
@@ -475,55 +507,59 @@ const DashboardSidebar = ({
                 badge: "LIVE",
               })}
 
-
-              {/* Fight Club */}
-              {renderSingleItem({
-                to: "/dashboard/fight-club",
-                name: "Fight Club",
-                icon: Swords,
-              })}
-
-              {/* Performance Boxing */}
-              {renderSingleItem({
-                to: "/dashboard/performance-boxing",
-                name: "Performance Boxing",
-                icon: Trophy,
-                badge: "ELITE"
-              })}
-
-              {/* Strength Lab */}
-              {renderSingleItem({
-                to: "/dashboard/strength-lab",
-                name: "Strength Lab",
-                icon: Dumbbell,
-              })}
-
-              {/* Hyrox Lab */}
-              {renderSingleItem({
-                to: "/dashboard/hyrox-lab",
-                name: "Hyrox Lab",
-                icon: Timer,
-              })}
-
-              {/* Hybrid Performance */}
-              {renderSingleItem({
-                to: "/dashboard/hybrid-performance",
-                name: "Hybrid Performance",
-                icon: Zap,
-              })}
-
-              {/* Athlete Performance Profile */}
-              {renderSingleItem({
-                to: "/dashboard/athlete-performance-profile",
-                name: "Athlete Profile",
-                icon: ClipboardList,
-              })}
-
-              {/* Junior Athlete Profile */}
-              {renderSingleItem({
-                to: "/dashboard/junior-athlete-profile",
-                name: "Junior Profile",
-                icon: Smile,
+              {/* Club Accordion / Flyout */}
+              {renderDropdownGroup({
+                title: "Club",
+                icon: Flame,
+                isOpen: clubOpen,
+                setIsOpen: setClubOpen,
+                pathMatch: [
+                  "/fight-club",
+                  "/performance-boxing",
+                  "/strength-lab",
+                  "/hyrox-lab",
+                  "/hybrid-performance",
+                  "/athlete-performance-profile",
+                  "/junior-athlete-profile",
+                ],
+                items: [
+                  {
+                    name: "Fight Club",
+                    path: "/dashboard/fight-club",
+                    icon: Swords,
+                  },
+                  {
+                    name: "Performance Boxing",
+                    path: "/dashboard/performance-boxing",
+                    icon: Trophy,
+                    badge: "ELITE",
+                  },
+                  {
+                    name: "Strength Lab",
+                    path: "/dashboard/strength-lab",
+                    icon: Dumbbell,
+                  },
+                  {
+                    name: "HyroxLab",
+                    path: "/dashboard/hyrox-lab",
+                    icon: Timer,
+                  },
+                  {
+                    name: "HybridPerformance",
+                    path: "/dashboard/hybrid-performance",
+                    icon: Zap,
+                  },
+                  {
+                    name: "Athlete Profile",
+                    path: "/dashboard/athlete-performance-profile",
+                    icon: ClipboardList,
+                  },
+                  {
+                    name: "Junior Profile",
+                    path: "/dashboard/junior-athlete-profile",
+                    icon: Smile,
+                  },
+                ],
               })}
 
               {/* Goals & Readiness */}
@@ -569,9 +605,9 @@ const DashboardSidebar = ({
                 ],
               })}
 
-              {/* Founders Club Accordion / Flyout */}
+              {/* Founder Member Club Accordion / Flyout */}
               {renderDropdownGroup({
-                title: "Founders Club",
+                title: "Founder Member Club",
                 icon: Crown,
                 isOpen: offerFoundersOpen,
                 setIsOpen: setOfferFoundersOpen,
