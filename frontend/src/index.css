@@ -253,22 +253,35 @@ html {
   letter-spacing: -0.015em;
 }
 
+/* Scaled base font size for Admin Dashboard (~93.75% / 15px base from standard 16px) */
+html.admin-dashboard-active {
+  font-size: 93.75%;
+}
+
+@media (max-width: 640px) {
+  html.admin-dashboard-active {
+    font-size: 90%;
+  }
+}
+
 /* High-clarity Tabular Data Styling */
 .dashboard-dark table,
 .dashboard-light table {
   font-variant-numeric: tabular-nums;
 }
 
-.dashboard-dark th {
+.dashboard-dark th,
+.dashboard-light th {
   font-weight: 600;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
-.dashboard-dark td {
+.dashboard-dark td,
+.dashboard-light td {
   font-weight: 450;
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   letter-spacing: -0.005em;
 }
 

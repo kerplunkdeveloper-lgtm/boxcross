@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
@@ -14,6 +14,13 @@ const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(
     typeof window !== "undefined" ? window.innerWidth >= 1024 : true
   );
+
+  useEffect(() => {
+    document.documentElement.classList.add("admin-dashboard-active");
+    return () => {
+      document.documentElement.classList.remove("admin-dashboard-active");
+    };
+  }, []);
 
   const handleLogout = async () => {
     const res = await logout();

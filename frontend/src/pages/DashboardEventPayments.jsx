@@ -14,11 +14,19 @@ import {
   ArrowUpDown,
   Download,
   X,
+  Award,
+  RotateCcw,
+  ChevronDown,
+  Mail,
+  Phone,
+  Clock,
+  Ticket,
 } from "lucide-react";
 import {
   getEventBookings,
   deleteEventBooking,
   updateEventBooking,
+  getEventsList,
 } from "../api/api";
 import { toast } from "react-hot-toast";
 
@@ -53,23 +61,130 @@ const formatDateToDMY = (dateVal) => {
   return `${day} / ${month} / ${year}`;
 };
 
+// Helper to parse date string into timestamp for accurate sorting (recent first)
+const parseDateToTimestamp = (dateVal, fallbackCreatedAt = null) => {
+  if (!dateVal) {
+    return fallbackCreatedAt ? new Date(fallbackCreatedAt).getTime() : 0;
+  }
+  // Try matching YYYY-MM-DD
+  const yyyymmddMatch = String(dateVal).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (yyyymmddMatch) {
+    const [_, y, m, d] = yyyymmddMatch;
+    return new Date(`${y}-${m}-${d}T00:00:00`).getTime();
+  }
+  // Try matching DD-MM-YYYY or DD/MM/YYYY
+  const dmyMatch = String(dateVal).match(/^(\d{2})[-/](\d{2})[-/](\d{4})/);
+  if (dmyMatch) {
+    const [_, d, m, y] = dmyMatch;
+    return new Date(`${y}-${m}-${d}T00:00:00`).getTime();
+  }
+  const parsed = new Date(dateVal).getTime();
+  if (!isNaN(parsed)) return parsed;
+  return fallbackCreatedAt ? new Date(fallbackCreatedAt).getTime() : 0;
+};
+
+// Normalized date key helper to match regardless of format (YYYY-MM-DD vs DD/MM/YYYY vs ISO)
+const normalizeDateKey = (dateVal) => {
+  if (!dateVal) return "";
+  const str = String(dateVal).trim();
+  const yyyymmdd = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (yyyymmdd) return `${yyyymmdd[1]}-${yyyymmdd[2]}-${yyyymmdd[3]}`;
+  const dmy = str.match(/^(\d{2})[-/](\d{2})[-/](\d{4})/);
+  if (dmy) return `${dmy[3]}-${dmy[2]}-${dmy[1]}`;
+  const d = new Date(str);
+  if (!isNaN(d.getTime())) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+  return str;
+};
+
+// Normalized slot key helper (strips whitespace and standardizes format)
+const normalizeSlotKey = (slotVal) => {
+  if (!slotVal) return "";
+  return String(slotVal).trim().toLowerCase().replace(/\s+/g, " ");
+};
+
 const DashboardEventPayments = () => {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [paymentMethodFilter, setPaymentMethodFilter] = useState("all");
+  const [eventFilter, setEventFilter] = useState(() => {
+    try {
+      return sessionStorage.getItem("bxc_event_filter") || "all";
+    } catch {
+      return "all";
+    }
+  });
+  const [dateFilter, setDateFilter] = useState(() => {
+    try {
+      return sessionStorage.getItem("bxc_date_filter") || "all";
+    } catch {
+      return "all";
+    }
+  });
+  const [timeSlotFilter, setTimeSlotFilter] = useState(() => {
+    try {
+      return sessionStorage.getItem("bxc_time_slot_filter") || "all";
+    } catch {
+      return "all";
+    }
+  });
   const [viewScreenshotUrl, setViewScreenshotUrl] = useState("");
   const [deletingId, setDeletingId] = useState(null);
+
+  const updateEventFilter = (val) => {
+    setEventFilter(val);
+    setDateFilter("all");
+    setTimeSlotFilter("all");
+    try {
+      sessionStorage.setItem("bxc_event_filter", val);
+      sessionStorage.setItem("bxc_date_filter", "all");
+      sessionStorage.setItem("bxc_time_slot_filter", "all");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateDateFilter = (val) => {
+    setDateFilter(val);
+    setTimeSlotFilter("all");
+    try {
+      sessionStorage.setItem("bxc_date_filter", val);
+      sessionStorage.setItem("bxc_time_slot_filter", "all");
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateTimeSlotFilter = (val) => {
+    setTimeSlotFilter(val);
+    try {
+      sessionStorage.setItem("bxc_time_slot_filter", val);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const fetchBookings = async (showLoader = false) => {
     const shouldShow = showLoader === true;
     try {
       if (shouldShow) setLoading(true);
-      const { data } = await getEventBookings();
-      if (data.success) {
-        setBookings(data.data);
+      const [bookingsRes, eventsRes] = await Promise.all([
+        getEventBookings(),
+        getEventsList(),
+      ]);
+      if (bookingsRes.data?.success) {
+        setBookings(bookingsRes.data.data);
+      }
+      if (eventsRes.data?.success) {
+        setEvents(eventsRes.data.data);
       }
     } catch (error) {
       console.error("Error fetching event bookings", error);
@@ -128,29 +243,212 @@ const DashboardEventPayments = () => {
     }
   };
 
-  // Compute stats
-  const totalVolume = bookings
+  // Build a comprehensive map of each event with its separate schedules and slots
+  const eventScheduleMap = new Map();
+
+  // 1. Populate from defined events collection
+  events.forEach((evt) => {
+    const title = evt.title;
+    if (title && !eventScheduleMap.has(title)) {
+      eventScheduleMap.set(title, {
+        title,
+        schedules: new Map(), // rawDate -> Set of timeSlots
+        latestTimestamp: 0,
+        bookingCount: 0,
+      });
+    }
+    const item = eventScheduleMap.get(title);
+    if (item && evt.schedules) {
+      evt.schedules.forEach((sched) => {
+        const rawDate = sched.date;
+        const ts = parseDateToTimestamp(rawDate);
+        if (ts > item.latestTimestamp) item.latestTimestamp = ts;
+        if (!item.schedules.has(rawDate)) {
+          item.schedules.set(rawDate, new Set());
+        }
+        if (sched.timeSlots) {
+          sched.timeSlots.forEach((slot) => {
+            if (slot.time) item.schedules.get(rawDate).add(slot.time.trim());
+          });
+        }
+      });
+    }
+  });
+
+  // 2. Populate from actual bookings
+  bookings.forEach((b) => {
+    const title = b.event?.title || "Deleted Event";
+    if (!eventScheduleMap.has(title)) {
+      eventScheduleMap.set(title, {
+        title,
+        schedules: new Map(),
+        latestTimestamp: 0,
+        bookingCount: 0,
+      });
+    }
+    const item = eventScheduleMap.get(title);
+    item.bookingCount += 1;
+
+    const ts = parseDateToTimestamp(b.date, b.createdAt);
+    if (ts > item.latestTimestamp) item.latestTimestamp = ts;
+
+    if (b.date) {
+      if (!item.schedules.has(b.date)) {
+        item.schedules.set(b.date, new Set());
+      }
+      if (b.timeSlot) {
+        item.schedules.get(b.date).add(b.timeSlot.trim());
+      }
+    }
+  });
+
+  // Sorted list of all events (recent date first)
+  const sortedEvents = Array.from(eventScheduleMap.values()).sort(
+    (a, b) => b.latestTimestamp - a.latestTimestamp,
+  );
+
+  // Separate schedule dates:
+  // If an event is selected, ONLY show the schedule dates belonging to that event!
+  let availableDates = [];
+  if (eventFilter !== "all" && eventScheduleMap.has(eventFilter)) {
+    const selectedEvt = eventScheduleMap.get(eventFilter);
+    availableDates = Array.from(selectedEvt.schedules.keys()).sort(
+      (a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a),
+    );
+  } else {
+    // If All Events is selected, collect all distinct schedule dates
+    const allDates = new Set();
+    eventScheduleMap.forEach((evt) => {
+      evt.schedules.forEach((_, dateKey) => allDates.add(dateKey));
+    });
+    availableDates = Array.from(allDates).sort(
+      (a, b) => parseDateToTimestamp(b) - parseDateToTimestamp(a),
+    );
+  }
+
+  // Separate time slots:
+  // If an event and/or date is selected, ONLY show time slots belonging to that event and date!
+  let availableTimeSlots = [];
+  if (eventFilter !== "all" && eventScheduleMap.has(eventFilter)) {
+    const selectedEvt = eventScheduleMap.get(eventFilter);
+    if (dateFilter !== "all" && selectedEvt.schedules.has(dateFilter)) {
+      availableTimeSlots = Array.from(selectedEvt.schedules.get(dateFilter)).sort();
+    } else {
+      const slots = new Set();
+      selectedEvt.schedules.forEach((slotSet) => {
+        slotSet.forEach((s) => slots.add(s));
+      });
+      availableTimeSlots = Array.from(slots).sort();
+    }
+  } else if (dateFilter !== "all") {
+    const slots = new Set();
+    eventScheduleMap.forEach((evt) => {
+      if (evt.schedules.has(dateFilter)) {
+        evt.schedules.get(dateFilter).forEach((s) => slots.add(s));
+      }
+    });
+    availableTimeSlots = Array.from(slots).sort();
+  } else {
+    const slots = new Set();
+    eventScheduleMap.forEach((evt) => {
+      evt.schedules.forEach((slotSet) => {
+        slotSet.forEach((s) => slots.add(s));
+      });
+    });
+    availableTimeSlots = Array.from(slots).sort();
+  }
+
+  // Auto-reset dateFilter if it was selected for a different event and is not in availableDates
+  useEffect(() => {
+    if (!loading && availableDates.length > 0 && dateFilter !== "all") {
+      const exists = availableDates.some(
+        (d) => normalizeDateKey(d) === normalizeDateKey(dateFilter),
+      );
+      if (!exists) {
+        updateDateFilter("all");
+      }
+    }
+  }, [availableDates, dateFilter, loading]);
+
+  // Compute stats strictly scoped to filtered event, schedule date & time
+  const statsBookings = bookings
+    .filter((b) => eventFilter === "all" || (b.event?.title || "Deleted Event") === eventFilter)
+    .filter((b) => dateFilter === "all" || normalizeDateKey(b.date) === normalizeDateKey(dateFilter))
+    .filter((b) => timeSlotFilter === "all" || normalizeSlotKey(b.timeSlot) === normalizeSlotKey(timeSlotFilter));
+
+  const totalVolume = statsBookings
     .filter(
       (b) => b.status === "payment successfully" || b.status === "confirmed",
     )
-    .reduce((sum, b) => sum + b.totalAmount, 0);
+    .reduce((sum, b) => sum + (Number(b.totalAmount) || 0), 0);
 
-  const successfulTxns = bookings.filter(
+  const totalSeats = statsBookings
+    .filter(
+      (b) => b.status === "payment successfully" || b.status === "confirmed",
+    )
+    .reduce((sum, b) => sum + (Number(b.seats) || 0), 0);
+
+  // Calculate total slots allocated for the selected event / date / slot filter
+  let totalSlotsAllocated = 0;
+  const filteredEventsForCapacity =
+    eventFilter === "all"
+      ? events
+      : events.filter((e) => (e.title || "Deleted Event") === eventFilter);
+
+  filteredEventsForCapacity.forEach((evt) => {
+    if (evt.schedules) {
+      evt.schedules.forEach((sched) => {
+        if (
+          dateFilter === "all" ||
+          normalizeDateKey(sched.date) === normalizeDateKey(dateFilter)
+        ) {
+          if (sched.timeSlots) {
+            sched.timeSlots.forEach((slot) => {
+              if (
+                timeSlotFilter === "all" ||
+                normalizeSlotKey(slot.time) === normalizeSlotKey(timeSlotFilter)
+              ) {
+                totalSlotsAllocated += Number(slot.slots) || 0;
+              }
+            });
+          }
+        }
+      });
+    }
+  });
+
+  const successfulTxns = statsBookings.filter(
     (b) => b.status === "payment successfully" || b.status === "confirmed",
   ).length;
-  const pendingTxns = bookings.filter((b) => b.status === "not payment").length;
-  const failedTxns = bookings.filter((b) => b.status === "failed").length;
+  const pendingTxns = statsBookings.filter(
+    (b) => b.status === "not payment",
+  ).length;
+  const failedTxns = statsBookings.filter(
+    (b) => b.status === "failed",
+  ).length;
 
   // Filter bookings
   const filteredBookings = bookings.filter((booking) => {
     const query = searchQuery.toLowerCase();
     const matchesSearch =
-      booking.name.toLowerCase().includes(query) ||
-      booking.email.toLowerCase().includes(query) ||
-      booking.phone.toLowerCase().includes(query) ||
+      booking.name?.toLowerCase().includes(query) ||
+      booking.email?.toLowerCase().includes(query) ||
+      booking.phone?.toLowerCase().includes(query) ||
       (booking.event?.title || "").toLowerCase().includes(query) ||
       (booking.razorpayOrderId || "").toLowerCase().includes(query) ||
       (booking.razorpayPaymentId || "").toLowerCase().includes(query);
+
+    const matchesEvent =
+      eventFilter === "all" ||
+      (booking.event?.title || "Deleted Event") === eventFilter;
+
+    const matchesDate =
+      dateFilter === "all" ||
+      normalizeDateKey(booking.date) === normalizeDateKey(dateFilter);
+
+    const matchesTimeSlot =
+      timeSlotFilter === "all" ||
+      normalizeSlotKey(booking.timeSlot) === normalizeSlotKey(timeSlotFilter);
 
     const matchesStatus =
       statusFilter === "all" || booking.status === statusFilter;
@@ -159,8 +457,30 @@ const DashboardEventPayments = () => {
       paymentMethodFilter === "all" ||
       (booking.paymentMethod || "razorpay") === paymentMethodFilter;
 
-    return matchesSearch && matchesStatus && matchesPaymentMethod;
+    return (
+      matchesSearch &&
+      matchesEvent &&
+      matchesDate &&
+      matchesTimeSlot &&
+      matchesStatus &&
+      matchesPaymentMethod
+    );
   });
+
+  const hasActiveFilters =
+    searchQuery !== "" ||
+    eventFilter !== "all" ||
+    dateFilter !== "all" ||
+    timeSlotFilter !== "all" ||
+    statusFilter !== "all" ||
+    paymentMethodFilter !== "all";
+
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    updateEventFilter("all");
+    setStatusFilter("all");
+    setPaymentMethodFilter("all");
+  };
 
   const handleExportToExcel = () => {
     const headers = [
@@ -280,9 +600,13 @@ const DashboardEventPayments = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
+    const sanitizedEventTag =
+      eventFilter !== "all"
+        ? `${eventFilter.replace(/[^a-zA-Z0-9]/g, "_")}_`
+        : "";
     link.setAttribute(
       "download",
-      `Event_Bookings_${new Date().toISOString().split("T")[0]}.xls`,
+      `Event_Bookings_${sanitizedEventTag}${new Date().toISOString().split("T")[0]}.xls`,
     );
     link.style.visibility = "hidden";
     document.body.appendChild(link);
@@ -292,7 +616,7 @@ const DashboardEventPayments = () => {
 
 
   return (
-    <div className="p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
+    <div className="mt-2 space-y-4 sm:space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
       {/* Background Radial Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[var(--db-accent-glow)] rounded-full blur-[120px] pointer-events-none z-0" />
 
@@ -312,7 +636,7 @@ const DashboardEventPayments = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4 md:gap-5">
           {/* Card 1: Total Revenue */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -321,8 +645,8 @@ const DashboardEventPayments = () => {
             className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 flex items-center justify-between shadow-lg transition-colors col-span-2 sm:col-span-1"
           >
             <div className="text-left">
-              <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
-                Event Collection
+              <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest truncate max-w-[170px]">
+                {eventFilter === "all" ? "Event Collection" : `${eventFilter} Revenue`}
               </p>
               <h3 className="text-lg sm:text-2xl font-black text-[var(--db-text)] mt-0.5 sm:mt-1">
                 ₹{totalVolume.toLocaleString()}
@@ -333,11 +657,31 @@ const DashboardEventPayments = () => {
             </div>
           </motion.div>
 
-          {/* Card 2: Success Payments */}
+          {/* Card 2: No. of Seats */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.05 }}
+            transition={{ duration: 0.3, delay: 0.03 }}
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 flex items-center justify-between shadow-lg transition-colors"
+          >
+            <div className="text-left">
+              <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
+                No. of Seats
+              </p>
+              <h3 className="text-lg sm:text-2xl font-black text-cyan-400 mt-0.5 sm:mt-1 font-mono">
+                {totalSeats}
+              </h3>
+            </div>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
+              <Users size={18} />
+            </div>
+          </motion.div>
+
+          {/* Card 3: Success Payments */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.06 }}
             className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 flex items-center justify-between shadow-lg transition-colors"
           >
             <div className="text-left">
@@ -402,41 +746,225 @@ const DashboardEventPayments = () => {
           className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl sm:rounded-[24px] p-4 sm:p-6 md:p-8 shadow-2xl transition-colors"
         >
           {/* List Header controls */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 mb-5 pb-4 border-b border-[var(--db-card-border)]">
-            <div className="flex items-center gap-2 text-left">
-              <CreditCard
-                size={18}
-                className="text-[var(--db-accent-highlight)]"
-              />
-              <span className="text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-[var(--db-accent-highlight)]">
-                Event Booking Records
-              </span>
+          <div className="space-y-4 mb-5 pb-4 border-b border-[var(--db-card-border)]">
+            {/* Top Row: Title & Record Counter + Action Buttons */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 text-left">
+                <CreditCard
+                  size={18}
+                  className="text-[var(--db-accent-highlight)]"
+                />
+                <span className="text-[11px] md:text-xs font-black uppercase tracking-widest text-[var(--db-accent-highlight)]">
+                  Event Booking Records
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text-muted)]">
+                  {filteredBookings.length} {filteredBookings.length === 1 ? "record" : "records"}
+                </span>
+              </div>
+
+              {/* Action buttons (Reset & Export to Excel) */}
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                {hasActiveFilters && (
+                  <button
+                    onClick={handleResetFilters}
+                    className="flex items-center gap-1.5 px-3.5 h-8.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer"
+                    title="Reset all filters"
+                  >
+                    <RotateCcw size={11} />
+                    <span>Reset</span>
+                  </button>
+                )}
+
+                <button
+                  onClick={handleExportToExcel}
+                  className="flex items-center gap-1.5 px-4 h-8.5 bg-[#ccf141] hover:bg-[#d4eb00] active:scale-95 text-black font-black uppercase tracking-wider text-[10px] rounded-full shadow-lg shadow-[#ccf141]/10 transition-all cursor-pointer whitespace-nowrap"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
+                  <Download size={12} />
+                  Export to Excel
+                </button>
+              </div>
             </div>
 
-            {/* Filters Row */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            {/* Bottom Row: Unified Filters Bar */}
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
               {/* Search Bar */}
-              <div className="relative w-full sm:w-auto">
+              <div className="relative flex-1 min-w-[200px] sm:min-w-[240px]">
                 <Search
                   size={14}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500"
                 />
                 <input
                   type="text"
                   placeholder="Search user, event, order..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-9 w-full sm:w-52 md:w-56 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-gray-500 rounded-full pl-9 pr-4 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
+                  className="h-9 w-full bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] placeholder-gray-500 rounded-full pl-9 pr-4 text-xs outline-none focus:border-[var(--db-accent-highlight)] transition-colors"
                 />
               </div>
 
+              {/* Event Filter Dropdown */}
+              <div className="relative flex items-center bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-full px-3 h-9 text-xs text-[var(--db-text-muted)] focus-within:border-[var(--db-accent-highlight)] transition-colors">
+                <Award size={12} className="mr-1.5 text-gray-500 shrink-0 pointer-events-none" />
+                <select
+                  value={eventFilter}
+                  onChange={(e) => updateEventFilter(e.target.value)}
+                  className="bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-[var(--db-text)] cursor-pointer pr-5 text-xs appearance-none max-w-[180px] sm:max-w-[220px] truncate"
+                  title="Filter by Event"
+                >
+                  <option
+                    value="all"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    All Events ({sortedEvents.length})
+                  </option>
+                  {sortedEvents.map((evt) => (
+                    <option
+                      key={evt.title}
+                      value={evt.title}
+                      className="bg-[var(--db-card)] text-[var(--db-text)]"
+                    >
+                      {evt.title} ({evt.bookingCount})
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown size={11} className="absolute right-2.5 pointer-events-none text-gray-500 shrink-0" />
+              </div>
+
+              {/* Schedule Date Filter Dropdown (Strictly Separated for Selected Event) */}
+              <div className="relative flex items-center bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-full px-3 h-9 text-xs text-[var(--db-text-muted)] focus-within:border-[var(--db-accent-highlight)] transition-colors">
+                <Calendar size={12} className="mr-1.5 text-gray-500 shrink-0 pointer-events-none" />
+                <select
+                  value={dateFilter}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "all") {
+                      updateDateFilter("all");
+                    } else if (val.includes(":::")) {
+                      const [evtTitle, rawDate] = val.split(":::");
+                      setEventFilter(evtTitle);
+                      setDateFilter(rawDate);
+                      setTimeSlotFilter("all");
+                      try {
+                        sessionStorage.setItem("bxc_event_filter", evtTitle);
+                        sessionStorage.setItem("bxc_date_filter", rawDate);
+                        sessionStorage.setItem("bxc_time_slot_filter", "all");
+                      } catch (err) {
+                        console.error(err);
+                      }
+                    } else {
+                      updateDateFilter(val);
+                    }
+                  }}
+                  className="bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-[var(--db-text)] cursor-pointer pr-5 text-xs appearance-none max-w-[150px] sm:max-w-[180px] truncate"
+                  title="Filter by Schedule Date"
+                >
+                  <option
+                    value="all"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    {eventFilter !== "all"
+                      ? `All Dates (${availableDates.length})`
+                      : "All Schedule Dates"}
+                  </option>
+                  {eventFilter !== "all" ? (
+                    availableDates.map((d) => {
+                      const dateBookingCount = bookings.filter(
+                        (b) =>
+                          (b.event?.title || "Deleted Event") === eventFilter &&
+                          normalizeDateKey(b.date) === normalizeDateKey(d),
+                      ).length;
+                      return (
+                        <option
+                          key={d}
+                          value={d}
+                          className="bg-[var(--db-card)] text-[var(--db-text)]"
+                        >
+                          {formatDateToDMY(d)} ({dateBookingCount} booked)
+                        </option>
+                      );
+                    })
+                  ) : (
+                    sortedEvents.map((evt) => {
+                      const datesForEvt = Array.from(evt.schedules.keys());
+                      if (datesForEvt.length === 0) return null;
+                      return (
+                        <optgroup
+                          key={evt.title}
+                          label={evt.title}
+                          className="bg-[var(--db-card)] text-[var(--db-accent-highlight)] font-bold"
+                        >
+                          {datesForEvt.map((d) => {
+                            const dateBookingCount = bookings.filter(
+                              (b) =>
+                                (b.event?.title || "Deleted Event") === evt.title &&
+                                normalizeDateKey(b.date) === normalizeDateKey(d),
+                            ).length;
+                            return (
+                              <option
+                                key={`${evt.title}-${d}`}
+                                value={`${evt.title}:::${d}`}
+                                className="bg-[var(--db-card)] text-[var(--db-text)] font-normal"
+                              >
+                                {formatDateToDMY(d)} {dateBookingCount > 0 ? `(${dateBookingCount} booked)` : ""}
+                              </option>
+                            );
+                          })}
+                        </optgroup>
+                      );
+                    })
+                  )}
+                </select>
+                <ChevronDown size={11} className="absolute right-2.5 pointer-events-none text-gray-500 shrink-0" />
+              </div>
+
+              {/* Time Slot Filter Dropdown (Strictly Separated for Selected Event & Date) */}
+              <div className="relative flex items-center bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-full px-3 h-9 text-xs text-[var(--db-text-muted)] focus-within:border-[var(--db-accent-highlight)] transition-colors">
+                <Clock size={12} className="mr-1.5 text-gray-500 shrink-0 pointer-events-none" />
+                <select
+                  value={timeSlotFilter}
+                  onChange={(e) => updateTimeSlotFilter(e.target.value)}
+                  className="bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-[var(--db-text)] cursor-pointer pr-5 text-xs appearance-none max-w-[140px] sm:max-w-[160px] truncate"
+                  title="Filter by Time Slot"
+                >
+                  <option
+                    value="all"
+                    className="bg-[var(--db-card)] text-[var(--db-text)]"
+                  >
+                    All Slots {availableTimeSlots.length > 0 ? `(${availableTimeSlots.length})` : ""}
+                  </option>
+                  {availableTimeSlots.map((slot) => {
+                    const slotBookingCount = bookings.filter((b) => {
+                      const matchE =
+                        eventFilter === "all" ||
+                        (b.event?.title || "Deleted Event") === eventFilter;
+                      const matchD =
+                        dateFilter === "all" ||
+                        normalizeDateKey(b.date) === normalizeDateKey(dateFilter);
+                      const matchS = normalizeSlotKey(b.timeSlot) === normalizeSlotKey(slot);
+                      return matchE && matchD && matchS;
+                    }).length;
+                    return (
+                      <option
+                        key={slot}
+                        value={slot}
+                        className="bg-[var(--db-card)] text-[var(--db-text)]"
+                      >
+                        {slot} {slotBookingCount > 0 ? `(${slotBookingCount} booked)` : ""}
+                      </option>
+                    );
+                  })}
+                </select>
+                <ChevronDown size={11} className="absolute right-2.5 pointer-events-none text-gray-500 shrink-0" />
+              </div>
+
               {/* Status Filter Dropdown */}
-              <div className="relative flex-1 sm:flex-initial flex items-center bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-full px-3 h-9 text-xs text-[var(--db-text-muted)]">
-                <Filter size={12} className="mr-1.5 text-gray-500 shrink-0" />
+              <div className="relative flex items-center bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-full px-3 h-9 text-xs text-[var(--db-text-muted)] focus-within:border-[var(--db-accent-highlight)] transition-colors">
+                <Filter size={12} className="mr-1.5 text-gray-500 shrink-0 pointer-events-none" />
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="w-full bg-transparent border-none text-[var(--db-text)] outline-none cursor-pointer pr-1 text-xs"
+                  className="bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-[var(--db-text)] cursor-pointer pr-5 text-xs appearance-none max-w-[130px] truncate"
                 >
                   <option
                     value="all"
@@ -481,15 +1009,16 @@ const DashboardEventPayments = () => {
                     Cancelled
                   </option>
                 </select>
+                <ChevronDown size={11} className="absolute right-2.5 pointer-events-none text-gray-500 shrink-0" />
               </div>
 
               {/* Payment Method Filter Dropdown */}
-              <div className="relative flex-1 sm:flex-initial flex items-center bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-full px-3 h-9 text-xs text-[var(--db-text-muted)]">
-                <Filter size={12} className="mr-1.5 text-gray-500 shrink-0" />
+              <div className="relative flex items-center bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-full px-3 h-9 text-xs text-[var(--db-text-muted)] focus-within:border-[var(--db-accent-highlight)] transition-colors">
+                <Filter size={12} className="mr-1.5 text-gray-500 shrink-0 pointer-events-none" />
                 <select
                   value={paymentMethodFilter}
                   onChange={(e) => setPaymentMethodFilter(e.target.value)}
-                  className="w-full bg-transparent border-none text-[var(--db-text)] outline-none cursor-pointer pr-1 text-xs"
+                  className="bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-[var(--db-text)] cursor-pointer pr-5 text-xs appearance-none max-w-[120px] truncate"
                 >
                   <option
                     value="all"
@@ -510,18 +1039,98 @@ const DashboardEventPayments = () => {
                     Barcode Scan
                   </option>
                 </select>
+                <ChevronDown size={11} className="absolute right-2.5 pointer-events-none text-gray-500 shrink-0" />
               </div>
-
-              {/* Export to Excel Button */}
-              <button
-                onClick={handleExportToExcel}
-                className="flex items-center gap-1.5 px-4 h-9 bg-[#ccf141] hover:bg-[#d4eb00] active:scale-95 text-black font-black uppercase tracking-wider text-[10px] rounded-full shadow-lg shadow-[#ccf141]/10 transition-all cursor-pointer"
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                <Download size={12} />
-                Export to Excel
-              </button>
             </div>
+
+            {/* Active Filter Chips Bar */}
+            {hasActiveFilters && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-[var(--db-card-border)]/40 text-[11px]">
+                <span className="text-[10px] uppercase font-bold text-[var(--db-text-muted)] mr-1">
+                  Active:
+                </span>
+                {searchQuery && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text)] font-mono text-[10px]">
+                    Search: &ldquo;{searchQuery}&rdquo;
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="hover:text-red-400 cursor-pointer ml-0.5 font-bold"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {eventFilter !== "all" && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] font-bold text-[10px]">
+                    <Award size={10} />
+                    {eventFilter}
+                    <button
+                      onClick={() => updateEventFilter("all")}
+                      className="hover:text-white cursor-pointer ml-0.5 font-bold"
+                      title="Clear Event filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {dateFilter !== "all" && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] font-mono text-[10px]">
+                    <Calendar size={10} />
+                    {formatDateToDMY(dateFilter)}
+                    <button
+                      onClick={() => updateDateFilter("all")}
+                      className="hover:text-white cursor-pointer ml-0.5 font-bold"
+                      title="Clear Date filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {timeSlotFilter !== "all" && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] font-mono text-[10px]">
+                    <Clock size={10} />
+                    {timeSlotFilter}
+                    <button
+                      onClick={() => updateTimeSlotFilter("all")}
+                      className="hover:text-white cursor-pointer ml-0.5 font-bold"
+                      title="Clear Time Slot filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {statusFilter !== "all" && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] capitalize text-[10px]">
+                    Status: {statusFilter}
+                    <button
+                      onClick={() => setStatusFilter("all")}
+                      className="hover:text-red-400 cursor-pointer ml-0.5 font-bold"
+                      title="Clear Status filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {paymentMethodFilter !== "all" && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] capitalize text-[10px]">
+                    Method: {paymentMethodFilter}
+                    <button
+                      onClick={() => setPaymentMethodFilter("all")}
+                      className="hover:text-red-400 cursor-pointer ml-0.5 font-bold"
+                      title="Clear Method filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                <button
+                  onClick={handleResetFilters}
+                  className="text-[10px] text-red-400 hover:underline cursor-pointer ml-1 font-bold"
+                >
+                  Clear All
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Records Display (Dual-View: Mobile Cards + Desktop Table) */}
@@ -699,11 +1308,8 @@ const DashboardEventPayments = () => {
                     <th className="py-4 px-4 rounded-l-xl border-r border-[var(--db-card-border)]/40">
                       Name
                     </th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
-                      Email
-                    </th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
-                      Phone
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40 min-w-[200px]">
+                      Email & Phone
                     </th>
                     <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
                       Event Details
@@ -748,29 +1354,59 @@ const DashboardEventPayments = () => {
                         {booking.name}
                       </td>
 
-                      {/* Email */}
-                      <td className="py-4 px-4 text-left text-xs text-[var(--db-text-muted)] font-medium border-r border-[var(--db-card-border)]/30">
-                        {booking.email}
-                      </td>
-
-                      {/* Phone */}
-                      <td className="py-4 px-4 text-left text-xs text-[var(--db-text-muted)] font-mono whitespace-nowrap border-r border-[var(--db-card-border)]/30">
-                        {booking.phone}
+                      {/* Email & Phone (Combined Field) */}
+                      <td className="py-4 px-4 text-left border-r border-[var(--db-card-border)]/30 min-w-[200px]">
+                        <div className="flex flex-col gap-1">
+                          {booking.email ? (
+                            <a
+                              href={`mailto:${booking.email}`}
+                              className="text-xs text-[var(--db-text)] hover:text-[var(--db-accent-highlight)] font-medium truncate flex items-center gap-1.5 transition-colors"
+                              title={booking.email}
+                            >
+                              <Mail size={12} className="text-gray-400 shrink-0" />
+                              <span className="truncate">{booking.email}</span>
+                            </a>
+                          ) : (
+                            <span className="text-xs text-[var(--db-text-muted)]">-</span>
+                          )}
+                          {booking.phone && (
+                            <a
+                              href={`tel:${booking.phone}`}
+                              className="text-[11px] text-[var(--db-text-muted)] hover:text-[var(--db-accent-highlight)] font-mono truncate flex items-center gap-1.5 transition-colors"
+                              title={booking.phone}
+                            >
+                              <Phone size={11} className="text-gray-400 shrink-0" />
+                              <span>{booking.phone}</span>
+                            </a>
+                          )}
+                        </div>
                       </td>
 
                       {/* Event Details */}
-                      <td className="py-4 px-4 text-sm text-[var(--db-text)] font-semibold max-w-[200px] truncate border-r border-[var(--db-card-border)]/30">
-                        {booking.event?.title || "Deleted Event"}
+                      <td className="py-4 px-4 text-left border-r border-[var(--db-card-border)]/30 min-w-[200px]">
+                        <div className="font-bold text-sm text-[var(--db-text)] line-clamp-1" title={booking.event?.title}>
+                          {booking.event?.title || "Deleted Event"}
+                        </div>
+                        {booking.createdAt && (
+                          <div className="text-[10px] text-[var(--db-text-muted)] mt-1 flex items-center gap-1 font-mono">
+                            <span>Booked on:</span>
+                            <span className="text-gray-400 font-semibold">{formatDateToDMY(booking.createdAt)}</span>
+                          </div>
+                        )}
                       </td>
 
                       {/* Schedule Date/Time */}
-                      <td className="py-4 px-4 text-xs text-[var(--db-text-muted)] min-w-[180px] whitespace-nowrap border-r border-[var(--db-card-border)]/30">
-                        <span className="font-bold text-[var(--db-accent-highlight)] uppercase block">
-                          {formatDateToDMY(booking.date)}
-                        </span>
-                        <span className="inline-block mt-1.5 px-2 py-0.5 text-[10px] font-semibold text-[var(--db-text-muted)] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-md">
-                          {booking.timeSlot}
-                        </span>
+                      <td className="py-4 px-4 text-left border-r border-[var(--db-card-border)]/30 min-w-[180px] whitespace-nowrap">
+                        <div className="flex items-center gap-1.5 font-bold text-xs text-[var(--db-accent-highlight)] uppercase font-mono">
+                          <Calendar size={12} className="shrink-0" />
+                          <span>{formatDateToDMY(booking.date)}</span>
+                        </div>
+                        <div className="mt-1 flex items-center gap-1">
+                          <Clock size={11} className="text-gray-500 shrink-0" />
+                          <span className="px-2 py-0.5 text-[10px] font-semibold text-[var(--db-text-muted)] bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-md font-mono">
+                            {booking.timeSlot || "Standard Slot"}
+                          </span>
+                        </div>
                       </td>
 
                       {/* Seats */}
