@@ -734,9 +734,26 @@ const ChoosePlan = React.forwardRef(
                   >
                     {isActive ? (
                       /* ACTIVE TAB: CONTINUOUS 360° SPIN BORDER BEAM ANIMATION */
-                      <div className="relative p-[2px] rounded-xl sm:rounded-full overflow-hidden shadow-[0_0_30px_rgba(204,241,65,0.4)]">
-                        {/* Spinning Conic Gradient Border */}
-                        <div className="absolute inset-[-250%] bg-[conic-gradient(from_0deg,#ccf141_0deg,transparent_70deg,transparent_180deg,#ccf141_250deg,transparent_360deg)] animate-spin-border" />
+                      <div className="relative p-[2px] sm:p-[2.5px] rounded-xl sm:rounded-full overflow-hidden shadow-[0_0_25px_rgba(204,241,65,0.45)]">
+                        {/* Spinning Conic Gradient Laser Border with Ambient Neon Glow */}
+                        <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+                          {/* Ambient glow underlayer */}
+                          <div
+                            className="w-[380px] h-[380px] shrink-0 rounded-full animate-spin-border blur-[5px] opacity-90"
+                            style={{
+                              background:
+                                "conic-gradient(from 0deg, transparent 0deg, transparent 35deg, #ccf141 90deg, #ffffff 125deg, #ccf141 150deg, transparent 180deg, transparent 215deg, #ccf141 270deg, #ffffff 305deg, #ccf141 330deg, transparent 360deg)",
+                            }}
+                          />
+                          {/* Razor-sharp laser beam */}
+                          <div
+                            className="absolute w-[380px] h-[380px] shrink-0 rounded-full animate-spin-border"
+                            style={{
+                              background:
+                                "conic-gradient(from 0deg, transparent 0deg, transparent 35deg, #ccf141 90deg, #ffffff 125deg, #ccf141 150deg, transparent 180deg, transparent 215deg, #ccf141 270deg, #ffffff 305deg, #ccf141 330deg, transparent 360deg)",
+                            }}
+                          />
+                        </div>
                         {/* Active Tab Core Body */}
                         <div className="relative z-10 bg-black px-4 sm:px-6 py-2.5 sm:py-3 rounded-[10px] sm:rounded-full flex items-center justify-center gap-2">
                           <span className={`w-2 h-2 rounded-full ${prog.isComingSoon ? "bg-amber-400 shadow-[0_0_10px_#f59e0b]" : "bg-[#ccf141] shadow-[0_0_10px_#ccf141]"} animate-pulse shrink-0`} />
@@ -989,7 +1006,11 @@ const ChoosePlan = React.forwardRef(
                     {/* ONLY 12-MONTH CARD: CONTINUOUS 360° SPINNING BORDER BEAM ANIMATION */}
                     {isTwelveMonth && (
                       <div
-                        className="absolute inset-[-200%] bg-[conic-gradient(from_0deg_at_50%_50%,#ccf141_0deg,#ffffff_6deg,#ccf141_15deg,transparent_75deg,transparent_180deg,#ccf141_180deg,#ffffff_186deg,#ccf141_195deg,transparent_255deg,transparent_360deg)] animate-spin-border pointer-events-none"
+                        className="absolute inset-[-200%] animate-spin-border pointer-events-none"
+                        style={{
+                          background:
+                            "conic-gradient(from 0deg at 50% 50%, #ccf141 0deg, #ffffff 6deg, #ccf141 18deg, transparent 75deg, transparent 180deg, #ccf141 180deg, #ffffff 186deg, #ccf141 198deg, transparent 255deg, transparent 360deg)",
+                        }}
                         aria-hidden="true"
                       />
                     )}

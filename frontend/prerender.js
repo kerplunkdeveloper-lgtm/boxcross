@@ -97,8 +97,9 @@ const buildMetaTags = (route) => `<!-- SEO_START -->
   <meta property="og:description" content="${escapeHtml(route.description)}" />
   <meta property="og:image" content="${route.image}" />
   <meta property="og:image:secure_url" content="${route.image}" />
-  <meta property="og:image:width" content="1080" />
-  <meta property="og:image:height" content="1350" />
+  <meta property="og:image:type" content="${route.imageType || 'image/png'}" />
+  <meta property="og:image:width" content="${route.imageWidth || '1200'}" />
+  <meta property="og:image:height" content="${route.imageHeight || '675'}" />
   <meta property="og:image:alt" content="${escapeHtml(route.imageAlt || route.title)}" />
 
   <!-- Twitter Card -->
@@ -268,6 +269,9 @@ async function runPrerender() {
     title: 'Membership Plans | Box & Cross – Performance Arena',
     description: 'At Box & Cross (BXC), every plan is designed to give you access to our premium performance arena, structured coaching, and the BXC community. Choose the plan that suits your goals.',
     image: 'https://membership.boxandcross.com/og-membership.png',
+    imageType: 'image/png',
+    imageWidth: '1200',
+    imageHeight: '675',
     imageAlt: 'Box and Cross Membership Plans',
     url: 'https://membership.boxandcross.com/'
   };

@@ -1344,17 +1344,17 @@ const FounderMembersOffers = () => {
                   </div>
                 )}
 
-                {/* Background Image Container with Targeted Scrim (Dedicated right wing on mobile & desktop) */}
-                <div className="absolute right-0 top-0 bottom-0 w-[45%] sm:w-[50%] lg:w-[46%] xl:w-[44%] overflow-hidden pointer-events-none z-0">
+                {/* Background Image Container - Full Cover on Right Wing */}
+                <div className="absolute right-0 top-0 bottom-0 w-[55%] sm:w-[52%] lg:w-[48%] xl:w-[46%] overflow-hidden pointer-events-none z-0 opacity-60 sm:opacity-100 transition-opacity">
                   <div
-                    className="absolute inset-0 bg-cover bg-[75%_18%] sm:bg-[center_18%] filter grayscale transition-transform duration-700 ease-out group-hover:scale-105"
+                    className="absolute inset-0 bg-cover bg-no-repeat filter grayscale brightness-110 contrast-125 transition-transform duration-700 ease-out group-hover:scale-105"
                     style={{
                       backgroundImage: `url(${juniorProgram.image})`,
+                      backgroundPosition: "center 34%",
                     }}
                   />
-                  {/* Smooth horizontal gradient fade to dark background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0d] via-[#0b0b0d]/70 via-25% to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0d] via-transparent to-black/40" />
+                  {/* Clean left-edge fade into solid card background (protects text while keeping full image crisp) */}
+                  <div className="absolute inset-y-0 left-0 w-24 sm:w-36 bg-gradient-to-r from-[#0b0b0d] via-[#0b0b0d]/60 to-transparent z-10" />
                 </div>
 
                 {/* Sleek Floating Live Badge at Top-Right of Card - aligned with card inner padding */}
