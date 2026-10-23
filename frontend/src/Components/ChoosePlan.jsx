@@ -852,6 +852,7 @@ const ChoosePlan = React.forwardRef(
             >
               {carouselPlans.map((plan, idx) => {
                 const isCenter = idx === activeCarouselIdx;
+                const isOneMonth = is1Month(plan.months);
                 const isTwelveMonth = is12Month(plan.months);
                 const isTwentyFourMonth = is24Month(plan.months);
                 const isSixMonth = is6Month(plan.months);
@@ -946,7 +947,7 @@ const ChoosePlan = React.forwardRef(
                         {/* Active Big Price + /mo* text */}
                         <div className="flex items-baseline gap-1.5 flex-wrap mt-0.5">
                           <span
-                            className="text-yellow-200 font-black text-3xl sm:text-4xl tracking-tight leading-none"
+                            className="text-[#c3e53f] font-black text-3xl sm:text-4xl tracking-tight leading-none"
                             style={{
                               fontFamily:
                                 '"BrutalTypeBold", Impact, sans-serif',
@@ -954,9 +955,11 @@ const ChoosePlan = React.forwardRef(
                           >
                             ₹{numericPrice.toLocaleString("en-IN")}
                           </span>
-                          <span className="text-zinc-400 font-medium text-xs sm:text-[13px]">
-                            (₹{getEmiPerMonth(cleanTotal, plan.months)}/mo*)
-                          </span>
+                          {!isOneMonth && (
+                            <span className="text-zinc-400 font-medium text-xs sm:text-[13px]">
+                              (₹{getEmiPerMonth(cleanTotal, plan.months)}/mo*)
+                            </span>
+                          )}
                         </div>
 
                         {/* Hairline Divider Line */}

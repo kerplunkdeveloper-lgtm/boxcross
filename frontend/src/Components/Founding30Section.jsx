@@ -136,7 +136,7 @@ const Founding30Section = ({
       {/* Background Graphic & Atmosphere */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Boxer athlete image placed on the right */}
-        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[58%] h-full opacity-15 sm:opacity-25 lg:opacity-65 mix-blend-luminosity">
+        <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[58%] h-full opacity-30 sm:opacity-40 lg:opacity-65 mix-blend-luminosity">
           <img
             src={boxerImg}
             alt="Box & Cross Founding Boxer"
@@ -153,85 +153,117 @@ const Founding30Section = ({
         <div className="absolute bottom-10 right-1/2 translate-x-1/2 lg:translate-x-0 lg:right-1/4 w-60 sm:w-80 h-60 sm:h-80 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none"></div>
       </div>
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-6 xl:gap-8 lg:items-stretch items-center">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
+        {/* ======================================================== */}
+        {/* MOBILE-ONLY HEADER: Clean, punchy & compact (lg:hidden) */}
+        {/* ======================================================== */}
+        <div className="lg:hidden flex flex-col items-center text-center mb-5 sm:mb-6">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#ccf141]/40 bg-[#ccf141]/10 backdrop-blur-md shadow-sm mb-2.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_6px_#ccf141] animate-pulse" />
+            <span
+              className="text-[#ccf141] text-[10px] font-black uppercase tracking-[0.18em]"
+              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+            >
+              {badge}
+            </span>
+          </div>
+          <h2
+            className="text-white text-2xl sm:text-3xl font-black uppercase leading-tight tracking-tight"
+            style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+          >
+            {heading1}{" "}
+            <span className="text-[#ccf141] drop-shadow-[0_0_15px_rgba(204,241,65,0.3)]">
+              {heading2}
+            </span>
+          </h2>
+          <p
+            className="text-zinc-400 text-[11px] sm:text-xs uppercase tracking-[0.12em] font-semibold mt-1.5 max-w-xs sm:max-w-sm"
+            style={{ fontFamily: '"Brutal Font Bold", sans-serif' }}
+          >
+            {subtitle}
+          </p>
+        </div>
+
+        {/* ======================================================== */}
+        {/* MAIN GRID: Mobile stacks cleanly; Desktop has 3 columns */}
+        {/* ======================================================== */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-6 xl:gap-8 items-stretch">
 
           {/* ======================================================== */}
-          {/* LEFT COLUMN: Headings, Subtext & 3 Features (col-span-5) */}
+          {/* COLUMN 1 (Desktop: Left | Mobile: Concise perks below)   */}
           {/* ======================================================== */}
-          <div className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left lg:justify-between lg:h-full space-y-6 lg:space-y-0 w-full">
+          <div className="order-last lg:order-first flex flex-col justify-between h-full w-full space-y-4 lg:space-y-0 text-center lg:text-left items-center lg:items-start">
 
-            {/* Top Area: Badge + Main Headline + Subtitle */}
-            <div className="space-y-3 sm:space-y-4 flex flex-col items-center lg:items-start w-full">
-              {/* Top Badge */}
-              <div className="flex justify-center lg:justify-start w-full">
-                <div className="inline-flex items-center justify-center px-3.5 py-1 sm:py-1.5 rounded-full lg:rounded-md border border-[#ccf141] bg-black/60 backdrop-blur-sm shadow-[0_0_15px_rgba(204,241,65,0.18)]">
-                  <span
-                    className="text-[#ccf141] text-[10px] sm:text-xs font-black uppercase tracking-[0.22em]"
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    {badge}
-                  </span>
-                </div>
+            {/* Desktop-only Top Area: Badge + Big Headlines + Subtitle */}
+            <div className="hidden lg:flex space-y-3 sm:space-y-3.5 flex-col items-start w-full">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#ccf141]/40 bg-[#ccf141]/10 backdrop-blur-md shadow-[0_0_15px_rgba(204,241,65,0.15)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_6px_#ccf141] animate-pulse" />
+                <span
+                  className="text-[#ccf141] text-[10px] sm:text-xs font-black uppercase tracking-[0.2em]"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
+                  {badge}
+                </span>
               </div>
 
-              {/* Big Main Headline */}
               <div className="space-y-1 w-full">
                 <h2
-                  className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[44px] font-black uppercase leading-[1.05] tracking-tight"
+                  className="text-white text-2xl sm:text-3xl lg:text-[34px] xl:text-[40px] font-black uppercase leading-[1.05] tracking-tight"
                   style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                 >
                   {heading1}
                 </h2>
                 <h2
-                  className="text-[#ccf141] text-2xl sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[44px] font-black uppercase leading-[1.05] tracking-tight drop-shadow-[0_0_25px_rgba(204,241,65,0.25)]"
+                  className="text-[#ccf141] text-2xl sm:text-3xl lg:text-[34px] xl:text-[40px] font-black uppercase leading-[1.05] tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.25)]"
                   style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                 >
                   {heading2}
                 </h2>
               </div>
 
-              {/* Subtitle */}
               <p
-                className="text-zinc-400 text-[11px] sm:text-xs lg:text-[11.5px] uppercase tracking-[0.16em] font-bold leading-relaxed max-w-md mx-auto lg:mx-0"
+                className="text-zinc-400 text-xs lg:text-[12px] uppercase tracking-[0.14em] font-semibold leading-relaxed max-w-md"
                 style={{ fontFamily: '"Brutal Font Bold", sans-serif' }}
               >
                 {subtitle}
               </p>
             </div>
 
-            {/* Bottom Area: 3 Numbered Feature Items */}
-            <div className="w-full max-w-md lg:max-w-none space-y-3 sm:space-y-3.5 pt-2 sm:pt-4 lg:pt-6">
+            {/* Feature Perks: On Mobile concise 1-line chips; on Desktop rich cards */}
+            <div className="w-full space-y-2 sm:space-y-2.5 lg:space-y-3 pt-1 lg:pt-6">
               {featureList.map((item, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, x: -25 }}
+                  initial={{ opacity: 0, x: -15 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.5, delay: idx * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                  viewport={{ once: true, margin: "-20px" }}
+                  transition={{ duration: 0.4, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
                   whileHover={{ x: 4, transition: { duration: 0.2 } }}
-                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-3.5 lg:p-0 rounded-2xl bg-zinc-950/60 lg:bg-transparent border border-zinc-800/60 lg:border-none backdrop-blur-sm lg:backdrop-blur-none group hover:border-[#ccf141]/40 transition-all text-left"
+                  className="flex items-center gap-2.5 sm:gap-3 p-2 sm:p-2.5 lg:p-3 rounded-xl bg-white/[0.03] border border-white/8 backdrop-blur-sm group hover:border-[#ccf141]/40 hover:bg-white/[0.05] transition-all text-left"
                 >
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-[#ccf141] bg-black/60 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(204,241,65,0.15)] group-hover:scale-105 transition-transform duration-300">
-                    {item.icon}
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-xl border border-[#ccf141]/50 bg-black/70 flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(204,241,65,0.12)] group-hover:scale-105 group-hover:border-[#ccf141] transition-all duration-300">
+                    <div className="scale-85 sm:scale-90 lg:scale-100 flex items-center justify-center">
+                      {item.icon}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                     <span
-                      className="text-white text-base sm:text-lg lg:text-xl font-black"
+                      className="text-white text-sm sm:text-base lg:text-lg font-black"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       {item.num}
                     </span>
-                    <div className="w-[1.5px] h-6 sm:h-7 bg-zinc-700"></div>
+                    <div className="w-[1px] h-5 sm:h-6 bg-zinc-700/80"></div>
                   </div>
                   <div className="flex flex-col min-w-0">
                     <h4
-                      className="text-[#ccf141] text-xs sm:text-[13px] font-black uppercase tracking-wider truncate sm:whitespace-normal"
+                      className="text-[#ccf141] text-[11px] sm:text-xs lg:text-[12.5px] font-black uppercase tracking-wider truncate"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       {item.title}
                     </h4>
-                    <p className="text-zinc-400 text-[11px] sm:text-xs lg:text-[13px] leading-snug">
+                    {/* On mobile, keep description concise and punchy */}
+                    <p className="text-zinc-400 text-[10px] sm:text-[11px] lg:text-xs leading-snug line-clamp-1 lg:line-clamp-2">
                       {item.desc}
                     </p>
                   </div>
@@ -241,46 +273,44 @@ const Founding30Section = ({
           </div>
 
           {/* ======================================================== */}
-          {/* CENTER COLUMN: The High-Contrast Pricing Card (col-span-4) */}
+          {/* COLUMN 2 (Center: High-Contrast Pricing Card)            */}
           {/* ======================================================== */}
-          <div className="lg:col-span-4 flex justify-center lg:items-stretch lg:h-full py-2 lg:py-0 w-full">
+          <div className="order-first lg:order-none flex justify-center items-center lg:items-stretch h-full w-full py-1 lg:py-0">
             <motion.div
               onClick={handleClaimSpot}
-              initial={{ opacity: 0, scale: 0.95, y: 25 }}
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ y: -6, scale: 1.015, transition: { type: "spring", stiffness: 350, damping: 25 } }}
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={{ y: -5, scale: 1.015, transition: { type: "spring", stiffness: 350, damping: 25 } }}
               whileTap={{ scale: 0.98 }}
-              className="relative w-full max-w-[340px] sm:max-w-[360px] lg:h-full rounded-[26px] lg:rounded-[28px] border-2 border-[#ccf141] bg-black/90 backdrop-blur-xl p-5 sm:p-7 xl:p-8 flex flex-col justify-between items-center text-center shadow-[0_0_45px_rgba(204,241,65,0.18)] transition-all duration-300 hover:shadow-[0_0_65px_rgba(204,241,65,0.32)] cursor-pointer mx-auto"
+              className="relative w-full max-w-[360px] lg:max-w-none rounded-[24px] sm:rounded-[28px] border-2 border-[#ccf141] bg-gradient-to-b from-[#111114]/95 via-black/95 to-black/95 backdrop-blur-xl p-4 sm:p-6 lg:p-7 flex flex-col justify-between items-center text-center shadow-[0_0_40px_rgba(204,241,65,0.22)] hover:shadow-[0_0_60px_rgba(204,241,65,0.35)] transition-all duration-300 cursor-pointer mx-auto"
             >
 
               {/* Card Top: Regular price, strikethrough, giant price & label */}
               <div className="w-full flex flex-col items-center">
-                {/* Header */}
-                <span
-                  className="text-zinc-400 text-[10px] sm:text-[11px] uppercase tracking-[0.25em] font-bold"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  {regularLabel}
-                </span>
+                {/* Header Badge */}
+                <div className="inline-flex items-center gap-1.5 px-3 py-0.5 sm:py-1 rounded-full bg-white/5 border border-white/10 text-zinc-400 text-[9px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.2em] font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-zinc-500" />
+                  <span>{regularLabel}</span>
+                </div>
 
                 {/* Crossed-out Price */}
                 <div className="relative inline-block my-1 sm:my-1.5">
                   <span
-                    className="text-zinc-300 font-black text-2xl sm:text-3xl tracking-tight opacity-90"
+                    className="text-zinc-400 font-black text-xl sm:text-2xl lg:text-3xl tracking-tight opacity-80"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     {regularPrice}
                   </span>
                   {/* Red diagonal slash mark */}
-                  <div className="absolute left-[-10%] right-[-10%] top-1/2 h-[3px] bg-[#ef4444] -rotate-6 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.7)] pointer-events-none"></div>
+                  <div className="absolute left-[-12%] right-[-12%] top-1/2 h-[2.5px] sm:h-[3px] bg-[#ef4444] -rotate-6 rounded-full shadow-[0_0_8px_rgba(239,68,68,0.7)] pointer-events-none"></div>
                 </div>
 
-                {/* Giant Price */}
+                {/* Giant Offer Price */}
                 <div className="my-0.5 sm:my-1">
                   <span
-                    className="text-[#ccf141] font-black text-4xl sm:text-5xl xl:text-[62px] leading-none tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.35)]"
+                    className="text-[#ccf141] font-black text-4xl sm:text-5xl lg:text-[52px] xl:text-[58px] leading-none tracking-tight drop-shadow-[0_0_25px_rgba(204,241,65,0.35)]"
                     style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                   >
                     {offerPrice}
@@ -288,33 +318,63 @@ const Founding30Section = ({
                 </div>
 
                 {/* Label */}
-                <div className="flex items-center justify-center gap-2 w-full my-2 sm:my-3">
-                  <div className="h-[1px] bg-zinc-700 flex-1 max-w-[20px]"></div>
+                <div className="flex items-center justify-center gap-2 w-full my-1.5 sm:my-2.5">
+                  <div className="h-[1px] bg-zinc-800 flex-1"></div>
                   <span
-                    className="text-white/90 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] font-black whitespace-nowrap"
+                    className="text-white/90 text-[9px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.18em] font-black whitespace-nowrap"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     {priceLabel}
                   </span>
-                  <div className="h-[1px] bg-zinc-700 flex-1 max-w-[20px]"></div>
+                  <div className="h-[1px] bg-zinc-800 flex-1"></div>
                 </div>
               </div>
 
-              {/* Card Middle: Olive Green Pill Badge */}
-              <div className="w-full max-w-[260px] py-2 sm:py-2.5 px-4 rounded-xl bg-[#2a340b] border border-[#ccf141]/40 flex items-center justify-center shadow-inner my-2 sm:my-3 hover:bg-[#34400e] transition-colors">
+              {/* Card Middle: Olive Green Savings Pill Badge */}
+              <div className="w-full max-w-[260px] py-1.5 sm:py-2 px-3 sm:px-4 rounded-xl bg-[#2a340b]/90 border border-[#ccf141]/50 flex items-center justify-center shadow-inner my-2 sm:my-2.5 hover:bg-[#34400e] transition-colors">
                 <span
-                  className="text-[#ccf141] font-black text-xs sm:text-sm md:text-base tracking-wider uppercase"
+                  className="text-[#ccf141] font-black text-xs sm:text-sm tracking-wider uppercase"
                   style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                 >
                   {saveAmount}
                 </span>
               </div>
 
-              {/* Card Bottom: Spot Counter & Subtext */}
-              <div className="w-full flex flex-col items-center">
-                {/* Spot Counter */}
+              {/* Mobile-Only Progress Bar & Urgency inside card */}
+              <div className="w-full lg:hidden my-2 pt-2 border-t border-zinc-800/80 flex flex-col gap-1.5">
+                <div className="flex items-center justify-between text-[10px] text-zinc-400">
+                  <span className="flex items-center gap-1.5 text-white font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] animate-pulse" />
+                    {spotsText}
+                  </span>
+                  <span className="text-[#ccf141] font-mono font-bold">82% Claimed</span>
+                </div>
+                <div className="w-full bg-zinc-900 rounded-full h-1.5 overflow-hidden border border-zinc-800">
+                  <div className="bg-gradient-to-r from-[#ccf141]/80 to-[#ccf141] h-full rounded-full w-[82%] shadow-[0_0_8px_#ccf141]" />
+                </div>
+              </div>
+
+              {/* Mobile-Only Direct Action Button right inside the card */}
+              <div className="w-full lg:hidden pt-2">
+                <button
+                  type="button"
+                  onClick={handleClaimSpot}
+                  className="w-full py-3 px-5 rounded-xl bg-[#ccf141] hover:bg-white text-black font-black uppercase tracking-wider text-xs flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(204,241,65,0.4)] transition-all cursor-pointer active:scale-95"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
+                  <span>{ctaButtonText}</span>
+                  <ArrowRight size={15} />
+                </button>
+                <div className="flex items-center justify-center gap-1.5 text-zinc-400 text-[10px] mt-2 font-medium">
+                  <ShieldCheck size={13} className="text-[#ccf141] shrink-0" />
+                  <span>{trustText}</span>
+                </div>
+              </div>
+
+              {/* Desktop Card Bottom: Spot Counter & Subtext */}
+              <div className="hidden lg:flex w-full flex-col items-center pt-2 border-t border-zinc-800/80">
                 <div className="flex items-center justify-center gap-2 text-[#ccf141]">
-                  <Users size={16} />
+                  <Users size={15} />
                   <span
                     className="font-black text-xs sm:text-[13px] uppercase tracking-wider"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -322,8 +382,6 @@ const Founding30Section = ({
                     {spotsText}
                   </span>
                 </div>
-
-                {/* Subtext */}
                 <p
                   className="text-zinc-500 text-[9px] sm:text-[10px] uppercase tracking-wider font-semibold mt-1 text-center"
                   style={{ fontFamily: '"Brutal Font Bold", sans-serif' }}
@@ -336,34 +394,77 @@ const Founding30Section = ({
           </div>
 
           {/* ======================================================== */}
-          {/* RIGHT COLUMN: Spots Headline + CTA (col-span-3)           */}
+          {/* COLUMN 3 (Desktop Only: Spots Headline + Status + CTA)   */}
+          {/* (Hidden on mobile to eliminate bloat & repetition)      */}
           {/* ======================================================== */}
-          <div className="lg:col-span-3 flex flex-col items-center lg:items-start text-center lg:text-left justify-between lg:h-full space-y-5 lg:space-y-0 pt-2 sm:pt-4 lg:pt-0 w-full">
+          <div className="hidden lg:flex flex-col justify-between h-full w-full space-y-6 text-left items-start pt-0">
 
-            {/* Top Area: Headline */}
-            <div className="space-y-0 text-center lg:text-left">
-              <h2
-                className="text-[#ccf141] text-3xl sm:text-4xl lg:text-[46px] xl:text-[54px] font-black uppercase leading-[0.95] tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.3)]"
-                style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+            {/* Top Area: Urgency Badge + Big Headline + Subtext */}
+            <div className="space-y-3 sm:space-y-3.5 flex flex-col items-start w-full">
+              {/* Urgency Badge (perfectly aligned with Left column badge) */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 backdrop-blur-md shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f59e0b] animate-ping" />
+                <span
+                  className="text-amber-300 text-[10px] sm:text-xs font-black uppercase tracking-[0.2em]"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
+                  STRICT ALLOCATION CAP
+                </span>
+              </div>
+
+              {/* Headline */}
+              <div className="space-y-0">
+                <h2
+                  className="text-[#ccf141] text-3xl sm:text-4xl lg:text-[38px] xl:text-[46px] font-black uppercase leading-[0.95] tracking-tight drop-shadow-[0_0_20px_rgba(204,241,65,0.3)]"
+                  style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                >
+                  {rightColHeading1}
+                </h2>
+                <h2
+                  className="text-white text-3xl sm:text-4xl lg:text-[38px] xl:text-[46px] font-black uppercase leading-[0.95] tracking-tight"
+                  style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                >
+                  {rightColHeading2}
+                </h2>
+              </div>
+
+              <p
+                className="text-zinc-400 text-xs lg:text-[12px] uppercase tracking-[0.14em] font-semibold leading-relaxed max-w-md mt-2"
+                style={{ fontFamily: '"Brutal Font Bold", sans-serif' }}
               >
-                {rightColHeading1}
-              </h2>
-              <h2
-                className="text-white text-3xl sm:text-4xl lg:text-[46px] xl:text-[54px] font-black uppercase leading-[0.95] tracking-tight"
-                style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-              >
-                {rightColHeading2}
-              </h2>
+                Strictly limited to the first 100 members. Once all allocations are locked, regular pricing resumes immediately.
+              </p>
+            </div>
+
+            {/* Middle: Live Tier Allocation Card */}
+            <div className="w-full rounded-2xl bg-black/60 border border-zinc-800/80 backdrop-blur-md p-3.5 sm:p-4 my-2 lg:my-0 space-y-2.5 shadow-lg text-left">
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-400 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#ccf141] animate-pulse" />
+                  Live Allocation Status
+                </span>
+                <span className="text-[#ccf141] text-[10px] sm:text-[11px] font-mono font-bold tracking-wider">
+                  TIER 1 ACTIVE
+                </span>
+              </div>
+              {/* Visual Progress Bar */}
+              <div className="w-full bg-zinc-900 rounded-full h-2 overflow-hidden border border-zinc-800">
+                <div className="bg-gradient-to-r from-[#ccf141]/80 to-[#ccf141] h-full rounded-full w-[82%] shadow-[0_0_10px_#ccf141]" />
+              </div>
+              <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-0.5">
+                <span>82% Claimed</span>
+                <span className="text-zinc-300 font-semibold">Limited Spots Remaining</span>
+              </div>
             </div>
 
             {/* Bottom Area: CTA Button + Trust Badge */}
-            <div className="w-full flex flex-col items-center lg:items-start space-y-3 pt-2 lg:pt-6">
+            <div className="w-full flex flex-col items-start space-y-2.5 pt-0">
               {/* CTA Button */}
               <motion.button
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={handleClaimSpot}
-                className="group w-full max-w-[340px] sm:max-w-[360px] px-6 sm:px-7 py-3.5 sm:py-4 rounded-xl bg-[#ccf141] hover:bg-white text-black font-black uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all duration-300 shadow-[0_0_30px_rgba(204,241,65,0.4)] hover:shadow-[0_0_40px_rgba(255,255,255,0.6)] cursor-pointer"
+                className="group w-full py-3.5 sm:py-4 px-6 rounded-xl bg-[#ccf141] hover:bg-white text-black font-black uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-2.5 transition-all duration-300 shadow-[0_0_30px_rgba(204,241,65,0.4)] hover:shadow-[0_0_40px_rgba(255,255,255,0.6)] cursor-pointer"
                 style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
               >
                 <span>{ctaButtonText}</span>
@@ -374,9 +475,9 @@ const Founding30Section = ({
               </motion.button>
 
               {/* Instant Trust Badge */}
-              <div className="flex items-center justify-center lg:justify-start gap-2 text-zinc-400 text-xs font-medium">
+              <div className="flex items-center justify-start gap-2 text-zinc-400 text-xs font-medium">
                 <ShieldCheck size={15} className="text-[#ccf141] shrink-0" />
-                <span className="text-center sm:text-left">{trustText}</span>
+                <span className="text-left">{trustText}</span>
               </div>
             </div>
 
