@@ -66,6 +66,51 @@ const getPlanMobileBullets = (plan, currentTitle) => {
     ];
   }
 
+  if (
+    currentTitle === "BXC DUO" ||
+    (currentTitle && currentTitle.toUpperCase().includes("DUO"))
+  ) {
+    return [
+      "Membership for Two",
+      "Boxing / Strength Training",
+      "Individual Training Pathways",
+      "Structured Coaching",
+      "Performance Assessment",
+      "Workout Progress Tracking",
+      "BXC Tribe Access",
+    ];
+  }
+
+  if (
+    currentTitle === "BXC FAMILY FIT" ||
+    (currentTitle && (currentTitle.toUpperCase().includes("FAMILY") || currentTitle.toUpperCase().includes("FAMILY FIT")))
+  ) {
+    return [
+      "Parent + Child Membership",
+      "Strength / Boxing for Parent",
+      "Junior Boxing for Child",
+      "Coach-Guided Sessions",
+      "Progress Tracking",
+      "BXC Tribe Access",
+      "Family Fitness Experience",
+    ];
+  }
+
+  if (
+    currentTitle === "JUNIOR" ||
+    (currentTitle && currentTitle.toUpperCase().includes("JUNIOR"))
+  ) {
+    return [
+      "Boxing Training",
+      "Certified Coach Guidance",
+      "Boxing Fundamentals",
+      "Discipline & Confidence",
+      "Agility & Coordination",
+      "Supervised Training",
+      "Progress Assessments",
+    ];
+  }
+
   if (monthsStr.includes("24") || monthsStr.includes("2 year")) {
     return [
       savings > 0 ? `Extra ₹${savings.toLocaleString("en-IN")} OFF applied` : "Maximum 2-Year Founding Member rate freeze",
@@ -925,25 +970,47 @@ const ChoosePlan = React.forwardRef(
                         ? currentTitle === "CORE" || currentTitle === "ATHLETE" || currentTitle === "ARENA" ? "640px" : "560px"
                         : currentTitle === "CORE" || currentTitle === "ATHLETE" || currentTitle === "ARENA" ? "560px" : "515px",
                     }}
-                    className={`shrink-0 snap-center rounded-[24px] cursor-pointer select-none transition-all duration-300 flex flex-col justify-between ${isDesktop
+                    className={`shrink-0 snap-center rounded-[24px] cursor-pointer select-none transition-all duration-300 flex flex-col justify-between relative ${isDesktop
                         ? isCenter
-                          ? "scale-100 opacity-100 shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-20"
-                          : "scale-100 opacity-95 hover:opacity-100 shadow-[0_10px_30px_rgba(0,0,0,0.6)] z-10"
+                          ? "scale-100 opacity-100 z-20"
+                          : "scale-100 opacity-95 hover:opacity-100 z-10"
                         : isCenter
-                          ? "scale-100 opacity-100 shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-20"
-                          : "scale-[0.95] opacity-80 hover:opacity-100 shadow-[0_8px_25px_rgba(0,0,0,0.6)] z-10"
+                          ? "scale-100 opacity-100 z-20"
+                          : "scale-[0.95] opacity-80 hover:opacity-100 z-10"
+                      } ${isTwelveMonth
+                        ? isCenter
+                          ? "p-[2px] overflow-hidden bg-zinc-900/90 shadow-[0_25px_60px_rgba(0,0,0,0.95),0_0_35px_rgba(204,241,65,0.35)]"
+                          : "p-[2px] overflow-hidden bg-zinc-900/90 shadow-[0_15px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(204,241,65,0.18)]"
+                        : isCenter
+                          ? "shadow-[0_25px_60px_rgba(0,0,0,0.95)]"
+                          : "shadow-[0_8px_25px_rgba(0,0,0,0.6)]"
                       }`}
                   >
+                    {/* ONLY 12-MONTH CARD: CONTINUOUS 360° SPINNING BORDER BEAM ANIMATION */}
+                    {isTwelveMonth && (
+                      <div
+                        className="absolute inset-[-200%] bg-[conic-gradient(from_0deg_at_50%_50%,#ccf141_0deg,#ffffff_6deg,#ccf141_15deg,transparent_75deg,transparent_180deg,#ccf141_180deg,#ffffff_186deg,#ccf141_195deg,transparent_255deg,transparent_360deg)] animate-spin-border pointer-events-none"
+                        aria-hidden="true"
+                      />
+                    )}
+
                     <div
-                      className={`w-full h-full rounded-[24px] p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${isCenter
-                          ? isTwelveMonth
-                            ? "bg-[#141417] border-2 border-[#ccf141]/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(204,241,65,0.25)] ring-1 ring-[#ccf141]/30"
-                            : isTwentyFourMonth
-                              ? "bg-[#141417] border-2 border-amber-400/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30"
-                              : "bg-[#141417] border border-zinc-700/80 shadow-[0_20px_45px_rgba(0,0,0,0.95)] ring-1 ring-white/10"
-                          : "bg-[#101012] hover:bg-[#141417] border border-zinc-700/90 shadow-md"
+                      className={`w-full h-full p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${isTwelveMonth
+                          ? "relative z-10 rounded-[22px] bg-[#141417]"
+                          : isCenter
+                            ? isTwentyFourMonth
+                              ? "rounded-[24px] bg-[#141417] border-2 border-amber-400/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30"
+                              : "rounded-[24px] bg-[#141417] border border-zinc-700/80 shadow-[0_20px_45px_rgba(0,0,0,0.95)] ring-1 ring-white/10"
+                            : "rounded-[24px] bg-[#101012] hover:bg-[#141417] border border-zinc-700/90 shadow-md"
                         }`}
                     >
+                      {/* Subtle ambient spotlight for 12-month card */}
+                      {isTwelveMonth && (
+                        <div
+                          className="pointer-events-none absolute -top-24 -right-24 w-60 h-60 bg-[#ccf141]/8 rounded-full blur-[80px]"
+                          aria-hidden="true"
+                        />
+                      )}
 
                       {/* Card Content Top Half */}
                       <div className="relative z-10 flex flex-col flex-grow">
@@ -1271,7 +1338,7 @@ const ChoosePlan = React.forwardRef(
                                 <span className="text-zinc-400 font-bold text-sm leading-none shrink-0 mt-0.5 select-none">
                                   +
                                 </span>
-                                <span className="text-[12px] sm:text-[13px] leading-snug text-zinc-300 italic font-medium">
+                                <span className="text-[12px] sm:text-[13px] leading-snug text-zinc-200 font-medium">
                                   {item}
                                 </span>
                               </div>
