@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Check, ArrowRight, ShieldCheck, Zap, Lock } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Check, ArrowRight, ShieldCheck, Zap, Lock, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BCMonogram from "./BCMonogram";
 
@@ -7,12 +7,70 @@ const getEmiPerMonth = (totalPriceStr, monthsStr = "") => {
   const numeric = Number(String(totalPriceStr).replace(/[^0-9]/g, "")) || 0;
   if (!numeric) return "0";
   let tenure = 3;
-  if (monthsStr.includes("12")) tenure = 12;
+  if (monthsStr.includes("24") || monthsStr.includes("2 year")) tenure = 24;
+  else if (monthsStr.includes("12") || monthsStr.includes("1 year")) tenure = 12;
   else if (monthsStr.includes("6")) tenure = 6;
   else if (monthsStr.includes("3")) tenure = 3;
   else tenure = 3;
   const emi = Math.round(numeric / tenure);
   return emi.toLocaleString("en-IN");
+};
+
+const getPlanMobileBullets = (plan, currentTitle) => {
+  const monthsStr = (plan?.months || "").toLowerCase();
+  const cleanTotal = plan?.price || plan?.totalPrice || "";
+  const numericTotal = Number(String(cleanTotal).replace(/[^0-9]/g, "")) || 0;
+  const numericOriginal = Number(String(plan?.originalPrice || "").replace(/[^0-9]/g, "")) || 0;
+  const savings = numericOriginal > numericTotal ? numericOriginal - numericTotal : 0;
+
+  if (plan?.mobileFeatures && plan.mobileFeatures.length > 0) {
+    return plan.mobileFeatures;
+  }
+
+  if (monthsStr.includes("24") || monthsStr.includes("2 year")) {
+    return [
+      savings > 0 ? `Extra ₹${savings.toLocaleString("en-IN")} OFF applied` : "Maximum 2-Year Founding Member rate freeze",
+      "Free Elite Onboarding Pack (Four 1:1 Trainer Sessions)",
+      "60 days of membership pause privilege",
+      "VIP Founding Member badge on Arena Wall",
+      "20% OFF* on BXC gear & activewear",
+    ];
+  }
+
+  if (monthsStr.includes("12") || monthsStr.includes("1 year")) {
+    return [
+      savings > 0 ? `Extra ₹${savings.toLocaleString("en-IN")} OFF applied` : "Maximum 54.4% Founding Member discount",
+      "Free Kickstart Onboarding Pack (Two 1:1 Trainer Sessions)",
+      "30 days of membership pause privilege",
+      "VIP Founding Member badge on Arena Wall",
+      "15% OFF* on BXC gear & activewear",
+    ];
+  }
+  if (monthsStr.includes("6")) {
+    return [
+      savings > 0 ? `Extra ₹${savings.toLocaleString("en-IN")} OFF applied` : "Extra ₹2,100 OFF applied",
+      "Free Kickstart Onboarding Pack (Two 1:1 Trainer Sessions)",
+      "15 days of membership pause privilege",
+      "Access all coached sessions in your pathway",
+      "15% OFF* on BXC activewear",
+    ];
+  }
+  if (monthsStr.includes("3")) {
+    return [
+      savings > 0 ? `Extra ₹${savings.toLocaleString("en-IN")} OFF applied` : "Extra ₹500 OFF locked rate",
+      "Five Coached sessions every week",
+      "7 days of membership pause privilege",
+      "Coach 1:1 baseline assessment & goal review",
+      "Full open gym & community locker access",
+    ];
+  }
+  return [
+    "Standard  membership",
+    "Five Coached sessions every week",
+    "Open gym floor & arena equipment access",
+    "Coach guided technique & form checks",
+    "Community locker & change room access",
+  ];
 };
 
 const ChoosePlan = React.forwardRef(
@@ -30,9 +88,13 @@ const ChoosePlan = React.forwardRef(
         ? "Five Coached sessions a week — Boxing, HYROX or Strength Training"
         : currentTitle === "ATHLETE"
           ? "Five coached sessions a week across two disciplines (Boxing + HYROX or Boxing + Strength Training)"
-          : currentTitle === "JUNIOR"
-            ? "Five Coached sessions a week"
-            : "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)");
+          : currentTitle === "BXC DUO"
+            ? "Five coached sessions a week for 2 members across your chosen pathways"
+            : currentTitle === "BXC FAMILY FIT"
+              ? "Full arena access for parents + Junior coaching for kids (up to 4 members)"
+              : currentTitle === "JUNIOR"
+                ? "Five Coached sessions a week"
+                : "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)");
 
     const dailyRate =
       activeData.dailyRate ||
@@ -40,15 +102,23 @@ const ChoosePlan = React.forwardRef(
         ? "₹92"
         : currentTitle === "ATHLETE"
           ? "₹132"
-          : currentTitle === "JUNIOR"
-            ? "₹64"
-            : "₹184");
+          : currentTitle === "BXC DUO"
+            ? "₹224"
+            : currentTitle === "BXC FAMILY FIT"
+              ? "₹390"
+              : currentTitle === "JUNIOR"
+                ? "₹64"
+                : "₹184");
 
     const dailyRateLabel =
       activeData.dailyRateLabel ||
       (currentTitle === "JUNIOR"
         ? "A DAY AS A FOUNDING MEMBER"
-        : "A DAY ON THE 12-MONTH PLAN");
+        : currentTitle === "BXC DUO"
+          ? "A DAY FOR 2 ON 12-MONTH PLAN"
+          : currentTitle === "BXC FAMILY FIT"
+            ? "A DAY FOR THE WHOLE FAMILY"
+            : "A DAY ON THE 12-MONTH PLAN");
 
     const dailyComparison =
       activeData.dailyComparison ||
@@ -56,9 +126,13 @@ const ChoosePlan = React.forwardRef(
         ? "Two coffees and a vada."
         : currentTitle === "ATHLETE"
           ? "One burger."
-          : currentTitle === "JUNIOR"
-            ? "One masala dosa."
-            : "One pizza.");
+          : currentTitle === "BXC DUO"
+            ? "Two coffees & breakfast for two."
+            : currentTitle === "BXC FAMILY FIT"
+              ? "One weekend family dinner."
+              : currentTitle === "JUNIOR"
+                ? "One masala dosa."
+                : "One pizza.");
 
     const benefits =
       activeData.benefits && activeData.benefits.length > 0
@@ -108,48 +182,94 @@ const ChoosePlan = React.forwardRef(
                   normalText: "built the way an athlete builds it.",
                 },
               ]
-              : currentTitle === "JUNIOR"
+              : currentTitle === "BXC DUO"
                 ? [
                   {
-                    boldText: "Confidence that shows up at school.",
+                    boldText: "You never skip when someone waits.",
                     normalText:
-                      "A child who can hold a stance stops shrinking in a crowd.",
+                      "Partner accountability cuts skipped sessions by over 70%.",
                   },
                   {
-                    boldText: "They learn to handle themselves — and when not to.",
+                    boldText: "Shared grind builds stronger bonds.",
                     normalText:
-                      "Discipline is taught before the punch is.",
+                      "Sweat together in the ring, conquer HYROX benchmarks together.",
                   },
                   {
-                    boldText: "Focus that carries into homework.",
+                    boldText: "Coached side-by-side.",
                     normalText:
-                      "Three rounds of concentration, three evenings a week.",
+                      "Train as a team with dedicated coaches pushing you both.",
                   },
                   {
-                    boldText: "Off the screen, on their feet.",
+                    boldText: "Better value, together.",
                     normalText:
-                      "Tired in the right way by 7pm.",
+                      "Complete premium arena access priced for two athletes.",
                   },
                 ]
-                : [
-                  {
-                    boldText: "Train the way fighters train.",
-                    normalText:
-                      "Five days, every discipline, nothing held back.",
-                  },
-                  {
-                    boldText: "This becomes your second place.",
-                    normalText: "After home, before everywhere else.",
-                  },
-                  {
-                    boldText: "Priority on everything.",
-                    normalText: "Classes, the ring, the open floor.",
-                  },
-                  {
-                    boldText: "You stop thinking about fitness.",
-                    normalText: "It is simply what you do now.",
-                  },
-                ];
+                : currentTitle === "BXC FAMILY FIT"
+                  ? [
+                    {
+                      boldText: "Active role models inspire children.",
+                      normalText:
+                        "Kids do what they see. When parents train, healthy habits become second nature.",
+                    },
+                    {
+                      boldText: "Screen-free family time with purpose.",
+                      normalText:
+                        "Replace screen time with punches, agility ladders, and shared sweat.",
+                    },
+                    {
+                      boldText: "Concurrent schedules that save your weekend.",
+                      normalText:
+                        "Drop off junior for boxing while you hit the HYROX floor simultaneously.",
+                    },
+                    {
+                      boldText: "One simple plan for everyone.",
+                      normalText:
+                        "Unrestricted arena access for the whole family without four separate bills.",
+                    },
+                  ]
+                  : currentTitle === "JUNIOR"
+                    ? [
+                      {
+                        boldText: "Confidence that shows up at school.",
+                        normalText:
+                          "A child who can hold a stance stops shrinking in a crowd.",
+                      },
+                      {
+                        boldText: "They learn to handle themselves — and when not to.",
+                        normalText:
+                          "Discipline is taught before the punch is.",
+                      },
+                      {
+                        boldText: "Focus that carries into homework.",
+                        normalText:
+                          "Three rounds of concentration, three evenings a week.",
+                      },
+                      {
+                        boldText: "Off the screen, on their feet.",
+                        normalText:
+                          "Tired in the right way by 7pm.",
+                      },
+                    ]
+                    : [
+                      {
+                        boldText: "Train the way fighters train.",
+                        normalText:
+                          "Five days, every discipline, nothing held back.",
+                      },
+                      {
+                        boldText: "This becomes your second place.",
+                        normalText: "After home, before everywhere else.",
+                      },
+                      {
+                        boldText: "Priority on everything.",
+                        normalText: "Classes, the ring, the open floor.",
+                      },
+                      {
+                        boldText: "You stop thinking about fitness.",
+                        normalText: "It is simply what you do now.",
+                      },
+                    ];
 
     const plans =
       activeData.plans && activeData.plans.length > 0
@@ -168,32 +288,254 @@ const ChoosePlan = React.forwardRef(
       return idx !== -1 ? idx : plansList.length - 1;
     };
 
+    // Helper duration matchers
+    const is1Month = (m = "") => {
+      const s = String(m).toLowerCase().trim();
+      return (
+        s === "1 month" ||
+        s === "1 months" ||
+        s === "1m" ||
+        (s.includes("1") &&
+          !s.includes("12") &&
+          !s.includes("24") &&
+          !s.includes("10") &&
+          !s.includes("11") &&
+          !s.includes("16") &&
+          !s.includes("18") &&
+          !s.includes("year"))
+      );
+    };
+
+    const is12Month = (m = "") => {
+      const s = String(m).toLowerCase().trim();
+      return (
+        s.includes("12") ||
+        s.includes("1 year") ||
+        s.includes("12m") ||
+        s.includes("12 month")
+      );
+    };
+
+    const is6Month = (m = "") => {
+      const s = String(m).toLowerCase().trim();
+      return (
+        (s.includes("6") &&
+          !s.includes("16") &&
+          !s.includes("26") &&
+          !s.includes("36")) ||
+        s.includes("6m") ||
+        s.includes("6 month")
+      );
+    };
+
+    const is24Month = (m = "") => {
+      const s = String(m).toLowerCase().trim();
+      return (
+        s.includes("24") ||
+        s.includes("2 year") ||
+        s.includes("24m") ||
+        s.includes("24 month")
+      );
+    };
+
+    const is3Month = (m = "") => {
+      const s = String(m).toLowerCase().trim();
+      return (
+        (s.includes("3") &&
+          !s.includes("13") &&
+          !s.includes("23") &&
+          !s.includes("30") &&
+          !s.includes("33")) ||
+        s.includes("3m") ||
+        s.includes("3 month")
+      );
+    };
+
     // Track which plan duration is selected to dynamically show EMI / Affordability - default to 12-month plan
     const [selectedPlanIdx, setSelectedPlanIdx] = useState(() =>
       getTwelveMonthIndex(plans),
     );
 
-    // Keep index in bounds and default to 12-month plan if activeData / plans change
+    // Sorted/arranged order: 1st: 1 Month, Center: 12 Months, 3rd: 6 Months, 4th: 24 Months, then 3 Months
+    const carouselPlans = React.useMemo(() => {
+      if (!plans || plans.length === 0) return [];
+      const plan1 = plans.find((p) => is1Month(p.months));
+      const plan12 = plans.find((p) => is12Month(p.months));
+      const plan6 = plans.find((p) => is6Month(p.months));
+      const plan24 = plans.find((p) => is24Month(p.months));
+      const plan3 = plans.find((p) => is3Month(p.months));
+
+      const arranged = [];
+      if (plan1) arranged.push(plan1);
+      if (plan12) arranged.push(plan12);
+      if (plan6) arranged.push(plan6);
+      if (plan24) arranged.push(plan24);
+      if (plan3) arranged.push(plan3);
+
+      plans.forEach((p) => {
+        if (!arranged.some((item) => item.months === p.months)) {
+          arranged.push(p);
+        }
+      });
+      return arranged;
+    }, [plans]);
+
+    // Active carousel index in carouselPlans (default to 12 Months)
+    const [activeCarouselIdx, setActiveCarouselIdx] = useState(() => {
+      const idx = carouselPlans.findIndex((p) => is12Month(p.months));
+      return idx !== -1 ? idx : 0;
+    });
+
+    const scrollContainerRef = useRef(null);
+    const [windowWidth, setWindowWidth] = useState(() =>
+      typeof window !== "undefined" ? window.innerWidth : 1280,
+    );
+
     useEffect(() => {
-      if (plans && plans.length > 0) {
-        const twelveIdx = getTwelveMonthIndex(plans);
-        setSelectedPlanIdx(twelveIdx);
+      const updateWidth = () => {
+        if (typeof window !== "undefined") {
+          setWindowWidth(window.innerWidth);
+        }
+      };
+      updateWidth();
+      window.addEventListener("resize", updateWidth);
+      return () => window.removeEventListener("resize", updateWidth);
+    }, []);
+
+    const isDesktop = windowWidth >= 1024;
+    const [desktopScrollLeft, setDesktopScrollLeft] = useState(0);
+
+    const cardWidth = isDesktop
+      ? 380
+      : Math.min(Math.max(windowWidth - 76, 275), 312);
+    const cardGap = isDesktop ? 24 : 14;
+    const step = cardWidth + cardGap;
+    const sidePadding = isDesktop
+      ? 0
+      : Math.max(Math.round((windowWidth - cardWidth) / 2), 24);
+
+    const getDesktopStep = () => {
+      if (!scrollContainerRef.current) return step;
+      const containerWidth = scrollContainerRef.current.clientWidth;
+      return (containerWidth - 48) / 3 + 24;
+    };
+
+    const maxDesktopScroll = Math.max(
+      0,
+      (carouselPlans.length - 3) * getDesktopStep(),
+    );
+
+    const slideDesktop = (direction) => {
+      if (!scrollContainerRef.current) return;
+      const container = scrollContainerRef.current;
+      const stepDesktop = getDesktopStep();
+      const maxScroll = Math.max(0, (carouselPlans.length - 3) * stepDesktop);
+      const targetScroll =
+        direction === "next"
+          ? container.scrollLeft + stepDesktop
+          : container.scrollLeft - stepDesktop;
+      const bounded = Math.max(0, Math.min(targetScroll, maxScroll));
+      container.scrollTo({
+        left: bounded,
+        behavior: "smooth",
+      });
+      setDesktopScrollLeft(bounded);
+    };
+
+    const scrollToCard = (index) => {
+      if (!scrollContainerRef.current) return;
+      const container = scrollContainerRef.current;
+      if (isDesktop) {
+        const stepDesktop = getDesktopStep();
+        const maxScroll = Math.max(0, (carouselPlans.length - 3) * stepDesktop);
+        let targetLeft = 0;
+        if (index >= 3) {
+          targetLeft = Math.min((index - 2) * stepDesktop, maxScroll);
+        } else {
+          targetLeft = 0; // Index 0, 1, 2 are in the starting three!
+        }
+        container.scrollTo({
+          left: targetLeft,
+          behavior: "smooth",
+        });
+        setDesktopScrollLeft(targetLeft);
+      } else {
+        const bounded = Math.max(0, Math.min(index, carouselPlans.length - 1));
+        container.scrollTo({
+          left: bounded * step,
+          behavior: "smooth",
+        });
       }
-    }, [activeData?.title]);
+      setActiveCarouselIdx(index);
+      const selectedPlan = carouselPlans[index];
+      if (selectedPlan) {
+        const origIdx = plans.findIndex((p) => p.months === selectedPlan.months);
+        if (origIdx !== -1) setSelectedPlanIdx(origIdx);
+      }
+    };
+
+    const handleScroll = (e) => {
+      const container = e.currentTarget;
+      const scrollLeft = container.scrollLeft;
+      setDesktopScrollLeft(scrollLeft);
+      if (!isDesktop) {
+        const newIndex = Math.round(scrollLeft / step);
+        const clamped = Math.max(0, Math.min(newIndex, carouselPlans.length - 1));
+        if (clamped !== activeCarouselIdx) {
+          setActiveCarouselIdx(clamped);
+          const selectedPlan = carouselPlans[clamped];
+          if (selectedPlan) {
+            const origIdx = plans.findIndex(
+              (p) => p.months === selectedPlan.months,
+            );
+            if (origIdx !== -1) setSelectedPlanIdx(origIdx);
+          }
+        }
+      }
+    };
+
+    // Default to 12-month plan if activeData / plans change and scroll into view
+    useEffect(() => {
+      if (carouselPlans.length > 0) {
+        const idx = carouselPlans.findIndex((p) => is12Month(p.months));
+        const targetIdx = idx !== -1 ? idx : 0;
+        setActiveCarouselIdx(targetIdx);
+        const origIdx = plans.findIndex(
+          (p) => p.months === carouselPlans[targetIdx]?.months,
+        );
+        if (origIdx !== -1) setSelectedPlanIdx(origIdx);
+
+        const timer = setTimeout(() => {
+          if (scrollContainerRef.current) {
+            if (isDesktop) {
+              scrollContainerRef.current.scrollTo({
+                left: 0,
+                behavior: "smooth",
+              });
+              setDesktopScrollLeft(0);
+            } else {
+              scrollContainerRef.current.scrollTo({
+                left: targetIdx * step,
+                behavior: "smooth",
+              });
+            }
+          }
+        }, 120);
+        return () => clearTimeout(timer);
+      }
+    }, [activeData?.title, carouselPlans.length, step, isDesktop]);
 
     // Listen for custom trigger to auto-select and highlight 12-month plan (e.g. from Founding30 CTA)
     useEffect(() => {
       const handleSelect12 = () => {
-        if (plans && plans.length > 0) {
-          const twelveIdx = getTwelveMonthIndex(plans);
-          setSelectedPlanIdx(twelveIdx);
-        }
+        const idx = carouselPlans.findIndex((p) => is12Month(p.months));
+        if (idx !== -1) scrollToCard(idx);
       };
       window.addEventListener("select-twelve-month-plan", handleSelect12);
       return () => {
         window.removeEventListener("select-twelve-month-plan", handleSelect12);
       };
-    }, [plans]);
+    }, [carouselPlans, step, isDesktop]);
 
     const razorpayKey =
       import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TS0kzk3tqsYO7Z";
@@ -319,9 +661,6 @@ const ChoosePlan = React.forwardRef(
                           >
                             {prog.title}
                           </span>
-                          <span className="text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-md sm:rounded-full tracking-wider font-extrabold bg-[#ccf141] text-black">
-                            {prog.subtitle}
-                          </span>
                           {prog.isComingSoon && (
                             <span className="text-[9px] font-mono px-2 py-0.5 rounded-full tracking-wider font-black bg-amber-500 text-black uppercase shadow-sm">
                               COMING SOON
@@ -338,9 +677,6 @@ const ChoosePlan = React.forwardRef(
                         >
                           {prog.title}
                         </span>
-                        <span className="text-[9.5px] sm:text-[10px] font-mono px-2 py-0.5 rounded-md sm:rounded-full tracking-wider font-extrabold bg-zinc-900/90 text-zinc-400 border border-zinc-700/50">
-                          {prog.subtitle}
-                        </span>
                         {prog.isComingSoon && (
                           <span className="text-[9px] font-mono px-1.5 py-0.5 rounded tracking-wider font-black bg-amber-500/15 text-amber-400 border border-amber-500/40 uppercase">
                             SOON
@@ -355,17 +691,14 @@ const ChoosePlan = React.forwardRef(
           </div>
         </motion.div>
 
-        {/* MAIN PRICING CARD (BLACK THEME WITH WHITE TEXT AND BORDERS) */}
-        <motion.div
-          key={currentTitle}
-          initial={{ opacity: 0, scale: 0.99 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.35 }}
-          className="w-full bg-[#0a0a0a] text-white border-2 border-zinc-800 rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
-        >
-          {/* CARD TOP HEADER STRIP: PROGRAM + SUBTITLE + SESSION INFO */}
-          <div className="bg-black text-white px-5 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800">
-            <div className="flex items-center gap-3.5 flex-wrap">
+        {/* ========================================================================= */}
+        {/* RESPONSIVE PEEK SLIDER STAGE (MOBILE & DESKTOP)                           */}
+        {/* Order: 1 Month -> 12 Months (Centered) -> 6 Months -> 24 Months          */}
+        {/* ========================================================================= */}
+        <div className="w-full relative mb-8">
+          {/* Program Header Strip */}
+          <div className="mb-4 sm:mb-6 px-2 sm:px-4 flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-zinc-800/80 pb-4">
+            <div className="flex items-center gap-3 flex-wrap">
               <span
                 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-white leading-none"
                 style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
@@ -385,367 +718,262 @@ const ChoosePlan = React.forwardRef(
                 </span>
               )}
             </div>
-            <p className="text-xs sm:text-[13px] text-zinc-300 font-medium">
-              {currentSessionInfo}
-            </p>
-          </div>
 
-          {/* CARD BODY WITH DURATION COLUMNS & BENEFITS (WITH FULL BLUR OVERLAY WHEN COMING SOON) */}
-          <div className="relative">
-            {/* 4 DURATION COLUMNS GRID - DISTINCT ELEVATED CARDS ON MOBILE, DIVIDED TABLE ON DESKTOP */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentTitle}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-0 sm:divide-x divide-zinc-800 p-3 sm:p-0 bg-[#0a0a0a]"
-              >
-              {plans.map((plan, idx) => {
-                const cleanTotal =
-                  plan.price ||
-                  plan.totalPrice ||
-                  "";
-                const cleanPerMonth = plan.perMonth || plan.price;
-                const hasDiscount = Boolean(plan.originalPrice);
+            <div className="flex items-center gap-4">
+              <p className="text-xs sm:text-[13px] md:text-sm text-zinc-400 font-medium max-w-xl text-left md:text-right leading-relaxed">
+                {currentSessionInfo}
+              </p>
 
-                const isSaveTag =
-                  plan.tag && plan.tag.toUpperCase().startsWith("SAVE");
-
-                const saveText =
-                  (plan.tag && plan.tag.toUpperCase().includes("SAVE")
-                    ? plan.tag
-                    : null) ||
-                  (plan.subtitle && plan.subtitle.toUpperCase().includes("SAVE")
-                    ? plan.subtitle
-                    : null) ||
-                  (hasDiscount && plan.originalPrice
-                    ? `SAVE ₹${(
-                      (Number(String(plan.originalPrice).replace(/[^0-9]/g, "")) || 0) -
-                      (Number(String(cleanTotal).replace(/[^0-9]/g, "")) || 0)
-                    ).toLocaleString("en-IN")}`
-                    : null);
-
-                const isSelected = selectedPlanIdx === idx;
-                const isTwelveMonth = Boolean(
-                  plan.months &&
-                  (plan.months.includes("12") ||
-                    plan.months.toLowerCase().includes("12 month") ||
-                    plan.months.toLowerCase().includes("1 year")),
-                );
-                const planNumericPrice =
-                  Number(String(cleanTotal).replace(/[^0-9]/g, "")) || 0;
-                const planAmountInPaise = planNumericPrice * 100;
-
-                return (
-                  <motion.div
-                    key={idx}
-                    id={isTwelveMonth ? "twelve-month-card" : `plan-card-${idx}`}
-                    data-twelve-month={isTwelveMonth ? "true" : undefined}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.45, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                    whileHover={{ y: -5, transition: { type: "spring", stiffness: 350, damping: 25 } }}
-                    whileTap={{ scale: 0.98 }}
-                    className={`scroll-mt-24 sm:scroll-mt-28 p-5 sm:p-7 md:p-8 rounded-2xl sm:rounded-none flex flex-col items-center text-center justify-between transition-all duration-300 group cursor-pointer relative ${
-                      isTwelveMonth
-                        ? "bg-gradient-to-b from-[#181d09] via-[#0f1114] to-[#0a0a0c] sm:bg-zinc-900/60 border-2 sm:border-0 border-[#ccf141] sm:ring-2 sm:ring-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)] z-10"
-                        : isSelected
-                          ? "bg-gradient-to-b from-zinc-900/90 to-[#0e0e11] sm:bg-zinc-900/50 border-2 sm:border-0 border-[#ccf141]/80 sm:ring-2 sm:ring-[#ccf141]/80 shadow-[0_0_20px_rgba(204,241,65,0.15)] z-10"
-                          : "bg-[#0d0d10]/95 sm:bg-transparent border border-zinc-800/80 sm:border-0 hover:bg-zinc-900/40"
-                    }`}
-                    onClick={() => {
-                      if (activeData.isComingSoon) {
-                        setSelectedPlanIdx(idx);
-                        return;
-                      }
-                      if (isSelected) {
-                        handlePlanSelect(
-                          `${currentTitle} - ${plan.months}`,
-                          cleanTotal,
-                          plan.months,
-                        );
-                      } else {
-                        setSelectedPlanIdx(idx);
-                      }
-                    }}
-                  >
-                    {/* Fixed Center Highlight Badge for 12-Month Plan: 54.4% OFFER & HURRY UP 8 DAYS ONLY */}
-                    {isTwelveMonth && (
-                      <div className="absolute top-2 sm:top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-max max-w-[95%]">
-                        <div className="relative group/offer">
-                          {/* Outer ambient glow */}
-                          <div className="absolute -inset-0.5 bg-gradient-to-r from-red-500 via-amber-400 to-[#ccf141] rounded-full blur-[4px] opacity-75 animate-pulse" />
-
-                          {/* Pill badge container */}
-                          <div className="relative px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-[#0b0b0e]/95 backdrop-blur-md border border-[#ccf141]/60 rounded-full flex items-center justify-center gap-1.5 sm:gap-2 shadow-[0_0_15px_rgba(204,241,65,0.25)]">
-                            {/* Pulsing red live beacon */}
-                            <span className="relative flex h-2 w-2 shrink-0">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                            </span>
-
-                            <span className="w-1 h-1 rounded-full bg-zinc-600 shrink-0" />
-
-                            {/* Urgent limited tag */}
-                            <span className="px-1.5 py-0.5 rounded-[4px] bg-red-500/25 border border-red-500/50 text-red-400 font-mono font-black text-[8px] sm:text-[9px] uppercase tracking-wider leading-none shrink-0 animate-pulse">
-                              LIMITED
-                            </span>
-
-                            {/* HURRY UP 8 DAYS ONLY */}
-                            <span className="text-[8.5px] sm:text-[10px] font-mono font-extrabold uppercase tracking-tight text-yellow-400 leading-none whitespace-nowrap">
-                              HURRY UP 8 DAYS ONLY
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="w-full flex flex-col items-center">
-                      {/* Duration Label & Mobile Status Pill */}
-                      <div className={`flex items-center justify-center gap-2 mb-1.5 select-none ${isTwelveMonth ? "mt-6 sm:mt-6" : "mt-0"}`}>
-                        <span
-                          className={`font-black uppercase text-xs sm:text-[13px] tracking-wider transition-colors ${
-                            isTwelveMonth ? "text-white" : isSelected ? "text-[#ccf141]" : "text-zinc-400"
-                          }`}
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          {plan.months}
-                        </span>
-                        {isSelected && !isTwelveMonth && (
-                          <span className="sm:hidden inline-flex items-center gap-1 text-[9px] font-bold text-[#ccf141] bg-[#ccf141]/15 px-2 py-0.5 rounded-full border border-[#ccf141]/40">
-                            SELECTED
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Total Price Line with Save Tag */}
-                      <div className="flex flex-col items-center justify-center gap-2 flex-wrap my-1">
-                        <span
-                          className="font-black text-white text-[48px] sm:text-3xl md:text-[42px] lg:text-[45px] leading-tight tracking-tight"
-                          style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                        >
-                          ₹{cleanTotal}/-
-                        </span>
-                        {saveText && (
-                          <span
-                            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#ccf141]/20 border border-[#ccf141]/50 text-[#ccf141] text-[14px] sm:text-[11px] font-black uppercase tracking-wider select-none whitespace-nowrap shadow-[0_0_10px_rgba(204,241,65,0.2)]"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141]"></span>
-                            {saveText}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Strikethrough if discounted */}
-                      {hasDiscount && (
-                        <div className="my-0.5">
-                          <span className="line-through text-zinc-400 font-medium text-xs sm:text-[13px]">
-                            ₹{plan.originalPrice}/-
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Per Month Price */}
-                      <div
-                        className="text-xs sm:text-sm font-black text-yellow-400 tracking-tight leading-none my-1 flex items-baseline justify-center"
-                        style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
-                      >
-                        <span>₹{cleanPerMonth} / Month</span>
-                      </div>
-
-                      {/* EMI Affordability Widget with border and enhanced UI/UX */}
-                      <div
-                        className={`w-full mt-3 mb-1 px-3 py-2 rounded-xl border transition-all duration-200 flex flex-col items-center justify-center min-h-[44px] cursor-pointer ${
-                          isSelected
-                            ? "border-[#ccf141]/60 bg-[#121215] shadow-[0_0_12px_rgba(204,241,65,0.1)]"
-                            : isTwelveMonth
-                              ? "border-[#ccf141]/40 bg-[#121215]/80 hover:border-[#ccf141]/70"
-                              : "border-zinc-800/90 bg-[#0d0d10] hover:border-zinc-700"
-                        }`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedPlanIdx(idx);
-                        }}
-                      >
-                        <div className="w-full flex justify-center items-center min-h-[36px]">
-                          {isSelected ? (
-                            <div className="relative w-full flex justify-center items-center min-h-[36px]">
-                              <div
-                                id="razorpay-affordability-widget"
-                                data-key={razorpayKey}
-                                data-amount={planAmountInPaise}
-                                data-currency="INR"
-                                className="w-full flex justify-center items-center text-center text-xs text-zinc-200 font-sans"
-                              ></div>
-                              <div className="razorpay-fallback flex items-center justify-center gap-1.5 text-xs text-zinc-300 pointer-events-none">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] animate-pulse"></span>
-                                <span className="text-[15px] font-medium text-white">
-                                  EMI from <strong className="text-[#ccf141] font-bold">₹{getEmiPerMonth(cleanTotal, plan.months)}/mo</strong>
-                                </span>
-                                <span className="text-[10px] text-zinc-500">•</span>
-                                <span className="text-[10.5px] text-[#ccf141] font-bold underline underline-offset-2">
-                                  View Plans
-                                </span>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="w-full flex justify-center items-center text-center text-xs text-zinc-300 min-h-[36px]">
-                              <div className="flex items-center justify-center gap-1.5 text-xs">
-                                <span className="text-[11.5px] font-medium text-zinc-300">
-                                  EMI from <strong className="text-white font-bold">₹{getEmiPerMonth(cleanTotal, plan.months)}/mo</strong>
-                                </span>
-                                <span className="text-[10px] text-zinc-500">•</span>
-                                <span className="text-[10.5px] text-zinc-400 hover:text-[#ccf141] underline underline-offset-2 transition-colors">
-                                  View Plans
-                                </span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bottom Action Button: Outline Button with Spinning Border Beam */}
-                    <div className="w-full pt-3">
-                      <button
-                        type="button"
-                        disabled={activeData.isComingSoon}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (activeData.isComingSoon) return;
-                          setSelectedPlanIdx(idx);
-                          handlePlanSelect(
-                            `${currentTitle} - ${plan.months}`,
-                            cleanTotal,
-                            plan.months,
-                          );
-                        }}
-                        className={`relative w-full p-[1.5px] rounded-xl overflow-hidden select-none transition-all duration-300 ${
-                          activeData.isComingSoon
-                            ? "opacity-90 cursor-not-allowed border border-amber-500/40"
-                            : isTwelveMonth || isSelected
-                              ? "cursor-pointer shadow-[0_0_25px_rgba(204,241,65,0.35)] active:scale-[0.98]"
-                              : "cursor-pointer shadow-[0_0_15px_rgba(204,241,65,0.1)] hover:shadow-[0_0_25px_rgba(204,241,65,0.3)] active:scale-[0.98]"
-                        }`}
-                      >
-                        {/* 360° Continuous Spinning Conic Border Animation */}
-                        {!activeData.isComingSoon && (
-                          <div className="absolute inset-[-250%] bg-[conic-gradient(from_0deg,#ccf141_0deg,transparent_70deg,transparent_180deg,#ccf141_250deg,transparent_360deg)] animate-spin-border" />
-                        )}
-
-                        {/* Outline Button Body */}
-                        <div
-                          className={`relative z-10 w-full py-2.5 sm:py-3 px-4 rounded-[10.5px] flex items-center justify-center gap-2 transition-all duration-300 ${
-                            activeData.isComingSoon
-                              ? "bg-zinc-900/90 text-amber-400 font-black border border-amber-500/30"
-                              : isTwelveMonth || isSelected
-                                ? "bg-[#ccf141] text-black sm:bg-black sm:text-[#ccf141] group-hover:bg-[#ccf141] group-hover:text-black font-black"
-                                : "bg-black text-white group-hover:bg-[#ccf141] group-hover:text-black"
-                          }`}
-                        >
-                          <span
-                            className="font-black uppercase tracking-wider text-xs sm:text-sm whitespace-nowrap"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                          >
-                            {activeData.isComingSoon ? "COMING SOON" : "GET ACCESS"}
-                          </span>
-                          {!activeData.isComingSoon && (
-                            <ArrowRight
-                              size={14}
-                              className="transition-transform duration-300 group-hover:translate-x-1 shrink-0"
-                            />
-                          )}
-                        </div>
-                      </button>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </AnimatePresence>
-
-            {/* CARD BOTTOM SECTION: WHAT IT ACTUALLY GIVES YOU + RIGHT BLACK BOX */}
-            <div className="border-t border-zinc-800 flex flex-col md:flex-row items-stretch bg-black">
-              {/* Left Side: WHAT IT ACTUALLY GIVES YOU */}
-              <div className="flex-1 p-5 sm:p-8 md:p-9 bg-[#0e0e0e]">
-                <span
-                  className="block text-xs sm:text-[20px] font-bold uppercase tracking-[0.2em] text-zinc-400 mb-4 sm:mb-5 select-none"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              {/* Header Desktop Chevron Controls */}
+              <div className="hidden sm:flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => (isDesktop ? slideDesktop("prev") : scrollToCard(activeCarouselIdx - 1))}
+                  disabled={isDesktop ? desktopScrollLeft <= 10 : activeCarouselIdx === 0}
+                  aria-label="Previous Plan"
+                  className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-700/80 hover:border-[#ccf141] hover:bg-[#ccf141] text-zinc-300 hover:text-black flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md disabled:opacity-30 disabled:pointer-events-none active:scale-95"
                 >
-                  WHAT IT ACTUALLY GIVES YOU  
-                </span>
-
-                <div className="space-y-3.5 sm:space-y-4">
-                  {benefits.map((b, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      {/* Neon Lime Square Bullet from Reference Images */}
-                      <span className="w-2.5 h-2.5 bg-[#ccf141] shrink-0 mt-1 rounded-[1.5px] shadow-[0_0_6px_rgba(204,241,65,0.4)]" />
-                      <p className="text-xs sm:text-[13.5px] leading-relaxed text-zinc-300">
-                        <strong className="text-white font-black mr-1">
-                          {b.boldText}
-                        </strong>
-                        <span className="text-zinc-400 font-normal">
-                          {b.normalText}
-                        </span>
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right Side: BLACK BOX (DAILY RATE) */}
-              <div className="w-full md:w-[320px] lg:w-[360px] bg-black text-white p-6 sm:p-8 flex flex-col items-center justify-center text-center border-t md:border-t-0 md:border-l border-zinc-800 shrink-0">
-                {/* Giant Neon Rate */}
-                <div
-                  className="text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-[#ccf141] tracking-tight leading-none select-none drop-shadow-[0_0_20px_rgba(204,241,65,0.45)] flex items-baseline justify-center gap-2"
-                  style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+                  <ChevronLeft size={20} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => (isDesktop ? slideDesktop("next") : scrollToCard(activeCarouselIdx + 1))}
+                  disabled={isDesktop ? desktopScrollLeft >= maxDesktopScroll - 15 : activeCarouselIdx === carouselPlans.length - 1}
+                  aria-label="Next Plan"
+                  className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-700/80 hover:border-[#ccf141] hover:bg-[#ccf141] text-zinc-300 hover:text-black flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md disabled:opacity-30 disabled:pointer-events-none active:scale-95"
                 >
-                  <span>{dailyRate}</span>
-                  <span className="text-lg sm:text-xl font-sans font-bold text-zinc-300">/ day</span>
-                </div>
-
-                {/* Subtitle */}
-                <span
-                  className="mt-2 text-[15px] sm:text-[11px] font-mono font-bold tracking-[0.18em] text-zinc-300 uppercase select-none"
-                >
-                  {dailyRateLabel}
-                </span>
-
-                {/* Daily Comparison Punchline (e.g. "A dosa and a filter coffee.") */}
-                <div
-                  className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white select-none leading-snug max-w-xs"
-                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                >
-                  {dailyComparison}
-                </div>
+                  <ChevronRight size={20} />
+                </button>
               </div>
             </div>
+          </div>
 
-            {/* COMING SOON FULL BLUR OVERLAY OVER PRICING COLUMNS & BENEFITS */}
+          {/* Slider Stage Container with Floating Side Chevrons and Bleed Width */}
+          <div className="relative w-full">
+            {/* Floating Side Left Arrow (Desktop / Tablet) */}
+            <button
+              type="button"
+              onClick={() => (isDesktop ? slideDesktop("prev") : scrollToCard(activeCarouselIdx - 1))}
+              disabled={isDesktop ? desktopScrollLeft <= 10 : activeCarouselIdx === 0}
+              aria-label="Slide Left"
+              className="hidden md:flex absolute -left-4 lg:-left-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-[#101012]/90 hover:bg-[#ccf141] text-white hover:text-black border border-zinc-700 hover:border-[#ccf141] backdrop-blur-md items-center justify-center transition-all duration-200 cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.9)] active:scale-95 disabled:opacity-0 disabled:pointer-events-none"
+            >
+              <ChevronLeft size={24} />
+            </button>
+
+            {/* Floating Side Right Arrow (Desktop / Tablet) */}
+            <button
+              type="button"
+              onClick={() => (isDesktop ? slideDesktop("next") : scrollToCard(activeCarouselIdx + 1))}
+              disabled={isDesktop ? desktopScrollLeft >= maxDesktopScroll - 15 : activeCarouselIdx === carouselPlans.length - 1}
+              aria-label="Slide Right"
+              className="hidden md:flex absolute -right-4 lg:-right-6 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-[#101012]/90 hover:bg-[#ccf141] text-white hover:text-black border border-zinc-700 hover:border-[#ccf141] backdrop-blur-md items-center justify-center transition-all duration-200 cursor-pointer shadow-[0_8px_30px_rgba(0,0,0,0.9)] active:scale-95 disabled:opacity-0 disabled:pointer-events-none"
+            >
+              <ChevronRight size={24} />
+            </button>
+
+            {/* Native Touch & Smooth Scrollable Peek Carousel Stage */}
+            <div
+              ref={scrollContainerRef}
+              onScroll={handleScroll}
+              className={`flex items-stretch overflow-x-auto snap-x snap-mandatory py-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+                isDesktop
+                  ? "w-full relative"
+                  : "w-screen relative left-1/2 -translate-x-1/2"
+              }`}
+              style={{
+                paddingLeft: isDesktop ? "0px" : `${sidePadding}px`,
+                paddingRight: isDesktop ? "0px" : `${sidePadding}px`,
+                gap: `${cardGap}px`,
+                WebkitOverflowScrolling: "touch",
+              }}
+            >
+              {carouselPlans.map((plan, idx) => {
+                const isCenter = idx === activeCarouselIdx;
+                const isTwelveMonth = is12Month(plan.months);
+                const isTwentyFourMonth = is24Month(plan.months);
+                const isSixMonth = is6Month(plan.months);
+
+                const cleanTotal = plan.price || plan.totalPrice || "";
+                const numericPrice =
+                  Number(String(cleanTotal).replace(/[^0-9]/g, "")) || 0;
+                const originalPriceStr =
+                  plan.originalPrice ||
+                  (isTwentyFourMonth
+                    ? Math.round(numericPrice * 1.45).toLocaleString("en-IN")
+                    : isTwelveMonth
+                      ? "42,000"
+                      : isSixMonth
+                        ? "21,000"
+                        : plan.months?.includes("3")
+                          ? "10,500"
+                          : Math.round(numericPrice * 1.25).toLocaleString(
+                              "en-IN",
+                            ));
+
+                const bullets = getPlanMobileBullets(plan, currentTitle);
+
+                return (
+                  <div
+                    key={plan.months || idx}
+                    id={isTwelveMonth ? "twelve-month-card" : `plan-card-${idx}`}
+                    onClick={() => scrollToCard(idx)}
+                    style={{
+                      width: isDesktop ? "calc((100% - 48px) / 3)" : `${cardWidth}px`,
+                      minHeight: isDesktop ? "560px" : "515px",
+                    }}
+                    className={`shrink-0 snap-center rounded-[24px] cursor-pointer select-none transition-all duration-300 flex flex-col justify-between ${
+                      isDesktop
+                        ? isCenter
+                          ? "scale-100 opacity-100 shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-20"
+                          : "scale-100 opacity-95 hover:opacity-100 shadow-[0_10px_30px_rgba(0,0,0,0.6)] z-10"
+                        : isCenter
+                          ? "scale-100 opacity-100 shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-20"
+                          : "scale-[0.93] opacity-50 hover:opacity-85 shadow-none z-10"
+                    }`}
+                  >
+                    <div
+                      className={`w-full h-full rounded-[24px] p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${
+                        isCenter
+                          ? isTwelveMonth
+                            ? "bg-[#141417] border-2 border-[#ccf141]/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(204,241,65,0.25)] ring-1 ring-[#ccf141]/30"
+                            : isTwentyFourMonth
+                              ? "bg-[#141417] border-2 border-amber-400/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30"
+                              : "bg-[#141417] border border-zinc-700/80 shadow-[0_20px_45px_rgba(0,0,0,0.95)] ring-1 ring-white/10"
+                          : "bg-[#101012] hover:bg-[#141417] border border-zinc-800/80 hover:border-zinc-700"
+                      }`}
+                    >
+                      {/* Dimmed Overlay on Inactive Peeking Cards only for mobile */}
+                      {!isDesktop && !isCenter && (
+                        <div className="absolute inset-0 bg-black/25 z-30 rounded-[24px] pointer-events-none transition-opacity hover:bg-black/10" />
+                      )}
+
+                      {/* Card Content Top Half */}
+                      <div className="relative z-10 flex flex-col flex-grow">
+                        {/* Duration Header & Badges */}
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <h3
+                            className="text-xl sm:text-2xl font-black text-white tracking-tight leading-none"
+                            style={{
+                              fontFamily: '"BrutalTypeBold", sans-serif',
+                            }}
+                          >
+                            {plan.months}
+                          </h3>
+
+                          {isTwelveMonth ? (
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-red-500 border border-red-400/90 shadow-[0_0_12px_rgba(255,0,0,0.35)] shrink-0">
+                              Limited time offer <br />
+                              8 days only 
+                            </span>
+                          ) : isTwentyFourMonth ? (
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-amber-300 border border-amber-400/90 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
+                              BEST VALUE
+                            </span>
+                          ) : plan.popular || isSixMonth ? (
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-[#ccf141] border border-[#ccf141]/80 shadow-[0_0_10px_rgba(204,241,65,0.3)] shrink-0">
+                              POPULAR
+                            </span>
+                          ) : null}
+                        </div>
+
+                        {/* Strikethrough Original Price */}
+                        <div className="min-h-[18px]">
+                          {originalPriceStr ? (
+                            <span className="text-zinc-500 font-bold text-xs sm:text-sm line-through italic">
+                              ₹{originalPriceStr}
+                            </span>
+                          ) : null}
+                        </div>
+
+                        {/* Active Big Price + /mo* text */}
+                        <div className="flex items-baseline gap-1.5 flex-wrap mt-0.5">
+                          <span
+                            className="text-white font-black text-3xl sm:text-4xl tracking-tight leading-none"
+                            style={{
+                              fontFamily:
+                                '"BrutalTypeBold", Impact, sans-serif',
+                            }}
+                          >
+                            ₹{numericPrice.toLocaleString("en-IN")}
+                          </span>
+                          <span className="text-zinc-400 font-medium text-xs sm:text-[13px]">
+                            (₹{getEmiPerMonth(cleanTotal, plan.months)}/mo*)
+                          </span>
+                        </div>
+
+                        {/* Hairline Divider Line */}
+                        <div className="h-[1px] bg-zinc-800/80 my-3 sm:my-3.5" />
+
+                        {/* Feature Bullet Points with '+' Icons */}
+                        <div className="space-y-2.5 sm:space-y-3 my-1 flex-grow">
+                          {bullets.map((item, bIdx) => (
+                            <div
+                              key={bIdx}
+                              className="flex items-start gap-2.5"
+                            >
+                              <span className="text-zinc-400 font-bold text-sm leading-none shrink-0 mt-0.5 select-none">
+                                +
+                              </span>
+                              <span className="text-[12px] sm:text-[13px] leading-snug text-zinc-300 italic font-medium">
+                                {item}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Bottom Action Button */}
+                      <div className="relative mt-4 sm:mt-6 pt-2 shrink-0">
+                        <button
+                          type="button"
+                          disabled={activeData.isComingSoon}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!isCenter) {
+                              scrollToCard(idx);
+                              return;
+                            }
+                            if (activeData.isComingSoon) return;
+                            handlePlanSelect(
+                              `${currentTitle} - ${plan.months}`,
+                              cleanTotal,
+                              plan.months,
+                            );
+                          }}
+                          className={`w-full py-3.5 px-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.5)] active:scale-[0.98] flex items-center justify-center gap-1.5 ${
+                            activeData.isComingSoon
+                              ? "bg-zinc-800 text-amber-400 border border-amber-500/40"
+                              : "bg-white text-[#ff3366] hover:bg-zinc-100 hover:shadow-[0_6px_28px_rgba(255,51,102,0.28)]"
+                          }`}
+                          style={{
+                            fontFamily: '"BrutalTypeBold", sans-serif',
+                          }}
+                        >
+                          {activeData.isComingSoon
+                            ? "COMING SOON"
+                            : "Get Access"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* COMING SOON FULL BLUR OVERLAY OVER SLIDER */}
             {activeData.isComingSoon && (
-              <div className="absolute inset-0 z-30 backdrop-blur-md bg-black/85 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none transition-all duration-300">
-                {/* Subtle Ambient Amber Glow */}
+              <div className="absolute inset-0 z-40 backdrop-blur-md bg-black/85 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none transition-all duration-300 rounded-[24px]">
                 <div className="absolute w-96 h-96 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
-
-
-
-                {/* Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs font-mono font-black uppercase tracking-widest mb-4 shadow-sm">
                   <span>{currentTitle} · ADMISSIONS LAUNCHING SOON</span>
                 </div>
-
-                {/* Main Title */}
                 <h3
                   className="text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-white mb-3 leading-none drop-shadow-lg"
                   style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                 >
                   COMING SOON
                 </h3>
-
-                {/* Explanatory Description */}
                 <p
                   className="text-zinc-300 text-sm sm:text-base md:text-lg max-w-xl leading-relaxed mb-8 font-medium"
                   style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
@@ -753,10 +981,83 @@ const ChoosePlan = React.forwardRef(
                   We are currently setting up the arena floor and coaching cohorts for the{" "}
                   <strong className="text-white font-bold">{currentTitle}</strong> pathway. Online bookings and admissions will unlock shortly.
                 </p>
-
-
               </div>
             )}
+          </div>
+
+        </div>
+
+
+        {/* SEPARATE SECTION: WHAT IT ACTUALLY GIVES YOU & DAILY VALUE */}
+        <motion.div
+          key={`benefits-${currentTitle}`}
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="mt-8 sm:mt-12 w-full bg-[#0a0a0c] text-white border-2 border-zinc-800 rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative"
+        >
+          {/* Subtle ambient background glow */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#ccf141]/5 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col md:flex-row items-stretch">
+            {/* Left Side: WHAT IT ACTUALLY GIVES YOU */}
+            <div className="flex-1 p-6 sm:p-9 md:p-10 bg-[#0c0c0e]">
+              <div className="flex items-center gap-2.5 mb-5 sm:mb-6 select-none">
+                <span className="w-2.5 h-2.5 bg-[#ccf141] rounded-[2px] shadow-[0_0_8px_#ccf141]" />
+                <span
+                  className="text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-zinc-400"
+                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                >
+                  WHAT IT ACTUALLY GIVES YOU
+                </span>
+              </div>
+
+              <div className="space-y-4 sm:space-y-4.5">
+                {benefits.map((b, idx) => (
+                  <div key={idx} className="flex items-start gap-3.5 group">
+                    {/* Neon Lime Square Bullet from Reference Images */}
+                    <span className="w-2.5 h-2.5 bg-[#ccf141] shrink-0 mt-1 rounded-[2px] shadow-[0_0_8px_rgba(204,241,65,0.4)] group-hover:scale-110 transition-transform" />
+                    <p className="text-xs sm:text-[14px] leading-relaxed text-zinc-300">
+                      <strong className="text-white font-black mr-1.5 tracking-tight">
+                        {b.boldText}
+                      </strong>
+                      <span className="text-zinc-400 font-normal">
+                        {b.normalText}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Side: BLACK BOX (DAILY RATE & COMPARISON) */}
+            <div className="w-full md:w-[320px] lg:w-[360px] bg-black text-white p-7 sm:p-9 flex flex-col items-center justify-center text-center border-t md:border-t-0 md:border-l border-zinc-800 shrink-0 relative overflow-hidden">
+              {/* Radial neon glow behind daily rate */}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(204,241,65,0.12)_0%,transparent_70%)] pointer-events-none" />
+
+              {/* Giant Neon Rate */}
+              <div
+                className="relative z-10 text-6xl sm:text-7xl md:text-8xl font-black text-[#ccf141] tracking-tight leading-none select-none drop-shadow-[0_0_25px_rgba(204,241,65,0.45)] flex items-baseline justify-center gap-2"
+                style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
+              >
+                <span>{dailyRate}</span>
+                <span className="text-lg sm:text-xl font-sans font-bold text-zinc-300">/ day</span>
+              </div>
+
+              {/* Subtitle / Term Label */}
+              <span className="relative z-10 mt-3 text-[13px] sm:text-[11px] font-mono font-bold tracking-[0.18em] text-zinc-300 uppercase select-none">
+                {dailyRateLabel}
+              </span>
+
+              {/* Daily Comparison Punchline (e.g. "Two coffees & breakfast for two.") */}
+              <div
+                className="relative z-10 mt-4 text-sm sm:text-base md:text-lg font-bold text-white select-none leading-snug max-w-xs"
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                {dailyComparison}
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>

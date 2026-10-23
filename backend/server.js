@@ -6,8 +6,6 @@ const connectDB = require("./config/db");
 const fs = require("fs");
 const path = require("path");
 const bookingRoutes = require("./routes/bookingRoutes");
-
-
 const authRoutes = require("./routes/authRoutes");
 const membershipRoutes = require("./routes/membershipRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");

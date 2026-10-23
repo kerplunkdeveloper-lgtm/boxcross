@@ -23,6 +23,8 @@ import box1 from "../assets/box1.png";
 import box2 from "../assets/box2.png";
 import box3 from "../assets/box3.png";
 import juniorBoxer from "../assets/junior_boxer.jpg";
+import duoCoupleImg from "../assets/duo_couple.jpg";
+import familyFatherSonImg from "../assets/family_father_son.jpg";
 import BCMonogram from "./BCMonogram";
 
 import ChoosePlan from "./ChoosePlan";
@@ -86,6 +88,60 @@ const programs = [
     desc: "Five coached sessions a week- (Boxing + Hyrox + Strength Training)",
     price: "5,600",
     image: box3,
+  },
+  {
+    id: "duo",
+    icon: (
+      <svg
+        width="45"
+        height="45"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#ccf141"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-[#ccf141]"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+    title: "BXC DUO",
+    subtitle: "2 PERSON PASS",
+    desc: "Five coached sessions a week for 2 members across your chosen pathways.",
+    price: "6,800",
+    image: duoCoupleImg,
+  },
+  {
+    id: "family",
+    icon: (
+      <svg
+        width="45"
+        height="45"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#ccf141"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-[#ccf141]"
+      >
+        <circle cx="6" cy="6" r="3" />
+        <path d="M2 18v-1a4 4 0 0 1 7-2.6" />
+        <circle cx="18" cy="6" r="3" />
+        <path d="M22 18v-1a4 4 0 0 0-7-2.6" />
+        <circle cx="12" cy="11" r="2.5" />
+        <path d="M8.5 21v-1a3.5 3.5 0 0 1 7 0v1" />
+      </svg>
+    ),
+    title: "BXC FAMILY FIT",
+    subtitle: "ALL AGES FAMILY",
+    desc: "Full arena access for parents + Junior coaching for kids (up to 4 members).",
+    price: "11,900",
+    image: familyFatherSonImg,
   },
   {
     id: "junior",
@@ -209,6 +265,21 @@ const pricingData = {
         tag: "SAVE ₹8,400",
         buttonText: "SAVE ₹8,400",
       },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹26,400",
+        price: "57,600",
+        perMonth: "2,400",
+        originalPrice: "84,000",
+        totalPrice: "57,600",
+        highlights: [
+          "Five Coached sessions a week",
+          "2-Year rate freeze guarantee",
+          "Founding Elite Wall badge",
+        ],
+        tag: "SAVE ₹26,400",
+        buttonText: "SAVE ₹26,400",
+      },
     ],
     starterPrice: "2,800",
   },
@@ -305,6 +376,21 @@ const pricingData = {
         tag: "SAVE ₹12,000",
         buttonText: "SAVE ₹12,000",
       },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹36,000",
+        price: "84,000",
+        perMonth: "3,500",
+        originalPrice: "120,000",
+        totalPrice: "84,000",
+        highlights: [
+          "Four coached sessions a week",
+          "Two disciplines access",
+          "2-Year rate freeze guarantee",
+        ],
+        tag: "SAVE ₹36,000",
+        buttonText: "SAVE ₹36,000",
+      },
     ],
     starterPrice: "4,000",
   },
@@ -400,6 +486,21 @@ const pricingData = {
         ],
         tag: "SAVE ₹16,800",
         buttonText: "SAVE ₹16,800",
+      },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹52,800",
+        price: "115,200",
+        perMonth: "4,800",
+        originalPrice: "168,000",
+        totalPrice: "115,200",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "2-Year rate freeze guarantee",
+        ],
+        tag: "SAVE ₹52,800",
+        buttonText: "SAVE ₹52,800",
       },
     ],
     starterPrice: "5,600",
@@ -498,8 +599,245 @@ const pricingData = {
         tag: "SAVE ₹5,300",
         buttonText: "SAVE ₹5,300",
       },
+      {
+        months: "24 MONTHS",
+        subtitle: "BEST VALUE",
+        price: "39,600",
+        perMonth: "1,650",
+        originalPrice: "72,000",
+        totalPrice: "39,600",
+        highlights: [
+          "Five Coached sessions a week",
+          "Long-term youth athletic mastery",
+          "2-Year rate freeze guarantee",
+        ],
+        tag: "SAVE ₹32,400",
+        buttonText: "SAVE ₹32,400",
+      },
     ],
     starterPrice: "3,000",
+  },
+  duo: {
+    title: "BXC DUO",
+    subtitle: "2 PERSON PASS",
+    sessionInfo: "Five coached sessions a week for 2 members across your chosen pathways",
+    dailyRate: "₹224",
+    dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
+    dailyComparison: "Two coffees & breakfast for two.",
+    features: [
+      "Two memberships under one account",
+      "Five coached sessions a week for both members",
+      "Partner workout programming & benchmarks",
+      "Full open gym & recovery lounge access",
+    ],
+    benefits: [
+      {
+        boldText: "You never skip when someone waits.",
+        normalText: "Partner accountability cuts skipped sessions by over 70%.",
+      },
+      {
+        boldText: "Shared grind builds stronger bonds.",
+        normalText: "Sweat together in the ring, conquer HYROX benchmarks together.",
+      },
+      {
+        boldText: "Coached side-by-side.",
+        normalText: "Train as a team with dedicated coaches pushing you both.",
+      },
+      {
+        boldText: "Better value, together.",
+        normalText: "Complete premium arena access priced for two athletes.",
+      },
+    ],
+    plans: [
+      {
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "8,500",
+        perMonth: "8,500",
+        originalPrice: "",
+        totalPrice: "8,500",
+        highlights: [
+          "Five coached sessions a week",
+          "Access for 2 partners",
+          "Full arena facilities",
+        ],
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "SAVE ₹1,500",
+        price: "24,000",
+        perMonth: "8,000",
+        originalPrice: "25,500",
+        totalPrice: "24,000",
+        highlights: [
+          "Five coached sessions a week",
+          "Held rate for full term",
+          "Joint coach assessment",
+        ],
+        tag: "SAVE ₹1,500",
+        buttonText: "SAVE ₹1,500",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "SAVE ₹6,000",
+        price: "45,000",
+        perMonth: "7,500",
+        originalPrice: "51,000",
+        totalPrice: "45,000",
+        highlights: [
+          "Five coached sessions a week",
+          "Locked rate for both members",
+          "Partner progress card",
+        ],
+        tag: "SAVE ₹6,000",
+        buttonText: "SAVE ₹6,000",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "SAVE ₹20,400",
+        price: "81,600",
+        perMonth: "6,800",
+        originalPrice: "102,000",
+        totalPrice: "81,600",
+        highlights: [
+          "Five coached sessions a week",
+          "Maximum partner discount",
+          "Founding Wall duo recognition",
+        ],
+        tag: "SAVE ₹20,400",
+        buttonText: "SAVE ₹20,400",
+      },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹64,800",
+        price: "139,200",
+        perMonth: "5,800",
+        originalPrice: "204,000",
+        totalPrice: "139,200",
+        highlights: [
+          "Five coached sessions a week",
+          "2-Year rate freeze for both partners",
+          "Founding Wall duo recognition",
+        ],
+        tag: "SAVE ₹64,800",
+        buttonText: "SAVE ₹64,800",
+      },
+    ],
+    starterPrice: "6,800",
+  },
+  family: {
+    title: "BXC FAMILY FIT",
+    subtitle: "ALL AGES FAMILY",
+    sessionInfo: "Full arena access for parents + Junior coaching for kids (up to 4 members)",
+    dailyRate: "₹390",
+    dailyRateLabel: "A DAY FOR THE WHOLE FAMILY",
+    dailyComparison: "One weekend family dinner.",
+    features: [
+      "Access for up to 4 family members (Adults + Juniors)",
+      "Adult pathways (Boxing, HYROX, Strength) + Junior Youth classes",
+      "Synchronized weekend session slots & open gym",
+      "Family fitness assessment & quarterly milestones",
+    ],
+    benefits: [
+      {
+        boldText: "Active role models inspire children.",
+        normalText: "Kids do what they see. When parents train, healthy habits become second nature.",
+      },
+      {
+        boldText: "Screen-free family time with purpose.",
+        normalText: "Replace screen time with punches, agility ladders, and shared sweat.",
+      },
+      {
+        boldText: "Concurrent schedules that save your weekend.",
+        normalText: "Drop off junior for boxing while you hit the HYROX floor simultaneously.",
+      },
+      {
+        boldText: "One simple plan for everyone.",
+        normalText: "Unrestricted arena access for the whole family without four separate bills.",
+      },
+    ],
+    plans: [
+      {
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "15,000",
+        perMonth: "15,000",
+        originalPrice: "",
+        totalPrice: "15,000",
+        highlights: [
+          "Coached sessions for up to 4 members",
+          "Adult pathways + Junior boxing",
+          "Arena weekend open access",
+        ],
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "SAVE ₹3,000",
+        price: "42,000",
+        perMonth: "14,000",
+        originalPrice: "45,000",
+        totalPrice: "42,000",
+        highlights: [
+          "Coached sessions for all members",
+          "Held rate for full term",
+          "Family fitness card",
+        ],
+        tag: "SAVE ₹3,000",
+        buttonText: "SAVE ₹3,000",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "SAVE ₹12,000",
+        price: "78,000",
+        perMonth: "13,000",
+        originalPrice: "90,000",
+        totalPrice: "78,000",
+        highlights: [
+          "Coached sessions for all members",
+          "Technique & athletic milestone tracking",
+          "Guest passes for friends",
+        ],
+        tag: "SAVE ₹12,000",
+        buttonText: "SAVE ₹12,000",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "SAVE ₹37,200",
+        price: "142,800",
+        perMonth: "11,900",
+        originalPrice: "180,000",
+        totalPrice: "142,800",
+        highlights: [
+          "Full year complete family arena access",
+          "Maximum savings for 4 athletes",
+          "Founding Family wall recognition",
+        ],
+        tag: "SAVE ₹37,200",
+        buttonText: "SAVE ₹37,200",
+      },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹122,400",
+        price: "237,600",
+        perMonth: "9,900",
+        originalPrice: "360,000",
+        totalPrice: "237,600",
+        highlights: [
+          "Coached sessions for up to 4 members",
+          "2-Year rate freeze for entire family",
+          "Founding Family permanent recognition",
+        ],
+        tag: "SAVE ₹122,400",
+        buttonText: "SAVE ₹122,400",
+      },
+    ],
+    starterPrice: "11,900",
   },
 };
 
@@ -508,20 +846,32 @@ const Membership = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const plan = params.get("plan");
+    const rawPlan = params.get("plan");
 
-    if (plan && ["core", "athlete", "arena", "junior"].includes(plan.toLowerCase())) {
-      setActiveTab(plan.toLowerCase());
+    if (rawPlan) {
+      const clean = rawPlan.toLowerCase().replace(/[-_\s]/g, "");
+      let resolvedPlan = null;
 
-      setTimeout(() => {
-        const pricingSection = document.getElementById("pricing");
-        if (pricingSection) {
-          pricingSection.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }
-      }, 800);
+      if (clean === "core") resolvedPlan = "core";
+      else if (clean === "athlete") resolvedPlan = "athlete";
+      else if (clean === "arena") resolvedPlan = "arena";
+      else if (clean === "junior") resolvedPlan = "junior";
+      else if (clean.includes("duo")) resolvedPlan = "duo";
+      else if (clean.includes("family")) resolvedPlan = "family";
+
+      if (resolvedPlan) {
+        setActiveTab(resolvedPlan);
+
+        setTimeout(() => {
+          const pricingSection = document.getElementById("pricing");
+          if (pricingSection) {
+            pricingSection.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 800);
+      }
     }
   }, []);
 
@@ -582,7 +932,7 @@ const Membership = () => {
           const newPricingData = { ...pricingData };
           plans.forEach((plan) => {
             const keyLower = plan.key?.toLowerCase();
-            if (["core", "athlete", "arena", "junior"].includes(keyLower)) {
+            if (["core", "athlete", "arena", "junior", "duo", "family"].includes(keyLower)) {
               newPricingData[keyLower] = {
                 ...newPricingData[keyLower],
                 _id: plan._id,
@@ -702,9 +1052,9 @@ const Membership = () => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.55, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
       onClick={() => setActiveTab(prog.id)}
-      className={`relative rounded-2xl md:rounded-xl p-5 sm:p-6 md:p-8 min-h-[350px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
-          ? "border-[#ccf141] shadow-[0_0_25px_rgba(204,241,65,0.25)] z-10"
-          : "border-zinc-800 hover:border-zinc-700"
+      className={`w-full md:w-[calc(50%-14px)] lg:w-[calc(33.333%-19px)] max-w-md lg:max-w-none relative rounded-2xl md:rounded-xl p-5 sm:p-6 md:p-8 min-h-[350px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${activeTab === prog.id
+        ? "border-[#ccf141] shadow-[0_0_25px_rgba(204,241,65,0.25)] z-10"
+        : "border-zinc-800 hover:border-zinc-700"
         }`}
     >
       {/* Background Image Container */}
@@ -823,13 +1173,12 @@ const Membership = () => {
 
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
-            className={`group/btn mt-5 sm:mt-8 w-full py-3 sm:py-2.5 text-xs sm:text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-xl border ${
-              prog.isComingSoon
+            className={`group/btn mt-5 sm:mt-8 w-full py-3 sm:py-2.5 text-xs sm:text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-xl border ${prog.isComingSoon
                 ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
                 : activeTab === prog.id
                   ? "bg-[#ccf141] border-[#ccf141] text-black shadow-[0_0_15px_rgba(204,241,65,0.3)]"
                   : "border-gray-600 text-white hover:border-[#ccf141] bg-transparent"
-            }`}
+              }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
             }}
@@ -857,7 +1206,7 @@ const Membership = () => {
         <div className="w-full max-w-7xl mx-auto mb-12 p-3 md:p-0">
           {/*................................................................. Membership Plans heading start.............................. */}
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -890,8 +1239,8 @@ const Membership = () => {
             </div>
           </motion.div>
 
-          {/* STEP 1: 3 ADULT PATHWAYS GRID (CORE, ATHLETE, ARENA) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7 mt-8 md:mt-15">
+          {/* STEP 1: 5 ADULT PATHWAYS (CORE, ATHLETE, ARENA, BXC DUO, BXC FAMILY FIT) */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-7 mt-8 md:mt-15">
             {adultPrograms.map((prog, index) => renderProgramCard(prog, index))}
           </div>
 
@@ -916,8 +1265,8 @@ const Membership = () => {
                 transition={{ duration: 0.6 }}
                 onClick={() => setActiveTab(juniorProgram.id)}
                 className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${activeTab === juniorProgram.id
-                    ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
-                    : "border-zinc-800 hover:border-zinc-700"
+                  ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
+                  : "border-zinc-800 hover:border-zinc-700"
                   } bg-[#0b0b0d]`}
               >
                 {/* Background Glow Overlay */}
@@ -1018,22 +1367,21 @@ const Membership = () => {
                             className="text-3xl  font-black text-[#ccf141] leading-none"
                             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                           >
-                           ₹3,000  <span className="line-through"> ₹ 4,500</span>
+                            ₹3,000  <span className="line-through"> ₹ 4,500</span>
                           </span>
-                         
+
                         </div>
                       </div>
 
                       <button
                         type="button"
                         onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
-                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${
-                          juniorProgram.isComingSoon
+                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${juniorProgram.isComingSoon
                             ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black"
                             : activeTab === juniorProgram.id
                               ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
                               : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
-                        }`}
+                          }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         <span>
