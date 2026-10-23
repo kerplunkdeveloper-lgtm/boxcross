@@ -27,6 +27,45 @@ const getPlanMobileBullets = (plan, currentTitle) => {
     return plan.mobileFeatures;
   }
 
+  if (currentTitle === "CORE") {
+    return [
+      "Training access: Choose 1 pathway",
+      "Weekly allowance: Up to 5 visits",
+      "Boxing coaching: 4 coached + 1 open (if selected)",
+      "Strength: CRM-guided open gym",
+      "Performance assessment & 90-day check: Included",
+      "BXC Tribe: Included",
+      "HYROX: Coming soon | Booking: Standard",
+    ];
+  }
+
+  if (currentTitle === "ATHLETE") {
+    return [
+      "Training access: Boxing + Strength",
+      "Boxing & Strength: Included",
+      "Weekly allowance: Up to 5 visits",
+      "Boxing coaching: Based on primary focus",
+      "Strength training: CRM-guided open gym",
+      "Performance assessment & 90-day check: Included",
+      "BXC Tribe: Included",
+      "HYROX alternative: Coming soon | Booking: Standard",
+    ];
+  }
+
+  if (currentTitle === "ARENA") {
+    return [
+      "Training access: All pathways",
+      "Boxing & Strength: Included",
+      "HYROX: Included when launched*",
+      "Weekly allowance: Up to 5 visits",
+      "Boxing coaching: Based on primary focus",
+      "Strength training: CRM-guided open gym",
+      "Performance assessment & 90-day check: Included",
+      "BXC Tribe: Included",
+      "Booking priority: Proposed priority | 1:1 Review: Proposed benefit",
+    ];
+  }
+
   if (monthsStr.includes("24") || monthsStr.includes("2 year")) {
     return [
       savings > 0 ? `Extra ₹${savings.toLocaleString("en-IN")} OFF applied` : "Maximum 2-Year Founding Member rate freeze",
@@ -838,11 +877,10 @@ const ChoosePlan = React.forwardRef(
             <div
               ref={scrollContainerRef}
               onScroll={handleScroll}
-              className={`flex items-stretch overflow-x-auto snap-x snap-mandatory py-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
-                isDesktop
+              className={`flex items-stretch overflow-x-auto snap-x snap-mandatory py-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDesktop
                   ? "w-full relative"
                   : "w-screen relative left-1/2 -translate-x-1/2"
-              }`}
+                }`}
               style={{
                 paddingLeft: isDesktop ? "0px" : `${sidePadding}px`,
                 paddingRight: isDesktop ? "0px" : `${sidePadding}px`,
@@ -871,8 +909,8 @@ const ChoosePlan = React.forwardRef(
                         : plan.months?.includes("3")
                           ? "10,500"
                           : Math.round(numericPrice * 1.25).toLocaleString(
-                              "en-IN",
-                            ));
+                            "en-IN",
+                          ));
 
                 const bullets = getPlanMobileBullets(plan, currentTitle);
 
@@ -883,28 +921,28 @@ const ChoosePlan = React.forwardRef(
                     onClick={() => scrollToCard(idx)}
                     style={{
                       width: isDesktop ? "calc((100% - 48px) / 3)" : `${cardWidth}px`,
-                      minHeight: isDesktop ? "560px" : "515px",
+                      minHeight: isDesktop
+                        ? currentTitle === "CORE" || currentTitle === "ATHLETE" || currentTitle === "ARENA" ? "640px" : "560px"
+                        : currentTitle === "CORE" || currentTitle === "ATHLETE" || currentTitle === "ARENA" ? "560px" : "515px",
                     }}
-                    className={`shrink-0 snap-center rounded-[24px] cursor-pointer select-none transition-all duration-300 flex flex-col justify-between ${
-                      isDesktop
+                    className={`shrink-0 snap-center rounded-[24px] cursor-pointer select-none transition-all duration-300 flex flex-col justify-between ${isDesktop
                         ? isCenter
                           ? "scale-100 opacity-100 shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-20"
                           : "scale-100 opacity-95 hover:opacity-100 shadow-[0_10px_30px_rgba(0,0,0,0.6)] z-10"
                         : isCenter
                           ? "scale-100 opacity-100 shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-20"
                           : "scale-[0.95] opacity-80 hover:opacity-100 shadow-[0_8px_25px_rgba(0,0,0,0.6)] z-10"
-                    }`}
+                      }`}
                   >
                     <div
-                      className={`w-full h-full rounded-[24px] p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${
-                        isCenter
+                      className={`w-full h-full rounded-[24px] p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${isCenter
                           ? isTwelveMonth
                             ? "bg-[#141417] border-2 border-[#ccf141]/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(204,241,65,0.25)] ring-1 ring-[#ccf141]/30"
                             : isTwentyFourMonth
                               ? "bg-[#141417] border-2 border-amber-400/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30"
                               : "bg-[#141417] border border-zinc-700/80 shadow-[0_20px_45px_rgba(0,0,0,0.95)] ring-1 ring-white/10"
                           : "bg-[#101012] hover:bg-[#141417] border border-zinc-700/90 shadow-md"
-                      }`}
+                        }`}
                     >
 
                       {/* Card Content Top Half */}
@@ -922,7 +960,7 @@ const ChoosePlan = React.forwardRef(
 
                           {isTwelveMonth ? (
                             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-green-400 border border-green-200 shrink-0">
-                            Most Bought
+                              Most Bought
                             </span>
                           ) : isTwentyFourMonth ? (
                             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-amber-300 border border-amber-400/90  shrink-0">
@@ -930,7 +968,7 @@ const ChoosePlan = React.forwardRef(
                             </span>
                           ) : plan.popular || isSixMonth ? (
                             <span className="">
-                              
+
                             </span>
                           ) : null}
                         </div>
@@ -965,22 +1003,281 @@ const ChoosePlan = React.forwardRef(
                         {/* Hairline Divider Line */}
                         <div className="h-[1px] bg-zinc-800/80 my-3 sm:my-3.5" />
 
-                        {/* Feature Bullet Points with '+' Icons */}
-                        <div className="space-y-2.5 sm:space-y-3 my-1 flex-grow">
-                          {bullets.map((item, bIdx) => (
-                            <div
-                              key={bIdx}
-                              className="flex items-start gap-2.5"
-                            >
-                              <span className="text-zinc-400 font-bold text-sm leading-none shrink-0 mt-0.5 select-none">
-                                +
-                              </span>
-                              <span className="text-[12px] sm:text-[13px] leading-snug text-zinc-300 italic font-medium">
-                                {item}
-                              </span>
+                        {/* Feature Bullet Points / Specification */}
+                        {currentTitle === "CORE" ? (
+                          <div className="my-2.5 flex-grow space-y-1 text-left">
+                            <div className="rounded-2xl bg-black/50 border border-zinc-800/90 p-3 sm:p-3.5 space-y-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                              {/* 1. Training access */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Training access</span>
+                                <span className="text-[#ccf141] font-black tracking-tight">Choose 1 pathway</span>
+                              </div>
+
+                              {/* 2. Boxing / Strength */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Boxing / Strength</span>
+                                <span className="text-zinc-200 font-semibold text-[11px]">If selected</span>
+                              </div>
+
+                              {/* 3. Weekly training allowance */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Weekly allowance</span>
+                                <span className="text-white font-bold">Up to 5 visits</span>
+                              </div>
+
+                              {/* 4. Boxing coaching */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Boxing coaching</span>
+                                <span className="text-zinc-200 font-semibold text-[10.5px] text-right">4 coached + 1 open</span>
+                              </div>
+
+                              {/* 5. Strength */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Strength</span>
+                                <span className="text-zinc-200 font-semibold text-[10.5px]">CRM-guided open gym</span>
+                              </div>
+
+                              {/* 6. Performance assessment */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Performance assessment</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 7. 90-day reassessment */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">90-day reassessment</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 8. BXC Tribe */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">BXC Tribe</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 9. HYROX */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">HYROX</span>
+                                <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/35">
+                                  Coming soon
+                                </span>
+                              </div>
+
+                              {/* 10. Booking priority */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Booking priority</span>
+                                <span className="text-zinc-300 font-medium text-[11px]">Standard</span>
+                              </div>
+
+                              {/* 11. Personal Training */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-500 font-medium">Personal Training</span>
+                                <span className="text-zinc-400 text-[10.5px]">Paid separately</span>
+                              </div>
+
+                              {/* 12. Monthly 1:1 review */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pt-0.5">
+                                <span className="text-zinc-500 font-medium">Monthly 1:1 review</span>
+                                <span className="text-zinc-500 text-[10.5px]">Not included</span>
+                              </div>
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        ) : currentTitle === "ATHLETE" ? (
+                          <div className="my-2.5 flex-grow space-y-1 text-left">
+                            <div className="rounded-2xl bg-black/50 border border-zinc-800/90 p-3 sm:p-3.5 space-y-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                              {/* 1. Training access */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Training access</span>
+                                <span className="text-[#ccf141] font-black tracking-tight">Boxing + Strength</span>
+                              </div>
+
+                              {/* 2. Boxing & Strength */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Boxing & Strength</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Both Included
+                                </span>
+                              </div>
+
+                              {/* 3. Weekly training allowance */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Weekly allowance</span>
+                                <span className="text-white font-bold">Up to 5 visits</span>
+                              </div>
+
+                              {/* 4. Boxing coaching */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Boxing coaching</span>
+                                <span className="text-zinc-200 font-semibold text-[10.5px] text-right">Based on primary focus</span>
+                              </div>
+
+                              {/* 5. Strength */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Strength</span>
+                                <span className="text-zinc-200 font-semibold text-[10.5px]">CRM-guided open gym</span>
+                              </div>
+
+                              {/* 6. Performance assessment */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Performance assessment</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 7. 90-day reassessment */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">90-day reassessment</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 8. BXC Tribe */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">BXC Tribe</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 9. HYROX */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">HYROX</span>
+                                <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-amber-500/15 text-amber-400 border border-amber-500/35">
+                                  Alt. coming soon
+                                </span>
+                              </div>
+
+                              {/* 10. Booking priority */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Booking priority</span>
+                                <span className="text-zinc-300 font-medium text-[11px]">Standard</span>
+                              </div>
+
+                              {/* 11. Personal Training */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-500 font-medium">Personal Training</span>
+                                <span className="text-zinc-400 text-[10.5px]">Paid separately</span>
+                              </div>
+
+                              {/* 12. Monthly 1:1 review */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pt-0.5">
+                                <span className="text-zinc-500 font-medium">Monthly 1:1 review</span>
+                                <span className="text-zinc-500 text-[10.5px]">Not included</span>
+                              </div>
+                            </div>
+                          </div>
+                        ) : currentTitle === "ARENA" ? (
+                          <div className="my-2.5 flex-grow space-y-1 text-left">
+                            <div className="rounded-2xl bg-black/50 border border-zinc-800/90 p-3 sm:p-3.5 space-y-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                              {/* 1. Training access */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Training access</span>
+                                <span className="text-[#ccf141] font-black tracking-tight">All pathways</span>
+                              </div>
+
+                              {/* 2. Boxing & Strength */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Boxing & Strength</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Both Included
+                                </span>
+                              </div>
+
+                              {/* 3. HYROX */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">HYROX</span>
+                                <span className="px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/35">
+                                  Included when launched*
+                                </span>
+                              </div>
+
+                              {/* 4. Weekly training allowance */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Weekly allowance</span>
+                                <span className="text-white font-bold">Up to 5 visits</span>
+                              </div>
+
+                              {/* 5. Boxing coaching */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Boxing coaching</span>
+                                <span className="text-zinc-200 font-semibold text-[10.5px] text-right">Based on primary focus</span>
+                              </div>
+
+                              {/* 6. Strength */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Strength</span>
+                                <span className="text-zinc-200 font-semibold text-[10.5px]">CRM-guided open gym</span>
+                              </div>
+
+                              {/* 7. Performance assessment */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Performance assessment</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 8. 90-day reassessment */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">90-day reassessment</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 9. BXC Tribe */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">BXC Tribe</span>
+                                <span className="inline-flex items-center gap-1 text-[#ccf141] font-bold text-[10.5px]">
+                                  <Check size={11} strokeWidth={3} /> Included
+                                </span>
+                              </div>
+
+                              {/* 10. Booking priority */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-400 font-medium">Booking priority</span>
+                                <span className="text-[#ccf141] font-semibold text-[10.5px]">Proposed priority</span>
+                              </div>
+
+                              {/* 11. Personal Training */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pb-1.5 border-b border-zinc-800/60">
+                                <span className="text-zinc-500 font-medium">Personal Training</span>
+                                <span className="text-zinc-400 text-[10.5px]">Paid separately</span>
+                              </div>
+
+                              {/* 12. Monthly 1:1 review */}
+                              <div className="flex items-center justify-between text-[11.5px] sm:text-xs pt-0.5">
+                                <span className="text-zinc-400 font-medium">Monthly 1:1 review</span>
+                                <span className="text-zinc-200 font-semibold text-[10.5px]">Proposed benefit</span>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          /* Feature Bullet Points with '+' Icons */
+                          <div className="space-y-2.5 sm:space-y-3 my-1 flex-grow">
+                            {bullets.map((item, bIdx) => (
+                              <div
+                                key={bIdx}
+                                className="flex items-start gap-2.5"
+                              >
+                                <span className="text-zinc-400 font-bold text-sm leading-none shrink-0 mt-0.5 select-none">
+                                  +
+                                </span>
+                                <span className="text-[12px] sm:text-[13px] leading-snug text-zinc-300 italic font-medium">
+                                  {item}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
                       {/* Bottom Action Button */}
@@ -1001,11 +1298,10 @@ const ChoosePlan = React.forwardRef(
                               plan.months,
                             );
                           }}
-                          className={`w-full py-3.5 px-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.5)] active:scale-[0.98] flex items-center justify-center gap-1.5 ${
-                            activeData.isComingSoon
+                          className={`w-full py-3.5 px-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.5)] active:scale-[0.98] flex items-center justify-center gap-1.5 ${activeData.isComingSoon
                               ? "bg-zinc-800 text-amber-400 border border-amber-500/40"
                               : "bg-[#ccf141] text-black hover:bg-zinc-100 hover:shadow-[0_6px_28px_rgba(255,51,102,0.28)]"
-                          }`}
+                            }`}
                           style={{
                             fontFamily: '"BrutalTypeBold", sans-serif',
                           }}

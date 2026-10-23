@@ -1362,37 +1362,37 @@ const Membership = () => {
                   </div>
                 )}
 
-                {/* Background Image Container with Targeted Scrim (Full background on mobile, dedicated right wing on desktop) */}
-                <div className="absolute right-0 top-0 bottom-0 w-full lg:w-[48%] xl:w-[50%] overflow-hidden pointer-events-none z-0">
+                {/* Background Image Container with Targeted Scrim (Dedicated right wing on mobile & desktop) */}
+                <div className="absolute right-0 top-0 bottom-0 w-[45%] sm:w-[50%] lg:w-[46%] xl:w-[44%] overflow-hidden pointer-events-none z-0">
                   <div
-                    className="absolute inset-0 bg-cover bg-[82%_16%] lg:bg-[center_18%] transition-transform duration-700 ease-out group-hover:scale-105"
+                    className="absolute inset-0 bg-cover bg-[75%_18%] sm:bg-[center_18%] filter grayscale transition-transform duration-700 ease-out group-hover:scale-105"
                     style={{
                       backgroundImage: `url(${juniorProgram.image})`,
                     }}
                   />
-                  {/* Scrim: On mobile, dark gradient protects text on left while keeping junior boxer visible on right. On desktop, seamless horizontal fade */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0d] via-[#0b0b0d]/90 via-55% to-[#0b0b0d]/20 lg:from-[#0b0b0d] lg:via-[#0b0b0d]/40 lg:via-25% lg:to-transparent" />
-                  {/* Subtle vertical vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0d] via-transparent to-black/30" />
-
-                  {/* Sleek Floating Live Badge on Photo */}
-                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 bg-black/80 backdrop-blur-md border border-white/10 text-[#ccf141] text-[9px] sm:text-[10px] font-mono font-bold px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-ping" />
-                    <span>BOX &amp; CROSS YOUTH</span>
-                  </div>
+                  {/* Smooth horizontal gradient fade to dark background */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#0b0b0d] via-[#0b0b0d]/70 via-25% to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0d] via-transparent to-black/40" />
                 </div>
 
-                {/* Content Area: Highly compact on mobile, spacious & punchy on desktop */}
-                <div className="relative z-10 p-4 sm:p-6 md:p-8 lg:p-9 flex flex-col justify-between max-w-full sm:max-w-[72%] lg:max-w-[56%] xl:max-w-[54%]">
+                {/* Sleek Floating Live Badge at Top-Right of Card - aligned with card inner padding */}
+                <div className="absolute top-4 right-4 sm:top-6 sm:right-7 lg:top-8 lg:right-9 z-20 bg-black/85 backdrop-blur-md border border-[#ccf141]/35 text-[#ccf141] text-[9px] sm:text-[10px] font-mono font-bold px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-ping" />
+                  <span className="hidden sm:inline">BOX &amp; CROSS YOUTH</span>
+                  <span className="sm:hidden">YOUTH</span>
+                </div>
+
+                {/* Content Area: Highly refined on mobile, spacious and perfectly balanced on desktop */}
+                <div className="relative z-10 p-4 sm:p-7 md:p-8 lg:p-9 flex flex-col justify-between h-full w-full max-w-[85%] sm:max-w-[70%] lg:max-w-[62%] xl:max-w-[58%]">
                   <div>
                     {/* Top Row: Icon + Badge + Age tag */}
-                    <div className="flex items-center gap-2.5 sm:gap-3 mb-2.5 sm:mb-3">
-                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-black/70 border border-white/15 backdrop-blur-md flex items-center justify-center text-[#ccf141] shadow-md shrink-0 group-hover:border-[#ccf141]/50 group-hover:bg-[#ccf141]/10 transition-all duration-300">
+                    <div className="flex items-center gap-2.5 sm:gap-3 mb-2 sm:mb-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-black/80 border border-white/15 backdrop-blur-md flex items-center justify-center text-[#ccf141] shadow-md shrink-0 group-hover:border-[#ccf141]/50 group-hover:bg-[#ccf141]/10 transition-all duration-300">
                         <div className="scale-75 sm:scale-85 flex items-center justify-center">
                           {juniorProgram.icon}
                         </div>
                       </div>
-                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#ccf141]/15 border border-[#ccf141]/35 text-[#ccf141] text-[10px] sm:text-[11px] font-bold tracking-wider uppercase">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_6px_#ccf141]" />
                           <span>YOUTH &amp; ATHLETIC</span>
@@ -1426,7 +1426,7 @@ const Membership = () => {
                       </div>
 
                       <p
-                        className="text-zinc-300 text-[11px] sm:text-xs md:text-sm mt-1.5 sm:mt-2 leading-relaxed max-w-xl font-normal drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
+                        className="text-zinc-300 text-[11px] sm:text-xs md:text-[13.5px] mt-1.5 sm:mt-2 leading-relaxed max-w-lg lg:max-w-xl font-normal drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
                         style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
                       >
                         Three coached sessions a week. Boxing fundamentals, footwork, screen-free focus &amp; lifelong discipline.
@@ -1435,33 +1435,33 @@ const Membership = () => {
 
                     {/* Quick Value Highlights Mini-Chips */}
                     <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-2.5 sm:mt-3.5">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white/[0.04] border border-white/10 text-zinc-300 text-[10px] sm:text-[11px] font-medium">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white/[0.04] border border-white/10 text-zinc-300 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
                         <Check size={11} className="text-[#ccf141] shrink-0" />
                         <span>3 Sessions / Wk</span>
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white/[0.04] border border-white/10 text-zinc-300 text-[10px] sm:text-[11px] font-medium">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white/[0.04] border border-white/10 text-zinc-300 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
                         <Check size={11} className="text-[#ccf141] shrink-0" />
                         <span>Screen-Free</span>
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white/[0.04] border border-white/10 text-zinc-300 text-[10px] sm:text-[11px] font-medium">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-white/[0.04] border border-white/10 text-zinc-300 text-[10px] sm:text-[11px] font-medium backdrop-blur-sm">
                         <Check size={11} className="text-[#ccf141] shrink-0" />
                         <span>Non-Contact Basics</span>
                       </span>
                     </div>
                   </div>
 
-                  {/* Compact Bottom Pricing & CTA Row */}
-                  <div className="mt-3.5 sm:mt-5 pt-3 sm:pt-4 border-t border-zinc-800/70 flex flex-row items-center justify-between gap-3 flex-wrap">
+                  {/* Compact Bottom Pricing & CTA Row: Perfectly aligned on desktop and mobile */}
+                  <div className="mt-3.5 sm:mt-5 pt-3 sm:pt-4 border-t border-zinc-800/80 flex items-center justify-between sm:justify-start sm:gap-6 md:gap-8 flex-wrap">
                     <div>
                       <span className="block text-zinc-400 text-[9px] sm:text-[10px] uppercase font-bold tracking-widest">
                         STARTS FROM
                       </span>
                       <div className="flex items-baseline gap-1.5 sm:gap-2 mt-0.5">
                         <span
-                          className="text-xl sm:text-2xl md:text-3xl font-black text-[#ccf141] leading-none tracking-tight drop-shadow-[0_2px_10px_rgba(204,241,65,0.25)]"
+                          className="text-2xl sm:text-3xl font-black text-[#ccf141] leading-none tracking-tight drop-shadow-[0_2px_10px_rgba(204,241,65,0.25)]"
                           style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                         >
-                          ₹{juniorProgram.price || "3,000"}
+                          ₹{juniorProgram.price || "2,999"}
                         </span>
                         {juniorProgram.originalPrice && (
                           <span
@@ -1480,7 +1480,7 @@ const Membership = () => {
                     <button
                       type="button"
                       onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
-                      className={`group/btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 shadow-md active:scale-95 ${
+                      className={`group/btn px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-black text-[11px] sm:text-xs uppercase tracking-wider transition-all duration-300 cursor-pointer flex items-center justify-center gap-1.5 sm:gap-2 shadow-md active:scale-95 shrink-0 ${
                         juniorProgram.isComingSoon
                           ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
                           : activeTab === juniorProgram.id
