@@ -693,17 +693,33 @@ const FounderMembersOffers = () => {
         : "border-zinc-800 hover:border-zinc-700"
         }`}
     >
-      {/* Background Image Container */}
-      <div className="absolute inset-0 z-0 bg-black overflow-hidden">
+      {/* Background Image Container with Targeted Scrim */}
+      <div className="absolute inset-0 z-0 bg-[#070709] overflow-hidden">
         <div
-          className="absolute inset-0 opacity-70 group-hover:opacity-90 scale-100 group-hover:scale-110 transition-all duration-700 ease-out"
+          className={`absolute inset-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out ${
+            prog.id?.includes("duo")
+              ? "opacity-75 group-hover:opacity-90 brightness-95 contrast-110"
+              : prog.id?.includes("family")
+              ? "opacity-75 group-hover:opacity-90 brightness-95 contrast-110"
+              : "opacity-85 group-hover:opacity-100 brightness-110 contrast-105"
+          }`}
           style={{
             backgroundImage: `url(${prog.image})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
+            backgroundPosition:
+              prog.id?.includes("duo")
+                ? "65% center"
+                : prog.id?.includes("family")
+                ? "75% center"
+                : "center",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-[#0a0a0a]/10" />
+        {/* Layer 1: Left-to-right scrim (protects text while keeping athletes on right clearly visible) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#070709]/95 via-[#070709]/60 via-45% to-transparent" />
+        {/* Layer 2: Bottom-to-top scrim (anchors price and button) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070709] via-[#070709]/70 via-35% to-transparent" />
+        {/* Layer 3: Soft top vignette */}
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#070709]/60 to-transparent pointer-events-none" />
       </div>
 
       {prog.isComingSoon ? (
@@ -745,30 +761,41 @@ const FounderMembersOffers = () => {
         </div>
       ) : null}
 
-      <div className="relative z-10 flex flex-col flex-grow text-left justify-between">
+      <div className="relative z-10 flex flex-col flex-grow text-left justify-between h-full">
         <div>
-          <div className="w-14 h-12 sm:w-16 sm:h-14 flex items-center justify-center mb-3 sm:mb-5">
-            {prog.icon}
+          {/* Frosted Icon Tile */}
+          <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-black/60 border border-white/10 backdrop-blur-md flex items-center justify-center mb-4 sm:mb-5 text-[#ccf141] shadow-[0_4px_20px_rgba(0,0,0,0.5)] group-hover:border-[#ccf141]/50 group-hover:bg-[#ccf141]/10 group-hover:shadow-[0_0_20px_rgba(204,241,65,0.2)] transition-all duration-300">
+            <div className="scale-75 sm:scale-85 flex items-center justify-center">
+              {prog.icon}
+            </div>
           </div>
 
+          {/* Title */}
           <h3
-            className="font-black mb-1 tracking-wide uppercase text-2xl sm:text-3xl lg:text-[35px]"
+            className="font-black mb-1.5 tracking-tight uppercase text-2xl sm:text-3xl lg:text-[34px] text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]"
             style={{
               fontFamily: '"BrutalTypeBold", Impact, sans-serif',
             }}
           >
             {prog.title}
           </h3>
+
+          {/* Subtitle Badge */}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ccf141]/15 border border-[#ccf141]/35 backdrop-blur-md mb-3 sm:mb-4 shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_6px_#ccf141]" />
+            <span
+              className="text-[#ccf141] tracking-widest uppercase text-xs sm:text-[13px] font-bold"
+              style={{
+                fontFamily: '"BrutalTypeBold", sans-serif',
+              }}
+            >
+              {prog.subtitle}
+            </span>
+          </div>
+
+          {/* Description */}
           <p
-            className="text-[#ccf141] tracking-widest uppercase mb-2 sm:mb-3 text-sm sm:text-base lg:text-[19px] font-bold"
-            style={{
-              fontFamily: '"BrutalTypeBold", sans-serif',
-            }}
-          >
-            {prog.subtitle}
-          </p>
-          <p
-            className="text-gray-200 mb-3 sm:mb-4 leading-relaxed max-w-[95%] text-xs sm:text-sm lg:text-[16px]"
+            className="text-zinc-300 mb-4 leading-relaxed text-xs sm:text-sm lg:text-[15px] font-medium max-w-[95%] drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
             style={{
               fontFamily: '"Brutal Font Light", sans-serif',
             }}
@@ -777,9 +804,10 @@ const FounderMembersOffers = () => {
           </p>
         </div>
 
-        <div className="mt-auto pt-3 sm:pt-4 w-full">
+        {/* Bottom Pricing & Action Section */}
+        <div className="mt-auto pt-4 sm:pt-5 w-full border-t border-white/10">
           <p
-            className="text-xs sm:text-[14px] text-gray-300 uppercase tracking-widest font-bold flex items-center"
+            className="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-widest font-bold mb-1"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
             }}
@@ -789,7 +817,7 @@ const FounderMembersOffers = () => {
 
           <div className="flex items-baseline flex-wrap gap-2 my-1">
             <span
-              className="text-[#ccf141] font-black text-2xl sm:text-3xl lg:text-[34px]"
+              className="text-[#ccf141] font-black text-2xl sm:text-3xl lg:text-[34px] tracking-tight drop-shadow-[0_2px_12px_rgba(204,241,65,0.25)]"
               style={{
                 fontFamily: '"BrutalTypeBold", Impact, sans-serif',
               }}
@@ -798,7 +826,7 @@ const FounderMembersOffers = () => {
             </span>
             {prog.originalPrice && (
               <span
-                className="line-through text-zinc-400 font-bold text-xs sm:text-sm"
+                className="line-through text-zinc-500 font-bold text-xs sm:text-sm"
                 style={{
                   fontFamily: '"BrutalTypeBold", sans-serif',
                 }}
@@ -806,18 +834,18 @@ const FounderMembersOffers = () => {
                 ₹{prog.originalPrice}
               </span>
             )}
-            <span className="text-gray-300 text-xs sm:text-sm font-bold uppercase tracking-wider">
+            <span className="text-zinc-400 text-xs sm:text-sm font-semibold uppercase tracking-wider">
               / MONTH
             </span>
           </div>
 
           <button
             onClick={(e) => handleScrollToPlans(e, prog.id)}
-            className={`group/btn mt-5 sm:mt-8 w-full py-3 sm:py-2.5 text-xs sm:text-[10px] font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-xl border ${prog.isComingSoon
+            className={`group/btn mt-4 sm:mt-5 w-full py-3 sm:py-2.5 text-xs sm:text-[11px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-xl border ${prog.isComingSoon
               ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
               : activeTab === prog.id
-                ? "bg-[#ccf141] border-[#ccf141] text-black shadow-[0_0_15px_rgba(204,241,65,0.3)]"
-                : "border-gray-600 text-white hover:border-[#ccf141] bg-transparent"
+                ? "bg-[#ccf141] border-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.35)]"
+                : "border-zinc-700 bg-black/40 backdrop-blur-md text-white hover:border-[#ccf141] hover:bg-[#ccf141]/10 hover:text-[#ccf141]"
               }`}
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
@@ -1279,17 +1307,20 @@ const FounderMembersOffers = () => {
                 )}
 
                 <div className="relative z-10 flex flex-col lg:flex-row items-stretch justify-between">
-                  {/* Left & Center: Rich Program Content */}
-                  <div className="flex-1 p-6 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-between">
+                  {/* Left & Center: Rich Program Content (Desktop: Left, Mobile: Bottom) */}
+                  <div className="flex-1 p-5 sm:p-8 md:p-10 lg:p-12 flex flex-col justify-between order-last lg:order-first">
                     <div>
                       {/* Top Row: Icon + Subtitle Badge */}
-                      <div className="flex items-center gap-4 mb-4">
-                        <div className="w-14 h-14 rounded-2xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-center text-[#ccf141] shadow-inner shrink-0">
-                          {juniorProgram.icon}
+                      <div className="flex items-center gap-3.5 mb-4 sm:mb-5">
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-black/60 border border-white/15 backdrop-blur-md flex items-center justify-center text-[#ccf141] shadow-lg shrink-0 group-hover:border-[#ccf141]/50 group-hover:bg-[#ccf141]/10 transition-all duration-300">
+                          <div className="scale-80 sm:scale-90 flex items-center justify-center">
+                            {juniorProgram.icon}
+                          </div>
                         </div>
                         <div>
-                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/30 text-[#ccf141] text-[11px] font-mono font-bold tracking-widest uppercase">
-                            YOUTH &amp; ATHLETIC DEVELOPMENT
+                          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ccf141]/15 border border-[#ccf141]/35 text-[#ccf141] text-[11px] font-bold tracking-wider uppercase">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_6px_#ccf141]" />
+                            <span>YOUTH &amp; ATHLETIC DEVELOPMENT</span>
                           </div>
                           {juniorProgram.isComingSoon && (
                             <span className="inline-flex items-center gap-1.5 ml-2 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[10px] font-black uppercase tracking-widest">
@@ -1297,7 +1328,7 @@ const FounderMembersOffers = () => {
                               COMING SOON
                             </span>
                           )}
-                          <p className="text-zinc-400 text-xs mt-1 font-mono">
+                          <p className="text-zinc-400 text-xs mt-1 font-medium">
                             Ages 7 to 13 · All Experience Levels
                           </p>
                         </div>
@@ -1305,10 +1336,10 @@ const FounderMembersOffers = () => {
 
                       {/* Main Title & Tagline */}
                       <div className="mt-2">
-                        <div className="flex items-baseline gap-3 flex-wrap">
+                        <div className="flex items-baseline gap-2.5 sm:gap-3 flex-wrap">
                           <h3
-                            className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-none"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight uppercase leading-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
+                            style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                           >
                             {juniorProgram.title}
                           </h3>
@@ -1321,30 +1352,50 @@ const FounderMembersOffers = () => {
                         </div>
 
                         <p
-                          className="text-zinc-300 text-sm sm:text-base md:text-lg mt-3 leading-relaxed max-w-2xl font-normal"
+                          className="text-zinc-300 text-xs sm:text-sm md:text-base mt-2.5 sm:mt-3 leading-relaxed max-w-2xl font-normal drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
                           style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
                         >
                           {juniorProgram.desc}. Built specifically to develop boxing fundamentals, agile footwork, screen-free focus, and lifelong discipline.
                         </p>
                       </div>
+
+                      {/* 4 Quick Value Highlights Chips */}
+                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 mt-4 sm:mt-5">
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-zinc-300 text-xs font-medium">
+                          <Check size={13} className="text-[#ccf141] shrink-0" />
+                          <span>3 Coached Sessions / Wk</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-zinc-300 text-xs font-medium">
+                          <Check size={13} className="text-[#ccf141] shrink-0" />
+                          <span>Ages 7–13 · All Levels</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-zinc-300 text-xs font-medium">
+                          <Check size={13} className="text-[#ccf141] shrink-0" />
+                          <span>Screen-Free Focus</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-zinc-300 text-xs font-medium">
+                          <Check size={13} className="text-[#ccf141] shrink-0" />
+                          <span>Safe Non-Contact Basics</span>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Bottom Pricing & CTA Row */}
-                    <div className="mt-8 pt-6 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
-                        <span className="block text-zinc-400 text-xs uppercase font-bold tracking-widest">
+                        <span className="block text-zinc-400 text-[10px] sm:text-xs uppercase font-bold tracking-widest">
                           MEMBERSHIP STARTS FROM
                         </span>
-                        <div className="flex items-baseline flex-wrap gap-2 sm:gap-3 mt-0.5">
+                        <div className="flex items-baseline flex-wrap gap-2 sm:gap-2.5 mt-0.5">
                           <span
-                            className="text-3xl sm:text-4xl md:text-5xl font-black text-[#ccf141] leading-none"
-                            style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                            className="text-3xl sm:text-4xl md:text-[40px] font-black text-[#ccf141] leading-none tracking-tight drop-shadow-[0_2px_12px_rgba(204,241,65,0.25)]"
+                            style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
                           >
-                            ₹{juniorProgram.price}
+                            ₹{juniorProgram.price || "3,000"}
                           </span>
                           {juniorProgram.originalPrice && (
                             <span
-                              className="line-through text-zinc-500 text-xl sm:text-2xl md:text-3xl font-bold leading-none"
+                              className="line-through text-zinc-500 text-lg sm:text-xl font-bold leading-none"
                               style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                             >
                               ₹{juniorProgram.originalPrice}
@@ -1359,12 +1410,13 @@ const FounderMembersOffers = () => {
                       <button
                         type="button"
                         onClick={(e) => handleScrollToPlans(e, juniorProgram.id)}
-                        className={`group/btn px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${juniorProgram.isComingSoon
-                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black"
-                          : activeTab === juniorProgram.id
-                            ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
-                            : "bg-white text-black hover:bg-[#ccf141] hover:text-black"
-                          }`}
+                        className={`group/btn w-full sm:w-auto px-6 sm:px-8 py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 cursor-pointer flex items-center justify-center gap-3 shadow-lg active:scale-95 ${
+                          juniorProgram.isComingSoon
+                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/50 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                            : activeTab === juniorProgram.id
+                              ? "bg-[#ccf141] text-black shadow-[0_0_25px_rgba(204,241,65,0.4)] hover:bg-[#bfe635]"
+                              : "bg-white text-black hover:bg-[#ccf141] hover:text-black shadow-[0_4px_20px_rgba(255,255,255,0.15)]"
+                        }`}
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         <span>
@@ -1380,20 +1432,26 @@ const FounderMembersOffers = () => {
                     </div>
                   </div>
 
-                  {/* Right Side: The Boxer Photo (Hero Visual with Cinematic Fade) */}
-                  <div className="w-full lg:w-[420px] xl:w-[480px] min-h-[300px] sm:min-h-[360px] lg:min-h-[460px] relative overflow-hidden bg-black shrink-0">
+                  {/* Right Side / Mobile Hero: The Boxer Photo */}
+                  <div className="w-full lg:w-[420px] xl:w-[480px] h-60 sm:h-72 lg:h-auto min-h-[240px] lg:min-h-[460px] relative overflow-hidden bg-black shrink-0 order-first lg:order-last">
                     <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      className="absolute inset-0 bg-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       style={{
                         backgroundImage: `url(${juniorProgram.image})`,
+                        backgroundPosition: "45% 15%",
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#0b0b0d] via-transparent to-transparent z-10" />
+                    {/* Mobile bottom fade into content */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0d] via-[#0b0b0d]/50 to-transparent lg:hidden z-10" />
+                    {/* Desktop left overlay gradient */}
+                    <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-[#0b0b0d] via-[#0b0b0d]/30 to-transparent z-10" />
+                    {/* Ambient vignette */}
                     <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60 z-10" />
 
-                    <div className="absolute top-4 right-4 z-20 bg-black/70 backdrop-blur-md border border-zinc-800 text-[#ccf141] text-[10px] font-mono font-bold px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] animate-ping" />
-                      BOX &amp; CROSS YOUTH
+                    {/* Badge on Photo */}
+                    <div className="absolute top-4 right-4 z-20 bg-black/75 backdrop-blur-md border border-white/10 text-[#ccf141] text-[10px] font-mono font-bold px-3 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-2 shadow-lg">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-ping" />
+                      <span>BOX &amp; CROSS YOUTH</span>
                     </div>
                   </div>
                 </div>

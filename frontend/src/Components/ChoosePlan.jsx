@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Check, ArrowRight, ShieldCheck, Zap, Lock, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, ArrowRight, ShieldCheck, Zap, Lock, ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import BCMonogram from "./BCMonogram";
 
@@ -405,14 +405,15 @@ const ChoosePlan = React.forwardRef(
     const isDesktop = windowWidth >= 1024;
     const [desktopScrollLeft, setDesktopScrollLeft] = useState(0);
 
+    // On mobile, show a generous peek (45px-55px) of adjacent cards so left and right cards are clearly visible
     const cardWidth = isDesktop
       ? 380
-      : Math.min(Math.max(windowWidth - 76, 275), 312);
-    const cardGap = isDesktop ? 24 : 14;
+      : Math.min(Math.max(Math.round(windowWidth * 0.70), 250), 295);
+    const cardGap = isDesktop ? 24 : 12;
     const step = cardWidth + cardGap;
     const sidePadding = isDesktop
       ? 0
-      : Math.max(Math.round((windowWidth - cardWidth) / 2), 24);
+      : Math.max(Math.round((windowWidth - cardWidth) / 2), 32);
 
     const getDesktopStep = () => {
       if (!scrollContainerRef.current) return step;
@@ -748,6 +749,67 @@ const ChoosePlan = React.forwardRef(
             </div>
           </div>
 
+          {/* Trust & Flexibility Feature Badges (Buy Now · Pause · No-Cost EMI) */}
+          <div className="w-full mb-5 sm:mb-6 px-2 sm:px-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl sm:max-w-3xl mx-auto py-3 sm:py-3.5 px-3 sm:px-6 rounded-2xl bg-[#0f0f12]/90 border border-zinc-800/80 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
+              {/* Feature 1: Buy Now */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3 text-center sm:text-left group cursor-default">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-amber-500/20 via-zinc-900 to-black border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)] flex items-center justify-center shrink-0 group-hover:border-amber-400 group-hover:scale-105 transition-all duration-200">
+                  <Play size={13} className="fill-amber-400 text-amber-400 translate-x-0.5" />
+                </div>
+                <div>
+                  <h4
+                    className="text-xs sm:text-[13px] md:text-sm font-black text-white uppercase tracking-tight leading-none"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    Buy Now
+                  </h4>
+                  <p className="text-[10px] sm:text-xs text-zinc-400 font-medium leading-tight mt-1">
+                    start anytime
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 2: Pause */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3 text-center sm:text-left border-x border-zinc-800/80 px-1 sm:px-3 group cursor-default">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-amber-500/20 via-zinc-900 to-black border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)] flex items-center justify-center shrink-0 group-hover:border-amber-400 group-hover:scale-105 transition-all duration-200">
+                  <Pause size={13} className="fill-amber-400 text-amber-400" />
+                </div>
+                <div>
+                  <h4
+                    className="text-xs sm:text-[13px] md:text-sm font-black text-white uppercase tracking-tight leading-none"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    Pause
+                  </h4>
+                  <p className="text-[10px] sm:text-xs text-zinc-400 font-medium leading-tight mt-1">
+                    pack anytime
+                  </p>
+                </div>
+              </div>
+
+              {/* Feature 3: No-Cost EMI */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3 text-center sm:text-left group cursor-default">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-amber-500/20 via-zinc-900 to-black border border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)] flex items-center justify-center shrink-0 group-hover:border-amber-400 group-hover:scale-105 transition-all duration-200">
+                  <span className="text-[10px] sm:text-[11px] font-black text-amber-400 font-mono tracking-tighter leading-none">
+                    EMI
+                  </span>
+                </div>
+                <div>
+                  <h4
+                    className="text-xs sm:text-[13px] md:text-sm font-black text-white uppercase tracking-tight leading-none"
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    No-Cost
+                  </h4>
+                  <p className="text-[10px] sm:text-xs text-zinc-400 font-medium leading-tight mt-1">
+                    EMI available
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Slider Stage Container with Floating Side Chevrons and Bleed Width */}
           <div className="relative w-full">
             {/* Floating Side Left Arrow (Desktop / Tablet) */}
@@ -829,24 +891,20 @@ const ChoosePlan = React.forwardRef(
                           : "scale-100 opacity-95 hover:opacity-100 shadow-[0_10px_30px_rgba(0,0,0,0.6)] z-10"
                         : isCenter
                           ? "scale-100 opacity-100 shadow-[0_25px_60px_rgba(0,0,0,0.95)] z-20"
-                          : "scale-[0.93] opacity-50 hover:opacity-85 shadow-none z-10"
+                          : "scale-[0.95] opacity-80 hover:opacity-100 shadow-[0_8px_25px_rgba(0,0,0,0.6)] z-10"
                     }`}
                   >
                     <div
-                      className={`w-full h-full rounded-[24px] p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${
+                      className={`w-full h-full rounded-[24px] p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-all duration-300 ${
                         isCenter
                           ? isTwelveMonth
                             ? "bg-[#141417] border-2 border-[#ccf141]/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(204,241,65,0.25)] ring-1 ring-[#ccf141]/30"
                             : isTwentyFourMonth
                               ? "bg-[#141417] border-2 border-amber-400/85 shadow-[0_20px_45px_rgba(0,0,0,0.95),0_0_30px_rgba(245,158,11,0.25)] ring-1 ring-amber-400/30"
                               : "bg-[#141417] border border-zinc-700/80 shadow-[0_20px_45px_rgba(0,0,0,0.95)] ring-1 ring-white/10"
-                          : "bg-[#101012] hover:bg-[#141417] border border-zinc-800/80 hover:border-zinc-700"
+                          : "bg-[#101012] hover:bg-[#141417] border border-zinc-700/90 shadow-md"
                       }`}
                     >
-                      {/* Dimmed Overlay on Inactive Peeking Cards only for mobile */}
-                      {!isDesktop && !isCenter && (
-                        <div className="absolute inset-0 bg-black/25 z-30 rounded-[24px] pointer-events-none transition-opacity hover:bg-black/10" />
-                      )}
 
                       {/* Card Content Top Half */}
                       <div className="relative z-10 flex flex-col flex-grow">
@@ -862,17 +920,16 @@ const ChoosePlan = React.forwardRef(
                           </h3>
 
                           {isTwelveMonth ? (
-                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-red-500 border border-red-400/90 shadow-[0_0_12px_rgba(255,0,0,0.35)] shrink-0">
-                              Limited time offer <br />
-                              8 days only 
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-green-400 border border-green-200 shrink-0">
+                            Most Bought
                             </span>
                           ) : isTwentyFourMonth ? (
-                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-amber-300 border border-amber-400/90 shadow-[0_0_12px_rgba(245,158,11,0.35)] shrink-0">
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-amber-300 border border-amber-400/90  shrink-0">
                               BEST VALUE
                             </span>
                           ) : plan.popular || isSixMonth ? (
-                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#18181b] text-[#ccf141] border border-[#ccf141]/80 shadow-[0_0_10px_rgba(204,241,65,0.3)] shrink-0">
-                              POPULAR
+                            <span className="">
+                              
                             </span>
                           ) : null}
                         </div>
@@ -889,7 +946,7 @@ const ChoosePlan = React.forwardRef(
                         {/* Active Big Price + /mo* text */}
                         <div className="flex items-baseline gap-1.5 flex-wrap mt-0.5">
                           <span
-                            className="text-white font-black text-3xl sm:text-4xl tracking-tight leading-none"
+                            className="text-yellow-200 font-black text-3xl sm:text-4xl tracking-tight leading-none"
                             style={{
                               fontFamily:
                                 '"BrutalTypeBold", Impact, sans-serif',
@@ -944,7 +1001,7 @@ const ChoosePlan = React.forwardRef(
                           className={`w-full py-3.5 px-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-[0_4px_20px_rgba(0,0,0,0.5)] active:scale-[0.98] flex items-center justify-center gap-1.5 ${
                             activeData.isComingSoon
                               ? "bg-zinc-800 text-amber-400 border border-amber-500/40"
-                              : "bg-white text-[#ff3366] hover:bg-zinc-100 hover:shadow-[0_6px_28px_rgba(255,51,102,0.28)]"
+                              : "bg-[#ccf141] text-black hover:bg-zinc-100 hover:shadow-[0_6px_28px_rgba(255,51,102,0.28)]"
                           }`}
                           style={{
                             fontFamily: '"BrutalTypeBold", sans-serif',
