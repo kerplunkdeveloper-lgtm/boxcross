@@ -149,7 +149,23 @@ const hiringApplicationSchema = new mongoose.Schema(
       originalName: { type: String, default: "" },
       fileType: { type: String, default: "" },
       fileSize: { type: Number, default: 0 },
+      storageProvider: { type: String, default: "google_drive" },
+      driveFileId: { type: String, default: "" },
+      webViewLink: { type: String, default: "" },
+      webContentLink: { type: String, default: "" },
     },
+    attachedFiles: [
+      {
+        url: { type: String, default: "" },
+        fileId: { type: String, default: "" },
+        originalName: { type: String, default: "" },
+        fileType: { type: String, default: "" },
+        fileSize: { type: Number, default: 0 },
+        storageProvider: { type: String, default: "google_drive" },
+        webViewLink: { type: String, default: "" },
+        webContentLink: { type: String, default: "" },
+      },
+    ],
     portfolioLink: {
       type: String,
       trim: true,
@@ -220,6 +236,11 @@ const hiringApplicationSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Indexes for high performance querying, sorting, and filtering
+hiringApplicationSchema.index({ createdAt: -1 });
+hiringApplicationSchema.index({ status: 1, createdAt: -1 });
+hiringApplicationSchema.index({ positions: 1 });
 
 // Pre-save hook: auto-generate unique applicationId if not provided
 hiringApplicationSchema.pre("validate", function (next) {

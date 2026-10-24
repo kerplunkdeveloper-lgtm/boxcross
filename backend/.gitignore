@@ -24,3 +24,8 @@ env
 *.njsproj
 *.sln
 *.sw?
+
+# Google Service Account Credentials
+*service-account*.json
+*hiringdetails*.json
+google-service-account.json

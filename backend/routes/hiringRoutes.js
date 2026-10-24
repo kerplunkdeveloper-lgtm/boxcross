@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const uploadResume = require("../middleware/resumeUploadMiddleware");
+const uploadHiringFiles = require("../middleware/resumeUploadMiddleware");
 const {
   submitApplication,
   getApplications,
@@ -13,8 +13,8 @@ const {
 } = require("../controllers/hiringController");
 
 // Public endpoints
-// 1. Submit hiring application (accepts multipart/form-data with "resume" file, or raw JSON)
-router.post("/", uploadResume.single("resume"), submitApplication);
+// 1. Submit hiring application (accepts multipart/form-data with "resume", "image", "file", or raw JSON)
+router.post("/", uploadHiringFiles, submitApplication);
 
 // 2. Get form metadata, standard roles, options, and screening questions
 router.get("/roles", getHiringFormConfig);

@@ -4,6 +4,12 @@ const https = require("https");
 const mongoose = require("mongoose");
 const HiringApplication = require("../models/HiringApplication");
 const cloudinary = require("../config/cloudinary");
+const {
+  isGoogleDriveConfigured,
+  uploadFileToGoogleDrive,
+  getFileStreamFromGoogleDrive,
+  deleteFileFromGoogleDrive,
+} = require("../config/googleDrive");
 
 // --------------------------------------------------------------------------
 // Cloudinary Helpers
@@ -188,27 +194,104 @@ const submitApplication = async (req, res) => {
       originalName: "",
       fileType: "",
       fileSize: 0,
+      storageProvider: isGoogleDriveConfigured() ? "google_drive" : "none",
+      driveFileId: "",
+      webViewLink: "",
+      webContentLink: "",
     };
+    const attachedFilesData = [];
 
-    if (req.file) {
-      try {
-        const uploadResult = await uploadResumeToCloudinary(
-          req.file.buffer,
-          req.file.originalname
-        );
-        resumeData = {
-          url: uploadResult.secure_url || uploadResult.url,
-          publicId: uploadResult.public_id,
-          originalName: req.file.originalname,
-          fileType: req.file.mimetype,
-          fileSize: req.file.size,
-        };
-      } catch (uploadError) {
-        console.error("Resume Upload to Cloudinary Error:", uploadError);
-        return res.status(500).json({
-          success: false,
-          message: "Failed to upload resume document. Please try again.",
-        });
+    const uploadedFiles = req.files || (req.file ? [req.file] : []);
+
+    if (uploadedFiles.length > 0) {
+      // Find primary file (resume or main upload)
+      const primaryFile =
+        uploadedFiles.find((f) => f.fieldname === "resume") ||
+        uploadedFiles.find((f) => f.fieldname === "image") ||
+        uploadedFiles.find((f) => f.fieldname === "file") ||
+        uploadedFiles[0];
+
+      const auxFiles = uploadedFiles.filter((f) => f !== primaryFile);
+
+      if (primaryFile) {
+        if (isGoogleDriveConfigured()) {
+          try {
+            const driveResult = await uploadFileToGoogleDrive({
+              fileBuffer: primaryFile.buffer,
+              originalname: primaryFile.originalname,
+              mimeType: primaryFile.mimetype,
+            });
+            resumeData = {
+              url: driveResult.webViewLink || driveResult.webContentLink,
+              publicId: driveResult.fileId,
+              driveFileId: driveResult.fileId,
+              originalName: primaryFile.originalname,
+              fileType: primaryFile.mimetype,
+              fileSize: driveResult.size,
+              storageProvider: "google_drive",
+              webViewLink: driveResult.webViewLink,
+              webContentLink: driveResult.webContentLink,
+            };
+          } catch (uploadError) {
+            console.error("Google Drive Upload Error:", uploadError.message);
+            return res.status(500).json({
+              success: false,
+              message:
+                "Failed to upload document to Google Drive: " +
+                uploadError.message,
+            });
+          }
+        } else {
+          // Fallback to Cloudinary if Google Drive credentials are not yet entered in .env
+          console.warn(
+            "[Hiring API] Google Drive not yet configured in .env. Falling back to Cloudinary."
+          );
+          try {
+            const uploadResult = await uploadResumeToCloudinary(
+              primaryFile.buffer,
+              primaryFile.originalname
+            );
+            resumeData = {
+              url: uploadResult.secure_url || uploadResult.url,
+              publicId: uploadResult.public_id,
+              originalName: primaryFile.originalname,
+              fileType: primaryFile.mimetype,
+              fileSize: primaryFile.size,
+              storageProvider: "cloudinary",
+            };
+          } catch (uploadError) {
+            console.error("Storage upload error:", uploadError);
+            return res.status(500).json({
+              success: false,
+              message: "Failed to upload document. Please check storage credentials.",
+            });
+          }
+        }
+      }
+
+      // Process auxiliary files (e.g. certificates, applicant pictures)
+      for (const auxFile of auxFiles) {
+        try {
+          if (isGoogleDriveConfigured()) {
+            const auxDrive = await uploadFileToGoogleDrive({
+              fileBuffer: auxFile.buffer,
+              originalname: auxFile.originalname,
+              mimeType: auxFile.mimetype,
+            });
+            attachedFilesData.push({
+              url: auxDrive.webViewLink || auxDrive.webContentLink,
+              fileId: auxDrive.fileId,
+              originalName: auxFile.originalname,
+              fileType: auxFile.mimetype,
+              fileSize: auxDrive.size,
+              storageProvider: "google_drive",
+              webViewLink: auxDrive.webViewLink,
+              webContentLink: auxDrive.webContentLink,
+            });
+          }
+        } catch (auxErr) {
+          console.warn("Auxiliary file upload warning:", auxErr.message);
+        }
       }
     }
 
@@ -248,6 +331,7 @@ const submitApplication = async (req, res) => {
           ? parseBooleanField(willingToWorkInPuducherry)
           : true,
       resume: resumeData,
+      attachedFiles: attachedFilesData,
       portfolioLink: portfolioLink ? String(portfolioLink).trim() : "",
       certificatesUrl: certificatesUrl ? String(certificatesUrl).trim() : "",
       additionalInfo: additionalInfo ? String(additionalInfo).trim() : "",
@@ -338,14 +422,18 @@ const getApplications = async (req, res) => {
     const sortOptions = {};
     sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
 
-    const [applications, totalFiltered, totalInDb] = await Promise.all([
+    const isFiltered = Object.keys(query).length > 0;
+    const [applications, totalFiltered] = await Promise.all([
       HiringApplication.find(query)
         .sort(sortOptions)
         .skip(skip)
-        .limit(pageSize),
+        .limit(pageSize)
+        .lean(),
       HiringApplication.countDocuments(query),
-      HiringApplication.countDocuments(),
     ]);
+    const totalInDb = isFiltered
+      ? await HiringApplication.estimatedDocumentCount().catch(() => totalFiltered)
+      : totalFiltered;
 
     res.status(200).json({
       success: true,
@@ -552,9 +640,32 @@ const deleteApplication = async (req, res) => {
       });
     }
 
-    // Delete stored resume from Cloudinary if present
-    if (application.resume && application.resume.publicId) {
-      await deleteResumeFromCloudinary(application.resume.publicId);
+    // Delete stored resume from Google Drive or Cloudinary
+    if (application.resume) {
+      const isDrive =
+        application.resume.storageProvider === "google_drive" ||
+        Boolean(application.resume.driveFileId) ||
+        (application.resume.url &&
+          application.resume.url.includes("drive.google.com"));
+
+      const driveId =
+        application.resume.driveFileId ||
+        (isDrive ? application.resume.publicId : null);
+
+      if (isDrive && driveId) {
+        await deleteFileFromGoogleDrive(driveId);
+      } else if (application.resume.publicId) {
+        await deleteResumeFromCloudinary(application.resume.publicId);
+      }
+    }
+
+    // Delete any auxiliary files stored in Google Drive
+    if (Array.isArray(application.attachedFiles)) {
+      for (const file of application.attachedFiles) {
+        if (file.fileId && file.storageProvider === "google_drive") {
+          await deleteFileFromGoogleDrive(file.fileId);
+        }
+      }
     }
 
     await application.deleteOne();
@@ -759,6 +870,42 @@ const streamResume = async (req, res) => {
       else if (ext === ".jpg" || ext === ".jpeg") contentType = "image/jpeg";
       else if (ext === ".webp") contentType = "image/webp";
       else contentType = "application/pdf";
+    }
+
+    // 1. If document is stored in Google Drive, stream directly from Google Drive API
+    const isGoogleDrive =
+      resume.storageProvider === "google_drive" ||
+      Boolean(resume.driveFileId) ||
+      (resume.url && resume.url.includes("drive.google.com"));
+
+    const driveFileId =
+      resume.driveFileId || (isGoogleDrive ? resume.publicId : null);
+
+    if (isGoogleDrive && driveFileId && isGoogleDriveConfigured()) {
+      try {
+        const driveMedia = await getFileStreamFromGoogleDrive(driveFileId);
+
+        res.setHeader("Content-Type", driveMedia.contentType || contentType);
+        res.setHeader(
+          "Content-Disposition",
+          `${isDownload ? "attachment" : "inline"}; filename="${encodeURIComponent(
+            filename
+          )}"`
+        );
+        res.setHeader("Cache-Control", "private, max-age=3600");
+
+        if (driveMedia.contentLength) {
+          res.setHeader("Content-Length", driveMedia.contentLength);
+        }
+
+        driveMedia.stream.pipe(res);
+        return;
+      } catch (driveErr) {
+        console.error("Google Drive Stream Error:", driveErr.message);
+        if (resume.url) {
+          return res.redirect(resume.url);
+        }
+      }
     }
 
     // Helper to fetch remote stream with Cloudinary Basic Auth (bypasses restricted delivery)
