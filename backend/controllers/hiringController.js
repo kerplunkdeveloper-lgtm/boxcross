@@ -242,30 +242,14 @@ const submitApplication = async (req, res) => {
             });
           }
         } else {
-          // Fallback to Cloudinary if Google Drive credentials are not yet entered in .env
-          console.warn(
-            "[Hiring API] Google Drive not yet configured in .env. Falling back to Cloudinary."
+          console.error(
+            "[Hiring API] Google Drive credentials not configured in googleDriveCredentials.js!"
           );
-          try {
-            const uploadResult = await uploadResumeToCloudinary(
-              primaryFile.buffer,
-              primaryFile.originalname
-            );
-            resumeData = {
-              url: uploadResult.secure_url || uploadResult.url,
-              publicId: uploadResult.public_id,
-              originalName: primaryFile.originalname,
-              fileType: primaryFile.mimetype,
-              fileSize: primaryFile.size,
-              storageProvider: "cloudinary",
-            };
-          } catch (uploadError) {
-            console.error("Storage upload error:", uploadError);
-            return res.status(500).json({
-              success: false,
-              message: "Failed to upload document. Please check storage credentials.",
-            });
-          }
+          return res.status(500).json({
+            success: false,
+            message:
+              "Google Drive storage is not configured. Please check backend/config/googleDriveCredentials.js.",
+          });
         }
       }
 
