@@ -180,6 +180,30 @@ const DashboardHiring = () => {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
+  // Auto-refresh interval (every 15s) and real-time BroadcastChannel listener
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        fetchApplications(false);
+      }
+    }, 15000);
+
+    const channel = new BroadcastChannel("bxc_hiring_updates");
+    channel.onmessage = (event) => {
+      if (
+        event.data === "NEW_APPLICATION_SUBMITTED" ||
+        event.data?.type === "NEW_APPLICATION_SUBMITTED"
+      ) {
+        fetchApplications(false);
+      }
+    };
+
+    return () => {
+      clearInterval(interval);
+      channel.close();
+    };
+  }, [page, limit, statusFilter, positionFilter, experienceFilter, searchTerm]);
+
   // Handle Status Change inline
   const handleStatusChange = async (id, newStatus) => {
     try {

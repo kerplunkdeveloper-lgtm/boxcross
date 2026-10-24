@@ -9,6 +9,7 @@ import {
   CreditCard,
   Calendar,
   BookOpen,
+  Briefcase,
   LogOut,
   Settings,
   ChevronDown,
@@ -29,6 +30,7 @@ import {
   getHomec2,
   getHomec3,
   getLeadsAdmin,
+  getHiringApplications,
 } from "../api/api";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -186,6 +188,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         getHomec2(),
         getHomec3(),
         getLeadsAdmin(),
+        getHiringApplications({ limit: 15 }),
       ]);
 
       const [
@@ -196,6 +199,7 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         homec2Res,
         homec3Res,
         leadsRes,
+        hiringRes,
       ] = results;
 
       // 1. Fetch Enquiry Bookings
@@ -324,6 +328,29 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         });
       }
 
+      // 8. Fetch Career / Hiring Applications
+      if (
+        hiringRes?.status === "fulfilled" &&
+        hiringRes.value?.data?.success &&
+        Array.isArray(hiringRes.value.data.data)
+      ) {
+        hiringRes.value.data.data.forEach((item) => {
+          const roleText =
+            Array.isArray(item.positions) && item.positions.length > 0
+              ? item.positions.join(", ")
+              : item.otherPosition || "Applicant";
+
+          aggregated.push({
+            id: `hiring-${item._id || item.applicationId}`,
+            title: "New Career Application",
+            message: `${item.fullName} applied for ${roleText}`,
+            time: new Date(item.createdAt || Date.now()),
+            type: "hiring",
+            link: "/dashboard/hiring",
+          });
+        });
+      }
+
       // Sort by time descending (newest first)
       aggregated.sort((a, b) => b.time.getTime() - a.time.getTime());
 
@@ -352,6 +379,10 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         if (newItems.length > 0) {
           playNotificationSound();
           setLatestNotification(newItems[0]);
+          toast.success(`${newItems[0].title}: ${newItems[0].message}`, {
+            duration: 6000,
+            icon: newItems[0].type === "hiring" ? "💼" : "🔔",
+          });
         }
       }
 
@@ -378,9 +409,9 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       if (document.visibilityState === "visible") {
         fetchNotifications();
       }
-    }, 30000); // 30s interval — reduced from 5s (was 84 API calls/min, now ~14/min)
+    }, 15000); // 15s interval for fast real-time notifications
 
-    // Global BroadcastChannel listener for immediate notifications across all dashboard pages
+    // Global BroadcastChannel listeners for immediate notifications across all dashboard pages
     const channel = new BroadcastChannel("founding_members_updates");
     channel.onmessage = (event) => {
       if (event.data === "NEW_FOUNDER_ADDED") {
@@ -389,10 +420,21 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
       }
     };
 
+    const hiringChannel = new BroadcastChannel("bxc_hiring_updates");
+    hiringChannel.onmessage = (event) => {
+      if (
+        event.data === "NEW_APPLICATION_SUBMITTED" ||
+        event.data?.type === "NEW_APPLICATION_SUBMITTED"
+      ) {
+        fetchNotifications();
+      }
+    };
+
     return () => {
       clearInterval(interval);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       channel.close();
+      hiringChannel.close();
     };
   }, [fetchNotifications]);
 
@@ -473,6 +515,8 @@ const DashboardHeader = ({ setSidebarOpen, sidebarOpen, user }) => {
         return (
           <Calendar size={14} className="text-[var(--db-accent-highlight)]" />
         );
+      case "hiring":
+        return <Briefcase size={14} className="text-[#ccf141]" />;
       default:
         return <Bell size={14} className="text-gray-400" />;
     }
