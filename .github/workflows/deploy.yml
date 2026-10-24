@@ -27,7 +27,6 @@ jobs:
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_SSH_KEY }}
           port: 22
-          script_stop: true
 
           script: |
             set -e
