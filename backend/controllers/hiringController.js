@@ -1,0 +1,703 @@
+const path = require("path");
+const mongoose = require("mongoose");
+const HiringApplication = require("../models/HiringApplication");
+const cloudinary = require("../config/cloudinary");
+
+// --------------------------------------------------------------------------
+// Cloudinary Helpers
+// --------------------------------------------------------------------------
+const uploadResumeToCloudinary = (fileBuffer, originalname) => {
+  return new Promise((resolve, reject) => {
+    // Sanitize file name for public ID
+    const cleanName = path
+      .parse(originalname || "resume")
+      .name.replace(/[^a-zA-Z0-9_-]/g, "_");
+
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: "bxc_career_resumes",
+        resource_type: "auto",
+        public_id: `${Date.now()}-${cleanName}`,
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+    uploadStream.end(fileBuffer);
+  });
+};
+
+const deleteResumeFromCloudinary = async (publicId) => {
+  if (!publicId) return;
+  try {
+    // Attempt deletion as raw document, then image
+    await cloudinary.uploader.destroy(publicId, { resource_type: "raw" });
+    await cloudinary.uploader.destroy(publicId, { resource_type: "image" });
+  } catch (err) {
+    console.error("Cloudinary Cleanup Warning:", err.message);
+  }
+};
+
+// Helper to coerce string / array inputs
+const parseArrayField = (val) => {
+  if (!val) return [];
+  if (Array.isArray(val)) return val.map((v) => String(v).trim()).filter(Boolean);
+  if (typeof val === "string") {
+    // Handle JSON stringified arrays or comma-delimited strings
+    if (val.startsWith("[") && val.endsWith("]")) {
+      try {
+        const parsed = JSON.parse(val);
+        if (Array.isArray(parsed)) return parsed.map((v) => String(v).trim()).filter(Boolean);
+      } catch (e) {
+        // Fall back to comma split
+      }
+    }
+    return val
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+  return [];
+};
+
+// Helper to coerce boolean inputs (handles "true", true, "yes", "Yes", 1)
+const parseBooleanField = (val) => {
+  if (typeof val === "boolean") return val;
+  if (typeof val === "string") {
+    const s = val.trim().toLowerCase();
+    return s === "true" || s === "yes" || s === "1";
+  }
+  if (typeof val === "number") return val === 1;
+  return false;
+};
+
+// --------------------------------------------------------------------------
+// @desc    Submit a career application (Public)
+// @route   POST /api/hiring
+// @access  Public
+// --------------------------------------------------------------------------
+const submitApplication = async (req, res) => {
+  try {
+    const {
+      fullName,
+      phone,
+      mobileNumber,
+      email,
+      is18Plus,
+      ageConfirmation,
+      currentLocation,
+      positions,
+      position,
+      otherPosition,
+      highestEducation,
+      totalExperience,
+      previousCompany,
+      certifications,
+      skillsDescription,
+      languagesKnown,
+      coachingExperience,
+      roleSpecificAnswers,
+      currentEmploymentStatus,
+      whenCanYouJoin,
+      preferredShift,
+      expectedSalary,
+      willingToWorkInPuducherry,
+      portfolioLink,
+      certificatesUrl,
+      additionalInfo,
+      declarationAgreed,
+      resumeUrl,
+    } = req.body;
+
+    // Normalization & Validation
+    const applicantName = (fullName || "").trim();
+    const applicantPhone = (phone || mobileNumber || "").trim();
+    const applicantEmail = (email || "").trim().toLowerCase();
+    const applicantLocation = (currentLocation || "").trim();
+
+    // Check mandatory Section 1 fields
+    if (!applicantName) {
+      return res.status(400).json({ success: false, message: "Full Name is required." });
+    }
+    if (!applicantPhone) {
+      return res.status(400).json({ success: false, message: "Mobile Number / WhatsApp is required." });
+    }
+    if (!applicantEmail) {
+      return res.status(400).json({ success: false, message: "Email Address is required." });
+    }
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
+    if (!emailRegex.test(applicantEmail)) {
+      return res.status(400).json({ success: false, message: "Please provide a valid email address." });
+    }
+
+    const verified18Plus = parseBooleanField(is18Plus !== undefined ? is18Plus : ageConfirmation);
+    if (!verified18Plus) {
+      return res.status(400).json({
+        success: false,
+        message: "Age confirmation (18+) is required to submit an application.",
+      });
+    }
+
+    if (!applicantLocation) {
+      return res.status(400).json({ success: false, message: "Current Location is required." });
+    }
+
+    // Positions (Section 2)
+    let selectedPositions = parseArrayField(positions);
+    if (selectedPositions.length === 0 && position) {
+      selectedPositions = parseArrayField(position);
+    }
+    if (selectedPositions.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Please select at least one position you are applying for.",
+      });
+    }
+
+    // Section 6 - Declaration Agreement
+    const declarationCheck = parseBooleanField(declarationAgreed);
+    if (!declarationCheck) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "You must confirm the declaration: 'I confirm that the information provided is accurate and agree to be contacted by the BXC hiring team regarding my application.'",
+      });
+    }
+
+    // File Upload handling (Section 5)
+    let resumeData = {
+      url: resumeUrl ? String(resumeUrl).trim() : "",
+      publicId: "",
+      originalName: "",
+      fileType: "",
+      fileSize: 0,
+    };
+
+    if (req.file) {
+      try {
+        const uploadResult = await uploadResumeToCloudinary(
+          req.file.buffer,
+          req.file.originalname
+        );
+        resumeData = {
+          url: uploadResult.secure_url || uploadResult.url,
+          publicId: uploadResult.public_id,
+          originalName: req.file.originalname,
+          fileType: req.file.mimetype,
+          fileSize: req.file.size,
+        };
+      } catch (uploadError) {
+        console.error("Resume Upload to Cloudinary Error:", uploadError);
+        return res.status(500).json({
+          success: false,
+          message: "Failed to upload resume document. Please try again.",
+        });
+      }
+    }
+
+    // Parse role-specific screening answers if sent as JSON string
+    let parsedRoleSpecific = roleSpecificAnswers;
+    if (typeof roleSpecificAnswers === "string") {
+      try {
+        parsedRoleSpecific = JSON.parse(roleSpecificAnswers);
+      } catch (e) {
+        parsedRoleSpecific = { text: roleSpecificAnswers };
+      }
+    }
+
+    // Create record
+    const application = await HiringApplication.create({
+      fullName: applicantName,
+      phone: applicantPhone,
+      email: applicantEmail,
+      is18Plus: verified18Plus,
+      currentLocation: applicantLocation,
+      positions: selectedPositions,
+      otherPosition: otherPosition ? String(otherPosition).trim() : "",
+      highestEducation: highestEducation ? String(highestEducation).trim() : "",
+      totalExperience: totalExperience ? String(totalExperience).trim() : "",
+      previousCompany: previousCompany ? String(previousCompany).trim() : "",
+      certifications: certifications ? String(certifications).trim() : "",
+      skillsDescription: skillsDescription ? String(skillsDescription).trim() : "",
+      languagesKnown: parseArrayField(languagesKnown),
+      coachingExperience: parseArrayField(coachingExperience),
+      roleSpecificAnswers: parsedRoleSpecific || {},
+      currentEmploymentStatus: currentEmploymentStatus ? String(currentEmploymentStatus).trim() : "",
+      whenCanYouJoin: whenCanYouJoin ? String(whenCanYouJoin).trim() : "",
+      preferredShift: preferredShift ? String(preferredShift).trim() : "Flexible",
+      expectedSalary: expectedSalary ? String(expectedSalary).trim() : "",
+      willingToWorkInPuducherry:
+        willingToWorkInPuducherry !== undefined
+          ? parseBooleanField(willingToWorkInPuducherry)
+          : true,
+      resume: resumeData,
+      portfolioLink: portfolioLink ? String(portfolioLink).trim() : "",
+      certificatesUrl: certificatesUrl ? String(certificatesUrl).trim() : "",
+      additionalInfo: additionalInfo ? String(additionalInfo).trim() : "",
+      declarationAgreed: true,
+      status: "Submitted",
+    });
+
+    res.status(201).json({
+      success: true,
+      message:
+        "APPLICATION RECEIVED. Thank you for your interest in joining Box & Cross Performance Arena. Our hiring team will review your application and contact shortlisted candidates. IT'S JUST NEVER ENOUGH.",
+      applicationId: application.applicationId,
+      data: application,
+    });
+  } catch (error) {
+    console.error("Submit Career Application Error:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Server Error while processing your application",
+    });
+  }
+};
+
+// --------------------------------------------------------------------------
+// @desc    Get all applications with filters & pagination
+// @route   GET /api/hiring
+// @access  Private / Admin
+// --------------------------------------------------------------------------
+const getApplications = async (req, res) => {
+  try {
+    const {
+      search,
+      position,
+      status,
+      experience,
+      startDate,
+      endDate,
+      page = 1,
+      limit = 20,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+    } = req.query;
+
+    const query = {};
+
+    // Filter by position
+    if (position && position !== "all") {
+      query.positions = { $regex: new RegExp(position, "i") };
+    }
+
+    // Filter by status
+    if (status && status !== "all") {
+      query.status = status;
+    }
+
+    // Filter by total experience
+    if (experience && experience !== "all") {
+      query.totalExperience = { $regex: new RegExp(experience, "i") };
+    }
+
+    // Date range filter
+    if (startDate || endDate) {
+      query.createdAt = {};
+      if (startDate) query.createdAt.$gte = new Date(startDate);
+      if (endDate) {
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+        query.createdAt.$lte = end;
+      }
+    }
+
+    // General text search across name, phone, email, and location
+    if (search && search.trim()) {
+      const searchRegex = new RegExp(search.trim(), "i");
+      query.$or = [
+        { fullName: searchRegex },
+        { phone: searchRegex },
+        { email: searchRegex },
+        { currentLocation: searchRegex },
+        { applicationId: searchRegex },
+      ];
+    }
+
+    const pageNumber = Math.max(1, parseInt(page, 10));
+    const pageSize = Math.min(100, Math.max(1, parseInt(limit, 10)));
+    const skip = (pageNumber - 1) * pageSize;
+
+    const sortOptions = {};
+    sortOptions[sortBy] = sortOrder === "asc" ? 1 : -1;
+
+    const [applications, totalFiltered, totalInDb] = await Promise.all([
+      HiringApplication.find(query)
+        .sort(sortOptions)
+        .skip(skip)
+        .limit(pageSize),
+      HiringApplication.countDocuments(query),
+      HiringApplication.countDocuments(),
+    ]);
+
+    res.status(200).json({
+      success: true,
+      count: applications.length,
+      total: totalFiltered,
+      totalInDatabase: totalInDb,
+      page: pageNumber,
+      totalPages: Math.ceil(totalFiltered / pageSize) || 1,
+      data: applications,
+    });
+  } catch (error) {
+    console.error("Get Applications Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+// --------------------------------------------------------------------------
+// @desc    Get aggregate stats for hiring dashboard
+// @route   GET /api/hiring/stats
+// @access  Private / Admin
+// --------------------------------------------------------------------------
+const getHiringStats = async (req, res) => {
+  try {
+    const totalApplications = await HiringApplication.countDocuments();
+
+    // Group count by status
+    const statusCounts = await HiringApplication.aggregate([
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]);
+
+    // Unwind positions to count applications per role
+    const positionCounts = await HiringApplication.aggregate([
+      { $unwind: "$positions" },
+      { $group: { _id: "$positions", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]);
+
+    // Count in last 7 days & 30 days
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+    const [recent7Days, recent30Days] = await Promise.all([
+      HiringApplication.countDocuments({ createdAt: { $gte: sevenDaysAgo } }),
+      HiringApplication.countDocuments({ createdAt: { $gte: thirtyDaysAgo } }),
+    ]);
+
+    // Transform status list into clean object
+    const statusSummary = {
+      Submitted: 0,
+      "Under Review": 0,
+      Shortlisted: 0,
+      "Interview Scheduled": 0,
+      Rejected: 0,
+      Hired: 0,
+    };
+    statusCounts.forEach((item) => {
+      if (item._id) statusSummary[item._id] = item.count;
+    });
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        total: totalApplications,
+        recent7Days,
+        recent30Days,
+        byStatus: statusSummary,
+        byPosition: positionCounts.map((p) => ({ position: p._id, count: p.count })),
+      },
+    });
+  } catch (error) {
+    console.error("Get Hiring Stats Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+// --------------------------------------------------------------------------
+// @desc    Get single application by MongoDB _id or applicationId
+// @route   GET /api/hiring/:id
+// @access  Private / Admin
+// --------------------------------------------------------------------------
+const getApplicationById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let application = null;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      application = await HiringApplication.findById(id);
+    }
+
+    if (!application) {
+      application = await HiringApplication.findOne({ applicationId: id });
+    }
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Career application not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: application,
+    });
+  } catch (error) {
+    console.error("Get Application Details Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+// --------------------------------------------------------------------------
+// @desc    Update application status, add admin notes, or schedule interview
+// @route   PATCH /api/hiring/:id
+// @access  Private / Admin
+// --------------------------------------------------------------------------
+const updateApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, note, author, interviewDate, tags } = req.body;
+
+    let application = null;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      application = await HiringApplication.findById(id);
+    }
+    if (!application) {
+      application = await HiringApplication.findOne({ applicationId: id });
+    }
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Career application not found.",
+      });
+    }
+
+    if (status) {
+      const allowedStatuses = [
+        "Submitted",
+        "Under Review",
+        "Shortlisted",
+        "Interview Scheduled",
+        "Rejected",
+        "Hired",
+      ];
+      if (!allowedStatuses.includes(status)) {
+        return res.status(400).json({
+          success: false,
+          message: `Invalid status. Allowed values: ${allowedStatuses.join(", ")}`,
+        });
+      }
+      application.status = status;
+    }
+
+    if (interviewDate !== undefined) {
+      application.interviewDate = interviewDate ? new Date(interviewDate) : null;
+    }
+
+    if (tags && Array.isArray(tags)) {
+      application.tags = tags;
+    }
+
+    if (note && String(note).trim()) {
+      application.adminNotes.push({
+        note: String(note).trim(),
+        author: author || req.user?.name || "Admin",
+        createdAt: new Date(),
+      });
+    }
+
+    await application.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Application updated successfully.",
+      data: application,
+    });
+  } catch (error) {
+    console.error("Update Application Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+// --------------------------------------------------------------------------
+// @desc    Delete an application and remove its resume from Cloudinary
+// @route   DELETE /api/hiring/:id
+// @access  Private / Admin
+// --------------------------------------------------------------------------
+const deleteApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    let application = null;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      application = await HiringApplication.findById(id);
+    }
+    if (!application) {
+      application = await HiringApplication.findOne({ applicationId: id });
+    }
+
+    if (!application) {
+      return res.status(404).json({
+        success: false,
+        message: "Career application not found.",
+      });
+    }
+
+    // Delete stored resume from Cloudinary if present
+    if (application.resume && application.resume.publicId) {
+      await deleteResumeFromCloudinary(application.resume.publicId);
+    }
+
+    await application.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: "Application deleted successfully.",
+      deletedId: id,
+    });
+  } catch (error) {
+    console.error("Delete Application Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+// --------------------------------------------------------------------------
+// @desc    Get standard role options, screening questions & form metadata
+// @route   GET /api/hiring/roles
+// @access  Public
+// --------------------------------------------------------------------------
+const getHiringFormConfig = (req, res) => {
+  res.status(200).json({
+    success: true,
+    title: "JOIN THE BXC TEAM",
+    description:
+      "We're building a team that believes in discipline, performance and community. If you're passionate about fitness, coaching or creating great member experiences, apply to be part of Box & Cross Performance Arena.",
+    sections: {
+      section1_personalDetails: [
+        { name: "fullName", label: "Full Name", type: "text", required: true },
+        { name: "phone", label: "Mobile Number / WhatsApp", type: "text", required: true },
+        { name: "email", label: "Email Address", type: "email", required: true },
+        { name: "is18Plus", label: "Age (18+ confirmation)", type: "boolean", options: ["Yes", "No"], required: true },
+        { name: "currentLocation", label: "Current Location", type: "text", required: true },
+      ],
+      section2_positions: {
+        field: "positions",
+        label: "Which position are you applying for?",
+        type: "checkbox_group",
+        required: true,
+        options: [
+          "Boxing Coach",
+          "Strength & Conditioning Coach",
+          "Personal Trainer",
+          "Front Desk Executive",
+          "Membership / Sales Executive",
+          "Housekeeping / Maintenance",
+          "Other",
+        ],
+      },
+      section3_experienceAndQualifications: [
+        {
+          name: "highestEducation",
+          label: "Highest Educational Qualification",
+          type: "dropdown",
+          options: [
+            "High School / 10th-12th",
+            "Diploma",
+            "Bachelor's Degree",
+            "Master's Degree",
+            "Certification Course",
+            "Other",
+          ],
+        },
+        {
+          name: "totalExperience",
+          label: "Total Work Experience",
+          type: "radio",
+          options: ["0–1 Years", "1–3 Years", "3–5 Years", "5+ Years"],
+        },
+        { name: "previousCompany", label: "Previous Company / Fitness Centre", type: "text" },
+        { name: "certifications", label: "Relevant Certifications", type: "text" },
+        { name: "skillsDescription", label: "Describe Your Relevant Skills", type: "textarea" },
+        {
+          name: "languagesKnown",
+          label: "Languages Known",
+          type: "checkboxes",
+          options: ["English", "Tamil", "Hindi", "Telugu", "Malayalam", "French", "Other"],
+        },
+        {
+          name: "coachingExperience",
+          label: "Do you have experience coaching beginners, amateur athletes or competitive athletes?",
+          forRoles: ["Boxing Coach", "Strength & Conditioning Coach", "Personal Trainer"],
+          type: "checkboxes",
+          options: ["Beginners", "Amateur Athletes", "Competitive Athletes"],
+        },
+      ],
+      section4_availabilityAndExpectations: [
+        {
+          name: "currentEmploymentStatus",
+          label: "Current Employment Status",
+          type: "dropdown",
+          options: ["Employed", "Unemployed", "Freelancer / Self-Employed", "Student", "Serving Notice Period"],
+        },
+        {
+          name: "whenCanYouJoin",
+          label: "When Can You Join?",
+          type: "radio",
+          options: ["Immediately", "15 Days", "30 Days", "Other"],
+        },
+        {
+          name: "preferredShift",
+          label: "Preferred Shift",
+          type: "radio",
+          options: ["Morning", "Evening", "Flexible"],
+        },
+        { name: "expectedSalary", label: "Expected Monthly Salary", type: "text" },
+        {
+          name: "willingToWorkInPuducherry",
+          label: "Willing to Work On-Site in Puducherry?",
+          type: "boolean",
+          options: ["Yes", "No"],
+        },
+      ],
+      section5_resumeAndPortfolio: [
+        { name: "resume", label: "Upload Resume", type: "file", acceptedFormats: [".pdf", ".doc", ".docx", ".jpg", ".png"], note: "PDF preferred" },
+        { name: "portfolioLink", label: "Instagram / LinkedIn / Portfolio Link", type: "url", required: false },
+        { name: "certificatesUrl", label: "Relevant coaching certificates", type: "text", required: false },
+        { name: "additionalInfo", label: "Any Additional Information", type: "textarea", required: false },
+      ],
+      section6_finalConfirmation: {
+        declaration:
+          "I confirm that the information provided is accurate and agree to be contacted by the BXC hiring team regarding my application.",
+        field: "declarationAgreed",
+        type: "checkbox",
+        required: true,
+        submitButtonText: "APPLY TO JOIN BXC",
+      },
+      completionMessage: {
+        headline: "APPLICATION RECEIVED.",
+        body: "Thank you for your interest in joining Box & Cross Performance Arena. Our hiring team will review your application and contact shortlisted candidates.",
+        slogan: "IT'S JUST NEVER ENOUGH.",
+      },
+      roleSpecificScreeningGuide: {
+        boxingCoach: [
+          "What is your competitive fight record or coaching experience?",
+          "Are you certified under any national/international boxing federation (e.g. BFI, AIBA/IBA)?",
+          "Can you conduct pad work, heavy bag drills, and technical sparring clinics?",
+        ],
+        strengthAndConditioningCoach: [
+          "Which certifications do you hold (CSCS, NSCA, ACE, ACSM, ISSA)?",
+          "Do you have experience with periodization, Olympic lifting, and powerlifting mechanics?",
+          "How do you assess movement dysfunctions and program injury prevention?",
+        ],
+        frontDeskExecutive: [
+          "Do you have experience with gym CRM/membership software?",
+          "How do you handle difficult customer disputes or billing queries?",
+          "Are you comfortable working early morning or evening shifts on rotation?",
+        ],
+      },
+    },
+  });
+};
+
+module.exports = {
+  submitApplication,
+  getApplications,
+  getHiringStats,
+  getApplicationById,
+  updateApplication,
+  deleteApplication,
+  getHiringFormConfig,
+};

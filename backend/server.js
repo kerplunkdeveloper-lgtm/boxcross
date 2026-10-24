@@ -30,6 +30,7 @@ const juniorAthleteProfileRoutes = require("./routes/juniorAthleteProfileRoutes"
 const memfoundRoutes = require("./routes/memfoundRoutes");
 const founderPlanRoutes = require("./routes/founderPlanRoutes");
 const founderPaymentRoutes = require("./routes/founderPaymentRoutes");
+const hiringRoutes = require("./routes/hiringRoutes");
 
 // Load env
 dotenv.config();
@@ -49,23 +50,29 @@ const allowedOrigins = [
   "https://boxandcross.com/contact-us",
   "https://membership.boxandcross.com",
   "https://membership.boxandcross.com/events",
-
+  "https://hiring.boxandcross.com",
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Postman, mobile apps
+      // Allow requests with no origin (Postman, curl, mobile apps, server-to-server)
       if (!origin) return callback(null, true);
 
-      // Check if it's localhost/127.0.0.1 on any port (for development ease)
+      // Allow localhost on any port, boxandcross.com subdomains, vercel deployments, or external websites
       const isLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
 
-      if (allowedOrigins.includes(origin) || isLocalhost) {
+      if (
+        allowedOrigins.includes(origin) ||
+        isLocalhost ||
+        /^https?:\/\/([a-zA-Z0-9-]+\.)*boxandcross\.com$/i.test(origin) ||
+        /^https?:\/\/.*vercel\.app$/i.test(origin)
+      ) {
         return callback(null, true);
       }
 
-      return callback(null, false);
+      // Allow external career form websites & third-party integrations
+      return callback(null, true);
     },
     credentials: true,
   })
@@ -103,6 +110,8 @@ app.use("/api/memfound", memfoundRoutes);
 app.use("/api/founding100access", memfoundRoutes);
 app.use("/api/founder-plans", founderPlanRoutes);
 app.use("/api/founder-payments", founderPaymentRoutes);
+app.use("/api/hiring", hiringRoutes);
+app.use("/api/careers", hiringRoutes);
 
 // Health check
 app.get("/", (req, res) => {

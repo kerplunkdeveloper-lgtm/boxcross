@@ -256,6 +256,12 @@ export const getMemfoundStats = () => API.get("/memfound/stats");
 export const checkMemfoundPhone = (phone) => API.get(`/memfound/check/${phone}`);
 export const getMemfoundById = (id) => API.get(`/memfound/${id}`);
 export const updateMemfound = (id, data) => API.put(`/memfound/${id}`, data);
-export const deleteMemfound = (id) => API.delete(`/memfound/${id}`);
+// ──────────────── HIRING & CAREER APPLICATIONS API ────────────────
+export const getHiringApplications = (params) => API.get("/hiring", { params });
+export const getHiringStats = () => API.get("/hiring/stats");
+export const getHiringApplicationById = (id) => API.get(`/hiring/${id}`);
+export const updateHiringApplication = (id, data) => API.patch(`/hiring/${id}`, data);
+export const deleteHiringApplication = (id) => API.delete(`/hiring/${id}`);
+export const getHiringFormConfig = () => API.get("/hiring/roles");
 
 export default API;

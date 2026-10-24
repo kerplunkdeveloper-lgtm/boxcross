@@ -30,6 +30,7 @@ import {
   Smile,
   Target,
   Flame,
+  Briefcase,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import { useAuth } from "../context/AuthContext";
@@ -505,6 +506,14 @@ const DashboardSidebar = ({
                 name: "User Attendance",
                 icon: Fingerprint,
                 badge: "LIVE",
+              })}
+
+              {/* Hiring Details */}
+              {renderSingleItem({
+                to: "/dashboard/hiring",
+                name: "Hiring Details",
+                icon: Briefcase,
+                badge: "HR",
               })}
 
               {/* Club Accordion / Flyout */}

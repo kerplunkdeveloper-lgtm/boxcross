@@ -73,6 +73,7 @@ const DashboardFounderPlans = lazy(
 const DashboardFounderPayments = lazy(
   () => import("./pages/DashboardFounderPayments"),
 );
+const DashboardHiring = lazy(() => import("./pages/DashboardHiring"));
 
 // import LeadModal from "./Components/LeadModal";
 
@@ -278,6 +279,9 @@ const App = () => {
                   <Route path="hybrid-performance" element={<HybridPerformance />} />
                   <Route path="athlete-performance-profile" element={<AthletePerformanceProfile />} />
                   <Route path="junior-athlete-profile" element={<JuniorAthleteProfile />} />
+                  {/* Hiring & Career Applications */}
+                  <Route path="hiring" element={<DashboardHiring />} />
+                  <Route path="hiring-details" element={<Navigate to="/dashboard/hiring" replace />} />
                 </Route>
               </Routes>
             </Suspense>
