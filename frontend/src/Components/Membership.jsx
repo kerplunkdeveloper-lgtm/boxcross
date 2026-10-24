@@ -14,11 +14,13 @@ import {
   Trophy,
   Shield,
   User,
+  Users,
+  ChevronDown,
   Star,
   Lock,
 } from "lucide-react";
 import RazorpayMembershipModal from "./RazorpayMembershipModal";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import box1 from "../assets/box1.png";
 import box2 from "../assets/box2.png";
 import box3 from "../assets/box3.png";
@@ -111,8 +113,8 @@ const programs = [
     ),
     title: "BXC DUO",
     subtitle: "COUPLE / BUDDY MEMBERSHIP",
-    desc: "TWO PEOPLE. DIFFERENT GOALS. ONE ARENA",
-    price: "6,800",
+    desc: "TWO PEOPLE. DIFFERENT GOALS. ONE ARENA.",
+    price: "4,999",
     image: duoCoupleImg,
   },
   {
@@ -124,23 +126,23 @@ const programs = [
         viewBox="0 0 24 24"
         fill="none"
         stroke="#ccf141"
-        strokeWidth="1.5"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
         className="text-[#ccf141]"
       >
-        <circle cx="6" cy="6" r="3" />
-        <path d="M2 18v-1a4 4 0 0 1 7-2.6" />
-        <circle cx="18" cy="6" r="3" />
-        <path d="M22 18v-1a4 4 0 0 0-7-2.6" />
-        <circle cx="12" cy="11" r="2.5" />
+        <circle cx="12" cy="7" r="3" />
+        <path d="M5 21v-1a4 4 0 0 1 7-2.6" />
+        <circle cx="6" cy="8" r="2.5" />
+        <path d="M19 21v-1a4 4 0 0 0-7-2.6" />
+        <circle cx="18" cy="8" r="2.5" />
         <path d="M8.5 21v-1a3.5 3.5 0 0 1 7 0v1" />
       </svg>
     ),
     title: "BXC FAMILY FIT",
     subtitle: "ALL AGES FAMILY",
-    desc: "Full arena access for parents + Junior coaching for kids (up to 4 members).",
-    price: "11,900",
+    desc: "PARENT + KID MEMBERSHIP",
+    price: "3,999",
     image: familyFatherSonImg,
   },
   {
@@ -822,7 +824,7 @@ const pricingData = {
         buttonText: "SAVE ₹64,800",
       },
     ],
-    starterPrice: "6,800",
+    starterPrice: "4,999",
   },
   family: {
     title: "BXC FAMILY FIT",
@@ -981,7 +983,7 @@ const pricingData = {
         buttonText: "SAVE ₹122,400",
       },
     ],
-    starterPrice: "11,900",
+    starterPrice: "3,999",
   },
 };
 
@@ -1167,8 +1169,35 @@ const Membership = () => {
 
   const activeData = dynamicPricingData[activeTab] || pricingData[activeTab];
 
-  const adultPrograms = dynamicPrograms.filter((p) => p.id !== "junior");
+  const primaryPrograms = dynamicPrograms.filter(
+    (p) => p.id !== "junior" && p.id !== "duo" && p.id !== "family"
+  );
+  const morePrograms = dynamicPrograms.filter(
+    (p) => p.id === "duo" || p.id === "family"
+  );
   const juniorProgram = dynamicPrograms.find((p) => p.id === "junior");
+
+  const [showMorePrograms, setShowMorePrograms] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const plan = params.get("plan");
+      if (
+        plan &&
+        (plan.toLowerCase().includes("duo") ||
+          plan.toLowerCase().includes("family"))
+      ) {
+        return true;
+      }
+    }
+    return false;
+  });
+
+  // Auto-expand dropdown when duo or family plan is selected
+  useEffect(() => {
+    if (activeTab === "duo" || activeTab === "family") {
+      setShowMorePrograms(true);
+    }
+  }, [activeTab]);
 
   const handlePlanSelect = (planName, price, durationStr) => {
     const monthsVal = durationStr ? parseInt(durationStr) : 1;
@@ -1197,13 +1226,23 @@ const Membership = () => {
     return (
       <motion.div
         key={prog.id}
-        initial={{ opacity: 0, y: 35 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: isWideCard ? 20 : 35 }}
+        {...(isWideCard
+          ? {
+              animate: {
+                opacity: 1,
+                y: 0,
+                scale: activeTab === prog.id ? 1.02 : 1,
+              },
+            }
+          : {
+              whileInView: { opacity: 1, y: 0 },
+              animate: { scale: activeTab === prog.id ? 1.02 : 1 },
+              viewport: { once: true, margin: "-50px" },
+            })}
         whileHover={{ y: -6, transition: { type: "spring", stiffness: 350, damping: 25 } }}
         whileTap={{ scale: 0.98 }}
-        animate={{ scale: activeTab === prog.id ? 1.02 : 1 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.55, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
         onClick={() => setActiveTab(prog.id)}
         className={`w-full md:w-[calc(50%-14px)] ${
           isWideCard ? "lg:w-[calc(50%-14px)]" : "lg:w-[calc(33.333%-19px)]"
@@ -1292,12 +1331,18 @@ const Membership = () => {
 
         <div className="relative z-10 flex flex-col flex-grow text-left justify-between h-full">
           <div>
-            {/* Frosted Icon Tile */}
-            <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-black/60 border border-white/10 backdrop-blur-md flex items-center justify-center mb-4 sm:mb-5 text-[#ccf141] shadow-[0_4px_20px_rgba(0,0,0,0.5)] group-hover:border-[#ccf141]/50 group-hover:bg-[#ccf141]/10 group-hover:shadow-[0_0_20px_rgba(204,241,65,0.2)] transition-all duration-300">
-              <div className="scale-75 sm:scale-85 flex items-center justify-center">
+            {/* Top Icon - Clean presentation matching reference image for wide cards */}
+            {isWideCard ? (
+              <div className="mb-4 sm:mb-5 text-[#ccf141] flex items-center">
                 {prog.icon}
               </div>
-            </div>
+            ) : (
+              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-black/60 border border-white/10 backdrop-blur-md flex items-center justify-center mb-4 sm:mb-5 text-[#ccf141] shadow-[0_4px_20px_rgba(0,0,0,0.5)] group-hover:border-[#ccf141]/50 group-hover:bg-[#ccf141]/10 group-hover:shadow-[0_0_20px_rgba(204,241,65,0.2)] transition-all duration-300">
+                <div className="scale-75 sm:scale-85 flex items-center justify-center">
+                  {prog.icon}
+                </div>
+              </div>
+            )}
 
             {/* Title */}
             <h3
@@ -1310,10 +1355,10 @@ const Membership = () => {
             </h3>
 
             {/* Subtitle Badge */}
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ccf141]/15 border border-[#ccf141]/35 backdrop-blur-md mb-3 sm:mb-4 shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shadow-[0_0_6px_#ccf141]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/70 border border-[#ccf141]/40 backdrop-blur-md mb-3 sm:mb-4 shadow-sm w-fit">
+              <span className="w-2 h-2 rounded-full bg-[#ccf141] shadow-[0_0_6px_#ccf141]" />
               <span
-                className="text-[#ccf141] tracking-widest uppercase text-xs sm:text-[13px] font-bold"
+                className="text-[#ccf141] tracking-wider uppercase text-xs sm:text-[13px] font-bold"
                 style={{
                   fontFamily: '"BrutalTypeBold", sans-serif',
                 }}
@@ -1325,7 +1370,7 @@ const Membership = () => {
             {/* Description */}
             <p
               className={`text-zinc-300 mb-4 leading-relaxed text-xs sm:text-sm lg:text-[15px] font-medium max-w-[95%] ${
-                isWideCard ? "lg:max-w-[360px]" : ""
+                isWideCard ? "lg:max-w-[420px] uppercase font-semibold text-zinc-300/90 tracking-wide" : ""
               } drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]`}
               style={{
                 fontFamily: '"Brutal Font Light", sans-serif',
@@ -1336,11 +1381,11 @@ const Membership = () => {
           </div>
 
           {/* Bottom Pricing & Action Section */}
-          <div className="mt-auto pt-4 sm:pt-5 w-full border-t border-white/10">
-            <div className={isWideCard ? "flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3" : ""}>
+          <div className="mt-auto pt-4 sm:pt-5 w-full border-t border-zinc-800/80">
+            <div className={isWideCard ? "flex items-center justify-between gap-3" : ""}>
               <div>
                 <p
-                  className="text-[11px] sm:text-xs text-zinc-400 uppercase tracking-widest font-bold mb-1"
+                  className="text-[10px] sm:text-[11px] text-zinc-400 uppercase tracking-widest font-bold mb-0.5"
                   style={{
                     fontFamily: '"BrutalTypeBold", sans-serif',
                   }}
@@ -1355,7 +1400,7 @@ const Membership = () => {
                       fontFamily: '"BrutalTypeBold", Impact, sans-serif',
                     }}
                   >
-                    ₹{prog.price || "3,500"}
+                    ₹{prog.price || (prog.id === "family" ? "3,999" : "4,999")}
                   </span>
                   {prog.originalPrice && (
                     <span className="line-through text-zinc-500 font-bold text-xs sm:text-sm">
@@ -1370,14 +1415,14 @@ const Membership = () => {
 
               <button
                 onClick={(e) => handleScrollToPlans(e, prog.id)}
-                className={`group/btn mt-4 sm:mt-5 ${
-                  isWideCard ? "sm:mt-0 sm:w-auto sm:px-8" : "w-full"
-                } w-full py-3 sm:py-2.5 text-xs sm:text-[11px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center rounded-xl border ${
+                className={`group/btn mt-4 sm:mt-0 ${
+                  isWideCard ? "rounded-full px-5 sm:px-7 py-2.5 sm:py-2.5 text-xs" : "w-full rounded-xl py-3 sm:py-2.5 text-xs sm:text-[11px]"
+                } font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center border cursor-pointer ${
                   prog.isComingSoon
                     ? "border-amber-500/60 bg-amber-500/15 text-amber-300 hover:bg-amber-500 hover:text-black shadow-[0_0_15px_rgba(245,158,11,0.2)]"
                     : activeTab === prog.id
                     ? "bg-[#ccf141] border-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.35)]"
-                    : "border-zinc-700 bg-black/40 backdrop-blur-md text-white hover:border-[#ccf141] hover:bg-[#ccf141]/10 hover:text-[#ccf141]"
+                    : "border-zinc-700/80 bg-black/60 backdrop-blur-md text-white hover:border-[#ccf141] hover:bg-[#ccf141]/10 hover:text-[#ccf141]"
                 }`}
                 style={{
                   fontFamily: '"BrutalTypeBold", sans-serif',
@@ -1441,10 +1486,127 @@ const Membership = () => {
             </div>
           </motion.div>
 
-          {/* STEP 1: 5 ADULT PATHWAYS (CORE, ATHLETE, ARENA, BXC DUO, BXC FAMILY FIT) */}
+          {/* PRIMARY PATHWAYS (CORE, ATHLETE, ARENA) */}
           <div className="flex flex-wrap justify-center gap-6 md:gap-7 mt-8 md:mt-15">
-            {adultPrograms.map((prog, index) => renderProgramCard(prog, index))}
+            {primaryPrograms.map((prog, index) => renderProgramCard(prog, index))}
           </div>
+
+          {/* MORE PROGRAMS BUTTON / DROPDOWN */}
+          {morePrograms.length > 0 && (
+            <div className="w-full mt-10 md:mt-14 flex flex-col items-center">
+              {/* Divider & Centered Toggle Button */}
+              <div className="flex items-center gap-3 sm:gap-4 w-full mb-6 px-1 max-w-5xl">
+                <div className="h-[1px] bg-gradient-to-r from-transparent via-zinc-800 to-zinc-700 flex-1" />
+                <motion.button
+                  type="button"
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setShowMorePrograms((prev) => !prev)}
+                  className="group relative p-[2px] rounded-full overflow-hidden cursor-pointer select-none transition-shadow duration-500 shadow-[0_4px_25px_rgba(0,0,0,0.8),0_0_20px_rgba(204,241,65,0.2)] hover:shadow-[0_8px_35px_rgba(0,0,0,0.9),0_0_35px_rgba(204,241,65,0.45)] focus:outline-none"
+                  aria-expanded={showMorePrograms}
+                  aria-label="Toggle More Programs"
+                >
+                  {/* CONTINUOUS 360° SPINNING BORDER BEAM ANIMATION */}
+                  <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+                    {/* Ambient Neon Glow Underlayer */}
+                    <div
+                      className="w-[420px] h-[420px] shrink-0 rounded-full animate-spin-border blur-[8px] opacity-85"
+                      style={{
+                        background:
+                          "conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 40deg, #ccf141 90deg, #ffffff 120deg, #ccf141 145deg, transparent 180deg, transparent 220deg, #ccf141 270deg, #ffffff 300deg, #ccf141 325deg, transparent 360deg)",
+                      }}
+                    />
+                    {/* Razor-Sharp Laser Border Beam */}
+                    <div
+                      className="absolute w-[420px] h-[420px] shrink-0 rounded-full animate-spin-border"
+                      style={{
+                        background:
+                          "conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 40deg, #ccf141 90deg, #ffffff 120deg, #ccf141 145deg, transparent 180deg, transparent 220deg, #ccf141 270deg, #ffffff 300deg, #ccf141 325deg, transparent 360deg)",
+                      }}
+                    />
+                  </div>
+
+                  {/* Button Core Body */}
+                  <div
+                    className={`relative z-10 px-5 sm:px-7 py-3 sm:py-3.5 rounded-full flex items-center gap-2.5 sm:gap-3 transition-colors duration-300 ${
+                      showMorePrograms
+                        ? "bg-[#0b0f05]"
+                        : "bg-[#0c0c0e] group-hover:bg-[#121215]"
+                    }`}
+                  >
+                    {/* Users Pod Icon */}
+                    <div
+                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
+                        showMorePrograms
+                          ? "bg-[#ccf141] text-black shadow-[0_0_15px_#ccf141]"
+                          : "bg-[#ccf141]/15 text-[#ccf141] border border-[#ccf141]/35 group-hover:border-[#ccf141]/60"
+                      }`}
+                    >
+                      <Users size={15} />
+                    </div>
+
+                    {/* Button Text */}
+                    <span
+                      className="text-xs sm:text-sm font-black uppercase tracking-wider text-white"
+                      style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                    >
+                      {showMorePrograms ? "Hide More Programs" : "More Programs"}
+                    </span>
+
+                    {/* Duo & Family Badge with Pulse Indicator */}
+                    <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-mono font-bold rounded-full bg-[#ccf141]/20 text-[#ccf141] border border-[#ccf141]/45 tracking-widest shadow-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141] animate-pulse" />
+                      <span>DUO &amp; FAMILY</span>
+                    </span>
+
+                    {/* Animated Rotating Chevron */}
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform duration-500 ease-out ${
+                        showMorePrograms
+                          ? "rotate-180 text-[#ccf141]"
+                          : "text-zinc-400 group-hover:text-white"
+                      }`}
+                    />
+                  </div>
+                </motion.button>
+                <div className="h-[1px] bg-gradient-to-l from-transparent via-zinc-800 to-zinc-700 flex-1" />
+              </div>
+
+              {/* SMOOTH COLLAPSIBLE DROPDOWN TRANSITION */}
+              <AnimatePresence initial={false}>
+                {showMorePrograms && (
+                  <motion.div
+                    key="more-programs-collapsible"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{
+                      opacity: 1,
+                      height: "auto",
+                      transition: {
+                        height: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+                        opacity: { duration: 0.4, delay: 0.1 },
+                      },
+                    }}
+                    exit={{
+                      opacity: 0,
+                      height: 0,
+                      transition: {
+                        height: { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+                        opacity: { duration: 0.25 },
+                      },
+                    }}
+                    className="overflow-hidden w-full"
+                  >
+                    <div className="pt-2 pb-6 flex flex-wrap justify-center gap-6 md:gap-7 w-full">
+                      {morePrograms.map((prog, index) =>
+                        renderProgramCard(prog, index)
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
 
           {/* HORIZONTAL FULL-WIDTH JUNIOR PROGRAM BANNER (UNDER 13) */}
           {juniorProgram && (
