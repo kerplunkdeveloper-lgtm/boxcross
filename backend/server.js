@@ -50,7 +50,7 @@ const allowedOrigins = [
   "https://boxandcross.com/contact-us",
   "https://membership.boxandcross.com",
   "https://membership.boxandcross.com/events",
-  "https://hiring.boxandcross.com",
+  "https://hire.boxandcross.com",
 ];
 
 app.use(
