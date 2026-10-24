@@ -36,6 +36,22 @@ import {
 } from "../api/api";
 import { useAuth } from "../context/AuthContext";
 
+const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000"
+).replace(/\/$/, "");
+
+const getResumeViewUrl = (app) => {
+  if (!app) return "";
+  const id = app._id || app.applicationId;
+  return `${API_BASE_URL}/api/hiring/${id}/resume`;
+};
+
+const getResumeDownloadUrl = (app) => {
+  if (!app) return "";
+  const id = app._id || app.applicationId;
+  return `${API_BASE_URL}/api/hiring/${id}/resume?download=1`;
+};
+
 const STATUS_OPTIONS = [
   "Submitted",
   "Under Review",
@@ -314,7 +330,7 @@ const DashboardHiring = () => {
       `"${app.preferredShift || ""}"`,
       `"${app.expectedSalary || ""}"`,
       app.willingToWorkInPuducherry ? "Yes" : "No",
-      `"${app.resume?.url || ""}"`,
+      `"${getResumeViewUrl(app) || app.resume?.url || ""}"`,
       `"${app.portfolioLink || ""}"`,
       `"${app.status || ""}"`,
       `"${new Date(app.createdAt).toLocaleDateString()}"`,
@@ -654,19 +670,28 @@ const DashboardHiring = () => {
 
                         {/* Resume / Portfolio */}
                         <td className="py-3.5 px-4">
-                          <div className="flex items-center gap-2">
-                            {app.resume?.url ? (
-                              <a
-                                href={app.resume.url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#ccf141]/10 text-[#ccf141] border border-[#ccf141]/30 hover:bg-[#ccf141]/20 font-bold text-[11px] transition-all"
-                                title="Open Resume Document"
-                              >
-                                <FileText size={12} />
-                                <span>Resume</span>
-                                <ExternalLink size={10} />
-                              </a>
+                          <div className="flex items-center gap-1.5">
+                            {app.resume?.url || app.resume?.publicId ? (
+                              <>
+                                <a
+                                  href={getResumeViewUrl(app)}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#ccf141]/10 text-[#ccf141] border border-[#ccf141]/30 hover:bg-[#ccf141]/20 font-bold text-[11px] transition-all"
+                                  title="View Resume Document in Browser"
+                                >
+                                  <Eye size={12} />
+                                  <span>Resume</span>
+                                  <ExternalLink size={10} />
+                                </a>
+                                <a
+                                  href={getResumeDownloadUrl(app)}
+                                  className="inline-flex items-center justify-center p-1 rounded-lg bg-white/[0.05] hover:bg-white/10 text-white hover:text-[#ccf141] border border-white/10 text-[11px] transition-all"
+                                  title="Direct Download Resume"
+                                >
+                                  <Download size={12} />
+                                </a>
+                              </>
                             ) : (
                               <span className="text-[10px] text-[var(--db-text-muted)] italic">
                                 No file
@@ -823,16 +848,26 @@ const DashboardHiring = () => {
                       <span>{app.phone}</span>
                     </a>
 
-                    <div className="flex items-center gap-2">
-                      {app.resume?.url && (
-                        <a
-                          href={app.resume.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="px-2.5 py-1 rounded-lg bg-[#ccf141]/20 text-[#ccf141] font-bold text-xs"
-                        >
-                          Resume
-                        </a>
+                    <div className="flex items-center gap-1.5">
+                      {(app.resume?.url || app.resume?.publicId) && (
+                        <>
+                          <a
+                            href={getResumeViewUrl(app)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#ccf141]/20 text-[#ccf141] font-bold text-xs"
+                          >
+                            <Eye size={12} />
+                            Resume
+                          </a>
+                          <a
+                            href={getResumeDownloadUrl(app)}
+                            className="p-1 rounded-lg bg-white/10 text-white hover:text-[#ccf141]"
+                            title="Download Resume"
+                          >
+                            <Download size={12} />
+                          </a>
+                        </>
                       )}
                       <button
                         onClick={() => {
@@ -1163,17 +1198,31 @@ const DashboardHiring = () => {
                   </h3>
                   <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-4 space-y-3">
                     <div className="flex flex-wrap items-center gap-3">
-                      {selectedApp.resume?.url ? (
-                        <a
-                          href={selectedApp.resume.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#ccf141] text-black font-black text-xs hover:bg-[#bfe636] transition-all"
-                        >
-                          <Download size={14} />
-                          <span>View / Download Resume Document</span>
-                          <ExternalLink size={12} />
-                        </a>
+                      {selectedApp.resume?.url || selectedApp.resume?.publicId ? (
+                        <>
+                          <a
+                            href={getResumeViewUrl(selectedApp)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#ccf141] text-black font-black text-xs hover:bg-[#bfe636] transition-all shadow-md"
+                          >
+                            <Eye size={14} />
+                            <span>Open Resume in New Tab</span>
+                            <ExternalLink size={12} />
+                          </a>
+                          <a
+                            href={getResumeDownloadUrl(selectedApp)}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.08] hover:bg-white/15 text-white font-bold text-xs transition-all border border-white/10"
+                          >
+                            <Download size={14} />
+                            <span>Download Resume</span>
+                          </a>
+                          {selectedApp.resume?.originalName && (
+                            <span className="text-xs text-zinc-400 bg-white/[0.04] px-2.5 py-1.5 rounded-lg border border-white/5 font-mono">
+                              📄 {selectedApp.resume.originalName}
+                            </span>
+                          )}
+                        </>
                       ) : (
                         <span className="text-zinc-400 italic">No resume attached</span>
                       )}
@@ -1194,6 +1243,29 @@ const DashboardHiring = () => {
                         </a>
                       )}
                     </div>
+
+                    {/* Live Document Preview Panel */}
+                    {(selectedApp.resume?.url || selectedApp.resume?.publicId) && (
+                      <div className="rounded-xl overflow-hidden border border-white/10 bg-black/60 shadow-inner mt-3">
+                        <div className="flex items-center justify-between px-3.5 py-2 bg-white/[0.03] border-b border-white/10 text-xs text-zinc-300">
+                          <span className="font-semibold flex items-center gap-1.5 text-zinc-300">
+                            <FileText size={13} className="text-[#ccf141]" />
+                            Live Document Viewer
+                          </span>
+                          <a
+                            href={getResumeDownloadUrl(selectedApp)}
+                            className="text-[11px] text-[#ccf141] hover:underline flex items-center gap-1"
+                          >
+                            <Download size={11} /> Direct Download
+                          </a>
+                        </div>
+                        <iframe
+                          src={getResumeViewUrl(selectedApp)}
+                          title="Resume Document Preview"
+                          className="w-full h-[450px] bg-zinc-950 border-0"
+                        />
+                      </div>
+                    )}
 
                     {selectedApp.additionalInfo && (
                       <div className="pt-2 border-t border-white/10">

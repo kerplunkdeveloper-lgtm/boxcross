@@ -1,4 +1,6 @@
 const path = require("path");
+const http = require("http");
+const https = require("https");
 const mongoose = require("mongoose");
 const HiringApplication = require("../models/HiringApplication");
 const cloudinary = require("../config/cloudinary");
@@ -8,17 +10,31 @@ const cloudinary = require("../config/cloudinary");
 // --------------------------------------------------------------------------
 const uploadResumeToCloudinary = (fileBuffer, originalname) => {
   return new Promise((resolve, reject) => {
-    // Sanitize file name for public ID
-    const cleanName = path
+    const ext = path.extname(originalname || "").toLowerCase();
+    const cleanBase = path
       .parse(originalname || "resume")
       .name.replace(/[^a-zA-Z0-9_-]/g, "_");
 
+    // For non-image documents (.doc, .docx, .txt), Cloudinary requires the extension in public_id
+    const isDoc = [".doc", ".docx", ".txt", ".rtf"].includes(ext);
+    const resourceType = isDoc ? "raw" : "auto";
+    const publicId = isDoc
+      ? `${Date.now()}-${cleanBase}${ext}`
+      : `${Date.now()}-${cleanBase}`;
+
+    const uploadOptions = {
+      folder: "bxc_career_resumes",
+      resource_type: resourceType,
+      public_id: publicId,
+      access_mode: "public",
+    };
+
+    if (ext === ".pdf") {
+      uploadOptions.format = "pdf";
+    }
+
     const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: "bxc_career_resumes",
-        resource_type: "auto",
-        public_id: `${Date.now()}-${cleanName}`,
-      },
+      uploadOptions,
       (error, result) => {
         if (error) return reject(error);
         resolve(result);
@@ -692,6 +708,177 @@ const getHiringFormConfig = (req, res) => {
   });
 };
 
+// --------------------------------------------------------------------------
+// @desc    Stream or download resume file with authentication proxy
+// @route   GET /api/hiring/:id/resume
+// @access  Public / Admin
+// --------------------------------------------------------------------------
+const streamResume = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const isDownload =
+      req.query.download === "1" ||
+      req.query.download === "true" ||
+      req.path.endsWith("/download");
+
+    let application = null;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      application = await HiringApplication.findById(id);
+    }
+    if (!application) {
+      application = await HiringApplication.findOne({ applicationId: id });
+    }
+
+    if (!application) {
+      return res.status(404).send("Application not found.");
+    }
+
+    const resume = application.resume;
+    if (!resume || (!resume.url && !resume.publicId)) {
+      return res
+        .status(404)
+        .send("No resume document attached to this application.");
+    }
+
+    // Determine filename
+    let filename =
+      resume.originalName ||
+      `${application.fullName || "applicant"}_resume.pdf`;
+    filename = filename.replace(/[/\\?%*:|"<>]/g, "_");
+    const ext = path.extname(filename).toLowerCase();
+
+    // Determine content type
+    let contentType = resume.fileType;
+    if (!contentType || contentType === "application/octet-stream") {
+      if (ext === ".pdf") contentType = "application/pdf";
+      else if (ext === ".docx")
+        contentType =
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+      else if (ext === ".doc") contentType = "application/msword";
+      else if (ext === ".png") contentType = "image/png";
+      else if (ext === ".jpg" || ext === ".jpeg") contentType = "image/jpeg";
+      else if (ext === ".webp") contentType = "image/webp";
+      else contentType = "application/pdf";
+    }
+
+    // Helper to fetch remote stream with Cloudinary Basic Auth (bypasses restricted delivery)
+    const fetchRemoteStream = (targetUrl, redirectCount = 0) => {
+      return new Promise((resolve, reject) => {
+        if (redirectCount > 5) return reject(new Error("Too many redirects"));
+
+        const client = targetUrl.startsWith("https") ? https : http;
+        const auth = Buffer.from(
+          `${process.env.CLOUDINARY_API_KEY}:${process.env.CLOUDINARY_API_SECRET}`
+        ).toString("base64");
+
+        const headers = {
+          "User-Agent": "BoxCross-Backend/1.0",
+        };
+        if (targetUrl.includes("cloudinary.com")) {
+          headers["Authorization"] = `Basic ${auth}`;
+        }
+
+        const request = client.get(targetUrl, { headers }, (response) => {
+          if (
+            response.statusCode >= 300 &&
+            response.statusCode < 400 &&
+            response.headers.location
+          ) {
+            let nextUrl = response.headers.location;
+            if (nextUrl.startsWith("/")) {
+              const u = new URL(targetUrl);
+              nextUrl = `${u.origin}${nextUrl}`;
+            }
+            return resolve(fetchRemoteStream(nextUrl, redirectCount + 1));
+          }
+
+          if (response.statusCode >= 200 && response.statusCode < 300) {
+            return resolve(response);
+          }
+
+          reject(new Error(`Upstream returned HTTP ${response.statusCode}`));
+        });
+
+        request.on("error", reject);
+      });
+    };
+
+    // Candidates URLs to try in order
+    const urlsToTry = [];
+
+    // 1. Signed private download URL if publicId exists
+    if (resume.publicId) {
+      try {
+        const isDoc = [".doc", ".docx", ".txt", ".rtf"].includes(ext);
+        const resourceType = isDoc
+          ? "raw"
+          : resume.url?.includes("/raw/")
+          ? "raw"
+          : "image";
+        const format = ext ? ext.replace(".", "") : isDoc ? "" : "pdf";
+
+        const signedUrl = cloudinary.utils.private_download_url(
+          resume.publicId,
+          format,
+          {
+            resource_type: resourceType,
+            type: "upload",
+            expires_at: Math.floor(Date.now() / 1000) + 7200,
+          }
+        );
+        if (signedUrl) urlsToTry.push(signedUrl);
+      } catch (err) {
+        console.warn("Could not generate signed download URL:", err.message);
+      }
+    }
+
+    // 2. Direct stored URL
+    if (resume.url && !urlsToTry.includes(resume.url)) {
+      urlsToTry.push(resume.url);
+    }
+
+    let remoteStream = null;
+    let fetchError = null;
+
+    for (const testUrl of urlsToTry) {
+      try {
+        remoteStream = await fetchRemoteStream(testUrl);
+        if (remoteStream) break;
+      } catch (err) {
+        fetchError = err;
+      }
+    }
+
+    if (!remoteStream) {
+      console.error("Stream Resume Fetch Failed:", fetchError?.message);
+      if (resume.url) {
+        return res.redirect(resume.url);
+      }
+      return res
+        .status(502)
+        .send("Failed to retrieve resume document from storage.");
+    }
+
+    res.setHeader("Content-Type", contentType);
+    res.setHeader(
+      "Content-Disposition",
+      `${isDownload ? "attachment" : "inline"}; filename="${encodeURIComponent(
+        filename
+      )}"`
+    );
+    res.setHeader("Cache-Control", "private, max-age=3600");
+
+    if (remoteStream.headers["content-length"]) {
+      res.setHeader("Content-Length", remoteStream.headers["content-length"]);
+    }
+
+    remoteStream.pipe(res);
+  } catch (error) {
+    console.error("Stream Resume Controller Error:", error);
+    res.status(500).send("Internal server error while retrieving resume.");
+  }
+};
+
 module.exports = {
   submitApplication,
   getApplications,
@@ -700,4 +887,5 @@ module.exports = {
   updateApplication,
   deleteApplication,
   getHiringFormConfig,
+  streamResume,
 };

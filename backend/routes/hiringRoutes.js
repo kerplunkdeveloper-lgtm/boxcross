@@ -9,6 +9,7 @@ const {
   updateApplication,
   deleteApplication,
   getHiringFormConfig,
+  streamResume,
 } = require("../controllers/hiringController");
 
 // Public endpoints
@@ -26,7 +27,14 @@ router.get("/stats", getHiringStats);
 // 4. Get all applications with search, status/position/experience filters & pagination
 router.get("/", getApplications);
 
-// 5. Get single application by MongoDB _id or applicationId (e.g. BXC-APP-...)
+// 5. Resume streaming / download endpoint (bypasses Cloudinary restricted delivery)
+router.get("/:id/resume", streamResume);
+router.get("/:id/resume/download", (req, res, next) => {
+  req.query.download = "1";
+  return streamResume(req, res, next);
+});
+
+// 6. Get single application by MongoDB _id or applicationId (e.g. BXC-APP-...)
 router.get("/:id", getApplicationById);
 
 // 6. Update application status, schedule interview, or add admin notes
