@@ -475,16 +475,17 @@ const defaultMembershipPlans = [
   },
   {
     key: "duo",
-    title: "BXC DUO",
-    subtitle: "2 PERSON PASS",
-    sessionInfo: "Five coached sessions a week for 2 members across your chosen pathways",
-    desc: "Five coached sessions a week for 2 members across your chosen pathways.",
+    title: "BXC DUO - CORE",
+    subtitle: "2 PERSON PASS • ONE PATHWAY",
+    sessionInfo: "Five coached sessions a week for 2 members across one chosen pathway (Boxing, HYROX or Strength Training)",
+    desc: "Five coached sessions a week for 2 members across one chosen pathway (Boxing, HYROX or Strength Training).",
     starterPrice: "6,800",
     dailyRate: "₹224",
     dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
     dailyComparison: "Two coffees & breakfast for two.",
     features: [
       "Two memberships under one account",
+      "One pathway (Boxing, HYROX or Strength Training)",
       "Five coached sessions a week for both members",
       "Partner workout programming & benchmarks",
       "Full open gym & recovery lounge access"
@@ -586,6 +587,244 @@ const defaultMembershipPlans = [
         ],
         tag: "SAVE ₹64,800",
         buttonText: "SAVE ₹64,800",
+        isPopular: false
+      }
+    ],
+    isComingSoon: false
+  },
+  {
+    key: "duo_athlete",
+    title: "BXC DUO - ATHLETE",
+    subtitle: "2 PERSON PASS • TWO PATHWAYS",
+    sessionInfo: "Five coached sessions a week for 2 members across two disciplines (Boxing + HYROX or Boxing + Strength Training)",
+    desc: "Five coached sessions a week for 2 members across two disciplines (Boxing + HYROX or Boxing + Strength Training).",
+    starterPrice: "9,600",
+    dailyRate: "₹315",
+    dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
+    dailyComparison: "Lunch for two.",
+    features: [
+      "Two memberships under one account",
+      "Two disciplines / pathways (Boxing + HYROX or Boxing + Strength Training)",
+      "Five coached sessions a week for both members",
+      "Partner hybrid benchmarks & progress tracking",
+      "Full arena facilities & recovery lounge"
+    ],
+    benefits: [
+      {
+        boldText: "Two pathways, twice the motivation.",
+        normalText: "Combine Boxing and Strength or HYROX side by side."
+      },
+      {
+        boldText: "Break plateaus together.",
+        normalText: "Complementary disciplines keep both partners progressing consistently."
+      },
+      {
+        boldText: "Coached side-by-side.",
+        normalText: "Train as a team with dedicated coaches pushing you both."
+      },
+      {
+        boldText: "Better value, together.",
+        normalText: "Complete two-pathway arena access priced for two athletes."
+      }
+    ],
+    plans: [
+      {
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "12,000",
+        perMonth: "12,000",
+        originalPrice: "",
+        totalPrice: "12,000",
+        highlights: [
+          "Five coached sessions a week",
+          "Two disciplines access for 2",
+          "Full arena facilities"
+        ],
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+        isPopular: false
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "SAVE ₹2,000",
+        price: "34,000",
+        perMonth: "11,333",
+        originalPrice: "36,000",
+        totalPrice: "34,000",
+        highlights: [
+          "Five coached sessions a week",
+          "Held rate for full term",
+          "Joint coach assessment"
+        ],
+        tag: "SAVE ₹2,000",
+        buttonText: "SAVE ₹2,000",
+        isPopular: false
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "SAVE ₹8,000",
+        price: "64,000",
+        perMonth: "10,667",
+        originalPrice: "72,000",
+        totalPrice: "64,000",
+        highlights: [
+          "Five coached sessions a week",
+          "Locked rate for both members",
+          "Partner progress card"
+        ],
+        tag: "SAVE ₹8,000",
+        buttonText: "SAVE ₹8,000",
+        isPopular: true
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "SAVE ₹28,800",
+        price: "115,200",
+        perMonth: "9,600",
+        originalPrice: "144,000",
+        totalPrice: "115,200",
+        highlights: [
+          "Five coached sessions a week",
+          "Maximum partner discount",
+          "Founding Wall duo recognition"
+        ],
+        tag: "SAVE ₹28,800",
+        buttonText: "SAVE ₹28,800",
+        isPopular: false
+      },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹91,200",
+        price: "196,800",
+        perMonth: "8,200",
+        originalPrice: "288,000",
+        totalPrice: "196,800",
+        highlights: [
+          "Five coached sessions a week",
+          "2-Year rate freeze for both partners",
+          "Founding Wall duo recognition"
+        ],
+        tag: "SAVE ₹91,200",
+        buttonText: "SAVE ₹91,200",
+        isPopular: false
+      }
+    ],
+    isComingSoon: false
+  },
+  {
+    key: "duo_arena",
+    title: "BXC DUO - ARENA",
+    subtitle: "2 PERSON PASS • EVERYTHING",
+    sessionInfo: "Five coached sessions a week for 2 members, every pathway, every class (Boxing + HYROX + Strength Training)",
+    desc: "Five coached sessions a week for 2 members, every pathway, every class (Boxing + HYROX + Strength Training).",
+    starterPrice: "13,600",
+    dailyRate: "₹447",
+    dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
+    dailyComparison: "Dinner for two.",
+    features: [
+      "Membership for Two",
+      "Every pathway, every class (Boxing + HYROX + Strength Training)",
+      "Five coached sessions a week for both members",
+      "Priority ring & arena floor for both",
+      "VIP Duo member perks & passes"
+    ],
+    benefits: [
+      {
+        boldText: "Train without limits together.",
+        normalText: "Five days, every discipline, nothing held back for both partners."
+      },
+      {
+        boldText: "Your shared second home.",
+        normalText: "After home and work, your arena community awaits."
+      },
+      {
+        boldText: "Priority on everything.",
+        normalText: "Classes, the ring, the open floor, together."
+      },
+      {
+        boldText: "Peak partner performance.",
+        normalText: "Unrestricted arena mastery built together."
+      }
+    ],
+    plans: [
+      {
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "17,000",
+        perMonth: "17,000",
+        originalPrice: "",
+        totalPrice: "17,000",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines for 2",
+          "Unrestricted arena access"
+        ],
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+        isPopular: false
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "SAVE ₹3,000",
+        price: "48,000",
+        perMonth: "16,000",
+        originalPrice: "51,000",
+        totalPrice: "48,000",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "Joint coach assessment"
+        ],
+        tag: "SAVE ₹3,000",
+        buttonText: "SAVE ₹3,000",
+        isPopular: false
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "SAVE ₹12,000",
+        price: "90,000",
+        perMonth: "15,000",
+        originalPrice: "102,000",
+        totalPrice: "90,000",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "Guest passes included"
+        ],
+        tag: "SAVE ₹12,000",
+        buttonText: "SAVE ₹12,000",
+        isPopular: true
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "SAVE ₹40,800",
+        price: "163,200",
+        perMonth: "13,600",
+        originalPrice: "204,000",
+        totalPrice: "163,200",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "VIP Wall & passes for two"
+        ],
+        tag: "SAVE ₹40,800",
+        buttonText: "SAVE ₹40,800",
+        isPopular: false
+      },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹129,600",
+        price: "278,400",
+        perMonth: "11,600",
+        originalPrice: "408,000",
+        totalPrice: "278,400",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "2-Year rate freeze for both"
+        ],
+        tag: "SAVE ₹129,600",
+        buttonText: "SAVE ₹129,600",
         isPopular: false
       }
     ],
@@ -718,8 +957,18 @@ exports.getMembershipPlans = async (req, res) => {
   try {
     // Permanently remove old legacy plans from MongoDB
     await MembershipPlan.deleteMany({
-      key: { $nin: ["core", "athlete", "arena", "junior", "duo", "family"] }
+      key: { $nin: ["core", "athlete", "arena", "junior", "duo", "duo_core", "duo_athlete", "duo_arena", "family"] }
     });
+
+    // Update legacy BXC DUO title to BXC DUO - CORE
+    const existingDuo = await MembershipPlan.findOne({ key: "duo" });
+    if (existingDuo && (!existingDuo.title || existingDuo.title === "BXC DUO")) {
+      existingDuo.title = "BXC DUO - CORE";
+      existingDuo.subtitle = "2 PERSON PASS • ONE PATHWAY";
+      existingDuo.sessionInfo = "Five coached sessions a week for 2 members across one chosen pathway (Boxing, HYROX or Strength Training)";
+      existingDuo.desc = "Five coached sessions a week for 2 members across one chosen pathway (Boxing, HYROX or Strength Training).";
+      await existingDuo.save();
+    }
 
     // Ensure default plans exist and dynamically add 24 MONTHS plan if missing in DB
     for (const defaultPlan of defaultMembershipPlans) {
@@ -744,15 +993,15 @@ exports.getMembershipPlans = async (req, res) => {
       { $set: { isComingSoon: true } }
     );
     await MembershipPlan.updateMany(
-      { key: { $in: ["core", "junior", "duo", "family"] }, isComingSoon: { $exists: false } },
+      { key: { $in: ["core", "junior", "duo", "duo_core", "duo_athlete", "duo_arena", "family"] }, isComingSoon: { $exists: false } },
       { $set: { isComingSoon: false } }
     );
 
     plans = await MembershipPlan.find({
-      key: { $in: ["core", "athlete", "arena", "junior", "duo", "family"] }
+      key: { $in: ["core", "athlete", "arena", "junior", "duo", "duo_core", "duo_athlete", "duo_arena", "family"] }
     });
 
-    const sortOrder = ["core", "athlete", "arena", "duo", "family", "junior"];
+    const sortOrder = ["core", "athlete", "arena", "duo", "duo_core", "duo_athlete", "duo_arena", "family", "junior"];
     plans.sort((a, b) => {
       const idxA = sortOrder.indexOf(a.key?.toLowerCase());
       const idxB = sortOrder.indexOf(b.key?.toLowerCase());
@@ -779,7 +1028,16 @@ exports.getMembershipPlans = async (req, res) => {
 // @access  Public
 exports.getMembershipPlanByKey = async (req, res) => {
   try {
-    const plan = await MembershipPlan.findOne({ key: req.params.key });
+    const searchKey = req.params.key?.toLowerCase();
+    const plan = await MembershipPlan.findOne({
+      $or: [
+        { key: req.params.key },
+        { key: { $regex: new RegExp(`^${req.params.key}$`, "i") } },
+        ...(searchKey === "duo" || searchKey === "duo_core"
+          ? [{ key: "duo" }, { key: "duo_core" }]
+          : [])
+      ]
+    });
     if (!plan) {
       return res.status(404).json({
         success: false,

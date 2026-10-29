@@ -100,7 +100,17 @@ const DashboardMemberships = () => {
 
   const sortPlansOrder = (planList) => {
     if (!Array.isArray(planList)) return [];
-    const sortOrder = ["core", "athlete", "arena", "duo", "family", "junior"];
+    const sortOrder = [
+      "core",
+      "athlete",
+      "arena",
+      "duo",
+      "duo_core",
+      "duo_athlete",
+      "duo_arena",
+      "family",
+      "junior",
+    ];
     return [...planList].sort((a, b) => {
       const idxA = sortOrder.indexOf(a.key?.toLowerCase());
       const idxB = sortOrder.indexOf(b.key?.toLowerCase());

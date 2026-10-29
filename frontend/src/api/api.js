@@ -15,8 +15,9 @@ API.interceptors.request.use(
   (config) => {
     const isAthleteRoute =
       typeof window !== "undefined" &&
-      (window.location.pathname.startsWith("/athlete") ||
-        window.location.pathname.startsWith("/member"));
+      (window.location.pathname.startsWith("/athlete-dashboard") ||
+        window.location.pathname.startsWith("/athlete-login") ||
+        window.location.pathname.startsWith("/member-dashboard"));
     const token = isAthleteRoute
       ? localStorage.getItem("boxcross_athlete_token") ||
         localStorage.getItem("boxcross_token")

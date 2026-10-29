@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
 
 import {
@@ -112,9 +113,61 @@ const programs = [
       </svg>
     ),
     title: "BXC DUO",
-    subtitle: "COUPLE / BUDDY MEMBERSHIP",
-    desc: "TWO PEOPLE. DIFFERENT GOALS. ONE ARENA.",
-    price: "4,999",
+    subtitle: "2 PERSON PASS • CORE, ATHLETE & ARENA",
+    desc: "Five coached sessions a week for 2 members across Boxing, HYROX or Strength Training. Choose Core, Athlete, or Arena with partner accountability.",
+    price: "6,800",
+    image: duoCoupleImg,
+  },
+  {
+    id: "duo_athlete",
+    icon: (
+      <svg
+        width="45"
+        height="45"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#ccf141"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-[#ccf141]"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+    title: "BXC DUO - ATHLETE",
+    subtitle: "2 PERSON PASS • TWO PATHWAYS",
+    desc: "Five coached sessions a week for 2 members across two disciplines (Boxing + HYROX or Boxing + Strength Training).",
+    price: "9,600",
+    image: duoCoupleImg,
+  },
+  {
+    id: "duo_arena",
+    icon: (
+      <svg
+        width="45"
+        height="45"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="#ccf141"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="text-[#ccf141]"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+    title: "BXC DUO - ARENA",
+    subtitle: "2 PERSON PASS • EVERYTHING",
+    desc: "Five coached sessions a week for 2 members, every pathway, every class (Boxing + HYROX + Strength Training).",
+    price: "13,600",
     image: duoCoupleImg,
   },
   {
@@ -669,8 +722,8 @@ const pricingData = {
   },
   duo: {
     title: "BXC DUO",
-    subtitle: "2 PERSON PASS",
-    sessionInfo: "Five coached sessions a week for 2 members across your chosen pathways",
+    subtitle: "2 PERSON PASS • CORE, ATHLETE & ARENA",
+    sessionInfo: "Five coached sessions a week for 2 members across one chosen pathway (Boxing, HYROX or Strength Training)",
     dailyRate: "₹224",
     dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
     dailyComparison: "Two coffees & breakfast for two.",
@@ -824,7 +877,233 @@ const pricingData = {
         buttonText: "SAVE ₹64,800",
       },
     ],
-    starterPrice: "4,999",
+    starterPrice: "6,800",
+  },
+  duo_athlete: {
+    title: "BXC DUO - ATHLETE",
+    subtitle: "2 PERSON PASS • TWO PATHWAYS",
+    sessionInfo: "Five coached sessions a week for 2 members across two disciplines (Boxing + HYROX or Boxing + Strength Training)",
+    dailyRate: "₹315",
+    dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
+    dailyComparison: "Lunch for two.",
+    features: [
+      "Membership for Two",
+      "Two disciplines / pathways (Boxing + HYROX or Boxing + Strength Training)",
+      "Structured Coaching for Both",
+      "Partner Hybrid Benchmarks",
+      "Workout Progress Tracking",
+      "BXC Tribe & Lounge Access",
+    ],
+    benefits: [
+      {
+        boldText: "Two pathways, twice the motivation.",
+        normalText: "Combine Boxing and Strength or HYROX side by side.",
+      },
+      {
+        boldText: "Break plateaus together.",
+        normalText: "Complementary disciplines keep both partners progressing consistently.",
+      },
+      {
+        boldText: "Coached side-by-side.",
+        normalText: "Train as a team with dedicated coaches pushing you both.",
+      },
+      {
+        boldText: "Better value, together.",
+        normalText: "Complete two-pathway arena access priced for two athletes.",
+      },
+    ],
+    plans: [
+      {
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "12,000",
+        perMonth: "12,000",
+        originalPrice: "",
+        totalPrice: "12,000",
+        highlights: [
+          "Five coached sessions a week",
+          "Two disciplines access for 2",
+          "Full arena facilities",
+        ],
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "SAVE ₹2,000",
+        price: "34,000",
+        perMonth: "11,333",
+        originalPrice: "36,000",
+        totalPrice: "34,000",
+        highlights: [
+          "Five coached sessions a week",
+          "Held rate for full term",
+          "Joint coach assessment",
+        ],
+        tag: "SAVE ₹2,000",
+        buttonText: "SAVE ₹2,000",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "SAVE ₹8,000",
+        price: "64,000",
+        perMonth: "10,667",
+        originalPrice: "72,000",
+        totalPrice: "64,000",
+        highlights: [
+          "Five coached sessions a week",
+          "Locked rate for both members",
+          "Partner progress card",
+        ],
+        tag: "SAVE ₹8,000",
+        buttonText: "SAVE ₹8,000",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "SAVE ₹28,800",
+        price: "115,200",
+        perMonth: "9,600",
+        originalPrice: "144,000",
+        totalPrice: "115,200",
+        highlights: [
+          "Five coached sessions a week",
+          "Maximum partner discount",
+          "Founding Wall duo recognition",
+        ],
+        tag: "SAVE ₹28,800",
+        buttonText: "SAVE ₹28,800",
+      },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹91,200",
+        price: "196,800",
+        perMonth: "8,200",
+        originalPrice: "288,000",
+        totalPrice: "196,800",
+        highlights: [
+          "Five coached sessions a week",
+          "2-Year rate freeze for both partners",
+          "Founding Wall duo recognition",
+        ],
+        tag: "SAVE ₹91,200",
+        buttonText: "SAVE ₹91,200",
+      },
+    ],
+    starterPrice: "9,600",
+  },
+  duo_arena: {
+    title: "BXC DUO - ARENA",
+    subtitle: "2 PERSON PASS • EVERYTHING",
+    sessionInfo: "Five coached sessions a week for 2 members, every pathway, every class (Boxing + HYROX + Strength Training)",
+    dailyRate: "₹447",
+    dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
+    dailyComparison: "Dinner for two.",
+    features: [
+      "Membership for Two",
+      "Every pathway, every class (Boxing + HYROX + Strength Training)",
+      "Priority Ring & Arena Floor",
+      "VIP Duo Member Perks",
+      "Comprehensive Progress Tracking",
+      "Unrestricted Arena Facilities",
+    ],
+    benefits: [
+      {
+        boldText: "Train without limits together.",
+        normalText: "Five days, every discipline, nothing held back for both partners.",
+      },
+      {
+        boldText: "Your shared second home.",
+        normalText: "After home and work, your arena community awaits.",
+      },
+      {
+        boldText: "Priority on everything.",
+        normalText: "Classes, the ring, the open floor, together.",
+      },
+      {
+        boldText: "Peak partner performance.",
+        normalText: "Unrestricted arena mastery built together.",
+      },
+    ],
+    plans: [
+      {
+        months: "1 MONTH",
+        subtitle: "STANDARD",
+        price: "17,000",
+        perMonth: "17,000",
+        originalPrice: "",
+        totalPrice: "17,000",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines for 2",
+          "Unrestricted arena access",
+        ],
+        tag: "STANDARD",
+        buttonText: "STANDARD",
+      },
+      {
+        months: "3 MONTHS",
+        subtitle: "SAVE ₹3,000",
+        price: "48,000",
+        perMonth: "16,000",
+        originalPrice: "51,000",
+        totalPrice: "48,000",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "Joint coach assessment",
+        ],
+        tag: "SAVE ₹3,000",
+        buttonText: "SAVE ₹3,000",
+      },
+      {
+        months: "6 MONTHS",
+        subtitle: "SAVE ₹12,000",
+        price: "90,000",
+        perMonth: "15,000",
+        originalPrice: "102,000",
+        totalPrice: "90,000",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "Guest passes included",
+        ],
+        tag: "SAVE ₹12,000",
+        buttonText: "SAVE ₹12,000",
+        isPopular: true,
+      },
+      {
+        months: "12 MONTHS",
+        subtitle: "SAVE ₹40,800",
+        price: "163,200",
+        perMonth: "13,600",
+        originalPrice: "204,000",
+        totalPrice: "163,200",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "VIP Wall & passes for two",
+        ],
+        tag: "SAVE ₹40,800",
+        buttonText: "SAVE ₹40,800",
+      },
+      {
+        months: "24 MONTHS",
+        subtitle: "SAVE ₹129,600",
+        price: "278,400",
+        perMonth: "11,600",
+        originalPrice: "408,000",
+        totalPrice: "278,400",
+        highlights: [
+          "Five coached sessions a week",
+          "All pathways & disciplines",
+          "2-Year rate freeze for both",
+        ],
+        tag: "SAVE ₹129,600",
+        buttonText: "SAVE ₹129,600",
+      },
+    ],
+    starterPrice: "13,600",
   },
   family: {
     title: "BXC FAMILY FIT",
@@ -988,6 +1267,7 @@ const pricingData = {
 };
 
 const Membership = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("core");
 
   useEffect(() => {
@@ -1078,7 +1358,7 @@ const Membership = () => {
           const newPricingData = { ...pricingData };
           plans.forEach((plan) => {
             const keyLower = plan.key?.toLowerCase();
-            if (["core", "athlete", "arena", "junior", "duo", "family"].includes(keyLower)) {
+            if (["core", "athlete", "arena", "junior", "duo", "duo_core", "duo_athlete", "duo_arena", "family"].includes(keyLower)) {
               newPricingData[keyLower] = {
                 ...newPricingData[keyLower],
                 _id: plan._id,
@@ -1170,10 +1450,10 @@ const Membership = () => {
   const activeData = dynamicPricingData[activeTab] || pricingData[activeTab];
 
   const primaryPrograms = dynamicPrograms.filter(
-    (p) => p.id !== "junior" && p.id !== "duo" && p.id !== "family"
+    (p) => ["core", "athlete", "arena"].includes(p.id?.toLowerCase())
   );
   const morePrograms = dynamicPrograms.filter(
-    (p) => p.id === "duo" || p.id === "family"
+    (p) => p.id?.toLowerCase() === "duo" || p.id?.toLowerCase() === "family"
   );
   const juniorProgram = dynamicPrograms.find((p) => p.id === "junior");
 
@@ -1194,7 +1474,7 @@ const Membership = () => {
 
   // Auto-expand dropdown when duo or family plan is selected
   useEffect(() => {
-    if (activeTab === "duo" || activeTab === "family") {
+    if (activeTab?.toLowerCase().includes("duo") || activeTab === "family") {
       setShowMorePrograms(true);
     }
   }, [activeTab]);
@@ -1207,6 +1487,19 @@ const Membership = () => {
 
   const handleScrollToPlans = (e, id) => {
     e.stopPropagation();
+    if (["core", "athlete", "arena"].includes(id.toLowerCase())) {
+      navigate(`/membership/${id.toLowerCase()}`);
+      return;
+    }
+    if (id.toLowerCase() === "duo" || id.toLowerCase().includes("duo")) { navigate("/duo"); return; }
+    if (id.toLowerCase() === "family" || id.toLowerCase().includes("family")) {
+      navigate("/family");
+      return;
+    }
+    if (id.toLowerCase() === "junior") {
+      navigate("/junior");
+      return;
+    }
     setActiveTab(id);
     // Smooth scroll to the pricing section
     if (pricingRef.current) {
@@ -1243,7 +1536,19 @@ const Membership = () => {
         whileHover={{ y: -6, transition: { type: "spring", stiffness: 350, damping: 25 } }}
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-        onClick={() => setActiveTab(prog.id)}
+        onClick={() => {
+          if (["core", "athlete", "arena"].includes(prog.id.toLowerCase())) {
+            navigate(`/membership/${prog.id.toLowerCase()}`);
+          } else if (prog.id.toLowerCase() === "duo" || prog.id.toLowerCase().includes("duo")) {
+            navigate("/duo");
+          } else if (prog.id.toLowerCase() === "family" || prog.id.toLowerCase().includes("family")) {
+            navigate("/family");
+          } else if (prog.id.toLowerCase() === "junior") {
+            navigate("/junior");
+          } else {
+            setActiveTab(prog.id);
+          }
+        }}
         className={`w-full md:w-[calc(50%-14px)] ${
           isWideCard ? "lg:w-[calc(50%-14px)]" : "lg:w-[calc(33.333%-19px)]"
         } max-w-md lg:max-w-none relative rounded-2xl md:rounded-xl p-5 sm:p-6 md:p-8 min-h-[350px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[440px] flex flex-col cursor-pointer transition-all duration-300 border group overflow-hidden ${
@@ -1469,7 +1774,7 @@ const Membership = () => {
                   fontWeight: "600",
                 }}
               >
-                STEP 1
+                OUR PROGRAMS
               </span>
             </div>
 
@@ -1627,7 +1932,7 @@ const Membership = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                onClick={() => setActiveTab(juniorProgram.id)}
+                onClick={() => navigate("/junior")}
                 className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${activeTab === juniorProgram.id
                   ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
                   : "border-zinc-800 hover:border-zinc-700"
@@ -1812,8 +2117,10 @@ const Membership = () => {
           )}
         </div>
 
-        {/* STEP 2: CHOOSE PLAN */}
+        {/* STEP 2: CHOOSE PLAN - Hidden on main membership page as requested */}
+
         <ChoosePlan
+          hideAll={true}
           ref={pricingRef}
           activeData={activeData}
           activeTab={activeTab}

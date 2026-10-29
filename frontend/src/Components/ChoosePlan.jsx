@@ -72,7 +72,11 @@ const getPlanMobileBullets = (plan, currentTitle) => {
   ) {
     return [
       "Membership for Two",
-      "Boxing / Strength Training",
+      currentTitle.toUpperCase().includes("ARENA")
+        ? "All Pathways: Boxing + HYROX + Strength"
+        : currentTitle.toUpperCase().includes("ATHLETE")
+        ? "Two Disciplines: Boxing + Strength / HYROX"
+        : "One Pathway: Boxing / Strength / HYROX",
       "Individual Training Pathways",
       "Structured Coaching",
       "Performance Assessment",
@@ -159,10 +163,20 @@ const getPlanMobileBullets = (plan, currentTitle) => {
 
 const ChoosePlan = React.forwardRef(
   (
-    { activeData, activeTab, setActiveTab, handlePlanSelect, programs },
+    {
+      activeData,
+      activeTab,
+      setActiveTab,
+      handlePlanSelect,
+      programs,
+      hideTabs = false,
+      sectionTitle = null,
+      hideAll = false,
+      stepBadge = null,
+    },
     ref,
   ) => {
-    if (!activeData) return null;
+    if (hideAll || !activeData) return null;
 
     const currentTitle = activeData.title || "CORE";
     const currentSubtitle = activeData.subtitle || "ONE PATHWAY";
@@ -686,6 +700,35 @@ const ChoosePlan = React.forwardRef(
       };
     }, [amountInPaise, selectedPlanIdx, plans, currentTitle, razorpayKey]);
 
+    const titleStr = typeof currentTitle === "string" ? currentTitle.toUpperCase() : "";
+    const computedHeading = sectionTitle || (
+      activeTab === "core" || titleStr === "CORE" ? (
+        <>
+          CORE <span className="text-[#ccf141]">PLAN</span>
+        </>
+      ) : activeTab === "athlete" || titleStr === "ATHLETE" ? (
+        <>
+          ATHLETE <span className="text-[#ccf141]">PLAN</span>
+        </>
+      ) : activeTab === "arena" || titleStr === "ARENA" ? (
+        <>
+          ARENA <span className="text-[#ccf141]">PLAN</span>
+        </>
+      ) : activeTab === "junior" || titleStr.includes("JUNIOR") ? (
+        <>
+          JUNIOR CORE <span className="text-[#ccf141]">PLAN</span>
+        </>
+      ) : activeTab?.includes("duo") || titleStr.includes("DUO") ? (
+        <>
+          {titleStr || "BXC DUO"} <span className="text-[#ccf141]">PLAN</span>
+        </>
+      ) : (
+        <>
+          CHOOSE YOUR <span className="text-[#ccf141]">PLAN</span>
+        </>
+      )
+    );
+
     return (
       <div
         ref={ref}
@@ -701,27 +744,23 @@ const ChoosePlan = React.forwardRef(
           transition={{ duration: 0.6 }}
           className="text-center mb-8 flex flex-col items-center justify-center gap-3"
         >
-          <div>
-            <span
-              className="px-4 py-1.5 rounded-md border border-[#ccf141]/40 bg-[#ccf141]/10 text-[#ccf141] text-xs sm:text-sm uppercase tracking-widest font-black inline-flex items-center gap-2"
-              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-            >
-              <Zap size={14} className="text-[#ccf141]" />
-              STEP 2
-            </span>
-          </div>
+        
+
+        
 
           <h2
-            className="mt-1 mb-0 text-3xl sm:text-4xl md:text-5xl font-black uppercase text-white tracking-tight"
+            className="mt-1 mb-0 text-3xl sm:text-4xl font-black uppercase text-white tracking-tight"
             style={{
               fontFamily: '"BrutalTypeBold", sans-serif',
             }}
           >
-            CHOOSE YOUR <span className="text-[#ccf141]">PLAN</span>
+            {computedHeading}
+
           </h2>
 
           {/* PREMIUM PROGRAM SWITCHER TABS WITH SPIN BORDER ANIMATION */}
-          <div className="w-full flex justify-center mt-5 mb-3 px-1 sm:px-4">
+
+          <div className={`w-full flex justify-center mt-5 mb-3 px-1 sm:px-4 ${hideTabs ? "hidden" : ""}`}>
             <div className="relative inline-flex items-center p-1.5 sm:p-2 bg-[#101012]/95 backdrop-blur-xl border border-zinc-800/90 rounded-2xl sm:rounded-full shadow-[0_16px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.06)] max-w-full overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden gap-1.5 sm:gap-2">
               {programs.map((prog) => {
                 const isActive = activeTab === prog.id;
@@ -1511,4 +1550,5 @@ const ChoosePlan = React.forwardRef(
 
 ChoosePlan.displayName = "ChoosePlan";
 
+export { ChoosePlan };
 export default ChoosePlan;

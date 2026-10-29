@@ -21,6 +21,12 @@ import { HelmetProvider } from "react-helmet-async";
 
 // Lazy-load page components for code splitting & optimized initial bundle sizes
 const MembershipPage = lazy(() => import("./pages/Membership"));
+const MembershipCore = lazy(() => import("./pages/MembershipCore"));
+const MembershipAthlete = lazy(() => import("./pages/MembershipAthlete"));
+const MembershipArena = lazy(() => import("./pages/MembershipArena"));
+const MembershipJunior = lazy(() => import("./pages/MembershipJunior"));
+const MembershipFamily = lazy(() => import("./pages/MembershipFamily"));
+const MembershipDuo = lazy(() => import("./pages/MembershipDuo"));
 const Auth = lazy(() => import("./pages/Auth"));
 const DashboardLayout = lazy(() => import("./Components/DashboardLayout"));
 const DashboardHome = lazy(() => import("./pages/DashboardHome"));
@@ -191,6 +197,25 @@ const App = () => {
                 {/* Routes WITH Navbar and Footer */}
                 <Route element={<Layout />}>
                   <Route path="/" element={<MembershipPage />} />
+                  <Route path="/membership/core" element={<MembershipCore />} />
+                  <Route path="/core" element={<MembershipCore />} />
+                  <Route path="/membership/athlete" element={<MembershipAthlete />} />
+                  <Route path="/athlete" element={<MembershipAthlete />} />
+                  <Route path="/membership/arena" element={<MembershipArena />} />
+                  <Route path="/arena" element={<MembershipArena />} />
+                  <Route path="/membership/junior" element={<MembershipJunior />} />
+                  <Route path="/junior" element={<MembershipJunior />} />
+                  <Route path="/junior-core" element={<MembershipJunior />} />
+                  <Route path="/membership/junior-core" element={<MembershipJunior />} />
+                  <Route path="/membership/junior-core" element={<MembershipJunior />} />
+                  <Route path="/membership/family" element={<MembershipFamily />} />
+                  <Route path="/family" element={<MembershipFamily />} />
+                  <Route path="/membership/family-fit" element={<MembershipFamily />} />
+                  <Route path="/family-fit" element={<MembershipFamily />} />
+                  <Route path="/bxc-family-fit" element={<MembershipFamily />} />
+                  <Route path="/membership/duo" element={<MembershipDuo />} />
+                  <Route path="/duo" element={<MembershipDuo />} />
+                  <Route path="/bxc-duo" element={<MembershipDuo />} />
                   <Route path="/events" element={<Eventpage />} />
                   <Route path="/events/:id" element={<Eventpage />} />
                   <Route path="/community" element={<Community />} />

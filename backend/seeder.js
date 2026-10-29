@@ -340,6 +340,312 @@ const seedDB = async () => {
         ]
       },
       {
+        key: "duo",
+        title: "BXC DUO - CORE",
+        subtitle: "2 PERSON PASS • ONE PATHWAY",
+        sessionInfo: "Five coached sessions a week for 2 members across one chosen pathway (Boxing, HYROX or Strength Training)",
+        desc: "Five coached sessions a week for 2 members across one chosen pathway (Boxing, HYROX or Strength Training).",
+        starterPrice: "6,800",
+        dailyRate: "₹224",
+        dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
+        dailyComparison: "Two coffees & breakfast for two.",
+        features: [
+          "Two memberships under one account",
+          "One pathway (Boxing, HYROX or Strength Training)",
+          "Five coached sessions a week for both members",
+          "Partner workout programming & benchmarks",
+          "Full open gym & recovery lounge access"
+        ],
+        benefits: [
+          {
+            boldText: "You never skip when someone waits.",
+            normalText: "Partner accountability cuts skipped sessions by over 70%."
+          },
+          {
+            boldText: "Shared grind builds stronger bonds.",
+            normalText: "Sweat together in the ring, conquer HYROX benchmarks together."
+          },
+          {
+            boldText: "Coached side-by-side.",
+            normalText: "Train as a team with dedicated coaches pushing you both."
+          },
+          {
+            boldText: "Better value, together.",
+            normalText: "Complete premium arena access priced for two athletes."
+          }
+        ],
+        plans: [
+          {
+            months: "1 MONTH",
+            subtitle: "STANDARD",
+            price: "8,500",
+            perMonth: "8,500",
+            originalPrice: "",
+            totalPrice: "8,500",
+            highlights: [
+              "Five coached sessions a week",
+              "One pathway focus for 2",
+              "Full arena facilities"
+            ],
+            tag: "STANDARD",
+            buttonText: "STANDARD",
+            isPopular: false
+          },
+          {
+            months: "3 MONTHS",
+            subtitle: "SAVE ₹1,500",
+            price: "24,000",
+            perMonth: "8,000",
+            originalPrice: "25,500",
+            totalPrice: "24,000",
+            highlights: [
+              "Five coached sessions a week",
+              "Held rate for full term",
+              "Joint coach assessment"
+            ],
+            tag: "SAVE ₹1,500",
+            buttonText: "SAVE ₹1,500",
+            isPopular: false
+          },
+          {
+            months: "6 MONTHS",
+            subtitle: "SAVE ₹6,000",
+            price: "45,000",
+            perMonth: "7,500",
+            originalPrice: "51,000",
+            totalPrice: "45,000",
+            highlights: [
+              "Five coached sessions a week",
+              "Locked rate for both members",
+              "Partner progress card"
+            ],
+            tag: "SAVE ₹6,000",
+            buttonText: "SAVE ₹6,000",
+            isPopular: true
+          },
+          {
+            months: "12 MONTHS",
+            subtitle: "SAVE ₹20,400",
+            price: "81,600",
+            perMonth: "6,800",
+            originalPrice: "102,000",
+            totalPrice: "81,600",
+            highlights: [
+              "Five coached sessions a week",
+              "Maximum partner discount",
+              "Founding Wall duo recognition"
+            ],
+            tag: "SAVE ₹20,400",
+            buttonText: "SAVE ₹20,400",
+            isPopular: false
+          }
+        ]
+      },
+      {
+        key: "duo_athlete",
+        title: "BXC DUO - ATHLETE",
+        subtitle: "2 PERSON PASS • TWO PATHWAYS",
+        sessionInfo: "Five coached sessions a week for 2 members across two disciplines (Boxing + HYROX or Boxing + Strength Training)",
+        desc: "Five coached sessions a week for 2 members across two disciplines (Boxing + HYROX or Boxing + Strength Training).",
+        starterPrice: "9,600",
+        dailyRate: "₹315",
+        dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
+        dailyComparison: "Lunch for two.",
+        features: [
+          "Two memberships under one account",
+          "Two disciplines / pathways (Boxing + HYROX or Boxing + Strength Training)",
+          "Five coached sessions a week for both members",
+          "Partner hybrid benchmarks & progress tracking",
+          "Full arena facilities & recovery lounge"
+        ],
+        benefits: [
+          {
+            boldText: "Two pathways, twice the motivation.",
+            normalText: "Combine Boxing and Strength or HYROX side by side."
+          },
+          {
+            boldText: "Break plateaus together.",
+            normalText: "Complementary disciplines keep both partners progressing consistently."
+          },
+          {
+            boldText: "Coached side-by-side.",
+            normalText: "Train as a team with dedicated coaches pushing you both."
+          },
+          {
+            boldText: "Better value, together.",
+            normalText: "Complete two-pathway arena access priced for two athletes."
+          }
+        ],
+        plans: [
+          {
+            months: "1 MONTH",
+            subtitle: "STANDARD",
+            price: "12,000",
+            perMonth: "12,000",
+            originalPrice: "",
+            totalPrice: "12,000",
+            highlights: [
+              "Five coached sessions a week",
+              "Two disciplines access for 2",
+              "Full arena facilities"
+            ],
+            tag: "STANDARD",
+            buttonText: "STANDARD",
+            isPopular: false
+          },
+          {
+            months: "3 MONTHS",
+            subtitle: "SAVE ₹2,000",
+            price: "34,000",
+            perMonth: "11,333",
+            originalPrice: "36,000",
+            totalPrice: "34,000",
+            highlights: [
+              "Five coached sessions a week",
+              "Held rate for full term",
+              "Joint coach assessment"
+            ],
+            tag: "SAVE ₹2,000",
+            buttonText: "SAVE ₹2,000",
+            isPopular: false
+          },
+          {
+            months: "6 MONTHS",
+            subtitle: "SAVE ₹8,000",
+            price: "64,000",
+            perMonth: "10,667",
+            originalPrice: "72,000",
+            totalPrice: "64,000",
+            highlights: [
+              "Five coached sessions a week",
+              "Locked rate for both members",
+              "Partner progress card"
+            ],
+            tag: "SAVE ₹8,000",
+            buttonText: "SAVE ₹8,000",
+            isPopular: true
+          },
+          {
+            months: "12 MONTHS",
+            subtitle: "SAVE ₹28,800",
+            price: "115,200",
+            perMonth: "9,600",
+            originalPrice: "144,000",
+            totalPrice: "115,200",
+            highlights: [
+              "Five coached sessions a week",
+              "Maximum partner discount",
+              "Founding Wall duo recognition"
+            ],
+            tag: "SAVE ₹28,800",
+            buttonText: "SAVE ₹28,800",
+            isPopular: false
+          }
+        ]
+      },
+      {
+        key: "duo_arena",
+        title: "BXC DUO - ARENA",
+        subtitle: "2 PERSON PASS • EVERYTHING",
+        sessionInfo: "Five coached sessions a week for 2 members, every pathway, every class (Boxing + HYROX + Strength Training)",
+        desc: "Five coached sessions a week for 2 members, every pathway, every class (Boxing + HYROX + Strength Training).",
+        starterPrice: "13,600",
+        dailyRate: "₹447",
+        dailyRateLabel: "A DAY FOR 2 ON 12-MONTH PLAN",
+        dailyComparison: "Dinner for two.",
+        features: [
+          "Membership for Two",
+          "Every pathway, every class (Boxing + HYROX + Strength Training)",
+          "Five coached sessions a week for both members",
+          "Priority ring & arena floor for both",
+          "VIP Duo member perks & passes"
+        ],
+        benefits: [
+          {
+            boldText: "Train without limits together.",
+            normalText: "Five days, every discipline, nothing held back for both partners."
+          },
+          {
+            boldText: "Your shared second home.",
+            normalText: "After home and work, your arena community awaits."
+          },
+          {
+            boldText: "Priority on everything.",
+            normalText: "Classes, the ring, the open floor, together."
+          },
+          {
+            boldText: "Peak partner performance.",
+            normalText: "Unrestricted arena mastery built together."
+          }
+        ],
+        plans: [
+          {
+            months: "1 MONTH",
+            subtitle: "STANDARD",
+            price: "17,000",
+            perMonth: "17,000",
+            originalPrice: "",
+            totalPrice: "17,000",
+            highlights: [
+              "Five coached sessions a week",
+              "All pathways & disciplines for 2",
+              "Unrestricted arena access"
+            ],
+            tag: "STANDARD",
+            buttonText: "STANDARD",
+            isPopular: false
+          },
+          {
+            months: "3 MONTHS",
+            subtitle: "SAVE ₹3,000",
+            price: "48,000",
+            perMonth: "16,000",
+            originalPrice: "51,000",
+            totalPrice: "48,000",
+            highlights: [
+              "Five coached sessions a week",
+              "All pathways & disciplines",
+              "Joint coach assessment"
+            ],
+            tag: "SAVE ₹3,000",
+            buttonText: "SAVE ₹3,000",
+            isPopular: false
+          },
+          {
+            months: "6 MONTHS",
+            subtitle: "SAVE ₹12,000",
+            price: "90,000",
+            perMonth: "15,000",
+            originalPrice: "102,000",
+            totalPrice: "90,000",
+            highlights: [
+              "Five coached sessions a week",
+              "All pathways & disciplines",
+              "Guest passes included"
+            ],
+            tag: "SAVE ₹12,000",
+            buttonText: "SAVE ₹12,000",
+            isPopular: true
+          },
+          {
+            months: "12 MONTHS",
+            subtitle: "SAVE ₹40,800",
+            price: "163,200",
+            perMonth: "13,600",
+            originalPrice: "204,000",
+            totalPrice: "163,200",
+            highlights: [
+              "Five coached sessions a week",
+              "All pathways & disciplines",
+              "VIP Wall & passes for two"
+            ],
+            tag: "SAVE ₹40,800",
+            buttonText: "SAVE ₹40,800",
+            isPopular: false
+          }
+        ]
+      },
+      {
         key: "junior",
         title: "JUNIOR",
         subtitle: "UNDER 13",
