@@ -115,17 +115,15 @@ const Founding30Section = ({
       return false;
     };
 
-    if (!scrollToTwelveMonthCard()) {
-      const currentPath =
-        typeof window !== "undefined" ? window.location.pathname : "";
-      const destination = currentPath.includes("founder")
-        ? "/founder-members-offers"
-        : "/membership";
-      navigate(destination);
-      setTimeout(() => {
-        scrollToTwelveMonthCard();
-      }, 350);
+    const currentPath =
+      typeof window !== "undefined" ? window.location.pathname.toLowerCase() : "";
+
+    if (currentPath === "/core" || currentPath === "/membership/core") {
+      scrollToTwelveMonthCard();
+      return;
     }
+
+    navigate("/membership/core?focus=12m#pricing");
   };
 
   return (

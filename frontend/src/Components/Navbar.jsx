@@ -891,9 +891,7 @@ const Navbar = () => {
                         >
                           {card.title}
                         </h4>
-                        <span className="text-[9.5px] text-[#ccf141] font-mono font-bold block mt-1">
-                          {card.fromPrice}
-                        </span>
+
                       </div>
 
                       <span
@@ -941,9 +939,7 @@ const Navbar = () => {
                       <span className="text-[9.5px] text-neutral-400 block mt-0.5 truncate">
                         Couple &amp; Buddy Pass
                       </span>
-                      <span className="text-[9.5px] text-[#ccf141] font-mono font-bold block mt-0.5">
-                        From ₹6,800/mo
-                      </span>
+
                     </div>
                     <span className="text-[9px] font-extrabold uppercase tracking-wider mt-2 py-1 px-1 rounded flex items-center justify-center gap-1 bg-white/5 text-neutral-300 border border-white/10 group-hover:bg-[#ccf141] group-hover:text-black transition-colors">
                       <span>View Duo</span>
@@ -980,9 +976,7 @@ const Navbar = () => {
                       <span className="text-[9.5px] text-neutral-400 block mt-0.5 truncate">
                         Parents + Kids (Up to 4)
                       </span>
-                      <span className="text-[9.5px] text-[#ccf141] font-mono font-bold block mt-0.5">
-                        From ₹11,900/mo
-                      </span>
+
                     </div>
                     <span className="text-[9px] font-extrabold uppercase tracking-wider mt-2 py-1 px-1 rounded flex items-center justify-center gap-1 bg-white/5 text-neutral-300 border border-white/10 group-hover:bg-[#ccf141] group-hover:text-black transition-colors">
                       <span>View Family</span>
@@ -1018,9 +1012,7 @@ const Navbar = () => {
                       >
                         JUNIOR CORE
                       </h4>
-                      <span className="text-[10px] text-[#ccf141] font-mono font-bold">
-                        ₹1,958/mo
-                      </span>
+
                     </div>
                     <p className="text-[10px] text-neutral-400 mt-1 leading-tight line-clamp-1">
                       Youth boxing fundamentals, discipline &amp; screen-free fitness.

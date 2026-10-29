@@ -1487,6 +1487,7 @@ const Membership = () => {
 
   const handleScrollToPlans = (e, id) => {
     e.stopPropagation();
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     if (["core", "athlete", "arena"].includes(id.toLowerCase())) {
       navigate(`/membership/${id.toLowerCase()}`);
       return;
@@ -1537,6 +1538,7 @@ const Membership = () => {
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.5, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
         onClick={() => {
+          window.scrollTo({ top: 0, left: 0, behavior: "instant" });
           if (["core", "athlete", "arena"].includes(prog.id.toLowerCase())) {
             navigate(`/membership/${prog.id.toLowerCase()}`);
           } else if (prog.id.toLowerCase() === "duo" || prog.id.toLowerCase().includes("duo")) {
@@ -1932,7 +1934,10 @@ const Membership = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                onClick={() => navigate("/junior")}
+                onClick={() => {
+                  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+                  navigate("/junior");
+                }}
                 className={`relative w-full rounded-2xl md:rounded-3xl border transition-all duration-300 cursor-pointer overflow-hidden group shadow-[0_20px_50px_rgba(0,0,0,0.8)] ${activeTab === juniorProgram.id
                   ? "border-[#ccf141] shadow-[0_0_30px_rgba(204,241,65,0.25)]"
                   : "border-zinc-800 hover:border-zinc-700"

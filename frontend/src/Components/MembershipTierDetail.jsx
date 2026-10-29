@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -336,6 +336,7 @@ const defaultFamilyData = {
 
 const MembershipTierDetail = ({ tierData, customTabs }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const pricingRef = useRef(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -406,7 +407,72 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
   });
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const params = new URLSearchParams(location.search);
+    const isFocus12m =
+      params.get("focus") === "12m" ||
+      params.get("plan") === "12m" ||
+      location.hash === "#pricing" ||
+      location.hash === "#twelve-month-card";
+
+    if (!isFocus12m) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    } else {
+      const trigger12mFocus = () => {
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("select-twelve-month-plan"));
+        }
+
+        const targetCard =
+          document.getElementById("twelve-month-card") ||
+          document.getElementById("pricing") ||
+          document.getElementById("choose-plan");
+
+        if (targetCard) {
+          const rect = targetCard.getBoundingClientRect();
+          const currentScroll =
+            window.pageYOffset || document.documentElement.scrollTop;
+          const targetY =
+            currentScroll + rect.top + rect.height / 2 - window.innerHeight / 2;
+
+          window.scrollTo({
+            top: Math.max(0, targetY),
+            behavior: "smooth",
+          });
+
+          targetCard.classList.add(
+            "ring-4",
+            "ring-[#ccf141]",
+            "shadow-[0_0_50px_rgba(204,241,65,0.7)]",
+            "transition-all",
+            "duration-500",
+          );
+          setTimeout(() => {
+            targetCard.classList.remove(
+              "ring-4",
+              "ring-[#ccf141]",
+              "shadow-[0_0_50px_rgba(204,241,65,0.7)]",
+            );
+          }, 2400);
+        }
+      };
+
+      const t1 = setTimeout(trigger12mFocus, 200);
+      const t2 = setTimeout(trigger12mFocus, 650);
+
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+      };
+    }
+  }, [location.search, location.hash]);
+
+  useEffect(() => {
 
     const fetchPlans = async () => {
       try {
