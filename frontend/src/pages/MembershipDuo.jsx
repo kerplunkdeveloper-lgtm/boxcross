@@ -679,61 +679,61 @@ const MembershipDuo = () => {
 
   // Custom high-tech tab switcher component passed to MembershipTierDetail
   const renderCustomTabs = () => (
-    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-4 p-3 rounded-2xl bg-neutral-900/90 border border-white/10 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-      <div className="flex items-center gap-2.5 px-3">
-        <span className="w-2.5 h-2.5 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-pulse" />
+    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 p-2.5 sm:p-3 rounded-2xl bg-neutral-900/90 border border-white/10 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+      <div className="flex items-center gap-2 px-1 sm:px-3 self-start md:self-auto">
+        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#ccf141] shadow-[0_0_8px_#ccf141] animate-pulse" />
         <span
-          className="text-xs sm:text-sm font-black uppercase tracking-wider text-white"
+          className="text-[11px] sm:text-sm font-black uppercase tracking-wider text-white"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           SELECT BXC DUO TIER:
         </span>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 w-full md:w-auto">
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2 w-full md:w-auto">
         <button
           type="button"
           onClick={() => handleTabChange("core")}
-          className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
+          className={`px-2 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs md:text-sm font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1 sm:gap-2 cursor-pointer ${
             activeTab === "core"
               ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] scale-[1.02]"
               : "text-neutral-400 hover:text-white hover:bg-white/5 border border-transparent"
           }`}
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
-          <Target size={14} className="shrink-0" />
+          <Target size={13} className="shrink-0" />
           <span>CORE</span>
-          <span className="text-[10px] opacity-75 font-mono hidden sm:inline">1 PATH</span>
+          <span className="text-[9px] opacity-75 font-mono hidden sm:inline">1 PATH</span>
         </button>
 
         <button
           type="button"
           onClick={() => handleTabChange("athlete")}
-          className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
+          className={`px-2 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs md:text-sm font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1 sm:gap-2 cursor-pointer ${
             activeTab === "athlete"
               ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] scale-[1.02]"
               : "text-neutral-400 hover:text-white hover:bg-white/5 border border-transparent"
           }`}
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
-          <Dumbbell size={14} className="shrink-0" />
+          <Dumbbell size={13} className="shrink-0" />
           <span>ATHLETE</span>
-          <span className="text-[10px] opacity-75 font-mono hidden sm:inline">2 PATHS</span>
+          <span className="text-[9px] opacity-75 font-mono hidden sm:inline">2 PATHS</span>
         </button>
 
         <button
           type="button"
           onClick={() => handleTabChange("arena")}
-          className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
+          className={`px-2 sm:px-5 py-2 sm:py-2.5 rounded-xl text-[11px] sm:text-xs md:text-sm font-black uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-1 sm:gap-2 cursor-pointer ${
             activeTab === "arena"
               ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.4)] scale-[1.02]"
               : "text-neutral-400 hover:text-white hover:bg-white/5 border border-transparent"
           }`}
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
-          <Trophy size={14} className="shrink-0" />
+          <Trophy size={13} className="shrink-0" />
           <span>ARENA</span>
-          <span className="text-[10px] opacity-75 font-mono hidden sm:inline">ALL ACCESS</span>
+          <span className="text-[9px] opacity-75 font-mono hidden sm:inline">ALL ACCESS</span>
         </button>
       </div>
     </div>

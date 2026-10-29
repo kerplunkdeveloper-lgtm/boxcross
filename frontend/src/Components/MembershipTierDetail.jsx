@@ -668,7 +668,7 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
   ];
 
   return (
-    <div className="w-full bg-[#050505] text-white min-h-screen selection:bg-[#ccf141] selection:text-black pt-24 md:pt-28 pb-20">
+    <div className="w-full max-w-full overflow-x-hidden bg-[#050505] text-white min-h-screen selection:bg-[#ccf141] selection:text-black pt-20 sm:pt-24 md:pt-28 pb-20 relative">
       <Helmet>
         <title>{tierData.metaTitle}</title>
         <meta name="description" content={tierData.metaDescription} />
@@ -677,85 +677,250 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
       </Helmet>
 
       {/* TOP GLOW ACCENTS */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[#ccf141]/10 blur-[130px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[600px] h-[250px] sm:h-[300px] bg-[#ccf141]/10 blur-[100px] sm:blur-[130px] rounded-full pointer-events-none" />
 
-      <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         {/* ================= BREADCRUMBS ================= */}
-        <nav className="flex items-center gap-2 text-xs uppercase tracking-wider text-neutral-400 mb-8">
-          <Link to="/" className="hover:text-white transition-colors">
+        <nav className="flex items-center gap-2 text-[11px] sm:text-xs uppercase tracking-wider text-neutral-400 mb-6 sm:mb-8 overflow-x-auto whitespace-nowrap [scrollbar-width:none]">
+          <Link to="/" className="hover:text-white transition-colors shrink-0">
             Home
           </Link>
-          <ChevronRight size={13} className="text-neutral-600" />
-          <Link to="/" className="hover:text-white transition-colors">
+          <ChevronRight size={13} className="text-neutral-600 shrink-0" />
+          <Link to="/" className="hover:text-white transition-colors shrink-0">
             Membership
           </Link>
-          <ChevronRight size={13} className="text-neutral-600" />
-          <span className="text-[#ccf141] font-semibold">{dynamicTierData.title}</span>
+          <ChevronRight size={13} className="text-neutral-600 shrink-0" />
+          <span className="text-[#ccf141] font-semibold shrink-0">{dynamicTierData.title}</span>
         </nav>
 
         {/* CUSTOM TABS (e.g. FOR BXC DUO: CORE / ATHLETE / ARENA) */}
-        {customTabs && <div className="mb-8">{customTabs}</div>}
+        {customTabs && <div className="mb-6 sm:mb-8 max-w-full overflow-hidden">{customTabs}</div>}
 
-        {/* ================= HERO SECTION ================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-16">
+        {/* ================= HERO SECTION WITH NEON PATTERN & GLOW ================= */}
+        <div className="relative mb-12 sm:mb-16 rounded-3xl p-2 sm:p-6 md:p-10 lg:p-12 border border-white/10 bg-[#0a0a0d]/80 backdrop-blur-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_50px_rgba(204,241,65,0.07)]">
+          {/* CYBER NEON GRID PATTERN */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-25 mix-blend-screen"
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, rgba(204, 241, 65, 0.15) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(204, 241, 65, 0.15) 1px, transparent 1px)
+              `,
+              backgroundSize: "40px 40px",
+              maskImage: "radial-gradient(ellipse at 50% 30%, black 20%, transparent 80%)",
+              WebkitMaskImage: "radial-gradient(ellipse at 50% 30%, black 20%, transparent 80%)",
+            }}
+          />
+
+          {/* DIAGONAL SPEED SLASHES / HUD ACCENT PATTERN */}
+          <div
+            className="absolute -top-10 right-0 w-[420px] h-[340px] pointer-events-none opacity-15"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(45deg, rgba(204,241,65,0.3) 0, rgba(204,241,65,0.3) 1px, transparent 0, transparent 20px)",
+              maskImage: "radial-gradient(circle at top right, black 20%, transparent 75%)",
+              WebkitMaskImage: "radial-gradient(circle at top right, black 20%, transparent 75%)",
+            }}
+          />
+
+          {/* DYNAMIC NEON GLOW ORBS */}
+          <div className="absolute -top-24 -left-24 w-[420px] h-[420px] rounded-full bg-[#ccf141]/14 blur-[130px] pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-[450px] h-[450px] rounded-full bg-[#ccf141]/12 blur-[140px] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[320px] h-[220px] rounded-full bg-[#ccf141]/6 blur-[100px] pointer-events-none" />
+
+          {/* LASER TOP ACCENT BEAM */}
+          <div className="absolute top-0 inset-x-8 sm:inset-x-16 h-[2px] bg-gradient-to-r from-transparent via-[#ccf141] to-transparent shadow-[0_0_20px_#ccf141]" />
+
+          {/* CORNER TECH ACCENTS */}
+          <div className="absolute top-3 left-3 w-3.5 h-3.5 border-t-2 border-l-2 border-[#ccf141]/40 rounded-tl pointer-events-none" />
+          <div className="absolute top-3 right-3 w-3.5 h-3.5 border-t-2 border-r-2 border-[#ccf141]/40 rounded-tr pointer-events-none" />
+          <div className="absolute bottom-3 left-3 w-3.5 h-3.5 border-b-2 border-l-2 border-[#ccf141]/40 rounded-bl pointer-events-none" />
+          <div className="absolute bottom-3 right-3 w-3.5 h-3.5 border-b-2 border-r-2 border-[#ccf141]/40 rounded-br pointer-events-none" />
+
+          {/* ================= MOBILE HERO (SHOWN ONLY ON MOBILE / TABLET < lg) ================= */}
+          <div className="block lg:hidden relative z-10">
+            {/* 1. CINEMATIC HERO POSTER CARD - CLEAN & UNCLUTTERED UX */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="relative rounded-2xl overflow-hidden border border-white/15 bg-black shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_30px_rgba(204,241,65,0.12)] mb-3"
+            >
+              {/* BACKGROUND ATHLETE IMAGE */}
+              <img
+                src={tierData.image}
+                alt={dynamicTierData.title}
+                style={{
+                  filter: "grayscale(50%) contrast(90%) brightness(90%)",
+                  WebkitFilter: "grayscale(50%) contrast(90%) brightness(90%)",
+                }}
+                className="w-full h-[360px] sm:h-[400px] object-cover object-[center_18%] filter grayscale contrast-125 brightness-90"
+              />
+
+              {/* GRADIENTS: CLEAN FADE LEAVING ATHLETE FULLY VISIBLE */}
+              <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/90 via-black/30 to-transparent pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-[#08080a] via-[#08080a]/95 via-45% to-transparent pointer-events-none" />
+              <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-[#ccf141] to-transparent pointer-events-none shadow-[0_0_12px_#ccf141]" />
+
+              {/* OVERLAY CONTENT */}
+              <div className="absolute inset-0 p-4 sm:p-5 flex flex-col justify-between pointer-events-auto">
+                {/* TOP: PURE CLEAN BADGE */}
+                <div className="flex items-center justify-start">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/80 border border-[#ccf141]/40 text-[10px] font-black tracking-widest uppercase backdrop-blur-md shadow-[0_0_15px_rgba(204,241,65,0.15)]">
+                    <span className="w-2 h-2 rounded-full bg-[#ccf141] animate-pulse shrink-0" />
+                    <span className="text-[#ccf141]">{tierData.badge}</span>
+                  </div>
+                </div>
+
+                {/* BOTTOM: MINIMALIST, HIGH-IMPACT TITLE & SUBTITLE */}
+                <div className="flex flex-col">
+                  {/* MAIN TITLE */}
+                  <h1
+                    className="text-3xl sm:text-4xl font-black uppercase tracking-tight leading-[0.95] text-white mb-1.5"
+                    style={{ fontFamily: '"BrutalTypeBold", "Impact", sans-serif' }}
+                  >
+                    {dynamicTierData.title}{" "}
+                    <span className="text-[#ccf141]">MEMBERSHIP</span>
+                  </h1>
+
+                  {/* 1-LINE PUNCHY SUBTITLE */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#ccf141] shrink-0" />
+                    <p className="text-xs font-bold text-neutral-300 uppercase tracking-wide truncate">
+                      {dynamicTierData.subtitle}
+                    </p>
+                  </div>
+
+                  {/* CLEAN DAILY RATE CHIP (NO CLUTTER) */}
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.08] border border-white/10 backdrop-blur-md self-start">
+                    <Sparkles size={12} className="text-[#ccf141] shrink-0" />
+                    <span className="text-xs font-bold text-white">
+                      {dynamicTierData.dailyRate}{" "}
+                      <span className="text-neutral-400 font-normal">/ day</span>
+                    </span>
+                    <span className="text-neutral-500 text-[10px]">•</span>
+                    <span className="text-[11px] text-[#ccf141] font-semibold">12-Month Plan</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 2. STATS HUD STRIP & CTA BUTTON (BELOW THE IMAGE POSTER) */}
+            <div className="flex flex-col gap-2.5">
+              {/* UNIFIED HORIZONTAL STATS HUD STRIP */}
+              <div className="grid grid-cols-3 divide-x divide-white/10 rounded-2xl bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 backdrop-blur-xl p-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                {/* STAT 1: SCHEDULE */}
+                <div className="flex flex-col items-center justify-center text-center px-1">
+                  <div className="flex items-center gap-1 text-[9.5px] uppercase font-bold tracking-wider text-neutral-400 mb-0.5">
+                    <Calendar size={11} className="text-[#ccf141] shrink-0" />
+                    <span>Schedule</span>
+                  </div>
+                  <span className="text-xs sm:text-sm font-black text-white uppercase tracking-tight">
+                    5 Coached / Wk
+                  </span>
+                </div>
+
+                {/* STAT 2: DISCIPLINES */}
+                <div className="flex flex-col items-center justify-center text-center px-1">
+                  <div className="flex items-center gap-1 text-[9.5px] uppercase font-bold tracking-wider text-neutral-400 mb-0.5">
+                    <Layers size={11} className="text-[#ccf141] shrink-0" />
+                    <span>Disciplines</span>
+                  </div>
+                  <span className="text-xs sm:text-sm font-black text-white uppercase tracking-tight truncate">
+                    {tierData.disciplineCount}
+                  </span>
+                </div>
+
+                {/* STAT 3: STARTS AT */}
+                <div className="flex flex-col items-center justify-center text-center px-1">
+                  <div className="flex items-center gap-1 text-[9.5px] uppercase font-bold tracking-wider text-neutral-400 mb-0.5">
+                    <Flame size={11} className="text-[#ccf141] shrink-0" />
+                    <span>Starts At</span>
+                  </div>
+                  <span className="text-xs sm:text-sm font-black text-[#ccf141] uppercase tracking-tight">
+                    ₹{dynamicTierData.starterPrice}/mo
+                  </span>
+                </div>
+              </div>
+
+              {/* PREMIUM CTA BUTTON */}
+              <a
+                href="#pricing"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (pricingRef.current) {
+                    pricingRef.current.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                className="w-full py-3.5 bg-gradient-to-r from-[#ccf141] via-[#d9f959] to-[#ccf141] hover:brightness-110 active:scale-[0.98] text-black font-black uppercase tracking-wider text-xs sm:text-sm rounded-xl transition-all duration-300 shadow-[0_0_25px_rgba(204,241,65,0.4),0_10px_20px_rgba(0,0,0,0.5)] flex items-center justify-center gap-2 group cursor-pointer text-center relative overflow-hidden"
+                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              >
+                <span className="relative z-10">Choose Your Plan</span>
+                <ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </div>
+          </div>
+
+          {/* ================= DESKTOP HERO (ONLY SHOWN ON DESKTOP lg+) ================= */}
+          <div className="hidden lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
           {/* LEFT: INFO */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="lg:col-span-7 flex flex-col justify-center"
+            className="lg:col-span-7 flex flex-col justify-center min-w-0"
           >
             {/* BADGE */}
-            <div className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold tracking-widest uppercase mb-5 backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-[#ccf141] animate-pulse" />
-              <span className="text-[#ccf141]">{tierData.badge}</span>
+            <div className="inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10.5px] sm:text-xs font-bold tracking-widest uppercase mb-4 sm:mb-5 backdrop-blur-md max-w-full">
+              <span className="w-2 h-2 rounded-full bg-[#ccf141] animate-pulse shrink-0" />
+              <span className="text-[#ccf141] truncate">{tierData.badge}</span>
             </div>
 
             {/* TITLE */}
             <h1
-              className="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tight leading-[0.95] mb-6"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.95] mb-4 sm:mb-6 break-words"
               style={{ fontFamily: '"BrutalTypeBold", "Impact", sans-serif' }}
             >
               {dynamicTierData.title}
-              <span className="block text-[#ccf141] text-3xl sm:text-5xl md:text-6xl mt-1">
+              <span className="block text-[#ccf141] text-2xl sm:text-4xl md:text-5xl lg:text-6xl mt-1">
                 MEMBERSHIP
               </span>
             </h1>
 
             {/* SUBTITLE & DESCRIPTION */}
-            <p className="text-lg sm:text-xl text-neutral-300 font-medium mb-3">
+            <p className="text-base sm:text-lg lg:text-xl text-neutral-300 font-medium mb-2 sm:mb-3">
               {dynamicTierData.subtitle}
             </p>
-            <p className="text-neutral-400 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl">
+            <p className="text-neutral-400 text-xs sm:text-sm md:text-base leading-relaxed mb-6 sm:mb-8 max-w-2xl">
               {tierData.desc}
             </p>
 
             {/* KEY STATS PILLS */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
-              <div className="p-3.5 rounded-xl bg-neutral-900/80 border border-white/5 backdrop-blur-sm">
-                <div className="text-xs uppercase tracking-wider text-neutral-400 mb-1 flex items-center gap-1.5">
-                  <Calendar size={13} className="text-[#ccf141]" />
-                  Schedule
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-6 sm:mb-8">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-neutral-900/80 border border-white/5 backdrop-blur-sm">
+                <div className="text-[10px] sm:text-xs uppercase tracking-wider text-neutral-400 mb-1 flex items-center gap-1.5">
+                  <Calendar size={12} className="text-[#ccf141] shrink-0" />
+                  <span>Schedule</span>
                 </div>
-                <div className="text-sm sm:text-base font-bold text-white">
+                <div className="text-xs sm:text-sm md:text-base font-bold text-white truncate">
                   5 Coached / Wk
                 </div>
               </div>
-              <div className="p-3.5 rounded-xl bg-neutral-900/80 border border-white/5 backdrop-blur-sm">
-                <div className="text-xs uppercase tracking-wider text-neutral-400 mb-1 flex items-center gap-1.5">
-                  <Layers size={13} className="text-[#ccf141]" />
-                  Disciplines
+              <div className="p-3 sm:p-3.5 rounded-xl bg-neutral-900/80 border border-white/5 backdrop-blur-sm">
+                <div className="text-[10px] sm:text-xs uppercase tracking-wider text-neutral-400 mb-1 flex items-center gap-1.5">
+                  <Layers size={12} className="text-[#ccf141] shrink-0" />
+                  <span>Disciplines</span>
                 </div>
-                <div className="text-sm sm:text-base font-bold text-white">
+                <div className="text-xs sm:text-sm md:text-base font-bold text-white truncate">
                   {tierData.disciplineCount}
                 </div>
               </div>
-              <div className="p-3.5 rounded-xl bg-neutral-900/80 border border-white/5 backdrop-blur-sm col-span-2 sm:col-span-1">
-                <div className="text-xs uppercase tracking-wider text-neutral-400 mb-1 flex items-center gap-1.5">
-                  <Flame size={13} className="text-[#ccf141]" />
-                  Starting At
+              <div className="p-3 sm:p-3.5 rounded-xl bg-neutral-900/80 border border-white/5 backdrop-blur-sm col-span-2 sm:col-span-1">
+                <div className="text-[10px] sm:text-xs uppercase tracking-wider text-neutral-400 mb-1 flex items-center gap-1.5">
+                  <Flame size={12} className="text-[#ccf141] shrink-0" />
+                  <span>Starting At</span>
                 </div>
-                <div className="text-sm sm:text-base font-bold text-[#ccf141]">
+                <div className="text-xs sm:text-sm md:text-base font-bold text-[#ccf141] truncate">
                   ₹{dynamicTierData.starterPrice} / mo
                 </div>
               </div>
@@ -787,31 +952,36 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-5 relative"
+            className="lg:col-span-5 relative w-full"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] group">
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)] group w-full">
               <img
                 src={tierData.image}
                 alt={dynamicTierData.title}
-                className="w-full h-[400px] sm:h-[480px] lg:h-[520px] object-cover object-[center_18%] group-hover:scale-105 transition-transform duration-700 filter contrast-105"
+                style={{
+                  filter: "grayscale(80%) contrast(90%) brightness(105%)",
+                  WebkitFilter: "grayscale(80%) contrast(90%) brightness(105%)",
+                }}
+                className="w-full h-[280px] sm:h-[400px] lg:h-[520px] object-cover object-[center_18%] group-hover:scale-105 transition-transform duration-700 filter grayscale contrast-125 brightness-95 group-hover:brightness-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+             
 
               {/* OVERLAY BADGES */}
-              <div className="absolute bottom-5 left-5 right-5 flex flex-col gap-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black/70 backdrop-blur-md border border-white/15 self-start">
-                  <Sparkles size={14} className="text-[#ccf141]" />
-                  <span className="text-xs uppercase tracking-wider font-semibold text-neutral-200">
+              <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5 flex flex-col gap-1.5 sm:gap-2">
+                <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-black/75 backdrop-blur-md border border-white/15 self-start max-w-full">
+                  <Sparkles size={13} className="text-[#ccf141] shrink-0" />
+                  <span className="text-[11px] sm:text-xs uppercase tracking-wider font-semibold text-neutral-200 truncate">
                     {dynamicTierData.dailyRate} / day on 12-Month Plan
                   </span>
                 </div>
-                <div className="text-xs text-neutral-400 italic">
+                <div className="text-[11px] sm:text-xs text-neutral-400 italic">
                   "{dynamicTierData.dailyComparison}"
                 </div>
               </div>
             </div>
           </motion.div>
         </div>
+      </div>
 
         {/* ================= STEP 2: CHOOSE PLAN SLIDE ANIMATION UI ================= */}
         {/* EXACT SAME SLIDE ANIMATION UI & DYNAMIC LOGIC FROM MEMBERSHIP PAGE */}
@@ -861,25 +1031,25 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
        
 
         {/* ================= WHAT'S INCLUDED CHECKLIST ================= */}
-        <section className="mb-20 rounded-3xl bg-neutral-900/50 border border-white/10 p-8 sm:p-12 relative overflow-hidden">
+        <section className="mb-12 sm:mb-20 rounded-2xl sm:rounded-3xl bg-neutral-900/50 border border-white/10 p-5 sm:p-8 md:p-12 relative overflow-hidden">
           <div className="max-w-3xl">
             <span className="text-xs font-bold uppercase tracking-widest text-[#ccf141] mb-2 block">
               FULL AMENITIES &amp; ACCESS
             </span>
             <h2
-              className="text-2xl sm:text-4xl font-black uppercase tracking-tight mb-8"
+              className="text-xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight mb-6 sm:mb-8"
               style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
             >
               What Every {dynamicTierData.title} Member Receives
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
               {tierData.allInclusions.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3">
+                <div key={idx} className="flex items-center gap-2.5 sm:gap-3">
                   <div className="w-5 h-5 rounded-full bg-[#ccf141]/20 flex items-center justify-center text-[#ccf141] shrink-0">
                     <Check size={12} strokeWidth={3} />
                   </div>
-                  <span className="text-sm text-neutral-300 font-medium">
+                  <span className="text-xs sm:text-sm text-neutral-300 font-medium">
                     {item}
                   </span>
                 </div>
@@ -889,45 +1059,45 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
         </section>
 
         {/* ================= OTHER TIERS SWITCHER ================= */}
-        <section className="mb-20">
-          <div className="text-center max-w-2xl mx-auto mb-10">
+        <section className="mb-12 sm:mb-20">
+          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
             <span className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-1 block">
               EXPLORE OTHER TIERS
             </span>
             <h2
-              className="text-2xl sm:text-3xl font-black uppercase tracking-tight"
+              className="text-xl sm:text-3xl font-black uppercase tracking-tight"
               style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
             >
               Looking for Something Different?
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-6 max-w-4xl mx-auto">
             {tierData.otherTiers.map((other) => (
               <Link
                 key={other.id}
                 to={other.path}
-                className="p-6 rounded-2xl bg-neutral-900/60 border border-white/10 hover:border-[#ccf141] transition-all group flex items-center justify-between"
+                className="p-4 sm:p-6 rounded-2xl bg-neutral-900/60 border border-white/10 hover:border-[#ccf141] transition-all group flex items-center justify-between"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#ccf141] group-hover:scale-110 transition-transform">
+                <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#ccf141] group-hover:scale-110 transition-transform shrink-0">
                     {other.icon}
                   </div>
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#ccf141]">
+                  <div className="min-w-0">
+                    <span className="text-[9.5px] sm:text-[10px] font-bold uppercase tracking-widest text-[#ccf141] block truncate">
                       {other.badge}
                     </span>
-                    <h4 className="text-lg font-bold uppercase text-white group-hover:text-[#ccf141] transition-colors">
+                    <h4 className="text-base sm:text-lg font-bold uppercase text-white group-hover:text-[#ccf141] transition-colors truncate">
                       {other.title}
                     </h4>
-                    <p className="text-xs text-neutral-400">
+                    <p className="text-[11px] sm:text-xs text-neutral-400">
                       Starting ₹{other.price} / mo
                     </p>
                   </div>
                 </div>
                 <ChevronRight
-                  size={20}
-                  className="text-neutral-500 group-hover:text-[#ccf141] group-hover:translate-x-1 transition-all"
+                  size={18}
+                  className="text-neutral-500 group-hover:text-[#ccf141] group-hover:translate-x-1 transition-all shrink-0 ml-2"
                 />
               </Link>
             ))}
@@ -935,13 +1105,13 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
         </section>
 
         {/* ================= FAQ SECTION ================= */}
-        <section className="mb-20 max-w-3xl mx-auto">
-          <div className="text-center mb-10">
+        <section className="mb-12 sm:mb-20 max-w-3xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10">
             <span className="text-xs font-bold uppercase tracking-widest text-[#ccf141] mb-2 block">
               QUESTIONS &amp; ANSWERS
             </span>
             <h2
-              className="text-3xl font-black uppercase tracking-tight"
+              className="text-2xl sm:text-3xl font-black uppercase tracking-tight"
               style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
             >
               Frequently Asked Questions
@@ -990,10 +1160,10 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
         </section>
 
         {/* ================= BOTTOM CTA ================= */}
-        <div className="rounded-3xl bg-gradient-to-r from-neutral-900 via-black to-neutral-900 border border-white/10 p-8 sm:p-12 text-center relative overflow-hidden">
+        <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-r from-neutral-900 via-black to-neutral-900 border border-white/10 p-5 sm:p-8 md:p-12 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-[#ccf141]/5 blur-3xl pointer-events-none" />
           <h2
-            className="text-2xl sm:text-4xl font-black uppercase tracking-tight mb-4 relative z-10"
+            className="text-xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight mb-3 sm:mb-4 relative z-10"
             style={{ fontFamily: '"BrutalTypeBold", Impact, sans-serif' }}
           >
             Ready to Experience Box &amp; Cross?

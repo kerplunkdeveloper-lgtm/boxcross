@@ -27,6 +27,7 @@ const MembershipArena = lazy(() => import("./pages/MembershipArena"));
 const MembershipJunior = lazy(() => import("./pages/MembershipJunior"));
 const MembershipFamily = lazy(() => import("./pages/MembershipFamily"));
 const MembershipDuo = lazy(() => import("./pages/MembershipDuo"));
+const WorkFormat = lazy(() => import("./pages/WorkFormat"));
 const Auth = lazy(() => import("./pages/Auth"));
 const DashboardLayout = lazy(() => import("./Components/DashboardLayout"));
 const DashboardHome = lazy(() => import("./pages/DashboardHome"));
@@ -89,10 +90,10 @@ const Layout = () => {
   const isEventsPage = location.pathname.startsWith("/events");
 
   return (
-    <div className="min-h-screen flex flex-col bg-black text-white">
+    <div className="min-h-screen flex flex-col bg-black text-white w-full max-w-full overflow-x-hidden">
       {!isEventsPage && <Navbar />}
       {/* ScrollToTop is mounted globally in App — no duplicate here */}
-      <main className="flex-grow">
+      <main className="flex-grow w-full max-w-full overflow-x-hidden">
         <Outlet />
       </main>
       {!isEventsPage && <Foot />}
@@ -216,6 +217,9 @@ const App = () => {
                   <Route path="/membership/duo" element={<MembershipDuo />} />
                   <Route path="/duo" element={<MembershipDuo />} />
                   <Route path="/bxc-duo" element={<MembershipDuo />} />
+                  <Route path="/work-format" element={<WorkFormat />} />
+                  <Route path="/workout-formats" element={<WorkFormat />} />
+                  <Route path="/workformat" element={<WorkFormat />} />
                   <Route path="/events" element={<Eventpage />} />
                   <Route path="/events/:id" element={<Eventpage />} />
                   <Route path="/community" element={<Community />} />

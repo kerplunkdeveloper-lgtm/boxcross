@@ -84,6 +84,22 @@ const Membership = () => {
         {/* GRADIENT OVERLAY */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-[#050505] z-[2]"></div>
 
+        {/* NEON GLOW & CYBER GRID OVERLAY */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-20 z-[3] mix-blend-screen"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(204, 241, 65, 0.12) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(204, 241, 65, 0.12) 1px, transparent 1px)
+            `,
+            backgroundSize: "44px 44px",
+            maskImage: "radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%)",
+            WebkitMaskImage: "radial-gradient(ellipse at 50% 50%, black 20%, transparent 80%)",
+          }}
+        />
+        <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] rounded-full bg-[#ccf141]/12 blur-[130px] pointer-events-none z-[3]" />
+        <div className="absolute bottom-10 right-1/4 w-[350px] h-[350px] rounded-full bg-[#ccf141]/10 blur-[120px] pointer-events-none z-[3]" />
+
         {/* HUGE BACKGROUND TEXT (Outline) */}
         <div className="absolute inset-x-0 top-10 md:top-30  flex justify-center pointer-events-none z-[5] overflow-hidden">
           <span

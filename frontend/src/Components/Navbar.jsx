@@ -135,7 +135,7 @@ const Navbar = () => {
       subtitle: "Couple & Buddy Pass",
       desc: "Synchronized coaching, joint benchmarks & partner accountability for two.",
       image: duoCoupleImg,
-      path: "/duo",
+      path: "/membership/duo",
       isPopular: false,
       btnText: "EXPLORE DUO",
     },
@@ -149,7 +149,7 @@ const Navbar = () => {
       subtitle: "Parents + Kids (Up to 4)",
       desc: "Full arena access for parents + Junior coaching for kids under one plan.",
       image: familyFatherSonImg,
-      path: "/family",
+      path: "/membership/family",
       isPopular: false,
       btnText: "EXPLORE FAMILY",
     },
@@ -163,7 +163,7 @@ const Navbar = () => {
       subtitle: "Youth Athletics (Ages 7–13)",
       desc: "Coached boxing fundamentals, agility drills & screen-free discipline.",
       image: juniorBoxer,
-      path: "/junior",
+      path: "/membership/junior",
       isPopular: false,
       btnText: "EXPLORE JUNIOR",
     },
@@ -547,6 +547,28 @@ const Navbar = () => {
                   )}
                 </div>
 
+                {/* WORK FORMAT */}
+                <NavLink
+                  to="/work-format"
+                  className={({ isActive }) =>
+                    `px-2 py-2 uppercase tracking-wider transition-all ${
+                      isActive ||
+                      location.pathname === "/work-format" ||
+                      location.pathname === "/workout-formats" ||
+                      location.pathname === "/workformat"
+                        ? "text-white"
+                        : "text-[#808080] hover:text-white"
+                    }`
+                  }
+                  style={{
+                    fontFamily: '"Brutal Font Bold", sans-serif',
+                    fontWeight: 600,
+                    fontSize: "14px",
+                  }}
+                >
+                  WORK FORMAT
+                </NavLink>
+
                 {/* COMMUNITY DROPDOWN */}
 
                 <div
@@ -602,19 +624,7 @@ const Navbar = () => {
                   )}
                 </div>
 
-                {/* CONTACT */}
 
-                <a
-                  href="https://boxandcross.com/contact-us/"
-                  className="px-2 py-2 text-[#808080] hover:text-white uppercase tracking-wider transition-all"
-                  style={{
-                    fontFamily: '"Brutal Font Bold", sans-serif',
-                    fontWeight: 600,
-                    fontSize: "14px",
-                  }}
-                >
-                  CONTACT US
-                </a>
               </div>
 
               {/* ================= RIGHT ================= */}
@@ -988,7 +998,7 @@ const Navbar = () => {
 
               {/* 3. BOTTOM: JUNIOR CARD */}
               <Link
-                to="/junior"
+                to="/membership/junior"
                 onClick={closeOffcanvas}
                 className="mt-2.5 group relative rounded-xl overflow-hidden border border-white/10 hover:border-[#ccf141]/50 p-2.5 flex items-center gap-3 transition-all active:scale-98 bg-[#121215] cursor-pointer"
               >
@@ -1054,6 +1064,26 @@ const Navbar = () => {
                 </Link>
               </div>
             </div>
+          </div>
+
+          {/* WORK FORMAT */}
+          <div className="border-b border-[#1f1f1f]">
+            <NavLink
+              to="/work-format"
+              onClick={closeOffcanvas}
+              className={({ isActive }) =>
+                `block py-2.5 text-[14px] font-extrabold uppercase transition-colors ${
+                  isActive ||
+                  location.pathname === "/work-format" ||
+                  location.pathname === "/workout-formats" ||
+                  location.pathname === "/workformat"
+                    ? "text-[#ccf141]"
+                    : "text-white hover:text-[#ccf141]"
+                }`
+              }
+            >
+              WORK FORMAT
+            </NavLink>
           </div>
 
           {/* COMMUNITY */}

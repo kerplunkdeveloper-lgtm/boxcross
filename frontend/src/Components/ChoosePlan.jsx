@@ -511,7 +511,7 @@ const ChoosePlan = React.forwardRef(
     const step = cardWidth + cardGap;
     const sidePadding = isDesktop
       ? 0
-      : Math.max(Math.round((windowWidth - cardWidth) / 2), 32);
+      : Math.max(Math.round((windowWidth - cardWidth) / 2) - 20, 16);
 
     const getDesktopStep = () => {
       if (!scrollContainerRef.current) return step;
@@ -980,7 +980,7 @@ const ChoosePlan = React.forwardRef(
               onScroll={handleScroll}
               className={`flex items-stretch overflow-x-auto snap-x snap-mandatory py-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDesktop
                   ? "w-full relative"
-                  : "w-screen relative left-1/2 -translate-x-1/2"
+                  : "w-full relative max-w-full"
                 }`}
               style={{
                 paddingLeft: isDesktop ? "0px" : `${sidePadding}px`,
