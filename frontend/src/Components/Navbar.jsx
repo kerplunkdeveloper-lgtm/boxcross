@@ -12,6 +12,8 @@ import {
   ChevronLeft,
   ChevronRight,
   User,
+  ArrowRight,
+  Sparkles,
 } from "lucide-react";
 import {
   FaFacebookF,
@@ -22,6 +24,12 @@ import {
 import { Link } from "react-router-dom";
 
 import logo from "../assets/images/logo-new.png";
+import box1 from "../assets/box1.png";
+import box2 from "../assets/box2.png";
+import box3 from "../assets/box3.png";
+import juniorBoxer from "../assets/junior_boxer.jpg";
+import duoCoupleImg from "../assets/duo_couple.jpg";
+import familyFatherSonImg from "../assets/family_father_son.jpg";
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -66,22 +74,98 @@ const Navbar = () => {
     },
   ];
 
-  const membershipDropdown = [
+  // 3 MEMBERSHIP TIERS (EXACT TO DESIGN REFERENCE)
+  const membershipCards = [
     {
-      name: "Founder Members 100",
-      path: "/founding100",
+      id: "core",
+      title: "CORE",
+      tag: "1 PATHWAY",
+      badge2: "ESSENTIAL",
+      mobileBadge: "1 PATH",
+      sessionBadge: "5 Coached / Wk",
+      fromPrice: "₹2,800/mo",
+      subtitle: "Boxing, HYROX or Strength",
+      desc: "5 coached sessions a week dedicated to 1 chosen craft with full open gym access.",
+      image: box1,
+      path: "/membership/core",
+      isPopular: false,
+      btnText: "EXPLORE CORE",
     },
     {
-      name: "BOOK FREE TRIAL",
-      scrollToId: "book-your-free-gym-tour",
+      id: "athlete",
+      title: "ATHLETE",
+      tag: "2 PATHWAYS",
+      badge2: "★ MOST POPULAR",
+      mobileBadge: "2 PATHS",
+      sessionBadge: "5 Coached / Wk",
+      fromPrice: "₹4,000/mo",
+      subtitle: "Combat + Conditioning Hybrid",
+      desc: "5 coached sessions a week across two disciplines to forge endurance and power.",
+      image: box2,
+      path: "/membership/athlete",
+      isPopular: true,
+      btnText: "EXPLORE ATHLETE",
     },
     {
-      name: "PROGRAMS",
-      scrollToId: "membership-plans",
+      id: "arena",
+      title: "ARENA",
+      tag: "ALL ACCESS",
+      badge2: "VIP TIER",
+      mobileBadge: "ALL IN",
+      sessionBadge: "5 Coached / Wk",
+      fromPrice: "₹5,600/mo",
+      subtitle: "Unrestricted All Disciplines",
+      desc: "5 coached sessions weekly across all pathways, priority ring time & VIP perks.",
+      image: box3,
+      path: "/membership/arena",
+      isPopular: false,
+      btnText: "EXPLORE ARENA",
+    },
+  ];
+
+  // SPECIAL & PARTNER PROGRAMS (DUO, FAMILY, JUNIOR)
+  const specialMembershipCards = [
+    {
+      id: "duo",
+      title: "BXC DUO",
+      tag: "2 PERSON PASS",
+      badge2: "COUPLE / BUDDY",
+      mobileBadge: "2 PERSON",
+      fromPrice: "₹6,800/mo",
+      subtitle: "Couple & Buddy Pass",
+      desc: "Synchronized coaching, joint benchmarks & partner accountability for two.",
+      image: duoCoupleImg,
+      path: "/duo",
+      isPopular: false,
+      btnText: "EXPLORE DUO",
     },
     {
-      name: "PLANS & PRICING",
-      scrollToId: "pricing",
+      id: "family",
+      title: "BXC FAMILY FIT",
+      tag: "ALL AGES",
+      badge2: "FAMILY PACK",
+      mobileBadge: "ALL AGES",
+      fromPrice: "₹11,900/mo",
+      subtitle: "Parents + Kids (Up to 4)",
+      desc: "Full arena access for parents + Junior coaching for kids under one plan.",
+      image: familyFatherSonImg,
+      path: "/family",
+      isPopular: false,
+      btnText: "EXPLORE FAMILY",
+    },
+    {
+      id: "junior",
+      title: "JUNIOR CORE",
+      tag: "UNDER 13",
+      badge2: "YOUTH BOXING",
+      mobileBadge: "UNDER 13",
+      fromPrice: "₹1,958/mo",
+      subtitle: "Youth Athletics (Ages 7–13)",
+      desc: "Coached boxing fundamentals, agility drills & screen-free discipline.",
+      image: juniorBoxer,
+      path: "/junior",
+      isPopular: false,
+      btnText: "EXPLORE JUNIOR",
     },
   ];
 
@@ -236,7 +320,7 @@ const Navbar = () => {
                   </button>
 
                   {openDropdown === "arena" && (
-                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl  overflow-hidden z-[100]">
+                    <div className="absolute left-0 top-full mt-3 w-52 bg-white shadow-2xl overflow-hidden z-[100]">
                       {arenaDropdown.map((item, idx) => (
                         <a
                           key={item.name}
@@ -275,7 +359,7 @@ const Navbar = () => {
                   COACHING
                 </a>
 
-                {/* MEMBERSHIP */}
+                {/* MEMBERSHIP WITH FULL-WIDTH DROP DOWN (IMAGE + TITLE ONLY) */}
 
                 <div
                   className="relative"
@@ -286,8 +370,17 @@ const Navbar = () => {
                     to="/"
                     className={({ isActive }) =>
                       `px-2 py-2 uppercase tracking-wider transition-all flex items-center gap-1 ${(isActive && location.pathname === "/") ||
-                        location.pathname.includes("/membership")
-                        ? "text-[#fffffff]"
+                        location.pathname.includes("/membership") ||
+                        location.pathname === "/core" ||
+                        location.pathname === "/athlete" ||
+                        location.pathname === "/arena" ||
+                        location.pathname === "/junior" ||
+                        location.pathname === "/junior-core" ||
+                        location.pathname === "/family" ||
+                        location.pathname === "/family-fit" ||
+                        location.pathname === "/duo" ||
+                        location.pathname === "/bxc-duo"
+                        ? "text-[#ffffff]"
                         : "text-gray-400 hover:text-white"
                       }`
                     }
@@ -304,63 +397,152 @@ const Navbar = () => {
                     />
                   </NavLink>
 
+                  {/* DESKTOP FULL-WIDTH MEGA DROPDOWN (COMPACT IMAGE + TITLE ONLY) */}
                   {openDropdown === "membership" && (
-                    <div className="absolute left-0 top-full mt-3 w-60 bg-white shadow-2xl overflow-hidden z-[100]">
-                      {membershipDropdown.map((item, idx) => {
-                        const content = (
-                          <>
-                            {/* Hover Line */}
-                            <span className="relative w-0 group-hover:w-10 h-[1.5px] overflow-hidden transition-all duration-500 ease-out">
-                              <span className="absolute inset-0 bg-black -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
-                            </span>
+                    <div className="fixed inset-x-4 top-full mt-2 max-w-[1040px] mx-auto w-auto before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 before:content-[''] bg-[#0c0c0e]/98 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-[0_25px_70px_rgba(0,0,0,0.95)] p-4 z-[100] text-left">
+                     
 
-                            {/* Text */}
-                            <span className="transition-all duration-300 group-hover:translate-x-1">
-                              {item.name}
-                            </span>
-                          </>
-                        );
-
-                        const itemClass = `group flex items-center gap-3 px-5 py-4 text-[11px] uppercase tracking-widest text-black hover:bg-gray-100 transition-all overflow-hidden ${idx !== membershipDropdown.length - 1
-                          ? "border-b border-gray-200"
-                          : ""
-                          }`;
-
-                        if (item.path) {
-                          return (
-                            <Link
-                              key={item.name}
-                              to={item.path}
-                              onClick={() => setOpenDropdown(null)}
-                              className={itemClass}
-                            >
-                              {content}
-                            </Link>
-                          );
-                        }
-
-                        return (
-                          <a
-                            key={item.name}
-                            href={`/#${item.scrollToId}`}
-                            onClick={(e) => {
-                              if (item.scrollToId) {
-                                const el = document.getElementById(
-                                  item.scrollToId,
-                                );
-                                if (el) {
-                                  e.preventDefault();
-                                  el.scrollIntoView({ behavior: "smooth" });
-                                  setOpenDropdown(null);
-                                }
-                              }
-                            }}
-                            className={itemClass}
+                      {/* ROW 1: 3 PRIMARY PATHWAYS */}
+                      <div className="grid grid-cols-3 gap-3 my-2">
+                        {membershipCards.map((card) => (
+                          <Link
+                            key={card.id}
+                            to={card.path}
+                            onClick={() => setOpenDropdown(null)}
+                            className={`group relative rounded-xl p-2.5 flex flex-col justify-between transition-all duration-300 bg-[#121215] cursor-pointer hover:-translate-y-0.5 ${
+                              card.isPopular
+                                ? "border-2 border-[#ccf141] shadow-[0_0_20px_rgba(204,241,65,0.18)] hover:shadow-[0_0_30px_rgba(204,241,65,0.28)]"
+                                : "border border-white/10 hover:border-[#ccf141]/60 hover:shadow-[0_10px_25px_rgba(0,0,0,0.8),0_0_15px_rgba(204,241,65,0.1)]"
+                            }`}
                           >
-                            {content}
-                          </a>
-                        );
-                      })}
+                            {/* TOP IMAGE */}
+                            <div className="relative h-24 rounded-lg overflow-hidden bg-black mb-2">
+                              <img
+                                src={card.image}
+                                alt={card.title}
+                                className="w-full h-full object-cover object-[center_18%] group-hover:scale-108 transition-transform duration-700 ease-out filter contrast-110 brightness-95 group-hover:brightness-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                              {/* TOP BADGE */}
+                              <div className="absolute top-2 left-2 z-10">
+                                <span
+                                  className={`px-2 py-0.5 rounded text-[8.5px] font-black uppercase tracking-wider ${
+                                    card.isPopular
+                                      ? "bg-[#ccf141] text-black shadow-sm font-extrabold"
+                                      : "bg-black/75 backdrop-blur-md text-white border border-white/15"
+                                  }`}
+                                >
+                                  {card.tag}
+                                </span>
+                              </div>
+
+                              {/* ARROW CIRCLE ICON ON IMAGE BOTTOM RIGHT */}
+                              <div className="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-black/70 backdrop-blur-md border border-white/20 flex items-center justify-center text-white group-hover:bg-[#ccf141] group-hover:text-black group-hover:border-[#ccf141] transition-all duration-300">
+                                <ArrowRight
+                                  size={11}
+                                  className="group-hover:translate-x-0.5 transition-transform"
+                                />
+                              </div>
+                            </div>
+
+                            {/* CONTENT */}
+                            <div className="flex flex-col flex-1 justify-between">
+                              <div>
+                                <h3
+                                  className="text-[15px] font-black uppercase text-white tracking-tight group-hover:text-[#ccf141] transition-colors leading-none"
+                                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                                >
+                                  {card.title}
+                                </h3>
+                              </div>
+
+                              {/* SUBTLE BOTTOM EXPLORE LINK */}
+                              <div className="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between">
+                                <span
+                                  className={`text-[11px] font-black uppercase tracking-wider flex items-center gap-1 transition-colors ${
+                                    card.isPopular
+                                      ? "text-[#ccf141]"
+                                      : "text-neutral-400 group-hover:text-[#ccf141]"
+                                  }`}
+                                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                                >
+                                  <span>Explore {card.title}</span>
+                                  <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+                                </span>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+
+                      {/* ROW 2 DIVIDER & HEADING */}
+                      <div className="flex items-center gap-2 my-2 pt-1.5 border-t border-white/10">
+                        <span className="text-[9.5px] font-mono font-bold uppercase tracking-widest text-[#ccf141] flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141]" />
+                          SPECIAL PASSES: DUO, FAMILY &amp; YOUTH PROGRAMS
+                        </span>
+                      </div>
+
+                      {/* ROW 2: BXC DUO, BXC FAMILY FIT, JUNIOR CORE (3 CARDS) */}
+                      <div className="grid grid-cols-3 gap-3 mb-2">
+                        {specialMembershipCards.map((card) => (
+                          <Link
+                            key={card.id}
+                            to={card.path}
+                            onClick={() => setOpenDropdown(null)}
+                            className="group relative rounded-xl p-2.5 flex flex-col justify-between transition-all duration-300 bg-[#121215] cursor-pointer hover:-translate-y-0.5 border border-white/10 hover:border-[#ccf141]/60 hover:shadow-[0_10px_25px_rgba(0,0,0,0.8),0_0_15px_rgba(204,241,65,0.1)]"
+                          >
+                            {/* TOP IMAGE */}
+                            <div className="relative h-22 rounded-lg overflow-hidden bg-black mb-2">
+                              <img
+                                src={card.image}
+                                alt={card.title}
+                                className="w-full h-full object-cover object-[center_30%] group-hover:scale-108 transition-transform duration-700 ease-out filter contrast-110 brightness-95 group-hover:brightness-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+                              {/* TOP BADGE */}
+                              <div className="absolute top-2 left-2 z-10">
+                                <span className="px-1.5 py-0.5 rounded text-[8.5px] font-black uppercase tracking-wider bg-black/80 backdrop-blur-md text-[#ccf141] border border-[#ccf141]/30">
+                                  {card.tag}
+                                </span>
+                              </div>
+
+                              {/* ARROW CIRCLE ICON ON IMAGE BOTTOM RIGHT */}
+                              <div className="absolute bottom-2 right-2 w-6 h-6 rounded-full bg-black/70 backdrop-blur-md border border-white/20 flex items-center justify-center text-white group-hover:bg-[#ccf141] group-hover:text-black group-hover:border-[#ccf141] transition-all duration-300">
+                                <ArrowRight
+                                  size={11}
+                                  className="group-hover:translate-x-0.5 transition-transform"
+                                />
+                              </div>
+                            </div>
+
+                            {/* CONTENT */}
+                            <div className="flex flex-col flex-1 justify-between">
+                              <div>
+                                <h3
+                                  className="text-[14px] font-black uppercase text-white tracking-tight group-hover:text-[#ccf141] transition-colors leading-none"
+                                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                                >
+                                  {card.title}
+                                </h3>
+                              </div>
+
+                              {/* SUBTLE BOTTOM EXPLORE LINK */}
+                              <div className="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between">
+                                <span
+                                  className="text-[11px] font-black uppercase tracking-wider flex items-center gap-1 text-neutral-400 group-hover:text-[#ccf141] transition-colors"
+                                  style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                                >
+                                  <span>Explore {card.title}</span>
+                                  <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+                                </span>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -568,7 +750,7 @@ const Navbar = () => {
         {/* MENU */}
 
         <div
-          className="flex-1 overflow-y-auto px-6 py-2 space-y-0"
+          className="flex-1 overflow-y-auto px-5 py-3 space-y-0"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           {/* HOME */}
@@ -627,15 +809,25 @@ const Navbar = () => {
             </a>
           </div>
 
-          {/* MEMBERSHIP */}
+          {/* MEMBERSHIP ACCORDION WITH 3-COLUMN GRID VIEW IN MOBILE */}
 
           <div className="border-b border-[#1f1f1f]">
-            <div className="flex justify-between items-center py-2">
+            <div className="flex justify-between items-center py-2.5">
               <NavLink
                 to="/"
                 onClick={closeOffcanvas}
                 className={({ isActive }) =>
-                  `text-[14px] font-extrabold transition-colors ${isActive
+                  `text-[14px] font-extrabold transition-colors ${isActive ||
+                  location.pathname.includes("/membership") ||
+                  location.pathname === "/core" ||
+                  location.pathname === "/athlete" ||
+                  location.pathname === "/arena" ||
+                  location.pathname === "/junior" ||
+                  location.pathname === "/junior-core" ||
+                  location.pathname === "/family" ||
+                  location.pathname === "/family-fit" ||
+                  location.pathname === "/duo" ||
+                  location.pathname === "/bxc-duo"
                     ? "text-[#ccf141]"
                     : "text-white hover:text-[#ccf141]"
                   }`
@@ -652,40 +844,222 @@ const Navbar = () => {
             </div>
 
             <div
-              className={`overflow-hidden transition-all duration-300 ${openDropdown === "membership" ? "max-h-[500px] pb-4" : "max-h-0"
-                }`}
+              className={`overflow-hidden transition-all duration-300 ${
+                openDropdown === "membership" ? "max-h-[1600px] pb-5" : "max-h-0"
+              }`}
             >
-              <div className="flex flex-col gap-3 pl-2">
-                {membershipDropdown.map((item) =>
-                  item.path ? (
-                    <Link
-                      key={item.name}
-                      to={item.path}
-                      onClick={closeOffcanvas}
-                      className="text-sm text-gray-400 hover:text-white font-medium tracking-wider"
-                    >
-                      {item.name}
-                    </Link>
-                  ) : (
-                    <a
-                      key={item.name}
-                      href={`/#${item.scrollToId}`}
-                      onClick={(e) => {
-                        if (item.scrollToId) {
-                          const el = document.getElementById(item.scrollToId);
-                          if (el) {
-                            e.preventDefault();
-                            el.scrollIntoView({ behavior: "smooth" });
-                          }
-                        }
-                        closeOffcanvas();
-                      }}
-                      className="text-sm text-gray-400 hover:text-white font-medium tracking-wider"
-                    >
-                      {item.name}
-                    </a>
-                  )
-                )}
+              {/* 1. TOP 3-GRID LAYOUT: CORE, ATHLETE, ARENA */}
+              <div className="grid grid-cols-3 gap-2 pt-2">
+                {membershipCards.map((card) => (
+                  <Link
+                    key={card.id}
+                    to={card.path}
+                    onClick={closeOffcanvas}
+                    className={`group relative rounded-xl overflow-hidden border p-2 flex flex-col justify-between transition-all active:scale-95 bg-[#121215] cursor-pointer ${
+                      card.isPopular
+                        ? "border-[#ccf141] shadow-[0_0_15px_rgba(204,241,65,0.2)]"
+                        : "border-white/10 hover:border-white/20"
+                    }`}
+                  >
+                    {/* Thumbnail Image */}
+                    <div className="relative h-24 sm:h-28 rounded-lg overflow-hidden bg-black mb-1.5">
+                      <img
+                        src={card.image}
+                        alt={card.title}
+                        className="w-full h-full object-cover object-[center_18%] filter contrast-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />
+                      
+                      {/* Top Badge */}
+                      <span
+                        className={`absolute top-1 left-1 px-1 py-0.2 rounded text-[7.5px] font-black uppercase tracking-wider ${
+                          card.isPopular
+                            ? "bg-[#ccf141] text-black font-extrabold"
+                            : "bg-black/80 backdrop-blur-md text-white border border-white/20"
+                        }`}
+                      >
+                        {card.mobileBadge}
+                      </span>
+                    </div>
+
+                    {/* Details */}
+                    <div className="flex flex-col flex-1 justify-between">
+                      <div>
+                        <h4
+                          className="text-xs sm:text-[13px] font-black uppercase text-white tracking-tight leading-none group-hover:text-[#ccf141] transition-colors truncate"
+                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                        >
+                          {card.title}
+                        </h4>
+                        <span className="text-[9.5px] text-[#ccf141] font-mono font-bold block mt-1">
+                          {card.fromPrice}
+                        </span>
+                      </div>
+
+                      <span
+                        className={`text-[8.5px] font-extrabold uppercase tracking-wider mt-2 py-1 px-1 rounded flex items-center justify-center gap-0.5 ${
+                          card.isPopular
+                            ? "bg-[#ccf141] text-black shadow-sm font-black"
+                            : "bg-white/5 text-neutral-300 border border-white/10 group-hover:bg-[#ccf141] group-hover:text-black transition-colors"
+                        }`}
+                      >
+                        <span>View</span>
+                        <ArrowRight size={9} />
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* 2. MIDDLE 2-GRID LAYOUT: BXC DUO & BXC FAMILY FIT */}
+              <div className="grid grid-cols-2 gap-2 mt-2.5">
+                {/* BXC DUO CARD */}
+                <Link
+                  to="/duo"
+                  onClick={closeOffcanvas}
+                  className="group relative rounded-xl overflow-hidden border border-white/10 hover:border-[#ccf141]/50 p-2.5 flex flex-col justify-between transition-all active:scale-95 bg-[#121215] cursor-pointer"
+                >
+                  <div className="relative h-20 rounded-lg overflow-hidden bg-black mb-1.5">
+                    <img
+                      src={duoCoupleImg}
+                      alt="BXC Duo"
+                      className="w-full h-full object-cover filter contrast-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />
+                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-black/80 backdrop-blur-md text-[#ccf141] border border-[#ccf141]/30">
+                      2 PERSON
+                    </span>
+                  </div>
+                  <div className="flex flex-col flex-1 justify-between">
+                    <div>
+                      <h4
+                        className="text-xs font-black uppercase text-white tracking-tight leading-none group-hover:text-[#ccf141] transition-colors"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        BXC DUO
+                      </h4>
+                      <span className="text-[9.5px] text-neutral-400 block mt-0.5 truncate">
+                        Couple &amp; Buddy Pass
+                      </span>
+                      <span className="text-[9.5px] text-[#ccf141] font-mono font-bold block mt-0.5">
+                        From ₹6,800/mo
+                      </span>
+                    </div>
+                    <span className="text-[9px] font-extrabold uppercase tracking-wider mt-2 py-1 px-1 rounded flex items-center justify-center gap-1 bg-white/5 text-neutral-300 border border-white/10 group-hover:bg-[#ccf141] group-hover:text-black transition-colors">
+                      <span>View Duo</span>
+                      <ArrowRight size={10} />
+                    </span>
+                  </div>
+                </Link>
+
+                {/* BXC FAMILY FIT CARD */}
+                <Link
+                  to="/family"
+                  onClick={closeOffcanvas}
+                  className="group relative rounded-xl overflow-hidden border border-white/10 hover:border-[#ccf141]/50 p-2.5 flex flex-col justify-between transition-all active:scale-95 bg-[#121215] cursor-pointer"
+                >
+                  <div className="relative h-20 rounded-lg overflow-hidden bg-black mb-1.5">
+                    <img
+                      src={familyFatherSonImg}
+                      alt="BXC Family Fit"
+                      className="w-full h-full object-cover filter contrast-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />
+                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-wider bg-black/80 backdrop-blur-md text-[#ccf141] border border-[#ccf141]/30">
+                      ALL AGES
+                    </span>
+                  </div>
+                  <div className="flex flex-col flex-1 justify-between">
+                    <div>
+                      <h4
+                        className="text-xs font-black uppercase text-white tracking-tight leading-none group-hover:text-[#ccf141] transition-colors"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        FAMILY FIT
+                      </h4>
+                      <span className="text-[9.5px] text-neutral-400 block mt-0.5 truncate">
+                        Parents + Kids (Up to 4)
+                      </span>
+                      <span className="text-[9.5px] text-[#ccf141] font-mono font-bold block mt-0.5">
+                        From ₹11,900/mo
+                      </span>
+                    </div>
+                    <span className="text-[9px] font-extrabold uppercase tracking-wider mt-2 py-1 px-1 rounded flex items-center justify-center gap-1 bg-white/5 text-neutral-300 border border-white/10 group-hover:bg-[#ccf141] group-hover:text-black transition-colors">
+                      <span>View Family</span>
+                      <ArrowRight size={10} />
+                    </span>
+                  </div>
+                </Link>
+              </div>
+
+              {/* 3. BOTTOM: JUNIOR CARD */}
+              <Link
+                to="/junior"
+                onClick={closeOffcanvas}
+                className="mt-2.5 group relative rounded-xl overflow-hidden border border-white/10 hover:border-[#ccf141]/50 p-2.5 flex items-center gap-3 transition-all active:scale-98 bg-[#121215] cursor-pointer"
+              >
+                <div className="relative w-20 h-16 rounded-lg overflow-hidden bg-black shrink-0">
+                  <img
+                    src={juniorBoxer}
+                    alt="Junior Core"
+                    className="w-full h-full object-cover object-[center_34%] filter contrast-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
+                  <span className="absolute top-1 left-1 px-1 py-0.2 rounded text-[7.5px] font-black uppercase tracking-wider bg-[#ccf141] text-black">
+                    UNDER 13
+                  </span>
+                </div>
+                <div className="flex-1 min-w-0 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-1">
+                      <h4
+                        className="text-xs font-black uppercase text-white tracking-tight leading-none group-hover:text-[#ccf141] transition-colors"
+                        style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                      >
+                        JUNIOR CORE
+                      </h4>
+                      <span className="text-[10px] text-[#ccf141] font-mono font-bold">
+                        ₹1,958/mo
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-neutral-400 mt-1 leading-tight line-clamp-1">
+                      Youth boxing fundamentals, discipline &amp; screen-free fitness.
+                    </p>
+                  </div>
+                  <span className="text-[9px] font-black uppercase tracking-wider mt-1 text-[#ccf141] flex items-center gap-1">
+                    <span>Explore Junior Program</span>
+                    <ArrowRight size={10} />
+                  </span>
+                </div>
+              </Link>
+
+              {/* SECONDARY QUICK LINKS IN MOBILE */}
+              <div className="pt-3 flex flex-col gap-2 border-t border-white/10 mt-3">
+                <Link
+                  to="/founding100"
+                  onClick={closeOffcanvas}
+                  className="flex items-center justify-between text-xs text-[#ccf141] font-bold uppercase tracking-wider py-1.5"
+                >
+                  <span className="flex items-center gap-2">
+                    <Sparkles size={14} />
+                    Founding Members 100 Access
+                  </span>
+                  <ArrowRight size={14} />
+                </Link>
+                <Link
+                  to="/#membership-plans"
+                  onClick={closeOffcanvas}
+                  className="text-xs text-neutral-400 hover:text-white uppercase tracking-wider py-1"
+                >
+                  Compare All Plans &amp; Pricing
+                </Link>
+                <Link
+                  to="/#book-your-free-gym-tour"
+                  onClick={closeOffcanvas}
+                  className="text-xs text-neutral-400 hover:text-white uppercase tracking-wider py-1"
+                >
+                  Book Free Trial / Gym Tour
+                </Link>
               </div>
             </div>
           </div>
@@ -752,10 +1126,10 @@ const Navbar = () => {
 
           {/* FOOTER */}
 
-          <div className=" mt-50px">
+          <div className="mt-[50px]">
             {/* SOCIAL */}
 
-            <div className="flex mt-5  gap-6">
+            <div className="flex mt-5 gap-6">
               <a href="#" className="text-white hover:text-[#ccf141]">
                 <FaFacebookF size={20} />
               </a>
@@ -911,7 +1285,7 @@ const Navbar = () => {
                 </div>
               </div>
 
-              {/* Admin Dashboard Button (opens in separate page) */}
+              {/* Admin Dashboard Button */}
               <div className="pt-6">
                 <a
                   href="/dashboard"
@@ -932,7 +1306,7 @@ const Navbar = () => {
           {/* Right Column: Gallery */}
           <div>
             <h3
-              className="text-white  uppercase tracking-wider mb-8"
+              className="text-white uppercase tracking-wider mb-8"
               style={{
                 fontFamily: '"Brutal Font Bold", sans-serif',
                 fontWeight: 600,
