@@ -892,82 +892,66 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         )}
                       </div>
 
-                      {/* Compact Slot Availability Indicator */}
+                      {/* Easy to Understand Slot Availability Indicator */}
                       {hasSlots && totalSlots > 0 && (
-                        <div className="my-2.5 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/15 transition-all">
-                          <div className="flex items-center justify-between text-xs mb-1.5">
-                            <div className="flex items-center gap-2">
-                              <span className="relative flex h-2 w-2 shrink-0">
-                                {isSoldOut ? (
-                                  <span className="h-2 w-2 rounded-full bg-red-500" />
-                                ) : isFillingFast ? (
-                                  <>
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500" />
-                                  </>
-                                ) : (
-                                  <span className="h-2 w-2 rounded-full bg-[#ccf141]" />
-                                )}
+                        <div className="my-2.5 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/15 transition-all">
+                          {/* 3 Clear Columns: Total Slots | Booked Slots | Remaining Slots */}
+                          <div className="grid grid-cols-3 gap-2 text-center pb-2 border-b border-white/[0.06]">
+                            <div className="flex flex-col items-center">
+                              <span className="text-[9px] uppercase tracking-wider text-gray-400 font-bold">
+                                Total Slots
                               </span>
-
-                              <span className="text-gray-300 font-medium text-[11px]">
-                                {isSoldOut ? (
-                                  <span className="text-red-400 font-bold uppercase tracking-wider text-[10px]">
-                                    Sold Out
-                                  </span>
-                                ) : (
-                                  <span>
-                                    <strong className="text-white font-black text-xs">
-                                      {remaining}
-                                    </strong>
-                                    <span className="text-gray-400 font-normal">
-                                      {" "}
-                                      of {totalSlots} spots left
-                                    </span>
-                                  </span>
-                                )}
+                              <span className="text-xs sm:text-sm font-black text-white font-mono mt-0.5">
+                                {totalSlots}
                               </span>
                             </div>
-
-                            <div className="text-[10px] font-bold uppercase tracking-wider">
-                              {isSoldOut ? (
-                                <span className="text-red-400/80">
-                                  Waitlist
-                                </span>
-                              ) : isFillingFast ? (
-                                <span className="text-orange-400 flex items-center gap-1">
-                                  <Flame
-                                    size={11}
-                                    className="fill-orange-400 text-orange-400 animate-pulse shrink-0"
-                                  />
-                                  Filling Fast
-                                </span>
-                              ) : (
-                                <span className="text-gray-400 font-medium normal-case">
-                                  {totalBooked > 0
-                                    ? `${totalBooked} booked`
-                                    : "Available"}
-                                </span>
-                              )}
+                            <div className="flex flex-col items-center border-x border-white/[0.08]">
+                              <span className="text-[9px] uppercase tracking-wider text-cyan-400 font-bold">
+                                Booked
+                              </span>
+                              <span className="text-xs sm:text-sm font-black text-cyan-400 font-mono mt-0.5">
+                                {totalBooked}
+                              </span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <span className="text-[9px] uppercase tracking-wider text-[#ccf141] font-bold">
+                                Remaining
+                              </span>
+                              <span
+                                className={`text-xs sm:text-sm font-black font-mono mt-0.5 ${
+                                  isSoldOut ? "text-red-400" : "text-[#ccf141]"
+                                }`}
+                              >
+                                {isSoldOut ? "0" : remaining}
+                              </span>
                             </div>
                           </div>
 
-                          {/* Slim Minimalist Progress Line */}
-                          <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full rounded-full transition-all duration-700 ease-out ${
-                                isSoldOut
-                                  ? "bg-red-500 w-full"
-                                  : isFillingFast
-                                    ? "bg-gradient-to-r from-amber-500 to-orange-500"
-                                    : "bg-gradient-to-r from-lime-400 to-[#ccf141]"
-                              }`}
-                              style={{
-                                width: isSoldOut
-                                  ? "100%"
-                                  : `${Math.min(100, Math.max(6, bookedPercent))}%`,
-                              }}
-                            />
+                          {/* Clean Visual Progress Line */}
+                          <div className="mt-2 flex items-center justify-between gap-2">
+                            <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all duration-700 ease-out ${
+                                  isSoldOut
+                                    ? "bg-red-500 w-full"
+                                    : isFillingFast
+                                      ? "bg-gradient-to-r from-amber-500 to-orange-500"
+                                      : "bg-gradient-to-r from-lime-400 to-[#ccf141]"
+                                }`}
+                                style={{
+                                  width: isSoldOut
+                                    ? "100%"
+                                    : `${Math.min(100, Math.max(6, bookedPercent))}%`,
+                                }}
+                              />
+                            </div>
+                            <span className="text-[10px] font-mono font-bold text-gray-400 shrink-0">
+                              {isSoldOut ? (
+                                <span className="text-red-400 font-bold uppercase">Sold Out</span>
+                              ) : (
+                                `${bookedPercent}% booked`
+                              )}
+                            </span>
                           </div>
                         </div>
                       )}

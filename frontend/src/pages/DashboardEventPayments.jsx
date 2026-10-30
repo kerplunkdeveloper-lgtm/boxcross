@@ -17,6 +17,8 @@ import {
   Award,
   RotateCcw,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Mail,
   Phone,
   Clock,
@@ -137,6 +139,8 @@ const DashboardEventPayments = () => {
     }
   });
   const [viewScreenshotUrl, setViewScreenshotUrl] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [deletingId, setDeletingId] = useState(null);
 
   const updateEventFilter = (val) => {
@@ -417,15 +421,42 @@ const DashboardEventPayments = () => {
     }
   });
 
+  const remainingSeats = Math.max(0, totalSlotsAllocated - totalSeats);
+
   const successfulTxns = statsBookings.filter(
     (b) => b.status === "payment successfully" || b.status === "confirmed",
   ).length;
   const pendingTxns = statsBookings.filter(
-    (b) => b.status === "not payment",
+    (b) => b.status === "not payment" || b.status === "None" || !b.status,
   ).length;
   const failedTxns = statsBookings.filter(
     (b) => b.status === "failed",
   ).length;
+
+    // Reset page on filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    searchQuery,
+    eventFilter,
+    dateFilter,
+    timeSlotFilter,
+    statusFilter,
+    paymentMethodFilter,
+  ]);
+
+  // Helper to retrieve event image
+  const getEventImage = (booking) => {
+    if (booking.event?.imageUrl) return booking.event.imageUrl;
+    const title = booking.event?.title;
+    const eventId =
+      booking.event?._id ||
+      (typeof booking.event === "string" ? booking.event : null);
+    const matched = events.find(
+      (e) => (eventId && e._id === eventId) || (title && e.title === title)
+    );
+    return matched?.imageUrl || "";
+  };
 
   // Filter bookings
   const filteredBookings = bookings.filter((booking) => {
@@ -451,7 +482,9 @@ const DashboardEventPayments = () => {
       normalizeSlotKey(booking.timeSlot) === normalizeSlotKey(timeSlotFilter);
 
     const matchesStatus =
-      statusFilter === "all" || booking.status === statusFilter;
+      statusFilter === "all" ||
+      booking.status === statusFilter ||
+      (statusFilter === "not payment" && (booking.status === "None" || !booking.status));
 
     const matchesPaymentMethod =
       paymentMethodFilter === "all" ||
@@ -466,6 +499,31 @@ const DashboardEventPayments = () => {
       matchesPaymentMethod
     );
   });
+
+    // Client-side pagination
+  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage) || 1;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const paginatedBookings = filteredBookings.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  const getPageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (currentPage <= 4) {
+        pages.push(1, 2, 3, 4, 5, "...", totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        pages.push(1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
+      }
+    }
+    return pages;
+  };
 
   const hasActiveFilters =
     searchQuery !== "" ||
@@ -636,13 +694,13 @@ const DashboardEventPayments = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4 md:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 md:gap-5">
           {/* Card 1: Total Revenue */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 flex items-center justify-between shadow-lg transition-colors col-span-2 sm:col-span-1"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 flex items-center justify-between shadow-lg transition-colors"
           >
             <div className="text-left">
               <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest truncate max-w-[170px]">
@@ -666,14 +724,35 @@ const DashboardEventPayments = () => {
           >
             <div className="text-left">
               <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
-                No. of Seats
+                No. of Seats Booked
               </p>
               <h3 className="text-lg sm:text-2xl font-black text-cyan-400 mt-0.5 sm:mt-1 font-mono">
                 {totalSeats}
               </h3>
             </div>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-              <Users size={18} />
+             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
+              <Ticket size={18} />
+            </div>
+           
+          </motion.div>
+
+          {/* Card: Remaining Seats */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.05 }}
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 flex items-center justify-between shadow-lg transition-colors"
+          >
+            <div className="text-left">
+              <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest truncate">
+                Remaining Seats
+              </p>
+              <h3 className="text-lg sm:text-2xl font-black text-purple-400 mt-0.5 sm:mt-1 font-mono">
+                {remainingSeats}
+              </h3>
+            </div>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
+              <Ticket size={18} />
             </div>
           </motion.div>
 
@@ -686,7 +765,7 @@ const DashboardEventPayments = () => {
           >
             <div className="text-left">
               <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
-                Successful
+               Booking person Group
               </p>
               <h3 className="text-lg sm:text-2xl font-black text-[var(--db-accent-highlight)] mt-0.5 sm:mt-1">
                 {successfulTxns}
@@ -1161,7 +1240,10 @@ const DashboardEventPayments = () => {
             <>
               {/* Mobile Cards View */}
               <div className="block md:hidden space-y-3">
-                {filteredBookings.map((booking) => (
+                {paginatedBookings.map((booking, index) => {
+                  const eventTitle = booking.event?.title || "Deleted Event";
+                  const eventImg = getEventImage(booking);
+                  return (
                   <div
                     key={booking._id}
                     className="bg-[var(--db-input-bg)]/40 border border-[var(--db-input-border)] rounded-2xl p-3.5 space-y-3 shadow-md"
@@ -1169,9 +1251,14 @@ const DashboardEventPayments = () => {
                     {/* Top Row: Name, Seats, and Amount */}
                     <div className="flex items-start justify-between gap-2 border-b border-[var(--db-card-border)]/50 pb-2.5">
                       <div>
-                        <h4 className="font-bold text-sm text-[var(--db-text)] leading-snug">
-                          {booking.name}
-                        </h4>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-[var(--db-accent-glow)] border border-[var(--db-accent-highlight)]/30 text-[var(--db-accent-highlight)] font-mono font-bold">
+                            #{indexOfFirstItem + index + 1}
+                          </span>
+                          <h4 className="font-bold text-sm text-[var(--db-text)] leading-snug">
+                            {booking.name}
+                          </h4>
+                        </div>
                         <div className="flex items-center gap-2 mt-1">
                           <span className="text-[10px] px-2 py-0.5 rounded bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] font-mono font-bold">
                             {booking.seats} {booking.seats === 1 ? "seat" : "seats"}
@@ -1201,17 +1288,34 @@ const DashboardEventPayments = () => {
                     </div>
 
                     {/* Event & Schedule */}
-                    <div className="p-2.5 rounded-xl bg-[var(--db-card)]/80 border border-[var(--db-card-border)]/60 space-y-1.5">
-                      <p className="text-xs font-bold text-[var(--db-text)] line-clamp-1">
-                        {booking.event?.title || "Deleted Event"}
-                      </p>
-                      <div className="flex items-center gap-1.5 text-[10px] text-[var(--db-text-muted)] font-medium">
-                        <Calendar size={11} className="text-[var(--db-accent-highlight)] shrink-0" />
-                        <span className="font-bold text-[var(--db-accent-highlight)] uppercase">
-                          {formatDateToDMY(booking.date)}
-                        </span>
-                        <span>•</span>
-                        <span className="truncate">{booking.timeSlot}</span>
+                    <div className="p-2.5 rounded-xl bg-[var(--db-card)]/80 border border-[var(--db-card-border)]/60 flex items-center gap-3">
+                      {eventImg ? (
+                        <img
+                          src={eventImg}
+                          alt={eventTitle}
+                          className="w-12 h-12 rounded-xl object-cover border border-[var(--db-card-border)] shrink-0 bg-black/20"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex items-center justify-center shrink-0 text-[var(--db-accent-highlight)]">
+                          <Ticket size={18} />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-[var(--db-text)] break-words leading-snug">
+                          {eventTitle}
+                        </p>
+                        <div className="flex items-center gap-1.5 text-[10px] text-[var(--db-text-muted)] font-medium mt-1">
+                          <Calendar size={11} className="text-[var(--db-accent-highlight)] shrink-0" />
+                          <span className="font-bold text-[var(--db-accent-highlight)] uppercase font-mono">
+                            {formatDateToDMY(booking.date)}
+                          </span>
+                          <span>•</span>
+                          <span className="truncate font-mono">{booking.timeSlot}</span>
+                        </div>
                       </div>
                     </div>
 
@@ -1273,11 +1377,12 @@ const DashboardEventPayments = () => {
                               ? "text-green-400 border-green-500/20"
                               : booking.status === "pending barcode verification"
                                 ? "text-blue-400 border-blue-500/20"
-                                : booking.status === "not payment"
+                                : booking.status === "not payment" || booking.status === "None"
                                   ? "text-yellow-500 border-yellow-500/20"
                                   : "text-red-400 border-red-500/20"
                           }`}
                         >
+                          <option value="None">None</option>
                           <option value="not payment">Not Payment</option>
                           <option value="pending barcode verification">Pending Barcode</option>
                           <option value="payment successfully">Payment Successfully</option>
@@ -1297,21 +1402,25 @@ const DashboardEventPayments = () => {
                       </button>
                     </div>
                   </div>
-                ))}
+                );
+              })}
               </div>
 
               {/* Desktop Table View */}
               <div className="hidden md:block overflow-x-auto w-full custom-scrollbar pb-2">
-                <table className="w-full text-left border-collapse min-w-[1300px]">
+                <table className="w-full text-left border-collapse min-w-[1450px]">
                   <thead>
                     <tr className="bg-[var(--db-accent)] border-b border-[var(--db-card-border)] text-[var(--db-accent-text)] text-[10px] uppercase font-extrabold tracking-widest">
-                    <th className="py-4 px-4 rounded-l-xl border-r border-[var(--db-card-border)]/40">
+                    <th className="py-4 px-3 text-center rounded-l-xl border-r border-[var(--db-card-border)]/40 w-16 whitespace-nowrap">
+                      Sl.No
+                    </th>
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40 whitespace-nowrap">
                       Name
                     </th>
                     <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40 min-w-[200px]">
                       Email & Phone
                     </th>
-                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40">
+                    <th className="py-4 px-4 border-r border-[var(--db-card-border)]/40 min-w-[320px]">
                       Event Details
                     </th>
                     <th className="py-4 px-4 min-w-[180px] whitespace-nowrap border-r border-[var(--db-card-border)]/40">
@@ -1344,11 +1453,19 @@ const DashboardEventPayments = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--db-card-border)]">
-                  {filteredBookings.map((booking) => (
+                  {paginatedBookings.map((booking, index) => {
+                    const eventTitle = booking.event?.title || "Deleted Event";
+                    const eventImg = getEventImage(booking);
+                    return (
                     <tr
                       key={booking._id}
                       className="hover:bg-[var(--db-table-hover)] transition-colors"
                     >
+                      {/* Sl.No */}
+                      <td className="py-4 px-3 text-center font-mono font-bold text-xs text-[var(--db-text-muted)] border-r border-[var(--db-card-border)]/30 w-16">
+                        {indexOfFirstItem + index + 1}
+                      </td>
+
                       {/* Name */}
                       <td className="py-4 px-4 text-left font-bold text-[var(--db-text)] text-sm whitespace-nowrap border-r border-[var(--db-card-border)]/30">
                         {booking.name}
@@ -1383,16 +1500,38 @@ const DashboardEventPayments = () => {
                       </td>
 
                       {/* Event Details */}
-                      <td className="py-4 px-4 text-left border-r border-[var(--db-card-border)]/30 min-w-[200px]">
-                        <div className="font-bold text-sm text-[var(--db-text)] line-clamp-1" title={booking.event?.title}>
-                          {booking.event?.title || "Deleted Event"}
-                        </div>
-                        {booking.createdAt && (
-                          <div className="text-[10px] text-[var(--db-text-muted)] mt-1 flex items-center gap-1 font-mono">
-                            <span>Booked on:</span>
-                            <span className="text-gray-400 font-semibold">{formatDateToDMY(booking.createdAt)}</span>
+                      <td className="py-4 px-4 text-left border-r border-[var(--db-card-border)]/30 min-w-[320px] max-w-[420px]">
+                        <div className="flex items-center gap-3">
+                          {eventImg ? (
+                            <img
+                              src={eventImg}
+                              alt={eventTitle}
+                              className="w-12 h-12 rounded-xl object-cover border border-[var(--db-card-border)] shadow-sm shrink-0 bg-black/20"
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.style.display = "none";
+                              }}
+                            />
+                          ) : (
+                            <div className="w-12 h-12 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] flex items-center justify-center shrink-0 text-[var(--db-accent-highlight)]">
+                              <Ticket size={20} />
+                            </div>
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <div
+                              className="font-bold text-sm text-[var(--db-text)] break-words whitespace-normal leading-snug"
+                              title={eventTitle}
+                            >
+                              {eventTitle}
+                            </div>
+                            {booking.createdAt && (
+                              <div className="text-[10px] text-[var(--db-text-muted)] mt-1 flex items-center gap-1 font-mono">
+                                <span>Booked on:</span>
+                                <span className="text-gray-400 font-semibold">{formatDateToDMY(booking.createdAt)}</span>
+                              </div>
+                            )}
                           </div>
-                        )}
+                        </div>
                       </td>
 
                       {/* Schedule Date/Time */}
@@ -1514,11 +1653,12 @@ const DashboardEventPayments = () => {
                                 : booking.status ===
                                     "pending barcode verification"
                                   ? "text-blue-400 border-blue-500/20"
-                                  : booking.status === "not payment"
+                                  : booking.status === "not payment" || booking.status === "None"
                                     ? "text-yellow-500 border-yellow-500/20"
                                     : "text-red-400 border-red-500/20"
                             }`}
                           >
+                            <option value="None">None</option>
                             <option value="not payment">Not Payment</option>
                             <option value="pending barcode verification">
                               Pending Barcode
@@ -1545,10 +1685,96 @@ const DashboardEventPayments = () => {
                         </button>
                       </td>
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
+
+            {/* Pagination Controls */}
+            {filteredBookings.length > 0 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-6 pt-4 border-t border-[var(--db-card-border)]">
+                <div className="flex flex-wrap items-center gap-3 text-xs text-[var(--db-text-muted)] font-bold">
+                  <span>
+                    Showing{" "}
+                    <span className="text-[var(--db-text)] font-mono">
+                      {filteredBookings.length > 0 ? indexOfFirstItem + 1 : 0}
+                    </span>{" "}
+                    to{" "}
+                    <span className="text-[var(--db-text)] font-mono">
+                      {Math.min(indexOfLastItem, filteredBookings.length)}
+                    </span>{" "}
+                    of{" "}
+                    <span className="text-[var(--db-text)] font-mono">
+                      {filteredBookings.length}
+                    </span>{" "}
+                    entries
+                  </span>
+
+                  <div className="flex items-center gap-1.5 pl-2 border-l border-[var(--db-card-border)]">
+                    <span className="text-[11px] text-[var(--db-text-muted)] font-semibold">Rows:</span>
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => {
+                        setItemsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                      }}
+                      className="bg-[var(--db-input-bg)] border border-[var(--db-input-border)] text-[var(--db-text)] rounded-lg px-2 py-1 text-xs outline-none cursor-pointer"
+                    >
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
+                      <option value={50}>50</option>
+                      <option value={100}>100</option>
+                    </select>
+                  </div>
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="p-2 rounded-lg border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer text-[var(--db-text)]"
+                      title="Previous Page"
+                    >
+                      <ChevronLeft size={14} />
+                    </button>
+
+                    {getPageNumbers().map((page, idx) =>
+                      page === "..." ? (
+                        <span
+                          key={`ellipsis-${idx}`}
+                          className="w-8 h-8 flex items-center justify-center text-xs text-[var(--db-text-muted)] font-bold"
+                        >
+                          ...
+                        </span>
+                      ) : (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`w-8 h-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                            currentPage === page
+                              ? "bg-[#ccf141] text-black shadow-md font-black"
+                              : "border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text-muted)]"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      )
+                    )}
+
+                    <button
+                      onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="p-2 rounded-lg border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer text-[var(--db-text)]"
+                      title="Next Page"
+                    >
+                      <ChevronRight size={14} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </>
           ) : (
             <div className="py-12 text-center text-gray-500 text-xs">

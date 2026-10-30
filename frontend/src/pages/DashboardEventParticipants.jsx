@@ -31,6 +31,7 @@ import {
   BarChart2,
   QrCode,
   RotateCcw,
+  CircleDot,
 } from "lucide-react";
 import {
   getEventBookings,
@@ -133,6 +134,7 @@ const formatFollowUpDisplay = (val) => {
 // ─── Bottom Analytics Panel (3-column) ───────────────────────────────────────
 const EventOverviewPanel = ({
   activeBookings,
+  noneCount,
   confirmedCount,
   attendedCount,
   awaitingCount,
@@ -151,6 +153,12 @@ const EventOverviewPanel = ({
 
   // Donut segments
   const segments = [
+    {
+      label: "None",
+      count: noneCount || 0,
+      color: "#a1a1aa",
+      dotColor: "#71717a",
+    },
     {
       label: "Confirmed",
       count: confirmedCount,
@@ -613,7 +621,6 @@ const DashboardEventParticipants = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showBulkMenu, setShowBulkMenu] = useState(false);
-  const [showRepeatedModal, setShowRepeatedModal] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
   const [editingNotes, setEditingNotes] = useState(false);
   const [isSelectMode, setIsSelectMode] = useState(false);
@@ -840,8 +847,8 @@ const DashboardEventParticipants = () => {
   };
 
   const getNormalizedStatus = (booking) => {
-    if (!booking) return "Awaiting";
-    const status = booking.status;
+    if (!booking) return "None";
+    const status = (booking.status || "").trim();
     if (
       status === "payment successfully" ||
       status === "confirmed" ||
@@ -869,14 +876,16 @@ const DashboardEventParticipants = () => {
     if (status === "noresponse" || status === "No Response") {
       return "No Response";
     }
+    if (
+      status === "None" ||
+      status === "none" ||
+      status === "not payment" ||
+      !status
+    ) {
+      return "None";
+    }
 
-    // Fallback for legacy "not payment" status:
-    const createdAtDate = new Date(booking.createdAt);
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
-    if (createdAtDate >= oneDayAgo) return "Awaiting";
-    if (createdAtDate >= threeDaysAgo) return "Follow-up";
-    return "No Response";
+    return "None";
   };
 
   // Build a map of events to their dates (from events definition & actual bookings)
@@ -955,10 +964,21 @@ const DashboardEventParticipants = () => {
   // Status-based counts
   const totalRegistrations = activeBookings.length;
 
-  const totalSeats = activeBookings.reduce(
-    (sum, b) => sum + (Number(b.seats) > 0 ? Number(b.seats) : 1),
-    0,
-  );
+  // Booked seats: Only count confirmed & attended bookings (matches DashboardEventPayments)
+  const totalSeats = activeBookings
+    .filter((b) => {
+      const s = (b.status || "").toLowerCase();
+      return (
+        s === "payment successfully" ||
+        s === "confirmed" ||
+        s === "attended"
+      );
+    })
+    .reduce((sum, b) => sum + (Number(b.seats) || 1), 0);
+
+  const noneCount = activeBookings.filter(
+    (b) => getNormalizedStatus(b) === "None",
+  ).length;
 
   const confirmedCount = activeBookings.filter(
     (b) => getNormalizedStatus(b) === "Confirmed",
@@ -986,12 +1006,11 @@ const DashboardEventParticipants = () => {
 
   const getCapacityStats = () => {
     let totalSlots = 0;
-    let bookedSlots = 0;
 
     const filteredEvents =
       eventFilter === "all"
         ? events
-        : events.filter((e) => e.title === eventFilter);
+        : events.filter((e) => (e.title || "") === eventFilter);
 
     filteredEvents.forEach((evt) => {
       if (evt.schedules) {
@@ -1003,7 +1022,6 @@ const DashboardEventParticipants = () => {
             if (sched.timeSlots) {
               sched.timeSlots.forEach((slot) => {
                 totalSlots += Number(slot.slots) || 0;
-                bookedSlots += Number(slot.booked) || 0;
               });
             }
           }
@@ -1011,23 +1029,11 @@ const DashboardEventParticipants = () => {
       }
     });
 
-    const availableSlots = Math.max(0, totalSlots - bookedSlots);
+    const availableSlots = Math.max(0, totalSlots - totalSeats);
     return { availableSlots, totalSlots };
   };
 
   const { availableSlots, totalSlots } = getCapacityStats();
-
-  const phoneCounts = {};
-  bookings.forEach(b => {
-    if (b.phone) {
-      phoneCounts[b.phone] = (phoneCounts[b.phone] || 0) + 1;
-    }
-  });
-  const repeatedPhones = new Set(
-    Object.keys(phoneCounts).filter(phone => phoneCounts[phone] > 1)
-  );
-
-  const repeatedCount = activeBookings.filter(b => repeatedPhones.has(b.phone)).length;
 
   // Filter based on search & tab status filter
   const filteredBookings = activeBookings.filter((booking) => {
@@ -1039,7 +1045,9 @@ const DashboardEventParticipants = () => {
 
     let matchesStatus = true;
     const normalized = getNormalizedStatus(booking);
-    if (statusFilter === "confirmed") {
+    if (statusFilter === "none") {
+      matchesStatus = normalized === "None";
+    } else if (statusFilter === "confirmed") {
       matchesStatus = normalized === "Confirmed" || normalized === "Attended";
     } else if (statusFilter === "awaiting") {
       matchesStatus = normalized === "Awaiting";
@@ -1049,8 +1057,6 @@ const DashboardEventParticipants = () => {
       matchesStatus = normalized === "No Response";
     } else if (statusFilter === "notcoming") {
       matchesStatus = normalized === "Not Coming";
-    } else if (statusFilter === "repeated") {
-      matchesStatus = repeatedPhones.has(booking.phone);
     }
 
     return matchesSearch && matchesStatus;
@@ -1171,6 +1177,7 @@ const DashboardEventParticipants = () => {
 
   const handleExportToExcel = () => {
     const headers = [
+      { name: "Sl. No", width: 70 },
       { name: "Name", width: 220 },
       { name: "Phone", width: 150 },
       { name: "Event Title", width: 220 },
@@ -1183,7 +1190,8 @@ const DashboardEventParticipants = () => {
       { name: "Notes", width: 350 },
     ];
 
-    const rows = filteredBookings.map((booking) => [
+    const rows = filteredBookings.map((booking, index) => [
+      index + 1,
       booking.name || "-",
       booking.phone || "-",
       booking.event?.title || "-",
@@ -1692,38 +1700,88 @@ const DashboardEventParticipants = () => {
           </div>
         </div>
 
-        {/* Stats Grid - Enhanced UI/UX with Balanced 8-Card Layout */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8 gap-2.5 sm:gap-3.5">
-          {/* Card 1: Total Registrations */}
+        {/* Stats Grid - 6 Cards Layout */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
+          {/* Card 1: Total Slots */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-emerald-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-blue-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
           >
             <div className="flex items-center justify-between gap-2">
               <span
                 className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors truncate"
-                title="Total Registrations"
+                title="Total Slots"
               >
-                Total Registrations
+                Total Slots
               </span>
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.15)]">
-                <Users size={16} />
+              <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 shadow-[0_0_12px_rgba(59,130,246,0.15)]">
+                <Ticket size={16} />
               </div>
             </div>
             <div className="flex items-baseline gap-1.5 mt-2">
-              <h3 className="text-2xl sm:text-3xl font-black text-[var(--db-text)] font-mono leading-none tracking-tight">
-                {totalRegistrations}
+              <h3 className="text-2xl sm:text-3xl font-black text-blue-400 font-mono leading-none tracking-tight">
+                {totalSlots}
               </h3>
             </div>
           </motion.div>
 
-          {/* Card 2: Confirmed */}
+          {/* Card 2: Booked Slots */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.05 }}
+            transition={{ duration: 0.3, delay: 0.04 }}
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-cyan-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span
+                className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors truncate"
+                title="Booked Slots"
+              >
+                Booked Slots
+              </span>
+              <div className="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.15)]">
+                <Ticket size={16} />
+              </div>
+            </div>
+            <div className="flex items-baseline gap-1.5 mt-2">
+              <h3 className="text-2xl sm:text-3xl font-black text-cyan-400 font-mono leading-none tracking-tight">
+                {totalSeats}
+              </h3>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Remaining Slots */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.08 }}
+            className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-purple-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span
+                className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors truncate"
+                title="Remaining Slots"
+              >
+                Remaining Slots
+              </span>
+              <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 shadow-[0_0_12px_rgba(168,85,247,0.15)]">
+                <Ticket size={16} />
+              </div>
+            </div>
+            <div className="flex items-baseline gap-1.5 mt-2">
+              <h3 className="text-2xl sm:text-3xl font-black text-purple-400 font-mono leading-none tracking-tight">
+                {availableSlots}
+              </h3>
+            </div>
+          </motion.div>
+
+          {/* Card 4: Confirmed */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.12 }}
             className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-green-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
           >
             <div className="flex items-center justify-between gap-2">
@@ -1744,19 +1802,19 @@ const DashboardEventParticipants = () => {
             </div>
           </motion.div>
 
-          {/* Card 4: Attendance */}
+          {/* Card 5: Attend */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.07 }}
+            transition={{ duration: 0.3, delay: 0.16 }}
             className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-[#ccf141]/50 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
           >
             <div className="flex items-center justify-between gap-2">
               <span
                 className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors truncate"
-                title="Attendance"
+                title="Attend"
               >
-                Attendance
+                Attend
               </span>
               <div className="w-8 h-8 rounded-xl bg-[#ccf141]/10 border border-[#ccf141]/30 flex items-center justify-center text-[#ccf141] shrink-0 shadow-[0_0_12px_rgba(204,241,65,0.15)]">
                 <Award size={16} />
@@ -1769,116 +1827,11 @@ const DashboardEventParticipants = () => {
             </div>
           </motion.div>
 
-          {/* Card 4: Available Seats */}
+          {/* Card 6: Not Coming */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-blue-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <span
-                className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors truncate"
-                title="Available Seats"
-              >
-                Available Seats
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 shadow-[0_0_12px_rgba(59,130,246,0.15)]">
-                <Ticket size={16} />
-              </div>
-            </div>
-            <div className="mt-2">
-              <div className="flex items-baseline justify-between gap-1">
-                <div className="flex items-baseline gap-1">
-                  <h3 className="text-2xl sm:text-3xl font-black text-blue-400 font-mono leading-none tracking-tight">
-                    {availableSlots}
-                  </h3>
-                  <span className="text-[10px] sm:text-[11px] font-bold text-[var(--db-text-muted)] font-mono">
-                    / {totalSlots}
-                  </span>
-                </div>
-                {totalSlots > 0 && (
-                  <span className="text-[10px] font-bold text-cyan-400 font-mono shrink-0">
-                    {Math.max(0, totalSlots - availableSlots)} booked
-                  </span>
-                )}
-              </div>
-              {totalSlots > 0 && (
-                <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mt-2">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-lime-400 to-[#ccf141] transition-all duration-700 ease-out"
-                    style={{
-                      width: `${Math.min(
-                        100,
-                        Math.max(
-                          4,
-                          Math.round(
-                            ((totalSlots - availableSlots) / totalSlots) * 100,
-                          ),
-                        ),
-                      )}%`,
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-          </motion.div>
-
-          {/* Card 6: Awaiting Confirmation */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.13 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-yellow-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <span
-                className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors truncate"
-                title="Awaiting Confirmation"
-              >
-                Awaiting Conf.
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-yellow-500/10 border border-yellow-500/20 flex items-center justify-center text-yellow-400 shrink-0 shadow-[0_0_12px_rgba(234,179,8,0.15)]">
-                <Clock size={16} />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-1.5 mt-2">
-              <h3 className="text-2xl sm:text-3xl font-black text-yellow-400 font-mono leading-none tracking-tight">
-                {awaitingCount}
-              </h3>
-            </div>
-          </motion.div>
-
-          {/* Card 7: Follow-up Pending */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.16 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-orange-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <span
-                className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-[var(--db-text)] transition-colors truncate"
-                title="Follow-ups"
-              >
-                Follow-ups
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 shrink-0 shadow-[0_0_12px_rgba(249,115,22,0.15)]">
-                <Phone size={16} />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-1.5 mt-2">
-              <h3 className="text-2xl sm:text-3xl font-black text-orange-400 font-mono leading-none tracking-tight">
-                {followUpCount}
-              </h3>
-            </div>
-          </motion.div>
-
-          {/* Card 8: Not Coming */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.19 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
             className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-red-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px]"
           >
             <div className="flex items-center justify-between gap-2">
@@ -1896,36 +1849,6 @@ const DashboardEventParticipants = () => {
               <h3 className="text-2xl sm:text-3xl font-black text-red-400 font-mono leading-none tracking-tight">
                 {notComingCount}
               </h3>
-            </div>
-          </motion.div>
-
-          {/* Card 9: Repeated Participants */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.22 }}
-            onClick={() => setShowRepeatedModal(true)}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] hover:border-purple-500/40 rounded-2xl p-3.5 sm:p-4 flex flex-col justify-between shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all relative overflow-hidden group min-h-[96px] cursor-pointer"
-            title="Click to view repeated participants"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <span
-                className="text-[10.5px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[var(--db-text-muted)] group-hover:text-purple-300 transition-colors truncate"
-                title="Repeated Participants"
-              >
-                Repeated
-              </span>
-              <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0 shadow-[0_0_12px_rgba(168,85,247,0.15)] group-hover:scale-105 transition-transform">
-                <Users size={16} />
-              </div>
-            </div>
-            <div className="flex items-baseline gap-1.5 mt-2">
-              <h3 className="text-2xl sm:text-3xl font-black text-purple-400 font-mono leading-none tracking-tight">
-                {repeatedCount}
-              </h3>
-              <span className="text-[9px] font-bold text-purple-400/80 uppercase">
-                View →
-              </span>
             </div>
           </motion.div>
         </div>
@@ -1956,6 +1879,20 @@ const DashboardEventParticipants = () => {
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     All ({activeBookings.length})
+                  </button>
+                  <button
+                    onClick={() => {
+                      setStatusFilter("none");
+                      setCurrentPage(1);
+                    }}
+                    className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+                      statusFilter === "none"
+                        ? "bg-[#ccf141] text-black shadow-md"
+                        : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
+                    }`}
+                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+                  >
+                    None ({noneCount})
                   </button>
                   <button
                     onClick={() => {
@@ -2026,20 +1963,6 @@ const DashboardEventParticipants = () => {
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     Not Coming ({notComingCount})
-                  </button>
-                  <button
-                    onClick={() => {
-                      setStatusFilter("repeated");
-                      setCurrentPage(1);
-                    }}
-                    className={`px-3 py-1.5 rounded-full text-[11px] font-black tracking-wider transition-all whitespace-nowrap cursor-pointer ${
-                      statusFilter === "repeated"
-                        ? "bg-[#ccf141] text-black shadow-md"
-                        : "bg-transparent border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)]"
-                    }`}
-                    style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                  >
-                    Repeated ({repeatedCount})
                   </button>
                 </div>
 
@@ -2146,10 +2069,11 @@ const DashboardEventParticipants = () => {
                 <>
                   {/* Mobile Cards View */}
                   <div className="block md:hidden space-y-3">
-                    {currentItems.map((booking) => {
+                    {currentItems.map((booking, index) => {
                       const isSelected = selectedBooking && selectedBooking._id === booking._id;
                       const ns = getNormalizedStatus(booking);
                       const statusColorMap = {
+                        None: "border-zinc-500/30 text-zinc-400 bg-zinc-500/10",
                         Confirmed: "border-green-500/30 text-green-400 bg-green-500/10",
                         Attended: "border-cyan-500/30 text-cyan-400 bg-cyan-500/10",
                         Awaiting: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10",
@@ -2175,6 +2099,9 @@ const DashboardEventParticipants = () => {
                                 <h4 className="font-bold text-sm text-[var(--db-text)] truncate">{booking.name}</h4>
                               </div>
                               <div className="flex items-center gap-2 mt-1">
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] font-bold">
+                                  #{indexOfFirstItem + index + 1}
+                                </span>
                                 <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--db-card)] border border-[var(--db-card-border)] text-[var(--db-text-muted)]">
                                   {booking.seats} {booking.seats === 1 ? "seat" : "seats"}
                                 </span>
@@ -2250,18 +2177,19 @@ const DashboardEventParticipants = () => {
                   <div className="hidden md:block overflow-x-auto w-full custom-scrollbar pb-2">
                     <table
                       className="w-full text-left border-collapse table-fixed"
-                      style={{ minWidth: "1050px" }}
+                      style={{ minWidth: "1100px" }}
                     >
                     <colgroup>
                       {isSelectMode && <col style={{ width: "3%" }} />}
+                      <col style={{ width: "5%" }} /> {/* Sl.No */}
                       <col style={{ width: "14%" }} /> {/* Name */}
                       <col style={{ width: "11%" }} /> {/* Phone */}
-                      <col style={{ width: "13%" }} /> {/* Event Date */}
-                      <col style={{ width: "6%" }} /> {/* Seats */}
-                      <col style={{ width: "13%" }} /> {/* Status */}
-                      <col style={{ width: "16%" }} /> {/* Last Contact */}
-                      <col style={{ width: "13%" }} /> {/* Follow-up */}
-                      <col style={{ width: "13%" }} /> {/* Notes */}
+                      <col style={{ width: "12%" }} /> {/* Event Date */}
+                      <col style={{ width: "5%" }} /> {/* Seats */}
+                      <col style={{ width: "12%" }} /> {/* Status */}
+                      <col style={{ width: "15%" }} /> {/* Last Contact */}
+                      <col style={{ width: "12%" }} /> {/* Follow-up */}
+                      <col style={{ width: "12%" }} /> {/* Notes */}
                       <col style={{ width: "8%" }} /> {/* Actions */}
                     </colgroup>
                     <thead>
@@ -2279,6 +2207,9 @@ const DashboardEventParticipants = () => {
                             />
                           </th>
                         )}
+                        <th className="py-2.5 px-2 text-center whitespace-nowrap">
+                          Sl.No
+                        </th>
                         <th className="py-2.5 px-3 whitespace-nowrap">Name</th>
                         <th className="py-2.5 px-3 whitespace-nowrap">Phone</th>
                         <th className="py-2.5 px-3 whitespace-nowrap">
@@ -2308,7 +2239,7 @@ const DashboardEventParticipants = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[var(--db-card-border)]">
-                      {currentItems.map((booking) => {
+                      {currentItems.map((booking, index) => {
                         const isSelected =
                           selectedBooking &&
                           selectedBooking._id === booking._id;
@@ -2336,6 +2267,11 @@ const DashboardEventParticipants = () => {
                                 />
                               </td>
                             )}
+
+                            {/* Sl.No */}
+                            <td className="py-2 px-2 text-center font-mono font-bold text-xs text-[var(--db-text-muted)] whitespace-nowrap">
+                              {indexOfFirstItem + index + 1}
+                            </td>
 
                             {/* Name */}
                             <td className="py-2 px-4 whitespace-nowrap">
@@ -2390,6 +2326,8 @@ const DashboardEventParticipants = () => {
                               {(() => {
                                 const ns = getNormalizedStatus(booking);
                                 const statusColorMap = {
+                                  None:
+                                    "border-zinc-500/30 text-zinc-400 bg-zinc-500/10",
                                   Confirmed:
                                     "border-green-500/30 text-green-400 bg-green-500/10",
                                   Attended:
@@ -2409,6 +2347,7 @@ const DashboardEventParticipants = () => {
                                     onChange={(e) => {
                                       const val = e.target.value;
                                       const toDb = {
+                                        None: "None",
                                         Confirmed: "payment successfully",
                                         Attended: "Attended",
                                         Awaiting: "Awaiting",
@@ -2422,6 +2361,12 @@ const DashboardEventParticipants = () => {
                                     }}
                                     className={`px-1.5 py-0.5 rounded-sm text-[13px] uppercase tracking-wider font-extrabold border cursor-pointer focus:outline-none transition-all ${statusColorMap[ns] || "border-gray-500/30 text-gray-400 bg-gray-500/10"}`}
                                   >
+                                    <option
+                                      value="None"
+                                      className="bg-[#121212] text-zinc-400"
+                                    >
+                                      None
+                                    </option>
                                     <option
                                       value="Confirmed"
                                       className="bg-[#121212] text-green-400"
@@ -2800,13 +2745,14 @@ const DashboardEventParticipants = () => {
             {/* Bottom Analytics — 3 columns */}
             <EventOverviewPanel
               activeBookings={activeBookings}
+              noneCount={noneCount}
               confirmedCount={confirmedCount}
               attendedCount={attendedCount}
               awaitingCount={awaitingCount}
               noResponseCount={noResponseCount}
               notComingCount={notComingCount}
               totalSlots={totalSlots}
-              bookedSlots={totalSlots - availableSlots}
+              bookedSlots={totalSeats}
               getNormalizedStatus={getNormalizedStatus}
               onSelectBooking={setSelectedBooking}
             />
@@ -2853,6 +2799,8 @@ const DashboardEventParticipants = () => {
                         {(() => {
                           const ns = getNormalizedStatus(selectedBooking);
                           const statusColorMap = {
+                            None:
+                              "border-zinc-500/30 text-zinc-400 bg-zinc-500/10",
                             Confirmed:
                               "border-green-500/30 text-green-400 bg-green-500/10",
                             Attended:
@@ -3115,6 +3063,16 @@ const DashboardEventParticipants = () => {
                     <button
                       onClick={() =>
                         handleUpdateBooking(selectedBooking._id, {
+                          status: "None",
+                        })
+                      }
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[var(--db-input-bg)] border border-[var(--db-card-border)] text-[var(--db-text-muted)] hover:text-[var(--db-text)] hover:bg-[var(--db-sidebar-link-hover)] hover:scale-[1.02] transition-all font-black text-[10px] uppercase tracking-wider cursor-pointer"
+                    >
+                      <CircleDot size={13} /> Reset to None
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleUpdateBooking(selectedBooking._id, {
                           status: "Awaiting",
                         })
                       }
@@ -3140,87 +3098,6 @@ const DashboardEventParticipants = () => {
         </div>
       </div>
 
-      {/* Repeated Participants Modal */}
-      <AnimatePresence>
-        {showRepeatedModal && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
-              onClick={() => setShowRepeatedModal(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-[101] overflow-hidden flex flex-col max-h-[80vh]"
-            >
-              <div className="flex items-center justify-between p-4 border-b border-[var(--db-card-border)] bg-[#ccf141] text-black">
-                <h2 className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
-                  <Users size={18} /> Repeated Participants
-                </h2>
-                <button onClick={() => setShowRepeatedModal(false)} className="hover:text-black/70 cursor-pointer">
-                  <X size={20} />
-                </button>
-              </div>
-              <div className="p-4 overflow-y-auto custom-scrollbar flex-1 space-y-3">
-                {(() => {
-                  const repeatedParticipantsList = Array.from(repeatedPhones).map(phone => {
-                    const userBookings = bookings.filter(b => b.phone === phone);
-                    
-                    const eventSeats = {};
-                    userBookings.forEach(b => {
-                      const evtName = b.event?.title || "Unknown Event";
-                      eventSeats[evtName] = (eventSeats[evtName] || 0) + (Number(b.seats) || 1);
-                    });
-                    
-                    const eventsWithSeats = Object.entries(eventSeats).map(([evtName, seats]) => {
-                      return `${evtName} (${seats} ${seats === 1 ? 'seat' : 'seats'})`;
-                    });
-
-                    return {
-                      phone,
-                      name: userBookings[0]?.name || "Unknown",
-                      count: userBookings.length,
-                      events: eventsWithSeats
-                    };
-                  }).sort((a, b) => b.count - a.count);
-
-                  if (repeatedParticipantsList.length === 0) {
-                    return <p className="text-sm text-[var(--db-text-muted)] text-center py-6">No repeated participants found.</p>;
-                  }
-
-                  return repeatedParticipantsList.map((rp, i) => (
-                    <div key={i} className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-xl p-3 hover:border-[var(--db-accent-highlight)] transition-colors">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h4 className="font-bold text-[var(--db-text)] text-sm">{rp.name}</h4>
-                          <a href={`tel:${rp.phone}`} className="font-mono text-xs text-[var(--db-text-muted)] flex items-center gap-1 hover:text-[var(--db-accent-highlight)] mt-0.5">
-                            <Phone size={10} /> {rp.phone}
-                          </a>
-                        </div>
-                        <span className="bg-purple-500/10 text-purple-400 border border-purple-500/20 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
-                          <Award size={10} /> {rp.count} Bookings
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-[var(--db-text-muted)] bg-[var(--db-card)] p-2 rounded-lg mt-2">
-                        <span className="font-bold text-[var(--db-text)]">Registered Events:</span> 
-                        <div className="flex flex-wrap gap-1 mt-1.5">
-                          {rp.events.map((e, idx) => (
-                            <span key={idx} className="bg-[var(--db-input-bg)] border border-[var(--db-card-border)] px-1.5 py-0.5 rounded text-[10px]">{e}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ));
-                })()}
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       {/* QR Check-in Modal */}
       <AnimatePresence>

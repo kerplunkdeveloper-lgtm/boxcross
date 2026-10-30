@@ -581,7 +581,7 @@ const bookEvent = async (req, res) => {
       };
     }
 
-    // Create event booking with "not payment" status
+    // Create event booking with "None" status
     const booking = await EventBooking.create({
       event: eventId,
       date,
@@ -591,7 +591,7 @@ const bookEvent = async (req, res) => {
       name,
       email,
       phone,
-      status: "not payment",
+      status: "None",
       razorpayOrderId: order.id,
     });
 
@@ -789,7 +789,7 @@ const verifyEventPaymentBarcode = async (req, res) => {
 const getEventBookings = async (req, res) => {
   try {
     const bookings = await EventBooking.find()
-      .populate("event", "title price")
+      .populate("event", "title price imageUrl")
       .sort({ createdAt: -1 });
 
     res.status(200).json({
@@ -878,7 +878,7 @@ const deleteEventBooking = async (req, res) => {
 
     // Restore slots if confirmed/successful
     const event = await Event.findById(booking.event);
-    if (event && (booking.status === "payment successfully" || booking.status === "confirmed" || booking.status === "pending barcode verification")) {
+    if (event && (booking.status === "payment successfully" || booking.status === "confirmed" || booking.status === "Attended" || booking.status === "attended" || booking.status === "pending barcode verification")) {
       const schedule = event.schedules.find((s) => s.date === booking.date);
       if (schedule) {
         const slot = schedule.timeSlots.find((t) => t.time === booking.timeSlot);
@@ -1009,8 +1009,8 @@ const updateEventBooking = async (req, res) => {
       const oldStatus = booking.status;
       const newStatus = status;
 
-      const wasBlocked = ["payment successfully", "confirmed", "pending barcode verification"].includes(oldStatus);
-      const isBlocked = ["payment successfully", "confirmed", "pending barcode verification"].includes(newStatus);
+      const wasBlocked = ["payment successfully", "confirmed", "Attended", "attended", "pending barcode verification"].includes(oldStatus);
+      const isBlocked = ["payment successfully", "confirmed", "Attended", "attended", "pending barcode verification"].includes(newStatus);
 
       if (wasBlocked && !isBlocked) {
         // Restore slots (decrement booked)

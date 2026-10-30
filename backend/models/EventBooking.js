@@ -42,7 +42,7 @@ const eventBookingSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "not payment",
+      default: "None",
     },
     razorpayOrderId: {
       type: String,
