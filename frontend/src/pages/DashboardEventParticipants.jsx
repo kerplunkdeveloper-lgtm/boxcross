@@ -1465,6 +1465,60 @@ const DashboardEventParticipants = () => {
     document.body.removeChild(link);
   };
 
+  // Download QR Code image
+  const downloadQRCode = async () => {
+    try {
+      const checkInUrl = `${window.location.origin}/event-checkin?event=${encodeURIComponent(eventFilter)}`;
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(checkInUrl)}`;
+      const response = await fetch(qrApiUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      const safeName = (eventFilter || "Event").replace(/[^a-zA-Z0-9]/g, "_");
+      a.download = `QR_${safeName}_CheckIn.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+      toast.success("QR Code downloaded successfully!");
+    } catch (err) {
+      console.error(err);
+      const fallbackUrl = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(window.location.origin + "/event-checkin?event=" + encodeURIComponent(eventFilter))}`;
+      window.open(fallbackUrl, "_blank");
+      toast.success("Opening QR Code image to save");
+    }
+  };
+
+  // Share to WhatsApp
+  const shareToWhatsApp = () => {
+    const checkInUrl = `${window.location.origin}/event-checkin?event=${encodeURIComponent(eventFilter)}`;
+    const text = `🎟️ *Event Check-In & Walk-in Registration*\n\n📌 *Event:* ${eventFilter}\n\n👉 Click link to check-in or register walk-in:\n${checkInUrl}`;
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+  };
+
+  // Share to Instagram / Copy Link
+  const shareToInstagram = async () => {
+    const checkInUrl = `${window.location.origin}/event-checkin?event=${encodeURIComponent(eventFilter)}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Event Check-in: ${eventFilter}`,
+          text: `Check-in for ${eventFilter}`,
+          url: checkInUrl,
+        });
+        return;
+      } catch (e) {
+        // cancelled, fallback to clipboard
+      }
+    }
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(checkInUrl);
+      toast.success("Check-in link copied! Share to Instagram Story or DM 📸");
+    }
+  };
+
   return (
     <div className="p-2 mt-2 space-y-4 sm:space-y-6 bg-[var(--db-bg)] min-h-screen text-[var(--db-text)] relative transition-colors">
       <style>{`
@@ -3574,7 +3628,7 @@ const DashboardEventParticipants = () => {
         )}
       </AnimatePresence>
 
-      {/* QR Check-in Modal */}
+{/* QR Check-in Modal */}
       <AnimatePresence>
         {showQRModal && eventFilter !== "all" && (
           <>
@@ -3589,48 +3643,118 @@ const DashboardEventParticipants = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-[101] overflow-hidden flex flex-col"
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[94%] max-w-md bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-[101] overflow-hidden flex flex-col max-h-[92vh]"
             >
+              {/* Modal Header */}
               <div className="flex items-center justify-between p-4 border-b border-[var(--db-card-border)] bg-[#ccf141] text-black">
                 <h2 className="text-sm font-black uppercase tracking-wider flex items-center gap-2">
                   <QrCode size={18} /> Event Check-In QR
                 </h2>
-                <button onClick={() => setShowQRModal(false)} className="hover:text-black/70 cursor-pointer">
+                <button onClick={() => setShowQRModal(false)} className="hover:text-black/70 cursor-pointer p-1">
                   <X size={20} />
                 </button>
               </div>
-              <div className="p-8 flex flex-col items-center justify-center space-y-3">
-                {getEventImage(eventFilter) && (
-                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-[#ccf141] shadow-lg mb-1">
+
+              {/* Modal Body */}
+              <div className="p-5 sm:p-6 overflow-y-auto custom-scrollbar flex flex-col items-center space-y-4">
+                {/* Event Image Banner (Large & High Quality) */}
+                {getEventImage(eventFilter) ? (
+                  <div className="relative w-full h-36 sm:h-100 rounded-2xl overflow-hidden border-2 border-[#ccf141] shadow-xl group">
                     <img
                       src={getEventImage(eventFilter)}
                       alt={eventFilter}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent flex items-end p-3">
+                      <p className="text-xs font-black uppercase text-[#ccf141] tracking-wide line-clamp-1 drop-shadow">
+                        {eventFilter}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3 bg-[var(--db-input-bg)] border border-[var(--db-card-border)] rounded-xl w-full text-center">
+                    <p className="text-xs font-black uppercase text-[#ccf141] tracking-wide">
+                      {eventFilter}
+                    </p>
                   </div>
                 )}
-                <p className="text-xs text-center text-[var(--db-text-muted)] font-bold uppercase tracking-wide">
-                  {eventFilter}
-                </p>
-                <div className="bg-white p-4 rounded-xl shadow-lg border-4 border-[#ccf141]">
+
+                {/* Download & Share Options Bar */}
+                <div className="w-full flex items-center justify-center gap-2 pt-1">
+                  {/* Download Button */}
+                  <button
+                    type="button"
+                    onClick={downloadQRCode}
+                    className="flex-1 py-2.5 px-3 bg-[#ccf141] hover:bg-[#b5d635] text-black font-black text-[11px] uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer hover:scale-[1.02]"
+                    title="Download QR code image"
+                  >
+                    <Download size={14} />
+                    <span>Download</span>
+                  </button>
+
+                  {/* WhatsApp Share Button */}
+                  <button
+                    type="button"
+                    onClick={shareToWhatsApp}
+                    className="flex-1 py-2.5 px-3 bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#25D366] border border-[#25D366]/40 font-black text-[11px] uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer hover:scale-[1.02]"
+                    title="Share to WhatsApp"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
+                    </svg>
+                    <span>WhatsApp</span>
+                  </button>
+
+                  {/* Instagram / Share Button */}
+                  <button
+                    type="button"
+                    onClick={shareToInstagram}
+                    className="flex-1 py-2.5 px-3 bg-gradient-to-r from-[#833ab4]/15 via-[#fd1d1d]/15 to-[#fcb045]/15 hover:from-[#833ab4]/25 hover:via-[#fd1d1d]/25 hover:to-[#fcb045]/25 text-[#fcb045] border border-[#fd1d1d]/40 font-black text-[11px] uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 shadow-md transition-all cursor-pointer hover:scale-[1.02]"
+                    title="Share to Instagram or Copy Link"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                      <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                    </svg>
+                    <span>Instagram</span>
+                  </button>
+                </div>
+
+                {/* QR Barcode Container */}
+                <div className="bg-white p-4 rounded-2xl shadow-xl border-4 border-[#ccf141]">
                   <img 
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(window.location.origin + "/event-checkin?event=" + encodeURIComponent(eventFilter))}`} 
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(window.location.origin + "/event-checkin?event=" + encodeURIComponent(eventFilter))}`} 
                     alt="Check-in QR Code" 
-                    className="w-48 h-48 object-contain"
+                    className="w-48 h-48 sm:w-52 sm:h-52 object-contain"
                   />
                 </div>
-                <p className="text-[10px] text-center text-gray-400 mt-4">
-                  Scan this code with a mobile device to mark attendance.
-                  <br /><br />
-                  <span className="text-[#ccf141] font-bold">Note for Local Testing:</span> If you scan this on your phone while running on `localhost`, it won't work. Click the button below to test it directly on this PC instead.
+
+                <p className="text-[11px] text-center text-gray-400 font-medium">
+                  Scan this QR code with a phone camera to mark attendance or register walk-ins.
                 </p>
+
                 <a 
                   href={`/event-checkin?event=${encodeURIComponent(eventFilter)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-2 w-full py-2.5 bg-[var(--db-input-bg)] text-white text-xs font-bold rounded-xl border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors text-center"
+                  className="w-full py-2.5 bg-[var(--db-input-bg)] text-white text-xs font-bold rounded-xl border border-[var(--db-card-border)] hover:bg-[var(--db-sidebar-link-hover)] transition-colors text-center"
                 >
-                  Test Check-in Page Here
+                  Open Check-in Page Directly →
                 </a>
               </div>
             </motion.div>
