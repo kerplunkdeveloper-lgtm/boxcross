@@ -909,13 +909,83 @@ const DashboardEventParticipants = () => {
     }
   });
 
-  // Calculate distinct events (combine from events list & bookings, sorted by bookings count)
+  // Helper to determine the latest relevant timestamp for an event (recent first)
+  const getEventLatestTimestamp = (title) => {
+    let latest = 0;
+    const titleKey = (title || "").trim().toLowerCase();
+
+    // 1. From events collection (schedules and createdAt)
+    const evt = events.find(
+      (e) => (e.title || "").trim().toLowerCase() === titleKey,
+    );
+    if (evt) {
+      if (evt.createdAt) {
+        const t = new Date(evt.createdAt).getTime();
+        if (!isNaN(t) && t > latest) latest = t;
+      }
+      if (evt.updatedAt) {
+        const t = new Date(evt.updatedAt).getTime();
+        if (!isNaN(t) && t > latest) latest = t;
+      }
+      if (Array.isArray(evt.schedules)) {
+        evt.schedules.forEach((s) => {
+          if (s?.date) {
+            const t = parseDateToTimestamp(s.date, evt.createdAt);
+            if (t > latest) latest = t;
+          }
+        });
+      }
+    }
+
+    // 2. From bookings collection (event schedule dates, booking createdAt, and event createdAt)
+    bookings.forEach((b) => {
+      if ((b.event?.title || "").trim().toLowerCase() === titleKey) {
+        if (b.event?.createdAt) {
+          const t = new Date(b.event.createdAt).getTime();
+          if (!isNaN(t) && t > latest) latest = t;
+        }
+        if (b.date) {
+          const t = parseDateToTimestamp(b.date, b.createdAt);
+          if (t > latest) latest = t;
+        }
+        if (b.createdAt) {
+          const t = new Date(b.createdAt).getTime();
+          if (!isNaN(t) && t > latest) latest = t;
+        }
+      }
+    });
+
+    // 3. Fallback: preserve order in events array (backend returns events sorted by createdAt: -1)
+    if (latest === 0 && evt) {
+      const idx = events.indexOf(evt);
+      if (idx !== -1) {
+        latest = (events.length - idx) * 1000;
+      }
+    }
+
+    return latest;
+  };
+
+  // Calculate distinct events (combine from events list & bookings, sorted by most recent first)
   const uniqueEvents = Array.from(
     new Set([
       ...events.map((e) => e.title),
       ...bookings.map((b) => b.event?.title),
     ].filter(Boolean)),
   ).sort((a, b) => {
+    const timeB = getEventLatestTimestamp(b);
+    const timeA = getEventLatestTimestamp(a);
+    if (timeB !== timeA) {
+      return timeB - timeA;
+    }
+    // Fallback tie-breaker: order in events array
+    const idxA = events.findIndex((e) => e.title === a);
+    const idxB = events.findIndex((e) => e.title === b);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+
+    // Further tie-breaker: booking count
     const countB = bookings.filter((x) => x.event?.title === b).length;
     const countA = bookings.filter((x) => x.event?.title === a).length;
     return countB - countA;
