@@ -1,7 +1,7 @@
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useParams } from 'react-router-dom'
-import EventNavbar from '../../Components/Event/EventNavbar'
+
 import Eventbanner from '../../Components/Event/Eventbanner'
 import EventList from '../../Components/Event/EventList'
 import Eventlastcontact from './Eventlastcontact'
@@ -38,8 +38,8 @@ const Eventpage = () => {
           <meta name="twitter:image" content={`${BASE_URL}/og-events.jpg`} />
         </Helmet>
       )}
-      {/*............................ separate navbar for event page............................*/}
-      <EventNavbar />
+
+
       {/*............................ banner section for events page............................*/}
       <Eventbanner/>
       {/*............................ event listing section............................*/}

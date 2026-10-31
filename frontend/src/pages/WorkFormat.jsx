@@ -30,33 +30,58 @@ import { FaWhatsapp } from "react-icons/fa";
 // 7 WORKOUT FORMATS EXACTLY FROM REFERENCE IMAGE
 const workoutFormatsData = [
   {
-    id: "gym",
-    title: "Gym",
-    category: "strength",
+    id: "boxing",
+    title: "Boxing",
+    category: "fight",
     duration: "50 mins",
     durationSubtitle: "workout",
-    desc: "Improve strength, endurance, and overall fitness through structured training.",
+    desc: "Learn the movements & techniques, build stamina, and gain knockout power.",
     image:
-      "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop",
-    categoryBadge: "FOUNDATION",
+      "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=1200&auto=format&fit=crop",
+    categoryBadge: "FIGHT DISCIPLINE",
     badges: [
       {
-        icon: Dumbbell,
-        label: "Gain muscle",
-      },
-      {
         icon: Flame,
-        label: "Lose weight",
+        label: "Improve stamina",
       },
       {
-        icon: Zap,
-        label: "Increase strength",
+        icon: Shield,
+        label: "Build core strength",
+      },
+      {
+        icon: Target,
+        label: "Learn a skill",
       },
     ],
   },
   {
-    id: "hrx",
-    title: "HRX",
+    id: "strength",
+    title: "Strength",
+    category: "strength",
+    duration: "50 mins",
+    durationSubtitle: "workout",
+    desc: "High Intensity workout using weights build your strength and fitness.",
+    image:
+      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop",
+    categoryBadge: "PROGRESSIVE OVERLOAD",
+    badges: [
+      {
+        icon: Dumbbell,
+        label: "Comprehensive strength",
+      },
+      {
+        icon: Trophy,
+        label: "Agile Excellence",
+      },
+      {
+        icon: Zap,
+        label: "Explosive Power",
+      },
+    ],
+  },
+  {
+    id: "BXC",
+    title: "BXC",
     category: "hiit",
     duration: "50 mins",
     durationSubtitle: "workout",
@@ -75,6 +100,31 @@ const workoutFormatsData = [
       },
       {
         icon: Activity,
+        label: "Improve mobility",
+      },
+    ],
+  },
+  {
+    id: "hiit",
+    title: "HIIT",
+    category: "hiit",
+    duration: "50 mins",
+    durationSubtitle: "workout",
+    desc: "Torch calories and boost stamina through fast-paced metabolic exercises.",
+    image:
+      "https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=1200&auto=format&fit=crop",
+    categoryBadge: "HIGH INTENSITY",
+    badges: [
+      {
+        icon: Flame,
+        label: "Burn fat",
+      },
+      {
+        icon: Shield,
+        label: "Increase strength",
+      },
+      {
+        icon: Zap,
         label: "Improve mobility",
       },
     ],
@@ -105,56 +155,6 @@ const workoutFormatsData = [
     ],
   },
   {
-    id: "hiit",
-    title: "HIIT",
-    category: "hiit",
-    duration: "50 mins",
-    durationSubtitle: "workout",
-    desc: "Torch calories and boost stamina through fast-paced metabolic exercises.",
-    image:
-      "https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?q=80&w=1200&auto=format&fit=crop",
-    categoryBadge: "HIGH INTENSITY",
-    badges: [
-      {
-        icon: Flame,
-        label: "Burn fat",
-      },
-      {
-        icon: Shield,
-        label: "Increase strength",
-      },
-      {
-        icon: Zap,
-        label: "Improve mobility",
-      },
-    ],
-  },
-  {
-    id: "strength",
-    title: "Strength",
-    category: "strength",
-    duration: "50 mins",
-    durationSubtitle: "workout",
-    desc: "High Intensity workout using weights build your strength and fitness.",
-    image:
-      "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1200&auto=format&fit=crop",
-    categoryBadge: "PROGRESSIVE OVERLOAD",
-    badges: [
-      {
-        icon: Dumbbell,
-        label: "Comprehensive strength",
-      },
-      {
-        icon: Trophy,
-        label: "Agile Excellence",
-      },
-      {
-        icon: Zap,
-        label: "Explosive Power",
-      },
-    ],
-  },
-  {
     id: "yoga",
     title: "Yoga",
     category: "mind",
@@ -180,43 +180,33 @@ const workoutFormatsData = [
     ],
   },
   {
-    id: "boxing",
-    title: "Boxing",
-    category: "fight",
+    id: "gym",
+    title: "Gym",
+    category: "strength",
     duration: "50 mins",
     durationSubtitle: "workout",
-    desc: "Learn the movements & techniques, build stamina, and gain knockout power.",
+    desc: "Improve strength, endurance, and overall fitness through structured training.",
     image:
-      "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?q=80&w=1200&auto=format&fit=crop",
-    categoryBadge: "FIGHT DISCIPLINE",
+      "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?q=80&w=1200&auto=format&fit=crop",
+    categoryBadge: "FOUNDATION",
     badges: [
       {
+        icon: Dumbbell,
+        label: "Gain muscle",
+      },
+      {
         icon: Flame,
-        label: "Improve stamina",
+        label: "Lose weight",
       },
       {
-        icon: Shield,
-        label: "Build core strength",
-      },
-      {
-        icon: Target,
-        label: "Learn a skill",
+        icon: Zap,
+        label: "Increase strength",
       },
     ],
   },
 ];
 
-const categoryFilters = [
-  { id: "all", label: "All Formats" },
-  { id: "strength", label: "Strength & Gym" },
-  { id: "hiit", label: "HIIT & HRX" },
-  { id: "fight", label: "Fight & Boxing" },
-  { id: "dance", label: "Dance Fitness" },
-  { id: "mind", label: "Yoga & Mobility" },
-];
-
 const WorkFormat = () => {
-  const [activeFilter, setActiveFilter] = useState("all");
   const [selectedFormat, setSelectedFormat] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingStatus, setBookingStatus] = useState("idle"); // "idle" | "submitting" | "success"
@@ -226,11 +216,6 @@ const WorkFormat = () => {
     slot: "Morning (6:00 AM - 9:00 AM)",
     date: "Tomorrow",
   });
-
-  const filteredFormats =
-    activeFilter === "all"
-      ? workoutFormatsData
-      : workoutFormatsData.filter((item) => item.category === activeFilter);
 
   const handleOpenModal = (format) => {
     setSelectedFormat(format);
@@ -260,7 +245,7 @@ const WorkFormat = () => {
         <title>Workout Formats | Box &amp; Cross – Performance Arena</title>
         <meta
           name="description"
-          content="Explore our 7 signature 50-minute coached workout formats: Gym, HRX, Dance Fitness, HIIT, Strength, Yoga, and Boxing. Engineered for high-output athletic progression."
+          content="Explore our 7 signature 50-minute coached workout formats: Gym, BXC, Dance Fitness, HIIT, Strength, Yoga, and Boxing. Engineered for high-output athletic progression."
         />
         <meta property="og:title" content="Workout Formats | Box & Cross Arena" />
         <meta
@@ -272,15 +257,8 @@ const WorkFormat = () => {
       {/* TOP AMBIENT NEON GLOW ACCENT */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[350px] bg-[#ccf141]/8 blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        {/* BREADCRUMB */}
-        <nav className="flex items-center gap-2 text-[11px] sm:text-xs uppercase tracking-wider text-neutral-400 mb-6 sm:mb-8 overflow-x-auto whitespace-nowrap [scrollbar-width:none]">
-          <Link to="/" className="hover:text-white transition-colors shrink-0">
-            Home
-          </Link>
-          <ChevronRight size={13} className="text-neutral-600 shrink-0" />
-          <span className="text-[#ccf141] font-bold shrink-0">Workout Formats</span>
-        </nav>
+      <div className="max-w-7xl mx-auto relative z-10 w-full">
+       
 
         {/* HERO TITLE & SUBHEADER */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12">
@@ -288,7 +266,7 @@ const WorkFormat = () => {
            
 
             <h1
-              className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-white leading-none"
+              className="text-3xl sm:text-4xl font-black uppercase tracking-tight text-white leading-none"
               style={{ fontFamily: '"BrutalTypeBold", "Impact", sans-serif' }}
             >
               Workout <span className="text-[#ccf141]">formats</span>
@@ -300,33 +278,11 @@ const WorkFormat = () => {
          
         </div>
 
-        {/* CATEGORY FILTER PILLS */}
-        <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto pb-2 mb-8 sm:mb-12 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {categoryFilters.map((tab) => {
-            const isActive = activeFilter === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveFilter(tab.id)}
-                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-[13px] font-black uppercase tracking-wider transition-all duration-300 shrink-0 cursor-pointer ${
-                  isActive
-                    ? "bg-[#ccf141] text-black shadow-[0_0_20px_rgba(204,241,65,0.35)] scale-[1.02]"
-                    : "bg-neutral-900/80 text-zinc-400 border border-white/10 hover:border-white/30 hover:text-white"
-                }`}
-                style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
-
         {/* ======================================================== */}
         {/* CARDS GRID: 7 FORMATS MATCHING REFERENCE IMAGE           */}
         {/* ======================================================== */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch">
-          {filteredFormats.map((format, idx) => (
+          {workoutFormatsData.map((format, idx) => (
             <motion.div
               key={format.id}
               initial={{ opacity: 0, y: 30 }}
@@ -348,12 +304,7 @@ const WorkFormat = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#101013] via-[#101013]/30 via-40% to-transparent pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-transparent pointer-events-none" />
 
-                {/* TOP BADGE */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-2.5 py-1 rounded-lg text-[9.5px] font-mono font-bold uppercase tracking-widest bg-black/85 backdrop-blur-md text-[#ccf141] border border-[#ccf141]/35 shadow-md">
-                    {format.categoryBadge}
-                  </span>
-                </div>
+               
 
                 {/* 3 CIRCULAR FEATURE ICONS WITH NEON GREEN ACCENTS OVERLAID AT BOTTOM OF IMAGE */}
                 <div className="absolute bottom-2 inset-x-3 z-10 grid grid-cols-3 gap-2">
