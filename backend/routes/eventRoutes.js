@@ -17,6 +17,9 @@ const {
   bookEventBarcode,
   verifyEventPaymentBarcode,
   markEventAttendance,
+  createEventWalkIn,
+  getEventWalkIns,
+  deleteEventWalkIn,
 } = require("../controllers/eventController");
 
 // Public routes
@@ -26,6 +29,7 @@ router.post("/book-barcode", upload.single("screenshot"), bookEventBarcode);
 router.post("/verify", verifyEventPayment);
 router.post("/verify-barcode", upload.single("screenshot"), verifyEventPaymentBarcode);
 router.post("/attendance", markEventAttendance);
+router.post("/walkin", createEventWalkIn);
 router.get("/:id/og", getEventOGMeta);
 
 // Admin protected routes
@@ -33,6 +37,8 @@ router.get("/admin", protect, authorize("admin"), getAllEventsAdmin);
 router.get("/bookings", protect, authorize("admin"), getEventBookings);
 router.put("/bookings/:id", protect, authorize("admin"), updateEventBooking);
 router.delete("/bookings/:id", protect, authorize("admin"), deleteEventBooking);
+router.get("/walkin", protect, authorize("admin"), getEventWalkIns);
+router.delete("/walkin/:id", protect, authorize("admin"), deleteEventWalkIn);
 router.post("/", protect, authorize("admin"), upload.single("image"), createEvent);
 router.put("/:id", protect, authorize("admin"), upload.single("image"), updateEvent);
 router.delete("/:id", protect, authorize("admin"), deleteEvent);

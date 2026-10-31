@@ -32,12 +32,18 @@ import {
   QrCode,
   RotateCcw,
   CircleDot,
+  UserPlus,
+  UserCheck,
+  Copy,
+  ExternalLink,
 } from "lucide-react";
 import {
   getEventBookings,
   deleteEventBooking,
   updateEventBooking,
   getEventsList,
+  getEventWalkIns,
+  deleteEventWalkIn,
 } from "../api/api";
 import { toast } from "react-hot-toast";
 
@@ -616,6 +622,13 @@ const DashboardEventParticipants = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [deletingId, setDeletingId] = useState(null);
 
+  // Walk-in participants states
+  const [walkIns, setWalkIns] = useState([]);
+  const [showWalkInModal, setShowWalkInModal] = useState(false);
+  const [walkInEventFilter, setWalkInEventFilter] = useState("all");
+  const [walkInSearch, setWalkInSearch] = useState("");
+  const [deletingWalkInId, setDeletingWalkInId] = useState(null);
+
   // Custom interactive CRM states
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
@@ -697,15 +710,19 @@ const DashboardEventParticipants = () => {
     const shouldShow = showLoader === true;
     try {
       if (shouldShow) setLoading(true);
-      const [bookingsRes, eventsRes] = await Promise.all([
+      const [bookingsRes, eventsRes, walkInsRes] = await Promise.all([
         getEventBookings(),
         getEventsList(),
+        getEventWalkIns().catch(() => ({ data: { success: false, data: [] } })),
       ]);
       if (bookingsRes.data.success) {
         setBookings(bookingsRes.data.data);
       }
       if (eventsRes.data.success) {
         setEvents(eventsRes.data.data);
+      }
+      if (walkInsRes && walkInsRes.data && walkInsRes.data.success) {
+        setWalkIns(walkInsRes.data.data);
       }
     } catch (error) {
       console.error("Error fetching event data", error);
@@ -966,11 +983,78 @@ const DashboardEventParticipants = () => {
     return latest;
   };
 
-  // Calculate distinct events (combine from events list & bookings, sorted by most recent first)
+  // Helper to get image for an event by title
+  const getEventImage = (title) => {
+    if (!title) return null;
+    const clean = title.trim().toLowerCase();
+    const ev = events.find((e) => e.title && e.title.trim().toLowerCase() === clean);
+    if (ev && ev.imageUrl) return ev.imageUrl;
+    const bk = bookings.find(
+      (b) => b.event && b.event.title && b.event.title.trim().toLowerCase() === clean && b.event.imageUrl
+    );
+    if (bk && bk.event && bk.event.imageUrl) return bk.event.imageUrl;
+    const wi = walkIns.find(
+      (w) => ((w.eventName && w.eventName.trim().toLowerCase() === clean) || (w.event && w.event.title && w.event.title.trim().toLowerCase() === clean)) && (w.event && w.event.imageUrl)
+    );
+    if (wi && wi.event && wi.event.imageUrl) return wi.event.imageUrl;
+    return null;
+  };
+
+  // Delete walk-in entry
+  const handleDeleteWalkIn = async (id, e) => {
+    if (e) e.stopPropagation();
+    if (!window.confirm("Are you sure you want to delete this walk-in participant?")) {
+      return;
+    }
+    setDeletingWalkInId(id);
+    try {
+      const res = await deleteEventWalkIn(id);
+      if (res.data?.success) {
+        toast.success("Walk-in participant deleted");
+        setWalkIns((prev) => prev.filter((w) => w._id !== id));
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to delete walk-in");
+    } finally {
+      setDeletingWalkInId(null);
+    }
+  };
+
+  // Export walk-ins to CSV
+  const exportWalkInsToCSV = () => {
+    const dataToExport = filteredWalkIns;
+    if (!dataToExport || dataToExport.length === 0) {
+      toast.error("No walk-in participants to export");
+      return;
+    }
+    const headers = ["Name", "Phone", "Event", "Status", "Date Registered"];
+    const rows = dataToExport.map((w) => [
+      `"${(w.name || "").replace(/"/g, '""')}"`,
+      `"${(w.phone || "").replace(/"/g, '""')}"`,
+      `"${(w.eventName || w.event?.title || "").replace(/"/g, '""')}"`,
+      `"${(w.status || "Attended").replace(/"/g, '""')}"`,
+      `"${w.createdAt ? new Date(w.createdAt).toLocaleString() : ""}"`,
+    ]);
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    const filename = `WalkIns_${walkInEventFilter !== "all" ? walkInEventFilter.replace(/\s+/g, "_") : "AllEvents"}_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Walk-ins exported successfully");
+  };
+
+  // Calculate distinct events (combine from events list & bookings & walk-ins, sorted by most recent first)
   const uniqueEvents = Array.from(
     new Set([
       ...events.map((e) => e.title),
       ...bookings.map((b) => b.event?.title),
+      ...walkIns.map((w) => w.eventName || w.event?.title),
     ].filter(Boolean)),
   ).sort((a, b) => {
     const timeB = getEventLatestTimestamp(b);
@@ -989,6 +1073,22 @@ const DashboardEventParticipants = () => {
     const countB = bookings.filter((x) => x.event?.title === b).length;
     const countA = bookings.filter((x) => x.event?.title === a).length;
     return countB - countA;
+  });
+
+  // Filtered Walk-ins for modal view
+  const filteredWalkIns = walkIns.filter((w) => {
+    const wEvtName = (w.eventName || w.event?.title || "").trim().toLowerCase();
+    const matchesEvent =
+      walkInEventFilter === "all" ||
+      wEvtName === walkInEventFilter.trim().toLowerCase();
+
+    const matchesSearch =
+      !walkInSearch ||
+      (w.name && w.name.toLowerCase().includes(walkInSearch.toLowerCase())) ||
+      (w.phone && w.phone.toLowerCase().includes(walkInSearch.toLowerCase())) ||
+      wEvtName.includes(walkInSearch.toLowerCase());
+
+    return matchesEvent && matchesSearch;
   });
 
   // Available schedule dates (filtered to selected event if chosen, or all distinct dates)
@@ -1409,6 +1509,26 @@ const DashboardEventParticipants = () => {
               </button>
             )}
 
+            {/* Walk-in Participants Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setWalkInEventFilter(eventFilter !== "all" ? eventFilter : "all");
+                setShowWalkInModal(true);
+              }}
+              className="px-3.5 py-2 bg-[var(--db-card)] hover:bg-[var(--db-sidebar-link-hover)] text-white hover:text-[#ccf141] border border-[var(--db-card-border)] hover:border-[#ccf141]/40 text-[10px] font-black uppercase rounded-full flex items-center gap-1.5 cursor-pointer hover:scale-105 transition-all shadow-md shrink-0"
+              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
+              title="View Walk-in Participants"
+            >
+              <UserCheck size={13} className="text-[#ccf141]" />
+              <span>Walk-ins</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-bold bg-[#ccf141] text-black">
+                {eventFilter === "all"
+                  ? walkIns.length
+                  : walkIns.filter((w) => (w.eventName || w.event?.title) === eventFilter).length}
+              </span>
+            </button>
+
             {eventFilter !== "all" && (
               <button 
                 onClick={() => setShowQRModal(true)}
@@ -1433,6 +1553,12 @@ const DashboardEventParticipants = () => {
                     <div className="w-5 h-5 rounded-full bg-[#ccf141]/20 flex items-center justify-center text-[#ccf141] shrink-0">
                       <Users size={12} />
                     </div>
+                  ) : getEventImage(eventFilter) ? (
+                    <img
+                      src={getEventImage(eventFilter)}
+                      alt={eventFilter}
+                      className="w-5 h-5 rounded-md object-cover shrink-0 border border-[#ccf141]/40 shadow-sm"
+                    />
                   ) : (
                     <div className="w-5 h-5 rounded-full bg-[#ccf141]/20 flex items-center justify-center text-[#ccf141] shrink-0">
                       <Award size={12} />
@@ -1580,15 +1706,23 @@ const DashboardEventParticipants = () => {
                                   : "hover:bg-[var(--db-sidebar-link-hover)] text-[var(--db-text)] font-semibold"
                               }`}
                             >
-                              <div className="flex items-center gap-2 min-w-0 pr-2">
-                                <Award
-                                  size={14}
-                                  className={`shrink-0 ${
-                                    isSelected
-                                      ? "text-black"
-                                      : "text-[var(--db-accent-highlight)]"
-                                  }`}
-                                />
+                              <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                {getEventImage(evt) ? (
+                                  <img
+                                    src={getEventImage(evt)}
+                                    alt={evt}
+                                    className="w-6 h-6 rounded-md object-cover shrink-0 border border-black/10 shadow-sm"
+                                  />
+                                ) : (
+                                  <Award
+                                    size={14}
+                                    className={`shrink-0 ${
+                                      isSelected
+                                        ? "text-black"
+                                        : "text-[var(--db-accent-highlight)]"
+                                    }`}
+                                  />
+                                )}
                                 <span
                                   className="truncate uppercase text-[11px] tracking-wide"
                                   title={evt}
@@ -3169,6 +3303,277 @@ const DashboardEventParticipants = () => {
       </div>
 
 
+      {/* Walk-in Participants Modal */}
+      <AnimatePresence>
+        {showWalkInModal && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/75 backdrop-blur-md z-[110]"
+              onClick={() => setShowWalkInModal(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] max-w-4xl bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl shadow-2xl z-[111] overflow-hidden flex flex-col max-h-[90vh]"
+            >
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[var(--db-card-border)] bg-[var(--db-bg)]">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#ccf141]/20 flex items-center justify-center text-[#ccf141]">
+                    <UserCheck size={20} />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2
+                        className="text-base sm:text-lg font-black uppercase tracking-wide text-white"
+                        style={{ fontFamily: '"Brutal Font", sans-serif' }}
+                      >
+                        Walk-in Participants
+                      </h2>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#ccf141] text-black">
+                        {filteredWalkIns.length}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[var(--db-text-muted)]">
+                      New members who registered and checked in at the event entrance
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowWalkInModal(false)}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-[var(--db-card-border)] transition-colors cursor-pointer"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Filters & Actions Bar */}
+              <div className="p-4 border-b border-[var(--db-card-border)] bg-[var(--db-card)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 flex-1">
+                  {/* Particular Event Filter Selector */}
+                  <div className="relative min-w-[220px]">
+                    <select
+                      value={walkInEventFilter}
+                      onChange={(e) => setWalkInEventFilter(e.target.value)}
+                      className="w-full h-9 pl-3 pr-8 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-[#ccf141] transition-colors cursor-pointer appearance-none"
+                    >
+                      <option value="all" className="bg-[#181818] text-white">
+                        All Events ({walkIns.length})
+                      </option>
+                      {uniqueEvents.map((evt) => {
+                        const count = walkIns.filter(
+                          (w) => (w.eventName || w.event?.title) === evt
+                        ).length;
+                        return (
+                          <option key={evt} value={evt} className="bg-[#181818] text-white">
+                            {evt} ({count})
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <ChevronDown
+                      size={14}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                    />
+                  </div>
+
+                  {/* Search Input */}
+                  <div className="relative flex-1">
+                    <Search
+                      size={14}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Search walk-in by name or phone..."
+                      value={walkInSearch}
+                      onChange={(e) => setWalkInSearch(e.target.value)}
+                      className="w-full h-9 pl-9 pr-8 bg-[var(--db-input-bg)] border border-[var(--db-input-border)] rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#ccf141] transition-colors"
+                    />
+                    {walkInSearch && (
+                      <button
+                        onClick={() => setWalkInSearch("")}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                      >
+                        <X size={12} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Export CSV Button */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={exportWalkInsToCSV}
+                    disabled={filteredWalkIns.length === 0}
+                    className="h-9 px-3.5 bg-[var(--db-input-bg)] hover:bg-[var(--db-sidebar-link-hover)] text-white text-xs font-bold rounded-xl border border-[var(--db-card-border)] hover:border-[#ccf141]/40 flex items-center gap-1.5 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <Download size={13} className="text-[#ccf141]" />
+                    <span>Export CSV</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Walk-in List / Table */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2">
+                {filteredWalkIns.length === 0 ? (
+                  <div className="py-16 text-center space-y-3">
+                    <div className="w-14 h-14 rounded-full bg-gray-800/60 border border-gray-700/50 flex items-center justify-center mx-auto text-gray-500">
+                      <Users size={24} />
+                    </div>
+                    <p className="text-sm font-bold text-gray-300">
+                      No walk-in participants found
+                    </p>
+                    <p className="text-xs text-gray-500 max-w-sm mx-auto">
+                      {walkInSearch
+                        ? "Try adjusting your search query or event filter."
+                        : "Walk-ins registered from the QR Check-in page will appear here."}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-[var(--db-card-border)] text-[10px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                          <th className="py-2.5 px-3">#</th>
+                          <th className="py-2.5 px-3">Participant</th>
+                          <th className="py-2.5 px-3">Mobile Number</th>
+                          <th className="py-2.5 px-3">Event</th>
+                          <th className="py-2.5 px-3">Checked-in At</th>
+                          <th className="py-2.5 px-3">Status</th>
+                          <th className="py-2.5 px-3 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[var(--db-card-border)]/50">
+                        {filteredWalkIns.map((w, idx) => {
+                          const eventTitle = w.eventName || w.event?.title || "Event";
+                          const eventImg = getEventImage(eventTitle);
+                          return (
+                            <tr
+                              key={w._id}
+                              className="hover:bg-white/[0.02] transition-colors group"
+                            >
+                              <td className="py-3 px-3 font-mono text-gray-500 text-[11px]">
+                                {idx + 1}
+                              </td>
+                              <td className="py-3 px-3">
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-7 h-7 rounded-full bg-[#ccf141]/15 text-[#ccf141] font-black text-xs flex items-center justify-center shrink-0 uppercase border border-[#ccf141]/30">
+                                    {w.name ? w.name.charAt(0) : "W"}
+                                  </div>
+                                  <div>
+                                    <span className="font-bold text-white text-xs block">
+                                      {w.name}
+                                    </span>
+                                    <span className="text-[10px] text-gray-500 font-medium">
+                                      Walk-in Member
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="py-3 px-3">
+                                <div className="flex items-center gap-2">
+                                  <a
+                                    href={`tel:${w.phone}`}
+                                    className="font-mono text-gray-300 hover:text-[#ccf141] transition-colors font-medium flex items-center gap-1.5"
+                                  >
+                                    <Phone size={12} className="text-gray-500" />
+                                    <span>{w.phone}</span>
+                                  </a>
+                                  <button
+                                    onClick={() => {
+                                      navigator.clipboard?.writeText(w.phone);
+                                      toast.success("Phone copied to clipboard");
+                                    }}
+                                    className="opacity-0 group-hover:opacity-100 text-gray-500 hover:text-white transition-opacity cursor-pointer"
+                                    title="Copy phone"
+                                  >
+                                    <Copy size={11} />
+                                  </button>
+                                </div>
+                              </td>
+                              <td className="py-3 px-3">
+                                <div className="flex items-center gap-2 max-w-[200px]">
+                                  {eventImg ? (
+                                    <img
+                                      src={eventImg}
+                                      alt={eventTitle}
+                                      className="w-6 h-6 rounded-md object-cover shrink-0 border border-white/10"
+                                    />
+                                  ) : (
+                                    <Award size={14} className="text-[#ccf141] shrink-0" />
+                                  )}
+                                  <span
+                                    className="truncate text-[11px] font-semibold text-gray-200 uppercase tracking-wide"
+                                    title={eventTitle}
+                                  >
+                                    {eventTitle}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="py-3 px-3 text-gray-400 font-mono text-[11px]">
+                                {w.createdAt
+                                  ? new Date(w.createdAt).toLocaleString(undefined, {
+                                      day: "numeric",
+                                      month: "short",
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })
+                                  : "-"}
+                              </td>
+                              <td className="py-3 px-3">
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-green-500/10 text-green-400 border border-green-500/30">
+                                  <Check size={10} />
+                                  <span>{w.status || "Attended"}</span>
+                                </span>
+                              </td>
+                              <td className="py-3 px-3 text-right">
+                                <button
+                                  type="button"
+                                  onClick={(e) => handleDeleteWalkIn(w._id, e)}
+                                  disabled={deletingWalkInId === w._id}
+                                  className="p-1.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors cursor-pointer"
+                                  title="Delete walk-in"
+                                >
+                                  {deletingWalkInId === w._id ? (
+                                    <div className="w-3.5 h-3.5 border-2 border-red-400 border-t-transparent rounded-full animate-spin" />
+                                  ) : (
+                                    <Trash2 size={14} />
+                                  )}
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-3 sm:p-4 border-t border-[var(--db-card-border)] bg-[var(--db-card)] flex items-center justify-between">
+                <span className="text-[11px] text-[var(--db-text-muted)] font-medium">
+                  Showing {filteredWalkIns.length} of {walkIns.length} total walk-ins
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowWalkInModal(false)}
+                  className="px-4 py-2 bg-[var(--db-input-bg)] hover:bg-[var(--db-sidebar-link-hover)] text-white text-xs font-bold rounded-xl border border-[var(--db-card-border)] transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* QR Check-in Modal */}
       <AnimatePresence>
         {showQRModal && eventFilter !== "all" && (
@@ -3194,8 +3599,17 @@ const DashboardEventParticipants = () => {
                   <X size={20} />
                 </button>
               </div>
-              <div className="p-8 flex flex-col items-center justify-center space-y-4">
-                <p className="text-xs text-center text-[var(--db-text-muted)] font-bold mb-2 uppercase tracking-wide">
+              <div className="p-8 flex flex-col items-center justify-center space-y-3">
+                {getEventImage(eventFilter) && (
+                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-[#ccf141] shadow-lg mb-1">
+                    <img
+                      src={getEventImage(eventFilter)}
+                      alt={eventFilter}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <p className="text-xs text-center text-[var(--db-text-muted)] font-bold uppercase tracking-wide">
                   {eventFilter}
                 </p>
                 <div className="bg-white p-4 rounded-xl shadow-lg border-4 border-[#ccf141]">

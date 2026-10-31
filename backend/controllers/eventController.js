@@ -469,6 +469,7 @@ const deleteEvent = async (req, res) => {
 };
 
 const EventBooking = require("../models/EventBooking");
+const EventWalkIn = require("../models/EventWalkIn");
 
 // @desc    Book an event (creates pending booking + Razorpay order)
 // @route   POST /api/events/book
@@ -1160,6 +1161,104 @@ const bookEventBarcode = async (req, res) => {
   }
 };
 
+// @desc    Register a new member walk-in for an event (Public via QR)
+// @route   POST /api/events/walkin
+// @access  Public
+const createEventWalkIn = async (req, res) => {
+  try {
+    const { name, phone, eventName, notes } = req.body;
+    if (!name || !name.trim()) {
+      return res.status(400).json({ success: false, message: "Please provide the member's name." });
+    }
+    if (!phone || !phone.trim()) {
+      return res.status(400).json({ success: false, message: "Please provide the mobile number." });
+    }
+    if (!eventName || !eventName.trim()) {
+      return res.status(400).json({ success: false, message: "Event name is missing." });
+    }
+
+    // Attempt to match event in DB to link ObjectId and thumbnail
+    const event = await Event.findOne({ title: eventName.trim() });
+
+    const newWalkIn = await EventWalkIn.create({
+      event: event ? event._id : null,
+      eventName: event ? event.title : eventName.trim(),
+      name: name.trim(),
+      phone: phone.trim(),
+      status: "Attended",
+      notes: notes || "Walk-in via QR check-in",
+      timeline: [
+        {
+          time: new Date().toLocaleString(undefined, {
+            day: "numeric",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          activity: "Walk-in Registered & Checked in",
+          type: "status",
+        },
+      ],
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Walk-in registered and attendance marked successfully!",
+      data: newWalkIn,
+    });
+  } catch (error) {
+    console.error("Create Event Walk-in Error:", error.message);
+    res.status(500).json({ success: false, message: "Server error. Could not register walk-in." });
+  }
+};
+
+// @desc    Get all event walk-ins (Admin)
+// @route   GET /api/events/walkin
+// @access  Private/Admin
+const getEventWalkIns = async (req, res) => {
+  try {
+    const { event, search } = req.query;
+    let query = {};
+    if (event && event !== "all") {
+      query.eventName = event;
+    }
+    if (search && search.trim()) {
+      const searchRegex = new RegExp(search.trim(), "i");
+      query.$or = [{ name: searchRegex }, { phone: searchRegex }, { eventName: searchRegex }];
+    }
+
+    const walkIns = await EventWalkIn.find(query)
+      .populate("event", "title imageUrl price")
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: walkIns.length,
+      data: walkIns,
+    });
+  } catch (error) {
+    console.error("Get Event Walk-ins Error:", error.message);
+    res.status(500).json({ success: false, message: "Server error. Could not retrieve walk-ins." });
+  }
+};
+
+// @desc    Delete an event walk-in (Admin)
+// @route   DELETE /api/events/walkin/:id
+// @access  Private/Admin
+const deleteEventWalkIn = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const walkIn = await EventWalkIn.findById(id);
+    if (!walkIn) {
+      return res.status(404).json({ success: false, message: "Walk-in participant not found." });
+    }
+    await EventWalkIn.findByIdAndDelete(id);
+    res.status(200).json({ success: true, message: "Walk-in participant deleted successfully." });
+  } catch (error) {
+    console.error("Delete Event Walk-in Error:", error.message);
+    res.status(500).json({ success: false, message: "Server error. Could not delete walk-in." });
+  }
+};
 
 module.exports = {
   getEvents,
@@ -1176,4 +1275,7 @@ module.exports = {
   bookEventBarcode,
   verifyEventPaymentBarcode,
   markEventAttendance,
+  createEventWalkIn,
+  getEventWalkIns,
+  deleteEventWalkIn,
 };

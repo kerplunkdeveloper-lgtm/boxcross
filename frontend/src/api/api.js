@@ -134,6 +134,9 @@ export const verifyEventPaymentBarcode = (formData) => API.post("/events/verify-
   },
 });
 export const markEventAttendance = (data) => API.post("/events/attendance", data);
+export const createEventWalkIn = (data) => API.post("/events/walkin", data);
+export const getEventWalkIns = (params) => API.get("/events/walkin", { params });
+export const deleteEventWalkIn = (id) => API.delete(`/events/walkin/${id}`);
 export const getEventBookings = () => API.get("/events/bookings");
 export const updateEventBooking = (id, data) => API.put(`/events/bookings/${id}`, data);
 export const deleteEventBooking = (id) => API.delete(`/events/bookings/${id}`);
