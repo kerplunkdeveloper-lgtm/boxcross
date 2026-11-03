@@ -4,6 +4,7 @@ const https = require("https");
 const mongoose = require("mongoose");
 const HiringApplication = require("../models/HiringApplication");
 const cloudinary = require("../config/cloudinary");
+const { uploadToS3, deleteFromS3, isS3Key } = require("../config/s3Upload");
 const {
   isGoogleDriveConfigured,
   uploadFileToGoogleDrive,
@@ -12,52 +13,29 @@ const {
 } = require("../config/googleDrive");
 
 // --------------------------------------------------------------------------
-// Cloudinary Helpers
+// S3 Helpers (new uploads) + Cloudinary helpers (old record cleanup)
 // --------------------------------------------------------------------------
-const uploadResumeToCloudinary = (fileBuffer, originalname) => {
-  return new Promise((resolve, reject) => {
-    const ext = path.extname(originalname || "").toLowerCase();
-    const cleanBase = path
-      .parse(originalname || "resume")
-      .name.replace(/[^a-zA-Z0-9_-]/g, "_");
-
-    // For non-image documents (.doc, .docx, .txt), Cloudinary requires the extension in public_id
-    const isDoc = [".doc", ".docx", ".txt", ".rtf"].includes(ext);
-    const resourceType = isDoc ? "raw" : "auto";
-    const publicId = isDoc
-      ? `${Date.now()}-${cleanBase}${ext}`
-      : `${Date.now()}-${cleanBase}`;
-
-    const uploadOptions = {
-      folder: "bxc_career_resumes",
-      resource_type: resourceType,
-      public_id: publicId,
-      access_mode: "public",
-    };
-
-    if (ext === ".pdf") {
-      uploadOptions.format = "pdf";
-    }
-
-    const uploadStream = cloudinary.uploader.upload_stream(
-      uploadOptions,
-      (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      }
-    );
-    uploadStream.end(fileBuffer);
-  });
+const uploadResumeToS3 = async (fileBuffer, mimetype) => {
+  return await uploadToS3(fileBuffer, mimetype, "bxc_career_resumes");
 };
 
 const deleteResumeFromCloudinary = async (publicId) => {
   if (!publicId) return;
   try {
-    // Attempt deletion as raw document, then image
     await cloudinary.uploader.destroy(publicId, { resource_type: "raw" });
     await cloudinary.uploader.destroy(publicId, { resource_type: "image" });
   } catch (err) {
     console.error("Cloudinary Cleanup Warning:", err.message);
+  }
+};
+
+// Smart delete: S3 for new uploads, Cloudinary for old records
+const deleteResumeFile = async (publicId, storageProvider) => {
+  if (!publicId) return;
+  if (storageProvider === "s3" || isS3Key(publicId)) {
+    await deleteFromS3(publicId);
+  } else {
+    await deleteResumeFromCloudinary(publicId);
   }
 };
 
@@ -242,14 +220,27 @@ const submitApplication = async (req, res) => {
             });
           }
         } else {
-          console.error(
-            "[Hiring API] Google Drive credentials not configured in googleDriveCredentials.js!"
-          );
-          return res.status(500).json({
-            success: false,
-            message:
-              "Google Drive storage is not configured. Please check backend/config/googleDriveCredentials.js.",
-          });
+          // Google Drive not configured — fallback to AWS S3
+          try {
+            const s3Result = await uploadResumeToS3(primaryFile.buffer, primaryFile.mimetype);
+            resumeData = {
+              url: s3Result.url,
+              publicId: s3Result.key,
+              originalName: primaryFile.originalname,
+              fileType: primaryFile.mimetype,
+              fileSize: primaryFile.size || primaryFile.buffer.length,
+              storageProvider: "s3",
+              driveFileId: "",
+              webViewLink: s3Result.url,
+              webContentLink: s3Result.url,
+            };
+          } catch (s3Err) {
+            console.error("[Hiring API] S3 Upload Error:", s3Err.message);
+            return res.status(500).json({
+              success: false,
+              message: "Failed to upload resume to S3: " + s3Err.message,
+            });
+          }
         }
       }
 
@@ -639,7 +630,7 @@ const deleteApplication = async (req, res) => {
       if (isDrive && driveId) {
         await deleteFileFromGoogleDrive(driveId);
       } else if (application.resume.publicId) {
-        await deleteResumeFromCloudinary(application.resume.publicId);
+        await deleteResumeFile(application.resume.publicId, application.resume.storageProvider);
       }
     }
 

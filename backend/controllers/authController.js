@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const cloudinary = require("../config/cloudinary");
+const { uploadToS3 } = require("../config/s3Upload");
 
 // Helper to generate JWT and set HttpOnly Cookie
 const sendTokenResponse = (user, statusCode, res) => {
@@ -172,21 +173,9 @@ exports.updateMembership = async (req, res) => {
   }
 };
 
-// Helper function to upload file buffer to Cloudinary
-const uploadToCloudinary = (fileBuffer, mimetype) => {
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: "boxcross_profiles",
-        resource_type: "image",
-      },
-      (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      }
-    );
-    uploadStream.end(fileBuffer);
-  });
+// Helper function to upload file buffer to AWS S3
+const uploadProfileImage = async (fileBuffer, mimetype) => {
+  return await uploadToS3(fileBuffer, mimetype, "boxcross_profiles");
 };
 
 // @desc    Update user profile details and/or profile image
@@ -206,8 +195,8 @@ exports.updateProfile = async (req, res) => {
     if (contactNumber !== undefined) user.contactNumber = contactNumber;
 
     if (req.file) {
-      const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
-      user.profileImage = result.secure_url;
+      const result = await uploadProfileImage(req.file.buffer, req.file.mimetype);
+      user.profileImage = result.url;
     }
 
     await user.save();

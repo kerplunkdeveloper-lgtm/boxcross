@@ -1,31 +1,26 @@
 const EventBanner = require("../models/EventBanner");
 const cloudinary = require("../config/cloudinary");
+const { uploadToS3, deleteFromS3, isS3Key } = require("../config/s3Upload");
 
-// Helper function to upload file buffer to Cloudinary
-const uploadToCloudinary = (fileBuffer, mimetype) => {
-  return new Promise((resolve, reject) => {
-    const resourceType = mimetype.startsWith("video/") ? "video" : "image";
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: "boxcross_banners",
-        resource_type: resourceType,
-      },
-      (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      }
-    );
-    uploadStream.end(fileBuffer);
-  });
+// Upload to AWS S3 (new uploads)
+const uploadBannerToS3 = async (fileBuffer, mimetype) => {
+  return await uploadToS3(fileBuffer, mimetype, "boxcross_banners");
 };
 
-// Helper function to delete file from Cloudinary
-const deleteFromCloudinary = async (publicId, mediaType) => {
-  try {
+// Smart delete: S3 for new uploads, Cloudinary for old records
+const deleteBannerMedia = async (publicId, mediaType) => {
+  if (!publicId) return;
+  if (isS3Key(publicId)) {
+    // New upload stored in S3
+    await deleteFromS3(publicId);
+  } else {
+    // Old upload stored in Cloudinary
     const resourceType = mediaType === "video" ? "video" : "image";
-    await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
-  } catch (error) {
-    console.error("Cloudinary Deletion Error:", error.message);
+    try {
+      await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+    } catch (error) {
+      console.error("Cloudinary Deletion Error:", error.message);
+    }
   }
 };
 
@@ -90,16 +85,16 @@ const createBanner = async (req, res) => {
       });
     }
 
-    // Upload to Cloudinary
-    const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+    // Upload to AWS S3
+    const result = await uploadBannerToS3(req.file.buffer, req.file.mimetype);
     const mediaType = req.file.mimetype.startsWith("video/") ? "video" : "image";
 
     const banner = await EventBanner.create({
       title,
       description: description || "",
-      mediaUrl: result.secure_url,
+      mediaUrl: result.url,
       mediaType,
-      publicId: result.public_id,
+      publicId: result.key,
     });
 
     res.status(201).json({
@@ -138,18 +133,18 @@ const updateBanner = async (req, res) => {
       description: description !== undefined ? description : banner.description,
     };
 
-    // If new file is uploaded, replace existing media in Cloudinary
+    // If new file is uploaded, replace existing media
     if (req.file) {
-      // 1. Delete old media from Cloudinary
-      await deleteFromCloudinary(banner.publicId, banner.mediaType);
+      // 1. Delete old media (S3 or Cloudinary based on publicId format)
+      await deleteBannerMedia(banner.publicId, banner.mediaType);
 
-      // 2. Upload new media
-      const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+      // 2. Upload new media to S3
+      const result = await uploadBannerToS3(req.file.buffer, req.file.mimetype);
       const mediaType = req.file.mimetype.startsWith("video/") ? "video" : "image";
 
-      updateData.mediaUrl = result.secure_url;
+      updateData.mediaUrl = result.url;
       updateData.mediaType = mediaType;
-      updateData.publicId = result.public_id;
+      updateData.publicId = result.key;
     }
 
     banner = await EventBanner.findByIdAndUpdate(id, updateData, {
@@ -186,8 +181,8 @@ const deleteBanner = async (req, res) => {
       });
     }
 
-    // Delete media from Cloudinary
-    await deleteFromCloudinary(banner.publicId, banner.mediaType);
+    // Delete media (S3 or Cloudinary based on publicId format)
+    await deleteBannerMedia(banner.publicId, banner.mediaType);
 
     // Delete document from database
     await EventBanner.findByIdAndDelete(id);

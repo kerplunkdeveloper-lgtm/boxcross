@@ -1,5 +1,6 @@
 const Event = require("../models/Event");
 const cloudinary = require("../config/cloudinary");
+const { uploadToS3, deleteFromS3, isS3Key } = require("../config/s3Upload");
 const fs = require("fs");
 const path = require("path");
 
@@ -124,29 +125,22 @@ const deleteEventPrerender = (eventId) => {
   }
 };
 
-// Helper function to upload file buffer to Cloudinary
-const uploadToCloudinary = (fileBuffer, mimetype) => {
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: "boxcross_events",
-        resource_type: "image",
-      },
-      (error, result) => {
-        if (error) return reject(error);
-        resolve(result);
-      }
-    );
-    uploadStream.end(fileBuffer);
-  });
+// Upload event image to AWS S3
+const uploadEventImage = async (fileBuffer, mimetype) => {
+  return await uploadToS3(fileBuffer, mimetype, "boxcross_events");
 };
 
-// Helper function to delete file from Cloudinary
-const deleteFromCloudinary = async (publicId) => {
-  try {
-    await cloudinary.uploader.destroy(publicId);
-  } catch (error) {
-    console.error("Cloudinary Deletion Error:", error.message);
+// Smart delete: S3 for new uploads, Cloudinary for old records
+const deleteEventMedia = async (publicId) => {
+  if (!publicId) return;
+  if (isS3Key(publicId)) {
+    await deleteFromS3(publicId);
+  } else {
+    try {
+      await cloudinary.uploader.destroy(publicId);
+    } catch (error) {
+      console.error("Cloudinary Deletion Error:", error.message);
+    }
   }
 };
 
@@ -272,8 +266,8 @@ const createEvent = async (req, res) => {
       }
     }
 
-    // Upload to Cloudinary
-    const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+    // Upload event image to AWS S3
+    const result = await uploadEventImage(req.file.buffer, req.file.mimetype);
 
     const event = await Event.create({
       title,
@@ -281,8 +275,8 @@ const createEvent = async (req, res) => {
       description: description || "",
       originalPrice: originalPrice ? Number(originalPrice) : null,
       price: Number(price),
-      imageUrl: result.secure_url,
-      publicId: result.public_id,
+      imageUrl: result.url,
+      publicId: result.key,
       bookingLink: bookingLink || "#",
       schedules: parsedSchedules,
       inclusions: parsedInclusions,
@@ -397,16 +391,16 @@ const updateEvent = async (req, res) => {
       try { updateData.paymentMethods = typeof paymentMethods === "string" ? JSON.parse(paymentMethods) : paymentMethods; } catch(e) {}
     }
 
-    // If new image is uploaded, replace existing image in Cloudinary
+    // If new image uploaded, replace existing (S3 or Cloudinary based on publicId)
     if (req.file) {
-      // 1. Delete old image from Cloudinary
-      await deleteFromCloudinary(event.publicId);
+      // 1. Delete old image
+      await deleteEventMedia(event.publicId);
 
-      // 2. Upload new image
-      const result = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+      // 2. Upload new image to S3
+      const result = await uploadEventImage(req.file.buffer, req.file.mimetype);
 
-      updateData.imageUrl = result.secure_url;
-      updateData.publicId = result.public_id;
+      updateData.imageUrl = result.url;
+      updateData.publicId = result.key;
     }
 
     event = await Event.findByIdAndUpdate(id, updateData, {
@@ -446,8 +440,8 @@ const deleteEvent = async (req, res) => {
       });
     }
 
-    // Delete image from Cloudinary
-    await deleteFromCloudinary(event.publicId);
+    // Delete image (S3 or Cloudinary based on publicId format)
+    await deleteEventMedia(event.publicId);
 
     // Delete document from database
     await Event.findByIdAndDelete(id);
@@ -1122,8 +1116,8 @@ const bookEventBarcode = async (req, res) => {
     // Calculate total amount
     const totalAmount = event.price * Number(seats);
 
-    // Upload screenshot to Cloudinary
-    const uploadResult = await uploadToCloudinary(req.file.buffer, req.file.mimetype);
+    // Upload payment screenshot to AWS S3
+    const uploadResult = await uploadEventImage(req.file.buffer, req.file.mimetype);
 
     // Create event booking with "pending barcode verification" status
     const booking = await EventBooking.create({
@@ -1136,8 +1130,8 @@ const bookEventBarcode = async (req, res) => {
       email,
       phone,
       paymentMethod: "barcode",
-      paymentScreenshot: uploadResult.secure_url,
-      paymentScreenshotPublicId: uploadResult.public_id,
+      paymentScreenshot: uploadResult.url,
+      paymentScreenshotPublicId: uploadResult.key,
       status: "pending barcode verification",
     });
 

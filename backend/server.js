@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+dotenv.config();
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const fs = require("fs");
@@ -32,8 +33,6 @@ const founderPlanRoutes = require("./routes/founderPlanRoutes");
 const founderPaymentRoutes = require("./routes/founderPaymentRoutes");
 const hiringRoutes = require("./routes/hiringRoutes");
 
-// Load env
-dotenv.config();
 
 // Connect to MongoDB
 connectDB();
