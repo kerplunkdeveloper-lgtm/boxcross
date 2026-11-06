@@ -207,6 +207,22 @@ async function runPrerender() {
       image: 'https://membership.boxandcross.com/og-founding100.jpg',
       imageAlt: 'Founding 100 Membership Offer - 12 Months at ₹14,999',
       url: 'https://membership.boxandcross.com/founding100'
+    },
+    {
+      path: 'membership/core',
+      title: 'Core Membership | One Pathway | Box & Cross',
+      description: 'Master one discipline with five coached sessions a week at Box & Cross. Choose Boxing, HYROX, or Strength Training with personal coach guidance and arena access.',
+      image: 'https://membership.boxandcross.com/og-membership.png',
+      imageAlt: 'Box and Cross Core Membership',
+      url: 'https://membership.boxandcross.com/membership/core'
+    },
+    {
+      path: 'core',
+      title: 'Core Membership | One Pathway | Box & Cross',
+      description: 'Master one discipline with five coached sessions a week at Box & Cross. Choose Boxing, HYROX, or Strength Training with personal coach guidance and arena access.',
+      image: 'https://membership.boxandcross.com/og-membership.png',
+      imageAlt: 'Box and Cross Core Membership',
+      url: 'https://membership.boxandcross.com/core'
     }
   ];
 

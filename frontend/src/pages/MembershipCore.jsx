@@ -217,6 +217,18 @@ const MembershipCore = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Track ViewContent for Core Membership in Meta Pixel
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "ViewContent", {
+        content_name: "Core Membership",
+        content_category: "Membership Tier",
+        content_ids: ["core_tier"],
+        content_type: "product",
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     const params = new URLSearchParams(location.search);
     const plan = (params.get("plan") || params.get("type") || "").toLowerCase();
     if (params.get("junior") === "true" || plan === "junior") {

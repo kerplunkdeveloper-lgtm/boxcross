@@ -594,6 +594,15 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
       tierTitle: currentName,
       programTitle: currentName,
     });
+    if (typeof window.fbq === "function") {
+      const priceNum = parseFloat(String(price || 0).replace(/,/g, "")) || 0;
+      window.fbq("track", "InitiateCheckout", {
+        content_name: `${currentName} - ${planName}`,
+        content_category: "Membership",
+        value: priceNum,
+        currency: "INR",
+      });
+    }
     setIsModalOpen(true);
   };
 

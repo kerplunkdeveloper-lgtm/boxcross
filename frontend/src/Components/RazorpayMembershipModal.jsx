@@ -214,6 +214,17 @@ const RazorpayMembershipModal = ({ isOpen, onClose, planDetails }) => {
                 id: verifyToastId,
               });
 
+              if (typeof window.fbq === "function") {
+                const priceNum =
+                  parseFloat(String(planDetails?.price || 0).replace(/,/g, "")) || 0;
+                window.fbq("track", "Purchase", {
+                  content_name: planDetails?.name,
+                  content_category: "Membership",
+                  value: priceNum,
+                  currency: "INR",
+                });
+              }
+
               // Update logged in user membership details if authenticated
               if (authUser && planDetails) {
                 const priceNum =

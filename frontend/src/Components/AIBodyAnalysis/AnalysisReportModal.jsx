@@ -20,12 +20,19 @@ const AnalysisReportModal = ({ isOpen, onClose, reportData, onSaveNotes }) => {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
-  if (!isOpen || !reportData) return null;
-
+  const defaultNotes =
+    "Athlete displays solid biomechanical baseline with minor forward head deviation. Focus on cervical retractions and thoracic extensions during warmups.";
   const [trainerNotes, setTrainerNotes] = useState(
-    reportData.trainerNotes ||
-      "Athlete displays solid biomechanical baseline with minor forward head deviation. Focus on cervical retractions and thoracic extensions during warmups.",
+    reportData?.trainerNotes || defaultNotes,
   );
+
+  useEffect(() => {
+    if (reportData?.trainerNotes) {
+      setTrainerNotes(reportData.trainerNotes);
+    }
+  }, [reportData]);
+
+  if (!isOpen || !reportData) return null;
 
   const formatDate = (dateStr) => {
     if (!dateStr)

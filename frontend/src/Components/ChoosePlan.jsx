@@ -176,12 +176,11 @@ const ChoosePlan = React.forwardRef(
     },
     ref,
   ) => {
-    if (hideAll || !activeData) return null;
-
-    const currentTitle = activeData.title || "CORE";
-    const currentSubtitle = activeData.subtitle || "ONE PATHWAY";
+    const safeData = activeData || {};
+    const currentTitle = safeData.title || "CORE";
+    const currentSubtitle = safeData.subtitle || "ONE PATHWAY";
     const currentSessionInfo =
-      activeData.sessionInfo ||
+      safeData.sessionInfo ||
       (currentTitle === "CORE"
         ? "Five Coached sessions a week — Boxing, HYROX or Strength Training"
         : currentTitle === "ATHLETE"
@@ -195,7 +194,7 @@ const ChoosePlan = React.forwardRef(
                 : "Five coached sessions a week, every pathway, every class (Boxing + HYROX + Strength Training)");
 
     const dailyRate =
-      activeData.dailyRate ||
+      safeData.dailyRate ||
       (currentTitle === "CORE"
         ? "₹92"
         : currentTitle === "ATHLETE"
@@ -209,7 +208,7 @@ const ChoosePlan = React.forwardRef(
                 : "₹184");
 
     const dailyRateLabel =
-      activeData.dailyRateLabel ||
+      safeData.dailyRateLabel ||
       (currentTitle === "JUNIOR"
         ? "A DAY AS A FOUNDING MEMBER"
         : currentTitle === "BXC DUO"
@@ -219,7 +218,7 @@ const ChoosePlan = React.forwardRef(
             : "A DAY ON THE 12-MONTH PLAN");
 
     const dailyComparison =
-      activeData.dailyComparison ||
+      safeData.dailyComparison ||
       (currentTitle === "CORE"
         ? "Two coffees and a vada."
         : currentTitle === "ATHLETE"
@@ -233,10 +232,10 @@ const ChoosePlan = React.forwardRef(
                 : "One pizza.");
 
     const benefits =
-      activeData.benefits && activeData.benefits.length > 0
-        ? activeData.benefits
-        : activeData.features && activeData.features.length > 0
-          ? activeData.features.map((f) => ({ boldText: f, normalText: "" }))
+      safeData.benefits && safeData.benefits.length > 0
+        ? safeData.benefits
+        : safeData.features && safeData.features.length > 0
+          ? safeData.features.map((f) => ({ boldText: f, normalText: "" }))
           : currentTitle === "CORE"
             ? [
               {
@@ -370,8 +369,8 @@ const ChoosePlan = React.forwardRef(
                     ];
 
     const plans =
-      activeData.plans && activeData.plans.length > 0
-        ? activeData.plans
+      safeData.plans && safeData.plans.length > 0
+        ? safeData.plans
         : [];
 
     const getTwelveMonthIndex = (plansList) => {
@@ -728,6 +727,8 @@ const ChoosePlan = React.forwardRef(
         </>
       )
     );
+
+    if (hideAll || !activeData) return null;
 
     return (
       <div
