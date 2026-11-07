@@ -20,7 +20,6 @@ import { Toaster } from "react-hot-toast";
 import { HelmetProvider } from "react-helmet-async";
 
 // Lazy-load page components for code splitting & optimized initial bundle sizes
-const HomePage = lazy(() => import("./pages/Home/Home"));
 const MembershipPage = lazy(() => import("./pages/Membership"));
 const MembershipCore = lazy(() => import("./pages/MembershipCore"));
 const MembershipAthlete = lazy(() => import("./pages/MembershipAthlete"));
@@ -36,7 +35,6 @@ const DashboardBookings = lazy(() => import("./pages/DashboardBookings"));
 const DashboardSettings = lazy(() => import("./pages/DashboardSettings"));
 const DashboardMemberships = lazy(() => import("./pages/DashboardMemberships"));
 const DashboardPayments = lazy(() => import("./pages/DashboardPayments"));
-const DashboardHomeBanner = lazy(() => import("./pages/DashboardHomeBanner"));
 const DashboardEvents = lazy(() => import("./pages/DashboardEvents"));
 const DashboardEventsList = lazy(() => import("./pages/DashboardEventsList"));
 const DashboardEventPayments = lazy(
@@ -124,7 +122,6 @@ const RoutePreloader = ({ setIsLoading }) => {
 
       if (
         location.pathname === "/" ||
-        location.pathname === "/home" ||
         (isCurrentEvents && !isPrevEvents) ||
         location.pathname === "/community"
       ) {
@@ -201,7 +198,6 @@ const App = () => {
                 {/* Routes WITH Navbar and Footer */}
                 <Route element={<Layout />}>
                   <Route path="/" element={<MembershipPage />} />
-                  <Route path="/home" element={<HomePage />} />
                   <Route path="/membership/core" element={<MembershipCore />} />
                   <Route path="/core" element={<MembershipCore />} />
                   <Route path="/membership/athlete" element={<MembershipAthlete />} />
@@ -274,8 +270,6 @@ const App = () => {
                   }
                 >
                   <Route index element={<DashboardHome />} />
-                  <Route path="home-banners" element={<DashboardHomeBanner />} />
-                  <Route path="home-banner" element={<Navigate to="/dashboard/home-banners" replace />} />
                   <Route path="bookings" element={<DashboardBookings />} />
                   <Route path="memberships" element={<DashboardMemberships />} />
                   <Route path="payments" element={<DashboardPayments />} />

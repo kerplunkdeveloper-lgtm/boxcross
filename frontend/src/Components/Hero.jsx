@@ -55,12 +55,9 @@ const Hero = () => {
       and creating lasting results in a motivating environment.
     </p>
 
-    <a
-      href="#book-trial"
-      className="bg-[#d9ff00] text-black uppercase font-bold px-8 py-4 rounded-xl w-fit hover:bg-lime-300 transition-all duration-300 inline-block text-center cursor-pointer"
-    >
+    <button className="bg-[#d9ff00] text-black uppercase font-bold px-8 py-4 rounded-xl w-fit hover:bg-lime-300 transition-all duration-300">
       Enter The Arena
-    </a>
+    </button>
 
   </motion.div>
 

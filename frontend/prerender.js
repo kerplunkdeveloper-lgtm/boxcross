@@ -217,14 +217,6 @@ async function runPrerender() {
       url: 'https://membership.boxandcross.com/membership/core'
     },
     {
-      path: 'home',
-      title: 'Box & Cross – Pondicherry’s Premier Performance Arena | Home',
-      description: 'Box & Cross is Pondicherry’s premier performance arena built for boxing, strength, HYROX, and functional fitness. Experience elite coaching and real transformation.',
-      image: 'https://membership.boxandcross.com/og-membership.png',
-      imageAlt: 'Box and Cross Performance Arena',
-      url: 'https://membership.boxandcross.com/home'
-    },
-    {
       path: 'core',
       title: 'Core Membership | One Pathway | Box & Cross',
       description: 'Master one discipline with five coached sessions a week at Box & Cross. Choose Boxing, HYROX, or Strength Training with personal coach guidance and arena access.',

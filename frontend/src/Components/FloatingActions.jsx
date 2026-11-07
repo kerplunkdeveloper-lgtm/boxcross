@@ -58,12 +58,25 @@ const FloatingActions = () => {
 
   return createPortal(
     <>
-      {/* WHATSAPP CONTACT BUTTON (LEFT SIDE) */}
+      {/* BACK TO TOP BUTTON */}
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-5 left-4 sm:left-6 md:bottom-8 md:left-8 w-11 h-11 md:w-14 md:h-14 bg-[#ccf141] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(222,251,2,0.3)] hover:scale-110 hover:shadow-[0_0_30px_rgba(222,251,2,0.5)] transition-all duration-300 z-[9999] ${
+          isVisible && !isModalOpen
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-10 pointer-events-none"
+        }`}
+        aria-label="Back to top"
+      >
+        <ArrowUp className="w-5 h-5 md:w-7 md:h-7" strokeWidth={2.5} />
+      </button>
+
+      {/* WHATSAPP CONTACT BUTTON */}
       <a
         href="https://wa.me/918925556900"
         target="_blank"
         rel="noopener noreferrer"
-        className={`fixed bottom-5 left-4 sm:left-6 md:bottom-8 md:left-8 z-[9999] flex flex-row items-center group cursor-pointer transition-all duration-300 ${
+        className={`fixed bottom-5 right-4 sm:right-6 md:bottom-8 md:right-8 z-[9999] flex flex-row-reverse items-center group cursor-pointer transition-all duration-300 ${
           isModalOpen
             ? "opacity-0 translate-y-10 pointer-events-none"
             : "opacity-100 translate-y-0"
@@ -74,29 +87,16 @@ const FloatingActions = () => {
           <FaWhatsapp className="text-xl md:text-3xl" />
         </div>
 
-        {/* Speech Bubble to the right */}
+        {/* Speech Bubble */}
         <div
-          className="ml-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[14px] md:text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300 opacity-0 -translate-x-2 pointer-events-none group-hover:opacity-100 group-hover:translate-x-1"
+          className="mr-4 relative bg-white text-[#333] px-5 py-2.5 rounded-xl shadow-xl font-medium text-[14px] md:text-[16px] whitespace-nowrap min-w-[110px] text-center transition-all duration-300 opacity-0 translate-x-2 pointer-events-none group-hover:opacity-100 group-hover:-translate-x-1"
           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
         >
           <span className="block text-black">WhatsApp</span>
-          {/* Triangle pointing left */}
-          <div className="absolute left-[-8px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-r-[10px] border-r-white border-b-[8px] border-b-transparent"></div>
+          {/* Triangle pointing right */}
+          <div className="absolute right-[-8px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[8px] border-t-transparent border-l-[10px] border-l-white border-b-[8px] border-b-transparent"></div>
         </div>
       </a>
-
-      {/* BACK TO TOP BUTTON (RIGHT SIDE) */}
-      <button
-        onClick={scrollToTop}
-        className={`fixed bottom-5 right-4 sm:right-6 md:bottom-8 md:right-8 w-11 h-11 md:w-14 md:h-14 bg-[#ccf141] text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(204,241,65,0.35)] hover:scale-110 hover:shadow-[0_0_30px_rgba(204,241,65,0.6)] transition-all duration-300 z-[9999] cursor-pointer ${
-          isVisible && !isModalOpen
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-10 pointer-events-none"
-        }`}
-        aria-label="Back to top"
-      >
-        <ArrowUp className="w-5 h-5 md:w-7 md:h-7" strokeWidth={2.5} />
-      </button>
     </>,
     document.body,
   );

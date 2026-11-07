@@ -86,8 +86,7 @@ const AboutSection = () => {
           {/* BUTTON + CONTACT */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-10 mt-14">
             {/* BUTTON */}
-            <a
-              href="#book-trial"
+            <button
               className="
                 bg-[#d9ff00]
                 text-black
@@ -103,13 +102,10 @@ const AboutSection = () => {
                 transition-all
                 duration-300
                 w-fit
-                inline-block
-                text-center
-                cursor-pointer
               "
             >
               Experience BXC
-            </a>
+            </button>
 
             {/* CALL */}
             <div className="flex items-center gap-5">

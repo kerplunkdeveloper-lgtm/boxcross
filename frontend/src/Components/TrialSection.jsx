@@ -8,7 +8,7 @@ import {
 
 const TrialSection = () => {
   return (
-    <section id="book-trial" className="w-full bg-black py-16 md:py-24 px-4 md:px-10 lg:px-20 overflow-hidden">
+    <section className="w-full bg-black py-16 md:py-24 px-4 md:px-10 lg:px-20 overflow-hidden">
 
       {/* MAIN CONTAINER */}
       <div

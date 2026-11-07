@@ -31,7 +31,6 @@ import {
   Target,
   Flame,
   Briefcase,
-  Layers,
 } from "lucide-react";
 import logo from "../assets/images/logo-new.png";
 import { useAuth } from "../context/AuthContext";
@@ -480,12 +479,6 @@ const DashboardSidebar = ({
               name: "Dashboard",
               icon: LayoutDashboard,
               end: true,
-            })}
-            {renderSingleItem({
-              to: "/dashboard/home-banners",
-              name: "Home Banners",
-              icon: Layers,
-              badge: "NEW",
             })}
             {renderSingleItem({
               to: "/dashboard/calendar",

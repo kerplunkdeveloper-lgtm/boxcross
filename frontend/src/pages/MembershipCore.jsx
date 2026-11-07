@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MembershipTierDetail from "../Components/MembershipTierDetail";
-import coreBanner from "../assets/core_membership_banner.jpg";
-import coreBannerMobile from "../assets/core_membership_banner_mobile.jpg";
+import box1 from "../assets/box1.png";
 import { Dumbbell, Trophy } from "lucide-react";
 
 const coreTierData = {
@@ -14,9 +13,7 @@ const coreTierData = {
     "Master one discipline with five coached sessions a week at Box & Cross. Choose Boxing, HYROX, or Strength Training with personal coach guidance and arena access.",
   subtitle: "ONE DISCIPLINE. ZERO DISTRACTIONS. MAXIMUM PROGRESSION.",
   desc: "Five coached sessions a week dedicated entirely to one chosen pathway — Boxing or HYROX or Strength Training. Perfect for those who want structured skill building, accountability, and physical transformation without compromise.",
-  image: coreBanner,
-  bannerImage: coreBanner,
-  bannerImageMobile: coreBannerMobile,
+  image: box1,
   disciplineCount: "1 Pathway",
   starterPrice: "2,800",
   dailyRate: "₹92",
