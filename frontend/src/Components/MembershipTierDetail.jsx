@@ -706,6 +706,77 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
         {customTabs && <div className="mb-6 sm:mb-8 max-w-full overflow-hidden">{customTabs}</div>}
 
         {/* ================= HERO SECTION WITH NEON PATTERN & GLOW ================= */}
+        {tierData.bannerImage ? (
+          <div className="relative mb-10 sm:mb-14">
+            <div
+              onClick={() => {
+                if (pricingRef.current) {
+                  pricingRef.current.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_50px_rgba(204,241,65,0.08)] cursor-pointer group"
+            >
+              {tierData.bannerImageMobile ? (
+                <>
+                  {/* MOBILE BANNER (portrait aspect for mobile devices) */}
+                  <img
+                    src={tierData.bannerImageMobile}
+                    alt={`${dynamicTierData.title} Mobile Banner`}
+                    className="block md:hidden w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-500"
+                  />
+                  {/* DESKTOP BANNER (landscape aspect for tablet/desktop) */}
+                  <img
+                    src={tierData.bannerImage}
+                    alt={`${dynamicTierData.title} Banner`}
+                    className="hidden md:block w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-500"
+                  />
+                </>
+              ) : (
+                <img
+                  src={tierData.bannerImage}
+                  alt={dynamicTierData.title}
+                  className="w-full h-auto object-cover group-hover:scale-[1.01] transition-transform duration-500"
+                />
+              )}
+            </div>
+
+            {/* UNIFIED HORIZONTAL STATS HUD STRIP */}
+            <div className="mt-4 sm:mt-6 grid grid-cols-3 divide-x divide-white/10 rounded-2xl bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 backdrop-blur-xl p-3 sm:p-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+              {/* STAT 1: SCHEDULE */}
+              <div className="flex flex-col items-center justify-center text-center px-1 sm:px-2">
+                <div className="flex items-center gap-1 sm:gap-1.5 text-[9.5px] sm:text-xs uppercase font-bold tracking-wider text-neutral-400 mb-0.5">
+                  <Calendar size={12} className="text-[#ccf141] shrink-0" />
+                  <span>Schedule</span>
+                </div>
+                <span className="text-xs sm:text-sm md:text-base font-black text-white uppercase tracking-tight">
+                  5 Coached / Wk
+                </span>
+              </div>
+
+              {/* STAT 2: DISCIPLINES */}
+              <div className="flex flex-col items-center justify-center text-center px-1 sm:px-2">
+                <div className="flex items-center gap-1 sm:gap-1.5 text-[9.5px] sm:text-xs uppercase font-bold tracking-wider text-neutral-400 mb-0.5">
+                  <Layers size={12} className="text-[#ccf141] shrink-0" />
+                  <span>Disciplines</span>
+                </div>
+                <span className="text-xs sm:text-sm md:text-base font-black text-white uppercase tracking-tight truncate">
+                  {tierData.disciplineCount}
+                </span>
+              </div>
+
+              {/* STAT 3: STARTS AT */}
+              <div className="flex flex-col items-center justify-center text-center px-1 sm:px-2">
+                <div className="flex items-center gap-1 sm:gap-1.5 text-[9.5px] sm:text-xs uppercase font-bold tracking-wider text-neutral-400 mb-0.5">
+                  <Flame size={12} className="text-[#ccf141] shrink-0" />
+                  <span>Starts At</span>
+                </div>
+                <span className="text-xs sm:text-sm md:text-base font-black text-[#ccf141] uppercase tracking-tight">
+                  ₹{dynamicTierData.starterPrice} / mo
+                </span>
+              </div>
+            </div>
+          </div>
+        ) : (
         <div className="relative mb-12 sm:mb-16 rounded-3xl p-2 sm:p-6 md:p-10 lg:p-12 border border-white/10 bg-[#0a0a0d]/80 backdrop-blur-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_50px_rgba(204,241,65,0.07)]">
           {/* CYBER NEON GRID PATTERN */}
           <div
@@ -991,6 +1062,7 @@ const MembershipTierDetail = ({ tierData, customTabs }) => {
           </motion.div>
         </div>
       </div>
+      )}
 
         {/* ================= STEP 2: CHOOSE PLAN SLIDE ANIMATION UI ================= */}
         {/* EXACT SAME SLIDE ANIMATION UI & DYNAMIC LOGIC FROM MEMBERSHIP PAGE */}

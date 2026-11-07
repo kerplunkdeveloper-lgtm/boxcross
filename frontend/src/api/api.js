@@ -107,6 +107,23 @@ export const updateBanner = (id, formData) => API.put(`/event-banners/${id}`, fo
 });
 export const deleteBanner = (id) => API.delete(`/event-banners/${id}`);
 
+// ──────────────── HOME BANNERS API ────────────────
+
+export const getActiveHomeBanners = () => API.get("/home-banners");
+export const getAllHomeBanners = () => API.get("/home-banners/admin");
+export const createHomeBanner = (formData) => API.post("/home-banners", formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+export const updateHomeBanner = (id, formData) => API.put(`/home-banners/${id}`, formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+export const deleteHomeBanner = (id) => API.delete(`/home-banners/${id}`);
+export const toggleHomeBannerStatus = (id) => API.patch(`/home-banners/${id}/toggle`);
+
 // ──────────────── EVENTS LIST API ────────────────
 export const getEventsList = () => API.get("/events");
 export const getEventsListAdmin = () => API.get("/events/admin");
