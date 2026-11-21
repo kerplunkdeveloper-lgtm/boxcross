@@ -58,19 +58,17 @@ const FeedbackQR = () => {
         <div className="relative">
           <img src={logo} alt="Box & Cross" className="h-9 w-auto mx-auto mb-7" />
 
-          <h1 className="text-[34px] sm:text-[40px] leading-[0.95] font-black uppercase tracking-tight" style={headingFont}>
-            Your voice.
-            <br />
-            <span className="text-[#ccf141]">Our next rep.</span>
+          <h1 className="text-[20px]  leading-[0.95] font-black uppercase tracking-tight" style={headingFont}>
+           *YOUR FEEDBACK IS ANONYMOUS. <br/> SO BE HONEST.*
+           
+           
           </h1>
 
-          <p className="mt-4 text-[13px] font-black uppercase tracking-[0.2em] text-white/80" style={headingFont}>
-            Help us build a better BXC.
-          </p>
+         
 
           <div className="mt-5 space-y-1 text-[15px] text-gray-300 leading-relaxed" style={bodyFont}>
-            <p>Love something? Tell us.</p>
-            <p>Think something needs to change? Tell us that too.</p>
+      
+            <p>No names. No judgment. Just your honest feedback to make BXC better.</p>
           </div>
 
           {/* QR — centre of the poster */}
@@ -90,7 +88,7 @@ const FeedbackQR = () => {
             Scan the QR code
           </p>
 
-          <p className="mt-4 text-[13px] text-gray-400 leading-relaxed max-w-xs mx-auto" style={bodyFont}>
+          <p className="mt-4 text-[16px] text-white leading-relaxed max-w-xs mx-auto" style={bodyFont}>
             Your feedback helps us improve our coaching, equipment, facilities and overall training experience.
           </p>
 
@@ -98,12 +96,7 @@ const FeedbackQR = () => {
             100% honest feedback. No name required.
           </p>
 
-          <div className="mt-8 pt-6 border-t border-white/10">
-            <p className="text-[12px] font-black uppercase tracking-[0.3em] text-white" style={headingFont}>
-              It's just never enough.
-            </p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.3em] text-gray-500">Box &amp; Cross Performance Arena</p>
-          </div>
+          
         </div>
       </main>
 

@@ -322,8 +322,8 @@ const Feedback = () => {
               <br />
               <span className="text-[#ccf141]">Our next rep.</span>
             </h1>
-            <p className="text-gray-300 text-[17px] leading-relaxed mt-6 max-w-xl" style={bodyFont}>
-              We're building a better arena. Tell us what's working, what's not, and what you'd like us to improve.
+            <p className="text-[#ccf141] text-[17px] leading-relaxed mt-6 max-w-xl" style={bodyFont}>
+            YOUR FEEDBACK IS ANONYMOUS. SO BE HONEST.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-2 mt-7">
