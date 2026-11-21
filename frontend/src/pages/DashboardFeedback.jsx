@@ -42,6 +42,9 @@ const STATUS_STYLES = {
 
 const PAGE_SIZE = 15;
 
+// Native <option> lists ignore the select's text colour in some browsers; set both explicitly
+const OPTION_CLS = "bg-[var(--db-card)] text-[var(--db-text)]";
+
 const formatDate = (d, withTime = false) =>
   d
     ? new Date(d).toLocaleString(undefined, {
@@ -428,21 +431,21 @@ const DashboardFeedback = () => {
           </div>
           <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
             <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={inputCls} aria-label="Status">
-              <option value="all">All statuses</option>
+              <option value="all" className={OPTION_CLS}>All statuses</option>
               {FEEDBACK_STATUSES.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s} className={OPTION_CLS}>{s}</option>
               ))}
             </select>
             <select value={areaFilter} onChange={(e) => setAreaFilter(e.target.value)} className={`${inputCls} sm:max-w-[200px]`} aria-label="Improvement area">
-              <option value="all">All areas</option>
+              <option value="all" className={OPTION_CLS}>All areas</option>
               {IMPROVEMENT_AREAS.map((a) => (
-                <option key={a} value={a}>{a}</option>
+                <option key={a} value={a} className={OPTION_CLS}>{a}</option>
               ))}
             </select>
             <select value={connectionFilter} onChange={(e) => setConnectionFilter(e.target.value)} className={inputCls} aria-label="Connection">
-              <option value="all">Everyone</option>
+              <option value="all" className={OPTION_CLS}>Everyone</option>
               {CONNECTIONS.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c} className={OPTION_CLS}>{c}</option>
               ))}
             </select>
             <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className={inputCls} aria-label="From date" />
