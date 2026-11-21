@@ -647,7 +647,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 max-w-md sm:max-w-none mx-auto w-full"
           >
             {displayEvents.map((event) => {
               // Calculate slot availability stats
@@ -692,11 +692,21 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 >
                   <div className="card-border-spin-inner">
                     {/* Media Image Wrap */}
-                    <div className="relative aspect-[16/10] overflow-hidden bg-black shrink-0">
+                    <div className="relative aspect-[4/5] overflow-hidden bg-black shrink-0">
+                      {/* Blurred backdrop fills any empty space */}
+                      <img
+                        src={event.imageUrl}
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-50 pointer-events-none"
+                      />
+                      {/* Full image - never cropped */}
                       <img
                         src={event.imageUrl}
                         alt={event.title}
-                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        loading="lazy"
+                        className="relative w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                       />
 
                       {/* Stacked Date Badge Overlay */}
@@ -737,7 +747,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             <div className="px-2.5 py-1 rounded-full bg-red-950/85 border border-red-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
                               <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
                               <span
-                                className="text-[10px] font-black uppercase tracking-wider text-red-300"
+                                className="text-[11px] font-black uppercase tracking-wider text-red-300"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
@@ -752,7 +762,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 className="text-orange-400 fill-orange-400 animate-bounce"
                               />
                               <span
-                                className="text-[10px] font-black uppercase tracking-wider text-orange-200"
+                                className="text-[11px] font-black uppercase tracking-wider text-orange-200"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
@@ -765,7 +775,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             <div className="px-2.5 py-1 rounded-full bg-black/75 border border-white/15 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
                               <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141]" />
                               <span
-                                className="text-[10px] font-black uppercase tracking-wider text-gray-200"
+                                className="text-[11px] font-black uppercase tracking-wider text-gray-200"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
@@ -781,26 +791,26 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       )}
 
                       {/* Subtle Top-Bottom Gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
+                      <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
                     </div>
 
                     {/* Card Content details */}
-                    <div className="p-4 flex-1 flex flex-col justify-between">
+                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                       <div>
                         {/* Event Title */}
                         <h3
-                          className="text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#ccf141] transition-colors line-clamp-1 mb-2"
+                          className="text-[19px] sm:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#ccf141] transition-colors line-clamp-2 mb-2"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           {event.title}
                         </h3>
 
                         {/* Date & Time */}
-                        <div className="flex flex-wrap items-center gap-3 mb-3 mt-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-3 mt-1">
                           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
                             <Calendar size={13} className="text-[#ccf141]" />
                             <span
-                              className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
+                              className="text-[12px] font-bold tracking-wider uppercase text-gray-200 mt-0.5"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -823,7 +833,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
                             <Timer size={13} className="text-[#ccf141]" />
                             <span
-                              className="text-[12px] font-bold tracking-widest uppercase text-gray-200 mt-0.5"
+                              className="text-[12px] font-bold tracking-wider uppercase text-gray-200 mt-0.5"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -835,13 +845,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
 
                         {/* Location venue */}
-                        <div className="flex items-start gap-1.5 text-gray-200 hover:text-gray-300 transition-colors mb-4">
+                        <div className="flex items-start gap-1.5 text-gray-300 mb-4">
                           <MapPin
                             size={16}
-                            className="text-gray-200 shrink-0 mt-0.5"
+                            className="text-[#ccf141] shrink-0 mt-0.5"
                           />
                           <span
-                            className="text-sm font-semibold leading-relaxed line-clamp-1"
+                            className="text-[14px] font-semibold leading-snug line-clamp-2"
                             style={{
                               fontFamily: '"Brutal Font Light", sans-serif',
                             }}
@@ -854,37 +864,37 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         {(event.category ||
                           event.duration ||
                           event.calories) && (
-                          <div className="flex flex-wrap gap-1.5 mb-4">
+                          <div className="flex flex-wrap gap-2 mb-4">
                             {event.category && (
                               <span
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-[#ccf141]"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/20 text-[12px] font-black uppercase tracking-wide text-[#ccf141]"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
-                                <Dumbbell size={9} strokeWidth={2.5} />
+                                <Dumbbell size={12} strokeWidth={2.5} />
                                 {event.category}
                               </span>
                             )}
                             {event.duration && (
                               <span
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-gray-400"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[12px] font-black uppercase tracking-wide text-gray-300"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
-                                <Timer size={9} strokeWidth={2.5} />
+                                <Timer size={12} strokeWidth={2.5} />
                                 {event.duration}
                               </span>
                             )}
                             {event.calories && (
                               <span
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[14px] font-black uppercase text-gray-400"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[12px] font-black uppercase tracking-wide text-gray-300"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
-                                <Flame size={9} strokeWidth={2.5} />
+                                <Flame size={12} strokeWidth={2.5} />
                                 {event.calories}
                               </span>
                             )}
@@ -894,31 +904,31 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                       {/* Easy to Understand Slot Availability Indicator */}
                       {hasSlots && totalSlots > 0 && (
-                        <div className="my-2.5 p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/15 transition-all">
+                        <div className="my-2.5 p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/15 transition-all">
                           {/* 3 Clear Columns: Total Slots | Booked Slots | Remaining Slots */}
                           <div className="grid grid-cols-3 gap-2 text-center pb-2 border-b border-white/[0.06]">
                             <div className="flex flex-col items-center">
-                              <span className="text-[9px] uppercase tracking-wider text-gray-400 font-bold">
+                              <span className="text-[10px] sm:text-[11px] uppercase tracking-wide text-gray-400 font-bold">
                                 Total Slots
                               </span>
-                              <span className="text-xs sm:text-sm font-black text-white font-mono mt-0.5">
+                              <span className="text-[15px] font-black text-white font-mono mt-0.5">
                                 {totalSlots}
                               </span>
                             </div>
                             <div className="flex flex-col items-center border-x border-white/[0.08]">
-                              <span className="text-[9px] uppercase tracking-wider text-cyan-400 font-bold">
+                              <span className="text-[10px] sm:text-[11px] uppercase tracking-wide text-cyan-400 font-bold">
                                 Booked
                               </span>
-                              <span className="text-xs sm:text-sm font-black text-cyan-400 font-mono mt-0.5">
+                              <span className="text-[15px] font-black text-cyan-400 font-mono mt-0.5">
                                 {totalBooked}
                               </span>
                             </div>
                             <div className="flex flex-col items-center">
-                              <span className="text-[9px] uppercase tracking-wider text-[#ccf141] font-bold">
+                              <span className="text-[10px] sm:text-[11px] uppercase tracking-wide text-[#ccf141] font-bold">
                                 Remaining
                               </span>
                               <span
-                                className={`text-xs sm:text-sm font-black font-mono mt-0.5 ${
+                                className={`text-[15px] font-black font-mono mt-0.5 ${
                                   isSoldOut ? "text-red-400" : "text-[#ccf141]"
                                 }`}
                               >
@@ -945,7 +955,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 }}
                               />
                             </div>
-                            <span className="text-[10px] font-mono font-bold text-gray-400 shrink-0">
+                            <span className="text-[11px] font-mono font-bold text-gray-400 shrink-0">
                               {isSoldOut ? (
                                 <span className="text-red-400 font-bold uppercase">Sold Out</span>
                               ) : (
@@ -957,16 +967,16 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       )}
 
                       {/* Pricing and Action Panel */}
-                      <div className="flex items-center justify-between pt-4 border-t border-white/5 mt-auto">
-                        <div className="flex flex-col">
+                      <div className="flex items-end justify-between gap-3 pt-4 border-t border-white/5 mt-auto">
+                        <div className="flex flex-col min-w-0">
                           {event.originalPrice && (
-                            <span className="text-xl text-gray-500 line-through font-semibold leading-none mb-1">
+                            <span className="text-[14px] text-gray-500 line-through font-semibold leading-none mb-1.5">
                               ₹{event.originalPrice}
                             </span>
                           )}
                           {Number(event.price) === 0 ? (
                             <span
-                              className="text-lg font-black text-[#ccf141] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#ccf141]/10 border border-[#ccf141]/20 rounded-lg inline-block self-start"
+                              className="text-base font-black text-[#ccf141] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#ccf141]/10 border border-[#ccf141]/20 rounded-lg inline-block self-start"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -975,13 +985,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             </span>
                           ) : (
                             <span
-                              className="text-4xl mt-1 font-black text-gray-200 leading-none"
+                              className="text-[28px] font-black text-white leading-none whitespace-nowrap"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
                             >
                               ₹{event.price}{" "}
-                              <span className="text-[15px] text-gray-400 font-normal ml-0.5 lowercase">
+                              <span className="text-[13px] text-gray-400 font-normal ml-0.5 lowercase">
                                 onwards
                               </span>
                             </span>
@@ -991,7 +1001,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         {isSoldOut ? (
                           <button
                             disabled
-                            className="inline-flex items-center gap-1.5 bg-neutral-900 border border-white/10 text-gray-500 font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full cursor-not-allowed opacity-60"
+                            className="inline-flex items-center gap-1.5 bg-neutral-900 border border-white/10 text-gray-500 font-black uppercase tracking-wider text-[13px] px-5 py-3 rounded-full cursor-not-allowed opacity-60 shrink-0"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1004,7 +1014,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               e.stopPropagation();
                               navigate(`/events/${event._id}?book=true`);
                             }}
-                            className="inline-flex items-center gap-1.5 bg-[#ccf141] text-black font-black uppercase tracking-wider text-[11px] px-5 py-2.5 rounded-full shadow-md hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                            className="inline-flex items-center gap-1.5 bg-[#ccf141] text-black font-black uppercase tracking-wider text-[13px] px-5 py-3 rounded-full shadow-md shrink-0 hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1013,7 +1023,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               Book Now
                             </span>
                             <ArrowRight
-                              size={12}
+                              size={14}
                               strokeWidth={3}
                               className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
                             />
@@ -1047,15 +1057,23 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
               className="bg-[#0a0a0a] w-full h-full overflow-y-auto md:overflow-hidden shadow-2xl relative z-10 flex flex-col md:flex-row animate-in fade-in zoom-in duration-200"
             >
               {/* Left side: Image banner section */}
-              <div className="relative w-full md:w-1/2 aspect-[16/10] md:aspect-auto h-[40vh] md:h-full overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-white/5">
+              <div className="relative w-full md:w-1/2 md:h-full overflow-hidden bg-black shrink-0 border-b md:border-b-0 md:border-r border-white/5">
+                {/* Blurred backdrop fills empty space around the full image */}
+                <img
+                  src={selectedEvent.imageUrl}
+                  alt=""
+                  aria-hidden="true"
+                  className="hidden md:block absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-50 pointer-events-none"
+                />
+                {/* Full image — never cropped */}
                 <img
                   src={selectedEvent.imageUrl}
                   alt={selectedEvent.title}
-                  className="w-full h-full object-cover md:absolute md:inset-0"
+                  className="relative block w-full h-auto md:absolute md:inset-0 md:h-full object-contain"
                 />
 
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0a0a0a] via-black/10 to-transparent pointer-events-none" />
+                {/* Gradient overlay (desktop only, so it doesn't hide part of the image on mobile) */}
+                <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/60 via-transparent to-transparent pointer-events-none" />
 
                 {/* Premium Back Arrow Button on mobile */}
                 <button
@@ -1079,18 +1097,21 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 </button>
 
                 {/* Scrollable details wrapper */}
-                <div className="p-6 md:p-12 md:overflow-y-auto space-y-6 flex-grow md:custom-scrollbar">
+                <div className="px-4 py-5 sm:p-6 md:p-12 md:overflow-y-auto space-y-5 md:space-y-6 flex-grow md:custom-scrollbar">
                   {/* Event Location Pin */}
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-400 text-[14px] font-black uppercase tracking-wider mb-1">
-                    <MapPin size={14} className="text-[#ccf141]" />
-                    <span>
-                      {selectedEvent.location.split(",").pop() || "Venue"}
+                  <div className="flex items-start gap-2 px-4 py-2.5 rounded-2xl bg-white/5 border border-white/10 text-gray-200 text-[14px] sm:text-[15px] font-semibold tracking-wide mb-1 max-w-full md:max-w-[calc(100%-3.5rem)] w-fit">
+                    <MapPin
+                      size={16}
+                      className="text-[#ccf141] shrink-0 mt-0.5"
+                    />
+                    <span className="whitespace-normal break-words text-left leading-snug">
+                      {selectedEvent.location?.trim() || "Venue"}
                     </span>
                   </div>
 
                   {/* Title */}
                   <h3
-                    className="text-4xl  font-black uppercase tracking-tight text-white leading-tight pr-8 text-left"
+                    className="text-[26px] leading-[1.15] sm:text-4xl sm:leading-tight font-black uppercase tracking-tight text-white md:pr-8 text-left break-words"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     {selectedEvent.title}
@@ -1100,15 +1121,15 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   {(selectedEvent.category ||
                     selectedEvent.duration ||
                     selectedEvent.calories) && (
-                    <div className="grid grid-cols-3 gap-2.5 sm:gap-4 my-2">
+                    <div className="grid grid-cols-3 gap-2 sm:gap-4 my-2">
                       {selectedEvent.category && (
-                        <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
+                        <div className="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center min-w-0">
                           <Dumbbell
                             size={16}
                             className="text-[#ccf141] mb-1.5 shrink-0"
                           />
                           <span
-                            className="text-[15px] font-black uppercase tracking-wider text-gray-400"
+                            className="text-[12px] sm:text-[15px] font-black uppercase tracking-wide sm:tracking-wider text-gray-300 leading-tight break-words"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1118,13 +1139,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
                       )}
                       {selectedEvent.duration && (
-                        <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
+                        <div className="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center min-w-0">
                           <Timer
                             size={16}
                             className="text-[#ccf141] mb-1.5 shrink-0"
                           />
                           <span
-                            className="text-[15px] font-black uppercase tracking-wider text-gray-400"
+                            className="text-[12px] sm:text-[15px] font-black uppercase tracking-wide sm:tracking-wider text-gray-300 leading-tight break-words"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1134,13 +1155,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
                       )}
                       {selectedEvent.calories && (
-                        <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center">
+                        <div className="flex flex-col items-center justify-center p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all text-center min-w-0">
                           <Flame
                             size={16}
                             className="text-[#ccf141] mb-1.5 shrink-0"
                           />
                           <span
-                            className="text-[15px] font-black uppercase tracking-wider text-gray-400"
+                            className="text-[12px] sm:text-[15px] font-black uppercase tracking-wide sm:tracking-wider text-gray-300 leading-tight break-words"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -1155,13 +1176,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   {/* Description Box */}
                   <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                     <h4
-                      className="text-[20px] font-black uppercase tracking-wider text-[#ccf141] mb-2"
+                      className="text-[17px] sm:text-[20px] font-black uppercase tracking-wider text-[#ccf141] mb-2"
                       style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                     >
                       About The Event
                     </h4>
                     <p
-                      className="text-[15px] text-gray-300 font-medium leading-relaxed whitespace-pre-line"
+                      className="text-[15px] sm:text-[16px] text-gray-300 font-medium leading-[1.7] whitespace-pre-line break-words"
                       style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
                     >
                       {selectedEvent.description ||
@@ -1173,7 +1194,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   {selectedEvent.benefits?.length > 0 && (
                     <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                       <h4
-                        className="text-[20px] font-black uppercase tracking-wider text-[#ccf141] mb-3"
+                        className="text-[17px] sm:text-[20px] font-black uppercase tracking-wider text-[#ccf141] mb-3"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         Benefits
@@ -1182,7 +1203,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         {selectedEvent.benefits.map((benefit, idx) => (
                           <li
                             key={idx}
-                            className="flex items-start gap-2.5 text-[15px] text-gray-300 font-medium leading-relaxed"
+                            className="flex items-start gap-2.5 text-[15px] sm:text-[16px] text-gray-300 font-medium leading-relaxed"
                           >
                             <CheckCircle
                               size={15}
@@ -1204,16 +1225,16 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   {/* Session Agenda Section */}
                   {selectedEvent.agenda?.length > 0 && (
                     <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left space-y-4">
-                      <div className="flex items-baseline justify-between">
+                      <div className="flex items-baseline justify-between gap-3">
                         <h4
-                          className="text-[15px] font-black uppercase tracking-wider text-[#ccf141]"
+                          className="text-[15px] sm:text-[17px] font-black uppercase tracking-wider text-[#ccf141] leading-snug"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           A typical {selectedEvent.title} Session
                         </h4>
                         {selectedEvent.duration && (
                           <span
-                            className="text-[15px] text-gray-400 font-bold"
+                            className="text-[14px] sm:text-[15px] text-gray-400 font-bold whitespace-nowrap shrink-0"
                             style={{
                               fontFamily: '"Brutal Font Light", sans-serif',
                             }}
@@ -1271,14 +1292,14 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           return (
                             <div
                               key={idx}
-                              className={`flex items-center justify-between p-3 bg-white/[0.01] border ${borderClass} rounded-xl transition-all`}
+                              className={`flex items-center justify-between gap-3 p-3 bg-white/[0.01] border ${borderClass} rounded-xl transition-all`}
                             >
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-3 min-w-0">
                                 <span
                                   className={`w-2.5 h-2.5 rounded-full ${bulletBg} shrink-0`}
                                 />
                                 <span
-                                  className="text-xs sm:text-sm text-gray-200 font-semibold leading-none"
+                                  className="text-[14px] sm:text-[15px] text-gray-200 font-semibold leading-snug"
                                   style={{
                                     fontFamily:
                                       '"Brutal Font Light", sans-serif',
@@ -1288,7 +1309,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 </span>
                               </div>
                               <span
-                                className="text-xs font-bold text-gray-400 tracking-wider whitespace-nowrap"
+                                className="text-[13px] sm:text-sm font-bold text-gray-400 tracking-wider whitespace-nowrap shrink-0"
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
@@ -1313,18 +1334,18 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       {selectedEvent.inclusions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[20px] font-black tracking-wider text-[#ccf141] mb-4 flex items-center justify-between"
+                            className="text-[17px] sm:text-[20px] font-black tracking-wider text-[#ccf141] mb-3 sm:mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
                           >
                             Venue Inclusions
                           </h4>
-                          <ul className="space-y-4">
+                          <ul className="space-y-3 sm:space-y-4">
                             {selectedEvent.inclusions.map((item, idx) => (
                               <li
                                 key={idx}
-                                className="flex items-start gap-3 text-[15px] text-gray-300 font-medium leading-relaxed"
+                                className="flex items-start gap-3 text-[15px] sm:text-[16px] text-gray-300 font-medium leading-relaxed break-words"
                               >
                                 <CheckCircle
                                   size={16}
@@ -1340,18 +1361,18 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       {selectedEvent.exclusions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[20px] font-black tracking-wider text-[#ccf141] mb-4 flex items-center justify-between"
+                            className="text-[17px] sm:text-[20px] font-black tracking-wider text-[#ccf141] mb-3 sm:mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
                           >
                             Venue Exclusions
                           </h4>
-                          <ul className="space-y-4">
+                          <ul className="space-y-3 sm:space-y-4">
                             {selectedEvent.exclusions.map((item, idx) => (
                               <li
                                 key={idx}
-                                className="flex items-start gap-3 text-[15px] text-gray-300 font-medium leading-relaxed"
+                                className="flex items-start gap-3 text-[15px] sm:text-[16px] text-gray-300 font-medium leading-relaxed break-words"
                               >
                                 <XCircle
                                   size={16}
@@ -1367,19 +1388,19 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       {selectedEvent.termsAndConditions?.length > 0 && (
                         <div className="bg-white/[0.01] border border-white/5 rounded-2xl p-4 sm:p-5 text-left">
                           <h4
-                            className="text-[20px] font-black tracking-wider text-[#ccf141] mb-4 flex items-center justify-between"
+                            className="text-[17px] sm:text-[20px] font-black tracking-wider text-[#ccf141] mb-3 sm:mb-4 flex items-center justify-between"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
                           >
                             Terms & Conditions
                           </h4>
-                          <ul className="space-y-4">
+                          <ul className="space-y-3 sm:space-y-4">
                             {selectedEvent.termsAndConditions.map(
                               (item, idx) => (
                                 <li
                                   key={idx}
-                                  className="flex items-start gap-3 text-[15px] text-gray-300 font-medium leading-relaxed"
+                                  className="flex items-start gap-3 text-[15px] sm:text-[16px] text-gray-300 font-medium leading-relaxed break-words"
                                 >
                                   <span className="w-1.5 h-1.5 bg-[#7a7a7a] transform rotate-45 inline-block shrink-0 mt-1.5"></span>
                                   <span>{item}</span>
@@ -1394,27 +1415,27 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 </div>
 
                 {/* Modal Footer Pricing + Call To Action */}
-                <div className="p-6 md:p-10 border-t border-white/5 bg-[#080808] flex items-center justify-between gap-4 shrink-0 mt-auto">
+                <div className="sticky bottom-0 md:static z-20 px-4 py-3.5 sm:p-6 md:p-10 border-t border-white/10 bg-[#080808]/95 backdrop-blur-md flex items-center justify-between gap-3 sm:gap-4 shrink-0 mt-auto">
                   <div className="flex flex-col text-left">
                     {selectedEvent.originalPrice && (
-                      <span className="text-[20px] text-gray-500 line-through font-semibold leading-none mb-1">
+                      <span className="text-[14px] sm:text-[20px] text-gray-500 line-through font-semibold leading-none mb-1">
                         ₹{selectedEvent.originalPrice}
                       </span>
                     )}
                     {Number(selectedEvent.price) === 0 ? (
                       <span
-                        className="text-xl font-black text-[#ccf141] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#ccf141]/10 border border-[#ccf141]/20 rounded-lg inline-block self-start"
+                        className="text-base sm:text-xl font-black text-[#ccf141] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#ccf141]/10 border border-[#ccf141]/20 rounded-lg inline-block self-start"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         Free Entry
                       </span>
                     ) : (
                       <span
-                        className="text-[30px] font-black text-gray-200 leading-none"
+                        className="text-[24px] sm:text-[30px] font-black text-gray-200 leading-none"
                         style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                       >
                         ₹{selectedEvent.price}
-                        <span className="text-[20px] text-gray-400 font-normal ml-0.5 lowercase">
+                        <span className="text-[13px] sm:text-[20px] text-gray-400 font-normal ml-1 lowercase">
                           onwards
                         </span>
                       </span>
@@ -1425,14 +1446,14 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     onClick={() =>
                       navigate(`/events/${selectedEvent._id}?book=true`)
                     }
-                    className="inline-flex items-center justify-center gap-2 bg-[#ccf141] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[11px] sm:text-xs px-6 py-3.5 rounded-full shadow-lg shadow-[#ccf141]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                    className="inline-flex items-center justify-center gap-2 bg-[#ccf141] hover:scale-[1.02] active:scale-95 text-black font-extrabold uppercase tracking-wider text-[13px] sm:text-sm px-5 sm:px-6 py-3 sm:py-3.5 rounded-full shrink-0 shadow-lg shadow-[#ccf141]/10 transition-all duration-300 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
                       Book Now
                     </span>
                     <ArrowRight
-                      size={12}
+                      size={14}
                       strokeWidth={3}
                       className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
                     />
