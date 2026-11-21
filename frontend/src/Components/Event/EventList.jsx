@@ -692,7 +692,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 >
                   <div className="card-border-spin-inner">
                     {/* Media Image Wrap */}
-                    <div className="relative aspect-[4/5] overflow-hidden bg-black shrink-0">
+                    <div className="relative aspect-square overflow-hidden bg-black shrink-0">
                       {/* Blurred backdrop fills any empty space */}
                       <img
                         src={event.imageUrl}
@@ -799,7 +799,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       <div>
                         {/* Event Title */}
                         <h3
-                          className="text-[19px] sm:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#ccf141] transition-colors line-clamp-2 mb-2"
+                          className="text-[19px] sm:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#ccf141] transition-colors line-clamp-1 mb-2"
                           style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                         >
                           {event.title}
@@ -845,13 +845,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
 
                         {/* Location venue */}
-                        <div className="flex items-start gap-1.5 text-gray-300 mb-4">
+                        <div className="flex items-start gap-1.5 text-gray-300 mb-3">
                           <MapPin
                             size={16}
                             className="text-[#ccf141] shrink-0 mt-0.5"
                           />
                           <span
-                            className="text-[14px] font-semibold leading-snug line-clamp-2"
+                            className="text-[14px] font-semibold leading-snug line-clamp-1"
                             style={{
                               fontFamily: '"Brutal Font Light", sans-serif',
                             }}
@@ -860,114 +860,39 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           </span>
                         </div>
 
-                        {/* Mini Badges on Card */}
-                        {(event.category ||
-                          event.duration ||
-                          event.calories) && (
-                          <div className="flex flex-wrap gap-2 mb-4">
-                            {event.category && (
-                              <span
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#ccf141]/10 border border-[#ccf141]/20 text-[12px] font-black uppercase tracking-wide text-[#ccf141]"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                <Dumbbell size={12} strokeWidth={2.5} />
-                                {event.category}
-                              </span>
-                            )}
-                            {event.duration && (
-                              <span
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[12px] font-black uppercase tracking-wide text-gray-300"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                <Timer size={12} strokeWidth={2.5} />
-                                {event.duration}
-                              </span>
-                            )}
-                            {event.calories && (
-                              <span
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[12px] font-black uppercase tracking-wide text-gray-300"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                <Flame size={12} strokeWidth={2.5} />
-                                {event.calories}
-                              </span>
-                            )}
-                          </div>
-                        )}
                       </div>
 
-                      {/* Easy to Understand Slot Availability Indicator */}
+                      {/* Compact slot availability line */}
                       {hasSlots && totalSlots > 0 && (
-                        <div className="my-2.5 p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:border-white/15 transition-all">
-                          {/* 3 Clear Columns: Total Slots | Booked Slots | Remaining Slots */}
-                          <div className="grid grid-cols-3 gap-2 text-center pb-2 border-b border-white/[0.06]">
-                            <div className="flex flex-col items-center">
-                              <span className="text-[10px] sm:text-[11px] uppercase tracking-wide text-gray-400 font-bold">
-                                Total Slots
-                              </span>
-                              <span className="text-[15px] font-black text-white font-mono mt-0.5">
-                                {totalSlots}
-                              </span>
-                            </div>
-                            <div className="flex flex-col items-center border-x border-white/[0.08]">
-                              <span className="text-[10px] sm:text-[11px] uppercase tracking-wide text-cyan-400 font-bold">
-                                Booked
-                              </span>
-                              <span className="text-[15px] font-black text-cyan-400 font-mono mt-0.5">
-                                {totalBooked}
-                              </span>
-                            </div>
-                            <div className="flex flex-col items-center">
-                              <span className="text-[10px] sm:text-[11px] uppercase tracking-wide text-[#ccf141] font-bold">
-                                Remaining
-                              </span>
-                              <span
-                                className={`text-[15px] font-black font-mono mt-0.5 ${
-                                  isSoldOut ? "text-red-400" : "text-[#ccf141]"
-                                }`}
-                              >
-                                {isSoldOut ? "0" : remaining}
-                              </span>
-                            </div>
+                        <div className="mb-3 flex items-center gap-2.5">
+                          <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full rounded-full transition-all duration-700 ease-out ${
+                                isSoldOut
+                                  ? "bg-red-500"
+                                  : isFillingFast
+                                    ? "bg-gradient-to-r from-amber-500 to-orange-500"
+                                    : "bg-gradient-to-r from-lime-400 to-[#ccf141]"
+                              }`}
+                              style={{
+                                width: isSoldOut
+                                  ? "100%"
+                                  : `${Math.min(100, Math.max(6, bookedPercent))}%`,
+                              }}
+                            />
                           </div>
-
-                          {/* Clean Visual Progress Line */}
-                          <div className="mt-2 flex items-center justify-between gap-2">
-                            <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                              <div
-                                className={`h-full rounded-full transition-all duration-700 ease-out ${
-                                  isSoldOut
-                                    ? "bg-red-500 w-full"
-                                    : isFillingFast
-                                      ? "bg-gradient-to-r from-amber-500 to-orange-500"
-                                      : "bg-gradient-to-r from-lime-400 to-[#ccf141]"
-                                }`}
-                                style={{
-                                  width: isSoldOut
-                                    ? "100%"
-                                    : `${Math.min(100, Math.max(6, bookedPercent))}%`,
-                                }}
-                              />
-                            </div>
-                            <span className="text-[11px] font-mono font-bold text-gray-400 shrink-0">
-                              {isSoldOut ? (
-                                <span className="text-red-400 font-bold uppercase">Sold Out</span>
-                              ) : (
-                                `${bookedPercent}% booked`
-                              )}
-                            </span>
-                          </div>
+                          <span
+                            className={`text-[12px] font-bold shrink-0 ${
+                              isSoldOut ? "text-red-400" : "text-gray-400"
+                            }`}
+                          >
+                            {isSoldOut ? "Sold out" : `${remaining} of ${totalSlots} left`}
+                          </span>
                         </div>
                       )}
 
                       {/* Pricing and Action Panel */}
-                      <div className="flex items-end justify-between gap-3 pt-4 border-t border-white/5 mt-auto">
+                      <div className="flex items-end justify-between gap-3 pt-3 border-t border-white/5 mt-auto">
                         <div className="flex flex-col min-w-0">
                           {event.originalPrice && (
                             <span className="text-[14px] text-gray-500 line-through font-semibold leading-none mb-1.5">
