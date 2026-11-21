@@ -64,6 +64,10 @@ const getOptimizedOgImageUrl = (
   return url;
 };
 
+// Digits only, drop a leading +91 / 91 country code
+const cleanPhoneInput = (p) =>
+  String(p || "").replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
+
 const EventList = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -89,6 +93,8 @@ const EventList = () => {
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+  // Guests 2..N (guest 1 is the person booking: customerName / customerPhone)
+  const [extraGuests, setExtraGuests] = useState([]);
   const [submittingBooking, setSubmittingBooking] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState(1);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -120,6 +126,7 @@ const EventList = () => {
     setCustomerName("");
     setCustomerEmail("");
     setCustomerPhone("");
+    setExtraGuests([]);
     setCheckoutStep(1);
     setTermsAccepted(false);
     setCreatedBooking(null);
@@ -129,6 +136,34 @@ const EventList = () => {
     setPaymentScreenshotPreview("");
     setShowFullQR(false);
   };
+
+  // Keep one guest card per extra seat; keep names already typed when seats change
+  useEffect(() => {
+    setExtraGuests((prev) => {
+      const n = Math.max(0, Number(seatsCount) - 1);
+      const next = prev.slice(0, n);
+      while (next.length < n) next.push({ name: "", phone: "", useMine: false });
+      return next;
+    });
+  }, [seatsCount]);
+
+  const updateGuest = (idx, patch) =>
+    setExtraGuests((prev) =>
+      prev.map((g, i) => (i === idx ? { ...g, ...patch } : g)),
+    );
+
+  // Full attendee list sent to the server: booker first, then the guests
+  const buildAttendees = () => [
+    { name: customerName.trim(), phone: cleanPhoneInput(customerPhone) },
+    ...extraGuests.map((g) => ({
+      name: g.name.trim(),
+      phone: g.useMine ? cleanPhoneInput(customerPhone) : cleanPhoneInput(g.phone),
+    })),
+  ];
+
+  const filledGuestCount = extraGuests.filter(
+    (g) => g.name.trim() && (g.useMine || cleanPhoneInput(g.phone).length === 10),
+  ).length;
 
   const handleShareToWhatsApp = () => {
     if (!bookingEvent || !selectedSlot) return;
@@ -147,10 +182,15 @@ Gym: *Box & Cross*
 • *Location:* ${locationStr}
 • *Reserved Seats:* ${seatsCount} Seat${seatsCount > 1 ? "s" : ""}
 
-👤 *Attendee Info:*
+👤 *Booked By:*
 • *Name:* ${customerName}
 • *Email:* ${customerEmail}
 • *Phone:* ${customerPhone}
+
+👥 *Attendees:*
+${buildAttendees()
+  .map((a, i) => `${i + 1}. ${a.name} (${a.phone})`)
+  .join("\n")}
 
 Thank you for registering! We've reserved your spot and look forward to seeing you. 💪🏋️`;
 
@@ -299,6 +339,23 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
       return;
     }
 
+    if (cleanPhoneInput(customerPhone).length !== 10) {
+      toast.error("Please enter a valid 10-digit phone number");
+      return;
+    }
+
+    for (let i = 0; i < extraGuests.length; i++) {
+      const g = extraGuests[i];
+      if (!g.name.trim()) {
+        toast.error(`Please enter a name for Guest ${i + 2}`);
+        return;
+      }
+      if (!g.useMine && cleanPhoneInput(g.phone).length !== 10) {
+        toast.error(`Please enter a valid 10-digit phone number for Guest ${i + 2}`);
+        return;
+      }
+    }
+
     setSubmittingBooking(true);
     const toastId = toast.loading(
       Number(bookingEvent.price) === 0
@@ -314,7 +371,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
         seats: Number(seatsCount),
         name: customerName.trim(),
         email: customerEmail.trim(),
-        phone: customerPhone.trim(),
+        phone: cleanPhoneInput(customerPhone),
+        attendees: buildAttendees(),
       });
 
       if (data.success) {
@@ -332,7 +390,10 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
       }
     } catch (error) {
       console.error(error);
-      toast.error("Error saving contact details", { id: toastId });
+      toast.error(
+        error.response?.data?.message || "Error saving contact details",
+        { id: toastId },
+      );
     } finally {
       setSubmittingBooking(false);
     }
@@ -1831,7 +1892,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           </div>
                           <div className="border-t border-white/5 pt-3">
                             <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
-                              Attendee
+                              {extraGuests.length > 0 ? "Booked By" : "Attendee"}
                             </p>
                             <p className="text-xs font-bold text-gray-200">
                               {customerName}
@@ -1839,6 +1900,26 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             <p className="text-[10px] text-gray-400">
                               {customerEmail} • {customerPhone}
                             </p>
+                            {extraGuests.length > 0 && (
+                              <div className="mt-3 space-y-1">
+                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">
+                                  Attendees
+                                </p>
+                                {buildAttendees().map((a, i) => (
+                                  <p
+                                    key={i}
+                                    className="text-xs text-gray-200 flex justify-between gap-3"
+                                  >
+                                    <span className="font-bold truncate">
+                                      {i + 1}. {a.name}
+                                    </span>
+                                    <span className="text-gray-400 font-mono shrink-0">
+                                      {a.phone}
+                                    </span>
+                                  </p>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
 
@@ -2185,18 +2266,145 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                       className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#ccf141] transition-colors"
                                     />
                                     <input
-                                      type="number"
+                                      type="tel"
+                                      inputMode="numeric"
+                                      autoComplete="tel"
+                                      maxLength={10}
                                       value={customerPhone}
                                       onChange={(e) =>
-                                        setCustomerPhone(e.target.value)
+                                        setCustomerPhone(
+                                          e.target.value.replace(/\D/g, "").slice(0, 10),
+                                        )
                                       }
-                                      placeholder="Enter your phone number"
+                                      placeholder="10-digit mobile number"
                                       className="w-full bg-[#050505] border border-white/10 focus:border-[#ccf141]/50 focus:bg-white/[0.02] outline-none rounded-xl pl-11 pr-4 py-4 text-sm text-white transition-all shadow-inner shadow-black/50"
                                       required
                                     />
                                   </div>
                                 </div>
                               </div>
+
+                              {/* Guest details: one card per extra seat */}
+                              {extraGuests.length > 0 && (
+                                <div className="space-y-3 pt-2">
+                                  <div className="flex items-end justify-between gap-3">
+                                    <div>
+                                      <h4
+                                        className="text-base sm:text-lg font-black uppercase text-white tracking-wide"
+                                        style={{
+                                          fontFamily: '"BrutalTypeBold", sans-serif',
+                                        }}
+                                      >
+                                        Guest Details
+                                      </h4>
+                                      <p className="text-[12px] text-gray-500 font-semibold mt-0.5">
+                                        You are Guest 1. Add the other {extraGuests.length}{" "}
+                                        {extraGuests.length === 1 ? "person" : "people"} coming with you.
+                                      </p>
+                                    </div>
+                                    <span
+                                      className={`text-[12px] font-bold shrink-0 px-2.5 py-1 rounded-full border ${
+                                        filledGuestCount === extraGuests.length
+                                          ? "text-[#ccf141] border-[#ccf141]/30 bg-[#ccf141]/10"
+                                          : "text-gray-400 border-white/10 bg-white/5"
+                                      }`}
+                                    >
+                                      {filledGuestCount}/{extraGuests.length} filled
+                                    </span>
+                                  </div>
+
+                                  {extraGuests.map((guest, idx) => {
+                                    const done =
+                                      guest.name.trim() &&
+                                      (guest.useMine ||
+                                        cleanPhoneInput(guest.phone).length === 10);
+                                    return (
+                                      <div
+                                        key={idx}
+                                        className={`rounded-xl border p-3.5 sm:p-4 space-y-3 transition-colors ${
+                                          done
+                                            ? "border-[#ccf141]/25 bg-[#ccf141]/[0.03]"
+                                            : "border-white/10 bg-white/[0.02]"
+                                        }`}
+                                      >
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-[12px] font-black uppercase tracking-wider text-gray-300">
+                                            Guest {idx + 2}
+                                          </span>
+                                          {done && (
+                                            <CheckCircle size={16} className="text-[#ccf141]" />
+                                          )}
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                          <div className="relative group">
+                                            <User
+                                              size={16}
+                                              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#ccf141] transition-colors"
+                                            />
+                                            <input
+                                              type="text"
+                                              autoComplete="off"
+                                              value={guest.name}
+                                              onChange={(e) =>
+                                                updateGuest(idx, { name: e.target.value })
+                                              }
+                                              placeholder={`Guest ${idx + 2} full name`}
+                                              aria-label={`Guest ${idx + 2} full name`}
+                                              className="w-full bg-[#050505] border border-white/10 focus:border-[#ccf141]/50 outline-none rounded-xl pl-11 pr-4 py-3.5 text-sm text-white transition-all"
+                                              required
+                                            />
+                                          </div>
+
+                                          <div className="relative group">
+                                            <Phone
+                                              size={16}
+                                              className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-[#ccf141] transition-colors"
+                                            />
+                                            <input
+                                              type="tel"
+                                              inputMode="numeric"
+                                              autoComplete="off"
+                                              maxLength={10}
+                                              value={
+                                                guest.useMine
+                                                  ? cleanPhoneInput(customerPhone)
+                                                  : guest.phone
+                                              }
+                                              disabled={guest.useMine}
+                                              onChange={(e) =>
+                                                updateGuest(idx, {
+                                                  phone: e.target.value
+                                                    .replace(/\D/g, "")
+                                                    .slice(0, 10),
+                                                })
+                                              }
+                                              placeholder="10-digit mobile number"
+                                              aria-label={`Guest ${idx + 2} phone number`}
+                                              className="w-full bg-[#050505] border border-white/10 focus:border-[#ccf141]/50 outline-none rounded-xl pl-11 pr-4 py-3.5 text-sm text-white transition-all disabled:opacity-60"
+                                              required={!guest.useMine}
+                                            />
+                                          </div>
+                                        </div>
+
+                                        <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                                          <input
+                                            type="checkbox"
+                                            checked={guest.useMine}
+                                            onChange={(e) =>
+                                              updateGuest(idx, { useMine: e.target.checked })
+                                            }
+                                            className="w-4 h-4 accent-[#ccf141] cursor-pointer"
+                                          />
+                                          <span className="text-[13px] text-gray-400 font-medium">
+                                            Use my number (no separate phone)
+                                          </span>
+                                        </label>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
 
                               {/* Form action buttons */}
                               <div className="pt-6">
@@ -2260,6 +2468,27 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                     </p>
                                   </div>
                                 </div>
+
+                                {extraGuests.length > 0 && (
+                                  <div className="bg-white/5 border border-white/5 rounded-xl p-3 mb-4 space-y-1.5">
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-gray-500">
+                                      {buildAttendees().length} Attendees
+                                    </p>
+                                    {buildAttendees().map((a, i) => (
+                                      <div
+                                        key={i}
+                                        className="flex items-center justify-between gap-3 text-xs"
+                                      >
+                                        <span className="text-white font-semibold truncate">
+                                          {i + 1}. {a.name}
+                                        </span>
+                                        <span className="text-gray-400 font-mono shrink-0">
+                                          {a.phone}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
 
                                 {/* Payment Method Selector */}
                                 {(() => {

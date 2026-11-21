@@ -465,6 +465,46 @@ const deleteEvent = async (req, res) => {
 const EventBooking = require("../models/EventBooking");
 const EventWalkIn = require("../models/EventWalkIn");
 
+const normalizePhone = (p) =>
+  String(p || "").replace(/[\s\-\+]/g, "").replace(/^91(?=\d{10}$)/, "");
+
+// Validates the per-seat attendee list sent by the booking form.
+// `raw` may be an array (JSON body) or a JSON string (multipart body).
+// Returns { attendees } on success or { error } with a user-facing message.
+const parseAttendees = (raw, seats, booker) => {
+  const seatCount = Number(seats);
+  let list = raw;
+  if (typeof list === "string") {
+    try {
+      list = JSON.parse(list);
+    } catch {
+      return { error: "Invalid attendee details" };
+    }
+  }
+
+  // Older clients don't send attendees: only allowed for a single seat.
+  if (!Array.isArray(list) || list.length === 0) {
+    if (seatCount === 1) {
+      return { attendees: [{ name: String(booker.name).trim(), phone: normalizePhone(booker.phone) }] };
+    }
+    return { error: `Please enter name and phone number for all ${seatCount} guests` };
+  }
+
+  if (list.length !== seatCount) {
+    return { error: `Please enter details for exactly ${seatCount} guest${seatCount > 1 ? "s" : ""}` };
+  }
+
+  const attendees = [];
+  for (let i = 0; i < list.length; i++) {
+    const name = String(list[i]?.name || "").trim();
+    const phone = normalizePhone(list[i]?.phone);
+    if (!name) return { error: `Please enter a name for Guest ${i + 1}` };
+    if (!/^\d{10}$/.test(phone)) return { error: `Please enter a valid 10-digit phone number for Guest ${i + 1}` };
+    attendees.push({ name, phone });
+  }
+  return { attendees };
+};
+
 // @desc    Book an event (creates pending booking + Razorpay order)
 // @route   POST /api/events/book
 // @access  Public
@@ -477,6 +517,11 @@ const bookEvent = async (req, res) => {
         success: false,
         message: "All fields are required to complete booking",
       });
+    }
+
+    const { attendees, error: attendeeError } = parseAttendees(req.body.attendees, seats, { name, phone });
+    if (attendeeError) {
+      return res.status(400).json({ success: false, message: attendeeError });
     }
 
     const event = await Event.findById(eventId);
@@ -526,6 +571,7 @@ const bookEvent = async (req, res) => {
         name,
         email,
         phone,
+        attendees,
         status: "payment successfully",
         razorpayOrderId: `free_event_${Date.now()}`,
         razorpayPaymentId: `free_pay_${Date.now()}`,
@@ -586,6 +632,7 @@ const bookEvent = async (req, res) => {
       name,
       email,
       phone,
+      attendees,
       status: "None",
       razorpayOrderId: order.id,
     });
@@ -812,12 +859,16 @@ const markEventAttendance = async (req, res) => {
     }
 
     // Normalize phone number for flexible matching
-    const cleanPhone = phone.replace(/[\s\-\+]/g, '').replace(/^91/, '');
-    
-    // Find all bookings and filter by normalized phone
+    const cleanPhone = normalizePhone(phone);
+
+    // Find bookings where the booker OR any guest on the booking has this phone
     const allBookings = await EventBooking.find({}).populate("event", "title");
-    const userBookings = allBookings.filter(b => b.phone && b.phone.replace(/[\s\-\+]/g, '').replace(/^91/, '') === cleanPhone);
-    
+    const userBookings = allBookings.filter(
+      (b) =>
+        (b.phone && normalizePhone(b.phone) === cleanPhone) ||
+        (b.attendees || []).some((a) => normalizePhone(a.phone) === cleanPhone)
+    );
+
     if (!userBookings || userBookings.length === 0) {
       return res.status(404).json({ success: false, message: "No registration found for this mobile number." });
     }
@@ -834,22 +885,57 @@ const markEventAttendance = async (req, res) => {
       return res.status(404).json({ success: false, message: "No registration found for this specific event." });
     }
 
+    // Per-person check-in: mark every guest on this booking with this phone
+    // (several guests can share one number via "Use my number").
+    const now = new Date();
+    const matchedGuests = (targetBooking.attendees || []).filter(
+      (a) => normalizePhone(a.phone) === cleanPhone
+    );
+    const newlyCheckedIn = matchedGuests.filter((a) => !a.checkedIn);
+    newlyCheckedIn.forEach((a) => {
+      a.checkedIn = true;
+      a.checkInTime = now;
+      a.status = "Attended";
+    });
+
     // Update the booking status to "Attended"
     targetBooking.status = "Attended";
-    
-    // Also push a timeline event
-    targetBooking.timeline.push({
-      time: new Date().toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }),
-      activity: "Checked in via QR Code",
-      type: "status"
-    });
+
+    const checkedInNames = matchedGuests.length
+      ? matchedGuests.map((a) => a.name).join(", ")
+      : targetBooking.name;
+
+    if (matchedGuests.length === 0 || newlyCheckedIn.length > 0) {
+      targetBooking.timeline.push({
+        time: now.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }),
+        activity: `Checked in via QR Code: ${
+          newlyCheckedIn.length ? newlyCheckedIn.map((a) => a.name).join(", ") : targetBooking.name
+        }`,
+        type: "status"
+      });
+    }
 
     await targetBooking.save();
 
+    const totalGuests = targetBooking.attendees?.length || targetBooking.seats;
+    const arrived = targetBooking.attendees?.length
+      ? targetBooking.attendees.filter((a) => a.checkedIn).length
+      : totalGuests;
+
     res.status(200).json({
       success: true,
-      message: "Good morning Guys - Attendance present",
-      data: targetBooking
+      message:
+        matchedGuests.length > 0 && newlyCheckedIn.length === 0
+          ? "Already checked in"
+          : "Good morning Guys - Attendance present",
+      data: {
+        ...targetBooking.toObject(),
+        name: checkedInNames,
+        phone: cleanPhone,
+        bookedBy: targetBooking.name,
+        arrivedCount: arrived,
+        totalGuests,
+      },
     });
   } catch (error) {
     console.error("Mark Event Attendance Error:", error.message);
@@ -1044,6 +1130,8 @@ const updateEventBooking = async (req, res) => {
     if (timeline !== undefined) booking.timeline = timeline;
 
     await booking.save();
+    // Return the event populated so the dashboard keeps showing its title/image
+    await booking.populate("event", "title price imageUrl");
 
     res.status(200).json({
       success: true,
@@ -1059,6 +1147,58 @@ const updateEventBooking = async (req, res) => {
   }
 };
 
+const GUEST_STATUSES = ["None", "Confirmed", "Attended", "Awaiting", "Follow-up", "No Response", "Not Coming"];
+
+// @desc    Update one guest's CRM fields on a booking
+// @route   PUT /api/events/bookings/:id/attendees/:attendeeId
+// @access  Private/Admin
+const updateEventAttendee = async (req, res) => {
+  try {
+    const { id, attendeeId } = req.params;
+    const { status, lastContact, nextFollowUp, notes } = req.body;
+
+    const booking = await EventBooking.findById(id);
+    if (!booking) {
+      return res.status(404).json({ success: false, message: "Booking record not found" });
+    }
+    const guest = booking.attendees.id(attendeeId);
+    if (!guest) {
+      return res.status(404).json({ success: false, message: "Guest not found on this booking" });
+    }
+
+    if (status !== undefined && status !== guest.status) {
+      if (!GUEST_STATUSES.includes(status)) {
+        return res.status(400).json({ success: false, message: "Invalid guest status" });
+      }
+      guest.status = status;
+      // Keep check-in flag in sync with the Attended status
+      if (status === "Attended" && !guest.checkedIn) {
+        guest.checkedIn = true;
+        guest.checkInTime = new Date();
+      } else if (status !== "Attended" && guest.checkedIn) {
+        guest.checkedIn = false;
+        guest.checkInTime = undefined;
+      }
+      booking.timeline.push({
+        time: new Date().toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }),
+        activity: `Guest ${guest.name}: status set to ${status}`,
+        type: "status",
+      });
+    }
+    if (lastContact !== undefined) guest.lastContact = String(lastContact);
+    if (nextFollowUp !== undefined) guest.nextFollowUp = String(nextFollowUp);
+    if (notes !== undefined) guest.notes = String(notes);
+
+    await booking.save();
+    await booking.populate("event", "title price imageUrl");
+
+    res.status(200).json({ success: true, message: "Guest updated successfully", data: booking });
+  } catch (error) {
+    console.error("Update Event Attendee Error:", error.message);
+    res.status(500).json({ success: false, message: "Server error. Could not update guest." });
+  }
+};
+
 // @desc    Book an event via Barcode (creates pending booking with payment screenshot upload)
 // @route   POST /api/events/book-barcode
 // @access  Public
@@ -1071,6 +1211,11 @@ const bookEventBarcode = async (req, res) => {
         success: false,
         message: "All fields are required to complete booking",
       });
+    }
+
+    const { attendees, error: attendeeError } = parseAttendees(req.body.attendees, seats, { name, phone });
+    if (attendeeError) {
+      return res.status(400).json({ success: false, message: attendeeError });
     }
 
     if (!req.file) {
@@ -1129,6 +1274,7 @@ const bookEventBarcode = async (req, res) => {
       name,
       email,
       phone,
+      attendees,
       paymentMethod: "barcode",
       paymentScreenshot: uploadResult.url,
       paymentScreenshotPublicId: uploadResult.key,
@@ -1265,6 +1411,7 @@ module.exports = {
   getEventBookings,
   deleteEventBooking,
   updateEventBooking,
+  updateEventAttendee,
   getEventOGMeta,
   bookEventBarcode,
   verifyEventPaymentBarcode,

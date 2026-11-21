@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -142,6 +142,15 @@ const DashboardEventPayments = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [deletingId, setDeletingId] = useState(null);
+  // Booking ids whose guest list is expanded
+  const [expandedGuests, setExpandedGuests] = useState(() => new Set());
+  const toggleGuests = (id) =>
+    setExpandedGuests((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   const updateEventFilter = (val) => {
     setEventFilter(val);
@@ -423,9 +432,6 @@ const DashboardEventPayments = () => {
 
   const remainingSeats = Math.max(0, totalSlotsAllocated - totalSeats);
 
-  const successfulTxns = statsBookings.filter(
-    (b) => b.status === "payment successfully" || b.status === "confirmed",
-  ).length;
   const pendingTxns = statsBookings.filter(
     (b) => b.status === "not payment" || b.status === "None" || !b.status,
   ).length;
@@ -467,7 +473,12 @@ const DashboardEventPayments = () => {
       booking.phone?.toLowerCase().includes(query) ||
       (booking.event?.title || "").toLowerCase().includes(query) ||
       (booking.razorpayOrderId || "").toLowerCase().includes(query) ||
-      (booking.razorpayPaymentId || "").toLowerCase().includes(query);
+      (booking.razorpayPaymentId || "").toLowerCase().includes(query) ||
+      (booking.attendees || []).some(
+        (a) =>
+          a.name?.toLowerCase().includes(query) ||
+          a.phone?.toLowerCase().includes(query),
+      );
 
     const matchesEvent =
       eventFilter === "all" ||
@@ -549,6 +560,7 @@ const DashboardEventPayments = () => {
       { name: "Schedule Date", width: 150 },
       { name: "Schedule Time Slot", width: 150 },
       { name: "Seats", width: 80 },
+      { name: "Guests", width: 360 },
       { name: "Total Amount", width: 130 },
       { name: "Payment Method", width: 150 },
       { name: "Payment Screenshot", width: 300 },
@@ -565,6 +577,11 @@ const DashboardEventPayments = () => {
       booking.date || "",
       booking.timeSlot || "",
       booking.seats || 0,
+      booking.attendees?.length
+        ? booking.attendees
+            .map((a, i) => `${i + 1}. ${a.name} (${a.phone})`)
+            .join("; ")
+        : "-",
       Number(booking.totalAmount) === 0
         ? "Free Plan"
         : `₹${booking.totalAmount}`,
@@ -694,7 +711,7 @@ const DashboardEventPayments = () => {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-4 md:gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4 md:gap-5">
           {/* Card 1: Total Revenue */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -753,26 +770,6 @@ const DashboardEventPayments = () => {
             </div>
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0">
               <Ticket size={18} />
-            </div>
-          </motion.div>
-
-          {/* Card 3: Success Payments */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.06 }}
-            className="bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-2xl p-3.5 sm:p-5 flex items-center justify-between shadow-lg transition-colors"
-          >
-            <div className="text-left">
-              <p className="text-[9px] sm:text-[10px] text-[var(--db-text-muted)] font-extrabold uppercase tracking-widest">
-               Booking person Group
-              </p>
-              <h3 className="text-lg sm:text-2xl font-black text-[var(--db-accent-highlight)] mt-0.5 sm:mt-1">
-                {successfulTxns}
-              </h3>
-            </div>
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 shrink-0">
-              <CheckCircle size={18} />
             </div>
           </motion.div>
 
@@ -1339,6 +1336,55 @@ const DashboardEventPayments = () => {
                       )}
                     </div>
 
+                    {/* Guests sub-dropdown */}
+                    {booking.attendees?.length > 0 && (
+                      <div className="rounded-xl border border-[var(--db-card-border)]/60 bg-[var(--db-card)]/60 overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() => toggleGuests(booking._id)}
+                          aria-expanded={expandedGuests.has(booking._id)}
+                          className="w-full flex items-center justify-between gap-2 px-3 py-2 text-[11px] font-bold text-[var(--db-text)] cursor-pointer"
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <Users size={13} className="text-[var(--db-accent-highlight)]" />
+                            {booking.attendees.length}{" "}
+                            {booking.attendees.length === 1 ? "Guest" : "Guests"}
+                          </span>
+                          <ChevronDown
+                            size={14}
+                            className={`text-[var(--db-text-muted)] transition-transform ${
+                              expandedGuests.has(booking._id) ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                        {expandedGuests.has(booking._id) && (
+                          <div className="border-t border-[var(--db-card-border)]/60 divide-y divide-[var(--db-card-border)]/40">
+                            {booking.attendees.map((a, i) => (
+                              <div
+                                key={a._id || i}
+                                className="flex items-center justify-between gap-2 px-3 py-2"
+                              >
+                                <span className="text-[12px] font-semibold text-[var(--db-text)] truncate">
+                                  {i + 1}. {a.name}
+                                  {i === 0 && (
+                                    <span className="ml-1 text-[10px] text-[var(--db-text-muted)] font-medium">
+                                      (booked)
+                                    </span>
+                                  )}
+                                </span>
+                                <a
+                                  href={`tel:${a.phone}`}
+                                  className="text-[11px] font-mono text-[var(--db-text-muted)] hover:text-[var(--db-accent-highlight)] shrink-0"
+                                >
+                                  {a.phone}
+                                </a>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {/* Screenshot Preview Button if present */}
                     {booking.paymentScreenshot && (
                       <div className="pt-1">
@@ -1456,10 +1502,14 @@ const DashboardEventPayments = () => {
                   {paginatedBookings.map((booking, index) => {
                     const eventTitle = booking.event?.title || "Deleted Event";
                     const eventImg = getEventImage(booking);
+                    const guests = booking.attendees || [];
+                    const isOpen = expandedGuests.has(booking._id);
                     return (
+                    <Fragment key={booking._id}>
                     <tr
-                      key={booking._id}
-                      className="hover:bg-[var(--db-table-hover)] transition-colors"
+                      className={`hover:bg-[var(--db-table-hover)] transition-colors ${
+                        isOpen ? "bg-[var(--db-table-hover)]" : ""
+                      }`}
                     >
                       {/* Sl.No */}
                       <td className="py-4 px-3 text-center font-mono font-bold text-xs text-[var(--db-text-muted)] border-r border-[var(--db-card-border)]/30 w-16">
@@ -1549,8 +1599,29 @@ const DashboardEventPayments = () => {
                       </td>
 
                       {/* Seats */}
-                      <td className="py-4 px-4 text-sm text-[var(--db-text)] font-bold font-mono border-r border-[var(--db-card-border)]/30">
-                        {booking.seats}
+                      <td className="py-4 px-4 text-sm text-[var(--db-text)] font-bold font-mono border-r border-[var(--db-card-border)]/30 whitespace-nowrap">
+                        {guests.length > 0 ? (
+                          <button
+                            type="button"
+                            onClick={() => toggleGuests(booking._id)}
+                            aria-expanded={isOpen}
+                            title={isOpen ? "Hide guests" : "Show guests"}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-bold cursor-pointer transition-colors ${
+                              isOpen
+                                ? "bg-[var(--db-accent)] text-[var(--db-accent-text)] border-transparent"
+                                : "bg-[var(--db-input-bg)] border-[var(--db-input-border)] hover:border-[var(--db-accent-highlight)]/50"
+                            }`}
+                          >
+                            <Users size={12} />
+                            {booking.seats}
+                            <ChevronDown
+                              size={12}
+                              className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+                            />
+                          </button>
+                        ) : (
+                          booking.seats
+                        )}
                       </td>
 
                       {/* Amount Paid */}
@@ -1685,6 +1756,45 @@ const DashboardEventPayments = () => {
                         </button>
                       </td>
                     </tr>
+
+                    {/* Guests sub-row */}
+                    {isOpen && guests.length > 0 && (
+                      <tr className="bg-[var(--db-input-bg)]/40">
+                        <td colSpan={13} className="px-4 py-3">
+                          <div className="sticky left-4 max-w-[calc(100vw-22rem)] min-w-[480px]">
+                            <div className="flex items-center gap-2 mb-2 text-[10px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                              <Users size={12} className="text-[var(--db-accent-highlight)]" />
+                              {guests.length} {guests.length === 1 ? "Guest" : "Guests"} · booked by {booking.name}
+                            </div>
+                            <div className="grid grid-cols-2 xl:grid-cols-4 gap-2">
+                              {guests.map((a, i) => (
+                                <div
+                                  key={a._id || i}
+                                  className="flex items-center justify-between gap-2 bg-[var(--db-card)] border border-[var(--db-card-border)] rounded-lg px-3 py-2"
+                                >
+                                  <div className="min-w-0">
+                                    <div className="text-xs font-bold text-[var(--db-text)] truncate" title={a.name}>
+                                      {i + 1}. {a.name}
+                                    </div>
+                                    <a
+                                      href={`tel:${a.phone}`}
+                                      className="text-[11px] font-mono text-[var(--db-text-muted)] hover:text-[var(--db-accent-highlight)] flex items-center gap-1"
+                                    >
+                                      <Phone size={10} className="shrink-0" />
+                                      {a.phone}
+                                    </a>
+                                  </div>
+                                  {a.checkedIn && (
+                                    <CheckCircle size={14} className="text-green-400 shrink-0" title="Checked in" />
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                    </Fragment>
                     );
                   })}
                 </tbody>

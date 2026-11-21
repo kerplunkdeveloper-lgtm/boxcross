@@ -181,6 +181,22 @@ const EventCheckIn = () => {
                 </div>
               )}
 
+              {successData.bookedBy && successData.bookedBy !== successData.name && (
+                <div>
+                  <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Booked By</p>
+                  <p className="text-sm text-gray-200 font-medium">{successData.bookedBy}</p>
+                </div>
+              )}
+
+              {successData.totalGuests > 1 && (
+                <div>
+                  <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Group Arrival</p>
+                  <p className="text-sm text-gray-200 font-medium">
+                    {successData.arrivedCount} of {successData.totalGuests} guests checked in
+                  </p>
+                </div>
+              )}
+
               <div>
                 <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mb-0.5">Event</p>
                 <p className="text-sm text-[#ccf141] font-bold">{successData.event?.title || successData.eventName || eventName}</p>

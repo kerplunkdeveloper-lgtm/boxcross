@@ -40,6 +40,21 @@ const eventBookingSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    // One entry per seat. attendees[0] is the person who booked.
+    // Older bookings may have an empty list — fall back to name/phone above.
+    attendees: [
+      {
+        name: { type: String, required: true, trim: true },
+        phone: { type: String, required: true, trim: true },
+        checkedIn: { type: Boolean, default: false },
+        checkInTime: { type: Date },
+        // Per-guest CRM fields (independent of the booking's payment status)
+        status: { type: String, default: "Confirmed" },
+        lastContact: { type: String, default: "" },
+        nextFollowUp: { type: String, default: "" },
+        notes: { type: String, default: "" },
+      },
+    ],
     status: {
       type: String,
       default: "None",

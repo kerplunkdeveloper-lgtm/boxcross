@@ -139,6 +139,8 @@ export const getEventWalkIns = (params) => API.get("/events/walkin", { params })
 export const deleteEventWalkIn = (id) => API.delete(`/events/walkin/${id}`);
 export const getEventBookings = () => API.get("/events/bookings");
 export const updateEventBooking = (id, data) => API.put(`/events/bookings/${id}`, data);
+export const updateEventAttendee = (bookingId, attendeeId, data) =>
+  API.put(`/events/bookings/${bookingId}/attendees/${attendeeId}`, data);
 export const deleteEventBooking = (id) => API.delete(`/events/bookings/${id}`);
 export const updateProfile = (formData) => API.put("/auth/profile", formData, {
   headers: {

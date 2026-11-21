@@ -13,6 +13,7 @@ const {
   getEventBookings,
   deleteEventBooking,
   updateEventBooking,
+  updateEventAttendee,
   getEventOGMeta,
   bookEventBarcode,
   verifyEventPaymentBarcode,
@@ -36,6 +37,7 @@ router.get("/:id/og", getEventOGMeta);
 router.get("/admin", protect, authorize("admin"), getAllEventsAdmin);
 router.get("/bookings", protect, authorize("admin"), getEventBookings);
 router.put("/bookings/:id", protect, authorize("admin"), updateEventBooking);
+router.put("/bookings/:id/attendees/:attendeeId", protect, authorize("admin"), updateEventAttendee);
 router.delete("/bookings/:id", protect, authorize("admin"), deleteEventBooking);
 router.get("/walkin", protect, authorize("admin"), getEventWalkIns);
 router.delete("/walkin/:id", protect, authorize("admin"), deleteEventWalkIn);

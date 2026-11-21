@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -41,11 +41,362 @@ import {
   getEventBookings,
   deleteEventBooking,
   updateEventBooking,
+  updateEventAttendee,
   getEventsList,
   getEventWalkIns,
   deleteEventWalkIn,
 } from "../api/api";
 import { toast } from "react-hot-toast";
+
+/* ---------------------------------------------------------------------------
+ * Guest (per-seat attendee) CRM helpers
+ * ------------------------------------------------------------------------- */
+
+// Guests start as "Confirmed" (they're on a booking), so "None" isn't offered
+const GUEST_STATUS_OPTIONS = [
+  { value: "Confirmed", style: "border-green-500/30 text-green-400 bg-green-500/10" },
+  { value: "Attended", style: "border-emerald-500/30 text-emerald-400 bg-emerald-500/10" },
+  { value: "Awaiting", style: "border-yellow-500/30 text-yellow-400 bg-yellow-500/10" },
+  { value: "Follow-up", style: "border-blue-500/30 text-blue-400 bg-blue-500/10" },
+  { value: "No Response", style: "border-gray-500/30 text-gray-400 bg-gray-500/10" },
+  { value: "Not Coming", style: "border-red-500/30 text-red-400 bg-red-500/10" },
+];
+
+// Missing / old "None" values start as Confirmed (or Attended if checked in)
+const getGuestStatus = (g) => {
+  if (g.status && g.status !== "None") return g.status;
+  return g.checkedIn ? "Attended" : "Confirmed";
+};
+
+const toFollowUpInputValue = (val) => {
+  if (!val) return "";
+  const s = String(val);
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(s)) return s.slice(0, 16);
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return `${s}T09:00`;
+  return "";
+};
+
+const autoGrow = (el) => {
+  if (!el) return;
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
+};
+
+const WhatsAppIcon = ({ size = 16 }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
+
+const GuestStatusSelect = ({ value, onChange, className = "" }) => {
+  const style =
+    GUEST_STATUS_OPTIONS.find((o) => o.value === value)?.style ||
+    GUEST_STATUS_OPTIONS[0].style;
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      aria-label="Guest status"
+      className={`rounded-sm uppercase tracking-wider font-extrabold border cursor-pointer focus:outline-none transition-all ${style} ${className}`}
+    >
+      {GUEST_STATUS_OPTIONS.map((o) => (
+        <option key={o.value} value={o.value} className="bg-[#121212] text-[var(--db-text)]">
+          {o.value}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+const guestWhatsAppLink = (guest, booking) =>
+  `https://wa.me/${guest.phone}?text=${encodeURIComponent(
+    `Hi ${guest.name}, this is Box & Cross regarding your registration for ${
+      booking.event?.title || "our event"
+    }...`,
+  )}`;
+
+const formatCheckIn = (d) =>
+  d
+    ? new Date(d).toLocaleString(undefined, {
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
+
+// One guest rendered as a table row aligned with the booking columns
+const GuestRow = ({ booking, guest, index, isLast, isSelectMode, onUpdate }) => {
+  const status = getGuestStatus(guest);
+  const save = (fields) => onUpdate(booking._id, guest._id, fields);
+  const isAttended = status === "Attended";
+
+  return (
+    <tr
+      className={`bg-[var(--db-input-bg)]/30 hover:bg-[var(--db-input-bg)]/60 transition-colors border-l-[3px] border-[#ccf141]/40 ${
+        isLast ? "" : "border-b border-dashed border-b-[var(--db-card-border)]/60"
+      }`}
+    >
+      {isSelectMode && <td />}
+
+      {/* Sl.No → guest position */}
+      <td className="py-1.5 px-2 text-center">
+        <span className="inline-flex items-center justify-center min-w-[26px] h-5 px-1 rounded bg-[#ccf141]/10 text-[#ccf141] text-[10px] font-black font-mono">
+          G{index + 1}
+        </span>
+      </td>
+
+      {/* Name */}
+      <td className="py-1.5 px-4">
+        <div className="flex items-center gap-2 pl-3 relative">
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 text-[var(--db-text-muted)] text-xs" aria-hidden="true">
+            ↳
+          </span>
+          <span className="font-semibold text-[var(--db-text)] text-[12px] truncate max-w-[120px]" title={guest.name}>
+            {guest.name}
+          </span>
+          {index === 0 && (
+            <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/5 text-[var(--db-text-muted)] shrink-0">
+              Booker
+            </span>
+          )}
+        </div>
+      </td>
+
+      {/* Phone */}
+      <td className="py-1.5 px-3 text-[13px] text-[var(--db-text-muted)] whitespace-nowrap">
+        <a href={`tel:${guest.phone}`} className="flex items-center gap-1.5 hover:text-[#ccf141] font-mono">
+          <Phone size={10} className="text-gray-500" />
+          {guest.phone}
+        </a>
+      </td>
+
+      {/* Event Date column → check-in info */}
+      <td className="py-1.5 px-3 whitespace-nowrap">
+        {guest.checkedIn ? (
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-400">
+            <CheckCircle size={11} />
+            In · {formatCheckIn(guest.checkInTime)}
+          </span>
+        ) : (
+          <span className="text-[10px] font-semibold text-[var(--db-text-muted)]">Not checked in</span>
+        )}
+      </td>
+
+      {/* Seats column → not applicable */}
+      <td className="py-1.5 px-2 text-center text-[var(--db-text-muted)] text-xs">·</td>
+
+      {/* Status */}
+      <td className="py-1.5 px-2 text-center">
+        <GuestStatusSelect
+          value={status}
+          onChange={(val) => save({ status: val })}
+          className="px-1.5 py-0.5 text-[11px]"
+        />
+      </td>
+
+      {/* Last Contact */}
+      <td className="py-1.5 px-2 align-middle">
+        <textarea
+          key={`${guest._id}-lc-${guest.lastContact || ""}`}
+          ref={autoGrow}
+          defaultValue={guest.lastContact || ""}
+          rows={1}
+          onInput={(e) => autoGrow(e.target)}
+          onBlur={(e) => {
+            if (e.target.value !== (guest.lastContact || "")) save({ lastContact: e.target.value });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) e.target.blur();
+          }}
+          placeholder="Add…"
+          aria-label={`Last contact for ${guest.name}`}
+          className="w-full bg-transparent border-b border-transparent hover:border-gray-700 focus:border-[var(--db-accent-highlight)] focus:bg-[var(--db-input-bg)] text-[var(--db-text)] placeholder:text-[var(--db-text-muted)]/50 text-[10px] font-semibold text-center leading-snug px-1 py-0.5 focus:outline-none transition-all rounded resize-none overflow-hidden"
+        />
+      </td>
+
+      {/* Follow-up */}
+      <td className="py-1.5 px-2 align-middle">
+        <input
+          key={`${guest._id}-nf-${guest.nextFollowUp || ""}`}
+          type="datetime-local"
+          defaultValue={toFollowUpInputValue(guest.nextFollowUp)}
+          onBlur={(e) => {
+            if (e.target.value !== toFollowUpInputValue(guest.nextFollowUp)) save({ nextFollowUp: e.target.value });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") e.target.blur();
+          }}
+          aria-label={`Follow-up for ${guest.name}`}
+          className="custom-datetime-picker w-full bg-transparent border-b border-transparent hover:border-gray-700 focus:border-[var(--db-accent-highlight)] focus:bg-[var(--db-input-bg)] text-[10px] font-extrabold text-orange-400 text-center leading-snug px-1 py-0.5 focus:outline-none transition-all rounded"
+        />
+      </td>
+
+      {/* Notes */}
+      <td className="py-1.5 px-2 align-middle">
+        <textarea
+          key={`${guest._id}-nt-${guest.notes || ""}`}
+          ref={autoGrow}
+          defaultValue={guest.notes || ""}
+          rows={1}
+          onInput={(e) => autoGrow(e.target)}
+          onBlur={(e) => {
+            if (e.target.value !== (guest.notes || "")) save({ notes: e.target.value });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) e.target.blur();
+          }}
+          placeholder="Add note…"
+          aria-label={`Notes for ${guest.name}`}
+          className="w-full bg-transparent border-b border-transparent hover:border-gray-700 focus:border-[var(--db-accent-highlight)] focus:bg-[var(--db-input-bg)] text-[var(--db-text)] placeholder:text-[var(--db-text-muted)]/50 text-[10px] text-center leading-snug px-1 py-0.5 focus:outline-none transition-all rounded resize-none overflow-hidden"
+        />
+      </td>
+
+      {/* Actions */}
+      <td className="py-1.5 px-3 text-center">
+        <div className="flex items-center justify-center gap-1">
+          <a
+            href={guestWhatsAppLink(guest, booking)}
+            target="_blank"
+            rel="noreferrer"
+            className="p-1.5 hover:bg-green-500/10 text-green-400 rounded-md transition-all"
+            title={`WhatsApp ${guest.name}`}
+          >
+            <WhatsAppIcon size={15} />
+          </a>
+          <a
+            href={`tel:${guest.phone}`}
+            className="p-1.5 hover:bg-yellow-500/10 text-yellow-400 rounded-md transition-all"
+            title={`Call ${guest.name}`}
+          >
+            <Phone size={15} />
+          </a>
+          <button
+            type="button"
+            onClick={() => save({ status: isAttended ? "Confirmed" : "Attended" })}
+            className={`p-1.5 rounded-md transition-all cursor-pointer ${
+              isAttended
+                ? "bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25"
+                : "text-[var(--db-text-muted)] hover:bg-emerald-500/10 hover:text-emerald-400"
+            }`}
+            title={isAttended ? "Undo check-in" : "Mark as attended"}
+            aria-pressed={isAttended}
+          >
+            <UserCheck size={15} />
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+};
+
+// One guest rendered as a compact editable card (mobile)
+const GuestMobileItem = ({ booking, guest, index, onUpdate }) => {
+  const status = getGuestStatus(guest);
+  const save = (fields) => onUpdate(booking._id, guest._id, fields);
+  const fieldCls =
+    "w-full bg-[var(--db-card)] border border-[var(--db-card-border)] focus:border-[var(--db-accent-highlight)] rounded-lg px-2.5 py-2 text-[12px] text-[var(--db-text)] placeholder:text-[var(--db-text-muted)]/60 focus:outline-none transition-colors";
+
+  return (
+    <div className="px-3 py-3 space-y-2.5">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-black font-mono text-[#ccf141] bg-[#ccf141]/10 rounded px-1.5 py-0.5">
+              G{index + 1}
+            </span>
+            <span className="text-[13px] font-bold text-[var(--db-text)] truncate">{guest.name}</span>
+            {index === 0 && (
+              <span className="text-[9px] font-bold uppercase text-[var(--db-text-muted)]">· Booker</span>
+            )}
+          </div>
+          <div className="text-[11px] font-mono text-[var(--db-text-muted)] mt-0.5">
+            {guest.phone}
+            {guest.checkedIn && (
+              <span className="ml-2 text-emerald-400 font-sans font-bold">
+                ✓ In {formatCheckIn(guest.checkInTime)}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          <a
+            href={guestWhatsAppLink(guest, booking)}
+            target="_blank"
+            rel="noreferrer"
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-green-500/10 text-green-400"
+            title={`WhatsApp ${guest.name}`}
+          >
+            <WhatsAppIcon size={15} />
+          </a>
+          <a
+            href={`tel:${guest.phone}`}
+            className="w-8 h-8 flex items-center justify-center rounded-lg bg-yellow-500/10 text-yellow-400"
+            title={`Call ${guest.name}`}
+          >
+            <Phone size={15} />
+          </a>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <label className="space-y-1">
+          <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">Status</span>
+          <GuestStatusSelect
+            value={status}
+            onChange={(val) => save({ status: val })}
+            className="w-full px-2 py-2 text-[11px] rounded-lg"
+          />
+        </label>
+        <label className="space-y-1">
+          <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">Follow-up</span>
+          <input
+            key={`${guest._id}-mnf-${guest.nextFollowUp || ""}`}
+            type="datetime-local"
+            defaultValue={toFollowUpInputValue(guest.nextFollowUp)}
+            onBlur={(e) => {
+              if (e.target.value !== toFollowUpInputValue(guest.nextFollowUp)) save({ nextFollowUp: e.target.value });
+            }}
+            className={`${fieldCls} text-orange-400 font-bold text-[11px]`}
+          />
+        </label>
+      </div>
+
+      <label className="block space-y-1">
+        <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">Last Contact</span>
+        <input
+          key={`${guest._id}-mlc-${guest.lastContact || ""}`}
+          type="text"
+          defaultValue={guest.lastContact || ""}
+          onBlur={(e) => {
+            if (e.target.value !== (guest.lastContact || "")) save({ lastContact: e.target.value });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") e.target.blur();
+          }}
+          placeholder="e.g. Called, will come"
+          className={fieldCls}
+        />
+      </label>
+
+      <label className="block space-y-1">
+        <span className="block text-[10px] font-bold uppercase tracking-wider text-[var(--db-text-muted)]">Notes</span>
+        <textarea
+          key={`${guest._id}-mnt-${guest.notes || ""}`}
+          ref={autoGrow}
+          defaultValue={guest.notes || ""}
+          rows={1}
+          onInput={(e) => autoGrow(e.target)}
+          onBlur={(e) => {
+            if (e.target.value !== (guest.notes || "")) save({ notes: e.target.value });
+          }}
+          placeholder="Add a note"
+          className={`${fieldCls} resize-none overflow-hidden`}
+        />
+      </label>
+    </div>
+  );
+};
 
 // Helper function to format date string (e.g. YYYY-MM-DD) into DD / MM / YYYY
 const formatDateToDMY = (dateVal) => {
@@ -150,8 +501,10 @@ const EventOverviewPanel = ({
   bookedSlots,
   getNormalizedStatus,
   onSelectBooking,
+  totalPeople,
 }) => {
-  const total = activeBookings.length;
+  // Counts are per person (booker + guests) when totalPeople is provided
+  const total = totalPeople ?? activeBookings.length;
   const confirmPct =
     total > 0
       ? Math.round(((confirmedCount + attendedCount) / total) * 100)
@@ -631,6 +984,15 @@ const DashboardEventParticipants = () => {
 
   // Custom interactive CRM states
   const [selectedBooking, setSelectedBooking] = useState(null);
+  // Booking ids whose guest list is expanded in the table / cards
+  const [expandedGuests, setExpandedGuests] = useState(() => new Set());
+  const toggleGuests = (id) =>
+    setExpandedGuests((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   const [selectedRows, setSelectedRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showBulkMenu, setShowBulkMenu] = useState(false);
@@ -764,6 +1126,26 @@ const DashboardEventParticipants = () => {
     } catch (error) {
       console.error(error);
       toast.error("Failed to update record");
+    }
+  };
+
+  const handleUpdateGuest = async (bookingId, attendeeId, fields) => {
+    try {
+      const { data } = await updateEventAttendee(bookingId, attendeeId, fields);
+      if (data.success) {
+        setBookings((prev) =>
+          prev.map((b) => (b._id === bookingId ? { ...b, ...data.data } : b)),
+        );
+        if (selectedBooking && selectedBooking._id === bookingId) {
+          setSelectedBooking(data.data);
+        }
+        toast.success("Guest updated");
+      } else {
+        toast.error(data.message || "Failed to update guest");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to update guest");
     }
   };
 
@@ -1174,6 +1556,34 @@ const DashboardEventParticipants = () => {
     (b) => getNormalizedStatus(b) === "Not Coming",
   ).length;
 
+  // Per-person status counts for the summary cards.
+  // The booker follows the booking's status. Extra guests use their own status,
+  // but only once the booking itself is Confirmed/Attended; otherwise the whole
+  // party follows the booking (e.g. a cancelled booking = everyone Not Coming).
+  const peopleStatusCounts = activeBookings.reduce((acc, b) => {
+    const bookingStatus = getNormalizedStatus(b);
+    const extraGuests = (b.attendees || []).slice(1);
+    const bookingIsOn = bookingStatus === "Confirmed" || bookingStatus === "Attended";
+
+    acc[bookingStatus] = (acc[bookingStatus] || 0) + 1;
+
+    if (extraGuests.length > 0) {
+      extraGuests.forEach((g) => {
+        const s = bookingIsOn ? getGuestStatus(g) : bookingStatus;
+        acc[s] = (acc[s] || 0) + 1;
+      });
+    } else {
+      // Older bookings without a guest list: count the remaining seats with the booking
+      const extraSeats = Math.max(0, (Number(b.seats) || 1) - 1);
+      if (extraSeats) acc[bookingStatus] = (acc[bookingStatus] || 0) + extraSeats;
+    }
+    return acc;
+  }, {});
+
+  const confirmedPeople = peopleStatusCounts["Confirmed"] || 0;
+  const attendedPeople = peopleStatusCounts["Attended"] || 0;
+  const notComingPeople = peopleStatusCounts["Not Coming"] || 0;
+
   const getCapacityStats = () => {
     let totalSlots = 0;
 
@@ -1211,7 +1621,12 @@ const DashboardEventParticipants = () => {
     const matchesSearch =
       booking.name?.toLowerCase().includes(query) ||
       booking.email?.toLowerCase().includes(query) ||
-      booking.phone?.toLowerCase().includes(query);
+      booking.phone?.toLowerCase().includes(query) ||
+      (booking.attendees || []).some(
+        (a) =>
+          a.name?.toLowerCase().includes(query) ||
+          a.phone?.toLowerCase().includes(query),
+      );
 
     let matchesStatus = true;
     const normalized = getNormalizedStatus(booking);
@@ -1350,6 +1765,8 @@ const DashboardEventParticipants = () => {
       { name: "Sl. No", width: 70 },
       { name: "Name", width: 220 },
       { name: "Phone", width: 150 },
+      { name: "Booked By", width: 220 },
+      { name: "Checked In", width: 120 },
       { name: "Event Title", width: 220 },
       { name: "Schedule Date", width: 150 },
       { name: "Time Slot", width: 150 },
@@ -1360,18 +1777,36 @@ const DashboardEventParticipants = () => {
       { name: "Notes", width: 350 },
     ];
 
-    const rows = filteredBookings.map((booking, index) => [
+    // One row per person: bookings with a guest list expand into one row per guest
+    const people = filteredBookings.flatMap((booking) =>
+      booking.attendees?.length
+        ? booking.attendees.map((a) => ({ booking, person: a }))
+        : [{ booking, person: null }],
+    );
+
+    const rows = people.map(({ booking, person }, index) => [
       index + 1,
+      (person ? person.name : booking.name) || "-",
+      (person ? person.phone : booking.phone) || "-",
       booking.name || "-",
-      booking.phone || "-",
+      person
+        ? person.checkedIn
+          ? "Yes"
+          : "No"
+        : getNormalizedStatus(booking) === "Attended"
+          ? "Yes"
+          : "No",
       booking.event?.title || "-",
       formatDateToDMY(booking.date),
       booking.timeSlot || "-",
       booking.seats || 0,
-      getNormalizedStatus(booking),
-      booking.lastContact || "-",
-      booking.nextFollowUp ? formatFollowUpDisplay(booking.nextFollowUp) : "-",
-      booking.notes || "-",
+      // Guests use their own CRM fields; fall back to the booking's when empty
+      person ? getGuestStatus(person) : getNormalizedStatus(booking),
+      (person?.lastContact || booking.lastContact) || "-",
+      (person?.nextFollowUp || booking.nextFollowUp)
+        ? formatFollowUpDisplay(person?.nextFollowUp || booking.nextFollowUp)
+        : "-",
+      (person?.notes || booking.notes) || "-",
     ]);
 
     let html = `
@@ -2055,8 +2490,9 @@ const DashboardEventParticipants = () => {
             </div>
             <div className="flex items-baseline gap-1.5 mt-2">
               <h3 className="text-2xl sm:text-3xl font-black text-green-400 font-mono leading-none tracking-tight">
-                {confirmedCount}
+                {confirmedPeople}
               </h3>
+              <span className="text-[10px] font-semibold text-[var(--db-text-muted)]">people</span>
             </div>
           </motion.div>
 
@@ -2080,8 +2516,9 @@ const DashboardEventParticipants = () => {
             </div>
             <div className="flex items-baseline gap-1.5 mt-2">
               <h3 className="text-2xl sm:text-3xl font-black text-[#ccf141] font-mono leading-none tracking-tight">
-                {attendedCount}
+                {attendedPeople}
               </h3>
+              <span className="text-[10px] font-semibold text-[var(--db-text-muted)]">people</span>
             </div>
           </motion.div>
 
@@ -2105,8 +2542,9 @@ const DashboardEventParticipants = () => {
             </div>
             <div className="flex items-baseline gap-1.5 mt-2">
               <h3 className="text-2xl sm:text-3xl font-black text-red-400 font-mono leading-none tracking-tight">
-                {notComingCount}
+                {notComingPeople}
               </h3>
+              <span className="text-[10px] font-semibold text-[var(--db-text-muted)]">people</span>
             </div>
           </motion.div>
         </div>
@@ -2405,6 +2843,49 @@ const DashboardEventParticipants = () => {
                             </a>
                           </div>
 
+                          {/* Guests sub-dropdown */}
+                          {booking.attendees?.length > 1 && (
+                            <div
+                              className="rounded-xl border border-[var(--db-card-border)]/60 bg-[var(--db-input-bg)]/40 overflow-hidden"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => toggleGuests(booking._id)}
+                                aria-expanded={expandedGuests.has(booking._id)}
+                                className="w-full flex items-center justify-between gap-2 px-3 py-2 text-[11px] font-bold text-[var(--db-text)] cursor-pointer"
+                              >
+                                <span className="flex items-center gap-1.5">
+                                  <Users size={13} className="text-[var(--db-accent-highlight)]" />
+                                  {booking.attendees.length - 1}{" "}
+                                  {booking.attendees.length - 1 === 1 ? "Guest" : "Guests"}
+                                  <span className="text-[var(--db-text-muted)] font-semibold">
+                                    · {booking.attendees.slice(1).filter((a) => a.checkedIn).length} checked in
+                                  </span>
+                                </span>
+                                <ChevronDown
+                                  size={14}
+                                  className={`text-[var(--db-text-muted)] transition-transform ${
+                                    expandedGuests.has(booking._id) ? "rotate-180" : ""
+                                  }`}
+                                />
+                              </button>
+                              {expandedGuests.has(booking._id) && (
+                                <div className="border-t border-[var(--db-card-border)]/60 divide-y divide-[var(--db-card-border)]/40">
+                                  {booking.attendees.slice(1).map((g, i) => (
+                                    <GuestMobileItem
+                                      key={g._id || i}
+                                      booking={booking}
+                                      guest={g}
+                                      index={i + 1}
+                                      onUpdate={handleUpdateGuest}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
+
                           {/* Follow up & notes snippet */}
                           {(booking.nextFollowUp || booking.notes) && (
                             <div className="text-[10px] text-[var(--db-text-muted)] bg-[var(--db-card)]/60 rounded-xl p-2 space-y-1">
@@ -2501,9 +2982,12 @@ const DashboardEventParticipants = () => {
                         const isSelected =
                           selectedBooking &&
                           selectedBooking._id === booking._id;
+                        // attendees[0] is the booker, already shown as the main row
+                        const guests = (booking.attendees || []).slice(1);
+                        const isOpen = expandedGuests.has(booking._id);
                         return (
+                          <Fragment key={booking._id}>
                           <tr
-                            key={booking._id}
                             onClick={() => setSelectedBooking(booking)}
                             className={`group hover:bg-[#1a1a1a] transition-all cursor-pointer border-l-[3px] border-transparent hover:border-[#ccf141] ${
                               isSelected
@@ -2572,8 +3056,31 @@ const DashboardEventParticipants = () => {
                             </td>
 
                             {/* Seats */}
-                            <td className="py-2 px-2 text-center text-[14px] font-black text-[var(--db-text)]">
-                              {booking.seats}
+                            <td
+                              className="py-2 px-1 text-center text-[14px] font-black text-[var(--db-text)]"
+                              onClick={(e) => guests.length > 0 && e.stopPropagation()}
+                            >
+                              {guests.length > 0 ? (
+                                <button
+                                  type="button"
+                                  onClick={() => toggleGuests(booking._id)}
+                                  aria-expanded={isOpen}
+                                  title={isOpen ? "Hide guests" : "Show guests"}
+                                  className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md border text-[13px] font-black cursor-pointer transition-colors ${
+                                    isOpen
+                                      ? "bg-[#ccf141] text-black border-transparent"
+                                      : "bg-[var(--db-input-bg)] border-[var(--db-card-border)] hover:border-[#ccf141]/60"
+                                  }`}
+                                >
+                                  {booking.seats}
+                                  <ChevronDown
+                                    size={12}
+                                    className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+                                  />
+                                </button>
+                              ) : (
+                                booking.seats
+                              )}
                             </td>
 
                             {/* Status */}
@@ -2943,6 +3450,51 @@ const DashboardEventParticipants = () => {
                               </div>
                             </td>
                           </tr>
+
+                          {/* Guests sub-row */}
+                          {isOpen && guests.length > 0 && (
+                            <>
+                              {/* Slim summary header for the guest group */}
+                              <tr className="bg-[var(--db-input-bg)]/50 border-l-[3px] border-[#ccf141]/40">
+                                <td colSpan={isSelectMode ? 11 : 10} className="px-4 py-1.5">
+                                  <div className="flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[var(--db-text-muted)]">
+                                      <Users size={12} className="text-[#ccf141]" />
+                                      {guests.length} {guests.length === 1 ? "Guest" : "Guests"}
+                                      <span className="normal-case tracking-normal font-semibold">
+                                        · booked by {booking.name}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-24 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                                        <div
+                                          className="h-full bg-emerald-400 rounded-full transition-all"
+                                          style={{
+                                            width: `${(guests.filter((a) => a.checkedIn).length / guests.length) * 100}%`,
+                                          }}
+                                        />
+                                      </div>
+                                      <span className="text-[10px] font-bold text-[var(--db-text-muted)]">
+                                        {guests.filter((a) => a.checkedIn).length}/{guests.length} checked in
+                                      </span>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                              {guests.map((g, i) => (
+                                <GuestRow
+                                  key={g._id || i}
+                                  booking={booking}
+                                  guest={g}
+                                  index={i + 1}
+                                  isLast={i === guests.length - 1}
+                                  isSelectMode={isSelectMode}
+                                  onUpdate={handleUpdateGuest}
+                                />
+                              ))}
+                            </>
+                          )}
+                          </Fragment>
                         );
                       })}
                     </tbody>
@@ -3003,12 +3555,13 @@ const DashboardEventParticipants = () => {
             {/* Bottom Analytics — 3 columns */}
             <EventOverviewPanel
               activeBookings={activeBookings}
-              noneCount={noneCount}
-              confirmedCount={confirmedCount}
-              attendedCount={attendedCount}
-              awaitingCount={awaitingCount}
-              noResponseCount={noResponseCount}
-              notComingCount={notComingCount}
+              noneCount={peopleStatusCounts["None"] || 0}
+              confirmedCount={confirmedPeople}
+              attendedCount={attendedPeople}
+              awaitingCount={peopleStatusCounts["Awaiting"] || 0}
+              noResponseCount={peopleStatusCounts["No Response"] || 0}
+              notComingCount={notComingPeople}
+              totalPeople={Object.values(peopleStatusCounts).reduce((s, n) => s + n, 0)}
               totalSlots={totalSlots}
               bookedSlots={totalSeats}
               getNormalizedStatus={getNormalizedStatus}
@@ -3118,6 +3671,55 @@ const DashboardEventParticipants = () => {
                       <span className="truncate">{selectedBooking.email}</span>
                     </div>
                   </div>
+
+                  {/* Guest list (one entry per seat) */}
+                  {selectedBooking.attendees?.length > 0 && (
+                    <div className="space-y-2 pb-4 border-b border-[var(--db-card-border)]">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-[11px] font-black uppercase tracking-wider text-[var(--db-text-muted)]">
+                          Guests
+                        </h3>
+                        <span className="text-[11px] font-bold text-[var(--db-text-muted)]">
+                          {selectedBooking.attendees.filter((a) => a.checkedIn).length}/
+                          {selectedBooking.attendees.length} checked in
+                        </span>
+                      </div>
+                      <div className="space-y-1.5">
+                        {selectedBooking.attendees.map((a, idx) => (
+                          <div
+                            key={a._id || idx}
+                            className="flex items-center justify-between gap-2 bg-[var(--db-input-bg)]/60 border border-[var(--db-card-border)] rounded-lg px-3 py-2"
+                          >
+                            <div className="min-w-0">
+                              <div className="text-[12px] font-bold text-[var(--db-text)] truncate">
+                                {idx + 1}. {a.name}
+                                {idx === 0 && (
+                                  <span className="ml-1.5 text-[10px] font-semibold text-[var(--db-text-muted)]">
+                                    (booked)
+                                  </span>
+                                )}
+                              </div>
+                              <a
+                                href={`tel:${a.phone}`}
+                                className="text-[11px] font-mono text-[var(--db-text-muted)] hover:text-[#ccf141]"
+                              >
+                                {a.phone}
+                              </a>
+                            </div>
+                            <span
+                              className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 ${
+                                a.checkedIn
+                                  ? "bg-green-500/15 text-green-400 border border-green-500/30"
+                                  : "bg-white/5 text-[var(--db-text-muted)] border border-[var(--db-card-border)]"
+                              }`}
+                            >
+                              {a.checkedIn ? "Checked in" : "Not yet"}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Grid stats */}
                   <div className="grid grid-cols-2 gap-2.5 pb-4 border-b border-[var(--db-card-border)]">
