@@ -46,8 +46,37 @@ const FeedbackQR = () => {
   return (
     <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center px-5 py-10 print:bg-white print:py-0">
       <Helmet>
-        <title>Feedback QR | Box &amp; Cross</title>
-        <meta name="robots" content="noindex" />
+        <title>Feedback QR | Box &amp; Cross – Performance Arena</title>
+        <meta
+          name="description"
+          content="Scan the QR code to share your 100% anonymous feedback for Box & Cross. No name or phone number needed."
+        />
+
+        {/* Open Graph / Facebook / WhatsApp */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Box &amp; Cross" />
+        <meta property="og:url" content="https://membership.boxandcross.com/feedback-qr" />
+        <meta property="og:title" content="Feedback QR | Box &amp; Cross – Performance Arena" />
+        <meta
+          property="og:description"
+          content="Scan the QR code to share your 100% anonymous feedback for Box & Cross. No name or phone number needed."
+        />
+        <meta property="og:image" content="https://membership.boxandcross.com/og-feedback.jpg" />
+        <meta property="og:image:secure_url" content="https://membership.boxandcross.com/og-feedback.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="768" />
+        <meta property="og:image:height" content="1024" />
+        <meta property="og:image:alt" content="Box &amp; Cross Feedback - Your Voice. Our Next Rep." />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://membership.boxandcross.com/feedback-qr" />
+        <meta name="twitter:title" content="Feedback QR | Box &amp; Cross – Performance Arena" />
+        <meta
+          name="twitter:description"
+          content="Scan the QR code to share your 100% anonymous feedback for Box & Cross. No name or phone number needed."
+        />
+        <meta name="twitter:image" content="https://membership.boxandcross.com/og-feedback.jpg" />
       </Helmet>
 
       <style>{`@media print { @page { size: A4; margin: 12mm; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }`}</style>

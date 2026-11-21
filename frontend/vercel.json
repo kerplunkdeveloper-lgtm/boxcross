@@ -56,6 +56,39 @@
       "destination": "/api/og?page=founding100"
     },
     {
+      "source": "/feedback",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|whatsapp|twitterbot|Twitterbot|telegrambot|TelegramBot|discordbot|Discordbot|slackbot|Slackbot|linkedinbot|LinkedInBot|googlebot|Googlebot|bingbot|Bingbot|baiduspider|yandexbot|embedly).*"
+        }
+      ],
+      "destination": "/api/og?page=feedback"
+    },
+    {
+      "source": "/feedback-qr",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|whatsapp|twitterbot|Twitterbot|telegrambot|TelegramBot|discordbot|Discordbot|slackbot|Slackbot|linkedinbot|LinkedInBot|googlebot|Googlebot|bingbot|Bingbot|baiduspider|yandexbot|embedly).*"
+        }
+      ],
+      "destination": "/api/og?page=feedback-qr"
+    },
+    {
+      "source": "/feedback/qr",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(facebookexternalhit|WhatsApp|whatsapp|twitterbot|Twitterbot|telegrambot|TelegramBot|discordbot|Discordbot|slackbot|Slackbot|linkedinbot|LinkedInBot|googlebot|Googlebot|bingbot|Bingbot|baiduspider|yandexbot|embedly).*"
+        }
+      ],
+      "destination": "/api/og?page=feedback-qr"
+    },
+    {
       "source": "/api/:path*",
       "destination": "/api/:path*"
     },

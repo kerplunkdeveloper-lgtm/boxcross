@@ -248,9 +248,37 @@ const Feedback = () => {
 
   const seo = (
     <Helmet>
-      <title>Feedback | Box &amp; Cross</title>
-      <meta name="description" content="Share anonymous feedback with Box & Cross Performance Arena." />
-      <meta name="robots" content="noindex" />
+      <title>Feedback Form | Box &amp; Cross – Performance Arena</title>
+      <meta
+        name="description"
+        content="Your Voice. Our Next Rep. Share your anonymous feedback and help us build a better BXC. No name or phone number needed (takes ~2 mins)."
+      />
+
+      {/* Open Graph / Facebook / WhatsApp */}
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Box &amp; Cross" />
+      <meta property="og:url" content="https://membership.boxandcross.com/feedback" />
+      <meta property="og:title" content="Feedback Form | Box &amp; Cross – Performance Arena" />
+      <meta
+        property="og:description"
+        content="Your Voice. Our Next Rep. Share your anonymous feedback and help us build a better BXC. No name or phone number needed (takes ~2 mins)."
+      />
+      <meta property="og:image" content="https://membership.boxandcross.com/og-feedback.jpg" />
+      <meta property="og:image:secure_url" content="https://membership.boxandcross.com/og-feedback.jpg" />
+      <meta property="og:image:type" content="image/jpeg" />
+      <meta property="og:image:width" content="768" />
+      <meta property="og:image:height" content="1024" />
+      <meta property="og:image:alt" content="Box &amp; Cross Feedback - Your Voice. Our Next Rep." />
+
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content="https://membership.boxandcross.com/feedback" />
+      <meta name="twitter:title" content="Feedback Form | Box &amp; Cross – Performance Arena" />
+      <meta
+        name="twitter:description"
+        content="Your Voice. Our Next Rep. Share your anonymous feedback and help us build a better BXC. No name or phone number needed (takes ~2 mins)."
+      />
+      <meta name="twitter:image" content="https://membership.boxandcross.com/og-feedback.jpg" />
     </Helmet>
   );
 

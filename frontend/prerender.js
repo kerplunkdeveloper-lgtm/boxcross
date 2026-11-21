@@ -54,7 +54,8 @@ const filesToCopy = [
   { src: 'og-membership.png', dest: 'og-membership.png' },
   { src: 'og-events.jpg', dest: 'og-events.jpg' },
   { src: 'og-community.jpg', dest: 'og-community.jpg' },
-  { src: 'og-founding100.jpg', dest: 'og-founding100.jpg' }
+  { src: 'og-founding100.jpg', dest: 'og-founding100.jpg' },
+  { src: 'og-feedback.jpg', dest: 'og-feedback.jpg' }
 ];
 
 filesToCopy.forEach(file => {
@@ -223,6 +224,28 @@ async function runPrerender() {
       image: 'https://membership.boxandcross.com/og-membership.png',
       imageAlt: 'Box and Cross Core Membership',
       url: 'https://membership.boxandcross.com/core'
+    },
+    {
+      path: 'feedback',
+      title: 'Feedback | Box & Cross – Performance Arena',
+      description: 'Your Voice. Our Next Rep. Share your anonymous feedback and help us build a better BXC. No name or phone number needed (takes ~2 mins).',
+      image: 'https://membership.boxandcross.com/og-feedback.jpg',
+      imageType: 'image/jpeg',
+      imageWidth: '768',
+      imageHeight: '1024',
+      imageAlt: 'Box & Cross Feedback - Your Voice. Our Next Rep.',
+      url: 'https://membership.boxandcross.com/feedback'
+    },
+    {
+      path: 'feedback-qr',
+      title: 'Feedback QR | Box & Cross – Performance Arena',
+      description: 'Scan the QR code to share your 100% anonymous feedback for Box & Cross. No name or phone number needed.',
+      image: 'https://membership.boxandcross.com/og-feedback.jpg',
+      imageType: 'image/jpeg',
+      imageWidth: '768',
+      imageHeight: '1024',
+      imageAlt: 'Box & Cross Feedback - Your Voice. Our Next Rep.',
+      url: 'https://membership.boxandcross.com/feedback-qr'
     }
   ];
 

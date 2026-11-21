@@ -72,6 +72,96 @@ export default async function handler(req, res) {
     return res.status(200).send(html);
   }
 
+  if (page === "feedback") {
+    const title = "Feedback | Box & Cross – Performance Arena";
+    const description = "Your Voice. Our Next Rep. Share your anonymous feedback and help us build a better BXC. No name or phone number needed (takes ~2 mins).";
+    const imageUrl = `${frontendUrl}/og-feedback.jpg`;
+    const targetUrl = `${frontendUrl}/feedback`;
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
+  <meta name="description" content="${description}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Box &amp; Cross" />
+  <meta property="og:url" content="${targetUrl}" />
+  <meta property="og:title" content="${title}" />
+  <meta property="og:description" content="${description}" />
+  <meta property="og:image" content="${imageUrl}" />
+  <meta property="og:image:secure_url" content="${imageUrl}" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="768" />
+  <meta property="og:image:height" content="1024" />
+  <meta property="og:image:alt" content="${title}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="${targetUrl}" />
+  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:description" content="${description}" />
+  <meta name="twitter:image" content="${imageUrl}" />
+  <link rel="canonical" href="${targetUrl}" />
+  <script>
+    if (!/bot|crawler|spider|whatsapp|facebookexternalhit|twitterbot|slackbot|discordbot|telegrambot/i.test(navigator.userAgent)) {
+      window.location.replace("${targetUrl}");
+    }
+  </script>
+</head>
+<body>
+  <p>Redirecting to <a href="${targetUrl}">${title}</a>...</p>
+</body>
+</html>`;
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    return res.status(200).send(html);
+  }
+
+  if (page === "feedback-qr") {
+    const title = "Feedback QR | Box & Cross – Performance Arena";
+    const description = "Scan the QR code to share your 100% anonymous feedback for Box & Cross. No name or phone number needed.";
+    const imageUrl = `${frontendUrl}/og-feedback.jpg`;
+    const targetUrl = `${frontendUrl}/feedback-qr`;
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
+  <meta name="description" content="${description}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Box &amp; Cross" />
+  <meta property="og:url" content="${targetUrl}" />
+  <meta property="og:title" content="${title}" />
+  <meta property="og:description" content="${description}" />
+  <meta property="og:image" content="${imageUrl}" />
+  <meta property="og:image:secure_url" content="${imageUrl}" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="768" />
+  <meta property="og:image:height" content="1024" />
+  <meta property="og:image:alt" content="${title}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="${targetUrl}" />
+  <meta name="twitter:title" content="${title}" />
+  <meta name="twitter:description" content="${description}" />
+  <meta name="twitter:image" content="${imageUrl}" />
+  <link rel="canonical" href="${targetUrl}" />
+  <script>
+    if (!/bot|crawler|spider|whatsapp|facebookexternalhit|twitterbot|slackbot|discordbot|telegrambot/i.test(navigator.userAgent)) {
+      window.location.replace("${targetUrl}");
+    }
+  </script>
+</head>
+<body>
+  <p>Redirecting to <a href="${targetUrl}">${title}</a>...</p>
+</body>
+</html>`;
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    return res.status(200).send(html);
+  }
+
   if (page === "founding100") {
     const title = "Founding 100 Exclusive Offer | 12 Months at ₹14,999 – Box & Cross";
     const description = "Limited time offer – Hurry up 8 days only! 12 Months Founding Membership for ₹14,999/- (₹1,250/month) — Save ₹18,601 (Original ₹33,600/-). Permanent rate lock, founder perks & full arena access.";
