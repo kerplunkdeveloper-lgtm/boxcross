@@ -81,6 +81,9 @@ const DashboardFounderPayments = lazy(
   () => import("./pages/DashboardFounderPayments"),
 );
 const DashboardHiring = lazy(() => import("./pages/DashboardHiring"));
+const Feedback = lazy(() => import("./pages/feedback/Feedback"));
+const FeedbackQR = lazy(() => import("./pages/feedback/FeedbackQR"));
+const DashboardFeedback = lazy(() => import("./pages/DashboardFeedback"));
 
 // import LeadModal from "./Components/LeadModal";
 
@@ -151,7 +154,8 @@ const MemfoundGuard = () => {
         location.pathname.startsWith("/dashboard") ||
         location.pathname.startsWith("/login") ||
         location.pathname.toLowerCase().startsWith("/founding100") ||
-        location.pathname.toLowerCase().startsWith("/founder-members-offers");
+        location.pathname.toLowerCase().startsWith("/founder-members-offers") ||
+        location.pathname.toLowerCase().startsWith("/feedback");
       if (!isAdminRoute) {
         navigate("/Founding100access", { replace: true });
       }
@@ -162,7 +166,12 @@ const MemfoundGuard = () => {
 };
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  // Skip the intro preloader on QR-scan pages so the form opens instantly
+  const [isLoading, setIsLoading] = useState(
+    () =>
+      typeof window === "undefined" ||
+      !window.location.pathname.toLowerCase().startsWith("/feedback"),
+  );
 
   return (
     <AuthProvider>
@@ -244,6 +253,9 @@ const App = () => {
                 <Route path="/memfound" element={<Navigate to="/Founding100access" replace />} />
                 <Route path="/Memfound" element={<Navigate to="/Founding100access" replace />} />
                 <Route path="/event-checkin" element={<EventCheckIn />} />
+                <Route path="/feedback" element={<Feedback />} />
+                <Route path="/feedback-qr" element={<FeedbackQR />} />
+                <Route path="/feedback/qr" element={<Navigate to="/feedback-qr" replace />} />
                 <Route path="/vistingcard" element={<VistingCard />} />
                 <Route path="/login" element={<Auth />} />
                 <Route path="/athlete-login" element={<Auth />} />
@@ -311,6 +323,8 @@ const App = () => {
                   {/* Hiring & Career Applications */}
                   <Route path="hiring" element={<DashboardHiring />} />
                   <Route path="hiring-details" element={<Navigate to="/dashboard/hiring" replace />} />
+                  {/* Anonymous member feedback */}
+                  <Route path="feedback" element={<DashboardFeedback />} />
                 </Route>
               </Routes>
             </Suspense>

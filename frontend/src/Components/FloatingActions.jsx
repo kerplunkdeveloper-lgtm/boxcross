@@ -52,7 +52,8 @@ const FloatingActions = () => {
     location.pathname.startsWith("/dashboard") ||
     location.pathname.startsWith("/login") ||
     location.pathname.toLowerCase().startsWith("/memfound") ||
-    location.pathname.toLowerCase().startsWith("/founding100access")
+    location.pathname.toLowerCase().startsWith("/founding100access") ||
+    location.pathname.toLowerCase().startsWith("/feedback")
   )
     return null;
 

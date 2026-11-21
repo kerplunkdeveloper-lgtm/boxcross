@@ -32,6 +32,7 @@ const memfoundRoutes = require("./routes/memfoundRoutes");
 const founderPlanRoutes = require("./routes/founderPlanRoutes");
 const founderPaymentRoutes = require("./routes/founderPaymentRoutes");
 const hiringRoutes = require("./routes/hiringRoutes");
+const feedbackRoutes = require("./routes/feedbackRoutes");
 
 
 // Connect to MongoDB
@@ -111,6 +112,7 @@ app.use("/api/founder-plans", founderPlanRoutes);
 app.use("/api/founder-payments", founderPaymentRoutes);
 app.use("/api/hiring", hiringRoutes);
 app.use("/api/careers", hiringRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 // Health check
 app.get("/", (req, res) => {

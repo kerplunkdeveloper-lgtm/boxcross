@@ -516,6 +516,13 @@ const DashboardSidebar = ({
                 badge: "HR",
               })}
 
+              {/* Member Feedback */}
+              {renderSingleItem({
+                to: "/dashboard/feedback",
+                name: "Member Feedback",
+                icon: MessageSquare,
+              })}
+
               {/* Club Accordion / Flyout */}
               {renderDropdownGroup({
                 title: "Club",

@@ -271,4 +271,11 @@ export const updateHiringApplication = (id, data) => API.patch(`/hiring/${id}`, 
 export const deleteHiringApplication = (id) => API.delete(`/hiring/${id}`);
 export const getHiringFormConfig = () => API.get("/hiring/roles");
 
+// Anonymous member feedback
+export const submitFeedback = (data) => API.post("/feedback", data);
+export const getFeedbackList = (params) => API.get("/feedback", { params });
+export const getFeedbackStats = () => API.get("/feedback/stats");
+export const updateFeedback = (id, data) => API.patch(`/feedback/${id}`, data);
+export const deleteFeedback = (id) => API.delete(`/feedback/${id}`);
+
 export default API;
