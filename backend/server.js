@@ -117,6 +117,19 @@ app.get("/", (req, res) => {
   res.json({ message: "🏋️ Box & Cross API is running" });
 });
 
+// JSON error handler (multer file-size / file-type errors etc.)
+// Without this Express returns an HTML error page and the dashboard only shows a generic toast.
+app.use((err, req, res, next) => {
+  console.error(`[Error] ${req.method} ${req.originalUrl}:`, err.code || "", err.message);
+  if (res.headersSent) return next(err);
+  const status = err.name === "MulterError" ? 400 : err.status || 500;
+  const message =
+    err.code === "LIMIT_FILE_SIZE"
+      ? "File too large. Maximum allowed size is 100MB."
+      : err.message || "Server error";
+  res.status(status).json({ success: false, message });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

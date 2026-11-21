@@ -391,7 +391,11 @@ const DashboardEventsList = () => {
       console.error(error);
       toast.error(
         error.response?.data?.message ||
-          "An error occurred while uploading. Please check inputs and credentials.",
+          (error.response?.status === 413
+            ? "File too large for the server (413). Increase Nginx client_max_body_size."
+            : error.response
+              ? `Upload failed (HTTP ${error.response.status}).`
+              : "Upload failed: no response from server (network / CORS / size limit)."),
         { id: toastId },
       );
     } finally {
