@@ -729,15 +729,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
       <div className="max-w-7xl mx-auto  relative z-10">
         {/* Title Block */}
         <div className="flex flex-col items-center text-center mb-12 md:mb-16">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="h-[2px] w-8 bg-[#ccf141]"></span>
-            <span
-              className="text-[#ccf141] text-[14px] md:text-md font-black uppercase tracking-widest"
-              style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-            >
-              Special Schedules
-            </span>
-          </div>
+          
           <h2
             className="text-3xl md:text-4xl font-black uppercase tracking-tight text-white mt-3"
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
@@ -748,8 +740,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
             className="text-gray-200 text-md md:text-md italic mt-5 max-w-xl text-center"
             style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
           >
-            Click on any card to view detailed schedules, descriptions, and
-            booking information for our upcoming fitness events.
+            Find the hottest events in the town! Right here
           </p>
         </div>
 
