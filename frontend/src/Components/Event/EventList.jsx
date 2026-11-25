@@ -907,7 +907,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                         return (
                           <div
-                            className="flex items-center gap-2 mb-2 text-[9px] font-bold uppercase tracking-wide leading-none whitespace-nowrap"
+                            className="flex items-center gap-2 mb-2 text-[12px] font-bold uppercase tracking-wide leading-none whitespace-nowrap"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
@@ -915,7 +915,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             {/* Left: Date • Time (single line) */}
                             <div className="flex items-center gap-1 min-w-0 flex-1">
                               <Calendar
-                                size={10}
+                                size={13}
                                 className="text-[#ccf141] shrink-0"
                               />
                               <span className="truncate text-[#ccf141] drop-shadow-[0_0_6px_rgba(204,241,65,0.6)]">
@@ -937,9 +937,9 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 title={`Open ${locationText} in Google Maps`}
                                 className="flex items-center gap-1 shrink-0 text-[#ccf141] hover:underline underline-offset-2"
                               >
-                                <MapPin size={10} className="shrink-0" />
+                                <MapPin size={13} className="shrink-0" />
                                 View location
-                                <ExternalLink size={9} strokeWidth={2.5} />
+                                <ExternalLink size={11} strokeWidth={2.5} />
                               </a>
                             ) : (
                               <span className="flex items-center gap-1 shrink-0 text-gray-500">
@@ -967,14 +967,14 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             {/* Headline + booked count in one row */}
                             <div className="flex items-baseline justify-between gap-2 mb-1">
                               <p
-                                className={`text-[12px] font-black leading-tight truncate ${tone.text}`}
+                                className={`text-[15px] font-black leading-tight truncate ${tone.text}`}
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
                                 {fomo.headline}
                               </p>
-                              <span className="text-[9px] text-gray-500 font-semibold shrink-0">
+                              <span className="text-[12px] text-gray-500 font-semibold shrink-0">
                                 <span className="text-white font-bold">
                                   {totalSlots - remaining}
                                 </span>
