@@ -113,7 +113,7 @@ const getFomoState = (remaining, total) => {
   return {
     label: "Registration open",
     headline: `Only ${remaining} spots left!`,
-    badge: `Limited to ${total} participants`,
+    badge: `Max ${total} spots`,
     icon: Users,
     tone: "lime",
   };
@@ -790,7 +790,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10 max-w-md sm:max-w-none mx-auto w-full"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 max-w-[320px] sm:max-w-2xl lg:max-w-5xl xl:max-w-7xl mx-auto w-full"
           >
             {displayEvents.map((event) => {
               // Calculate slot availability stats
@@ -833,21 +833,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 >
                   <div className="card-border-spin-inner">
                     {/* Media Image Wrap */}
-                    <div className="relative aspect-square overflow-hidden bg-black shrink-0">
-                      {/* Blurred backdrop fills any empty space */}
-                      <img
-                        src={event.imageUrl}
-                        alt=""
-                        aria-hidden="true"
-                        loading="lazy"
-                        className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-50 pointer-events-none"
-                      />
-                      {/* Full image - never cropped */}
+                    <div className="relative aspect-4/5 overflow-hidden bg-black shrink-0">
+                      {/* Image fills the whole media area */}
                       <img
                         src={event.imageUrl}
                         alt={event.title}
                         loading="lazy"
-                        className="relative w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                       />
 
                       {/* Stacked Date Badge Overlay */}
@@ -865,12 +857,12 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         });
 
                         return (
-                          <div className="absolute top-3 left-3 bg-[#111111] border border-white/10 rounded-lg shadow-xl flex flex-col items-center overflow-hidden z-10 w-[50px] group-hover:scale-105 transition-transform duration-300">
-                            <div className="bg-[#ccf141] w-full text-center py-1 text-[10px] font-black uppercase text-black tracking-widest leading-none">
+                          <div className="absolute top-2 left-2 bg-[#111111] border border-white/10 rounded-md shadow-xl flex flex-col items-center overflow-hidden z-10 w-9.5 group-hover:scale-105 transition-transform duration-300">
+                            <div className="bg-[#ccf141] w-full text-center py-0.5 text-[8px] font-black uppercase text-black tracking-widest leading-none">
                               {month}
                             </div>
                             <div
-                              className="bg-[#111111] text-white w-full text-center py-1.5 text-lg font-black leading-none"
+                              className="bg-[#111111] text-white w-full text-center py-1 text-[14px] font-black leading-none"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -888,12 +880,12 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         const BadgeIcon = fomo.icon;
                         const isUrgent = remaining <= 10;
                         return (
-                          <div className="absolute top-3 right-3 z-10 max-w-[calc(100%-5.5rem)]">
+                          <div className="absolute top-2 right-2 z-10 max-w-[calc(100%-4rem)]">
                             <div
-                              className={`relative flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-black/75 backdrop-blur-md border ${tone.border} ${tone.glow}`}
+                              className={`relative flex items-center gap-1 pl-0.5 pr-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md border ${tone.border}`}
                             >
                               <span
-                                className={`relative flex items-center justify-center w-6 h-6 rounded-full shrink-0 ${tone.bar}`}
+                                className={`relative flex items-center justify-center w-4 h-4 rounded-full shrink-0 ${tone.bar}`}
                               >
                                 {isUrgent && (
                                   <span
@@ -901,13 +893,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                   />
                                 )}
                                 <BadgeIcon
-                                  size={13}
-                                  strokeWidth={2.75}
+                                  size={9}
+                                  strokeWidth={3}
                                   className="relative text-black"
                                 />
                               </span>
                               <span
-                                className={`text-[11px] font-black uppercase tracking-wider truncate ${tone.text}`}
+                                className={`text-[9px] font-black uppercase tracking-wide truncate ${tone.text}`}
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
@@ -924,14 +916,14 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     </div>
 
                     {/* Card Content details */}
-                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                    <div className="p-3 flex-1 flex flex-col justify-between">
                       <div>
                         {/* Date & Time */}
-                        <div className="flex flex-wrap items-center gap-2 mb-3">
-                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
-                            <Calendar size={13} className="text-[#ccf141]" />
+                        <div className="flex flex-wrap items-center gap-1 mb-1">
+                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white/5 border border-white/10">
+                            <Calendar size={10} className="text-[#ccf141]" />
                             <span
-                              className="text-[12px] font-bold tracking-wider uppercase text-gray-200 mt-0.5"
+                              className="text-[9px] font-bold tracking-wide uppercase text-gray-200 mt-0.5"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -951,10 +943,10 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 : "TBA"}
                             </span>
                           </div>
-                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
-                            <Timer size={13} className="text-[#ccf141]" />
+                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white/5 border border-white/10">
+                            <Timer size={10} className="text-[#ccf141]" />
                             <span
-                              className="text-[12px] font-bold tracking-wider uppercase text-gray-200 mt-0.5"
+                              className="text-[9px] font-bold tracking-wide uppercase text-gray-200 mt-0.5"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -966,13 +958,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         </div>
 
                         {/* Location venue */}
-                        <div className="flex items-start gap-1.5 text-gray-300 mb-3">
+                        <div className="flex items-start gap-1 text-gray-300 mb-2">
                           <MapPin
-                            size={16}
+                            size={10}
                             className="text-[#ccf141] shrink-0 mt-0.5"
                           />
                           <span
-                            className="text-[14px] font-semibold leading-snug line-clamp-1"
+                            className="text-[10px] font-semibold leading-snug line-clamp-1"
                             style={{
                               fontFamily: '"Brutal Font Light", sans-serif',
                             }}
@@ -985,7 +977,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                       {/* Registration + booking panel */}
                       <div
-                        className={`mt-auto rounded-2xl bg-[#0a0a0a] border p-4 shadow-inner shadow-black ${
+                        className={`mt-auto rounded-xl bg-[#0a0a0a] border p-2.5 shadow-inner shadow-black ${
                           hasSlots && totalSlots > 0
                             ? FOMO_TONES[getFomoState(remaining, totalSlots).tone].border
                             : "border-white/10"
@@ -995,46 +987,24 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         const fomo = getFomoState(remaining, totalSlots);
                         const tone = FOMO_TONES[fomo.tone];
                         return (
-                          <div className="pb-4 mb-4 border-b border-white/10">
-                            {/* Status row */}
-                            <div className="flex items-center justify-between gap-2 mb-2.5">
-                              <div className="flex items-center gap-1.5 min-w-0">
-                                <span className="relative flex w-2 h-2 shrink-0">
-                                  {!isSoldOut && (
-                                    <span
-                                      className={`absolute inline-flex w-full h-full rounded-full ${tone.dot} opacity-60 animate-ping`}
-                                    />
-                                  )}
-                                  <span
-                                    className={`relative inline-flex w-2 h-2 rounded-full ${tone.dot}`}
-                                  />
-                                </span>
-                                <span
-                                  className={`text-[11px] font-black uppercase tracking-wider truncate ${tone.text}`}
-                                  style={{
-                                    fontFamily: '"BrutalTypeBold", sans-serif',
-                                  }}
-                                >
-                                  {fomo.label}
-                                </span>
-                              </div>
-                              <span className="text-[11px] text-gray-500 font-semibold shrink-0">
-                                {totalSlots} spots available in total
+                          <div className="pb-2 mb-2 border-b border-white/10">
+                            {/* Headline + total in one row */}
+                            <div className="flex items-baseline justify-between gap-2 mb-1.5">
+                              <p
+                                className={`text-[13px] sm:text-[14px] font-black leading-tight truncate ${tone.text}`}
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                {fomo.headline}
+                              </p>
+                              <span className="text-[10px] text-gray-500 font-semibold shrink-0">
+                                {totalSlots} spots in total
                               </span>
                             </div>
 
-                            {/* Headline */}
-                            <p
-                              className={`text-[22px] sm:text-[24px] font-black leading-tight mb-3.5 ${tone.text}`}
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              {fomo.headline}
-                            </p>
-
                             {/* Progress bar */}
-                            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
                               <div
                                 className={`h-full rounded-full transition-all duration-700 ease-out ${tone.bar} ${tone.glow}`}
                                 style={{
@@ -1046,7 +1016,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             </div>
 
                             {/* Booked / available */}
-                            <div className="flex items-center justify-between mt-2 text-[11px] font-semibold">
+                            <div className="flex items-center justify-between mt-1 text-[10px] font-semibold">
                               <span className="text-gray-400">
                                 <span className="text-white font-bold">
                                   {totalSlots - remaining}
@@ -1074,7 +1044,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           )}
                           {Number(event.price) === 0 ? (
                             <span
-                              className="text-[18px] sm:text-[20px] font-black text-[#ccf141] leading-none uppercase tracking-wide whitespace-nowrap"
+                              className="text-[15px] sm:text-[16px] font-black text-[#ccf141] leading-none uppercase tracking-wide whitespace-nowrap"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -1083,7 +1053,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             </span>
                           ) : (
                             <span
-                              className="text-[28px] font-black text-white leading-none whitespace-nowrap"
+                              className="text-[20px] font-black text-white leading-none whitespace-nowrap"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -1102,7 +1072,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               e.stopPropagation();
                               navigate(`/events/${event._id}?book=true`);
                             }}
-                            className="inline-flex items-center gap-1.5 bg-[#ccf141] text-black font-black uppercase tracking-wider text-[13px] px-5 py-3 rounded-full shadow-md shrink-0 hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                            className="inline-flex items-center gap-1.5 bg-[#ccf141] text-black font-black uppercase tracking-wider text-[11px] px-3.5 py-2 rounded-full shadow-md shrink-0 hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
