@@ -824,7 +824,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   key={event._id}
                   variants={itemVariants}
                   onClick={() => navigate(`/events/${event._id}`)}
-                  className="group relative p-[1.5px] rounded-2xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-black/70 card-border-spin-container"
+                  className="group relative p-[1.5px] rounded-md overflow-hidden shadow-2xl flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-black/70 card-border-spin-container"
                   style={
                     isSoldOut
                       ? { "--spin-glow-color": "#ef4444" }
@@ -842,37 +842,6 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                       />
 
-                      {/* Stacked Date Badge Overlay */}
-                      {(() => {
-                        const dateStr = event.schedules?.[0]?.date;
-                        if (!dateStr || dateStr === "TBA") return null;
-                        const d = new Date(dateStr);
-                        if (isNaN(d.getTime())) return null;
-
-                        const month = d.toLocaleDateString("en-GB", {
-                          month: "short",
-                        });
-                        const day = d.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                        });
-
-                        return (
-                          <div className="absolute top-2 left-2 bg-[#111111] border border-white/10 rounded-md shadow-xl flex flex-col items-center overflow-hidden z-10 w-9.5 group-hover:scale-105 transition-transform duration-300">
-                            <div className="bg-[#ccf141] w-full text-center py-0.5 text-[8px] font-black uppercase text-black tracking-widest leading-none">
-                              {month}
-                            </div>
-                            <div
-                              className="bg-[#111111] text-white w-full text-center py-1 text-[14px] font-black leading-none"
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              {day}
-                            </div>
-                          </div>
-                        );
-                      })()}
-
                       {/* Top-Right Slot Availability Status Pill */}
                       {hasSlots && totalSlots > 0 && !isSoldOut && (() => {
                         const fomo = getFomoState(remaining, totalSlots);
@@ -880,7 +849,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         const BadgeIcon = fomo.icon;
                         const isUrgent = remaining <= 10;
                         return (
-                          <div className="absolute top-2 right-2 z-10 max-w-[calc(100%-4rem)]">
+                          <div className="absolute top-2 right-2 z-10 max-w-[calc(100%-1rem)]">
                             <div
                               className={`relative flex items-center gap-1 pl-0.5 pr-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md border ${tone.border}`}
                             >
@@ -916,68 +885,75 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     </div>
 
                     {/* Card Content details */}
-                    <div className="p-3 flex-1 flex flex-col justify-between">
-                      <div>
-                        {/* Date & Time */}
-                        <div className="flex flex-wrap items-center gap-1 mb-1">
-                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white/5 border border-white/10">
-                            <Calendar size={10} className="text-[#ccf141]" />
-                            <span
-                              className="text-[9px] font-bold tracking-wide uppercase text-gray-200 mt-0.5"
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              {event.schedules?.[0]?.date
-                                ? isNaN(
-                                    new Date(event.schedules[0].date).getTime(),
-                                  )
-                                  ? event.schedules[0].date
-                                  : new Date(
-                                      event.schedules[0].date,
-                                    ).toLocaleDateString("en-GB", {
-                                      day: "2-digit",
-                                      month: "short",
-                                      year: "numeric",
-                                    })
-                                : "TBA"}
-                            </span>
-                          </div>
-                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-white/5 border border-white/10">
-                            <Timer size={10} className="text-[#ccf141]" />
-                            <span
-                              className="text-[9px] font-bold tracking-wide uppercase text-gray-200 mt-0.5"
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              {event.schedules?.[0]?.timeSlots?.[0]?.time ||
-                                "TBA"}
-                            </span>
-                          </div>
-                        </div>
+                    <div className="p-3 flex-1 flex flex-col justify-between bg-black">
+                      {(() => {
+                        const rawDate = event.schedules?.[0]?.date;
+                        const d = rawDate ? new Date(rawDate) : null;
+                        const dateText =
+                          d && !isNaN(d.getTime())
+                            ? d.toLocaleDateString("en-GB", {
+                                weekday: "short",
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              })
+                            : rawDate || "TBA";
+                        const timeText =
+                          event.schedules?.[0]?.timeSlots?.[0]?.time || "TBA";
+                        const locationText = event.location?.trim();
+                        const mapUrl = locationText
+                          ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationText)}`
+                          : null;
 
-                        {/* Location venue */}
-                        <div className="flex items-start gap-1 text-gray-300 mb-2">
-                          <MapPin
-                            size={10}
-                            className="text-[#ccf141] shrink-0 mt-0.5"
-                          />
-                          <span
-                            className="text-[10px] font-semibold leading-snug line-clamp-1"
+                        return (
+                          <div
+                            className="flex items-center gap-2 mb-2 text-[9px] font-bold uppercase tracking-wide leading-none whitespace-nowrap"
                             style={{
-                              fontFamily: '"Brutal Font Light", sans-serif',
+                              fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
                           >
-                            {event.location}
-                          </span>
-                        </div>
+                            {/* Left: Date • Time (single line) */}
+                            <div className="flex items-center gap-1 min-w-0 flex-1">
+                              <Calendar
+                                size={10}
+                                className="text-[#ccf141] shrink-0"
+                              />
+                              <span className="truncate text-[#ccf141] drop-shadow-[0_0_6px_rgba(204,241,65,0.6)]">
+                                {dateText}
+                                <span className="mx-1 opacity-60">•</span>
+                                <span className="text-gray-300">{timeText}</span>
+                              </span>
+                            </div>
 
-                      </div>
+                            <span className="w-px h-3 bg-white/15 shrink-0" />
+
+                            {/* Right: Location link */}
+                            {mapUrl ? (
+                              <a
+                                href={mapUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                title={`Open ${locationText} in Google Maps`}
+                                className="flex items-center gap-1 shrink-0 text-[#ccf141] hover:underline underline-offset-2"
+                              >
+                                <MapPin size={10} className="shrink-0" />
+                                View location
+                                <ExternalLink size={9} strokeWidth={2.5} />
+                              </a>
+                            ) : (
+                              <span className="flex items-center gap-1 shrink-0 text-gray-500">
+                                <MapPin size={10} className="text-[#ccf141] shrink-0" />
+                                Venue TBA
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })()}
 
                       {/* Registration + booking panel */}
                       <div
-                        className={`mt-auto rounded-xl bg-[#0a0a0a] border p-2.5 shadow-inner shadow-black ${
+                        className={`mt-auto rounded-md bg-black border p-2 ${
                           hasSlots && totalSlots > 0
                             ? FOMO_TONES[getFomoState(remaining, totalSlots).tone].border
                             : "border-white/10"
@@ -988,18 +964,21 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                         const tone = FOMO_TONES[fomo.tone];
                         return (
                           <div className="pb-2 mb-2 border-b border-white/10">
-                            {/* Headline + total in one row */}
-                            <div className="flex items-baseline justify-between gap-2 mb-1.5">
+                            {/* Headline + booked count in one row */}
+                            <div className="flex items-baseline justify-between gap-2 mb-1">
                               <p
-                                className={`text-[13px] sm:text-[14px] font-black leading-tight truncate ${tone.text}`}
+                                className={`text-[12px] font-black leading-tight truncate ${tone.text}`}
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
                                 {fomo.headline}
                               </p>
-                              <span className="text-[10px] text-gray-500 font-semibold shrink-0">
-                                {totalSlots} spots in total
+                              <span className="text-[9px] text-gray-500 font-semibold shrink-0">
+                                <span className="text-white font-bold">
+                                  {totalSlots - remaining}
+                                </span>
+                                /{totalSlots} booked
                               </span>
                             </div>
 
@@ -1014,56 +993,45 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                                 }}
                               />
                             </div>
-
-                            {/* Booked / available */}
-                            <div className="flex items-center justify-between mt-1 text-[10px] font-semibold">
-                              <span className="text-gray-400">
-                                <span className="text-white font-bold">
-                                  {totalSlots - remaining}
-                                </span>{" "}
-                                already booked
-                              </span>
-                              <span className="text-gray-400">
-                                <span className={`font-bold ${tone.text}`}>
-                                  {remaining}
-                                </span>{" "}
-                                available
-                              </span>
-                            </div>
                           </div>
                         );
                       })()}
 
                       {/* Pricing and Action row */}
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex flex-col min-w-0">
-                          {event.originalPrice && (
-                            <span className="text-[14px] text-gray-500 line-through font-semibold leading-none mb-1.5">
-                              ₹{event.originalPrice}
-                            </span>
-                          )}
-                          {Number(event.price) === 0 ? (
-                            <span
-                              className="text-[15px] sm:text-[16px] font-black text-[#ccf141] leading-none uppercase tracking-wide whitespace-nowrap"
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              Free Entry
-                            </span>
-                          ) : (
-                            <span
-                              className="text-[20px] font-black text-white leading-none whitespace-nowrap"
-                              style={{
-                                fontFamily: '"BrutalTypeBold", sans-serif',
-                              }}
-                            >
-                              ₹{event.price}{" "}
-                              <span className="text-[13px] text-gray-400 font-normal ml-0.5 lowercase">
-                                onwards
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex flex-col min-w-0 leading-none">
+                          <span className="text-[8px] font-semibold uppercase tracking-[0.15em] text-gray-500 mb-1">
+                            Entry fee
+                          </span>
+                          <div className="flex items-baseline gap-1.5">
+                            {Number(event.price) === 0 ? (
+                              <span
+                                className="text-[14px] font-black text-[#ccf141] uppercase tracking-wide whitespace-nowrap drop-shadow-[0_0_6px_rgba(204,241,65,0.5)]"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                Free
                               </span>
-                            </span>
-                          )}
+                            ) : (
+                              <span
+                                className="text-[15px] font-black text-white whitespace-nowrap"
+                                style={{
+                                  fontFamily: '"BrutalTypeBold", sans-serif',
+                                }}
+                              >
+                                ₹{event.price}
+                                <span className="text-[9px] text-gray-400 font-normal ml-1 lowercase">
+                                  onwards
+                                </span>
+                              </span>
+                            )}
+                            {event.originalPrice && (
+                              <span className="text-[10px] text-gray-500 line-through font-semibold">
+                                ₹{event.originalPrice}
+                              </span>
+                            )}
+                          </div>
                         </div>
 
                         {!isSoldOut && (
@@ -1072,18 +1040,18 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                               e.stopPropagation();
                               navigate(`/events/${event._id}?book=true`);
                             }}
-                            className="inline-flex items-center gap-1.5 bg-[#ccf141] text-black font-black uppercase tracking-wider text-[11px] px-3.5 py-2 rounded-full shadow-md shrink-0 hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
+                            className="inline-flex items-center gap-1 bg-[#ccf141] text-black font-black uppercase tracking-wider text-[10px] px-3 py-1.5 rounded-md shadow-[0_0_10px_rgba(204,241,65,0.35)] shrink-0 hover:scale-105 active:scale-95 cursor-pointer relative overflow-hidden group/btn book-now-btn"
                             style={{
                               fontFamily: '"BrutalTypeBold", sans-serif',
                             }}
                           >
-                            <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
-                              Claim your Spot 
+                            <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-0.5">
+                              Claim Spot
                             </span>
                             <ArrowRight
-                              size={14}
+                              size={11}
                               strokeWidth={3}
-                              className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-2"
+                              className="relative z-10 transform transition-transform duration-300 group-hover/btn:translate-x-1"
                             />
                           </button>
                         )}
