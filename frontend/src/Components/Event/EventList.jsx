@@ -731,13 +731,13 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
         <div className="flex flex-col items-center text-center mb-12 md:mb-16">
           
           <h2
-            className="text-3xl md:text-4xl font-black uppercase tracking-tight text-white mt-3"
+            className="text-3xl md:text-4xl font-black uppercase tracking-tight text-[#ccf141]  mt-3"
             style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
           >
             Events & Workshops
           </h2>
           <p
-            className="text-gray-200 text-md md:text-md italic mt-5 max-w-xl text-center"
+            className="text-gray-200 text-md md:text-md italic mt-2  max-w-xl text-center"
             style={{ fontFamily: '"Brutal Font Light", sans-serif' }}
           >
             Find the hottest events in the town! Right here
@@ -824,7 +824,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                 >
                   <div className="card-border-spin-inner">
                     {/* Media Image Wrap */}
-                    <div className="relative aspect-4/5 overflow-hidden bg-black shrink-0">
+                    <div className="relative aspect-[8/11] overflow-hidden bg-black shrink-0">
                       {/* Image fills the whole media area */}
                       <img
                         src={event.imageUrl}
