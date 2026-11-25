@@ -790,7 +790,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
             variants={containerVariants}
             initial="hidden"
             animate="show"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 max-w-[320px] sm:max-w-2xl lg:max-w-5xl xl:max-w-7xl mx-auto w-full"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-2 max-w-[320px] sm:max-w-2xl lg:max-w-5xl xl:max-w-7xl mx-auto w-full"
           >
             {displayEvents.map((event) => {
               // Calculate slot availability stats
