@@ -68,6 +68,88 @@ const getOptimizedOgImageUrl = (
 const cleanPhoneInput = (p) =>
   String(p || "").replace(/\D/g, "").replace(/^91(?=\d{10}$)/, "");
 
+// Dynamic FOMO messaging based on spots remaining
+const getFomoState = (remaining, total) => {
+  if (remaining <= 0)
+    return {
+      label: "Registration closed",
+      headline: "Sold out!",
+      badge: "Sold Out",
+      icon: XCircle,
+      tone: "red",
+    };
+  if (remaining <= 5)
+    return {
+      label: "Closing soon",
+      headline: "Last few spots!",
+      badge: "Last few spots!",
+      icon: Flame,
+      tone: "red",
+    };
+  if (remaining <= 10)
+    return {
+      label: "Closing soon",
+      headline: "Almost full!",
+      badge: "Almost full!",
+      icon: Flame,
+      tone: "orange",
+    };
+  if (remaining <= 20)
+    return {
+      label: "Registration open",
+      headline: `Only ${remaining} spots left!`,
+      badge: `Only ${remaining} spots left!`,
+      icon: Zap,
+      tone: "amber",
+    };
+  if (remaining <= 30)
+    return {
+      label: "Registration open",
+      headline: "Spots are filling up!",
+      badge: "Spots are filling up!",
+      icon: Zap,
+      tone: "lime",
+    };
+  return {
+    label: "Registration open",
+    headline: `Only ${remaining} spots left!`,
+    badge: `Limited to ${total} participants`,
+    icon: Users,
+    tone: "lime",
+  };
+};
+
+const FOMO_TONES = {
+  lime: {
+    text: "text-[#ccf141]",
+    dot: "bg-[#ccf141]",
+    bar: "bg-[#ccf141]",
+    glow: "shadow-[0_0_12px_rgba(204,241,65,0.55)]",
+    border: "border-[#ccf141]/15",
+  },
+  amber: {
+    text: "text-amber-400",
+    dot: "bg-amber-400",
+    bar: "bg-gradient-to-r from-[#ccf141] to-amber-400",
+    glow: "shadow-[0_0_12px_rgba(251,191,36,0.55)]",
+    border: "border-amber-400/20",
+  },
+  orange: {
+    text: "text-orange-400",
+    dot: "bg-orange-400",
+    bar: "bg-gradient-to-r from-amber-400 to-orange-500",
+    glow: "shadow-[0_0_12px_rgba(249,115,22,0.55)]",
+    border: "border-orange-500/25",
+  },
+  red: {
+    text: "text-red-400",
+    dot: "bg-red-500",
+    bar: "bg-gradient-to-r from-orange-500 to-red-500",
+    glow: "shadow-[0_0_12px_rgba(239,68,68,0.55)]",
+    border: "border-red-500/25",
+  },
+};
+
 const EventList = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -732,13 +814,6 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
               const remaining = Math.max(0, totalSlots - totalBooked);
               const isSoldOut = hasSlots && totalSlots > 0 && remaining === 0;
-              const isFillingFast =
-                hasSlots &&
-                totalSlots > 0 &&
-                remaining > 0 &&
-                (remaining <= 5 || remaining / totalSlots <= 0.35);
-              const percentLeft =
-                totalSlots > 0 ? Math.round((remaining / totalSlots) * 100) : 0;
               const bookedPercent =
                 totalSlots > 0
                   ? Math.min(100, Math.round((totalBooked / totalSlots) * 100))
@@ -750,6 +825,11 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                   variants={itemVariants}
                   onClick={() => navigate(`/events/${event._id}`)}
                   className="group relative p-[1.5px] rounded-2xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-black/70 card-border-spin-container"
+                  style={
+                    isSoldOut
+                      ? { "--spin-glow-color": "#ef4444" }
+                      : undefined
+                  }
                 >
                   <div className="card-border-spin-inner">
                     {/* Media Image Wrap */}
@@ -802,54 +882,42 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                       })()}
 
                       {/* Top-Right Slot Availability Status Pill */}
-                      {hasSlots && totalSlots > 0 && (
-                        <div className="absolute top-3 right-3 z-10">
-                          {isSoldOut ? (
-                            <div className="px-2.5 py-1 rounded-full bg-red-950/85 border border-red-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-                              <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                      {hasSlots && totalSlots > 0 && !isSoldOut && (() => {
+                        const fomo = getFomoState(remaining, totalSlots);
+                        const tone = FOMO_TONES[fomo.tone];
+                        const BadgeIcon = fomo.icon;
+                        const isUrgent = remaining <= 10;
+                        return (
+                          <div className="absolute top-3 right-3 z-10 max-w-[calc(100%-5.5rem)]">
+                            <div
+                              className={`relative flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-black/75 backdrop-blur-md border ${tone.border} ${tone.glow}`}
+                            >
                               <span
-                                className="text-[11px] font-black uppercase tracking-wider text-red-300"
+                                className={`relative flex items-center justify-center w-6 h-6 rounded-full shrink-0 ${tone.bar}`}
+                              >
+                                {isUrgent && (
+                                  <span
+                                    className={`absolute inset-0 rounded-full ${tone.dot} opacity-50 animate-ping`}
+                                  />
+                                )}
+                                <BadgeIcon
+                                  size={13}
+                                  strokeWidth={2.75}
+                                  className="relative text-black"
+                                />
+                              </span>
+                              <span
+                                className={`text-[11px] font-black uppercase tracking-wider truncate ${tone.text}`}
                                 style={{
                                   fontFamily: '"BrutalTypeBold", sans-serif',
                                 }}
                               >
-                                Sold Out
+                                {fomo.badge}
                               </span>
                             </div>
-                          ) : isFillingFast ? (
-                            <div className="px-2.5 py-1 rounded-full bg-orange-950/85 border border-orange-500/40 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-                              <Flame
-                                size={12}
-                                className="text-orange-400 fill-orange-400 animate-bounce"
-                              />
-                              <span
-                                className="text-[11px] font-black uppercase tracking-wider text-orange-200"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                Only {remaining}{" "}
-                                {remaining === 1 ? "Slot" : "Slots"} Left
-                              </span>
-                            </div>
-                          ) : (
-                            <div className="px-2.5 py-1 rounded-full bg-black/75 border border-white/15 backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#ccf141]" />
-                              <span
-                                className="text-[11px] font-black uppercase tracking-wider text-gray-200"
-                                style={{
-                                  fontFamily: '"BrutalTypeBold", sans-serif',
-                                }}
-                              >
-                                <strong className="text-[#ccf141] font-black">
-                                  {remaining}
-                                </strong>{" "}
-                                / {totalSlots} Left
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                          </div>
+                        );
+                      })()}
 
                       {/* Subtle Top-Bottom Gradient */}
                       <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/50 to-transparent pointer-events-none" />
@@ -858,16 +926,8 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     {/* Card Content details */}
                     <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                       <div>
-                        {/* Event Title */}
-                        <h3
-                          className="text-[19px] sm:text-xl font-bold text-white tracking-wide leading-snug group-hover:text-[#ccf141] transition-colors line-clamp-1 mb-2"
-                          style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
-                        >
-                          {event.title}
-                        </h3>
-
                         {/* Date & Time */}
-                        <div className="flex flex-wrap items-center gap-2 mb-3 mt-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
                           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/10">
                             <Calendar size={13} className="text-[#ccf141]" />
                             <span
@@ -923,37 +983,89 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
 
                       </div>
 
-                      {/* Compact slot availability line */}
-                      {hasSlots && totalSlots > 0 && (
-                        <div className="mb-3 flex items-center gap-2.5">
-                          <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                            <div
-                              className={`h-full rounded-full transition-all duration-700 ease-out ${
-                                isSoldOut
-                                  ? "bg-red-500"
-                                  : isFillingFast
-                                    ? "bg-gradient-to-r from-amber-500 to-orange-500"
-                                    : "bg-gradient-to-r from-lime-400 to-[#ccf141]"
-                              }`}
-                              style={{
-                                width: isSoldOut
-                                  ? "100%"
-                                  : `${Math.min(100, Math.max(6, bookedPercent))}%`,
-                              }}
-                            />
-                          </div>
-                          <span
-                            className={`text-[12px] font-bold shrink-0 ${
-                              isSoldOut ? "text-red-400" : "text-gray-400"
-                            }`}
-                          >
-                            {isSoldOut ? "Sold out" : `${remaining} of ${totalSlots} left`}
-                          </span>
-                        </div>
-                      )}
+                      {/* Registration + booking panel */}
+                      <div
+                        className={`mt-auto rounded-2xl bg-[#0a0a0a] border p-4 shadow-inner shadow-black ${
+                          hasSlots && totalSlots > 0
+                            ? FOMO_TONES[getFomoState(remaining, totalSlots).tone].border
+                            : "border-white/10"
+                        }`}
+                      >
+                      {hasSlots && totalSlots > 0 && (() => {
+                        const fomo = getFomoState(remaining, totalSlots);
+                        const tone = FOMO_TONES[fomo.tone];
+                        return (
+                          <div className="pb-4 mb-4 border-b border-white/10">
+                            {/* Status row */}
+                            <div className="flex items-center justify-between gap-2 mb-2.5">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <span className="relative flex w-2 h-2 shrink-0">
+                                  {!isSoldOut && (
+                                    <span
+                                      className={`absolute inline-flex w-full h-full rounded-full ${tone.dot} opacity-60 animate-ping`}
+                                    />
+                                  )}
+                                  <span
+                                    className={`relative inline-flex w-2 h-2 rounded-full ${tone.dot}`}
+                                  />
+                                </span>
+                                <span
+                                  className={`text-[11px] font-black uppercase tracking-wider truncate ${tone.text}`}
+                                  style={{
+                                    fontFamily: '"BrutalTypeBold", sans-serif',
+                                  }}
+                                >
+                                  {fomo.label}
+                                </span>
+                              </div>
+                              <span className="text-[11px] text-gray-500 font-semibold shrink-0">
+                                {totalSlots} spots available in total
+                              </span>
+                            </div>
 
-                      {/* Pricing and Action Panel */}
-                      <div className="flex items-end justify-between gap-3 pt-3 border-t border-white/5 mt-auto">
+                            {/* Headline */}
+                            <p
+                              className={`text-[22px] sm:text-[24px] font-black leading-tight mb-3.5 ${tone.text}`}
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
+                              {fomo.headline}
+                            </p>
+
+                            {/* Progress bar */}
+                            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all duration-700 ease-out ${tone.bar} ${tone.glow}`}
+                                style={{
+                                  width: isSoldOut
+                                    ? "100%"
+                                    : `${Math.min(100, Math.max(4, bookedPercent))}%`,
+                                }}
+                              />
+                            </div>
+
+                            {/* Booked / available */}
+                            <div className="flex items-center justify-between mt-2 text-[11px] font-semibold">
+                              <span className="text-gray-400">
+                                <span className="text-white font-bold">
+                                  {totalSlots - remaining}
+                                </span>{" "}
+                                already booked
+                              </span>
+                              <span className="text-gray-400">
+                                <span className={`font-bold ${tone.text}`}>
+                                  {remaining}
+                                </span>{" "}
+                                available
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })()}
+
+                      {/* Pricing and Action row */}
+                      <div className="flex items-center justify-between gap-3">
                         <div className="flex flex-col min-w-0">
                           {event.originalPrice && (
                             <span className="text-[14px] text-gray-500 line-through font-semibold leading-none mb-1.5">
@@ -962,7 +1074,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           )}
                           {Number(event.price) === 0 ? (
                             <span
-                              className="text-base font-black text-[#ccf141] leading-none uppercase tracking-widest px-3 py-1.5 bg-[#ccf141]/10 border border-[#ccf141]/20 rounded-lg inline-block self-start"
+                              className="text-[18px] sm:text-[20px] font-black text-[#ccf141] leading-none uppercase tracking-wide whitespace-nowrap"
                               style={{
                                 fontFamily: '"BrutalTypeBold", sans-serif',
                               }}
@@ -984,17 +1096,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           )}
                         </div>
 
-                        {isSoldOut ? (
-                          <button
-                            disabled
-                            className="inline-flex items-center gap-1.5 bg-neutral-900 border border-white/10 text-gray-500 font-black uppercase tracking-wider text-[13px] px-5 py-3 rounded-full cursor-not-allowed opacity-60 shrink-0"
-                            style={{
-                              fontFamily: '"BrutalTypeBold", sans-serif',
-                            }}
-                          >
-                            Sold Out
-                          </button>
-                        ) : (
+                        {!isSoldOut && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -1006,7 +1108,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                             }}
                           >
                             <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
-                              Book Now
+                              Claim your Spot 
                             </span>
                             <ArrowRight
                               size={14}
@@ -1016,7 +1118,37 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                           </button>
                         )}
                       </div>
+                      </div>
                     </div>
+
+                    {/* Premium Sold Out overlay */}
+                    {isSoldOut && (
+                      <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-[3px] rounded-[inherit]">
+                        {/* Soft red glow behind the stamp */}
+                        <div className="absolute w-64 h-64 rounded-full bg-red-600/20 blur-3xl pointer-events-none" />
+
+                        <div className="relative -rotate-6 rounded-2xl border-2 border-red-500/80 bg-black/75 p-1.5 shadow-[0_0_40px_rgba(239,68,68,0.35)]">
+                          <div className="rounded-xl border border-red-500/40 px-7 py-4 flex flex-col items-center text-center">
+                            <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-red-300/80 mb-1.5">
+                              <span className="w-6 h-px bg-red-400/60" />
+                              Registration closed
+                              <span className="w-6 h-px bg-red-400/60" />
+                            </span>
+                            <span
+                              className="text-[38px] leading-none font-black uppercase tracking-[0.12em] text-transparent bg-clip-text bg-gradient-to-b from-red-300 to-red-600"
+                              style={{
+                                fontFamily: '"BrutalTypeBold", sans-serif',
+                              }}
+                            >
+                              Sold Out
+                            </span>
+                            <span className="mt-2 text-[11px] font-semibold text-gray-300">
+                              All {totalSlots} spots booked
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               );
@@ -1436,7 +1568,7 @@ Thank you for registering! We've reserved your spot and look forward to seeing y
                     style={{ fontFamily: '"BrutalTypeBold", sans-serif' }}
                   >
                     <span className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1">
-                      Book Now
+                      Claim your Spot
                     </span>
                     <ArrowRight
                       size={14}
